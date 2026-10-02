@@ -115,6 +115,11 @@ the reason there is none), the file-claim state, and the user's own words
 verbatim. The verbatim ask travels with every hop, because a five-stage
 pipeline drifts from the original request one paraphrase at a time.
 
+Every hand-off also carries the size standard as a standing constraint: the
+surface ships sm, md and lg over one token set, text stepping most, icons less,
+inputs least, and is render-checked at md and lg
+(`conventions/visual-design.md`, One product, one system).
+
 Then stop. This skill produces no plan, no direction, and no code.
 
 ## Phase 4: Record the routing

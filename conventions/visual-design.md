@@ -77,6 +77,16 @@ chroma at one lightness; reserve high chroma for identity and severity.**
 - **Reusable row/column primitives.** When several sections hand-roll alignment
   (manual padding, ad-hoc stacks), build one composer they all feed. Inconsistent
   spacing is usually the absence of a shared primitive, not a tuning problem.
+- **Every surface ships three sizes over one token set: sm, md, lg.** sm is a
+  laptop screen, md is comfortable on a wide monitor at arm's length, lg reads
+  in a screen share without looking huge. One setting moves every surface of the
+  product together. Text steps most; icons follow most of the way (so a glyph
+  stays level with its word); inputs, padding and gaps step least, so a control
+  grows without looking swollen beside its label. No literal size outside the
+  tokens: a hard-coded font size or width is a surface that will not scale.
+  Render-check md and lg, not only sm. Reference build: switchboard-mac
+  `Sources/Scale.swift` (text 1 / 1.18 / 1.36, icons 85% of the text step,
+  controls 60%), proposal prop-20261002-205759-bc.
 
 ## Where to read more (per surface)
 
