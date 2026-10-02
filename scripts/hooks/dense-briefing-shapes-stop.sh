@@ -42,11 +42,17 @@ h=$(printf '%s' "$verdict" | shasum | cut -c1-12)
 STATE="/tmp/claude-dense-shapes-$sid8"; mkdir -p "$STATE"
 [ -f "$STATE/$h" ] && exit 0; touch "$STATE/$h"
 
+# The readout hand-reads a sample of fires, so each row says which shape fired
+# and where: the verdict's opening words plus the transcript line count.
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty')
+at=$(wc -l < "$tp" 2>/dev/null | tr -d ' ')
+detail="${verdict:0:64} @L${at:-?}"
+
 if [ "${DENSE_SHAPES_ENFORCE:-0}" = "1" ]; then
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook dense-briefing-shapes --action block --heeded unknown >/dev/null 2>&1 || true
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook dense-briefing-shapes --action block --heeded unknown --cwd "$cwd" --target "$tp" --detail "$detail" >/dev/null 2>&1 || true
   jq -cn --arg r "dense-briefing shape check (rules/dense-briefing-direct-answer.md): $verdict" '{decision:"block", reason:$r}'
 else
-  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook dense-briefing-shapes --action soft --heeded unknown >/dev/null 2>&1 || true
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook dense-briefing-shapes --action soft --heeded unknown --cwd "$cwd" --target "$tp" --detail "$detail" >/dev/null 2>&1 || true
   jq -cn --arg m "[dense-briefing-shapes WOULD-BLOCK · dry-run] $verdict (Enforce: DENSE_SHAPES_ENFORCE=1 · mute: touch ~/.claude/.no-dense-shapes-gate)" '{systemMessage: $m}'
 fi
 exit 0

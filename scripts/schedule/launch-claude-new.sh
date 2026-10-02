@@ -51,6 +51,24 @@ if [[ -n "${DRYRUN:-}" ]]; then
   printf 'open -na Ghostty.app --args -e zsh -lc %q\n' "$inner"; exit 0
 fi
 
+# A window opening is not a session starting: from July to October, 7 of 13
+# launches opened a window with no session behind it on time, and the bare
+# "unknown" outcome hid all of them. So wait for this launch's transcript to
+# appear and record what actually happened.
+proj="$HOME/.claude/projects/$(printf '%s' "$WORKDIR" | tr '/.' '--')"
+stamp="${TMPDIR:-/tmp}/gcc-launch-stamp.$$"
+: > "$stamp"
 write_meta "outcome=unknown" "reason=post_handoff" "stage=handoff"
-if open -na 'Ghostty.app' --args -e zsh -lc "$inner"; then exit 0
-else write_meta "outcome=failed" "reason=open_failed" "stage=open"; exit 1; fi
+if ! open -na 'Ghostty.app' --args -e zsh -lc "$inner"; then
+  write_meta "outcome=failed" "reason=open_failed" "stage=open"; exit 1
+fi
+deadline=$(( $(date +%s) + ${LAUNCH_VERIFY_SECS:-90} ))
+while (( $(date +%s) < deadline )); do
+  if [[ -n "$(find "$proj" -maxdepth 1 -name '*.jsonl' -newer "$stamp" -print -quit 2>/dev/null)" ]]; then
+    write_meta "outcome=ok" "reason=session_started" "stage=handoff"; exit 0
+  fi
+  sleep 5
+done
+write_meta "outcome=failed" "reason=no_session_${LAUNCH_VERIFY_SECS:-90}s" "stage=handoff"
+echo "launch-claude-new: window opened but no session transcript appeared in $proj" >&2
+exit 1

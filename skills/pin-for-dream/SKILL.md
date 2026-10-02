@@ -1,12 +1,18 @@
 ---
 name: pin-for-dream
-description: Pin a structured insight from the current Claude Code session for i-dream's next dream cycle to examine. Auto-gathers session context (cwd, recent files touched, transcript path). Writes one PinEvent JSON to ~/.claude/pinned/events.jsonl via `i-dream pin add --from-json -`. Use when the user (or you) notices something worth dreaming about — a non-obvious pattern, a bug whose root cause spans files, a tradeoff that should propagate to future decisions. Auto-decays after 2 dream cycles (~2 weeks).
+description: Pin a structured insight from the current Claude Code session so it reaches the improvement backlog. Auto-gathers session context (cwd, recent files touched, transcript path), writes one PinEvent to ~/.claude/pinned/events.jsonl via `i-dream pin add --from-json -`, and files a matching proposal with propose.sh, because no dream pass reads pins since the 2026-09-18 retirement. Use when the user (or you) notices a non-obvious pattern, a bug whose root cause spans files, or a tradeoff that should propagate to future decisions.
 allowed-tools: Bash, Read
 user-invocable: true
 argument-hint: "[brief description of the insight]"
 ---
 
-# /pin-for-dream — Pin a session insight for i-dream's next dream cycle
+# /pin-for-dream: pin a session insight so it reaches the backlog
+
+Since the scheduled dream pass was retired (2026-09-18), nothing reads
+`pinned/events.jsonl` on its own: a pin alone decays unread after about two
+weeks. Step 5 files the same insight as a proposal, which the backlog triage
+and the monthly i-dream audit do read. Keep the pin too; it is the structured
+record if a dream pass ever returns.
 
 ## When to invoke
 
@@ -85,22 +91,34 @@ echo '<json>' | i-dream pin add --from-json
 
 Capture stdout — it'll be the assigned pin id (e.g. `pin-20260517170135-6f`).
 
-### 5. Confirm to the user
+### 5. File it to the backlog
+
+```bash
+bash ~/.claude/scripts/propose.sh add \
+  --title "<the insight in under 80 chars>" \
+  --body "<the pin text, then 'pin: <id>' and the referenced file paths>" \
+  --category other --effort small --tier minor \
+  --project "<repo basename of cwd>" --tags "pinned <framing>"
+```
+
+Capture the proposal id it prints.
+
+### 6. Confirm to the user
 
 Close with the house 🏁 done box (`~/.claude/conventions/callout-boxes.md`
 v2; compose by hand or via `box done`):
 
 ```
-┌─ 🏁 done · pinned for the next dream cycle ──────── <framing> ──
+┌─ 🏁 done · pinned and filed to the backlog ──────── <framing> ──
 │ pin      <id>
+│ proposal <prop id>
 │ files    <count> referenced
 │ ▸ <absolute path of each referenced file, one per line>
-│ → surfaces in tomorrow's i-dream digest ("Pinned from sessions");
-│   auto-archives after 2 dream cycles (~2 weeks)
+│ → read by backlog triage and the monthly i-dream audit
 └─────────────────────────────────────────────────────────────────
 ```
 
-If anything in steps 1-4 failed gracefully, name what was missing in the
+If anything in steps 1-5 failed gracefully, name what was missing in the
 body (e.g. `degraded: no transcript path; pinned without it`), never
 outside the box.
 
@@ -112,7 +130,7 @@ outside the box.
   (a good behavior just happened) — those have their own skills with
   proper schemas
 - One-off questions ("what does X mean?") — pinning these creates noise
-  in tomorrow's digest
+  in the backlog
 
 ## Tone
 
