@@ -371,6 +371,15 @@
             "async": true
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /Users/alcatraz627/Code/Claude/switchboard-mac/hooks/permission-ask.py",
+            "timeout": 660
+          }
+        ]
       }
     ],
     "PostCompact": [

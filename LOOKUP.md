@@ -287,10 +287,10 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 
 | File | Brief | Read when... |
 |------|-------|-------------|
-| `~/.claude/widgets/claude-instances/` | Native macOS menu bar widget (Swift/AppKit) for monitoring live Claude Code sessions, rate limits, history, events. NSMenu dropdown + NSPanel dashboard | Debugging the widget, adding new dropdown sections, understanding session data flow |
-| `~/.claude/widgets/claude-instances/native/build.sh` | Compile, ad-hoc sign, relaunch, install LaunchAgent | Rebuilding the widget after source changes |
-| `~/.claude/widgets/claude-instances/native/color-sampler.swift` | One-off color sampler: SwiftUI window with `NSVisualEffectView(.menu)` vibrancy material, toggleable color swatches per group, auto-saves picks to `/tmp/color-sampler-result.json`. Compile: `swiftc -O -framework SwiftUI color-sampler.swift -o /tmp/color-sampler`, launch: `open /tmp/color-sampler` | Selecting colors that look good on macOS translucent/vibrancy backgrounds (NSMenu, NSPopover). Reusable for any future color contrast work on macOS |
-| `~/.claude/widgets/claude-instances/lib/scan.sh` | JSON scanner: live instances, history, events, rate limits, aggregates | Understanding widget data sources |
+| `~/Code/Claude/switchboard-mac/hub/` | The session hub and scanner (moved here 2026-10-03 from ~/.claude/widgets/claude-instances): phone-facing transcript pages on :5400 under pm2 as `session-hub`, and the scanner Switchboard's Sessions page reads. The old menu-bar dropdown is retired | Debugging the hub, the scanner, or session data flow |
+| `~/Code/Claude/switchboard-mac/hub/native/build.sh` | Builds the retired menu-bar app (kept only because the hub suite compiles it) | Not for daily use |
+| `~/Code/Claude/switchboard-mac/hub/native/color-sampler.swift` | One-off color sampler: SwiftUI window with `NSVisualEffectView(.menu)` vibrancy material, toggleable color swatches per group, auto-saves picks to `/tmp/color-sampler-result.json`. Compile: `swiftc -O -framework SwiftUI color-sampler.swift -o /tmp/color-sampler`, launch: `open /tmp/color-sampler` | Selecting colors that look good on macOS translucent/vibrancy backgrounds (NSMenu, NSPopover). Reusable for any future color contrast work on macOS |
+| `~/Code/Claude/switchboard-mac/hub/lib/scan.sh` | JSON scanner: live sessions with their attention state (needs you / working / idle), history. Fields Switchboard reads: `~/Code/Claude/switchboard-mac/hub/docs/contract.md` | Understanding widget data sources |
 
 ## External References
 

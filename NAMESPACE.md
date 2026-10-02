@@ -343,8 +343,8 @@ Planned (not yet implemented): HTTP fetch wrappers, local network scanning helpe
 | Path | Role |
 |---|---|
 | `~/.claude/subconscious/dashboard.html` | Dream insights dashboard (standalone HTML, viewable in browser) — likely the "dream dropdown" entry point |
-| `~/.claude/widgets/claude-instances/` | Native macOS menu bar widget for monitoring Claude Code sessions (Swift, NSMenu dropdown, NSPanel dashboard) |
-| `~/.claude/widgets/claude-instances/native/color-sampler.swift` | One-off color sampler tool: SwiftUI window with NSMenu vibrancy material (`.menu`), toggleable color swatches, auto-saves picks to `/tmp/color-sampler-result.json`. Reusable for future color selection tasks |
+| `~/Code/Claude/switchboard-mac/hub/` | The session hub and scanner, inside the Switchboard repo since 2026-10-03; the menu-bar dropdown is retired |
+| `~/Code/Claude/switchboard-mac/hub/native/color-sampler.swift` | One-off color sampler tool: SwiftUI window with NSMenu vibrancy material (`.menu`), toggleable color swatches, auto-saves picks to `/tmp/color-sampler-result.json`. Reusable for future color selection tasks |
 
 Widgets are small, self-contained UI surfaces that run *outside* the Claude conversation — browser tabs, menu-bar apps, status dropdowns, launchers. They let Claude-authored information live in a macOS-native way.
 

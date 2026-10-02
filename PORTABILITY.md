@@ -27,7 +27,7 @@ separately on a new machine; this repo only depends on their presence.
 | Project | Path | State | Re-provision |
 |---|---|---|---|
 | i-dream (subconscious engine) | `~/Code/Claude/i-dream` | own git repo (has remote) | `mac-migration/kit/clone-all.sh` + `cargo install` the `i-dream` binary |
-| claude-instances (widget) | `~/.claude/widgets/claude-instances` | **TODO: not yet its own repo** | needs `git init` + remote, then register here |
+| session hub (was claude-instances) | `~/Code/Claude/switchboard-mac/hub` | part of switchboard-mac (github.com/alcatraz627/switchboard-mac) | moved 2026-10-03; the old ~/.claude/widgets copy is no longer used |
 | file-tools MCP | `~/Code/Claude/mcp-file-tools` | local-only repo (unpushed) | push first, then clone (MANIFEST §5) |
 | interactive-inputs MCP | `~/Code/Claude/mcp-interactive-inputs` | local-only repo (unpushed) | push first, then clone (MANIFEST §5) |
 | **atone** (mistake-learning log) | `~/.claude/atone` | own repo → `github.com/alcatraz627/claude-atone` (private) | `git clone` to `~/.claude/atone`; daemon pushes biweekly |
