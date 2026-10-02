@@ -7,6 +7,10 @@
 
 METRICS_FILE="$HOME/.claude/subconscious/dreams/dream-metrics.json"
 
+# Same switch as the rest of the dream injection (dream-insights.sh). The
+# averages here are lifetime and include headless runs, so with the dream
+# lane off they say nothing a session can act on.
+[ -f "$HOME/.claude/subconscious/dreams/.inject-on" ] || exit 0
 [ -f "$METRICS_FILE" ] || exit 0
 
 python3 - "$METRICS_FILE" <<'PYEOF'

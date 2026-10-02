@@ -147,7 +147,7 @@ route_target() {
   # Mechanically detectable? Hookable if precheck contains git/process.env/file
   # patterns OR slug indicates a clearly tool-call-shaped action.
   case "$slug" in
-    *git-add*|unsolicited-index*|*-staging*|generalize-before-enumerate)
+    *git-add*|unsolicited-index*|*-staging*)
       echo "hook-draft"; return ;;
     raw-process-env*|adding-env-var-reads*)
       echo "hook-draft"; return ;;

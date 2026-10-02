@@ -208,9 +208,14 @@ cmd__record_run() {
 # Safe to delete our own sched_dir: the generated script wraps its body in
 # main(), so the whole script is already in memory.
 cmd__retire_self() {
-  local name="$1" entry label plist cal_uid
+  local name="$1" entry label plist cal_uid last_outcome cause
   entry=$(jq -r --arg n "$name" '.[$n] // empty' "$REGISTRY")
-  ledger_append removed "$name" cause fired-complete
+  # "complete" only when the last run actually reported ok; a window launch
+  # that never started used to retire as complete too.
+  last_outcome=$(jq -r --arg n "$name" 'select(.ev=="run" and .name==$n) | .outcome' "$HIST" 2>/dev/null | tail -1)
+  cause=fired-unverified
+  [[ "$last_outcome" == "ok" ]] && cause=fired-complete
+  ledger_append removed "$name" cause "$cause"
   [[ -n "$entry" ]] || return 0
   plist=$(jq -r '.plist' <<<"$entry")
   cal_uid=$(jq -r '.calendar_uid // ""' <<<"$entry")

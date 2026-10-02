@@ -19,6 +19,11 @@
 #   - never-fail: any internal error is swallowed; it ALWAYS exits 0.
 #   - silent no-op when called without --hook.
 #
+# Reading heed: a fire row almost always says heeded "unknown". Whether it was
+# heeded arrives later as a separate kind:"heed" row whose `ref` is the fire id
+# or a hook:session key. Count heed from those rows, never from the fire row's
+# own `heeded` field, or every hook reads as about 0% heeded.
+#
 # Diagnosis context (all OPTIONAL — a call with none of them is byte-identical to
 # the pre-enrichment line, so the ~194 existing lines and every existing caller
 # stay valid):

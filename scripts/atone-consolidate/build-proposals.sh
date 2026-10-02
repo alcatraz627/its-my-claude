@@ -64,10 +64,9 @@ Auto-drafted from atone pattern (slug: $slug, severity: $sev_str, recurrences: $
 
 **Proposed hook**: PreToolUse on Bash (and possibly Edit/Write).
 
-**Detection regex (suggested — verify and refine):**
-\`\`\`
-$(echo "$slug" | tr '-' '|')
-\`\`\`
+**Detection signal:** to be written from the source events. Name the exact
+command shape or file path the mistake shows up in; the slug words alone are
+not a pattern (joined with \`|\` they match almost any command).
 
 **Injection / block message:**
 ${precheck:-(precheck field empty — review the latest event for actionable text)}

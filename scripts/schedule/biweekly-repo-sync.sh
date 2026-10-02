@@ -26,7 +26,9 @@ write_meta() { [[ -n "${GCC_SCHED_META:-}" ]] && printf '%s\n' "$@" > "$GCC_SCHE
 if [[ -f "$STAMP" ]]; then
   last=$(cat "$STAMP" 2>/dev/null || echo 0)
   elapsed=$(( now - last ))
-  if (( elapsed < INTERVAL )); then
+  # An hour of slack: the stamp records launch time, and the next weekly fire
+  # can land seconds short of 14 days, which skipped it and made the cadence 21.
+  if (( elapsed < INTERVAL - 3600 )); then
     days=$(( elapsed / 86400 ))
     echo "[$(date '+%F %T')] repo-sync skipped — only ${days}d since last run (need 14d)"
     write_meta "outcome=ok" "reason=cadence_skip" "stage=gate" "detail=${days}d_elapsed"
