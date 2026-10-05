@@ -444,6 +444,8 @@ def named_style_requests(tab):
         ps, pfields = {}, []
         if key in sp:
             ps = {"spaceAbove": pt(sp[key][0]), "spaceBelow": pt(sp[key][1])}; pfields = ["spaceAbove", "spaceBelow"]
+        if key.startswith("h"):
+            ps["keepWithNext"] = True; pfields.append("keepWithNext")
         reqs.append({"updateNamedStyle": {"tabId": tab, "namedStyle": {"namedStyleType": name, "textStyle": ts, "paragraphStyle": ps},
                                           "fields": ",".join(["namedStyleType"] + ["textStyle." + x for x in fields] + ["paragraphStyle." + x for x in pfields])}})
     one("NORMAL_TEXT", "body", f["body"]); one("TITLE", "title", f["title"]); one("SUBTITLE", "subtitle", f["title"])
@@ -505,7 +507,7 @@ def tab_requests(blocks, tab):
             bar = (C["bar"], C["bar_pt"]) if kind == "code" else None
             s = para(text, {"namedStyleType": "NORMAL_TEXT", "shading": {"backgroundColor": rgb(bg)}, **box(bg, C["pad_pt"], left=bar),
                             "indentStart": pt(C["pad_pt"]), "indentFirstLine": pt(C["pad_pt"]), "indentEnd": pt(C["pad_pt"]),
-                            "spaceAbove": pt(C["space_pt"]), "spaceBelow": pt(C["space_pt"]), "lineSpacing": C["line_spacing"]})
+                            "spaceAbove": pt(C["space_pt"]), "spaceBelow": pt(C["space_pt"]), "lineSpacing": C["line_spacing"], "keepLinesTogether": True})
             weight = C["weight"] if kind == "code" else C["diagram_weight"]
             reqs.append(text_style(s, cursor, tab, font=G["fonts"]["mono"], weight=weight, size=G["sizes"]["code"]))
             if kind == "diagram":
@@ -645,17 +647,19 @@ def table_style_requests(tab_body, tables_in_order, tab):
                 reqs.append(cell_style(cell_range(loc, first, 0, nrows - first, 1), {"backgroundColor": rgb(T["first_col_fill"])}))
         if header and T.get("pin_header") and nrows > 1:
             reqs.append({"pinTableHeaderRows": {"tableStartLocation": loc, "pinnedHeaderRowsCount": 1}})
+        # A row moves whole to the next page rather than splitting.
+        reqs.append({"updateTableRowStyle": {"tableStartLocation": loc, "rowIndices": list(range(nrows)), "tableRowStyle": {"preventOverflow": True}, "fields": "preventOverflow"}})
         head_color = TL["header_text"] if light else T["header_text"]
         for r, trow in enumerate(t["tableRows"]):
             for c, tcell in enumerate(trow["tableCells"]):
                 runs = rows[r][c] if r < len(rows) and c < len(rows[r]) else []
-                cells.append((tcell["content"][0]["startIndex"], runs, header and r == 0, head_color))
-    for start, runs, is_head, head_color in sorted(cells, key=lambda x: -x[0]):
+                cells.append((tcell["content"][0]["startIndex"], runs, header and r == 0, head_color, c == 0 and r >= (1 if header else 0)))
+    for start, runs, is_head, head_color, is_label in sorted(cells, key=lambda x: -x[0]):
         text = runs_text(runs).strip(" \t\n")  # not .strip(): it would eat the thin spaces padding inline code
         end = start + u16(text) if text else start + 1
         if text:
             reqs.append({"insertText": {"location": {"index": start, "tabId": tab}, "text": text}})
-        ts = {"fontSize": pt(T["font_pt"]), "weightedFontFamily": {"fontFamily": T["header_font"] if is_head else T["body_font"]}, "bold": False,
+        ts = {"fontSize": pt(T["font_pt"]), "weightedFontFamily": {"fontFamily": T["header_font"] if is_head else T["body_font"]}, "bold": bool((is_label and T.get("bold_first_col")) or (is_head and T.get("header_bold"))),
               "foregroundColor": rgb(head_color if is_head else T["text"])}
         reqs.append({"updateTextStyle": {"range": {"startIndex": start, "endIndex": end, "tabId": tab}, "textStyle": ts,
                                          "fields": "fontSize,weightedFontFamily,bold,foregroundColor"}})
@@ -664,6 +668,15 @@ def table_style_requests(tab_body, tables_in_order, tab):
                                               "fields": "spaceAbove,spaceBelow,lineSpacing"}})
         if text and not is_head:
             reqs += style_requests(list(runs), start, tab, base_size=T["font_pt"])
+            # A bulleted line inside a cell hangs its wrapped text under the first word, with a little air below.
+            off = 0
+            for line_text in text.split("\n"):
+                if line_text.startswith("\u2022 "):
+                    a = start + off; z = a + u16(line_text)
+                    reqs.append({"updateParagraphStyle": {"range": {"startIndex": a, "endIndex": z, "tabId": tab},
+                                                          "paragraphStyle": {"indentStart": pt(9), "indentFirstLine": pt(0), "spaceBelow": pt(2)},
+                                                          "fields": "indentStart,indentFirstLine,spaceBelow"}})
+                off += u16(line_text) + 1
     return reqs
 
 
@@ -912,18 +925,18 @@ def main():
     plan, adds = [(parsed[0][0], first_tab, parsed[0][2])], []
     for i, (name, title, blocks) in enumerate(parsed[1:], start=1):
         tid = tabs.get(name) or by_title.get(title)
-        if not tid: adds.append({"addDocumentTab": {"tabProperties": {"title": title[:80], "index": i}}})
+        if not tid: adds.append({"addDocumentTab": {"tabProperties": {"title": title[:50], "index": i}}})
         plan.append((name, tid, blocks))
     if adds:
         batch(tok, doc_id, adds)
         by_title = {t["tabProperties"]["title"]: t["tabProperties"]["tabId"] for t in get_doc(tok, doc_id)["tabs"]}
-        plan = [(n, tid or by_title[[t for nm, t, _ in parsed if nm == n][0][:80]], b) for n, tid, b in plan]
+        plan = [(n, tid or by_title[[t for nm, t, _ in parsed if nm == n][0][:50]], b) for n, tid, b in plan]
     tabs.clear()
     for name, tid, _ in plan:
         tabs[name] = tid
     # A tab this script made earlier that no file maps to any more (a file dropped, or the README moved to the cover) goes.
     stale = [{"deleteTab": {"tabId": tid}} for tid in old_ids if tid not in tabs.values() and tid in by_title.values()]
-    batch(tok, doc_id, stale + [{"updateDocumentTabProperties": {"tabProperties": {"tabId": first_tab, "title": "Cover"}, "fields": "title"}}])
+    batch(tok, doc_id, stale + [{"updateDocumentTabProperties": {"tabProperties": {"tabId": first_tab, "title": parsed[0][1][:50]}, "fields": "title"}}])
     cfg_path.write_text(json.dumps(cfg, indent=2) + "\n")
 
     link_map = {name: f"https://docs.google.com/document/d/{doc_id}/edit?tab={tid}" for name, tid, _ in plan}
