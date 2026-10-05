@@ -30,6 +30,8 @@ the work, and their time is the scarce resource. Not the unfamiliar-reader modes
 of doc-writing.md — this reader needs each finding *connected to the system they
 already hold*, not tutorial context and not naked mechanism.
 
+An RCA or incident report for readers outside engineering uses the section template in `conventions/rca-template.md`; this contract still governs its voice.
+
 ## Per finding: the chain, in order
 
 1. **Symptom in system terms** — what breaks or is wrong, named at the level the
