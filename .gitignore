@@ -125,11 +125,15 @@ memory-domain/dream/cursor.json
 # dragging along large logs or intermediate state already captured in refined
 # form. Queues, cursors and derivations go; curated insight stays.
 #
-# Left TRACKED for now, though the same test arguably catches them:
-# subconscious/metacog/audits/ (2.3M, 320 files) and dreams/project-briefs/
-# (412K, 94 files). No code reads either — every reference is a transcript, WAL
-# or shell log — and their refined forms (metacog/calibration.jsonl,
-# metacog/activity.jsonl, dreams/insights.md, dreams/patterns.json) are tracked.
+# Untracked 2026-10-06 per i-dream ruling D6a (docs/29 3.4), the same test:
+# metacog audit snapshots, generated project briefs (regenerated weekly), the
+# retired daily digests, the reader's daily recon files, and every _archived/
+# overflow bucket. Curated state stays tracked (2026-08-16 ruling above).
+subconscious/metacog/audits/
+subconscious/dreams/project-briefs/
+i-dream/daily/
+i-dream/reader/daily/
+**/_archived/
 # Untracking them is a one-line change here plus a git rm --cached.
 subconscious/dreams/ingest-queue/
 i-dream/derived/

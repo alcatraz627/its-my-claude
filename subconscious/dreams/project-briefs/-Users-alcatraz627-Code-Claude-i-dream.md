@@ -1,19 +1,17 @@
-<!-- i-dream project brief · 2026-08-31T03:33:20.734914+00:00 · 20 patterns / 3 insights -->
+<!-- i-dream project brief · 2026-10-06T10:17:03.265101+00:00 · 20 patterns / 3 insights -->
 ## What this project is about
-Dream-cycle memory consolidation system for Claude Code sessions — a background agent that reads session transcripts, extracts behavioral patterns, and writes structured insight files. Work style is investigative + review-heavy with frequent peer-agent cross-checks.
+`i-dream` is a Rust-based background memory consolidation and pattern extraction layer for Claude Code — dreaming, metacognition, intuition running silently while you work. Work style is iterative, multi-session, heavy checkpoint/resume use with a dashboard UI component.
 
 ## Things to do (or keep doing)
-- **Preserve independent outputs as separate artifacts** until the user explicitly requests a merge — peer plans stay side-by-side, never auto-collapsed
-- **Grep the full project tree before fixing any single instance** — UI shells, pagination, component patterns are always global concerns
-- **Trace claims back to human-authored source** (design mock, spec, actual code) before using them — never treat a Claude-generated doc as ground truth
-- **Continue on terse signals** ("proceed", "keep going") without asking for clarification when context is below 70% pressure
+- **Read source before making structural claims** — every "this does not exist / this is broken" assertion needs a file:line citation from the actual code, not inference.
+- **Exercise the announced thing before ending the turn** — navigate the URL, run the binary, write the file; a status claim is not verification.
+- **Use the two-agent peer-review workflow when the user asks for it** — each agent produces a plan independently, then grades the other's blueprint; don't collapse it into one pass.
+- **Follow full paths everywhere** — basenames alone are not clickable; use relative or absolute paths in all output and reports.
 
 ## Things to avoid
-- **Don't declare UI or runtime fixes done without exercising the running dev server** — visual inspection only; green local tests ≠ CI pass ≠ rendered page verified
-- **Don't implement any UI shell component on one page without auditing all sibling pages** for the same component first
-- **Don't assert cost or structural claims without reading the source** — "this is cheaper" or "this doesn't exist" requires a file:line citation
-- **Don't regress to default-LLM register after a prose-smell hook fires** — rewritten replies must be checked before sending; the same violations recur immediately after correction
+- **Don't substitute a proxy verification for the real one** — a type check is not a runtime check, a DOM snapshot is not a visual render, a collect-only run is not a passing suite.
+- **Don't treat declaration as completion** — printing a `/goal` line, listing next steps, or saying "ready to merge" without having exercised the thing is the dominant failure pattern here.
+- **Don't publish Claude Artifacts for repo deliverables** — write the file into the repo as markdown or HTML; the user does not want hosted pages unless explicitly asked.
 
 ## Open questions / known gaps
-- Prose-smell hook fires repeatedly but corrections don't stick across turns — the enforcement loop isn't closing; each rewrite needs an explicit self-check before sending
-- CI vs local test divergence is a recurring false-green pattern; the project may need a standing "check CI, not just local" checkpoint before any "done" claim
+- **Declaration-vs-completion loop recurs across sessions** — the promoted insights flag it three separate times; this project's verification bar is higher than the global default.
