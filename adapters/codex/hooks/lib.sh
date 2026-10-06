@@ -55,8 +55,11 @@ gcc_ipc_bin() {
 }
 
 # Pull the additionalContext out of any hook-output JSON (either schema).
+# Codex has no mods, so an <owner …> block (hook_owner_wrap in hook-common.sh)
+# is unwrapped here and read as the plain text it always was.
 gcc_ctx_of() {
-  printf '%s' "$1" | jq -r '(.hookSpecificOutput.additionalContext // .additionalContext // empty)' 2>/dev/null
+  printf '%s' "$1" | jq -r '(.hookSpecificOutput.additionalContext // .additionalContext // empty)' 2>/dev/null \
+    | sed -E 's#</?owner( [^>]*)?>##g'
 }
 
 # Emit one SessionStart/UserPromptSubmit-shaped context object, if text given.

@@ -1,0 +1,22 @@
+{
+  "name": "gcc-mods",
+  "version": "0.1.0",
+  "description": "gcc's owner surfaces inside the Claude Code TUI: clickable paths, catchup band, context gauge, docs and tasks panes, fleet and wakes, hook router and nudge panel, decision pane, proof receipt, and a few situational touches.",
+  "author": { "name": "alcatraz627" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "hygiene": { "type": "boolean", "default": true, "title": "Transcript hygiene", "description": "Clickable absolute paths and compact seat and peer rows in the transcript." },
+    "continuity": { "type": "boolean", "default": true, "title": "Continuity", "description": "Catchup band after a clear or resume, context and usage gauge, core-dump button, Docs tab." },
+    "tasks": { "type": "boolean", "default": true, "title": "Tasks", "description": "Tasks pane over the goal record, pending chips, stopped-with-open-work nudge." },
+    "tasksWrite": { "type": "boolean", "default": true, "title": "Tasks pane writes", "description": "Let the Tasks pane record accepts and callouts through gs. Off makes the pane read-only." },
+    "fleet": { "type": "boolean", "default": true, "title": "Fleet", "description": "Sub-agent seats in the band, landing toasts, seat wake when a report sits unread." },
+    "wake": { "type": "boolean", "default": true, "title": "Wake", "description": "Show ipc mail and pending decisions; wake an idle session when a decision-page answer or an unread seat report lands." },
+    "mailWake": { "type": "boolean", "default": false, "title": "Mail wake", "description": "Also wake an idle session for new ipc mail. Off by default: claude-ipc has its own delivery and this is only a layer over it." },
+    "router": { "type": "boolean", "default": true, "title": "Hook router", "description": "Route tagged owner text out of hook output and onto a surface instead of the model." },
+    "nudges": { "type": "boolean", "default": true, "title": "Nudge panel", "description": "What fired this session, why, snooze and feedback." },
+    "decide": { "type": "boolean", "default": true, "title": "Decision pane", "description": "Pending decision pages drawn in the TUI, with submit." },
+    "receipt": { "type": "boolean", "default": true, "title": "Proof receipt", "description": "Beside a done-claim: last run, last screenshot, last curl this turn." },
+    "fun": { "type": "boolean", "default": true, "title": "Fun", "description": "Situational spinner words, greeting, landing phrases, goal-met toast." },
+    "sound": { "type": "boolean", "default": false, "title": "Sound", "description": "A short system sound on a seat landing (macOS afplay)." }
+  }
+}

@@ -42,6 +42,11 @@
 # allowlist above ignores every new top level by default (owner ruling
 # 2026-08-20, after a sync nearly recorded the move as 428 bare deletions).
 !/skills-parked/
+# mods/: Claude Code mods (plugins of function hooks), loaded with --plugin-dir.
+# The engine rewrites .claude-plugin/types/ on every load, so it stays out.
+!/mods/
+!/mods/*/.claude-plugin/
+/mods/*/.claude-plugin/types/
 !/hinters/
 !/rules/
 # rules-provenance/: the folded-out reasoning behind every always-loaded rule

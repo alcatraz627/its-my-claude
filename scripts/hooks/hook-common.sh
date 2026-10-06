@@ -118,6 +118,24 @@ hook_box_kind() {
   printf '%s\n' "$body" | hook_box "$kind · $name" "$width"
 }
 
+# hook_owner_wrap <surface> <hook> [model-text] — mark stdin as text for the OWNER.
+#
+# A session with the gcc-mods plugin draws the block on <surface> (toast, log,
+# band, pane:nudges, pane:tasks, ask) and removes it from what the model reads,
+# handing the model <model-text> instead when one is given. A session without
+# the plugin (Codex, claude -p, the plugin switched off) sees the tag as plain
+# text and behaves exactly as before, so keep the "surface this verbatim"
+# instruction INSIDE the block. Attribute values must not contain a double quote.
+hook_owner_wrap() {
+  local surface="${1:-toast}" hook="${2:-hook}" model="${3:-}" body
+  body=$(cat)
+  if [ -n "$model" ]; then
+    printf '<owner surface="%s" hook="%s" model="%s">\n%s\n</owner>\n' "$surface" "$hook" "$model" "$body"
+  else
+    printf '<owner surface="%s" hook="%s">\n%s\n</owner>\n' "$surface" "$hook" "$body"
+  fi
+}
+
 # hook_clear_reset <sid8> <counter_file> — reset a per-process counter after /clear.
 #
 # The per-process counters keyed by ${PPID} (the tool tally, ctx %) survive a

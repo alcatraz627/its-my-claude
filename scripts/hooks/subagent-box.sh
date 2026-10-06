@@ -43,8 +43,9 @@ case "$event" in
       "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" \
       "${desc:+$desc — }" "$goal")
     box=$(printf '%s\n' "$body" | hook_box_kind dispatch "${typ:-general-purpose}" "${model:-inherit}")
-    emit_ctx "PreToolUse" "$box
-Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), then continue."
+    # The whole box is owner text: a gcc-mods session draws it as a transcript
+    # line and the model never reads it; any other session pastes it as before.
+    emit_ctx "PreToolUse" "$(printf '%s\nSurface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), then continue.' "$box" | hook_owner_wrap log subagent-box)"
     ;;
   SubagentStart)
     aid=$(printf '%s' "$input" | jq -r '.agent_id // empty' 2>/dev/null)
@@ -86,7 +87,7 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
     # UserPromptSubmit drain below; the direct emit stays as cheap insurance.
     mkdir -p "$STASH_DIR" 2>/dev/null || true
     printf '%s\n' "$box" >> "$STASH_DIR/pending-boxes" 2>/dev/null || true
-    emit_ctx "SubagentStop" "$box"
+    emit_ctx "SubagentStop" "$(printf '%s\n' "$box" | hook_owner_wrap log subagent-box)"
     ;;
   UserPromptSubmit)
     p="$STASH_DIR/pending-boxes"
@@ -107,8 +108,11 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
       fi
     fi
     if [ -n "$boxes" ]; then
-      ctx="$boxes
-Subagent landing(s) since your last turn. Surface each box verbatim to the user (rules/surface-hook-nudges-to-user.md), and verify each agent's output before acting on it."
+      # The boxes and the paste instruction are owner text; the duty to verify
+      # each agent's output stays outside the block so the model keeps it.
+      owner=$(printf '%s\nSubagent landing(s) since your last turn. Surface each box verbatim to the user (rules/surface-hook-nudges-to-user.md).' "$boxes" | hook_owner_wrap log subagent-box)
+      ctx="$owner
+Subagent landing(s) since your last turn: verify each agent's output before acting on it."
       [ -n "$tag" ] && ctx="$ctx
 $tag"
       emit_ctx "UserPromptSubmit" "$ctx"

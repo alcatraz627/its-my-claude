@@ -7,7 +7,7 @@ triggers:
 related: []
 tier: 2
 category: features
-updated: 2026-07-02
+updated: 2026-10-06
 stale_after_days: 90
 ---
 
@@ -30,6 +30,10 @@ Claude Code's TUI uses an alternate screen buffer (since v2.1.89) that overwrite
 ## What hooks CANNOT do
 
 Display visual content in the conversation/terminal area. Period.
+
+## Mods lift this (2026-10-06)
+
+Claude Code mods draw in the TUI directly. `features/gcc-mods.md` is gcc's mod: wrap owner-facing hook text with `hook_owner_wrap` (hook-common.sh) and it is drawn on a surface instead of handed to the model. The rule below still holds for a session without the mod.
 
 ## Practical implication
 
