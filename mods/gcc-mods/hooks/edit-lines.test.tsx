@@ -395,6 +395,35 @@ describe('restyled tabs with rows in them', () => {
   })
 })
 
+describe('goal record shapes', () => {
+  test('a gated row whose gate is an object draws its text instead of breaking the pane', ON, async ($, on) => {
+    const w = world(on)
+    w.pathPy = () =>
+      ok(
+        JSON.stringify({
+          scope: 'scope',
+          armed: '',
+          goals: [
+            {
+              id: 'g2',
+              outcome: 'PR shows completeness',
+              accept: [{ id: 'a1', kind: 'functional', text: 'a check', evidence: null, status: 'open', source: null }],
+              milestones: [{ id: 'm1', name: 'Right now, the owner has ruled', status: 'open' }],
+              tasks: [{ id: '1', subject: 'D1: how completeness shows', milestone: 'm1', state: 'owner-gate', gate: { text: 'USER: pick the display', do: 'Agent pick: a count per tab' }, blocked_by: [] }],
+              containment: [],
+              cwd: '/x',
+            },
+          ],
+        }),
+      )
+    await $.classic.SessionStart({ source: 'clear' })
+    const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
+    await ui.press({ key: 'tab-tasks' })
+    expect(await ui.find({ text: 'USER: pick the display' })).toBeDefined()
+    expect(await ui.find({ text: 'D1: how completeness shows' })).toBeDefined()
+  })
+})
+
 describe('goal toast', () => {
   test('a failed first read does not make the next read toast a long-met goal', ON, async ($, on) => {
     const w = world(on)

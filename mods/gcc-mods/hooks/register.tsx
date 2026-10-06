@@ -834,6 +834,15 @@ type RawGoal = {
   cwd?: string | null
 }
 
+// A record field as drawable text: strings and numbers pass, an object gives its
+// `text` or `name`, anything else is absent. Never an object into a Text.
+function textOrNull(v: unknown): string | null {
+  if (v == null) return null
+  if (typeof v === 'string' || typeof v === 'number') return String(v)
+  const o = v as { text?: unknown; name?: unknown }
+  return typeof o.text === 'string' ? o.text : typeof o.name === 'string' ? o.name : null
+}
+
 function toGoal(g: RawGoal): GoalView {
   return {
     id: g.id,
@@ -845,13 +854,15 @@ function toGoal(g: RawGoal): GoalView {
       (t): TaskRow => ({
         id: String(t.id),
         subject: String(t.subject ?? ''),
-        milestone: t.milestone ?? null,
+        milestone: textOrNull(t.milestone),
         state: String(t.state ?? ''),
-        gate: t.gate ?? null,
+        // gs writes a gate as a string or as { text, do }; the pane draws text only,
+        // and an object reaching a Text makes the engine drop the whole pane.
+        gate: t.gate == null ? null : typeof t.gate === 'string' ? t.gate : String(t.gate.text ?? '') + (t.gate.do ? ' · ' + String(t.gate.do) : ''),
         blockedBy: Array.isArray(t.blocked_by) ? t.blocked_by.map(String) : [],
-        lane: t.lane ?? null,
-        tier: t.tier ?? null,
-        note: t.note ?? null,
+        lane: textOrNull(t.lane),
+        tier: textOrNull(t.tier),
+        note: textOrNull(t.note),
       }),
     ),
     containment: g.containment ?? [],
@@ -1029,7 +1040,9 @@ async function tasksTab($: $T, el: El, v: View, write: boolean) {
           <Box width={4} flexShrink={0}>
             <Text dimColor>#{t.id}</Text>
           </Box>
-          <Text wrap="wrap">{t.subject}</Text>
+          <Box width={30} flexShrink={0}>
+            <Text wrap="wrap">{firstLine(t.subject)}</Text>
+          </Box>
           <Text dimColor wrap="wrap">{t.gate}</Text>
         </Box>
       ))}
@@ -2086,7 +2099,7 @@ async function greet($: $T) {
   const c = goalCounts(await read($, goalsAtom))
   const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
   const parts = [
-    c.gates ? plural(c.gates, 'read owed') : 'nothing owed by you',
+    c.gates ? plural(c.gates, 'read owed', 'reads owed') : 'nothing owed by you',
     c.ready ? plural(c.ready, 'row') + ' agent-ready' : null,
     mail ? plural(mail, 'message') + ' waiting' : 'inbox clear',
   ].filter(Boolean)
