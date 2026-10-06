@@ -8,7 +8,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Audience, Bookmark, Catchup, DecideSet, Doc, DocFilter, Msg, Notice, Nudge, NudgeMode, Preview, Receipt, Scope, Seat, Snippet, Snips, Tab, View, GoalView, GoalsSnap, TaskRow } from '../types'
+import type { Audience, Bookmark, Catchup, DecideItem, DecideSet, Doc, DocFilter, Msg, Notice, Nudge, NudgeMode, Preview, Receipt, Scope, Seat, Snippet, Snips, Tab, View, GoalView, GoalsSnap, TaskRow } from '../types'
 import {
   CURL_RE, DP_REG, GCC, GOAL_SH, GS, HOME, LANDING, PANE, PATH_RE, RUN_RE, SUBJECT_RE, SUCCESS_RE, TRAIL_RE, VIEWS, WORDS,
   abs, ago, agoPhrase, answerString, clip, docKindOf, dur, emptyDecide, emptyFun, emptyIdle, emptyMail, emptyMeter, emptyReceipt, firstLine, gatedRows,
@@ -1347,7 +1347,7 @@ async function wakeForMail($: $T) {
   })
 }
 
-type Cfg = { title?: string; intro?: string; origin?: { session?: string; project?: string; created?: string }; decisions?: Record<string, any>[] }
+type Cfg = { title?: string; intro?: string; copyHeader?: string; origin?: { session?: string; project?: string; created?: string }; decisions?: Record<string, any>[]; sections?: Record<string, any>[] }
 
 async function refreshDecide($: $T) {
   const now = await $.clock.now()
@@ -1370,12 +1370,24 @@ async function refreshDecide($: $T) {
       project: cfg.origin?.project ?? '',
       session: cfg.origin?.session ?? '',
       created: cfg.origin?.created ?? '',
-      items: (cfg.decisions ?? []).map(d => ({
+      items: (cfg.decisions ?? []).map((d): DecideItem => ({
         id: String(d.id),
         question: String(d.question ?? ''),
         context: String(d.context ?? ''),
         options: ((d.options ?? []) as Record<string, any>[]).map(o => ({ code: String(o.code), label: String(o.label ?? ''), rec: o.rec === true })),
-      })),
+        kind: 'decision' as const,
+      })).concat(
+        (cfg.sections ?? []).map((s): DecideItem => ({
+          id: String(s.id),
+          question: String(s.title ?? s.id) + (s.prio ? ' · ' + String(s.prio) : ''),
+          context: [s.group ? String(s.group) : '', String(s.read ?? ''), ...Object.entries((s.slots ?? {}) as Record<string, unknown>).map(([k, v]) => k + ': ' + String(v))].filter(Boolean).join('\n\n'),
+          options: [
+            { code: 'agree', label: 'agree', rec: true },
+            { code: 'disagree', label: 'DISAGREE', rec: false },
+          ],
+          kind: 'section' as const,
+        })),
+      ),
     })
   }
   // Sets seen pending earlier stay, even once the file drops them: those are
@@ -1833,11 +1845,11 @@ async function decideTab($: $T, el: El, v: View, cwd: string) {
               <Text dimColor>web page: http://localhost:5106/dp/{set.slug}/</Text>
             </Box>
             {items.length === 0 && <Text dimColor wrap="wrap">This page's questions use a layout the hub cannot draw. p previews it; the web page answers it.</Text>}
-            {items.length > 0 && listHead(el, [{ text: 'id', width: 5 }, { text: 'question', width: 36 }, { text: 'your pick' }])}
+            {items.length > 0 && listHead(el, [{ text: 'id', width: 10 }, { text: 'question', width: 32 }, { text: 'your pick' }])}
             {items.map(it =>
               listRow(el, 'q-' + set.slug + '/' + it.id, it.id === qSel, () => choose(it.id), [
-                { text: it.id, width: 5 },
-                { text: clip(it.question, 36), width: 36, press: true },
+                { text: clip(it.id, 10), width: 10 },
+                { text: clip(it.question, 32), width: 32, press: true },
                 { text: labelOf(it) + (d.notes[set.slug + '/' + it.id] ? ' · note' : ''), color: it.id === qSel ? 'cyan' : undefined },
               ]),
             )}

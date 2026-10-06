@@ -356,6 +356,31 @@ describe('restyled tabs with rows in them', () => {
     expect(w.runs.some(a => a.join(' ').includes('--consume'))).toBe(false)
   })
 
+  test('Decide draws agree/DISAGREE section cards and answers them in the web page format', ON, async ($, on) => {
+    const w = world(on)
+    w.files[DP + '/.pending.txt'] = 'reader\n'
+    w.files[DP + '/reader/config.json'] = JSON.stringify({
+      title: 'Reader',
+      origin: { project: '/Users/alcatraz627/.claude', session: 'me' },
+      decisions: [],
+      sections: [
+        { id: 'c-1', title: 'RCAs anonymize known facts', prio: 'SHOULD', group: 'repeat', read: 'Same lesson twice.', slots: { CHANGE: 'name the customer' } },
+        { id: 'c-2', title: 'Missing gate', group: 'structural-need', read: 'No hook for this.', slots: {} },
+      ],
+    })
+    await $.classic.SessionStart({ source: 'clear' })
+    const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
+    await ui.press({ key: 'tab-decide' })
+    expect((await ui.find({ key: 'q-reader/c-1' }))?.text).toContain('RCAs anonymize known facts')
+    await ui.press({ key: 'dp-copy' })
+    expect(w.copies[0]).toBe('all items: agree as drafted')
+    await ui.press({ key: 'q-reader/c-2' })
+    await ui.select({ key: 'pick-reader/c-2', value: 'disagree' })
+    await $.prompt.submit({ text: 'dp-note reader/c-2: a hook would be noise here' } as any)
+    await ui.press({ key: 'dp-copy' })
+    expect(w.copies[1]).toBe('c-2: DISAGREE — a hook would be noise here')
+  })
+
   test('Fleet lists a launched seat under Running with its detail frame', ON, async ($, on) => {
     world(on)
     on('tool.call', { tool: 'Agent' } as any, () => ({ result: { status: 'async_launched', agentId: 'ag-1' } }) as any)

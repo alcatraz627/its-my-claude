@@ -209,12 +209,19 @@ export function splitOwnerBlocks(text: string): { rest: string; blocks: OwnerBlo
 // The decision page's answer string: "<id><code>" tokens on one line, then one
 // "<id> note — <text>" line per note, the format the web page copies out.
 export function answerString(set: DecideSet, picks: Record<string, string>, notes: Record<string, string>): string {
-  const toks = set.items.map(it => it.id + (picks[set.slug + '/' + it.id] ?? it.options.find(o => o.rec)?.code ?? 'a'))
-  const lines = [toks.join(' ')]
-  for (const it of set.items) {
-    const n = (notes[set.slug + '/' + it.id] ?? '').trim()
-    if (n) lines.push(it.id + ' note — ' + n)
+  const pickOf = (it: DecideSet['items'][number]) => picks[set.slug + '/' + it.id] ?? it.options.find(o => o.rec)?.code ?? 'a'
+  const noteOf = (it: DecideSet['items'][number]) => (notes[set.slug + '/' + it.id] ?? '').trim()
+  const decisions = set.items.filter(it => it.kind !== 'section')
+  const sections = set.items.filter(it => it.kind === 'section')
+  const lines: string[] = []
+  if (decisions.length) lines.push(decisions.map(it => it.id + pickOf(it)).join(' '))
+  for (const it of decisions) if (noteOf(it)) lines.push(it.id + ' note — ' + noteOf(it))
+  // A section card is listed only when it deviates, the web page's own format.
+  for (const it of sections) {
+    const agree = pickOf(it) !== 'disagree'
+    if (!agree || noteOf(it)) lines.push(it.id + ': ' + (agree ? 'agree' : 'DISAGREE') + (noteOf(it) ? ' — ' + noteOf(it) : ''))
   }
+  if (sections.length && !decisions.length && lines.length === 0) lines.push('all items: agree as drafted')
   return lines.join('\n')
 }
 

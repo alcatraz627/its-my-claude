@@ -135,7 +135,9 @@ export type Receipt = {
 export type Idle = { since: number | null; openRows: number; continueOfferedAt: number | null }
 
 export type DecideOption = { code: string; label: string; rec: boolean }
-export type DecideItem = { id: string; question: string; context: string; options: DecideOption[] }
+// kind 'section': a page's agree/DISAGREE card (config `sections`), answered as
+// `id: DISAGREE — note` only when it deviates, as the web page does.
+export type DecideItem = { id: string; question: string; context: string; options: DecideOption[]; kind?: 'decision' | 'section' }
 export type DecideSet = {
   slug: string
   title: string
