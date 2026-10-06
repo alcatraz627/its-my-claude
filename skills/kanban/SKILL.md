@@ -7,6 +7,10 @@ user-invocable: true
 
 # Kanban
 
+**"/hub" is not this.** When the owner says "/hub" or "put it in the hub", they
+mean the gcc-mods hub in the TUI, which draws the goal record: use `gs`
+(`features/gcc-mods.md`, GLOSSARY `/hub`). This board's web page is not it.
+
 Thin driver for `~/.claude/scripts/kanban/kanban.sh` (design + decisions:
 `~/.claude/assets/reports/20260721-kanban-board-design/DESIGN.md`). The board is a
 derived mirror plus a human-note overlay, never a source of truth: docs and the Task

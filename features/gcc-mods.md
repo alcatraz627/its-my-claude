@@ -5,6 +5,8 @@ triggers:
   - topic:mods
   - topic:plugin
   - phrase:/hub
+  - phrase:the hub
+  - phrase:put it in the hub
   - phrase:owner surface
   - phrase:hook_owner_wrap
   - phrase:catchup band

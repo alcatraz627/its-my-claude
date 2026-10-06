@@ -17,6 +17,8 @@ stale_after_days: 180
 
 # The kanban board
 
+"/hub" is not this board: it is the gcc-mods hub in the TUI, which draws the goal record (`gs`). See `features/gcc-mods.md` and GLOSSARY `/hub`.
+
 ## What it is for
 
 The owner's words, 2026-08-10: **"The kanban is for user communication over the

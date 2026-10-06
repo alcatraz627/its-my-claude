@@ -26,6 +26,7 @@
 | **MCP** | Model Context Protocol | Server protocol for extending Claude's tool access (databases, APIs, services). Config: `.mcp.json` (active) vs `mcp-catalog.json` (available) |
 | **TUI** | Terminal User Interface | Styled terminal output via `gum`. Source `gum-tui.sh`; never call raw `gum style` |
 | **CWD** | Current Working Directory | The project root from which Claude Code was launched. Determines which per-project memory, WAL, and scratchpad are loaded |
+| **/hub** | the gcc-mods hub in the Claude Code TUI | NOT the kanban hub at :5106 (frozen, D2). "Put X in the /hub" means put it on the goal record with `gs` (tasks), a decision page (Decide), or a file (Docs); the hub only draws those. See `features/gcc-mods.md` |
 
 ## Namespace Labels
 
