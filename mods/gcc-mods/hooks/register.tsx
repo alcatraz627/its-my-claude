@@ -858,7 +858,7 @@ function toGoal(g: RawGoal): GoalView {
         state: String(t.state ?? ''),
         // gs writes a gate as a string or as { text, do }; the pane draws text only,
         // and an object reaching a Text makes the engine drop the whole pane.
-        gate: t.gate == null ? null : typeof t.gate === 'string' ? t.gate : String(t.gate.text ?? '') + (t.gate.do ? ' · ' + String(t.gate.do) : ''),
+        gate: t.gate == null ? null : typeof t.gate === 'string' ? t.gate : String(t.gate.text ?? ''),
         blockedBy: Array.isArray(t.blocked_by) ? t.blocked_by.map(String) : [],
         lane: textOrNull(t.lane),
         tier: textOrNull(t.tier),
@@ -899,6 +899,9 @@ async function refreshGoals($: $T) {
   if (!fun.goalsSeeded) await update($, funAtom, f => ({ ...f, goalsSeeded: true }))
 }
 
+// Row states as short words that fit the 9-wide column.
+const STATE_LABEL: Record<string, string> = { 'owner-gate': 'yours', deferred: 'later', delegated: 'handed' }
+
 async function tasksTab($: $T, el: El, v: View, write: boolean) {
   const { Box, Text, Button, Input } = el
   const snap = await read($, goalsAtom)
@@ -920,7 +923,7 @@ async function tasksTab($: $T, el: El, v: View, write: boolean) {
   const gated = gatedRows(goal)
   const ready = readyRows(goal)
   const current = gates[0] ?? null
-  const glyph: Record<string, string> = { done: '✓', active: '◐', doing: '◐', review: '◇', todo: '○', ready: '○', open: '○', deferred: '…', dropped: '⊘', blocked: '⊘' }
+  const glyph: Record<string, string> = { done: '✓', active: '◐', doing: '◐', review: '◇', todo: '○', ready: '○', open: '○', deferred: '…', dropped: '⊘', blocked: '⊘', 'owner-gate': '◆' }
   const color: Record<string, string | undefined> = { done: 'green', active: 'yellow', doing: 'yellow', review: 'cyan', dropped: 'red', blocked: 'red' }
 
   const prove = async (aid: string) => {
@@ -944,14 +947,17 @@ async function tasksTab($: $T, el: El, v: View, write: boolean) {
   const goalRecord = (
     <Box flexDirection="column">
       <Text wrap="wrap">{goal.outcome}</Text>
-      <Text dimColor wrap="truncate-end">{snap.scope}</Text>
-      <Box flexDirection="row" columnGap={2} marginTop={1}>
-        <Text dimColor>🎯 session goal</Text>
-        <Text wrap="truncate-end" dimColor={!snap.sessionGoal}>{snap.sessionGoal || 'none yet'}</Text>
-      </Box>
-      {goal.containment.map(c => (
-        <Text color="yellow" wrap="wrap">{c}</Text>
-      ))}
+      <Text dimColor wrap="truncate-end">
+        {goal.accept.filter(a => a.status === 'proven').length}/{goal.accept.length} acceptance proven · {goal.tasks.filter(t => t.state !== 'done').length} rows open · {snap.scope.replace(/^scope:\s*/, '')}
+      </Text>
+      {snap.sessionGoal && snap.sessionGoal.trim() !== goal.outcome.trim() && (
+        <Box flexDirection="row" columnGap={1}>
+          <Box width={16} flexShrink={0}>
+            <Text dimColor>🎯 session goal</Text>
+          </Box>
+          <Text wrap="truncate-end">{snap.sessionGoal}</Text>
+        </Box>
+      )}
       <Box flexDirection="row" columnGap={3} marginTop={1} flexWrap="wrap">
         <Button key="goal-edit-btn" label="edit goal" plain {...hk('e')} onPress={() => openGoalTab($, goal)} />
         <Button
@@ -1040,10 +1046,10 @@ async function tasksTab($: $T, el: El, v: View, write: boolean) {
           <Box width={4} flexShrink={0}>
             <Text dimColor>#{t.id}</Text>
           </Box>
-          <Box width={30} flexShrink={0}>
-            <Text wrap="wrap">{firstLine(t.subject)}</Text>
+          <Box width={40} flexShrink={0}>
+            <Text wrap="truncate-end">{clip(firstLine(t.subject), 38)}</Text>
           </Box>
-          <Text dimColor wrap="wrap">{t.gate}</Text>
+          <Text dimColor wrap="truncate-end">{(t.gate ?? '').replace(/^USER:\s*/, '')}</Text>
         </Box>
       ))}
     </Box>
@@ -1083,7 +1089,7 @@ async function tasksTab($: $T, el: El, v: View, write: boolean) {
                   <Text dimColor>#{t.id}</Text>
                 </Box>
                 <Box width={9} flexShrink={0}>
-                  <Text dimColor={t.state === 'done'}>{t.state}</Text>
+                  <Text dimColor={t.state === 'done'} wrap="truncate-end">{STATE_LABEL[t.state] ?? t.state}</Text>
                 </Box>
                 <Text dimColor={t.state === 'done'} wrap="truncate-end">{firstLine(t.subject)}</Text>
                 {t.blockedBy.length > 0 && <Text dimColor> after {t.blockedBy.join(',')}</Text>}

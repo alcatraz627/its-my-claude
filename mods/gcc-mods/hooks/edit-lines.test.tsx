@@ -419,7 +419,9 @@ describe('goal record shapes', () => {
     await $.classic.SessionStart({ source: 'clear' })
     const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
     await ui.press({ key: 'tab-tasks' })
-    expect(await ui.find({ text: 'USER: pick the display' })).toBeDefined()
+    expect(await ui.find({ text: 'pick the display' })).toBeDefined()
+    // One line per gate: the ask only, the agent's draft stays out of the row.
+    expect(await ui.find({ text: 'Agent pick: a count per tab' })).toBeUndefined()
     expect(await ui.find({ text: 'D1: how completeness shows' })).toBeDefined()
   })
 })
