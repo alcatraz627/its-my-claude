@@ -396,7 +396,9 @@ function toolbar(el: El, children: unknown) {
 }
 
 // One column of a list: a fixed width, or the rest of the row when width is left out.
-type Cell = { text: string; width?: number; color?: string; bold?: boolean; dim?: boolean }
+// `press` marks the cell drawn as the row's button, the click target; without
+// one the first cell is. A Button takes no colour, so the pressed cell is plain.
+type Cell = { text: string; width?: number; color?: string; bold?: boolean; dim?: boolean; press?: true }
 
 // The dim header row over a list; the two leading spaces sit over the selection marker.
 function listHead(el: El, cells: { text: string; width?: number }[]) {
@@ -420,27 +422,31 @@ function listHead(el: El, cells: { text: string; width?: number }[]) {
 }
 
 // One row of a list. The marker has a column of its own so a narrow first
-// column is never clipped by it; the first cell is the button that selects.
+// column is never clipped by it; one cell is the button that selects the row.
 function listRow(el: El, key: string, isSel: boolean, onPress: () => unknown, cells: Cell[]) {
   const { Box, Text, Button } = el
-  const [first, ...rest] = cells
+  const pressAt = Math.max(0, cells.findIndex(c => c.press))
+  const draw = (c: Cell, i: number) => {
+    const inner =
+      i === pressAt ? (
+        <Button key={key} label={c.text} plain dimColor={!isSel} onPress={onPress} />
+      ) : (
+        <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
+      )
+    return c.width ? (
+      <Box width={c.width} flexShrink={0}>
+        {inner}
+      </Box>
+    ) : (
+      inner
+    )
+  }
   return (
     <Box flexDirection="row" columnGap={1}>
       <Box width={2} flexShrink={0}>
         <Text color="cyan">{isSel ? '▸' : ' '}</Text>
       </Box>
-      <Box width={first?.width} flexShrink={0}>
-        <Button key={key} label={first?.text ?? ''} plain dimColor={!isSel} onPress={onPress} />
-      </Box>
-      {rest.map(c =>
-        c.width ? (
-          <Box width={c.width} flexShrink={0}>
-            <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
-          </Box>
-        ) : (
-          <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
-        ),
-      )}
+      {cells.map(draw)}
     </Box>
   )
 }
@@ -1481,7 +1487,7 @@ async function inboxTab($: $T, el: El, v: View, now: number) {
           {list.map(m =>
             listRow(el, 'msg-' + m.id, m.id === selId, () => pick(m.id), [
               { text: m.isSent ? '↗' : m.isRead ? '○' : '●', width: 1 },
-              { text: clip(m.isSent ? '→ ' + (m.to || '?') : m.from, 20), width: 20, dim: false },
+              { text: clip(m.isSent ? '→ ' + (m.to || '?') : m.from, 20), width: 20, press: true },
               { text: m.kind, width: 9 },
               { text: ago(now, m.at), width: 5 },
               { text: firstLine(m.text), bold: !m.isRead },
@@ -1634,8 +1640,8 @@ async function nudgesTab($: $T, el: El, v: View, now: number) {
           {shown.map(n => {
             const [word, color] = badge[n.audience]
             return listRow(el, 'nudge-' + n.id, n.id === selId, () => choose(n.id), [
-              { text: word.trim(), width: 6 },
-              { text: clip(n.hook, 24), width: 24, color },
+              { text: word.trim(), width: 6, color },
+              { text: clip(n.hook, 24), width: 24, press: true },
               { text: n.action, width: 8 },
               { text: n.at ? ago(now, n.at) : '', width: 5 },
               { text: n.chars ? n.chars + 'c' : '', width: 6 },
@@ -1831,7 +1837,7 @@ async function decideTab($: $T, el: El, v: View, cwd: string) {
             {items.map(it =>
               listRow(el, 'q-' + set.slug + '/' + it.id, it.id === qSel, () => choose(it.id), [
                 { text: it.id, width: 5 },
-                { text: clip(it.question, 36), width: 36 },
+                { text: clip(it.question, 36), width: 36, press: true },
                 { text: labelOf(it) + (d.notes[set.slug + '/' + it.id] ? ' · note' : ''), color: it.id === qSel ? 'cyan' : undefined },
               ]),
             )}

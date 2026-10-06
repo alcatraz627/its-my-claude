@@ -345,6 +345,9 @@ describe('restyled tabs with rows in them', () => {
     await ui.press({ key: 'tab-inbox' })
     expect(await ui.find({ text: '3 messages · 1 new · 1 sent' })).toBeDefined()
     expect(await ui.find({ text: '→ clanky-opus' })).toBeDefined()
+    // The click target is the sender, not the one-glyph read dot beside it.
+    expect((await ui.find({ key: 'msg-in-1' }))?.text).toBe('clanky-opus')
+    expect((await ui.find({ key: 'msg-out-1' }))?.text).toBe('→ clanky-opus')
     await ui.press({ key: 'msg-out-1' })
     expect(await ui.find({ text: 'you → clanky-opus' })).toBeDefined()
     expect(await ui.find({ key: 'reply-open' })).toBeUndefined()
