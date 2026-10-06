@@ -23,7 +23,7 @@
 
 - `/hub` opens the hub; `/hub tasks` (or docs, nudges, fleet, inbox, decide) opens a tab.
 - `/hub help` opens this guide. `/hub band` hides or shows the band.
-- `/hub off` silences the mod for this session only: hooks pass through, panes close, status clears. `/hub on` restores it.
+- The mod starts off in every session and draws nothing. Any `/hub` turns it on for this session; `/hub off` silences it again (hooks pass through, panes close, status clears). `startOn` in `/config` makes it start on everywhere.
 
 ## Keys
 
@@ -31,7 +31,7 @@
 - The hub takes the keyboard when opened by a command or a chip, or when you click it; the band after `ctrl+x tab` or a click. Esc hands the keyboard back to the prompt. If a letter typed in the prompt vanished, the pane had the keyboard; press Esc first.
 - `1` to `7` switch tabs, `h` guide. Tab and arrows walk, Enter presses, `ctrl+x x` closes a pane.
 - Everything the mod puts in the prompt box is inserted at the cursor, never replacing what you typed. A slash command (`/goal`, `/core-dump`, `/atone` and the other skills) only runs from the start of an empty prompt, so with a draft in the box it goes to the clipboard instead and a toast says so.
-- A `gcc-goal:`, `snip-note` or `dp-note` line starts on its own line. Enter saves it and sends nothing; any other text you had in the box comes back.
+- A `gcc-goal:`, `snip-note` or `dp-note` line is one line of its own. Enter saves that line and sends nothing; every other line you had in the box comes back. If it names a snippet or decision that does not exist, or cannot be saved, nothing is saved or sent and your whole text comes back.
 - Preview and goal open in place of the hub; `b` goes back to it.
 - In a text field every key types. Enter saves to gcc and sends nothing.
 
@@ -83,7 +83,7 @@ Then the receipt (after a done-claim) and count chips; each chip opens its tab.
 
 ## Switches
 
-`/config` rows, machine-wide: hygiene, continuity, tasks, tasksWrite, fleet, wake, mailWake, router, nudges, decide, receipt, fun, sound. On by default except mailWake and sound.
+`/config` rows, machine-wide: startOn (off by default), hygiene, continuity, tasks, tasksWrite, fleet, wake, mailWake, router, nudges, decide, receipt, fun, sound. On by default except startOn, mailWake and sound.
 
 ## If something looks wrong
 

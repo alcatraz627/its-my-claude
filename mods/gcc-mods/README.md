@@ -4,7 +4,7 @@ gcc's owner surfaces drawn inside the Claude Code TUI, so what waits on you, wha
 
 The owner's guide, every surface and key explained, is `GUIDE.md` beside this file; `/hub help` or `h` in the hub opens it in the preview pane.
 
-Loads only in a session started with `claude --plugin-dir ~/.claude/mods/gcc-mods` (v1 rollout, one session at a time); that folder is watched, so edits hot-reload. Built against Claude Code 2.1.291; the mods API is early access, so after a CLI update run the three checks below before trusting it.
+Loads in every session through `CLAUDE_CODE_PLUGIN_DIRS` in the `env` block of `~/.claude/settings.json`, and starts off: a session behaves as if the mod were absent until `/hub` turns it on for that session. The `startOn` switch in `/config` makes it start on everywhere. The folder is watched, so edits hot-reload. Built against Claude Code 2.1.291; the mods API is early access, so after a CLI update run the three checks below before trusting it.
 
 ## What it draws
 
@@ -18,7 +18,7 @@ Loads only in a session started with `claude --plugin-dir ~/.claude/mods/gcc-mod
 | wakes | an idle session is woken when ipc mail, a decision-page answer, or an unread seat report lands; the wake names the sender and the read command, never the body |
 | fun | a spinner word that fits the moment, a turn footer with the tool count, a greeting with what waits, landing phrases, a toast when every acceptance row is proven |
 
-`/hub off` silences the mod for the current session only (every hook passes through, panes close, status clears); `/hub on` restores it. Every cluster is also a machine-wide switch in `/config` (hygiene, continuity, tasks, tasksWrite, fleet, wake, mailWake, router, nudges, decide, receipt, fun, sound). Turn one off rather than argue with it.
+Any `/hub` turns the mod on for the current session; `/hub off` silences it again (every hook passes through, panes close, status clears). Every cluster is also a machine-wide switch in `/config` (startOn, hygiene, continuity, tasks, tasksWrite, fleet, wake, mailWake, router, nudges, decide, receipt, fun, sound). Turn one off rather than argue with it.
 
 ## The router
 

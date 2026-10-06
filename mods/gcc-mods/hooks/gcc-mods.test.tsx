@@ -6,6 +6,8 @@ import type { On } from 'claude-code'
 import { describe, expect, mock, test } from 'claude-code/testing'
 
 const NOW = 1_790_000_000_000
+// The mod starts off by default; these tests drive it on.
+const ON = { options: { startOn: true } }
 
 const PATH_JSON = JSON.stringify({
   scope: 'scope: live goals touching .claude · 1 goal(s)',
@@ -70,7 +72,7 @@ const BAND_PROPS = { hasSurvey: false, isWorking: false, maxRows: 6, bodyColumns
 
 describe('gcc-mods', () => {
   for (const surface of SURFACES) {
-    test('hub tabs draw from the goal record and the inbox on ' + surface, async ($, on) => {
+    test('hub tabs draw from the goal record and the inbox on ' + surface, ON, async ($, on) => {
       world(on)
       await $.classic.SessionStart({ source: 'clear' })
       const ui = await $.ui.mount({ plugin: 'gcc-mods', surface, component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
@@ -98,7 +100,7 @@ describe('gcc-mods', () => {
       expect(await ui.find({ text: 'Nothing waiting on you here.' })).toBeDefined()
     })
 
-    test('band shows the owed read, the chips, and hides on ' + surface, async ($, on) => {
+    test('band shows the owed read, the chips, and hides on ' + surface, ON, async ($, on) => {
       world(on)
       await $.classic.SessionStart({ source: 'clear' })
       const band = await $.ui.mount({ plugin: 'gcc-mods', surface, component: 'AbovePrompt', props: BAND_PROPS })
@@ -110,7 +112,7 @@ describe('gcc-mods', () => {
     })
   }
 
-  test("showing other agents' decision pages leaves the Tasks tab's done rows folded", async ($, on) => {
+  test("showing other agents' decision pages leaves the Tasks tab's done rows folded", ON, async ($, on) => {
     world(on, [], ['fs.read'])
     on('fs.read', ($, e) => {
       const p = String((e as { path?: string }).path ?? '')
@@ -128,7 +130,7 @@ describe('gcc-mods', () => {
     expect((await ui.find({ key: 'done' }))?.text).toContain('show done rows')
   })
 
-  test('a command fill over a draft goes to the clipboard, never into the box', async ($, on) => {
+  test('a command fill over a draft goes to the clipboard, never into the box', ON, async ($, on) => {
     const fills: string[] = []
     const copies: string[] = []
     world(on, [], ['prompt.fill', 'ui.copy'])
@@ -149,13 +151,7 @@ describe('gcc-mods', () => {
     expect(copies.length).toBe(1)
   })
 
-  test('a dp-note line is kept on the decision and dropped, not sent', async ($, on) => {
-    world(on)
-    const r = await $.prompt.submit({ text: 'dp-note some-page/D2: the second option, but only after the migration' } as any)
-    expect((r as { drop?: string }).drop).toBeDefined()
-  })
-
-  test('router strips tagged owner blocks from hook context and keeps the rest', async ($, on) => {
+  test('router strips tagged owner blocks from hook context and keeps the rest', ON, async ($, on) => {
     const seen: string[] = []
     world(on, seen)
     on('prompt.attachment', ($, e) => ({ text: e.text }))

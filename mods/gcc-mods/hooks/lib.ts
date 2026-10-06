@@ -46,7 +46,7 @@ export const emptyMail: Mail = { messages: [], at: 0, lastWakeAt: 0, error: null
 export const emptyReceipt: Receipt = { turnStartedAt: 0, lastRun: null, lastShot: null, lastCurl: null, claim: null }
 export const emptyIdle: Idle = { since: null, openRows: 0, continueOfferedAt: null }
 export const emptyDecide: Decide = { pending: [], picks: {}, notes: {}, at: 0, submitted: [], answered: [] }
-export const emptyFun: Fun = { greetedAt: null, metGoals: [], lastLanding: '' }
+export const emptyFun: Fun = { greetedAt: null, metGoals: [], lastLanding: '', goalsSeeded: false }
 
 // The switches from plugin.json's userConfig, read once at register time.
 export type Switches = {
@@ -63,6 +63,7 @@ export type Switches = {
   receipt: boolean
   fun: boolean
   sound: boolean
+  startOn: boolean
 }
 export function switchesOf(options: PluginOptions): Switches {
   const on = (k: keyof Switches, dflt = true) => (typeof options[k] === 'boolean' ? (options[k] as boolean) : dflt)
@@ -80,6 +81,7 @@ export function switchesOf(options: PluginOptions): Switches {
     receipt: on('receipt'),
     fun: on('fun'),
     sound: on('sound', false),
+    startOn: on('startOn', false),
   }
 }
 
@@ -171,6 +173,27 @@ export function docKindOf(path: string): Doc['kind'] {
 const BLOCK_RE = /<owner\b([^>]*)>([\s\S]*?)<\/owner>\s*/g
 const ATTR_RE = /(\w+)=("([^"]*)"|'([^']*)'|([^\s>]+))/g
 export type OwnerBlock = { surface: string; hook: string; text: string; model: string }
+
+// A line the owner typed to edit something in gcc rather than to talk to the
+// model: `gcc-goal: <goal>`, `snip-note <id>: <note>`, `dp-note <slug>/<item>: <note>`.
+// The edit is that one line; `rest` is every other line of the draft, which
+// belongs to the owner and goes back in the box.
+export type EditLine = { kind: 'goal' | 'snip' | 'dp'; key: string; body: string; rest: string }
+
+export function parseEditLine(text: string): EditLine | null {
+  const lines = text.split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!
+    const goal = line.match(/^gcc-goal: ?(.*)$/)
+    const snip = line.match(/^snip-note (\S+): ?(.*)$/)
+    const dp = line.match(/^dp-note (\S+\/\S+): ?(.*)$/)
+    const hit = goal ? (['goal', '', goal[1]] as const) : snip ? (['snip', snip[1], snip[2]] as const) : dp ? (['dp', dp[1], dp[2]] as const) : null
+    if (!hit) continue
+    const rest = [...lines.slice(0, i), ...lines.slice(i + 1)].join('\n').trim()
+    return { kind: hit[0], key: hit[1] ?? '', body: (hit[2] ?? '').trim(), rest }
+  }
+  return null
+}
 
 export function splitOwnerBlocks(text: string): { rest: string; blocks: OwnerBlock[] } {
   const blocks: OwnerBlock[] = []

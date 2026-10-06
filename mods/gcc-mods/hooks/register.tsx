@@ -12,10 +12,10 @@ import type { Audience, Bookmark, Catchup, DecideSet, Doc, DocFilter, Msg, Notic
 import {
   CURL_RE, DP_REG, GCC, GOAL_SH, GS, HOME, LANDING, PANE, PATH_RE, RUN_RE, SUBJECT_RE, SUCCESS_RE, TRAIL_RE, VIEWS, WORDS,
   abs, ago, agoPhrase, answerString, clip, docKindOf, dur, emptyDecide, emptyFun, emptyIdle, emptyMail, emptyMeter, emptyReceipt, firstLine, gatedRows,
-  goalCounts, greetingFor, head, hk, hourGlyph, initialView, isGate, jsonOr, openGates, parseJsonl, plural, readyRows, receiptLine, sid8,
+  goalCounts, greetingFor, head, hk, hourGlyph, initialView, isGate, jsonOr, openGates, parseEditLine, parseJsonl, plural, readyRows, receiptLine, sid8,
   splitOwnerBlocks, switchesOf, tablesToBlocks, tilde,
 } from './lib'
-import type { El, OwnerBlock, Switches } from './lib'
+import type { EditLine, El, OwnerBlock, Switches } from './lib'
 
 type $T = EngineInterface
 
@@ -35,8 +35,9 @@ const idleAtom = atom({ plugin: 'gcc-mods', key: 'idle' } as const, emptyIdle)
 const decideAtom = atom({ plugin: 'gcc-mods', key: 'decide' } as const, emptyDecide)
 const funAtom = atom({ plugin: 'gcc-mods', key: 'fun' } as const, emptyFun)
 const previewAtom = atom({ plugin: 'gcc-mods', key: 'preview' } as const, null as Preview | null)
-// The per-session master switch: /hub off makes every hook a pass-through.
-const enabledAtom = atom({ plugin: 'gcc-mods', key: 'enabled' } as const, true)
+// The per-session master switch. Off, every hook is a pass-through and the
+// session behaves as if the mod were not loaded; /hub turns it on.
+const enabledAtom = atom({ plugin: 'gcc-mods', key: 'enabled' } as const, null as boolean | null)
 const snipsAtom = atom({ plugin: 'gcc-mods', key: 'snips' } as const, { snippets: [], bookmarks: [], at: 0, sel: null, editing: null, scope: 'all' } as Snips)
 const PREVIEW = 'gcc-preview'
 const SNIP_DIR = GCC + '/snippets'
@@ -64,18 +65,21 @@ async function loadSnips($: $T) {
   await update($, snipsAtom, s => ({ ...s, snippets: snippets.sort((a, b) => b.ts - a.ts), bookmarks: bookmarks.sort((a, b) => b.ts - a.ts), at: now }))
 }
 
-async function writeScope($: $T, scope: Scope, cwd: string, sid: string, rows: (Snippet | Bookmark)[]) {
-  const lines = rows.map(r => JSON.stringify('path' in r ? { kind: 'bookmark', ...r } : { kind: 'snippet', ...r }))
-  await $.fs.write(snipFile(scope, cwd, sid), lines.join('\n') + (lines.length ? '\n' : ''))
-}
+type SnipRow = (Snippet | Bookmark) & { kind?: string }
 
-async function saveSnips($: $T) {
+// Change one scope's file by re-reading it and applying a single change by id,
+// so rows other sessions added since this one loaded survive. A file that
+// exists but cannot be read throws rather than being rewritten empty.
+async function mutateSnips($: $T, scope: Scope, change: (rows: SnipRow[]) => SnipRow[]) {
   const cwd = await cwdOf($)
   const sid = await $.session.id().catch(() => '')
-  const s = await read($, snipsAtom)
-  for (const scope of ['global', 'project', 'session'] as const) {
-    await writeScope($, scope, cwd, sid, [...s.snippets.filter(x => x.scope === scope), ...s.bookmarks.filter(x => x.scope === scope)])
-  }
+  const file = snipFile(scope, cwd, sid)
+  const raw = await readText($, file)
+  if (raw === null && (await fileExists($, file))) throw new Error('could not read ' + file)
+  const rows = change(parseJsonl(raw ?? '') as SnipRow[])
+  const lines = rows.map(r => JSON.stringify('path' in r ? { ...r, kind: 'bookmark' } : { ...r, kind: 'snippet' }))
+  await $.fs.write(file, lines.join('\n') + (lines.length ? '\n' : ''))
+  await loadSnips($)
 }
 
 async function addSnippet($: $T, text: string, scope: Scope = 'project') {
@@ -83,23 +87,60 @@ async function addSnippet($: $T, text: string, scope: Scope = 'project') {
   const sid = await $.session.id().catch(() => '')
   const now = await $.clock.now()
   const snip: Snippet = { id: 's-' + now.toString(36), ts: now, scope, project: cwd, sid, title: clip(firstLine(text), 60), text, notes: '', tags: [] }
-  await update($, snipsAtom, s => ({ ...s, snippets: [snip, ...s.snippets], sel: snip.id, editing: 'title' as const }))
-  await saveSnips($)
+  await mutateSnips($, scope, rows => [snip, ...rows])
+  await update($, snipsAtom, s => ({ ...s, sel: snip.id, editing: 'title' as const }))
   return snip
+}
+
+// Edit or delete (patch null) one snippet. A scope change moves it between
+// files. Returns false when no snippet has that id.
+async function editSnippet($: $T, id: string, patch: Partial<Snippet> | null): Promise<boolean> {
+  await loadSnips($)
+  const have = (await read($, snipsAtom)).snippets.find(x => x.id === id)
+  if (!have) return false
+  const moved = patch?.scope && patch.scope !== have.scope ? patch.scope : null
+  await mutateSnips($, have.scope, rows => (patch && !moved ? rows.map(r => (r.id === id ? { ...r, ...patch } : r)) : rows.filter(r => r.id !== id)))
+  if (moved) await mutateSnips($, moved, rows => [{ ...have, ...patch }, ...rows])
+  return true
 }
 
 async function toggleBookmark($: $T, path: string, scope: Scope = 'project') {
   const cwd = await cwdOf($)
   const sid = await $.session.id().catch(() => '')
   const now = await $.clock.now()
-  const s = await read($, snipsAtom)
-  const have = s.bookmarks.find(b => b.path === path)
-  await update($, snipsAtom, x => ({
-    ...x,
-    bookmarks: have ? x.bookmarks.filter(b => b.path !== path) : [{ id: 'b-' + now.toString(36), ts: now, scope, project: cwd, sid, path, note: '' }, ...x.bookmarks],
-  }))
-  await saveSnips($)
+  const have = (await read($, snipsAtom)).bookmarks.find(b => b.path === path)
+  if (have) await mutateSnips($, have.scope, rows => rows.filter(r => r.id !== have.id))
+  else await mutateSnips($, scope, rows => [{ id: 'b-' + now.toString(36), ts: now, scope, project: cwd, sid, path, note: '' }, ...rows])
   $.ui.toast(have ? 'Bookmark removed.' : 'Bookmarked (' + scope + ').')
+}
+
+// Save one prompt-box edit line. False means nothing was saved (an unknown
+// snippet or decision, or goal.sh refused) and the caller puts the draft back.
+async function saveEditLine($: $T, edit: EditLine): Promise<boolean> {
+  if (edit.kind === 'snip') {
+    const found = await editSnippet($, edit.key, { notes: edit.body })
+    $.ui.toast(found ? 'Snippet note saved. Nothing was sent.' : 'No snippet ' + edit.key + ' here. Nothing was saved or sent; your text is back in the box.', { timeoutMs: 7_000 })
+    return found
+  }
+  if (edit.kind === 'dp') {
+    const [slug, item] = edit.key.split('/')
+    const page = (await read($, decideAtom)).pending.find(s => s.slug === slug)
+    if (!page || !page.items.some(it => it.id === item)) {
+      $.ui.toast('No decision ' + edit.key + ' here. Nothing was saved or sent; your text is back in the box.', { timeoutMs: 7_000 })
+      return false
+    }
+    await update($, decideAtom, x => ({ ...x, notes: { ...x.notes, [edit.key]: edit.body } }))
+    $.ui.toast('Note kept on ' + edit.key + '. Submit sends it with the rulings; nothing was sent now.')
+    return true
+  }
+  if (!edit.body) {
+    $.ui.toast('The goal line was empty. Nothing was saved or sent.')
+    return false
+  }
+  const r = await run($, ['bash', GOAL_SH, 'set', edit.body, '--by', 'owner'], { timeoutMs: 6_000 })
+  $.ui.toast(r.ok ? 'gcc goal saved. Nothing was sent. The /goal paste line (p in the Tasks tab) arms the harness.' : 'goal.sh refused: ' + clip(r.err || r.out, 120), { timeoutMs: 7_000 })
+  if (r.ok) await refreshGoals($)
+  return r.ok
 }
 
 // The last mouse selection, or nothing: fullscreen terminal and desktop only.
@@ -119,12 +160,25 @@ const SNIP_SKILLS: [string, string, string][] = [
   ['affirm', '/affirm', 'f'],
 ]
 
-const isOn = ($: $T) => read($, enabledAtom)
+// The startOn switch from /config, set when the module registers.
+let startOn = false
+const isOn = async ($: $T) => (await read($, enabledAtom)) ?? startOn
 
-async function switchMod($: $T, on: boolean) {
+// The work a session does when the mod comes on: what a start would have done.
+async function startUp($: $T, sw: Switches) {
+  if (sw.continuity) {
+    await seedDocs($)
+    await offerCheckpoint($)
+  }
+  await refreshAll($, sw)
+}
+
+async function switchMod($: $T, on: boolean, sw: Switches) {
+  const was = await isOn($)
   await update($, enabledAtom, () => on)
   if (on) {
-    $.ui.toast('gcc-mods is on for this session.')
+    if (!was) await startUp($, sw)
+    $.ui.toast('gcc-mods is on for this session. /hub off silences it.')
     return
   }
   $.ui.status(undefined)
@@ -277,8 +331,12 @@ async function fillPrompt($: $T, text: string, how: 'text' | 'line' | 'command' 
     $.ui.toast(r.isCopied ? 'Your prompt has a draft, so this went to the clipboard. Paste it into an empty prompt.' : 'Your prompt has a draft; clear it and try again.', { timeoutMs: 7_000 })
     return false
   }
+  // An edit line sits on a line of its own, so text on either side of the
+  // cursor stays the owner's and is never read into the edit.
   const atLineStart = box.cursor === 0 || box.text[box.cursor - 1] === '\n'
-  await $.prompt.fill({ text: how === 'line' && !atLineStart ? '\n' + text : text, mode: 'insert' })
+  const atLineEnd = box.cursor >= box.text.length || box.text[box.cursor] === '\n'
+  const line = (atLineStart ? '' : '\n') + text + (atLineEnd ? '' : '\n')
+  await $.prompt.fill({ text: how === 'line' ? line : text, mode: 'insert' })
   return true
 }
 
@@ -724,7 +782,6 @@ async function refreshGoals($: $T) {
   }
   const j = jsonOr<{ scope?: string; armed?: string; goals?: RawGoal[] }>(r.out, {})
   const goals = (j.goals ?? []).map(toGoal)
-  const isFirstRead = (await read($, goalsAtom)) === null
   const snap: GoalsSnap = { scope: j.scope ?? '', armed: j.armed ?? '', sessionGoal, goals, at: now, error: null }
   await update($, goalsAtom, () => snap)
   await update($, idleAtom, i => ({ ...i, openRows: goalCounts(snap).ready }))
@@ -733,9 +790,10 @@ async function refreshGoals($: $T) {
   const fresh = met.filter(g => !fun.metGoals.includes(g.id))
   if (fresh.length) {
     await update($, funAtom, f => ({ ...f, metGoals: [...f.metGoals, ...fresh.map(g => g.id)] }))
-    // Only a goal that became met while this session watched earns the toast.
-    if (!isFirstRead) for (const g of fresh) $.ui.toast('🎯 every acceptance row is proven: ' + clip(g.outcome, 70), { timeoutMs: 8_000 })
+    // The first good read seeds what was already met; only later ones are news.
+    if (fun.goalsSeeded) for (const g of fresh) $.ui.toast('🎯 every acceptance row is proven: ' + clip(g.outcome, 70), { timeoutMs: 8_000 })
   }
+  if (!fun.goalsSeeded) await update($, funAtom, f => ({ ...f, goalsSeeded: true }))
 }
 
 async function tasksTab($: $T, el: El, v: View, write: boolean) {
@@ -1656,8 +1714,8 @@ async function snipsTab($: $T, el: El, now: number) {
   const selId = list.some(x => x.id === s.sel) ? s.sel : (list[0]?.id ?? null)
   const sel = list.find(x => x.id === selId)
   const patch = async (id: string, p: Partial<Snippet>) => {
-    await update($, snipsAtom, x => ({ ...x, snippets: x.snippets.map(y => (y.id === id ? { ...y, ...p } : y)), editing: null }))
-    await saveSnips($)
+    await editSnippet($, id, p)
+    await update($, snipsAtom, x => ({ ...x, editing: null }))
   }
   const scopes = [
     { value: 'all', label: 'all scopes' },
@@ -1746,8 +1804,8 @@ async function snipsTab($: $T, el: El, now: number) {
               plain
               {...hk('x')}
               onPress={async () => {
-                await update($, snipsAtom, x => ({ ...x, snippets: x.snippets.filter(y => y.id !== sel.id), sel: null }))
-                await saveSnips($)
+                await editSnippet($, sel.id, null)
+                await update($, snipsAtom, x => ({ ...x, sel: null }))
               }}
             />
           </Box>
@@ -1995,22 +2053,21 @@ async function refreshAll($: $T, sw: Switches) {
 
 export const register: Register = (on, options) => {
   const sw = switchesOf(options)
+  startOn = sw.startOn
 
+  // /hub and the timers exist in every session, on or off; the timers do
+  // nothing while the mod is off, so /hub can turn it on at any point.
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'hub',
-      description: 'The owner hub: docs, tasks, nudges, fleet, inbox, decide, snips; help, band, on, off; snip|pin|propose|atone|affirm act on the mouse selection',
+      description: 'The owner hub (gcc-mods): docs, tasks, nudges, fleet, inbox, decide, snips. Turns the mod on for this session; /hub off silences it.',
       argumentHint: '[tab|help|band|on|off|snip|pin|propose|atone|affirm]',
       immediate: true,
     })
-    if (!(await isOn($))) return next(e)
-
-    if (sw.continuity) {
-      await seedDocs($)
-      await offerCheckpoint($)
+    if (await isOn($)) {
+      await startUp($, sw)
+      if (sw.fun) await greet($)
     }
-    await refreshAll($, sw)
-    if (sw.fun) await greet($)
 
     // Slow timers: the stores other sessions and the owner write to.
     $.clock.every(60_000, async () => {
@@ -2054,11 +2111,11 @@ export const register: Register = (on, options) => {
   on('command.run', { command: 'hub' }, async ($, e) => {
     const want = e.args.trim() as Tab | 'help' | 'on' | 'off' | 'band' | 'snip' | 'pin' | 'propose' | 'atone' | 'affirm'
     if (want === 'off' || want === 'on') {
-      await switchMod($, want === 'on')
-      if (want === 'on') await refreshAll($, sw)
+      await switchMod($, want === 'on', sw)
       return { text: 'the hub mod is ' + want + ' for this session.' }
     }
-    if (!(await isOn($))) return { text: 'the hub mod is off for this session. /hub on turns it back on.' }
+    // Any other /hub is a request to use the hub, so it turns the mod on first.
+    if (!(await isOn($))) await switchMod($, true, sw)
     if (want === 'help') {
       await openGuide($)
       return {}
@@ -2288,36 +2345,16 @@ export const register: Register = (on, options) => {
   }
 
   // ── the unmatched lifecycle hooks, once each ──
+  // An edit line in the prompt box (gcc-goal:, snip-note, dp-note) is saved and
+  // dropped, never sent. The edit is that one line; the rest of the draft goes
+  // back in the box. When the edit cannot be saved the whole draft goes back.
   on('prompt.submit', async ($, e, next) => {
     if (!(await isOn($))) return next(e)
-    // An edit line typed in the prompt box (snippet note, decision note, goal)
-    // is saved and dropped, never sent. It runs from its prefix to the end of
-    // the draft; any text above it is put back in the box.
-    const noteMatch = e.text.match(/(?:^|\n)snip-note (\S+): ?([\s\S]*)$/)
-    if (noteMatch) {
-      await update($, snipsAtom, x => ({ ...x, snippets: x.snippets.map(y => (y.id === noteMatch[1] ? { ...y, notes: (noteMatch[2] ?? '').trim() } : y)) }))
-      await saveSnips($)
-      $.ui.toast('Snippet note saved. Nothing was sent.')
-      void restoreDraft($, e.text.slice(0, noteMatch.index))
-      return { drop: 'snippet note, saved by gcc-mods' }
-    }
-    const dpMatch = e.text.match(/(?:^|\n)dp-note (\S+)\/(\S+): ?([\s\S]*)$/)
-    if (dpMatch) {
-      const key = dpMatch[1] + '/' + dpMatch[2]
-      await update($, decideAtom, x => ({ ...x, notes: { ...x.notes, [key]: (dpMatch[3] ?? '').trim() } }))
-      $.ui.toast('Note kept on ' + key + '. Submit sends it with the rulings; nothing was sent now.')
-      void restoreDraft($, e.text.slice(0, dpMatch.index))
-      return { drop: 'decision note, saved by gcc-mods' }
-    }
-    const goalAt = e.text.indexOf(GOAL_PREFIX)
-    if (sw.tasks && goalAt >= 0 && (goalAt === 0 || e.text[goalAt - 1] === '\n')) {
-      const text = e.text.slice(goalAt + GOAL_PREFIX.length).trim()
-      void restoreDraft($, e.text.slice(0, goalAt))
-      if (!text) return { drop: 'empty goal edit' }
-      const r = await run($, ['bash', GOAL_SH, 'set', text, '--by', 'owner'], { timeoutMs: 6_000 })
-      $.ui.toast(r.ok ? 'gcc goal saved. Nothing was sent. The /goal paste line (p in the Tasks tab) arms the harness.' : 'goal.sh refused: ' + clip(r.err || r.out, 120), { timeoutMs: 7_000 })
-      await refreshGoals($)
-      return { drop: 'gcc goal edit, saved by gcc-mods' }
+    const edit = parseEditLine(e.text)
+    if (edit && (edit.kind !== 'goal' || sw.tasks)) {
+      const saved = await saveEditLine($, edit)
+      void restoreDraft($, saved ? edit.rest : e.text)
+      return { drop: saved ? 'edit line saved by gcc-mods' : 'edit line not saved; the draft is back in the box' }
     }
     if (sw.tasks) await update($, idleAtom, i => ({ ...i, since: null, continueOfferedAt: null }))
     if (sw.receipt) await resetReceipt($)
@@ -2327,6 +2364,12 @@ export const register: Register = (on, options) => {
       turnKey = Math.floor((await $.clock.now()) / 1000)
     }
     return next(e)
+  }).catch(($, e, next) => {
+    // A save that threw must not let an edit line through to the model.
+    if (next.called || !parseEditLine(e.text)) return next(e)
+    $.ui.toast('gcc-mods could not save that line. Nothing was sent; your text is back in the box.', { timeoutMs: 8_000 })
+    void restoreDraft($, e.text)
+    return { drop: 'edit line not saved; the draft is back in the box' }
   })
 
   on('turn.complete', async ($, e, next) => {

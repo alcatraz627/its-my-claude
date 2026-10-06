@@ -5,6 +5,7 @@
   "author": { "name": "alcatraz627" },
   "types": "./types/index.d.ts",
   "userConfig": {
+    "startOn": { "type": "boolean", "default": false, "title": "Start on", "description": "Turn the mod on in every new session. Off: a session starts with the mod silent, and /hub turns it on for that session." },
     "hygiene": { "type": "boolean", "default": true, "title": "Transcript hygiene", "description": "Clickable absolute paths and compact seat and peer rows in the transcript." },
     "continuity": { "type": "boolean", "default": true, "title": "Continuity", "description": "Catchup band after a clear or resume, context and usage gauge, core-dump button, Docs tab." },
     "tasks": { "type": "boolean", "default": true, "title": "Tasks", "description": "Tasks pane over the goal record, pending chips, stopped-with-open-work nudge." },

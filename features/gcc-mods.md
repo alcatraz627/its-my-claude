@@ -39,6 +39,10 @@ Surfaces: `toast`, `log` (a dim transcript line), `band`, `pane:nudges`, `pane:t
 
 Keep the paste instruction inside the block and any model duty outside it. A session without the mod sees the tag as text and behaves as before; the Codex adapter unwraps it in `gcc_ctx_of`.
 
+## How it loads
+
+Every session loads it through `CLAUDE_CODE_PLUGIN_DIRS` in the `env` block of `~/.claude/settings.json`, and it starts off: hooks pass through and nothing is drawn until `/hub` turns it on for that session. A hook author can rely on neither state, which is why the owner tag must read as plain text when the mod is off. To stop loading it at all, remove that env entry; it takes effect in new sessions.
+
 ## Checks after a CLI update
 
 `claude plugin validate`, `tsc` against the laid types, `claude plugin test` on the skills folder. The types file's first line names the CLI version that wrote it. The three validator rules the types cannot express: `$` is followed only into functions declared in the module file, an event is registered without a matcher at most once per module, and every `$.state` reference is spelled with literal `plugin` and `key`.

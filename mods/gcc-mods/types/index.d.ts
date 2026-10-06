@@ -150,7 +150,9 @@ export type Decide = {
   answered: string[]
 }
 
-export type Fun = { greetedAt: number | null; metGoals: string[]; lastLanding: string }
+// goalsSeeded: the goal record has been read successfully once, so a goal met
+// from here on is news and earns its toast.
+export type Fun = { greetedAt: number | null; metGoals: string[]; lastLanding: string; goalsSeeded: boolean }
 
 // What the preview pane shows: the full text of whatever was last picked.
 export type Preview = { title: string; text: string; path: string | null; at: number; kind: 'text' | 'goal'; goalId: string | null; editing: boolean }
@@ -195,7 +197,8 @@ declare module 'claude-code' {
       decide: Decide
       fun: Fun
       preview: Preview | null
-      enabled: boolean
+      // null until /hub or /hub off decides it this session; the startOn switch fills in.
+      enabled: boolean | null
       snips: Snips
     }
   }
