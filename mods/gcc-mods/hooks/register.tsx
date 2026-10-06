@@ -696,38 +696,15 @@ async function docsTab($: $T, el: El, v: View, now: number) {
               {docs.length ? plural(docs.length, 'doc') + ' under other filters. f widens it.' : 'Nothing found yet. r rescans.'}
             </Text>
           )}
-          {list.length > 0 && (
-            <Box flexDirection="row" columnGap={1}>
-              <Box width={titleW} flexShrink={0}>
-                <Text dimColor>  title</Text>
-              </Box>
-              <Box width={11} flexShrink={0}>
-                <Text dimColor>kind</Text>
-              </Box>
-              <Box width={5} flexShrink={0}>
-                <Text dimColor>age</Text>
-              </Box>
-              <Text dimColor>edits</Text>
-            </Box>
+          {list.length > 0 && listHead(el, [{ text: 'title', width: titleW }, { text: 'kind', width: 11 }, { text: 'age', width: 5 }, { text: 'edits' }])}
+          {shown.map(doc =>
+            listRow(el, 'doc-' + doc.id, doc.id === selId, () => setView($, { docSel: doc.id }), [
+              { text: clip(doc.title, titleW), width: titleW },
+              { text: doc.kind, width: 11 },
+              { text: ago(now, doc.at), width: 5 },
+              { text: (doc.edits ? String(doc.edits) : '·') + (doc.isLive ? ' · live' : ''), color: doc.isLive ? 'green' : undefined },
+            ]),
           )}
-          {shown.map(doc => {
-            const isSel = doc.id === selId
-            return (
-              <Box flexDirection="row" columnGap={1}>
-                <Box width={titleW} flexShrink={0}>
-                  <Button key={'doc-' + doc.id} label={(isSel ? '▸ ' : '  ') + clip(doc.title, titleW - 2)} plain dimColor={!isSel} onPress={() => setView($, { docSel: doc.id })} />
-                </Box>
-                <Box width={11} flexShrink={0}>
-                  <Text dimColor>{doc.kind}</Text>
-                </Box>
-                <Box width={5} flexShrink={0}>
-                  <Text dimColor>{ago(now, doc.at)}</Text>
-                </Box>
-                <Text dimColor>{doc.edits ? String(doc.edits) : '·'}</Text>
-                {doc.isLive && <Text color="green"> live</Text>}
-              </Box>
-            )
-          })}
           {list.length > shown.length && <Text dimColor>  +{list.length - shown.length} more (j/k reaches them)</Text>}
         </Box>,
       )}
@@ -1950,15 +1927,14 @@ async function snipsTab($: $T, el: El, now: number) {
         plural(list.length, 'snippet'),
         <Box flexDirection="column">
           {list.length === 0 && <Text dimColor>Select text, then s. Or /hub snip from the prompt.</Text>}
-          {list.slice(0, 12).map(x => (
-            <Box flexDirection="row" columnGap={1}>
-              <Box width={9} flexShrink={0}>
-                <Text dimColor>{x.scope}</Text>
-              </Box>
-              <Button key={'snip-' + x.id} label={(x.id === selId ? '▸ ' : '  ') + x.title} plain dimColor={x.id !== selId} onPress={() => update($, snipsAtom, y => ({ ...y, sel: x.id, editing: null }))} />
-              <Text dimColor>{ago(now, x.ts)}{x.tags.length ? ' · ' + x.tags.join(' ') : ''}</Text>
-            </Box>
-          ))}
+          {list.length > 0 && listHead(el, [{ text: 'scope', width: 9 }, { text: 'title', width: 34 }, { text: 'age · tags' }])}
+          {list.slice(0, 12).map(x =>
+            listRow(el, 'snip-' + x.id, x.id === selId, () => update($, snipsAtom, y => ({ ...y, sel: x.id, editing: null })), [
+              { text: x.scope, width: 9 },
+              { text: clip(x.title, 34), width: 34, press: true },
+              { text: ago(now, x.ts) + (x.tags.length ? ' · ' + x.tags.join(' ') : '') },
+            ]),
+          )}
         </Box>,
       )}
       {sel && (
