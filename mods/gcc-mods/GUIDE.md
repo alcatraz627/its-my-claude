@@ -29,7 +29,7 @@
 
 - A letter or digit presses a button only while that pane or the band holds the keyboard. The prompt holds it by default: then the letter is typed into the prompt box, which is what the engine does and the mod cannot change.
 - The hub takes the keyboard when opened by a command or a chip, or when you click it; the band after `ctrl+x tab` or a click. Esc hands the keyboard back to the prompt. If a letter typed in the prompt vanished, the pane had the keyboard; press Esc first.
-- `1` to `7` switch tabs, `h` guide. Tab and arrows walk, Enter presses, `ctrl+x x` closes a pane.
+- `1` to `7` switch tabs, `h` guide, `j` `k` move the selection in a list. Tab and arrows walk, Enter presses, `ctrl+x x` closes a pane.
 - Everything the mod puts in the prompt box is inserted at the cursor, never replacing what you typed. A slash command (`/goal`, `/core-dump`, `/atone` and the other skills) only runs from the start of an empty prompt, so with a draft in the box it goes to the clipboard instead and a toast says so.
 - A `gcc-goal:`, `snip-note` or `dp-note` line is one line of its own. Enter saves that line and sends nothing; every other line you had in the box comes back. If it names a snippet or decision that does not exist, or cannot be saved, nothing is saved or sent and your whole text comes back.
 - Preview and goal open in place of the hub; `b` goes back to it.
@@ -68,7 +68,7 @@ Then the receipt (after a done-claim) and count chips; each chip opens its tab.
 
 **Snips (7).** Selections you kept, with a title, notes and tags, plus bookmarked docs. Select text with the mouse (fullscreen terminal or desktop), then `s` here or `/hub snip` from the prompt. Scope is session, project or global, stored as jsonl under `~/.claude/snippets/`, so any session sees the same lists. Per snippet: `t` title · `n` notes · `e` tags · `l` notes in the prompt box (Enter saves, sends nothing) · `o` cycle scope · `p` preview · `q` quote · `c` copy · `x` delete · send to a skill with `d` pin-for-dream, `g` gcc-proposal, `a` atone, `f` affirm (the command lands in the prompt box for editing). From the prompt, `/hub pin`, `/hub propose`, `/hub atone`, `/hub affirm` do the same with the current selection. `b` on a doc in the Docs tab bookmarks it.
 
-**Decide (6).** Pages filed for this folder or by this session, drafted picks preselected. Pick with the id button, flip the select, note on one line or `l` for a `dp-note` line in the prompt box. `s` submit · `c` copy the answer string · `x` dismiss · `o` show other agents' pages.
+**Decide (6).** Pages filed for this folder or by this session, drafted picks preselected. The page's questions are rows with your pick beside each; `j` `k` move through them and the selected one opens below with its context, the pick menu and a one-line note, or `l` for a `dp-note` line in the prompt box. `s` submit · `c` copy the answer string · `x` dismiss · `o` show other agents' pages. A page whose questions use a layout the hub cannot draw says so; `p` previews it and the web page answers it.
 
 ## Reads and writes
 

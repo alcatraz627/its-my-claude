@@ -385,6 +385,92 @@ function section(el: El, title: string, children: unknown, color?: string) {
   )
 }
 
+// The row of single-letter buttons at the top of a tab or a detail frame.
+function toolbar(el: El, children: unknown) {
+  const { Box } = el
+  return (
+    <Box flexDirection="row" columnGap={3} flexWrap="wrap">
+      {children}
+    </Box>
+  )
+}
+
+// One column of a list: a fixed width, or the rest of the row when width is left out.
+type Cell = { text: string; width?: number; color?: string; bold?: boolean; dim?: boolean }
+
+// The dim header row over a list; the two leading spaces sit over the selection marker.
+function listHead(el: El, cells: { text: string; width?: number }[]) {
+  const { Box, Text } = el
+  return (
+    <Box flexDirection="row" columnGap={1}>
+      <Box width={2} flexShrink={0}>
+        <Text> </Text>
+      </Box>
+      {cells.map(c =>
+        c.width ? (
+          <Box width={c.width} flexShrink={0}>
+            <Text dimColor>{c.text}</Text>
+          </Box>
+        ) : (
+          <Text dimColor wrap="truncate-end">{c.text}</Text>
+        ),
+      )}
+    </Box>
+  )
+}
+
+// One row of a list. The marker has a column of its own so a narrow first
+// column is never clipped by it; the first cell is the button that selects.
+function listRow(el: El, key: string, isSel: boolean, onPress: () => unknown, cells: Cell[]) {
+  const { Box, Text, Button } = el
+  const [first, ...rest] = cells
+  return (
+    <Box flexDirection="row" columnGap={1}>
+      <Box width={2} flexShrink={0}>
+        <Text color="cyan">{isSel ? '▸' : ' '}</Text>
+      </Box>
+      <Box width={first?.width} flexShrink={0}>
+        <Button key={key} label={first?.text ?? ''} plain dimColor={!isSel} onPress={onPress} />
+      </Box>
+      {rest.map(c =>
+        c.width ? (
+          <Box width={c.width} flexShrink={0}>
+            <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
+          </Box>
+        ) : (
+          <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
+        ),
+      )}
+    </Box>
+  )
+}
+
+// The selected item: a cyan frame, its actions above its text.
+function detailFrame(el: El, title: string, actions: unknown, children: unknown, color = 'cyan') {
+  const { Box, Text } = el
+  return (
+    <Box flexDirection="column" borderStyle="round" borderColor={color} paddingX={1} marginBottom={1}>
+      <Text bold wrap="truncate-end">{title}</Text>
+      {actions && <Box marginBottom={1}>{toolbar(el, actions)}</Box>}
+      {children}
+    </Box>
+  )
+}
+
+// The j and k buttons: move the selection through a list of ids, wrapping.
+function moveButtons($: $T, el: El, ids: string[], current: string | null, select: (id: string) => unknown) {
+  const { Button } = el
+  const step = (by: number) => {
+    if (!ids.length) return
+    const i = Math.max(0, ids.indexOf(current ?? ''))
+    return select(ids[(i + by + ids.length) % ids.length]!)
+  }
+  return [
+    <Button key="next" label="next" plain {...hk('j')} onPress={() => step(1)} />,
+    <Button key="prev" label="prev" plain {...hk('k')} onPress={() => step(-1)} />,
+  ]
+}
+
 // Transcript hygiene: paths drawn absolute and clickable.
 
 const existsCache = new Map<string, boolean>()
@@ -1069,92 +1155,105 @@ async function fleetTab($: $T, el: El, v: View, now: number) {
   const selId = all.some(s => s.id === v.seatSel) ? v.seatSel : (all[0]?.id ?? null)
   const sel = all.find(s => s.id === selId)
 
+  const shownLanded = landed.slice(0, 8)
+  const choose = (id: string) => setView($, { seatSel: id })
+  const cols = [{ text: 'seat', width: 24 }, { text: 'model', width: 10 }, { text: 'time', width: 8 }, { text: 'output' }]
   const row = (s: Seat) => {
-    const isSel = s.id === selId
     const isLive = s.endedAt === null
-    return (
-      <Box flexDirection="row" columnGap={1}>
-        <Text color={isLive ? 'yellow' : 'green'}>{isLive ? '◐' : '✓'}</Text>
-        <Button key={'seat-' + s.id} label={(isSel ? '▸ ' : '  ') + s.name} plain dimColor={!isSel} onPress={() => setView($, { seatSel: s.id })} />
-        <Text dimColor>{s.resolvedModel ?? s.model}</Text>
-        <Text>{dur((s.endedAt ?? now) - s.startedAt)}</Text>
-        {!isLive && s.outputPath && <Text color={s.hasOutput ? 'green' : 'red'}>{s.hasOutput ? 'output ✓' : 'no output ✗'}</Text>}
-        {s.isBackground && <Text dimColor>bg</Text>}
-      </Box>
-    )
+    const out = isLive ? (s.isBackground ? '◐ running · bg' : '◐ running') : !s.outputPath ? '·' : s.hasOutput ? 'output ✓' : 'no output ✗'
+    return listRow(el, 'seat-' + s.id, s.id === selId, () => choose(s.id), [
+      { text: clip(s.name, 24), width: 24 },
+      { text: s.resolvedModel ?? s.model, width: 10 },
+      { text: dur((s.endedAt ?? now) - s.startedAt), width: 8 },
+      { text: out, color: isLive ? 'yellow' : !s.outputPath ? undefined : s.hasOutput ? 'green' : 'red' },
+    ])
   }
+  const actions = sel && [
+    sel.hasOutput && (
+      <Button
+        key="seat-preview"
+        label="preview output"
+        plain
+        {...hk('p')}
+        onPress={async () => {
+          const text = (await readText($, abs(sel.outputPath!))) ?? '(could not read the file)'
+          await openPreview($, sel.name + ' output', text, abs(sel.outputPath!))
+        }}
+      />
+    ),
+    sel.hasOutput && (
+      <Button
+        key="seat-open"
+        label="open"
+        plain
+        {...hk('o')}
+        onPress={async () => {
+          const r = await run($, ['open', abs(sel.outputPath!)], { timeoutMs: 5_000 })
+          if (!r.ok) $.ui.toast('Could not open: ' + clip(r.err, 80))
+        }}
+      />
+    ),
+    sel.outputPath && (
+      <Button
+        key="seat-copy"
+        label="copy path"
+        plain
+        {...hk('c')}
+        onPress={async (press: UiPressArgument) => {
+          const r = await $.ui.copy({ text: abs(sel.outputPath!), surface: press.surface })
+          $.ui.toast(r.isCopied ? 'Copied ' + abs(sel.outputPath!) : 'Could not copy: ' + r.reason)
+        }}
+      />
+    ),
+    sel.hasOutput && (
+      <Button
+        key="seat-quote"
+        label="attach"
+        plain
+        {...hk('q')}
+        onPress={async () => {
+          await $.prompt.fill({ text: '@' + abs(sel.outputPath!) + ' ', mode: 'insert' })
+          $.ui.toast('Attached ' + sel.name + ' output to your prompt.')
+        }}
+      />
+    ),
+  ].filter(Boolean)
 
   return (
     <Box flexDirection="column">
-      <Text bold>{live.length ? 'Running (' + live.length + ')' : 'Nothing running'}</Text>
-      {live.map(row)}
-      <Text> </Text>
-      <Text bold>Landed</Text>
-      {landed.length === 0 && <Text dimColor>None yet this session.</Text>}
-      {landed.slice(0, 8).map(row)}
-      {sel && (
-        <Box flexDirection="column" borderStyle="round" paddingX={1} marginTop={1}>
-          <Text bold>{sel.name}</Text>
-          <Text wrap="wrap">{sel.desc}</Text>
-          <Text dimColor>
-            {sel.type} · requested {sel.model}
-            {sel.resolvedModel ? ' · ran on ' + sel.resolvedModel : sel.endedAt === null ? ' · resolved model shows on landing' : ' · resolved model not reported'}
-          </Text>
-          {sel.outputPath && <Text dimColor wrap="truncate-start">output: {tilde(abs(sel.outputPath))}</Text>}
-          {!sel.outputPath && <Text dimColor>no output path in the dispatch prompt</Text>}
-          <Text> </Text>
-          <Box flexDirection="row" columnGap={3}>
-            {sel.outputPath && (
-              <Button
-                key="seat-copy"
-                label="copy output path"
-                plain
-                {...hk('c')}
-                onPress={async (press: UiPressArgument) => {
-                  const r = await $.ui.copy({ text: abs(sel.outputPath!), surface: press.surface })
-                  $.ui.toast(r.isCopied ? 'Copied ' + abs(sel.outputPath!) : 'Could not copy: ' + r.reason)
-                }}
-              />
-            )}
-            {sel.hasOutput && (
-              <Button
-                key="seat-quote"
-                label="attach output to prompt"
-                plain
-                {...hk('q')}
-                onPress={async () => {
-                  await $.prompt.fill({ text: '@' + abs(sel.outputPath!) + ' ', mode: 'insert' })
-                  $.ui.toast('Attached ' + sel.name + ' output to your prompt.')
-                }}
-              />
-            )}
-            {sel.hasOutput && (
-              <Button
-                key="seat-open"
-                label="open output"
-                plain
-                {...hk('o')}
-                onPress={async () => {
-                  const r = await run($, ['open', abs(sel.outputPath!)], { timeoutMs: 5_000 })
-                  if (!r.ok) $.ui.toast('Could not open: ' + clip(r.err, 80))
-                }}
-              />
-            )}
-            {sel.hasOutput && (
-              <Button
-                key="seat-preview"
-                label="preview output"
-                plain
-                {...hk('p')}
-                onPress={async () => {
-                  const text = (await readText($, abs(sel.outputPath!))) ?? '(could not read the file)'
-                  await openPreview($, sel.name + ' output', text, abs(sel.outputPath!))
-                }}
-              />
-            )}
-          </Box>
-        </Box>
+      {toolbar(el, moveButtons($, el, [...live, ...shownLanded].map(s => s.id), selId, choose))}
+      {section(
+        el,
+        'Running · ' + live.length,
+        <Box flexDirection="column">
+          {live.length === 0 ? <Text dimColor>Nothing running</Text> : listHead(el, cols)}
+          {live.map(row)}
+        </Box>,
+        live.length ? 'yellow' : undefined,
       )}
+      {section(
+        el,
+        'Landed · ' + landed.length,
+        <Box flexDirection="column">
+          {landed.length === 0 ? <Text dimColor>None yet this session.</Text> : listHead(el, cols)}
+          {shownLanded.map(row)}
+          {landed.length > shownLanded.length && <Text dimColor>  +{landed.length - shownLanded.length} older</Text>}
+        </Box>,
+      )}
+      {sel &&
+        detailFrame(
+          el,
+          sel.name,
+          actions && actions.length ? actions : null,
+          <Box flexDirection="column">
+            <Text wrap="wrap">{sel.desc}</Text>
+            <Text dimColor>
+              {sel.type} · requested {sel.model}
+              {sel.resolvedModel ? ' · ran on ' + sel.resolvedModel : sel.endedAt === null ? ' · resolved model shows on landing' : ' · resolved model not reported'}
+            </Text>
+            <Text dimColor wrap="truncate-start">{sel.outputPath ? 'output: ' + tilde(abs(sel.outputPath)) : 'no output path in the dispatch prompt'}</Text>
+          </Box>,
+        )}
     </Box>
   )
 }
@@ -1309,76 +1408,84 @@ async function inboxTab($: $T, el: El, v: View, now: number) {
   const sel = list.find(m => m.id === selId)
   const markRead = (id: string, isRead: boolean) => update($, mailAtom, m => ({ ...m, messages: m.messages.map(x => (x.id === id ? { ...x, isRead } : x)) }))
 
+  const pick = async (id: string) => {
+    await setView($, { msgSel: id, isReplying: false })
+    const m = list.find(x => x.id === id)
+    if (m && !m.isRead) await markRead(id, true)
+  }
+  const unread = list.filter(m => !m.isRead).length
+
+  const actions = sel && !v.isReplying && [
+    <Button key="reply-open" label="reply" plain {...hk('y')} onPress={() => setView($, { isReplying: true })} />,
+    <Button
+      key="msg-quote"
+      label="quote into prompt"
+      plain
+      {...hk('i')}
+      onPress={async () => {
+        await $.prompt.fill({ text: '> ' + sel.from + ': ' + sel.text.replace(/\n/g, '\n> ') + '\n\n', mode: 'insert' })
+        $.ui.toast('Quoted into your prompt. Nothing is sent until you press Enter.')
+      }}
+    />,
+    <Button key="msg-read" label={sel.isRead ? 'mark unread' : 'mark read'} plain {...hk('m')} onPress={() => markRead(sel.id, !sel.isRead)} />,
+    previewButton($, el, 'msg-preview', 'mail from ' + sel.from, sel.text),
+  ]
+
   return (
     <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={3}>
-        <Button key="mail-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshMail($)} />
-        <Text dimColor>{mail.error ? 'ipc: ' + mail.error : mail.at ? 'checked ' + agoPhrase(now, mail.at) : 'not checked yet'}</Text>
-      </Box>
-      {list.length === 0 && <Text dimColor>No mail in this project's inbox.</Text>}
-      {list.map(m => {
-        const isSel = m.id === selId
-        return (
-          <Box flexDirection="row" columnGap={1}>
-            <Text color={m.isRead ? undefined : 'cyan'} dimColor={m.isRead}>{m.isRead ? '○' : '●'}</Text>
-            <Button
-              key={'msg-' + m.id}
-              label={(isSel ? '▸ ' : '  ') + m.from}
-              plain
-              dimColor={!isSel}
-              onPress={async () => {
-                await setView($, { msgSel: m.id, isReplying: false })
-                if (!m.isRead) await markRead(m.id, true)
-              }}
-            />
-            <Text dimColor>{m.kind} · {ago(now, m.at)}</Text>
-            <Text bold={!m.isRead} dimColor={m.isRead} wrap="truncate-end">{clip(m.text.split('\n')[0] ?? '', 80)}</Text>
-          </Box>
-        )
-      })}
-      {sel && (
-        <Box flexDirection="column" borderStyle="round" paddingX={1} marginTop={1}>
-          <Text dimColor wrap="wrap">
-            From {sel.from}, {agoPhrase(now, sel.at)}, kind {sel.kind}. Peer text: shown to you, never handed to the model unless you attach it.
-          </Text>
-          <Text> </Text>
-          <Text wrap="wrap">{clip(sel.text, 700)}</Text>
-          {sel.text.length > 700 && <Box marginTop={1}>{previewButton($, el, 'msg-preview', 'mail from ' + sel.from, sel.text)}</Box>}
-          <Text> </Text>
-          {v.isReplying ? (
-            <Input
-              key="reply"
-              label="Reply"
-              placeholder={'to ' + sel.from + '; empty Enter cancels'}
-              value=""
-              submitLabel="send"
-              autoFocus
-              onSubmit={async (text: string) => {
-                await setView($, { isReplying: false })
-                if (!text.trim()) return
-                const r = await run($, ['claude-ipc', 'reply', sel.id, text.trim()], { timeoutMs: 8_000 })
-                $.ui.toast(r.ok ? 'Replied to ' + sel.from + '.' : 'reply failed: ' + clip(r.err || r.out, 100))
-                await markRead(sel.id, true)
-              }}
-            />
-          ) : (
-            <Box flexDirection="row" columnGap={3}>
-              <Button key="reply-open" label="reply" plain {...hk('y')} onPress={() => setView($, { isReplying: true })} />
-              <Button
-                key="msg-quote"
-                label="attach to prompt"
-                plain
-                {...hk('i')}
-                onPress={async () => {
-                  await $.prompt.fill({ text: '> ' + sel.from + ': ' + sel.text.replace(/\n/g, '\n> ') + '\n\n', mode: 'insert' })
-                  $.ui.toast('Quoted into your prompt. Nothing is sent until you press Enter.')
-                }}
-              />
-              <Button key="msg-read" label={sel.isRead ? 'mark unread' : 'mark read'} plain {...hk('m')} onPress={() => markRead(sel.id, !sel.isRead)} />
-            </Box>
+      {toolbar(el, [
+        ...moveButtons($, el, list.map(m => m.id), selId, pick),
+        <Button key="mail-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshMail($)} />,
+        <Text dimColor>{mail.error ? 'ipc: ' + mail.error : mail.at ? 'checked ' + agoPhrase(now, mail.at) : 'not checked yet'}</Text>,
+      ])}
+      {section(
+        el,
+        list.length ? plural(list.length, 'message') + ' · ' + unread + ' new' : 'Inbox',
+        <Box flexDirection="column">
+          {list.length === 0 && <Text dimColor>No mail in this project's inbox.</Text>}
+          {list.length > 0 && listHead(el, [{ text: '', width: 1 }, { text: 'from', width: 20 }, { text: 'kind', width: 9 }, { text: 'age', width: 5 }, { text: 'first line' }])}
+          {list.map(m =>
+            listRow(el, 'msg-' + m.id, m.id === selId, () => pick(m.id), [
+              { text: m.isRead ? '○' : '●', width: 1 },
+              { text: clip(m.from, 20), width: 20, dim: false },
+              { text: m.kind, width: 9 },
+              { text: ago(now, m.at), width: 5 },
+              { text: firstLine(m.text), bold: !m.isRead },
+            ]),
           )}
-        </Box>
+        </Box>,
       )}
+      {sel &&
+        detailFrame(
+          el,
+          sel.from,
+          actions,
+          <Box flexDirection="column">
+            <Text dimColor wrap="wrap">
+              {sel.kind} · {agoPhrase(now, sel.at)} · peer text: shown to you, never handed to the model unless you attach it
+            </Text>
+            <Text wrap="wrap">{clip(sel.text, 700)}</Text>
+            {v.isReplying && (
+              <Box marginTop={1}>
+                <Input
+                  key="reply"
+                  label="Reply"
+                  placeholder={'to ' + sel.from + '; empty Enter cancels'}
+                  value=""
+                  submitLabel="send"
+                  autoFocus
+                  onSubmit={async (text: string) => {
+                    await setView($, { isReplying: false })
+                    if (!text.trim()) return
+                    const r = await run($, ['claude-ipc', 'reply', sel.id, text.trim()], { timeoutMs: 8_000 })
+                    $.ui.toast(r.ok ? 'Replied to ' + sel.from + '.' : 'reply failed: ' + clip(r.err || r.out, 100))
+                    await markRead(sel.id, true)
+                  }}
+                />
+              </Box>
+            )}
+          </Box>,
+        )}
     </Box>
   )
 }
@@ -1477,45 +1584,47 @@ async function nudgesTab($: $T, el: El, v: View, now: number) {
   const mode = (m: NudgeMode) => setView($, { nudgeMode: v.nudgeMode === m ? 'text' : m })
   const sid = sid8(await $.session.id().catch(() => ''))
 
+  const shown = list.slice(0, 14)
+  const choose = (id: string) => setView($, { nudgeSel: id, nudgeMode: 'text' })
+  const status = (n: Nudge) => [n.heeded === 'no' ? 'ignored' : n.heeded === 'yes' ? 'heeded' : '', n.snoozed ? 'snoozed ' + n.snoozed : '', n.feedback ?? ''].filter(Boolean).join(' · ')
+
   return (
     <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={3}>
-        <Button key="nudge-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshNudgesFromLedger($)} />
-        <Text dimColor wrap="truncate-end">
-          {list.length} this session · {toYou} chars drawn for you · {toModel} chars to the model · {blocks} blocks
-        </Text>
-      </Box>
-      <Text> </Text>
-      {list.length === 0 && <Text dimColor>Nothing has fired yet this session.</Text>}
-      {list.slice(0, 14).map(n => {
-        const isSel = n.id === selId
-        const [word, color] = badge[n.audience]
-        return (
-          <Box flexDirection="row" columnGap={1}>
-            <Text color={color} dimColor={!color}>{word}</Text>
-            <Button key={'nudge-' + n.id} label={(isSel ? '▸ ' : '  ') + n.hook} plain dimColor={!isSel} onPress={() => setView($, { nudgeSel: n.id, nudgeMode: 'text' })} />
-            <Text dimColor wrap="truncate-end">
-              {n.action} · {n.at ? ago(now, n.at) : ''}
-              {n.chars ? ' · ' + n.chars + 'c' : ''}
-              {n.heeded === 'no' ? ' · ignored' : n.heeded === 'yes' ? ' · heeded' : ''}
-            </Text>
-            {n.snoozed && <Text dimColor>snoozed {n.snoozed}</Text>}
-            {n.feedback && <Text dimColor>· {n.feedback}</Text>}
-          </Box>
-        )
-      })}
-      {list.length > 14 && <Text dimColor>  +{list.length - 14} older</Text>}
+      {toolbar(el, [...moveButtons($, el, shown.map(n => n.id), selId, choose), <Button key="nudge-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshNudgesFromLedger($)} />])}
+      {section(
+        el,
+        list.length ? plural(list.length, 'nudge') + ' · ' + toYou + 'c drawn for you · ' + toModel + 'c to the model · ' + plural(blocks, 'block') : 'Nudges',
+        <Box flexDirection="column">
+          {list.length === 0 && <Text dimColor>Nothing has fired yet this session.</Text>}
+          {list.length > 0 && listHead(el, [{ text: 'to', width: 6 }, { text: 'hook', width: 24 }, { text: 'action', width: 8 }, { text: 'age', width: 5 }, { text: 'size', width: 6 }, { text: 'status' }])}
+          {shown.map(n => {
+            const [word, color] = badge[n.audience]
+            return listRow(el, 'nudge-' + n.id, n.id === selId, () => choose(n.id), [
+              { text: word.trim(), width: 6 },
+              { text: clip(n.hook, 24), width: 24, color },
+              { text: n.action, width: 8 },
+              { text: n.at ? ago(now, n.at) : '', width: 5 },
+              { text: n.chars ? n.chars + 'c' : '', width: 6 },
+              { text: status(n) },
+            ])
+          })}
+          {list.length > shown.length && <Text dimColor>  +{list.length - shown.length} older</Text>}
+        </Box>,
+      )}
       {sel && (
-        <Box flexDirection="column" borderStyle="round" paddingX={1} marginTop={1}>
-          <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-            <Button key="m-text" label="text" plain dimColor={v.nudgeMode !== 'text'} {...hk('t')} onPress={() => mode('text')} />
-            <Button key="m-why" label="why it fired" plain dimColor={v.nudgeMode !== 'why'} {...hk('w')} onPress={() => mode('why')} />
-            <Button key="m-snooze" label="snooze" plain dimColor={v.nudgeMode !== 'snooze'} {...hk('s')} onPress={() => mode('snooze')} />
-            <Button key="m-fb" label="feedback" plain dimColor={v.nudgeMode !== 'feedback'} {...hk('f')} onPress={() => mode('feedback')} />
-          </Box>
-          <Text> </Text>
+        <Box flexDirection="column">
+          {detailFrame(
+            el,
+            sel.hook,
+            [
+              <Button key="m-text" label="text" plain dimColor={v.nudgeMode !== 'text'} {...hk('t')} onPress={() => mode('text')} />,
+              <Button key="m-why" label="why it fired" plain dimColor={v.nudgeMode !== 'why'} {...hk('w')} onPress={() => mode('why')} />,
+              <Button key="m-snooze" label="snooze" plain dimColor={v.nudgeMode !== 'snooze'} {...hk('s')} onPress={() => mode('snooze')} />,
+              <Button key="m-fb" label="feedback" plain dimColor={v.nudgeMode !== 'feedback'} {...hk('f')} onPress={() => mode('feedback')} />,
+              previewButton($, el, 'nudge-preview', sel.hook, sel.text || '(no text recorded)'),
+            ],
+            <Box flexDirection="column">
           {v.nudgeMode === 'text' && <Text wrap="wrap">{clip(sel.text || '(no text recorded)', 600)}</Text>}
-          {v.nudgeMode === 'text' && sel.text.length > 600 && <Box marginTop={1}>{previewButton($, el, 'nudge-preview', sel.hook, sel.text)}</Box>}
           {v.nudgeMode === 'why' && (
             <Box flexDirection="column">
               <Text wrap="wrap">{sel.detail || 'No trigger detail was recorded for this one.'}</Text>
@@ -1561,6 +1670,8 @@ async function nudgesTab($: $T, el: El, v: View, now: number) {
                 />
               ))}
             </Box>
+          )}
+            </Box>,
           )}
         </Box>
       )}
@@ -1623,18 +1734,22 @@ async function decideTab($: $T, el: El, v: View, cwd: string) {
       </Box>
     )
 
+  const items = set?.items ?? []
+  const qSel = items.some(it => it.id === v.decideSel) ? v.decideSel : (items[0]?.id ?? null)
+  const q = items.find(it => it.id === qSel)
+  const pickOf = (it: DecideSet['items'][number]) => d.picks[set!.slug + '/' + it.id] ?? it.options.find(o => o.rec)?.code ?? 'a'
+  const labelOf = (it: DecideSet['items'][number]) => {
+    const o = it.options.find(x => x.code === pickOf(it))
+    return o ? o.label + (o.rec ? ' (drafted)' : '') : pickOf(it)
+  }
+  const choose = (id: string) => setView($, { decideSel: id })
+  const pagePreview = set && '# ' + set.title + '\n\n' + set.intro + '\n\n' + set.items.map(it => '## ' + it.id + ' ' + it.question + '\n\n' + it.context + '\n\n' + it.options.map(o => '- ' + o.code + ') ' + o.label + (o.rec ? ' (drafted)' : '')).join('\n')).join('\n\n')
+
   return (
     <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={2} flexWrap="wrap">
-        {mineFirst.map(s => (
-          <Button key={'dp-' + s.slug} label={clip(s.title, 32) + (isCurrentPage(s, cwd, aliases) ? '' : ' (' + (s.session || 'other') + ')')} plain dimColor={s.slug !== slug} onPress={() => setView($, { decideSlug: s.slug, decideSel: null })} />
-        ))}
-        {staleToggle}
-        {set && <Button key="dp-dismiss" label="dismiss this page" plain {...hk('x')} onPress={() => setView($, { dismissed: [...v.dismissed, 'dp-' + set.slug], decideSlug: null })} />}
-      </Box>
-      {set && (
-        <Box flexDirection="row" columnGap={3} marginTop={1}>
-          <Button key="dp-submit" label="submit these rulings" variant="primary" {...hk('s')} onPress={() => submitDecision($, set)} />
+      {toolbar(el, [
+        set && <Button key="dp-submit" label="submit these rulings" variant="primary" {...hk('s')} onPress={() => submitDecision($, set)} />,
+        set && (
           <Button
             key="dp-copy"
             label="copy answer string"
@@ -1645,61 +1760,78 @@ async function decideTab($: $T, el: El, v: View, cwd: string) {
               $.ui.toast(r.isCopied ? 'Answer string copied.' : 'Could not copy: ' + r.reason)
             }}
           />
-        </Box>
-      )}
-      {set && (
-        <Box flexDirection="column">
-          {section(
-            el,
-            set.title,
-            <Box flexDirection="column">
-              <Text dimColor wrap="truncate-end">
-                {set.project || 'no project'} · from {set.session || 'a session'} · {set.created}
-              </Text>
-              {set.intro && <Text wrap="wrap">{clip(set.intro, 220)}</Text>}
-              <Box flexDirection="row" columnGap={3} marginTop={1}>
-                {previewButton($, el, 'dp-preview', set.title, '# ' + set.title + '\n\n' + set.intro + '\n\n' + set.items.map(it => '## ' + it.id + ' ' + it.question + '\n\n' + it.context + '\n\n' + it.options.map(o => '- ' + o.code + ') ' + o.label + (o.rec ? ' (drafted)' : '')).join('\n')).join('\n\n'))}
-                <Text dimColor>web page: http://localhost:5106/dp/{set.slug}/</Text>
-              </Box>
-            </Box>,
-            'cyan',
-          )}
-          {set.items.map(it => {
-            const key = set.slug + '/' + it.id
-            const pick = d.picks[key] ?? it.options.find(o => o.rec)?.code ?? 'a'
-            const isSel = v.decideSel === it.id
-            return (
-              <Box flexDirection="column" borderStyle="round" borderColor={isSel ? 'yellow' : undefined} paddingX={1} marginBottom={1}>
-                <Box flexDirection="row" columnGap={1}>
-                  <Box width={5} flexShrink={0}>
-                    <Button key={'q-' + key} label={it.id} plain dimColor={!isSel} onPress={() => setView($, { decideSel: isSel ? null : it.id })} />
-                  </Box>
-                  <Text bold wrap="wrap">{it.question}</Text>
-                </Box>
-                {it.context && (
-                  <Box paddingLeft={6}>
-                    <Text dimColor wrap="wrap">{isSel ? it.context : clip(it.context, 140)}</Text>
-                  </Box>
-                )}
-                <Box paddingLeft={6} marginTop={1}>
-                  <Select key={'pick-' + key} options={it.options.map(o => ({ value: o.code, label: o.label + (o.rec ? '  (drafted)' : '') }))} value={pick} onSelect={(value: string) => setPick(key, value)} />
-                </Box>
-                {isSel && (
-                  <Box paddingLeft={6} flexDirection="column" marginTop={1}>
-                    <Input key={'note-' + key} label="Note" placeholder="your sentence is the ruling; Enter keeps it" value={d.notes[key] ?? ''} submitLabel="keep" onSubmit={(text: string) => setNote(key, text)} />
-                    <Button key={'long-' + key} label="longer note in the prompt box" plain {...hk('l')} onPress={() => fillPrompt($, DP_NOTE + set.slug + '/' + it.id + ': ' + (d.notes[key] ?? ''), 'line')} />
-                  </Box>
-                )}
-                {!isSel && d.notes[key] && (
-                  <Box paddingLeft={6}>
-                    <Text color="green" wrap="wrap">note: {d.notes[key]}</Text>
-                  </Box>
-                )}
-              </Box>
-            )
-          })}
-        </Box>
-      )}
+        ),
+        ...moveButtons($, el, items.map(it => it.id), qSel, choose),
+        staleToggle,
+        set && <Button key="dp-dismiss" label="dismiss" plain {...hk('x')} onPress={() => setView($, { dismissed: [...v.dismissed, 'dp-' + set.slug], decideSlug: null })} />,
+      ])}
+      {mineFirst.length > 0 &&
+        section(
+          el,
+          plural(mineFirst.length, 'page'),
+          <Box flexDirection="column">
+            {mineFirst.map(s =>
+              listRow(el, 'dp-' + s.slug, s.slug === slug, () => setView($, { decideSlug: s.slug, decideSel: null }), [
+                { text: clip(s.title, 38), width: 38 },
+                { text: clip(isCurrentPage(s, cwd, aliases) ? 'yours' : s.session || 'other', 20), width: 20 },
+                { text: plural(s.items.length, 'call') },
+              ]),
+            )}
+          </Box>,
+        )}
+      {set &&
+        section(
+          el,
+          set.title,
+          <Box flexDirection="column">
+            <Text dimColor wrap="truncate-end">
+              {set.project || 'no project'} · from {set.session || 'a session'} · {set.created}
+            </Text>
+            {set.intro && <Text wrap="wrap">{clip(set.intro, 220)}</Text>}
+            <Box flexDirection="row" columnGap={3} marginBottom={1}>
+              {previewButton($, el, 'dp-preview', set.title, pagePreview ?? '')}
+              <Text dimColor>web page: http://localhost:5106/dp/{set.slug}/</Text>
+            </Box>
+            {items.length === 0 && <Text dimColor wrap="wrap">This page's questions use a layout the hub cannot draw. p previews it; the web page answers it.</Text>}
+            {items.length > 0 && listHead(el, [{ text: 'id', width: 5 }, { text: 'question', width: 36 }, { text: 'your pick' }])}
+            {items.map(it =>
+              listRow(el, 'q-' + set.slug + '/' + it.id, it.id === qSel, () => choose(it.id), [
+                { text: it.id, width: 5 },
+                { text: clip(it.question, 36), width: 36 },
+                { text: labelOf(it) + (d.notes[set.slug + '/' + it.id] ? ' · note' : ''), color: it.id === qSel ? 'cyan' : undefined },
+              ]),
+            )}
+          </Box>,
+          'cyan',
+        )}
+      {set &&
+        q &&
+        detailFrame(
+          el,
+          q.id + ' · ' + q.question,
+          [<Button key={'long-' + set.slug + '/' + q.id} label="note in the prompt box" plain {...hk('l')} onPress={() => fillPrompt($, DP_NOTE + set.slug + '/' + q.id + ': ' + (d.notes[set.slug + '/' + q.id] ?? ''), 'line')} />],
+          <Box flexDirection="column">
+            {q.context && <Text dimColor wrap="wrap">{q.context}</Text>}
+            <Box marginTop={1}>
+              <Select
+                key={'pick-' + set.slug + '/' + q.id}
+                options={q.options.map(o => ({ value: o.code, label: o.label + (o.rec ? '  (drafted)' : '') }))}
+                value={pickOf(q)}
+                onSelect={(value: string) => setPick(set.slug + '/' + q.id, value)}
+              />
+            </Box>
+            <Input
+              key={'note-' + set.slug + '/' + q.id}
+              label="Note"
+              placeholder="your sentence is the ruling; Enter keeps it"
+              value={d.notes[set.slug + '/' + q.id] ?? ''}
+              submitLabel="keep"
+              onSubmit={(text: string) => setNote(set.slug + '/' + q.id, text)}
+            />
+            {d.notes[set.slug + '/' + q.id] && <Text color="green" wrap="wrap">note: {d.notes[set.slug + '/' + q.id]}</Text>}
+          </Box>,
+          'yellow',
+        )}
     </Box>
   )
 }

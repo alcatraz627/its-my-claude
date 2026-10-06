@@ -307,6 +307,35 @@ describe('off by default', () => {
   })
 })
 
+describe('restyled tabs with rows in them', () => {
+  test('Nudges lists a routed block as a row, and its detail frame switches between text and why', ON, async ($, on) => {
+    world(on)
+    on('prompt.attachment', ($, e) => ({ text: e.text }))
+    await $.classic.SessionStart({ source: 'clear' })
+    await $.prompt.attachment({ type: 'hook_context', text: '<owner surface="toast" hook="subagent-box">seat landed · output ✓</owner>', origin: { kind: 'hook', event: 'SubagentStop' } } as any)
+    const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
+    await ui.press({ key: 'tab-nudges' })
+    expect(await ui.find({ text: 'subagent-box' })).toBeDefined()
+    expect(await ui.find({ text: 'seat landed · output ✓' })).toBeDefined()
+    await ui.press({ key: 'm-why' })
+    expect(await ui.find({ text: 'routed to toast' })).toBeDefined()
+    expect(await ui.find({ key: 'nudge-preview' })).toBeDefined()
+  })
+
+  test('Fleet lists a launched seat under Running with its detail frame', ON, async ($, on) => {
+    world(on)
+    on('tool.call', { tool: 'Agent' } as any, () => ({ result: { status: 'async_launched', agentId: 'ag-1' } }) as any)
+    await $.classic.SessionStart({ source: 'clear' })
+    await $.tool.call({ tool: 'Agent', tool_use_id: 'tu-1', description: 'Map the surfaces', prompt: 'Write to /tmp/x/report.md before returning', subagent_type: 'general-purpose', model: 'sonnet' } as any)
+    const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
+    await ui.press({ key: 'tab-fleet' })
+    expect(await ui.find({ text: 'Running · 1' })).toBeDefined()
+    expect(await ui.find({ key: 'seat-tu-1' })).toBeDefined()
+    expect(await ui.find({ key: 'seat-copy' })).toBeDefined()
+    expect(await ui.find({ text: 'output: /tmp/x/report.md' })).toBeDefined()
+  })
+})
+
 describe('goal toast', () => {
   test('a failed first read does not make the next read toast a long-met goal', ON, async ($, on) => {
     const w = world(on)
