@@ -91,9 +91,13 @@ export type Seat = {
   wokeAt: number | null
 }
 
+// One ipc message this session sent or received. A sent one is stored as read,
+// so it never counts as new.
 export type Msg = {
   id: string
   from: string
+  to: string
+  isSent: boolean
   kind: string
   at: number
   text: string

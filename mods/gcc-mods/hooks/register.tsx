@@ -1276,29 +1276,50 @@ async function wakeForUnreadSeats($: $T) {
 
 // Wakes for an idle session, the ipc inbox, and decision pages.
 
-type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; body?: string; ts?: number }
+type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; toAlias?: string; body?: string; ts?: number }
 
+// The Inbox shows two read-only sources: the project mailbox (mail waiting for
+// any session here) and the ipc log for this session's own aliases, which holds
+// what it sent and what was sent to it, delivered or not, for the last day.
 async function refreshMail($: $T) {
   const now = await $.clock.now()
-  const r = await run($, ['claude-ipc', 'inbox', '--project'], { timeoutMs: 8_000 })
-  if (!r.ok) {
-    await update($, mailAtom, m => ({ ...m, at: now, error: clip(r.err || 'claude-ipc unavailable', 80) }))
+  const project = await run($, ['claude-ipc', 'inbox', '--project'], { timeoutMs: 8_000 })
+  if (!project.ok) {
+    await update($, mailAtom, m => ({ ...m, at: now, error: clip(project.err || 'claude-ipc unavailable', 80) }))
     return
   }
-  const j = jsonOr<{ messages?: RawMsg[] }>(r.out, {})
+  const aliases = (await aliasesOf($)).filter(a => !/^[0-9a-f]{8}$/.test(a))
+  const since = String(Math.floor(now / 1000) - 86_400)
+  const raw: RawMsg[] = [...jsonOr<{ messages?: RawMsg[] }>(project.out, {}).messages ?? []]
+  // New means nobody has handled it yet: still waiting in the project mailbox or
+  // in one of this session's own inboxes (peeked, never consumed).
+  const pending = new Set(raw.map(m => String(m.id)))
+  for (const alias of aliases) {
+    const box = await run($, ['claude-ipc', 'inbox', alias], { timeoutMs: 8_000 })
+    if (box.ok) for (const m of jsonOr<{ messages?: RawMsg[] }>(box.out, {}).messages ?? []) pending.add(String(m.id))
+    const log = await run($, ['claude-ipc', 'log', '--peer', alias, '--since', since], { timeoutMs: 8_000 })
+    if (log.ok) raw.push(...(jsonOr<{ messages?: RawMsg[] }>(log.out, {}).messages ?? []))
+  }
   const prev = await read($, mailAtom)
   const seen = new Map(prev.messages.map(m => [m.id, m]))
-  const messages: Msg[] = (j.messages ?? [])
-    .filter(m => m.id)
-    .map(m => ({
+  const byId = new Map<string, Msg>()
+  for (const m of raw) {
+    if (!m.id || byId.has(String(m.id))) continue
+    const from = String(m.fromAlias ?? m.from ?? '?')
+    const isSent = aliases.includes(from)
+    byId.set(String(m.id), {
       id: String(m.id),
-      from: String(m.fromAlias ?? m.from ?? '?'),
+      from,
+      to: String(m.toAlias ?? ''),
+      isSent,
       kind: String(m.kind ?? 'inform'),
       at: typeof m.ts === 'number' ? (m.ts > 1e12 ? m.ts : m.ts * 1000) : now,
       text: String(m.body ?? ''),
-      isRead: seen.get(String(m.id))?.isRead ?? false,
-    }))
-  await update($, mailAtom, m => ({ ...m, messages, at: now, error: null }))
+      // Sent, or already handled by the session it was for: nothing waits on the owner.
+      isRead: isSent || !pending.has(String(m.id)) || (seen.get(String(m.id))?.isRead ?? false),
+    })
+  }
+  await update($, mailAtom, m => ({ ...m, messages: [...byId.values()], at: now, error: null }))
 }
 
 // Wake the session for mail it has not seen, at most once per ten minutes
@@ -1370,8 +1391,11 @@ async function aliasesOf($: $T): Promise<string[]> {
   const r = await run($, ['claude-ipc', 'peers'], { timeoutMs: 6_000 })
   const j = jsonOr<{ peers?: { sessionId?: string; sessionAliases?: string[] }[] }>(r.out, {})
   const mine = (j.peers ?? []).find(p => p.sessionId === sid)
-  myAliases = [...new Set([...(mine?.sessionAliases ?? []), sid8(sid)].filter(Boolean))]
-  return myAliases
+  const found = [...new Set([...(mine?.sessionAliases ?? []), sid8(sid)].filter(Boolean))]
+  // The session's alias registers in a start hook that can run after the mod's
+  // first ask; keep asking until it shows up rather than caching its absence.
+  if (mine?.sessionAliases?.length) myAliases = found
+  return found
 }
 
 // A page is this agent's when it was filed for this directory or by this
@@ -1414,9 +1438,10 @@ async function inboxTab($: $T, el: El, v: View, now: number) {
     if (m && !m.isRead) await markRead(id, true)
   }
   const unread = list.filter(m => !m.isRead).length
+  const sent = list.filter(m => m.isSent).length
 
   const actions = sel && !v.isReplying && [
-    <Button key="reply-open" label="reply" plain {...hk('y')} onPress={() => setView($, { isReplying: true })} />,
+    !sel.isSent && <Button key="reply-open" label="reply" plain {...hk('y')} onPress={() => setView($, { isReplying: true })} />,
     <Button
       key="msg-quote"
       label="quote into prompt"
@@ -1427,27 +1452,36 @@ async function inboxTab($: $T, el: El, v: View, now: number) {
         $.ui.toast('Quoted into your prompt. Nothing is sent until you press Enter.')
       }}
     />,
-    <Button key="msg-read" label={sel.isRead ? 'mark unread' : 'mark read'} plain {...hk('m')} onPress={() => markRead(sel.id, !sel.isRead)} />,
-    previewButton($, el, 'msg-preview', 'mail from ' + sel.from, sel.text),
-  ]
+    !sel.isSent && <Button key="msg-read" label={sel.isRead ? 'mark unread' : 'mark read'} plain {...hk('m')} onPress={() => markRead(sel.id, !sel.isRead)} />,
+    previewButton($, el, 'msg-preview', sel.isSent ? 'mail to ' + sel.to : 'mail from ' + sel.from, sel.text),
+  ].filter(Boolean)
 
   return (
     <Box flexDirection="column">
       {toolbar(el, [
         ...moveButtons($, el, list.map(m => m.id), selId, pick),
-        <Button key="mail-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshMail($)} />,
+        <Button
+          key="mail-refresh"
+          label="refresh"
+          plain
+          {...hk('r')}
+          onPress={async () => {
+            await refreshMail($)
+            await refreshStatus($)
+          }}
+        />,
         <Text dimColor>{mail.error ? 'ipc: ' + mail.error : mail.at ? 'checked ' + agoPhrase(now, mail.at) : 'not checked yet'}</Text>,
       ])}
       {section(
         el,
-        list.length ? plural(list.length, 'message') + ' · ' + unread + ' new' : 'Inbox',
+        list.length ? plural(list.length, 'message') + ' · ' + unread + ' new · ' + sent + ' sent' : 'Inbox',
         <Box flexDirection="column">
-          {list.length === 0 && <Text dimColor>No mail in this project's inbox.</Text>}
-          {list.length > 0 && listHead(el, [{ text: '', width: 1 }, { text: 'from', width: 20 }, { text: 'kind', width: 9 }, { text: 'age', width: 5 }, { text: 'first line' }])}
+          {list.length === 0 && <Text dimColor>No mail to or from this session, or in this project's mailbox, in the last day.</Text>}
+          {list.length > 0 && listHead(el, [{ text: '', width: 1 }, { text: 'from / to', width: 20 }, { text: 'kind', width: 9 }, { text: 'age', width: 5 }, { text: 'first line' }])}
           {list.map(m =>
             listRow(el, 'msg-' + m.id, m.id === selId, () => pick(m.id), [
-              { text: m.isRead ? '○' : '●', width: 1 },
-              { text: clip(m.from, 20), width: 20, dim: false },
+              { text: m.isSent ? '↗' : m.isRead ? '○' : '●', width: 1 },
+              { text: clip(m.isSent ? '→ ' + (m.to || '?') : m.from, 20), width: 20, dim: false },
               { text: m.kind, width: 9 },
               { text: ago(now, m.at), width: 5 },
               { text: firstLine(m.text), bold: !m.isRead },
@@ -1458,11 +1492,11 @@ async function inboxTab($: $T, el: El, v: View, now: number) {
       {sel &&
         detailFrame(
           el,
-          sel.from,
+          sel.isSent ? 'you → ' + (sel.to || '?') : sel.from,
           actions,
           <Box flexDirection="column">
             <Text dimColor wrap="wrap">
-              {sel.kind} · {agoPhrase(now, sel.at)} · peer text: shown to you, never handed to the model unless you attach it
+              {sel.isSent ? sel.kind + ' · sent ' + agoPhrase(now, sel.at) + ' by this session' : sel.kind + ' · ' + agoPhrase(now, sel.at) + ' · peer text: shown to you, never handed to the model unless you attach it'}
             </Text>
             <Text wrap="wrap">{clip(sel.text, 700)}</Text>
             {v.isReplying && (

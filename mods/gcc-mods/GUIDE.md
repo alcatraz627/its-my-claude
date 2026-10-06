@@ -64,7 +64,7 @@ Then the receipt (after a done-claim) and count chips; each chip opens its tab.
 
 **Fleet (4).** Seats running and landed, output file checked. `c` copy output path · `q` attach · `o` open · `p` preview.
 
-**Inbox (5).** This project's ipc mail, read without consuming. `y` reply · `i` quote into prompt · `m` toggle read · `p` preview. Mail wake is off by default (`mailWake` in `/config`).
+**Inbox (5).** This session's ipc mail for the last day, sent (`↗`, `→ peer`) and received, plus the project mailbox, all read without consuming. A message is new while it still waits to be read by the session it was for. `y` reply · `i` quote into prompt · `m` toggle read · `p` preview. Mail wake is off by default (`mailWake` in `/config`).
 
 **Snips (7).** Selections you kept, with a title, notes and tags, plus bookmarked docs. Select text with the mouse (fullscreen terminal or desktop), then `s` here or `/hub snip` from the prompt. Scope is session, project or global, stored as jsonl under `~/.claude/snippets/`, so any session sees the same lists. Per snippet: `t` title · `n` notes · `e` tags · `l` notes in the prompt box (Enter saves, sends nothing) · `o` cycle scope · `p` preview · `q` quote · `c` copy · `x` delete · send to a skill with `d` pin-for-dream, `g` gcc-proposal, `a` atone, `f` affirm (the command lands in the prompt box for editing). From the prompt, `/hub pin`, `/hub propose`, `/hub atone`, `/hub affirm` do the same with the current selection. `b` on a doc in the Docs tab bookmarks it.
 

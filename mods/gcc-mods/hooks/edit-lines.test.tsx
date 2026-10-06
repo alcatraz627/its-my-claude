@@ -44,10 +44,13 @@ type World = {
   files: Record<string, string>
   pathPy: () => ReturnType<typeof ok>
   writeThrows: boolean
+  ipcPeers: string
+  ipcLog: string
+  ipcPending: string
 }
 
 function world(on: On) {
-  const w: World = { toasts: [], fills: [], copies: [], writes: [], runs: [], submitted: [], box: { text: '', cursor: 0 }, files: {}, pathPy: () => ok(goalJson(false)), writeThrows: false }
+  const w: World = { toasts: [], fills: [], copies: [], writes: [], runs: [], submitted: [], box: { text: '', cursor: 0 }, files: {}, pathPy: () => ok(goalJson(false)), writeThrows: false, ipcPeers: '{"peers":[]}', ipcLog: '{"messages":[]}', ipcPending: '{"messages":[]}' }
   const clock = mock.clock(on, { now: NOW })
   on('classic.SessionStart', () => ({}))
   on('classic.Stop', () => ({}))
@@ -91,7 +94,10 @@ function world(on: On) {
     w.runs.push([...e.argv])
     const argv = e.argv.join(' ')
     if (argv.includes('path.py')) return w.pathPy()
-    if (argv.includes('claude-ipc inbox')) return ok('{"messages":[]}')
+    if (argv.includes('claude-ipc inbox --project')) return ok('{"messages":[]}')
+    if (argv.includes('claude-ipc inbox')) return ok(w.ipcPending)
+    if (argv.includes('claude-ipc peers')) return ok(w.ipcPeers)
+    if (argv.includes('claude-ipc log')) return ok(w.ipcLog)
     if (argv.startsWith('tail')) return ok('')
     if (argv.includes('resolve.sh')) return { value: { exitCode: 3, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
     return ok('ok')
@@ -320,6 +326,31 @@ describe('restyled tabs with rows in them', () => {
     await ui.press({ key: 'm-why' })
     expect(await ui.find({ text: 'routed to toast' })).toBeDefined()
     expect(await ui.find({ key: 'nudge-preview' })).toBeDefined()
+  })
+
+  test('Inbox shows what this session sent beside what it received, and only the received one is new', ON, async ($, on) => {
+    const w = world(on)
+    w.ipcPeers = JSON.stringify({ peers: [{ sessionId: 'test-session-0001', sessionAliases: ['me-alias'] }] })
+    w.ipcLog = JSON.stringify({
+      messages: [
+        { id: 'out-1', kind: 'inform', fromAlias: 'me-alias', toAlias: 'clanky-opus', body: 'please arm the hub', ts: 1_789_999_000 },
+        { id: 'in-1', kind: 'query', fromAlias: 'clanky-opus', toAlias: 'me-alias', body: 'armed, thanks', ts: 1_789_999_500 },
+        { id: 'in-0', kind: 'inform', fromAlias: 'switchboard-panel', toAlias: 'me-alias', body: 'already handled by the agent', ts: 1_789_998_000 },
+      ],
+    })
+    // in-1 still waits in this session's inbox; in-0 was consumed, so it is not new.
+    w.ipcPending = JSON.stringify({ messages: [{ id: 'in-1' }] })
+    await $.classic.SessionStart({ source: 'clear' })
+    const ui = await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc', props: PANE_PROPS })
+    await ui.press({ key: 'tab-inbox' })
+    expect(await ui.find({ text: '3 messages · 1 new · 1 sent' })).toBeDefined()
+    expect(await ui.find({ text: '→ clanky-opus' })).toBeDefined()
+    await ui.press({ key: 'msg-out-1' })
+    expect(await ui.find({ text: 'you → clanky-opus' })).toBeDefined()
+    expect(await ui.find({ key: 'reply-open' })).toBeUndefined()
+    await ui.press({ key: 'msg-in-1' })
+    expect(await ui.find({ key: 'reply-open' })).toBeDefined()
+    expect(w.runs.some(a => a.join(' ').includes('--consume'))).toBe(false)
   })
 
   test('Fleet lists a launched seat under Running with its detail frame', ON, async ($, on) => {
