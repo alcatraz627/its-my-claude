@@ -50,10 +50,14 @@ extend it; do not show more than one phrase.
 ## Enforcement
 
 `scripts/hooks/guard-github-agent-marker.sh` (PreToolUse on Bash) blocks
-`gh pr comment`, `gh issue comment`, and `gh api` comment or review writes
-whose inline body or referenced body file lacks the marker head. **There is
-no mute file and no env override, by the owner's explicit instruction.** The
-block message prints the exact line to add, with the phrase already picked.
+`gh pr comment`, `gh issue comment`, `gh api` comment or review writes, and
+`gh pr create|edit` / `gh issue create|edit` that carry a body, when the
+inline body or referenced body file lacks the marker OR its phrase is not one
+of the eight above, verbatim. An invented phrase ("count before you build") is
+the same defect as no marker (2026-10-09: nine PR bodies carried made-up
+phrases because PR bodies were not gated). **There is no mute file and no env
+override, by the owner's explicit instruction.** The block message prints the
+exact line to add, with the phrase already picked.
 
 Reads (`gh pr view`, `gh api` GETs) and non-comment commands are not gated.
 Repo tooling that composes comments (ci-kit `agent-comment.cjs` in
