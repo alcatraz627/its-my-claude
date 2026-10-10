@@ -16,6 +16,22 @@
 
 ---
 
+## catchup: resume gcc-everything (notes store, keyboard round) [catch-gcc-7f], 2026-10-10 23:49
+
+**Purpose:** Resume the five-repo tool-suite session from `_20261010-gcc-everything.claude.md` after a /clear in the same terminal.
+
+**Insights:**
+
+1. A /clear in the same terminal keeps the pid and tty but rotates the session id, so `claude-ipc peers` lists the predecessor (gcc-reaper) as idle with the same pid. Check pid and tty before treating a "live" predecessor as a separate process.
+2. The push-gate sentinel is keyed by session id. An owner approval made seconds before a /clear is stranded; the only honest path is to re-run the push and surface the new nonce. Filed as prop-20261010-181743-2d.
+3. `~/.claude/scripts/goals/gs` is Python; calling it through `bash` prints a wall of syntax errors that look like a broken tool. Run it bare.
+4. A hanging `ssh` to a Tailscale-SSH host prints the one-time check-in URL to its output file within seconds. Running the probe with the Bash timeout and reading the task output file hands the owner a clickable link instead of a "ssh stalls" caveat.
+5. `git log origin/master..master` on a repo whose branch is main fails loudly; `git status -sb` gives the ahead count without guessing the branch name.
+
+---
+
+---
+
 ## gcc-mods build: pain-first scour, then the whole mod · 2026-10-06 12:30
 **Purpose:** Four sonnet seats mined the owner's pain records, the backlog, every owner-facing hook channel and the 2.1.291 mods API; the proposal in assets/reports/20261006-mods-scour/PROPOSAL.md was built in full except push approval, installed at ~/.claude/skills/gcc-mods.
 
