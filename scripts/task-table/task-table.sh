@@ -35,7 +35,7 @@ set -uo pipefail
 export PATH="/opt/homebrew/bin:$PATH"
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"   # ${#var} counts characters, not bytes
 
-MODE=human; SID=""; PIN=""; GROUP=""; SETGROUP=""; DETAIL=0
+MODE=human; SID=""; PIN=""; GROUP=""; SETGROUP=""; DETAIL=0; PROJECT=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --json) MODE=json; shift ;;
@@ -46,6 +46,7 @@ while [ $# -gt 0 ]; do
     --session) SID="$2"; shift 2 ;;
     --pin) PIN="$2"; shift 2 ;;
     --candidates) MODE=candidates; shift ;;
+    --project) PROJECT="$2"; shift 2 ;;          # filter to rows whose project is this (path or name); identity contract I3
     --group) GROUP="$2"; shift 2 ;;              # one-off: batch|domain|class|actor|auto
     --set-group) SETGROUP="$2"; shift 2 ;;       # persist for this project; the owner says it once
     # The range ends at the blank comment line after Usage, computed rather than
@@ -280,29 +281,118 @@ ARMED_GOAL=""
 # Test seam: the suites run with no live harness goal, and the /goal line is a
 # ruled surface (D2b) that has to be exercised.
 [ -n "${TASKS_ARMED_GOAL:-}" ] && ARMED_GOAL="$TASKS_ARMED_GOAL"
-ALIAS="$ALIAS" MODEL="$MODEL" DETAIL="$DETAIL" MODE="$MODE" DIR="$DIR" GCC="$HOME/.claude" RESOLVED_BY="$RESOLVED_BY" GROUP="$GROUP" VIEW_FILE="$VIEW_FILE" PROOT="$PROOT" ARMED_GOAL="$ARMED_GOAL" python3 - <<'PY'
+ALIAS="$ALIAS" MODEL="$MODEL" DETAIL="$DETAIL" MODE="$MODE" DIR="$DIR" GCC="$HOME/.claude" RESOLVED_BY="$RESOLVED_BY" GROUP="$GROUP" VIEW_FILE="$VIEW_FILE" PROOT="$PROOT" ARMED_GOAL="$ARMED_GOAL" PROJECT="$PROJECT" python3 - <<'PY'
 import calendar, json, os, re, pathlib, sys, time
 
 mode = os.environ["MODE"]; d = pathlib.Path(os.environ["DIR"]); G = pathlib.Path(os.environ["GCC"])
 resolved_by = os.environ.get("RESOLVED_BY", "explicit")
 HEIGHT = 44
 
-rows = []
-for f in d.glob("*.json"):
-    # A task file carries no timestamp of its own, so mtime is the only age
-    # signal there is. Keeping it is what lets the header say whether these
-    # rows have moved recently or are an accumulated store rendered as today.
-    # pathlib's glob matches dotfiles, unlike the shell's: a JSON sidecar such
-    # as .goals (or a future .anything.json) is store metadata, never a row.
-    if f.name.startswith("."): continue
+def num(r):
+    # Leading digits only: an aggregated project view qualifies an id with its
+    # store (e.g. 3·f04ae8) so the five #3s from five stores stay distinct, and
+    # num() must still read the numeric part for sorting and reference lookup.
+    m = re.match(r"\d+", str(r.get("id", "0")))
+    return int(m.group()) if m else 0
+
+# ---- project identity + cross-store project view -------------------------------
+# Contract: assets/reports/20260922-tasks-identity-fix/contract.md. A task's
+# project is metadata.project, set from what the work is. A store carries a CWD
+# stamp (.project) as a back-compat fallback, and even an unstamped store can be
+# attributed to where its session RAN, from its transcript directory. The point:
+# a project's work is spread across many session stores, so "for a project" has to
+# gather rows across ALL of them, not render one session's slice (owner,
+# 2026-09-22: "the tool is useless to me if it can't do what I need it to").
+def _canon(p):
+    p = os.path.expanduser(str(p or ""))
+    try: return os.path.realpath(p)
+    except Exception: return p
+def _base(p):
+    return os.path.basename(str(p or "").rstrip("/")) or str(p or "")
+_TASKS_ROOT = G / "tasks"; _PROJ_DIR = G / "projects"
+def _load_rows(store_dir):
+    out = []
+    for f in store_dir.glob("*.json"):
+        if f.name.startswith("."): continue   # .goals and other sidecars are not rows
+        try:
+            r = json.load(open(f))
+            r["_mtime"] = f.stat().st_mtime
+            r["_birth"] = getattr(f.stat(), "st_birthtime", f.stat().st_mtime)
+            r["_store"] = store_dir.name
+            out.append(r)
+        except Exception: pass
+    return out
+def _store_stamp(store_dir):
+    pf = store_dir / ".project"
+    if pf.exists():
+        try:
+            s = pf.read_text(errors="replace").strip()
+            if s: return s
+        except Exception: pass
+    return ""
+def _store_ran_in(store_dir):
+    # The encoded CWD of the session, from its transcript dir name, e.g.
+    # -Users-alcatraz627-Code-Claude-i-dream. Recovers a project for an unstamped
+    # store; matched by its trailing repo segment below.
+    sid = store_dir.name.replace("session-", "")
     try:
-        r = json.load(open(f))
-        r["_mtime"] = f.stat().st_mtime
-        # Birth time is when the row was filed; mtime moves on every edit.
-        r["_birth"] = getattr(f.stat(), "st_birthtime", f.stat().st_mtime)
-        rows.append(r)
+        for tj in _PROJ_DIR.glob(f"*/{sid}*.jsonl"): return tj.parent.name
     except Exception: pass
-def num(r): return int(re.sub(r"\D", "", str(r.get("id", "0"))) or 0)
+    return ""
+def _proj_of(r, hint=""):
+    return (r.get("metadata") or {}).get("project") or hint
+def _proj_match(rp, want):
+    # want is an absolute path, a ~path, or a bare project name. rp is a path
+    # (stamp / metadata.project) or an encoded transcript dir (starts with '-').
+    if not rp: return False
+    rp = str(rp); wb = _base(want)
+    if rp == want: return True
+    if rp.startswith("/") and _canon(rp) == _canon(want): return True
+    if rp.startswith("/") and (_base(rp) == wb or _base(rp) == want): return True
+    if not rp.startswith("/") and (rp == wb or rp.endswith("-" + wb)): return True
+    return False
+
+_PROJECT = os.environ.get("PROJECT", "").strip()
+_project_notes = []
+_agg = None
+_stamp = ""
+
+if _PROJECT:
+    # PROJECT VIEW: gather this project's rows from every store.
+    rows = []; _scanned = 0; _matched = 0
+    for _sd in sorted(_TASKS_ROOT.glob("session-*")):
+        if not _sd.is_dir(): continue
+        _srows = _load_rows(_sd)
+        if not _srows: continue
+        _scanned += 1
+        _hint = _store_stamp(_sd) or _store_ran_in(_sd)
+        _keep = [r for r in _srows if _proj_match(_proj_of(r, _hint), _PROJECT)]
+        if _keep:
+            _matched += 1; rows.extend(_keep)
+    _agg = (_matched, _scanned)
+    # Ids are per-store, so a cross-store view has to qualify them or five #3s
+    # collide into one. Append a short store tag; num() still reads the leading
+    # digits for sorting and references.
+    for r in rows:
+        r["id"] = f"{r['id']}·{r['_store'].replace('session-', '')[:6]}"
+    if rows:
+        _project_notes.append(f"  !! project view for {_base(_PROJECT)}: {len(rows)} row(s) gathered across {_matched} store(s) of {_scanned} scanned.")
+    else:
+        _project_notes.append(f"  !! no work found for project {_base(_PROJECT)} in any of {_scanned} stores. Nothing has been filed under it yet.")
+else:
+    # SINGLE STORE (the resolved one) plus the I4 stamp-vs-rows guard.
+    rows = _load_rows(d)
+    _stamp = _store_stamp(d)
+    if _stamp:
+        _foreign = [r for r in rows if (r.get("metadata") or {}).get("project")
+                    and not _proj_match(_proj_of(r, _stamp), _stamp)]
+        if _foreign:
+            _byp = {}
+            for r in _foreign:
+                k = _base(_proj_of(r, _stamp)); _byp[k] = _byp.get(k, 0) + 1
+            _other = "  ·  ".join(f"{n}× {p}" for p, n in sorted(_byp.items(), key=lambda kv: -kv[1]))
+            _project_notes.append(f"  !! this store is stamped {_base(_stamp)} but {len(_foreign)} row(s) belong to other projects ({_other}); it is not purely {_base(_stamp)}'s queue. Filter with --project <name>.")
+
 rows.sort(key=num)
 by_id = {num(r): r for r in rows}
 
@@ -430,7 +520,7 @@ def backlog(r): return bool(RE_PROP.search(desc(r)))
 
 def enrich(r):
     return {
-        "id": num(r), "subject": subj(r), "status": r.get("status", "pending"),
+        "id": (r.get("id") if _agg else num(r)), "subject": subj(r), "status": r.get("status", "pending"),
         "gated": gated(r), "source": "backlog" if backlog(r) else "session",
         # Carried through because the GATES band flags an ask nobody has touched
         # in a day: a gate goes false by being satisfied, and recency is the only
@@ -696,6 +786,14 @@ sub = "batch" if group != "batch" and has_meta("batch") else None   # goal › b
 
 if mode == "json":
     print(json.dumps({"store": str(d), "group": group, "sub": sub, "group_source": group_src,
+        # Project identity, so a machine caller sees the same stamp/attribute
+        # conflict (I4) and filter context the human render shows. Named
+        # 'project_conflict' as well as carried in the notes, so a caller can key
+        # on either (identity contract, 2026-09-22).
+        "project": {"filter": _PROJECT or None, "stamp": _stamp or None,
+                    "notes": _project_notes},
+        "project_conflict": any(("not purely" in n or "belong to other" in n
+                                 or "no rows in this store" in n) for n in _project_notes),
         "groups": {k: [x["id"] for x in seq_sort(v)] for k, v in groups.items()},
         "gates": [x["id"] for x in gates], "later": [x["id"] for x in later],
         # The ids the footer stopped printing (Q8a): rows whose file moved in the
@@ -1072,10 +1170,10 @@ def w(s=""): out.append(s)
 # over another session's rows: a hardcoded false alias survived all 444
 # assertions (adv-tasks F1, 2026-09-05). The store id cannot be wrong about
 # whose rows these are; the provenance line below already says how it resolved.
-_head = f"TASKS  {d.name}"
+_head = f"TASKS  project: {_base(_PROJECT)}" if _agg else f"TASKS  {d.name}"
 # His goal and the goal tags are two objects; line 1 shows his, clipped at a
 # word, and the count below names itself as tags (alignment check 3).
-_armed = (os.environ.get("ARMED_GOAL") or "").strip()
+_armed = "" if _agg else (os.environ.get("ARMED_GOAL") or "").strip()  # a project view is not this session's goal
 if _armed:
     # The text itself rides its own line under the provenance line (unblock-0908
     # D2b, 2026-09-08); Q7a's 96-char clip on this line cut goals at their
@@ -1123,8 +1221,12 @@ _src = ("from the --group flag" if group_src.startswith("flag")
         else "set in this project's view file" if group_src.startswith("project view file")
         else f"auto, {_m.group(1)}% of open rows carry it" if _m and group != "actor"
         else "auto")
-w(f"  store {d.name}, found by {_how}  ·  grouped by {group}"
-  + (f", then {sub}" if sub else "") + f", {_src}")
+if _agg:
+    w(f"  project view: {_agg[0]} of {_agg[1]} stores hold {_base(_PROJECT)} rows, gathered across sessions  ·  grouped by {group}"
+      + (f", then {sub}" if sub else "") + f", {_src}")
+else:
+    w(f"  store {d.name}, found by {_how}  ·  grouped by {group}"
+      + (f", then {sub}" if sub else "") + f", {_src}")
 # His goal in his words, whole, as the line he can paste back. Plain text with
 # continuation lines at column 0 and nothing else on them, because he copies it
 # off this screen (unblock-0908 D2b and the D3 note, 2026-09-08).
@@ -1168,6 +1270,9 @@ _last_open = _age(time.time() - max(_open_m)) if _open_m else ""
 # "a third of the render was the tool complaining about fields it could have
 # defaulted"). A header line never asks the reader a question.
 _bangs, _quiet = [], []
+# Project identity notes (the --project filter context, or the I4 stamp-vs-rows
+# disagreement) lead the bangs: they change whose queue the owner is reading.
+for _pn in _project_notes: _bangs.append(_pn)
 if resolved_by.startswith("guess"):
     _bangs.append(f"  !! STORE NOT CONFIRMED ({resolved_by}). This may be another session's queue. Pin: task-table.sh --session <sid8>")
 # A gate goes false by being SATISFIED, and nothing closes the row. Twice on
@@ -1669,6 +1774,28 @@ def build_body():
             return
         _first = (2 + first_row_cost(_bands[0][1])) if _bands else first_row_cost(items)
         if not fits(5 + len(_tlines) + _first + _dcost + _wcost):
+            # The full box (rail, meter, milestone bands) will not fit. Rather than
+            # drop it whole and leave the tail lines blank (adv-tasks F5, owner D3a
+            # 2026-09-18: b8008a10 dropped a 4-row box with 6 lines unspent), spill
+            # it railless like the one_row branch: header, then rows, emit_rows
+            # stopping when the lines run out. Rows that still do not fit land in
+            # `hidden` and the overflow line counts them, so nothing is lost
+            # silently. The meter and band headers are the chrome that did not fit;
+            # each row still carries its own state.
+            if fits(len(_tlines) + first_row_cost(items) + 1):
+                _box_owed = 0
+                if out and out[-1] != "": w("")
+                _draw_dir()
+                w(lead + _tlines[0] + (tailtxt if len(_tlines) == 1 else ""))
+                for _tl in _tlines[1:-1]: w(_tl)
+                if len(_tlines) > 1: w(_tlines[-1] + tailtxt)
+                if _when:
+                    for _wl in _when_lines(" " * (ID_COL - 2)): w(_wl)
+                _start = len(out)
+                emit_rows(items)
+                for _i in range(_start, len(out)):
+                    if out[_i].startswith("│"): out[_i] = " " + out[_i][1:]
+                return
             hidden.extend(f"#{x['id']}" for x in items)
             _unopened.append((ball, emo, title, len(items))); return
         _box_owed = 1

@@ -46,8 +46,12 @@ case "$LANE" in
     [[ "$wk" =~ ^[0-9]+$ ]] || say UNKNOWN "no numeric week pct in $LIMITS"
     rs=$(reset_in "$(jq -r '.resets_at_weekly // 0' "$LIMITS" 2>/dev/null)")
     if [ "$LANE" = fable ]; then
-      if [ "$wk" -gt 90 ]; then say STRONG "general week at ${wk}% ($rs): prefer not to seat fable; if you think it is worth it, ask the owner in one line"
-      elif [ "$wk" -gt 80 ]; then say WARN "general week at ${wk}% ($rs): say in the Model Plan what fable buys here that opus does not"
+      # Thresholds are the owner's policy (ops.fable_*_pct), 80 and 90 when unset.
+      pol="${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}"
+      fw=$(bash "$pol" get ops.fable_warn_pct 2>/dev/null); [[ "$fw" =~ ^[0-9]+$ ]] || fw=80
+      fs=$(bash "$pol" get ops.fable_strong_pct 2>/dev/null); [[ "$fs" =~ ^[0-9]+$ ]] || fs=90
+      if [ "$wk" -gt "$fs" ]; then say STRONG "general week at ${wk}% ($rs): prefer not to seat fable; if you think it is worth it, ask the owner in one line"
+      elif [ "$wk" -gt "$fw" ]; then say WARN "general week at ${wk}% ($rs): say in the Model Plan what fable buys here that opus does not"
       else say OK "general week at ${wk}%"; fi
     else
       if [ "$wk" -gt 90 ]; then say STRONG "general week at ${wk}% ($rs): before any big action name its cost and get a go; snoozable per session only"

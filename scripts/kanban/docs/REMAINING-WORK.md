@@ -556,7 +556,7 @@ Answer string: `D1d D2a D3a D4a D5a D6b`, with four notes.
   eight disagreements. A decision can carry its own `images` as evidence.
   `none: true` adds a built-in reject option, renameable via `noneLabel` and
   `noneCode`, drawn dashed so it reads as a way out rather than a peer. The
-  scrimmed zoom and the 1-9 keyboard apply to every image and every option
+  inline zoom and the 1-9 keyboard apply to every image and every option
   wherever they appear, which was the owner's *"the same click to expand +
   keyboard support applies"*.
   **A latent bug fell out of testing it.** The kind tabs bind 1-5 globally, so

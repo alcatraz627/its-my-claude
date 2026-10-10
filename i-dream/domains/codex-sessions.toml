@@ -1,14 +1,6 @@
-# i-dream domain manifest — codex sessions (STAGED, NOT LIVE)
-#
-# Registers Codex's own session history as a dream domain so the dreaming layer
-# can see the third agent on this machine: what gets handed to Codex, from where,
-# and how those runs cluster. One-way: i-dream reads; nothing here writes back.
-#
-# To register (after the owner rules on i-dream/REQUEST.md):
-#   cp ~/.claude/adapters/codex/i-dream/codex-sessions.toml ~/.claude/i-dream/domains/codex-sessions.toml
-#   i-dream domain list        # shows codex-sessions, kind=external
-#   i-dream dream-pass         # status: ok, insight_count > 0
-# To remove: delete that copy. Nothing in the adapter depends on it.
+# i-dream domain manifest — Codex sessions.
+# Registered at ~/.claude/i-dream/domains/codex-sessions.toml.
+# Keep both copies in sync when changing this manifest.
 
 [domain]
 name        = "codex-sessions"

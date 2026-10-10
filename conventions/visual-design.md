@@ -10,7 +10,11 @@ triggers:
   - phrase:"design system"
   - phrase:"make it look good"
   - phrase:"ui redesign"
+  - topic:severity
+  - phrase:"status color"
+  - phrase:"traffic light"
 related:
+  - features/hook-design.md
   - conventions/tui-design.md
   - conventions/cli-help-design.md
   - conventions/html-output.md
@@ -18,16 +22,17 @@ related:
   - conventions/ui-charter.md
 tier: 2
 category: conventions
-updated: 2026-06-21
+updated: 2026-09-30
 stale_after_days: 365
 ---
 
 # Visual design — color, hierarchy, and where to read more
 
 How to make a UI surface (native app, web page, widget, CLI/TUI) read as designed
-rather than assembled. Distilled from the claude-instances menu-bar redesign; the
-worked example with hex values lives in that project's
-`docs/dropdown-redesign.md`.
+rather than assembled. The worked example to copy is Switchboard's kit,
+`~/Code/Claude/switchboard-mac/docs/design-kit.md`. The claude-instances dropdown
+redesign these principles were first drawn from is not an exemplar; the owner
+judged it a failure (see Provenance).
 
 ## Color: harmony beats count
 
@@ -57,9 +62,47 @@ Keep the colors — they aid identification — and make them one system:
    and less saturated. On translucent/blurred material keep chroma moderate and
    lightness mid-band, or saturated colors vibrate and near-background colors wash
    out. Never use pure primaries (`#00FF00`/`#FF0000`/`#0000FF`) on blur.
+6. **Glass needs a legibility floor.** Blur does not stop what sits behind it
+   from showing through: a terminal's red and green bands read straight through
+   a menu material and cut text contrast. Put text rows on a backing opaque
+   enough that contrast holds over any window behind, and check it over a busy
+   window, not an empty desktop.
 
 The de-chaos lever, in one line: **collapse the competing ambient colors to one low
 chroma at one lightness; reserve high chroma for identity and severity.**
+
+## Severity: what makes a light worth lighting
+
+The rules above govern what severity *looks* like. This one governs when it fires,
+which is the half that decides whether anyone still reads it in a month.
+
+**A severity indicator fires on evidence of a real problem, not on a metric crossing
+a threshold.** Its job is to call for attention, or to confirm something the reader
+already suspects. A light that is academically accurate but corresponds to nothing
+they feel is worse than no light, because it teaches them to discount every light
+including the true ones. Owner ruling 2026-09-06, on a system monitor whose lights
+tracked utilization percentages: *"the lights exist to call for attention or confirm
+my laggy felt experience, so it should match up with that instead of being only
+academically accurate."*
+
+Three consequences worth designing to:
+
+1. **Pick the trigger metric by correlation with the felt symptom, not by which
+   number is easiest to read.** Utilization crosses lines constantly without anything
+   being wrong. Saturation, queue depth, and stall time are what a person actually
+   experiences as slowness. A CPU pinned at 100% with an empty run queue feels fine;
+   the same 100% behind a deep queue is the thing they came to look at.
+2. **A steady-state amber is a bug.** If an indicator sits warm during normal
+   operation, its threshold is describing the machine's ordinary condition rather than
+   a problem. Either re-baseline it or remove it.
+3. **Prefer a rate, a duration, or a deviation from this machine's own baseline over
+   an absolute level.** Sustained-for-N-intervals and unusual-for-this-hour both track
+   felt experience far better than a fixed percentage, and neither needs the user to
+   tune a number they have no way to choose well.
+
+The hook analogue is the same idea costed differently: `features/hook-design.md`
+weighs a false fire by what it costs to dismiss. A severity light and a warning hook
+are both attention claims, and both are spent by firing when nothing was wrong.
 
 ## Layout and hierarchy
 
@@ -69,9 +112,11 @@ chroma at one lightness; reserve high chroma for identity and severity.**
   for columnar or numeric content; system font for prose.
 - **One spacing rhythm.** A single vertical-rhythm constant applied as both row
   spacing and section padding beats per-section guesses. Group; don't over-separate.
-- **One truncation rule per field kind.** Prose clamps by line count with a tail `…`;
-  paths middle-truncate to one line with the full value on hover; identifiers
-  tail-truncate. Pick the rule by field kind, not per call site.
+- **Text wraps; it is never cut with an ellipsis.** Owner's standing rule: "text
+  wraps, never an ellipsis cut". Prose, prompts and messages wrap to as many
+  lines as they need. Where space truly cannot grow (a single-line path in a
+  fixed column), show the whole value on hover or click, and say so. Pick the
+  rule by field kind, not per call site.
 - **Detail stays; interaction shrinks.** Density is fine; never bury a *common*
   action behind a submenu/extra click.
 - **Reusable row/column primitives.** When several sections hand-roll alignment
@@ -88,9 +133,39 @@ chroma at one lightness; reserve high chroma for identity and severity.**
   `Sources/Scale.swift` (text 1 / 1.18 / 1.36, icons 85% of the text step,
   controls 60%), proposal prop-20261002-205759-bc.
 
+## One product, one system
+
+
+- **Sibling surfaces share one token source.** A menu, a window and two web
+  pages of the same product draw colour, type and spacing from one set of
+  tokens. Solving consistency one surface at a time produces surfaces that are
+  each tidy and never agree (claude-instances: a palette for the menu only, a
+  separate rainbow in its window, and two web pages in two visual languages).
+- **Themes and styles sit on top of data, never inside it.** A theme is colour;
+  a style is a reading mode (terminal, chat, printed essay). Both are swappable
+  presentation over one data model, so adding one never touches parsing.
+- **Every variant must be good on its own.** A theme or style that ships is
+  judged by its weakest reading, not rescued by one strong feature. Fewer
+  finished variants beat many half-finished ones.
+- **The theme follows the OS until the person chooses.** Store only an explicit
+  choice. Saving the OS-resolved value at load pins whatever the OS was on the
+  first visit, and the page never follows the OS again.
+- **Say a machine-wide fact once.** A condition true for the whole machine (a
+  service down, a shared counter) appears once, at the top, not on every row. A
+  warning lit on every row is not a warning; see Severity above.
+- **Words on screen are for people.** No em dashes in UI text. No raw machine
+  tokens (`06-01:21:34` elapsed times, unlabelled `1187t`, bare arrows for
+  tokens); translate them or label them. Monospace only for code, paths and
+  aligned numbers. See `rules/machine-token-where-human-words-belong.md`.
+- **Judge by use, in the state and on the device that matter.** A screenshot of
+  a surface looking right is not evidence it works. The claude-instances
+  redesign was declared converged twice by audits of screenshots, then found
+  "great looking but still pretty fucking useless" on the phone it was for.
+
 ## Where to read more (per surface)
 
 ### Apple (macOS/iOS apps, menu-bar, SwiftUI)
+- House kit to copy for any new Swift menu-bar app: `~/Code/Claude/switchboard-mac/docs/design-kit.md`, with the build and packaging steps in `features/macos-menubar-widget.md` §0.
 - Human Interface Guidelines — https://developer.apple.com/design/human-interface-guidelines
 - HIG · The menu bar / menus — https://developer.apple.com/design/human-interface-guidelines/the-menu-bar
 - HIG · Color — https://developer.apple.com/design/human-interface-guidelines/color
@@ -126,5 +201,10 @@ chroma at one lightness; reserve high chroma for identity and severity.**
 ## Provenance
 
 Distilled 2026-06-21 from the claude-instances menu-bar dropdown redesign. The
-full color study (perceptual tiers, the 17-token light/dark palette, sources) is in
-that repo at `docs/dropdown-redesign.md` and `.claude/output/20260620-color-palette-research/palette.md`.
+color study (perceptual tiers, a 17-token palette) is in that repo at
+`docs/dropdown-redesign.md`; read it for the reasoning, not as a model, since
+its dark column was never built and the owner judged the result a failure.
+Corrected 2026-09-30 after a deep dive of that tool
+(`~/.claude/widgets/claude-instances/.claude/output/20260930-deep-dive/map.md`):
+wrap instead of ellipsis, the glass legibility floor, the exemplar moved to
+Switchboard's kit, and the "One product, one system" section.

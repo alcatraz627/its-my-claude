@@ -1,0 +1,271 @@
+2026-09-08T22:20:20.378317Z  INFO Running manual dream cycle (phase: All)
+2026-09-08T22:20:20.382212Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-08T22:20:20.404886Z  INFO Running dreaming module (budget: 25000 tokens)
+2026-09-08T22:20:20.405416Z  INFO SWS Phase: Compressing session data into structured learnings
+2026-09-08T22:20:20.443595Z  INFO SWS: consolidating 50 new sessions (50 turn summaries)
+2026-09-08T22:21:05.873484Z  INFO SWS phase complete (12138 tokens used)
+2026-09-08T22:21:06.062682Z  INFO Merge pass: 510 patterns → 468 schemas (42 collapsed, redundancy 1.09, largest 6×)
+2026-09-08T22:21:06.062913Z  INFO REM Phase: Exploring creative associations
+2026-09-08T22:21:06.064464Z  INFO REM: reasoning over 468 consolidated schemas (from 510 episodic patterns)
+2026-09-08T22:22:52.440078Z  INFO REM phase complete (6219 tokens used)
+2026-09-08T22:22:52.440486Z  INFO Wake Phase: Verifying and promoting insights
+2026-09-08T22:22:52.468330Z  INFO Wake: archived 1 old cycles to insights-archive.md
+2026-09-08T22:22:52.468981Z  INFO Wake: promoted 9 insights to dreams/insights.md
+2026-09-08T22:22:52.469380Z  INFO Wake: created 9 prospective intentions
+2026-09-08T22:23:12.117330Z  INFO Compiler: 7 new shadow intervention(s), 0 rejected (62 qualified, 54 covered, 0 batch-capped)
+2026-09-08T22:23:12.126883Z  INFO Promotions: 4 intervention(s) advanced on evidence
+2026-09-08T22:23:12.127087Z  INFO Dreaming complete (18357 tokens used)
+2026-09-08T22:23:12.127094Z  INFO Running metacog module (budget: 15821 tokens)
+2026-09-08T22:23:12.127096Z  INFO Running metacognitive analysis on recent session samples
+2026-09-08T22:23:12.156904Z  INFO Metacog: sampled 11 units from 50 new sessions
+2026-09-08T22:23:12.162747Z  INFO Metacog effort: Standard (units=11, corrections=0%, novelty=0.10, dream_fresh=true, budget=15821)
+2026-09-08T22:23:46.867031Z  INFO Metacog samples pruned: 2712 → 2500 entries (removed 212 entries older than 30 days)
+2026-09-08T22:23:46.867051Z  INFO Metacog analysis complete (3099 tokens)
+2026-09-08T22:23:46.867064Z  INFO Metacog complete (3099 tokens used)
+2026-09-08T22:23:46.916528Z  INFO Introspection: collected chains from 50 new sessions
+2026-09-08T22:23:46.926927Z  INFO Running intuition module (valence collection)
+2026-09-08T22:23:46.957300Z  INFO Intuition consolidation: scanned 50 sessions, collected 0 outcomes
+2026-09-08T22:23:46.957314Z  INFO Intuition complete
+2026-09-08T22:23:47.223010Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-08T22:24:00.115830Z  INFO Insight digest updated (3678 tokens)
+2026-09-08T22:24:00.117037Z  INFO Insight digest complete (3678 tokens used)
+2026-09-08T22:24:00.117260Z  INFO Cleaning up 9 expired intentions
+2026-09-08T22:24:00.591711Z  INFO Domain 'claude-audit' consolidated: 0 events, 472ms (extract-events: 35 vents + 325 pulses -> /Users/alcatraz627/.claude/hooks-feedback-domain/events.jsonl (vents=35, telemetry=25618))
+2026-09-08T22:24:00.699195Z  INFO Domain 'claude-ipc' consolidated: 0 events, 107ms
+2026-09-08T22:24:00.809777Z  INFO Domain 'proposals' consolidated: 0 events, 110ms (Backlog: 339 open; 121 stale (>30d); top: hooks (190), other (41), scripts (41); oldest 68d (prop-20260702-113149-fb).)
+2026-09-08T22:24:14.937245Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:24:29.392666Z  INFO Domain 'atone' consolidated: 0 events, 28582ms (● full consolidation: backing up derived/ → derived.bak/ / ● view: 545 of 556 events (test slugs filtered) / ✓ wrote index.md (     552 lines))
+2026-09-08T22:24:29.444021Z  INFO Domain 'memory-domain' consolidated: 0 events, 51ms (memory-domain: 0 new/updated memory file(s) (1 total found))
+2026-09-08T22:24:29.547218Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-08T22:24:29.598773Z  INFO Domain 'pinned' consolidated: 0 events, 51ms (pinned consolidate: 15 active, 2 archived this run)
+2026-09-08T22:24:29.598786Z  INFO Domain cadence dispatch: 6 consolidations ran, 1 failed
+2026-09-08T22:24:29.599430Z  INFO [cycle 1587] complete — used 25134 tokens (24866 remaining of 50000)
+2026-09-08T22:24:29.627984Z  INFO Reinforcement: 0 reactivated, 0 weakened, 0 stale-skipped, 0 known-skipped, 0 forgotten, 10 evicted, 500 surviving
+2026-09-08T22:24:29.761662Z  INFO Retention: .claude/subconscious/dreams/traces → 5 overflow entries archived
+2026-09-08T22:24:29.761673Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-08T22:24:29.761675Z  INFO Retention: .claude/i-dream/injections.jsonl → 222 overflow entries archived
+2026-09-08T22:24:29.761676Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 4187 overflow entries archived
+2026-09-08T22:24:29.761678Z  INFO Retention: .claude/i-dream/daily → 2 overflow entries archived
+2026-09-08T22:24:29.762782Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-08T22:24:30.121958Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-08T22:24:30.122262Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-08T22:24:30.828836Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-08T22:24:30.831239Z  INFO Project brief: synthesising for sys-monitor
+2026-09-08T22:24:44.905620Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:24:51.588422Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/sys-monitor.md (2248 tokens)
+2026-09-08T22:24:51.588920Z  INFO D6 v2: regenerated brief for sys-monitor (2248 tokens)
+2026-09-08T22:24:51.589030Z  INFO Project brief: synthesising for slack-automation
+2026-09-08T22:25:11.375976Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/slack-automation.md (2233 tokens)
+2026-09-08T22:25:11.376680Z  INFO D6 v2: regenerated brief for slack-automation (2233 tokens)
+2026-09-08T22:25:11.376744Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-walmart-mvp-backend
+2026-09-08T22:25:14.885139Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:25:32.299709Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-walmart-mvp-backend.md (2050 tokens)
+2026-09-08T22:25:32.300033Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-walmart-mvp-backend (2050 tokens)
+2026-09-08T22:25:32.301693Z  INFO Project brief: synthesising for versable-builder
+2026-09-08T22:25:44.884418Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:25:50.207356Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/versable-builder.md (2636 tokens)
+2026-09-08T22:25:50.207941Z  INFO D6 v2: regenerated brief for versable-builder (2636 tokens)
+2026-09-08T22:25:50.209390Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-walmart-mvp
+2026-09-08T22:26:07.152548Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-walmart-mvp.md (2193 tokens)
+2026-09-08T22:26:07.152823Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-walmart-mvp (2193 tokens)
+2026-09-08T22:26:07.153227Z  INFO Project brief: synthesising for .claude
+2026-09-08T22:26:14.852031Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:26:27.441387Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/.claude.md (2473 tokens)
+2026-09-08T22:26:27.441894Z  INFO D6 v2: regenerated brief for .claude (2473 tokens)
+2026-09-08T22:26:27.443093Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-foundry-runner
+2026-09-08T22:26:43.555865Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-foundry-runner.md (2048 tokens)
+2026-09-08T22:26:43.556363Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-foundry-runner (2048 tokens)
+2026-09-08T22:26:43.556492Z  INFO Project brief: synthesising for gcp
+2026-09-08T22:26:44.846132Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:27:01.475513Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/gcp.md (2087 tokens)
+2026-09-08T22:27:01.475881Z  INFO D6 v2: regenerated brief for gcp (2087 tokens)
+2026-09-08T22:27:01.475949Z  INFO D6 v2: refreshed 8 project brief(s) post-cycle
+2026-09-08T22:27:14.861634Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:27:44.857998Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:28:14.844618Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:28:44.839564Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:29:14.852686Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:29:44.838409Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:30:14.857241Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:30:44.865400Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:31:14.865945Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:31:44.931839Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:32:14.847417Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:32:44.840271Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:33:14.864728Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:33:44.846268Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:34:14.861720Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:34:44.858401Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:35:14.838437Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:35:44.854837Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:36:14.858939Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:36:44.869703Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:37:14.856327Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:37:44.861861Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:38:14.844021Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:38:44.846180Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:39:14.902724Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:39:44.940763Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:40:14.861838Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:40:44.839831Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:41:14.875637Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:41:44.848100Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:42:14.867456Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:42:44.932706Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:43:14.843448Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:43:44.865867Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:44:14.853275Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:44:44.862393Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:45:14.861034Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:45:44.874440Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:46:14.864957Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:46:44.874527Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:47:14.869674Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:47:44.848902Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:48:14.870571Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:48:44.852169Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:49:14.871121Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:49:44.869017Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:50:14.921151Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:50:44.869897Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:51:14.860089Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:51:44.865422Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:52:14.858963Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:52:44.860554Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:53:14.862266Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:53:44.853368Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:54:14.859863Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:54:44.871007Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:55:14.853338Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:55:44.881581Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:56:14.851286Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:56:44.885038Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:57:14.892126Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:57:44.863016Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:58:14.876118Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:58:44.990406Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:59:14.941944Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T22:59:44.889579Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:00:14.857537Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:00:44.853383Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:01:14.874119Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:01:44.868668Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:02:14.851660Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:02:44.861855Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:03:14.911199Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:03:44.941464Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:04:14.859100Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:04:44.877484Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:05:14.874171Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:05:44.865838Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:06:14.857134Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:06:44.861679Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:07:14.926973Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:07:44.861463Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:08:14.868955Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:08:44.875253Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:09:14.885532Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:09:44.887097Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:10:14.874662Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:10:44.882857Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:11:14.858189Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:11:44.891421Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:12:14.862964Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:12:44.864856Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:13:14.881199Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:13:44.925374Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:14:14.917053Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:14:44.858240Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:15:14.881322Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:15:44.884929Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:16:14.871784Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:16:44.874955Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:17:14.885846Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:17:44.883442Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:18:14.867784Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:18:44.872123Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:19:14.869480Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:19:44.878446Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:20:14.875193Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:20:44.888876Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:21:14.882752Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:21:44.915369Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:22:14.878274Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:22:44.895988Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:23:14.889634Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:23:44.888045Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:24:14.871068Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:24:44.887519Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:25:14.871280Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:25:44.881279Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:26:14.890492Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:26:44.887710Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:27:14.879799Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:27:44.863351Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:28:14.890293Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:28:44.895935Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:29:14.879778Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:29:44.881605Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:30:14.884096Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:30:44.888923Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:31:14.893990Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:31:44.888564Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:32:14.875675Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:32:44.876546Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:33:14.889195Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:33:44.920098Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:34:14.891009Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:34:44.880211Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:35:14.899753Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:35:44.874855Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:36:14.895150Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:36:44.879813Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:37:14.872843Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:37:44.869850Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:38:14.909569Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:38:44.876598Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:39:14.891478Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:39:44.891609Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:40:14.877095Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:40:44.883895Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:41:14.889886Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:41:44.875867Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:42:14.880266Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:42:44.898960Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:43:14.892799Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:43:44.890984Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:44:14.992047Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:44:44.888163Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:45:14.883686Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:45:44.885678Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:46:14.900469Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:46:44.948456Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:47:14.879050Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:47:44.893389Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:48:14.882739Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:48:44.879579Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:49:14.885503Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:49:44.897728Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:50:14.900423Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:50:44.906005Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:51:14.898744Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:51:44.897811Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:52:14.895032Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:52:44.887106Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:53:14.886701Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:53:44.928145Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:54:14.880952Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:54:44.903336Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:55:14.906476Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:55:44.875604Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:56:14.902883Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:56:44.897091Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:57:14.896189Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:57:44.899857Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:58:14.886515Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:58:44.920180Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:59:14.906296Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts
+2026-09-08T23:59:44.890470Z  WARN External domain 'claude-ipc': cursor id 'msg-87c1cb8df3334ed3' not found; falling back to last_ts

@@ -12,8 +12,8 @@
 #               proven with `codex execpolicy check` (rm must come back forbidden).
 #   4. AGENTS   rules/00-index.md regenerated, then $CODEX_HOME/AGENTS.md rebuilt
 #               from preamble.md + the index (scripts/export-agents-md.sh).
-#   5. verify   bash -n on every hook, one synthetic rm payload through the
-#               PreToolUse guard (must block), an empty outbox drain.
+#   5. verify   syntax checks, shell and patch canaries, turn-guard behavior
+#               tests, and an empty outbox drain.
 #
 # Symlink where Codex follows one (skills, hooks.json, rules); generate where it
 # cannot (AGENTS.md is assembled from two sources and byte-capped). Sync model:
@@ -21,7 +21,7 @@
 # preamble edit. Nothing here is automated on a timer, by design.
 #
 # After install: hooks are TRUSTED per hash. Open `codex`, run /hooks, trust the
-# six gcc entries once (again after any edit to hooks.json), or launch through
+# gcc entries once (again after any edit to hooks.json), or launch through
 # bin/codex-gcc, which passes --dangerously-bypass-hook-trust for exec runs.
 set -uo pipefail
 
@@ -53,10 +53,20 @@ wanted=()
 while IFS= read -r name; do
   case "$name" in ''|'#'*) continue;; esac
   wanted+=("$name")
-  if [ -d "$ROOT/skills/$name" ]; then link "$ROOT/skills/$name" "$AGENTS_SKILLS/$name"
-  else fail "skills.list names $name but $ROOT/skills/$name does not exist"; fi
+  if [ -f "$ADAPTER/skills/$name/SKILL.md" ]; then
+    link "$ADAPTER/skills/$name" "$AGENTS_SKILLS/$name"
+  elif [ -d "$ROOT/skills/$name" ]; then
+    link "$ROOT/skills/$name" "$AGENTS_SKILLS/$name"
+  else fail "skills.list names $name but no Codex adapter or gcc skill exists"; fi
 done < "$ADAPTER/skills.list"
 link "$ADAPTER/skills/core-dump" "$AGENTS_SKILLS/core-dump"; wanted+=(core-dump)
+mkdir -p "$CODEX_HOME/skills"
+for skill in "$ADAPTER"/skills/*; do
+  [ -f "$skill/SKILL.md" ] || continue
+  name=$(basename "$skill")
+  [ "$name" = core-dump ] && continue
+  link "$skill" "$CODEX_HOME/skills/$name"
+done
 for l in "$AGENTS_SKILLS"/*; do
   [ -L "$l" ] || continue
   case "$(readlink "$l")" in "$ROOT"/*) ;; *) continue;; esac
@@ -96,6 +106,18 @@ out=$(printf '%s' "$payload" | bash "$ADAPTER/hooks/pre-tool-bash.sh" 2>/dev/nul
 [ -z "$out" ] || [ "$(printf '%s' "$out" | jq -r '.decision // empty')" != block ] && pass "PreToolUse guard passes ls" || fail "PreToolUse guard blocked ls"
 bash "$ADAPTER/hooks/drain-outbox.sh" 00000000-install-check >/dev/null 2>&1 && pass "outbox drain (empty) exits 0" || fail "drain-outbox"
 python3 "$ADAPTER/bin/codex-status.py" --hours 1 --json >/dev/null 2>&1 && pass "codex-gcc status renders" || fail "codex-status.py"
+python3 "$ADAPTER/bin/codex-setup-map.py" --check >/dev/null 2>&1 && pass "adapter map reports current" || fail "adapter map reports drift"
+PYTHONPYCACHEPREFIX="${TMPDIR:-/tmp}/codex-gcc-pycache" python3 -m unittest discover -s "$ADAPTER/tests" -q >/dev/null 2>&1 && pass "hook parity behavior canaries" || fail "hook parity behavior canaries"
+patch_payload=$(jq -nc --arg cwd "$HOME" --arg command '*** Begin Patch
+*** Update File: .claude/rules/00-index.md
+*** End Patch' '{tool_name:"apply_patch",cwd:$cwd,tool_input:{command:$command}}')
+patch_dec=$(printf '%s' "$patch_payload" | python3 "$ADAPTER/hooks/pre-tool-patch.py" | jq -r '.decision // empty')
+[ "$patch_dec" = block ] && pass "patch guard blocks generated rule index" || fail "patch guard did not block generated rule index"
+patch_payload=$(jq -nc --arg cwd "$HOME" --arg command '*** Begin Patch
+*** Update File: .claude/adapters/codex/preamble.md
+*** End Patch' '{tool_name:"apply_patch",cwd:$cwd,tool_input:{command:$command}}')
+patch_dec=$(printf '%s' "$patch_payload" | python3 "$ADAPTER/hooks/pre-tool-patch.py" | jq -r '.decision // empty')
+[ -z "$patch_dec" ] && pass "patch guard permits authored preamble" || fail "patch guard blocked authored preamble"
 
 printf '\n%s ok, %s failed\n' "$ok" "$bad"
 printf 'Trust the hooks once: open `codex`, run /hooks, trust the gcc entries (repeat after editing hooks.json).\n'

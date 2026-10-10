@@ -1,11 +1,17 @@
 #!/bin/bash
+# i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
+# not feed the daemon (it was downvoting its own intentions, 2026-10-06).
+[ -n "${I_DREAM_CHILD:-}" ] && exit 0
 # i-dream: SessionStart hook — injects subconscious signals
 SOCKET="/Users/alcatraz627/.claude/subconscious/daemon.sock"
-# D6: send the working directory so the daemon can inject a per-project brief.
-# jq escapes the path for safe JSON; falls back to no-cwd payload if jq is missing.
+# D6: send the working directory so the daemon can inject a per-project brief,
+# and the session id so a later correction blames only this session's rules.
+# jq escapes both for safe JSON; falls back to a bare payload if jq is missing.
+HOOK_INPUT=$(cat 2>/dev/null)
 if command -v jq >/dev/null 2>&1; then
-    PAYLOAD=$(jq -nc --arg cwd "$PWD" --argjson ts "$(date +%s)" \
-        '{event:"session_start",ts:$ts,cwd:$cwd}')
+    SID=$(printf '%s' "$HOOK_INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+    PAYLOAD=$(jq -nc --arg cwd "$PWD" --arg sid "$SID" --arg ep "${CLAUDE_CODE_ENTRYPOINT:-}" --argjson ts "$(date +%s)" \
+        '{event:"session_start",ts:$ts,cwd:$cwd} + (if $sid == "" then {} else {session_id:$sid} end) + (if $ep == "" then {} else {entrypoint:$ep} end)')
 else
     PAYLOAD='{"event":"session_start","ts":'$(date +%s)'}'
 fi

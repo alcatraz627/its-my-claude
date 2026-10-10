@@ -7,6 +7,7 @@
 #   gcc affirm     <affirm.sh args>       record an affirmed-good call
 #   gcc pin        <i-dream pin args>     pin an insight for the next dream
 #   gcc checkpoint <handback> <summary>   register a handback in the index
+#   gcc canon     check|apply MANIFEST    bounded authored Markdown changes
 #   gcc ledger     <ledger.sh args>       read the ledgers (read-only)
 #
 # Why this exists. Codex runs shell commands inside a seatbelt sandbox that
@@ -27,6 +28,7 @@ set -uo pipefail
 ROOT="$HOME/.claude"
 SID="${CODEX_THREAD_ID:-${GCC_CODEX_SID:-${CLAUDE_CODE_SESSION_ID:-}}}"
 OUTBOX_DIR="${CODEX_GCC_OUTBOX:-/tmp/codex-gcc/outbox}"
+source "$ROOT/adapters/codex/hooks/lib.sh"
 
 die() { printf 'gcc: %s\n' "$1" >&2; exit 2; }
 [ $# -ge 1 ] || { sed -n '2,12p' "$0"; exit 2; }
@@ -39,7 +41,11 @@ alias_for() {
   tag=$(printf '%s' "$SID" | tr -cd 'A-Za-z0-9' | tr '[:upper:]' '[:lower:]' | cut -c1-8)
   if [ -n "$base" ] && [ -n "$tag" ]; then printf 'cx-%s-%s' "$base" "$tag"; else printf 'cx-%s' "${tag:-session}"; fi
 }
-ALIAS=$(alias_for)
+if gcc_is_managed_host_hook && [ -n "${CLAUDE_IPC_ALIAS:-}" ]; then
+  ALIAS="$CLAUDE_IPC_ALIAS"
+else
+  ALIAS=$(alias_for)
+fi
 [ -n "$SID" ] && export CLAUDE_CODE_SESSION_ID="$SID" GCC_CODEX_SID="$SID"
 export CLAUDE_IPC_ALIAS="$ALIAS" GCC_HOST=codex
 unset CLAUDE_CODE_MESSAGING_SOCKET CLAUDE_CODE_MESSAGING_TOKEN 2>/dev/null || true
@@ -71,17 +77,28 @@ case "$verb" in
   affirm)
     cmd=(bash "$ROOT/scripts/affirm.sh" "$@")
     [ "${1:-}" = add ] && ! has_flag --tags "$@" && cmd+=(--tags "src:codex codex:$sid8") ;;
-  pin)        cmd=(i-dream pin "$@") ;;
+  pin)
+    cmd=(i-dream pin "$@")
+    if [ "${1:-}" = add ] && ! has_flag --from-json "$@"; then
+      [ -z "$SID" ] || has_flag --session-id "$@" || cmd+=(--session-id "$SID")
+      has_flag --cwd "$@" || cmd+=(--cwd "$PWD")
+    fi ;;
+  canon)
+    [ $# -eq 2 ] || die "canon needs check|apply and a manifest path"
+    case "$1" in check|apply) ;; *) die "canon needs check|apply" ;; esac
+    [ -f "$2" ] || die "canon manifest missing: $2"
+    manifest_hash=$(shasum -a 256 "$2" | awk '{print $1}')
+    cmd=(python3 "$ROOT/adapters/codex/bin/gcc-canon.py" "$1" "$2" "$manifest_hash") ;;
   checkpoint) cmd=(bash "$ROOT/adapters/codex/checkpoint-register.sh" "$@") ;;
   ledger)     cmd=(bash "$ROOT/scripts/ledger/ledger.sh" "$@") ;;
   -h|--help|help) sed -n '2,12p' "$0"; exit 0 ;;
-  *) die "unknown verb '$verb' (ipc|propose|atone|affirm|pin|checkpoint|ledger)" ;;
+  *) die "unknown verb '$verb' (ipc|propose|atone|affirm|pin|canon|checkpoint|ledger)" ;;
 esac
 
 # --- read-only verbs never queue ---------------------------------------------
 readonly_call=0
 case "$verb:${1:-}" in
-  ledger:*|propose:list|propose:search|propose:show|atone:list|atone:search|atone:show|atone:slugs|atone:stats|affirm:list|affirm:search|affirm:show|affirm:slugs|pin:list|pin:show|pin:archived|ipc:peers|ipc:inbox|ipc:owed|ipc:log|ipc:show|ipc:status|ipc:sent|ipc:who|ipc:digest|ipc:asks|ipc:count|ipc:projects|ipc:orphans)
+  ledger:*|canon:check|propose:list|propose:search|propose:show|atone:list|atone:search|atone:show|atone:slugs|atone:stats|affirm:list|affirm:search|affirm:show|affirm:slugs|pin:list|pin:show|pin:archived|ipc:peers|ipc:inbox|ipc:owed|ipc:log|ipc:show|ipc:status|ipc:sent|ipc:who|ipc:digest|ipc:asks|ipc:count|ipc:projects|ipc:orphans)
     readonly_call=1 ;;
 esac
 
@@ -99,6 +116,14 @@ fi
 if [ "$rc" -eq 0 ]; then
   [ -n "$stderr" ] && printf '%s\n' "$stderr" >&2
   exit 0
+fi
+
+# Canonical file changes require the exact reviewed manifest to pass the host's
+# filesystem approval. Never replay them from a seat-writable outbox.
+if [ "$verb" = canon ]; then
+  [ -n "$stderr" ] && printf '%s\n' "$stderr" >&2
+  printf 'gcc canon: apply is not queued; run the approved manifest with tool filesystem escalation.\n' >&2
+  exit "$rc"
 fi
 
 sandboxed=0

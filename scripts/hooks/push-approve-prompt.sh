@@ -19,7 +19,9 @@ set -uo pipefail
 
 command -v jq >/dev/null 2>&1 || exit 0
 input=$(cat 2>/dev/null) || exit 0
-prompt=$(printf '%s' "$input" | jq -r '.prompt // empty' 2>/dev/null)
+# Claude Code sends the typed text as .prompt; the other names cover Codex,
+# whose UserPromptSubmit payload runs this same hook through its adapter.
+prompt=$(printf '%s' "$input" | jq -r '.prompt // .user_prompt // .message // .input // empty | if type == "string" then . else tostring end' 2>/dev/null)
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 sid_safe=$(printf '%s' "$sid" | tr -c 'A-Za-z0-9._-' '_')
 [ -n "$sid_safe" ] || sid_safe="nosession"

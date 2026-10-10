@@ -38,6 +38,15 @@ esac
 url=$(printf '%s' "$input" | jq -r '.tool_input.url // empty' 2>/dev/null)
 [ -n "$url" ] && exit 0
 
+# The owner's policy (artifact.publish): allow skips the ask check, block refuses
+# every new publish, ask (the default) is the check below.
+case "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get artifact.publish 2>/dev/null)" in
+  allow) exit 0 ;;
+  block)
+    jq -cn --arg r "The owner has switched off Artifact publishing (policy artifact.publish = block). Do not ask to approve it: write the file into the project, hand over its absolute path, and mention that publishing is off in the menu bar policy panel." '{decision:"block", reason:$r}' 2>/dev/null || true
+    exit 0 ;;
+esac
+
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -n "$tp" ] && [ -f "$tp" ] || exit 0
 

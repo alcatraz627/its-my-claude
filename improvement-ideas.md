@@ -1021,3 +1021,10 @@ green cron.** Propagate the code, or the scheduler reports success forever.
 - The secret-file guard fires on secret-shaped dotfile names anywhere in Bash command text, including ipc message bodies; reword the filename. `rg -q '\$\{VAR\}' FILE` learns which env var a registry config expects without printing it.
 - A blocked compound command is a partial failure: re-run the whole command, not the half you remember (peer's README that "existed" but did not).
 - A deck reviewer prompt that maps every slide claim to a source line and marks SUPPORTED/OVERSTATED/CONTRADICTED/UNSOURCED is cheap and finds real defects (19 in a 14-slide deck the author thought clean).
+
+## 2026-09-05 · brain-docs-7c (gcp brains, docs round)
+
+- An instrument call batched in parallel with the writes it should inform cannot inform them. A `date` in the same tool batch as six stamped writes produced stamps composed from a guess (10:2x) while the reading said 10:44, one hour after an S3 RCA for the same slug. Read the instrument in its own batch, see the output, then write. This generalises past clocks: any read whose output should gate a claim goes in an earlier batch than the claim.
+- The claude-ipc roster's 'offline (last seen Nm ago)' is heartbeat recency, not process liveness. ListAgents is the liveness instrument; two console sessions were alive and idle while the roster said offline. The lane-start checklist already says this and it still got written into five records.
+- After a compaction the clock is gone from context and nothing in the resume path reads it back; the checkpoint's last stamp reads like a reading and gets advanced by feel. First call after any compaction: `date`.
+- A citation checker that only matches directory-prefixed paths passes bare filenames (`admin-usage.tsx`) clean; the real drift hid there. An instrument's blind spot is where the next divergence lives.

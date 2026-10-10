@@ -60,7 +60,7 @@ leaked turn-state that fed the wedge.
   one beat of slack on a transient error, forced succession on the second.
   Invoke capped at 20m so beats never stack.
 - **Owner surfaces**: `claude-warden` CLI (status/actions/ward/wards/ipc/
-  spend/log/pause/open, colored); the claude-instances switchboard Warden row
+  spend/log/pause/open, colored); the Warden row in the Switchboard panel's System tab
   (green live, yellow standing-down-usage, off paused; click is the manual
   override, which supersedes the auto-gate everywhere); ledger FINDING rows;
   the weekly review item in weekly-todos.md.

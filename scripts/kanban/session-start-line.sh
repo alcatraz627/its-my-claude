@@ -218,7 +218,7 @@ if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
   extra=""; [ "${actionable:-0}" -gt 0 ] 2>/dev/null && extra=" ($actionable marked !now)"
   line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted$decided · board: http://localhost:5106/b/$slug"
 else
-  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted$decided · sync: bash ~/.claude/scripts/kanban/kanban.sh sync · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted$decided · frozen, sync only on request · board: http://localhost:5106/b/$slug"
 fi
 
 jq -nc --arg c "$line" '{additionalContext: $c}'

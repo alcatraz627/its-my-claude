@@ -35,10 +35,13 @@ def first_user_text(payload):
         return None
     parts = [c.get("text", "") for c in payload.get("content", []) if c.get("type") == "input_text"]
     text = " ".join(p for p in parts if p).strip()
-    # Codex prefixes the owner's first turn with instruction blocks; skip those.
-    if not text or text.startswith("<"):
+    # Harness instruction blocks are not the task. A delegated seat's real
+    # request is wrapped in <task>...</task>; keep its contents.
+    if text.startswith("<task>"):
+        text = text[len("<task>"):].split("</task>", 1)[0].strip()
+    elif text.startswith("<"):
         return None
-    return text[:240]
+    return text[:240] if text else None
 
 
 def timestamp_seconds(value):
@@ -252,6 +255,11 @@ def extract(sessions, out):
 
 
 def self_test():
+    wrapped = {"type": "message", "role": "user", "content":
+               [{"type": "input_text", "text": "<task>Review the branch</task>"}]}
+    assert first_user_text(wrapped) == "Review the branch"
+    wrapped["content"][0]["text"] = "<environment_context>injected</environment_context>"
+    assert first_user_text(wrapped) is None
     with tempfile.TemporaryDirectory() as temp_dir:
         root = Path(temp_dir)
         codex_home = root / "codex-home"

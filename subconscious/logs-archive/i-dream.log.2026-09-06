@@ -1,0 +1,324 @@
+2026-09-06T02:06:48.726890Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-06T02:06:48.733906Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-06T02:06:48.767114Z  INFO Running dreaming module (budget: 25000 tokens)
+2026-09-06T02:06:48.767626Z  INFO SWS Phase: Compressing session data into structured learnings
+2026-09-06T02:06:48.861030Z  INFO SWS: consolidating 50 new sessions (50 turn summaries)
+2026-09-06T02:07:36.681205Z  INFO SWS phase complete (11641 tokens used)
+2026-09-06T02:07:37.436734Z  INFO Merge pass: 510 patterns → 441 schemas (69 collapsed, redundancy 1.16, largest 7×)
+2026-09-06T02:07:37.437001Z  INFO REM Phase: Exploring creative associations
+2026-09-06T02:07:37.441083Z  INFO REM: reasoning over 441 consolidated schemas (from 510 episodic patterns)
+2026-09-06T02:08:51.546114Z  INFO REM phase complete (6423 tokens used)
+2026-09-06T02:08:51.547353Z  INFO Wake Phase: Verifying and promoting insights
+2026-09-06T02:08:51.631436Z  INFO Wake: archived 1 old cycles to insights-archive.md
+2026-09-06T02:08:51.634222Z  INFO Wake: promoted 11 insights to dreams/insights.md
+2026-09-06T02:08:51.635556Z  INFO Wake: created 11 prospective intentions
+2026-09-06T02:09:07.059030Z  INFO Compiler: 4 new shadow intervention(s), 0 rejected (57 qualified, 52 covered, 0 batch-capped)
+2026-09-06T02:09:07.099539Z  INFO Promotions: 5 intervention(s) advanced on evidence
+2026-09-06T02:09:07.100522Z  INFO Dreaming complete (18064 tokens used)
+2026-09-06T02:09:07.100540Z  INFO Running metacog module (budget: 15968 tokens)
+2026-09-06T02:09:07.100588Z  INFO Running metacognitive analysis on recent session samples
+2026-09-06T02:09:07.151448Z  INFO Metacog: sampled 16 units from 50 new sessions
+2026-09-06T02:09:07.155846Z  INFO Metacog effort: Standard (units=16, corrections=0%, novelty=0.20, dream_fresh=true, budget=15968)
+2026-09-06T02:10:16.132793Z  INFO Metacog samples pruned: 2723 → 2608 entries (removed 115 entries older than 30 days)
+2026-09-06T02:10:16.132842Z  INFO Metacog analysis complete (6358 tokens)
+2026-09-06T02:10:16.132881Z  INFO Metacog complete (6358 tokens used)
+2026-09-06T02:10:16.193308Z  INFO Introspection: collected chains from 50 new sessions
+2026-09-06T02:10:16.205269Z  INFO Running intuition module (valence collection)
+2026-09-06T02:10:16.280260Z  INFO Intuition: collected 1 outcomes from 50 sessions, memory now has 1000 entries
+2026-09-06T02:10:16.281214Z  INFO Intuition consolidation: scanned 50 sessions, collected 1 outcomes
+2026-09-06T02:10:16.281231Z  INFO Intuition complete
+2026-09-06T02:10:17.205106Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-06T02:10:37.888989Z  INFO Insight digest updated (3546 tokens)
+2026-09-06T02:10:37.889426Z  INFO Insight digest complete (3546 tokens used)
+2026-09-06T02:10:37.889666Z  INFO Cleaning up 17 expired intentions
+2026-09-06T02:10:38.898755Z  INFO Domain 'claude-audit' consolidated: 0 events, 1005ms (extract-events: 35 vents + 294 pulses -> /Users/alcatraz627/.claude/hooks-feedback-domain/events.jsonl (vents=35, telemetry=24491))
+2026-09-06T02:10:39.303758Z  INFO Domain 'claude-ipc' consolidated: 0 events, 404ms
+2026-09-06T02:10:39.408238Z  INFO Domain 'proposals' consolidated: 0 events, 104ms (Backlog: 330 open; 111 stale (>30d); top: hooks (186), other (40), scripts (39); oldest 65d (prop-20260702-113149-fb).)
+2026-09-06T02:11:39.467137Z  WARN Domain 'atone' consolidation failed: External domain 'atone' consolidate script failed: /Users/alcatraz627/.claude/scripts/atone-consolidate.sh: Script exceeded timeout of 60s
+2026-09-06T02:11:39.563981Z  INFO Domain 'memory-domain' consolidated: 0 events, 96ms (memory-domain: 1 new/updated memory file(s) (1 total found))
+2026-09-06T02:11:39.763006Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-06T02:11:39.864717Z  INFO Domain 'pinned' consolidated: 0 events, 101ms (pinned consolidate: 14 active, 4 archived this run)
+2026-09-06T02:11:39.864766Z  INFO Domain cadence dispatch: 5 consolidations ran, 2 failed
+2026-09-06T02:11:39.866456Z  INFO [cycle 1575] complete — used 27968 tokens (22032 remaining of 50000)
+2026-09-06T02:11:39.951012Z  INFO Reinforcement: 0 reactivated, 330 weakened, 0 stale-skipped, 0 known-skipped, 0 forgotten, 10 evicted, 500 surviving
+2026-09-06T02:11:40.312949Z  INFO Retention: .claude/subconscious/dreams/traces → 3 overflow entries archived
+2026-09-06T02:11:40.312977Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-06T02:11:40.312986Z  INFO Retention: .claude/i-dream/injections.jsonl → 328 overflow entries archived
+2026-09-06T02:11:40.312994Z  INFO Retention: .claude/subconscious/dreams/insight-feedback.jsonl → 308 overflow entries archived
+2026-09-06T02:11:40.313000Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 7841 overflow entries archived
+2026-09-06T02:11:40.313008Z  INFO Retention: .claude/i-dream/daily → 3 overflow entries archived
+2026-09-06T02:11:40.314849Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T02:11:41.112564Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T02:11:41.112663Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T02:11:42.357530Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T02:11:42.361954Z  INFO Project brief: synthesising for -private-tmp-sa-wt-digest2
+2026-09-06T02:11:58.896655Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-private-tmp-sa-wt-digest2.md (1211 tokens)
+2026-09-06T02:11:58.897756Z  INFO D6 v2: regenerated brief for -private-tmp-sa-wt-digest2 (1211 tokens)
+2026-09-06T02:11:58.897800Z  INFO Project brief: synthesising for -private-tmp-sa-wt-digest3
+2026-09-06T02:12:19.871537Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-private-tmp-sa-wt-digest3.md (1214 tokens)
+2026-09-06T02:12:19.872918Z  INFO D6 v2: regenerated brief for -private-tmp-sa-wt-digest3 (1214 tokens)
+2026-09-06T02:12:19.873081Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-walmart-mvp
+2026-09-06T02:12:40.506058Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-walmart-mvp.md (1896 tokens)
+2026-09-06T02:12:40.506979Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-walmart-mvp (1896 tokens)
+2026-09-06T02:12:40.507209Z  INFO Project brief: synthesising for -private-tmp-sa-wt-digest5
+2026-09-06T02:12:58.639586Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-private-tmp-sa-wt-digest5.md (1234 tokens)
+2026-09-06T02:12:58.640485Z  INFO D6 v2: regenerated brief for -private-tmp-sa-wt-digest5 (1234 tokens)
+2026-09-06T02:12:58.640546Z  INFO Project brief: synthesising for gcp
+2026-09-06T02:13:18.237254Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/gcp.md (2351 tokens)
+2026-09-06T02:13:18.238111Z  INFO D6 v2: regenerated brief for gcp (2351 tokens)
+2026-09-06T02:13:18.238196Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-walmart-mvp-backend
+2026-09-06T02:13:36.231408Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-walmart-mvp-backend.md (1255 tokens)
+2026-09-06T02:13:36.232324Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-walmart-mvp-backend (1255 tokens)
+2026-09-06T02:13:36.232421Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-foundry-runner
+2026-09-06T02:13:55.028259Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-foundry-runner.md (1289 tokens)
+2026-09-06T02:13:55.029026Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-foundry-runner (1289 tokens)
+2026-09-06T02:13:55.029063Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-builder
+2026-09-06T02:14:15.397539Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-builder.md (2703 tokens)
+2026-09-06T02:14:15.398480Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-builder (2703 tokens)
+2026-09-06T02:14:15.398915Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-walmart-mvp-frontend
+2026-09-06T02:14:35.974154Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-walmart-mvp-frontend.md (1308 tokens)
+2026-09-06T02:14:35.974970Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-walmart-mvp-frontend (1308 tokens)
+2026-09-06T02:14:35.975135Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-forge-v6
+2026-09-06T02:14:56.390893Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-forge-v6.md (2454 tokens)
+2026-09-06T02:14:56.391839Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-forge-v6 (2454 tokens)
+2026-09-06T02:14:56.391908Z  INFO Project brief: synthesising for .claude
+2026-09-06T02:15:19.884283Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/.claude.md (2548 tokens)
+2026-09-06T02:15:19.884918Z  INFO D6 v2: regenerated brief for .claude (2548 tokens)
+2026-09-06T02:15:19.884985Z  INFO Project brief: synthesising for versable-builder
+2026-09-06T02:15:38.284309Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/versable-builder.md (2338 tokens)
+2026-09-06T02:15:38.285216Z  INFO D6 v2: regenerated brief for versable-builder (2338 tokens)
+2026-09-06T02:15:38.285307Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-builder-packages-ui
+2026-09-06T02:15:58.231354Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-builder-packages-ui.md (1929 tokens)
+2026-09-06T02:15:58.232203Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-builder-packages-ui (1929 tokens)
+2026-09-06T02:15:58.232970Z  INFO Project brief: synthesising for slack-automation
+2026-09-06T02:16:18.207627Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/slack-automation.md (2457 tokens)
+2026-09-06T02:16:18.208405Z  INFO D6 v2: regenerated brief for slack-automation (2457 tokens)
+2026-09-06T02:16:18.208611Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-foundry
+2026-09-06T02:16:37.620736Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-foundry.md (1942 tokens)
+2026-09-06T02:16:37.621662Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-foundry (1942 tokens)
+2026-09-06T02:16:37.622005Z  INFO Project brief: synthesising for -private-tmp-sa-wt-digest4
+2026-09-06T02:16:54.300205Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-private-tmp-sa-wt-digest4.md (1251 tokens)
+2026-09-06T02:16:54.301003Z  INFO D6 v2: regenerated brief for -private-tmp-sa-wt-digest4 (1251 tokens)
+2026-09-06T02:16:54.301411Z  INFO D6 v2: refreshed 16 project brief(s) post-cycle
+2026-09-06T02:16:54.315138Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T02:16:54.315462Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T02:16:54.316027Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T02:16:54.316350Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T02:16:54.318293Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T02:16:54.331174Z  INFO D3 v2: auto-downvoted 104 dream-spawned intention(s) after correction signal
+2026-09-06T02:16:54.333078Z  INFO D3 v2: auto-downvoted 106 dream-spawned intention(s) after correction signal
+2026-09-06T03:31:54.371006Z  INFO Weekly briefing: synthesizing past 7 days
+2026-09-06T03:32:35.522472Z  INFO Weekly briefing: wrote /Users/alcatraz627/.claude/subconscious/dreams/briefings/2026-W36.md (11729 input bytes, 4838 tokens)
+2026-09-06T03:32:35.523405Z  INFO weekly briefing: wrote /Users/alcatraz627/.claude/subconscious/dreams/briefings/2026-W36.md (4838 tokens)
+2026-09-06T05:32:35.605933Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-06T05:32:35.612470Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-06T05:32:35.653697Z  INFO Running dreaming module (budget: 25000 tokens)
+2026-09-06T05:32:35.654282Z  INFO SWS Phase: Compressing session data into structured learnings
+2026-09-06T05:32:35.796077Z  INFO SWS: consolidating 50 new sessions (105 turn summaries)
+2026-09-06T05:33:30.981207Z  INFO SWS phase complete (11501 tokens used)
+2026-09-06T05:33:31.624828Z  INFO Merge pass: 507 patterns → 449 schemas (58 collapsed, redundancy 1.13, largest 7×)
+2026-09-06T05:33:31.625020Z  INFO REM Phase: Exploring creative associations
+2026-09-06T05:33:31.629975Z  INFO REM: reasoning over 449 consolidated schemas (from 507 episodic patterns)
+2026-09-06T05:34:46.754544Z  INFO REM phase complete (6389 tokens used)
+2026-09-06T05:34:46.755920Z  INFO Wake Phase: Verifying and promoting insights
+2026-09-06T05:34:46.813267Z  INFO Wake: archived 1 old cycles to insights-archive.md
+2026-09-06T05:34:46.815642Z  INFO Wake: promoted 10 insights to dreams/insights.md
+2026-09-06T05:34:46.817254Z  INFO Wake: created 10 prospective intentions
+2026-09-06T05:34:47.519490Z  INFO Dreaming complete (17890 tokens used)
+2026-09-06T05:34:47.519525Z  INFO Running metacog module (budget: 16055 tokens)
+2026-09-06T05:34:47.519539Z  INFO Running metacognitive analysis on recent session samples
+2026-09-06T05:34:47.622099Z  INFO Metacog: sampled 32 units from 50 new sessions
+2026-09-06T05:34:47.627594Z  INFO Metacog effort: Deep (units=32, corrections=3%, novelty=0.23, dream_fresh=true, budget=16055)
+2026-09-06T05:34:47.630009Z  INFO Metacog: analyzing 5/32 units (budget-limited to 80k chars)
+2026-09-06T05:36:04.513755Z  INFO Metacog analysis complete (17362 tokens)
+2026-09-06T05:36:04.513908Z  INFO Metacog complete (17362 tokens used)
+2026-09-06T05:36:04.647233Z  INFO Introspection: collected chains from 50 new sessions
+2026-09-06T05:36:04.660117Z  INFO Running intuition module (valence collection)
+2026-09-06T05:36:04.795006Z  INFO Intuition: collected 29 outcomes from 50 sessions, memory now has 1000 entries
+2026-09-06T05:36:04.796005Z  INFO Intuition consolidation: scanned 50 sessions, collected 29 outcomes
+2026-09-06T05:36:04.796024Z  INFO Intuition complete
+2026-09-06T05:36:05.808032Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-06T05:36:28.850829Z  INFO Insight digest updated (3661 tokens)
+2026-09-06T05:36:28.851155Z  INFO Insight digest complete (3661 tokens used)
+2026-09-06T05:36:28.851317Z  INFO Cleaning up 11 expired intentions
+2026-09-06T05:36:29.037991Z  INFO Domain 'atone' consolidated: 0 events, 185ms (● input hash unchanged — skipping (use --force to rebuild))
+2026-09-06T05:36:29.513986Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-06T05:36:29.514048Z  INFO Domain cadence dispatch: 1 consolidations ran, 1 failed
+2026-09-06T05:36:29.515406Z  INFO [cycle 1576] complete — used 38913 tokens (11087 remaining of 50000)
+2026-09-06T05:36:29.588864Z  INFO Reinforcement: 0 reactivated, 334 weakened, 0 stale-skipped, 0 known-skipped, 0 forgotten, 7 evicted, 500 surviving
+2026-09-06T05:36:29.917412Z  INFO Retention: .claude/subconscious/dreams/traces → 1 overflow entries archived
+2026-09-06T05:36:29.917439Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-06T05:36:29.917449Z  INFO Retention: .claude/i-dream/injections.jsonl → 21 overflow entries archived
+2026-09-06T05:36:29.917458Z  INFO Retention: .claude/subconscious/dreams/insight-feedback.jsonl → 210 overflow entries archived
+2026-09-06T05:36:29.917467Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 31 overflow entries archived
+2026-09-06T05:36:29.919114Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T05:36:30.731752Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T05:36:30.731843Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T05:36:32.004165Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T05:36:32.008850Z  INFO Project brief: synthesising for versable-builder
+2026-09-06T05:36:53.228819Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/versable-builder.md (2470 tokens)
+2026-09-06T05:36:53.230552Z  INFO D6 v2: regenerated brief for versable-builder (2470 tokens)
+2026-09-06T05:36:53.230704Z  INFO Project brief: synthesising for .claude
+2026-09-06T05:37:16.081477Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/.claude.md (2658 tokens)
+2026-09-06T05:37:16.082781Z  INFO D6 v2: regenerated brief for .claude (2658 tokens)
+2026-09-06T05:37:16.084168Z  INFO Project brief: synthesising for its-my-config
+2026-09-06T05:37:32.683279Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/its-my-config.md (1707 tokens)
+2026-09-06T05:37:32.684207Z  INFO D6 v2: regenerated brief for its-my-config (1707 tokens)
+2026-09-06T05:37:32.684327Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-builder
+2026-09-06T05:37:50.095260Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-builder.md (2591 tokens)
+2026-09-06T05:37:50.095849Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-builder (2591 tokens)
+2026-09-06T05:37:50.095916Z  INFO Project brief: synthesising for slack-automation
+2026-09-06T05:38:13.592084Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/slack-automation.md (2277 tokens)
+2026-09-06T05:38:13.592915Z  INFO D6 v2: regenerated brief for slack-automation (2277 tokens)
+2026-09-06T05:38:13.592995Z  INFO Project brief: synthesising for Personal
+2026-09-06T05:38:31.754495Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/Personal.md (1176 tokens)
+2026-09-06T05:38:31.755359Z  INFO D6 v2: regenerated brief for Personal (1176 tokens)
+2026-09-06T05:38:31.755553Z  INFO Project brief: synthesising for gcp
+2026-09-06T05:38:53.296059Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/gcp.md (2342 tokens)
+2026-09-06T05:38:53.296884Z  INFO D6 v2: regenerated brief for gcp (2342 tokens)
+2026-09-06T05:38:53.297114Z  INFO D6 v2: refreshed 7 project brief(s) post-cycle
+2026-09-06T05:38:53.311847Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T05:38:53.312591Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T05:38:53.314623Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T05:38:53.314965Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T05:38:53.316600Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T05:38:53.327847Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T05:38:53.334963Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T05:38:53.339180Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T05:38:53.343444Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T05:38:53.344068Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T07:38:53.383376Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-06T07:38:53.385809Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-06T07:38:53.420272Z  INFO Running dreaming module (budget: 25000 tokens)
+2026-09-06T07:38:53.421001Z  INFO SWS Phase: Compressing session data into structured learnings
+2026-09-06T07:38:53.728434Z  INFO SWS: consolidating 50 new sessions (284 turn summaries)
+2026-09-06T07:39:48.800590Z  INFO SWS phase complete (8994 tokens used)
+2026-09-06T07:39:49.501293Z  INFO Merge pass: 507 patterns → 452 schemas (55 collapsed, redundancy 1.12, largest 6×)
+2026-09-06T07:39:49.501434Z  INFO REM Phase: Exploring creative associations
+2026-09-06T07:39:49.504371Z  INFO REM: reasoning over 452 consolidated schemas (from 507 episodic patterns)
+2026-09-06T07:41:28.196310Z  INFO REM phase complete (6216 tokens used)
+2026-09-06T07:41:28.197564Z  INFO Wake Phase: Verifying and promoting insights
+2026-09-06T07:41:28.261184Z  INFO Wake: archived 1 old cycles to insights-archive.md
+2026-09-06T07:41:28.262737Z  INFO Wake: promoted 7 insights to dreams/insights.md
+2026-09-06T07:41:28.263157Z  INFO Wake: created 7 prospective intentions
+2026-09-06T07:41:28.997792Z  INFO Dreaming complete (15210 tokens used)
+2026-09-06T07:41:28.997823Z  INFO Running metacog module (budget: 17395 tokens)
+2026-09-06T07:41:28.997834Z  INFO Running metacognitive analysis on recent session samples
+2026-09-06T07:41:29.297024Z  INFO Metacog: sampled 68 units from 50 new sessions
+2026-09-06T07:41:29.302906Z  INFO Metacog effort: Deep (units=68, corrections=3%, novelty=0.26, dream_fresh=true, budget=17395)
+2026-09-06T07:41:29.305336Z  INFO Metacog: analyzing 6/68 units (budget-limited to 80k chars)
+2026-09-06T07:43:09.782731Z  INFO Metacog analysis complete (22425 tokens)
+2026-09-06T07:43:09.782937Z  INFO Metacog complete (22425 tokens used)
+2026-09-06T07:43:10.082539Z  INFO Introspection: collected chains from 50 new sessions
+2026-09-06T07:43:10.095079Z  INFO Running intuition module (valence collection)
+2026-09-06T07:43:10.360589Z  INFO Intuition: collected 67 outcomes from 50 sessions, memory now has 1000 entries
+2026-09-06T07:43:10.361535Z  INFO Intuition consolidation: scanned 50 sessions, collected 67 outcomes
+2026-09-06T07:43:10.361557Z  INFO Intuition complete
+2026-09-06T07:43:11.521893Z  INFO Insight feedback: backfilled 357 fired records with relevance
+2026-09-06T07:43:11.522620Z  INFO Backfilled 357 insight feedback records
+2026-09-06T07:43:11.522864Z  INFO Cleaning up 10 expired intentions
+2026-09-06T07:43:11.803391Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-06T07:43:11.803453Z  INFO Domain cadence dispatch: 0 consolidations ran, 1 failed
+2026-09-06T07:43:11.804203Z  INFO [cycle 1577] complete — used 37635 tokens (12365 remaining of 50000)
+2026-09-06T07:43:11.896649Z  INFO Reinforcement: 0 reactivated, 1150 weakened, 0 stale-skipped, 150 known-skipped, 0 forgotten, 7 evicted, 500 surviving
+2026-09-06T07:43:12.155303Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-06T07:43:12.155326Z  INFO Retention: .claude/i-dream/injections.jsonl → 10 overflow entries archived
+2026-09-06T07:43:12.155333Z  INFO Retention: .claude/subconscious/dreams/insight-feedback.jsonl → 500 overflow entries archived
+2026-09-06T07:43:12.155339Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 14 overflow entries archived
+2026-09-06T07:43:12.156680Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T07:43:12.955401Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T07:43:12.955465Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T07:43:14.144332Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T07:43:14.148742Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-slack-automation
+2026-09-06T07:43:33.427366Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-slack-automation.md (2046 tokens)
+2026-09-06T07:43:33.429634Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-slack-automation (2046 tokens)
+2026-09-06T07:43:33.430057Z  INFO Project brief: synthesising for controlelr
+2026-09-06T07:43:49.697090Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/controlelr.md (1023 tokens)
+2026-09-06T07:43:49.698908Z  INFO D6 v2: regenerated brief for controlelr (1023 tokens)
+2026-09-06T07:43:49.699193Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-versable-builder
+2026-09-06T07:44:09.969775Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-versable-builder.md (2418 tokens)
+2026-09-06T07:44:09.970621Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-versable-builder (2418 tokens)
+2026-09-06T07:44:09.971015Z  INFO D6 v2: refreshed 3 project brief(s) post-cycle
+2026-09-06T07:44:09.986456Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T07:44:09.987351Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T07:44:09.987362Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T07:44:09.988331Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T07:44:09.989793Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T07:44:09.999877Z  INFO D3 v2: auto-downvoted 77 dream-spawned intention(s) after correction signal
+2026-09-06T07:44:10.003535Z  INFO D3 v2: auto-downvoted 77 dream-spawned intention(s) after correction signal
+2026-09-06T07:44:10.007353Z  INFO D3 v2: auto-downvoted 77 dream-spawned intention(s) after correction signal
+2026-09-06T07:44:10.010549Z  INFO D3 v2: auto-downvoted 77 dream-spawned intention(s) after correction signal
+2026-09-06T18:02:51.846570Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-06T18:02:51.855494Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-06T18:02:51.880678Z  INFO Running dreaming module (budget: 25000 tokens)
+2026-09-06T18:02:51.881306Z  INFO SWS Phase: Compressing session data into structured learnings
+2026-09-06T18:02:52.041979Z  INFO SWS: consolidating 50 new sessions (254 turn summaries)
+2026-09-06T18:03:24.277257Z  INFO SWS phase complete (8807 tokens used)
+2026-09-06T18:03:24.713589Z  INFO Merge pass: 506 patterns → 455 schemas (51 collapsed, redundancy 1.11, largest 6×)
+2026-09-06T18:03:24.713729Z  INFO REM Phase: Exploring creative associations
+2026-09-06T18:03:24.716494Z  INFO REM: reasoning over 455 consolidated schemas (from 506 episodic patterns)
+2026-09-06T18:04:49.017650Z  INFO REM phase complete (6516 tokens used)
+2026-09-06T18:04:49.018499Z  INFO Wake Phase: Verifying and promoting insights
+2026-09-06T18:04:49.061793Z  INFO Wake: archived 1 old cycles to insights-archive.md
+2026-09-06T18:04:49.064152Z  INFO Wake: promoted 10 insights to dreams/insights.md
+2026-09-06T18:04:49.064921Z  INFO Wake: created 10 prospective intentions
+2026-09-06T18:04:49.521205Z  INFO Dreaming complete (15323 tokens used)
+2026-09-06T18:04:49.521229Z  INFO Running metacog module (budget: 17338 tokens)
+2026-09-06T18:04:49.521238Z  INFO Running metacognitive analysis on recent session samples
+2026-09-06T18:04:49.677609Z  INFO Metacog: sampled 64 units from 50 new sessions
+2026-09-06T18:04:49.693830Z  INFO Metacog effort: Deep (units=64, corrections=2%, novelty=0.25, dream_fresh=true, budget=17338)
+2026-09-06T18:04:49.695516Z  INFO Metacog: analyzing 23/64 units (budget-limited to 80k chars)
+2026-09-06T18:07:04.881292Z  INFO Metacog samples pruned: 2772 → 2716 entries (removed 56 entries older than 30 days)
+2026-09-06T18:07:04.881324Z  INFO Metacog analysis complete (15226 tokens)
+2026-09-06T18:07:04.881395Z  INFO Metacog complete (15226 tokens used)
+2026-09-06T18:07:05.034523Z  INFO Introspection: collected chains from 50 new sessions
+2026-09-06T18:07:05.046924Z  INFO Running intuition module (valence collection)
+2026-09-06T18:07:05.198135Z  INFO Intuition: collected 49 outcomes from 50 sessions, memory now has 1000 entries
+2026-09-06T18:07:05.198739Z  INFO Intuition consolidation: scanned 50 sessions, collected 49 outcomes
+2026-09-06T18:07:05.198753Z  INFO Intuition complete
+2026-09-06T18:07:05.739418Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-06T18:07:33.293220Z  INFO Insight digest updated (3410 tokens)
+2026-09-06T18:07:33.293804Z  INFO Insight digest complete (3410 tokens used)
+2026-09-06T18:07:33.293922Z  INFO Cleaning up 7 expired intentions
+2026-09-06T18:07:33.566043Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-06T18:07:33.566101Z  INFO Domain cadence dispatch: 0 consolidations ran, 1 failed
+2026-09-06T18:07:33.566838Z  INFO [cycle 1578] complete — used 33959 tokens (16041 remaining of 50000)
+2026-09-06T18:07:33.618781Z  INFO Reinforcement: 0 reactivated, 836 weakened, 0 stale-skipped, 0 known-skipped, 0 forgotten, 6 evicted, 500 surviving
+2026-09-06T18:07:33.881161Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-06T18:07:33.881189Z  INFO Retention: .claude/i-dream/injections.jsonl → 11 overflow entries archived
+2026-09-06T18:07:33.881199Z  INFO Retention: .claude/subconscious/dreams/insight-feedback.jsonl → 308 overflow entries archived
+2026-09-06T18:07:33.881206Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 283 overflow entries archived
+2026-09-06T18:07:33.883654Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T18:07:34.401984Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-06T18:07:34.402056Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T18:07:35.256749Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-06T18:07:35.260325Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-gcp
+2026-09-06T18:07:56.509326Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-gcp.md (2266 tokens)
+2026-09-06T18:07:56.510569Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-gcp (2266 tokens)
+2026-09-06T18:07:56.511689Z  INFO Project brief: synthesising for -Users-alcatraz627-Code-Versable-slack-automation
+2026-09-06T18:08:14.699542Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/-Users-alcatraz627-Code-Versable-slack-automation.md (2233 tokens)
+2026-09-06T18:08:14.701151Z  INFO D6 v2: regenerated brief for -Users-alcatraz627-Code-Versable-slack-automation (2233 tokens)
+2026-09-06T18:08:14.702758Z  INFO Project brief: synthesising for sys-monitor
+2026-09-06T18:08:32.399780Z  INFO Project brief: wrote /Users/alcatraz627/.claude/subconscious/dreams/project-briefs/sys-monitor.md (1768 tokens)
+2026-09-06T18:08:32.400658Z  INFO D6 v2: regenerated brief for sys-monitor (1768 tokens)
+2026-09-06T18:08:32.401263Z  INFO D6 v2: refreshed 3 project brief(s) post-cycle
+2026-09-06T18:08:32.411167Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T18:08:32.411907Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T18:08:32.412442Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T18:08:32.413412Z  WARN Failed to update intention fire counts: No such file or directory (os error 2)
+2026-09-06T18:08:32.425563Z  INFO D3 v2: auto-downvoted 85 dream-spawned intention(s) after correction signal
+2026-09-06T18:08:32.428504Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T18:08:32.429619Z  INFO D3 v2: auto-downvoted 100 dream-spawned intention(s) after correction signal
+2026-09-06T21:19:41.381616Z  WARN External domain 'claude-ipc': cursor id 'msg-a4e284d6a1b349d6' not found; falling back to last_ts

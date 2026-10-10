@@ -72,7 +72,7 @@ Comments are for humans first, AI agents second, machines never. First sentence 
 
 ### Atone — mistake tracking & affirmation system
 
-`~/.claude/mistake-patterns.md` is a **DERIVED** view — don't hand-edit it. The raw log is the kernel-append-only `~/.claude/atone/events.jsonl`; the SessionStart dream-insights lane injects its TL;DR automatically (from `atone/derived/_tldr.txt`), so read it at session start. **To record a mistake, invoke `/atone`** — it classifies severity (S1/S2/S3) and drafts an RCA for S3; the `rules/corrections.md` ritual routes through it rather than hand-editing. Inspect past patterns with `atone.sh list|search|show|slugs`. The `/affirm` counterweight (recorded good calls, higher write-bar) works the same way. Full operational detail — inspect flags, hinter mute files, the phrase-gated escape hatch, the snapshot/kernel-protection model — lives in `features/atone.md`.
+`~/.claude/mistake-patterns.md` is a **DERIVED** view — don't hand-edit it. The raw log is the kernel-append-only `~/.claude/atone/events.jsonl`; its TL;DR is `atone/derived/_tldr.txt`, no longer injected at SessionStart (retired 2026-10-06, i-dream D12), so read it or run `atone.sh list` when a pattern bears on the work. **To record a mistake, invoke `/atone`** — it classifies severity (S1/S2/S3) and drafts an RCA for S3; the `rules/corrections.md` ritual routes through it rather than hand-editing. Inspect past patterns with `atone.sh list|search|show|slugs`. The `/affirm` counterweight (recorded good calls, higher write-bar) works the same way. Full operational detail — inspect flags, hinter mute files, the phrase-gated escape hatch, the snapshot/kernel-protection model — lives in `features/atone.md`.
 
 ### MCP tool preferences (MANDATORY)
 
@@ -146,14 +146,14 @@ Each of these activates most sessions. The summary is load-bearing; load the sub
 
 ## On-demand pointers (Tier 2)
 
-Every file under `features/` and `conventions/` carries frontmatter with `brief` and prefixed `triggers:` (`tool:` `topic:` `phrase:` `skill:` `mcp:`). `~/.claude/LOOKUP.md` is the address book; `FOLDERS.md` the per-folder map. Load a file when the task matches its triggers. Two that bite often: `features/dev-servers.md` (port policy, launches without a proper port are blocked) and `conventions/html-output.md` (dark default plus a light toggle, mandatory).
+Every file under `features/` and `conventions/` carries frontmatter with `brief` and prefixed `triggers:` (`tool:` `topic:` `phrase:` `skill:` `mcp:`). `~/.claude/LOOKUP.md` is the address book; `FOLDERS.md` the per-folder map. Load a file when the task matches its triggers. Two that bite often: `features/dev-servers.md` (port policy, launches without a proper port are blocked) and `conventions/pages.md` (which surface to show something on, and the shared kit and check every HTML page uses).
 
 ---
 
 ## MANDATORY quick-rules (never-miss bar)
 
 - **Never let a relative `.claude/…` path resolve into `~/.claude/.claude/`.** When CWD is `~/.claude`, `.claude/output/X` does NOT mean `~/.claude/output/X` — it lands one level deeper, where nothing reads it. Redirect `.claude/output/X` → `~/.claude/assets/reports/X`, `.claude/skills/X` → `~/.claude/skills/X`, etc. A hook blocks the write; reading, grepping, or testing that path is fine. The directory itself is legitimate — it is this project's own project-scoped `.claude/` (it holds `settings.local.json` and `worktrees/`), so the accident is the relative resolution, never the path.
-- **Every HTML output needs a dark/light toggle button.** Dark is default. Use CSS vars (`--bg`, `--surface`, `--text`, `--dim`, `--border`), not hardcoded colors. See `conventions/html-output.md` for the pattern.
+- **Every HTML page is built on the shared kit and passes the page check.** The kit carries the dark and light switch and every colour, so neither is written by hand. Pick the surface first (markdown, local page, decision page, Artifact). See `conventions/pages.md`, or run `/router:page`.
 - **Desktop automation: confirm before focus-steal, HARD STOP on any failure.** `mcp__inputs__confirm` before `click`/`type`/`key`/`space`/`focus` unless user pre-approved the sequence. On any failure — empty screenshot, command non-zero, window-bounds empty — stop and report, never hallucinate state. See `features/desktop-automation.md`.
 - **Never `rm`; `trash` only.** Hook blocks `rm` unconditionally.
 - **Never push to main without fresh approval.** One approval is not blanket.

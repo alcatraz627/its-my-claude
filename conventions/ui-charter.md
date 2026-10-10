@@ -113,3 +113,6 @@ capped QA round above.
 - `conventions/preference-graduation.md` is the sibling mechanism, for
   preferences that generalise past one surface and belong in the global config
   instead.
+- `GLOSSARY.md` §Concepts defines **peruse** (the affordance) and **power
+  user** (the audience) as account-wide terms; a charter for any Work-altitude
+  surface states which of its views support perusing.

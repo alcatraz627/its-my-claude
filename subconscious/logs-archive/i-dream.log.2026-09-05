@@ -1,0 +1,6 @@
+2026-09-05T11:51:54.207583Z  INFO Received SIGTERM (supervisor shutdown), shutting down
+2026-09-05T11:51:54.213352Z  INFO Daemon stopped
+2026-09-05T11:53:44.171414Z  INFO Starting i-dream daemon
+2026-09-05T11:53:45.053098Z  INFO i-dream daemon running in foreground (Ctrl+C to stop)
+2026-09-05T11:53:45.079851Z  INFO Daemon started with PID 1351
+2026-09-05T11:53:45.080081Z  INFO Hook socket listening on /Users/alcatraz627/.claude/subconscious/daemon.sock

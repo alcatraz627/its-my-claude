@@ -1,5 +1,43 @@
 # ui-gripe — runtime notes
 
+## ui-gripe: Speedway job-control state audit (5 pause/cancel/resume shots), 2026-09-22
+
+**Purpose:** Coordinator-dispatched audit of five Part Type Matching job-detail
+screenshots across running / pausing / paused / resumed / cancelled, judging whether
+the pause-cancel-resume states read clearly to a customer. Findings written to
+scratchpad, path returned.
+
+**Insights:**
+
+1. On a multi-state control feature, the highest-damage finding is a state-machine
+   contradiction between two surfaces, not any single label. Here the header ran a
+   correct machine (Paused) while the module Status pill ran a wrong one (Cancelled).
+   The cheap detector: for each state shot, read the header state token AND the row
+   status pill AND the parts-row pills, and check all three agree. Two of five shots
+   disagreed. Cross-surface agreement is the check, not each pill in isolation.
+2. Verify the crux label with OCR before quoting, and it paid off exactly where the
+   finding was most severe. Native read said the paused module pill was "Cancelled";
+   `see --ocr` on r3 confirmed header "Paused" plus pill "Cancelled" verbatim, which is
+   the difference between a hedged and a flat top finding. Only OCR-verify the
+   load-bearing tokens (the two mismatched states), not all five shots.
+3. The prose-lint Write hook blocks ALL em/en dashes in earnest prose (owner budget
+   zero), including section-title dashes such as "State legibility, ...". Draft findings
+   files with colons and periods from the start; a dash-heavy first draft costs a full
+   rewrite. Quotes/code/tables are excluded, prose is not.
+4. `see --ui` was reliable here for the control census (it cleanly enumerated the two
+   distinct Cancel controls, element 6 job-scope vs element 18 the black in-row X), but
+   as prior notes warn, it invented a "biq-parts.csv" near-miss and is not trustworthy
+   for counts. Use it for "which controls exist", never for a number.
+5. A "resume returns to In progress, not Resumed" is correct, not a finding. r4's header
+   read "In progress" like r1; the resume machine reusing the running label is sound.
+   Progress resuming from 160/300 rather than resetting confirmed the resume side works,
+   which isolated every real defect to the pause transition and its labels.
+6. The `lock-file.sh` path resolves relative to the project cwd (speedway/skills/...),
+   but the real runtime-notes file is the global `~/.claude/skills/ui-gripe/`. The lock
+   is just a coordination sentinel; edit the global file directly, as prior notes say.
+
+---
+
 ## ui-gripe: kanban board, live-tree audit (no gripe, no path), 2026-08-24
 
 **Purpose:** No-args run in the kanban project. No screenshot was supplied and the

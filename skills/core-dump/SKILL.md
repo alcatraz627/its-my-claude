@@ -220,11 +220,17 @@ waiting for, or about to do?
 A bullet list of what's needed to complete the current task — both agent-side and
 user-side.
 
-Seed this from the live Task list first: read `~/.claude/tasks/session-<sid8>/*.json`
-(sid8 = first 8 hex of `$CLAUDE_CODE_SESSION_ID`; each file is `{id, subject,
-status}`) and treat every non-`completed` task as pending.
-Then add anything the conversation surfaced that the task list missed. The live
-Task list is the freshest record of what's open; the conversation fills gaps.
+**The goal record is the truth for what is left across sessions (D1, 2026-09-23).**
+Before writing this section, put the open work ON the goal, not only in this file:
+`python3 ~/.claude/scripts/goals/views/left.py` shows what the record already holds;
+anything the conversation surfaced that is missing goes in with
+`~/.claude/scripts/goals/gs task <g> <mN> "<subject>"` (a row) or
+`gs note <g> [id] "<handoff>"` (a one-off the next session should do as part of an
+existing row, never a second row). Then this section CITES the goal
+(`goal <id>: N open rows, acceptance p/a proven; run /tasks left <id>`) and lists
+only what has no home on it. The agent's own Task-tool list
+(`~/.claude/tasks/session-<sid8>/`) is its checklist; it seeds this section only
+for rows the goal should not carry.
 
 ### 2.5 Session insights & meta
 
@@ -372,15 +378,16 @@ everything below them:
   Write `none` for any never set. An armed commitment carried here is NOT an
   authorization: a re-armed wake or deadline never revives a push, deploy, or
   destructive-op approval. Those stay dead under Expired authorizations.
-- **Task list, glanced:** run `bash ~/.claude/scripts/task-table/task-table.sh --compact`
+- **Task list, glanced:** run `python3 ~/.claude/scripts/goals/views/now.py`
   while writing this section, and let it shape the Next action and the proposed
   goal in the Re-arm block. Owner ask 2026-08-18 ("good to have: during core-dump or
   catchup, have the agent run /tasks and also suggest a new / update existing goal").
-- **Task store:** the task-store id backing this session's live Task list
-  (`session-<sid8>`, under `~/.claude/tasks/`). Carried so a resumed agent
-  references the store directly instead of re-deriving it. `/tasks` resolves it by
-  content-matching task subjects against the transcript, which works, and is a
-  derivation the checkpoint can simply hand over. Write `—` if no tasks exist.
+- **Goal record:** the goal id this session works under (`~/.claude/goals/by-id/<id>.json`,
+  from `~/.claude/scripts/goals/gs list`). Carried so a resumed session runs
+  `gs link <id>` and is back on the same record. Write `—` when no goal was filed,
+  and say why in one clause.
+- **Task store:** the agent's own checklist store (`session-<sid8>`, under
+  `~/.claude/tasks/`), for `gs adopt` if a resumed agent wants rows from it. `—` if empty.
 - **ipc alias** — this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
 - **Key anchor** — the single most load-bearing file:line, or `—`.
 
@@ -396,17 +403,13 @@ jq -r '.wake // "none"' ~/.claude/.turn-state/"$SID".json 2>/dev/null
 # deadline: most recent run's state
 rg -m1 '^## deadline' ~/.claude/skills/deadline/runtime-notes.md 2>/dev/null
 
-# task store: ask the resolver, never guess from the sid
-bash ~/.claude/scripts/task-table/resolve-store.sh 2>/dev/null
+# goal record: the goal this session points at, and every live goal in scope
+~/.claude/scripts/goals/gs list
 ```
 
-**Do not derive the store from your own session id.** A task list survives
-`/clear`, so the store is named for the session that CREATED the tasks, not the one
-reading them. Measured while writing this: session `78060eb5` was working out of
-store `session-f5c44d78`, and a `tasks/session-${SID:0:8}` lookup found nothing at
-all. That mismatch is the entire reason `resolve-store.sh` exists (task #49, and
-the worked case in `rules/refusal-is-not-a-fix.md`). Record whatever the resolver
-returns, including its own uncertainty when it declines to pick.
+**The goal record needs no resolver.** It is keyed by the goal, and this session's
+pointer (`~/.claude/goals/<sid>.json`, written by `gs new` / `gs link` / `goal.sh set`)
+names it. Record the goal id; a resumed session links to it and is home.
 
 The goal has two readable sources, and `bash ~/.claude/scripts/goal/goal.sh show`
 prints both. `/goal <text>` is a Claude Code BUILT-IN that installs a session-scoped

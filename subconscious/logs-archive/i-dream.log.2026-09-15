@@ -1,0 +1,332 @@
+2026-09-15T01:47:41.623261Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T01:47:41.630089Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T01:47:41.705626Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T01:47:41.706944Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T01:47:41.706990Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T01:47:41.773513Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T01:47:41.773629Z  INFO Metacog complete (0 tokens used)
+2026-09-15T01:47:41.854288Z  INFO Running intuition module (valence collection)
+2026-09-15T01:47:41.905593Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T01:47:41.905720Z  INFO Intuition complete
+2026-09-15T01:47:42.778119Z  INFO Insight feedback: backfilled 108 fired records with relevance
+2026-09-15T01:47:42.778767Z  INFO Backfilled 108 insight feedback records
+2026-09-15T01:47:42.778996Z  INFO Cleaning up 9 expired intentions
+2026-09-15T01:47:42.781054Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T01:47:43.019100Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T01:47:43.019238Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T01:47:43.020369Z  INFO [cycle 1625] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T01:47:43.116219Z  INFO Reinforcement: 0 reactivated, 818 weakened, 0 stale-skipped, 252 known-skipped, 0 forgotten, 0 evicted, 500 surviving
+2026-09-15T01:47:43.537876Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T01:47:43.537908Z  INFO Retention: .claude/i-dream/injections.jsonl → 9 overflow entries archived
+2026-09-15T01:47:43.537917Z  INFO Retention: .claude/subconscious/dreams/insight-feedback.jsonl → 370 overflow entries archived
+2026-09-15T01:47:43.537925Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 17 overflow entries archived
+2026-09-15T01:47:43.539954Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T01:47:44.862534Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T01:47:44.862629Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T01:47:46.497789Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:02:46.533494Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T02:02:46.535528Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T02:02:46.617045Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T02:02:46.618266Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T02:02:46.618295Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T02:02:46.697835Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T02:02:46.697919Z  INFO Metacog complete (0 tokens used)
+2026-09-15T02:02:46.756992Z  INFO Running intuition module (valence collection)
+2026-09-15T02:02:46.789222Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T02:02:46.789265Z  INFO Intuition complete
+2026-09-15T02:02:47.570313Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T02:02:48.044107Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T02:02:48.044300Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T02:02:48.045365Z  INFO [cycle 1626] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T02:02:48.116845Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T02:02:48.118736Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:02:49.553450Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:02:49.553919Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:02:51.185573Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:17:51.212609Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T02:17:51.214357Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T02:17:51.296189Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T02:17:51.297405Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T02:17:51.297435Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T02:17:51.380394Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T02:17:51.380535Z  INFO Metacog complete (0 tokens used)
+2026-09-15T02:17:51.443068Z  INFO Running intuition module (valence collection)
+2026-09-15T02:17:51.498899Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T02:17:51.498958Z  INFO Intuition complete
+2026-09-15T02:17:52.272869Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T02:17:52.562364Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T02:17:52.562487Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T02:17:52.563523Z  INFO [cycle 1627] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T02:17:52.645452Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T02:17:52.647903Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:17:54.080330Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:17:54.080525Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:17:55.776761Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:32:55.801083Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T02:32:55.802965Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T02:32:55.884915Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T02:32:55.886150Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T02:32:55.886213Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T02:32:55.968046Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T02:32:55.968195Z  INFO Metacog complete (0 tokens used)
+2026-09-15T02:32:56.028010Z  INFO Running intuition module (valence collection)
+2026-09-15T02:32:56.082246Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T02:32:56.082359Z  INFO Intuition complete
+2026-09-15T02:32:56.873769Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T02:32:57.322735Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T02:32:57.322839Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T02:32:57.323840Z  INFO [cycle 1628] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T02:32:57.410508Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T02:32:57.412544Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:32:58.816203Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:32:58.816330Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:33:00.455371Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:48:00.481208Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T02:48:00.483887Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T02:48:00.560020Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T02:48:00.560888Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T02:48:00.560906Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T02:48:00.641765Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T02:48:00.641886Z  INFO Metacog complete (0 tokens used)
+2026-09-15T02:48:00.717960Z  INFO Running intuition module (valence collection)
+2026-09-15T02:48:00.772027Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T02:48:00.772140Z  INFO Intuition complete
+2026-09-15T02:48:01.587296Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-15T02:48:25.770826Z  INFO Insight digest updated (3302 tokens)
+2026-09-15T02:48:25.770919Z  INFO Insight digest complete (3302 tokens used)
+2026-09-15T02:48:25.771693Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T02:48:26.084832Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T02:48:26.085068Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T02:48:26.088295Z  INFO [cycle 1629] complete — used 3302 tokens (46698 remaining of 50000)
+2026-09-15T02:48:26.467848Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T02:48:26.467895Z  INFO Retention: .claude/i-dream/injections.jsonl → 1 overflow entries archived
+2026-09-15T02:48:26.467902Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 2 overflow entries archived
+2026-09-15T02:48:26.470179Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:48:27.857896Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T02:48:27.857993Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T02:48:29.437519Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T04:48:29.512950Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T04:48:29.519508Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T04:48:29.599464Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T04:48:29.600630Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T04:48:29.600655Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T04:48:29.678649Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T04:48:29.678770Z  INFO Metacog complete (0 tokens used)
+2026-09-15T04:48:29.769229Z  INFO Running intuition module (valence collection)
+2026-09-15T04:48:29.821011Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T04:48:29.821129Z  INFO Intuition complete
+2026-09-15T04:48:30.625325Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T04:48:31.118209Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T04:48:31.118291Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T04:48:31.120971Z  INFO [cycle 1630] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T04:48:31.203535Z  INFO Retention: .claude/subconscious/dreams/traces → 1 overflow entries archived
+2026-09-15T04:48:31.203588Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T04:48:31.206094Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T04:48:32.626477Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T04:48:32.626681Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T04:48:34.316879Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:03:34.344754Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T05:03:34.346106Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T05:03:34.413433Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T05:03:34.414234Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T05:03:34.414256Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T05:03:34.479757Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T05:03:34.479811Z  INFO Metacog complete (0 tokens used)
+2026-09-15T05:03:34.534097Z  INFO Running intuition module (valence collection)
+2026-09-15T05:03:34.577552Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T05:03:34.577605Z  INFO Intuition complete
+2026-09-15T05:03:35.395572Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T05:03:35.666209Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T05:03:35.666328Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T05:03:35.667424Z  INFO [cycle 1631] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T05:03:35.740949Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T05:03:35.743223Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:03:37.192224Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:03:37.192368Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:03:38.873775Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:18:38.871239Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T05:18:38.873500Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T05:18:38.949338Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T05:18:38.950164Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T05:18:38.950185Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T05:18:39.026216Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T05:18:39.026317Z  INFO Metacog complete (0 tokens used)
+2026-09-15T05:18:39.075865Z  INFO Running intuition module (valence collection)
+2026-09-15T05:18:39.116703Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T05:18:39.116777Z  INFO Intuition complete
+2026-09-15T05:18:39.882909Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T05:18:40.368307Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T05:18:40.368389Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T05:18:40.368870Z  INFO [cycle 1632] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T05:18:40.415687Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T05:18:40.416947Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:18:41.703414Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:18:41.703587Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:18:43.322297Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:33:43.347091Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T05:33:43.348998Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T05:33:43.432880Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T05:33:43.434108Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T05:33:43.434134Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T05:33:43.515024Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T05:33:43.515165Z  INFO Metacog complete (0 tokens used)
+2026-09-15T05:33:43.578528Z  INFO Running intuition module (valence collection)
+2026-09-15T05:33:43.627621Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T05:33:43.627901Z  INFO Intuition complete
+2026-09-15T05:33:44.301021Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T05:33:44.603477Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T05:33:44.603614Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T05:33:44.604896Z  INFO [cycle 1633] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T05:33:44.678973Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T05:33:44.681009Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:33:46.037919Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:33:46.038082Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:33:47.596873Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:48:47.620300Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T05:48:47.627093Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T05:48:47.702756Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T05:48:47.703891Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T05:48:47.703912Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T05:48:47.770150Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T05:48:47.770285Z  INFO Metacog complete (0 tokens used)
+2026-09-15T05:48:47.847071Z  INFO Running intuition module (valence collection)
+2026-09-15T05:48:47.896685Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T05:48:47.896798Z  INFO Intuition complete
+2026-09-15T05:48:48.624039Z  INFO Running insight digest (budget: 512 tokens)
+2026-09-15T05:49:13.623318Z  INFO Insight digest updated (3274 tokens)
+2026-09-15T05:49:13.623369Z  INFO Insight digest complete (3274 tokens used)
+2026-09-15T05:49:13.623860Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T05:49:14.113054Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T05:49:14.113141Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T05:49:14.114085Z  INFO [cycle 1634] complete — used 3274 tokens (46726 remaining of 50000)
+2026-09-15T05:49:14.446965Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T05:49:14.447028Z  INFO Retention: .claude/i-dream/injections.jsonl → 1 overflow entries archived
+2026-09-15T05:49:14.447042Z  INFO Retention: .claude/i-dream/would-fire.jsonl → 2 overflow entries archived
+2026-09-15T05:49:14.449148Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:49:15.822926Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T05:49:15.823108Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T05:49:17.408129Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T07:49:17.515809Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T07:49:17.522683Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T07:49:17.603504Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T07:49:17.604610Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T07:49:17.604638Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T07:49:17.674619Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T07:49:17.674757Z  INFO Metacog complete (0 tokens used)
+2026-09-15T07:49:17.759501Z  INFO Running intuition module (valence collection)
+2026-09-15T07:49:17.809756Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T07:49:17.809955Z  INFO Intuition complete
+2026-09-15T07:49:19.904379Z  INFO Domain 'claude-audit' consolidated: 0 events, 1356ms (extract-events: 36 vents + 337 pulses -> /Users/alcatraz627/.claude/hooks-feedback-domain/events.jsonl (vents=36, telemetry=27344))
+2026-09-15T07:49:19.904621Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T07:49:20.074788Z  INFO Domain 'claude-ipc' consolidated: 0 events, 170ms
+2026-09-15T07:49:20.177477Z  INFO Domain 'proposals' consolidated: 0 events, 102ms (Backlog: 362 open; 163 stale (>30d); top: hooks (202), other (45), scripts (45); oldest 74d (prop-20260702-113149-fb).)
+2026-09-15T07:49:20.515459Z  INFO Domain 'atone' consolidated: 0 events, 337ms (● input hash unchanged — skipping (use --force to rebuild))
+2026-09-15T07:49:20.632687Z  INFO Domain 'memory-domain' consolidated: 0 events, 117ms (memory-domain: 0 new/updated memory file(s) (1 total found))
+2026-09-15T07:49:21.123469Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T07:49:21.262476Z  INFO Domain 'pinned' consolidated: 0 events, 138ms (pinned consolidate: 13 active, 2 archived this run)
+2026-09-15T07:49:21.262574Z  INFO Domain cadence dispatch: 6 consolidations ran, 2 failed
+2026-09-15T07:49:21.264600Z  INFO [cycle 1635] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T07:49:21.332584Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T07:49:21.335138Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T07:49:22.629467Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T07:49:22.629652Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T07:49:24.229264Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:04:24.256168Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T08:04:24.257894Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T08:04:24.340755Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T08:04:24.341981Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T08:04:24.342007Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T08:04:24.414305Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T08:04:24.414442Z  INFO Metacog complete (0 tokens used)
+2026-09-15T08:04:24.466179Z  INFO Running intuition module (valence collection)
+2026-09-15T08:04:24.511199Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T08:04:24.511283Z  INFO Intuition complete
+2026-09-15T08:04:25.291542Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T08:04:25.720043Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T08:04:25.720191Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T08:04:25.721261Z  INFO [cycle 1636] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T08:04:25.808769Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T08:04:25.811309Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:04:27.135079Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:04:27.135251Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:04:28.777107Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:19:28.800569Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T08:19:28.802259Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T08:19:28.883141Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T08:19:28.884325Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T08:19:28.884349Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T08:19:28.957997Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T08:19:28.958121Z  INFO Metacog complete (0 tokens used)
+2026-09-15T08:19:29.014748Z  INFO Running intuition module (valence collection)
+2026-09-15T08:19:29.061838Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T08:19:29.061945Z  INFO Intuition complete
+2026-09-15T08:19:29.857711Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T08:19:30.176882Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T08:19:30.177021Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T08:19:30.178131Z  INFO [cycle 1637] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T08:19:30.289442Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T08:19:30.291056Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:19:31.645725Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:19:31.645899Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:19:33.242623Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:34:33.268503Z  INFO Idle threshold reached, starting consolidation cycle
+2026-09-15T08:34:33.270176Z  INFO Starting consolidation (budget: 50000 tokens, deadline: 10min)
+2026-09-15T08:34:33.340379Z  INFO Dreaming: only 0 new sessions (need 3), skipping cycle
+2026-09-15T08:34:33.341162Z  INFO Running metacog module (budget: 25000 tokens)
+2026-09-15T08:34:33.341181Z  INFO Running metacognitive analysis on recent session samples
+2026-09-15T08:34:33.423209Z  INFO Metacog: no new samples (scanned 0 sessions), skipping API call
+2026-09-15T08:34:33.423378Z  INFO Metacog complete (0 tokens used)
+2026-09-15T08:34:33.477259Z  INFO Running intuition module (valence collection)
+2026-09-15T08:34:33.527285Z  INFO Intuition consolidation: scanned 0 sessions, collected 0 outcomes
+2026-09-15T08:34:33.527390Z  INFO Intuition complete
+2026-09-15T08:34:34.326739Z  WARN Domain 'codex-sessions' consolidation failed: External domain 'codex-sessions' consolidate script failed: /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: Cannot spawn /Users/alcatraz627/.claude/adapters/codex/i-dream/extract-events.sh: No such file or directory (os error 2)
+2026-09-15T08:34:34.821204Z  WARN Domain 'sessions-domain' consolidation failed: External domain 'sessions-domain' consolidate script failed: /Users/alcatraz627/.claude/sessions-domain/extract-events.py: Script exited exit status: 1: Traceback (most recent call last):
+  File "/Users/alcatraz627/.claude/sessions-domain/extract-events.py", line 80, in <module>
+    first_ts: datetime | None = None
+TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
+2026-09-15T08:34:34.821276Z  INFO Domain cadence dispatch: 0 consolidations ran, 2 failed
+2026-09-15T08:34:34.821762Z  INFO [cycle 1638] complete — used 0 tokens (50000 remaining of 50000)
+2026-09-15T08:34:34.899411Z  INFO Retention: .claude/subconscious/dreams/snapshots → 1 overflow entries archived
+2026-09-15T08:34:34.901317Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:34:36.252898Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/scripts/dream-metrics.sh
+2026-09-15T08:34:36.253077Z  INFO Running post-wake hook: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh
+2026-09-15T08:34:37.798246Z  INFO Post-wake hook succeeded: /Users/alcatraz627/.claude/subconscious/hooks/post-wake.sh

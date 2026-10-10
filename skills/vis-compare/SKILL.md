@@ -4,7 +4,6 @@ description: Judges whether a recreated image faithfully imitates a reference �
 allowed-tools: Read, Bash, Write, Edit
 user-invocable: true
 argument-hint: "<reference-A> <candidate-B> [focus, in your words]"
-context: fork
 ---
 
 ## Brief
@@ -80,8 +79,11 @@ If invoked with `--revisit`, skip to Phase 5.
 
 ## Phase 1 — Resolve the inputs
 
-1. Validate both paths exist and are images (`file -b --mime-type`). If one is missing,
-   ask for it — do not guess.
+1. Resolve A and B from explicit paths or images already attached/shown in the
+   conversation, preserving their order. Validate paths that exist. If an image
+   has no readable filesystem path, compare the visible images directly and state
+   that the path-only `see diff` evidence pack could not run. If either image is
+   genuinely inaccessible, request that specific image; never start an empty fork.
 2. Restate the comparison in one line as the question being answered ("does the rebuilt
    login page keep the original's information and hierarchy?"). The `focus`, if given,
    names what to weigh most; with no focus the working question is "where does B depart
@@ -89,7 +91,9 @@ If invoked with `--revisit`, skip to Phase 5.
 
 ## Phase 2 — Deterministic evidence (zero-cost ground truth)
 
-The evidence layer is model-independent and free; run it first, always.
+The evidence layer is model-independent and free. Run it first when both images
+have readable filesystem paths. If either image exists only in the conversation,
+use the native-only path below and label every observation unmeasured.
 
 ```bash
 command -v see >/dev/null 2>&1 && see diff "<A>" "<B>" --json
@@ -119,8 +123,8 @@ saturated heatmap → `--grid 32` to localize) at the end of the report.
 This is the one expensive seat. Before reading the images, announce it:
 
 > Running the native-vision judge (Claude — the expensive-but-valuable seat). The zero-cost
-> machine evidence is already in hand; in a convergence loop where machine scores are
-> still improving, this judgment can wait.
+> machine evidence is already in hand when paths were available; in a convergence
+> loop where machine scores are still improving, this judgment can wait.
 
 Then `Read` A, B, and `contact.png`. Walk every divergence the pack measured, plus what
 only native vision can see, and classify each against `policy.md`:

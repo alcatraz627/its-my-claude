@@ -1,0 +1,11 @@
+[
+  {
+    "id": "thr-20260910-164147-9980",
+    "opened": "2026-09-10T16:41:47.849648Z",
+    "text": "Re-evaluate the Codex adapter v2 (features/codex-adapter.md, migration 0060) around 2026-09-24: are the guards, gcc outbox, cx- ipc identity and the codex-sessions dream domain earning their keep, and what did Codex seats file with src:codex tags",
+    "target_file": "/Users/alcatraz627/.claude/migrations/0061-codex-adapter-review.md",
+    "status": "open",
+    "resolved": null,
+    "resolution": null
+  }
+]

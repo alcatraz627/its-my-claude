@@ -1,0 +1,80 @@
+{
+  "last_recon": "2026-10-09T23:00:05.415940Z",
+  "last_weekly": "2026-10-06T10:00:21.566984Z",
+  "weekly_pending_since": null,
+  "pending_pages": [],
+  "streams": [
+    {
+      "domain": "claude-audit",
+      "path": "/Users/alcatraz627/.claude/hooks-feedback-domain/events.jsonl",
+      "events_in_window": 117,
+      "newest": "2026-10-05T00:00:00Z"
+    },
+    {
+      "domain": "codex-sessions",
+      "path": "/Users/alcatraz627/.claude/adapters/codex/i-dream/events.jsonl",
+      "events_in_window": 248,
+      "newest": "2026-10-08T15:44:08.579Z"
+    },
+    {
+      "domain": "claude-ipc",
+      "path": "/Users/alcatraz627/.claude-ipc/i-dream-events.jsonl",
+      "events_in_window": 57,
+      "newest": "2026-10-08T15:48:54Z"
+    },
+    {
+      "domain": "proposals",
+      "path": "/Users/alcatraz627/.claude/proposals-domain/events.jsonl",
+      "events_in_window": 63,
+      "newest": "2026-10-09T22:05:30Z"
+    },
+    {
+      "domain": "atone",
+      "path": "/Users/alcatraz627/.claude/atone/events.jsonl",
+      "events_in_window": 71,
+      "newest": "2026-10-09T19:08:30Z"
+    },
+    {
+      "domain": "affirm",
+      "path": "/Users/alcatraz627/.claude/affirm/events.jsonl",
+      "events_in_window": 4,
+      "newest": "2026-10-06T08:07:35Z"
+    },
+    {
+      "domain": "memory-domain",
+      "path": "/Users/alcatraz627/.claude/memory-domain/events.jsonl",
+      "events_in_window": 3,
+      "newest": "2026-10-06T09:34:38Z"
+    },
+    {
+      "domain": "sessions-domain",
+      "path": "/Users/alcatraz627/.claude/sessions-domain/events.jsonl",
+      "events_in_window": 151,
+      "newest": "2026-10-08T16:28:38Z"
+    },
+    {
+      "domain": "pinned",
+      "path": "/Users/alcatraz627/.claude/pinned/events.jsonl",
+      "events_in_window": 22,
+      "newest": "2026-10-09T14:41:14Z"
+    },
+    {
+      "domain": "checkpoints",
+      "path": "/Users/alcatraz627/.claude/checkpoints-domain/events.jsonl",
+      "events_in_window": 150,
+      "newest": "2026-10-08T11:53:05Z"
+    },
+    {
+      "domain": "skill-usage",
+      "path": "/Users/alcatraz627/.claude/skill-usage-domain/events.jsonl",
+      "events_in_window": 249,
+      "newest": "2026-10-08T14:53:59Z"
+    },
+    {
+      "domain": "signals",
+      "path": "/Users/alcatraz627/.claude/subconscious/logs/signals.jsonl",
+      "events_in_window": 78,
+      "newest": "2026-10-09T19:23:43.593791Z"
+    }
+  ]
+}

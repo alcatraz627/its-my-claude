@@ -54,6 +54,14 @@ if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
   fi
+  # The owner's policy switch for fable seats. The snooze row above still wins
+  # while it exists; this covers the one-click case.
+  if [ "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get model.fable 2>/dev/null)" = "block" ]; then
+    reason="⛔ The owner has switched off fable seats (policy model.fable = block). Do not ask to approve one: re-dispatch on opus for judgment seats or sonnet otherwise, and carry on. The owner turns fable back on in the menu bar policy panel."
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook model-tier --action block-policy --heeded unknown >/dev/null 2>&1 || true
+    jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+    exit 0
+  fi
 fi
 
 # 2a — usage-window advisory for a fable seat (owner D5 note, 2026-09-18). Never a

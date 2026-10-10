@@ -1,11 +1,11 @@
 #!/bin/bash
+# i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
+# not feed the daemon (it was downvoting its own intentions, 2026-10-06).
+[ -n "${I_DREAM_CHILD:-}" ] && exit 0
 # i-dream: UserPromptSubmit hook — sentiment signals + compiled-intervention
 # hints (felt-metabolism Phase 2).
-# NOTE: this hook is registered async, and an async UserPromptSubmit hook's stdout
-#       never reaches the model (verified 2026-09-05). It therefore emits NOTHING
-#       to stdout; LIVE intervention hints reach the model through the sync
-#       PreToolUse sibling, and every match is still written to the would-fire
-#       ledger here.
+# NOTE: this script emits NOTHING to stdout; it runs async, so any output
+#       would never reach the session anyway.
 # No daemon-up guard here on purpose: the sentiment send needs the socket,
 # but the intervention interpreter is file-only and must run regardless.
 SOCKET="/Users/alcatraz627/.claude/subconscious/daemon.sock"
@@ -78,7 +78,9 @@ payload = json.dumps({
     "swear_count": swear_count,
     "correction": correction,
     "positive": positive,
-    "frustration_score": frustration_score
+    "frustration_score": frustration_score,
+    "session_id": data.get("session_id") or None,
+    "entrypoint": os.environ.get("CLAUDE_CODE_ENTRYPOINT") or None
 }).encode()
 
 try:
@@ -90,9 +92,8 @@ except Exception:
     pass
 
 # ── Compiled-intervention interpreter (felt-metabolism B1, prompt surface) ──
-# LIVE hints inject one additionalContext JSON (display capped at 2); every
-# match — shadow, candidate, AND live — is appended to the would-fire ledger,
-# because display caps must never gate telemetry. Patterns are re-validated
+# Every match — shadow, candidate, AND live — is appended to the would-fire
+# ledger; nothing is printed (see the note at the end). Patterns are re-validated
 # here with re.search inside try/except: a broken compiler-drafted pattern
 # skips silently rather than firing wrong (the point-of-use check).
 try:
@@ -142,15 +143,11 @@ try:
                             "ts": int(time.time())}) + "\n")
             except Exception:
                 pass
-        # LIVE hints used to print one additionalContext JSON here. This hook is
-        # registered async on UserPromptSubmit and the harness never returns that
-        # stdout (canary 2026-09-05: zero deliveries in any transcript), so the
-        # owner ruled to strip the payload and keep the ledger above. The sync
-        # PreToolUse sibling (pre-tool-use.sh) still delivers hints at tool time.
-        # To revive prompt-time hints, register this hook synchronous and print
-        # json.dumps({"additionalContext": ...}) here again.
+        # No stdout payload: this hook runs async on UserPromptSubmit and the
+        # harness never delivers its output (owner canary 2026-09-05, zero
+        # deliveries). The sync PreToolUse sibling delivers hints at tool time.
 except Exception:
     pass
 PYEOF
-# Touch activity signal (always, regardless of socket availability)
-touch "/Users/alcatraz627/.claude/subconscious/.last-activity"
+# Touch activity signal (best-effort — dir may not exist on first install)
+touch "/Users/alcatraz627/.claude/subconscious/.last-activity" 2>/dev/null || true

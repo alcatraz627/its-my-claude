@@ -104,13 +104,15 @@ h3 .idtag{color:var(--text-3);font:500 var(--fs-caption)/1.4 var(--mono);letter-
    this file spans several source lines, and pre-wrap on the shared class made
    that HTML indentation visible on screen. */
 .read.flow{white-space:pre-wrap}
+.mock{margin:10px 0;padding:12px 14px;background:#0c0e12;color:#d6d9de;border:1px solid var(--border);border-radius:var(--r-card);overflow-x:auto;font:12.5px/1.45 ui-monospace,Menlo,"SF Mono",monospace;white-space:pre}
+.mock .em{display:inline-block;width:2ch;text-align:center;font-size:11px;vertical-align:baseline}
 .shots{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-.shots img{max-width:236px;width:100%;border:1px solid var(--border);border-radius:var(--r-card);cursor:zoom-in;background:#fff}
-/* scrimmed zoom instead of an in-flow blowup (defect U5) */
-#zoom{position:fixed;inset:0;background:var(--scrim);z-index:var(--z-modal);display:none;
-  align-items:center;justify-content:center;cursor:zoom-out;padding:24px}
-#zoom.on{display:flex}
-#zoom img{max-width:96vw;max-height:92vh;border-radius:var(--r-card);background:#fff}
+/* Owner ruling 2026-10-01: a click zooms the image inline, in place, and any
+   number can stay open at once. A modal made reading and comparing shots hard. */
+.shots img{flex:0 1 236px;max-width:236px;width:100%;border:1px solid var(--border);border-radius:var(--r-card);cursor:zoom-in;background:#fff;
+  transition:max-width .28s ease,flex-basis .28s ease}
+.shots img.zoomed{flex-basis:100%;max-width:100%;cursor:zoom-out}
+@media (prefers-reduced-motion:reduce){.shots img{transition:none}}
 .slots{font-size:var(--fs-body);margin:8px 0}
 .slots b{display:inline-block;min-width:62px;color:var(--text-3);font-weight:600;font-size:var(--fs-caption);letter-spacing:.05em}
 .slots div{margin:3px 0}
@@ -125,10 +127,12 @@ section.card.focused .opt .num{display:inline-block}
 /* A visual one-of-many: options that carry a picture become tiles you compare
    side by side, because the picture IS the choice (owner, 2026-08-25). */
 .opts.gallery{display:grid;gap:10px;margin:6px 0;
-  grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr))}
+  grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
 .opts.gallery .opt{margin:0;display:flex;flex-direction:column;gap:8px;padding:10px}
 .opts.gallery .opt .shots{margin:0}
 .opts.gallery .opt .shots img{max-width:100%}
+/* a zoomed tile takes the whole row, or "full width" is only the tile's width */
+.opts.gallery .opt:has(.shots img.zoomed){grid-column:1/-1}
 .opt.shot .optline{display:block}
 /* the reject-everything option reads as a way out, not as a peer of the others */
 .opt.none{border-style:dashed;color:var(--text-3)}
@@ -196,7 +200,6 @@ body.notes-off #notesBtn,body.notes-off .addnote,body.notes-off .notewrap,body.n
   </table>
   <p class="note">Untouched = agreed. Only your changes and notes end up in the paste — notes are optional.</p>
 </div></div>
-<div id="zoom"><img alt=""></div>
 <div id="toast">Copied — paste it in chat</div>
 <script src="/kinds.js"></script>
 <script src="/shared.js"></script>
@@ -315,6 +318,7 @@ function render() {
     h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
       <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
     if (s.read) h += `<p class="read flow">${linkify(s.read)}</p>`;
+    if (s.pre) h += `<pre class="mock">${esc(s.pre).replace(/[\u{1F300}-\u{1FAFF}]️?/gu, m => `<span class="em">${m}</span>`)}</pre>`;
     if ((s.images || []).length) h += `<div class="shots">` +
       s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
     if (s.slots) {
@@ -449,7 +453,8 @@ function openNote(card) {
 document.addEventListener("keydown", e => {
   const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "");
   if (e.key === "Escape") {
-    if ($("#zoom").classList.contains("on")) return $("#zoom").classList.remove("on");
+    const zoomed = $$(".shots img.zoomed");
+    if (zoomed.length) return zoomed.forEach(i => i.classList.remove("zoomed"));
     if ($("#overlay").classList.contains("on")) return $("#overlay").classList.remove("on");
     if (typing) return document.activeElement.blur();
   }
@@ -482,9 +487,11 @@ document.addEventListener("keydown", e => {
 
 document.body.addEventListener("click", e => {
   if (e.target.matches(".shots img")) {
-    $("#zoom img").src = e.target.src; $("#zoom").classList.add("on"); return;
+    e.preventDefault();   // inside an option's label, a zoom click must not also pick it
+    const img = e.target, opening = img.classList.toggle("zoomed");
+    if (opening) setTimeout(() => img.scrollIntoView({ block: "nearest", behavior: "smooth" }), 300);
+    return;
   }
-  if (e.target.closest("#zoom")) { $("#zoom").classList.remove("on"); return; }
   if (e.target.matches(".addnote")) { e.preventDefault();
     openNote(e.target.closest("section.card")); return; }
   const card = e.target.closest("section.card");

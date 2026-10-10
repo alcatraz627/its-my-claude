@@ -16,6 +16,8 @@ stale_after_days: 90
 # Html Output
 Standards for HTML files Claude generates.
 
+> Start at [`pages.md`](pages.md). It says which surface to use, and it carries the shared kit and the page check. A page built with `scripts/pages/pagekit.py` already has the theme switch and the colours below, so neither is written by hand. This file stays for its colour system, its complexity tiers and its snippets.
+
 ## MANDATORY — Dark/light mode toggle
 
 Every HTML file written to disk **must** include a dark/light mode toggle button in the top-right corner. Dark mode is the default. This applies to ALL HTML outputs: reports, matrices, previews, visualizations — no exceptions.

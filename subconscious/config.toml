@@ -64,3 +64,7 @@ user_prompt_submit = true
 [ingestion]
 projects_dir = "~/.claude/projects"
 max_sessions_per_scan = 50
+
+[limits]
+output_tokens_5h = 40000
+output_tokens_7d = 500000

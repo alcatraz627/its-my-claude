@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-09-02T05:41:58.074498Z",
-  "average_depth": 7.9,
-  "average_breadth": 1.5,
-  "fixation_rate": 0.08,
-  "assumption_rate": 0.67,
-  "overconfidence_rate": 0.52,
+  "last_updated": "2026-10-02T05:32:17.754199Z",
+  "average_depth": 6.2,
+  "average_breadth": 1.1,
+  "fixation_rate": 0.18,
+  "assumption_rate": 0.71,
+  "overconfidence_rate": 0.46,
   "common_assumptions": [
-    "style ledger rules are exhaustive and correctly apply to all input content without ambiguity",
-    "single-pass rule application is sufficient without iteration or counter-checking",
-    "input context is complete and accurately represents the full task state",
-    "juror evaluation evidence is unambiguous and requires no additional fact-finding",
-    "tool output faithfully represents current system state without staleness"
+    "stdin content is complete and parseable without additional tool calls",
+    "ledger rules are unambiguous and cover all encountered patterns",
+    "juror verdict can be reached from provided context alone without file lookups",
+    "single-pass processing is sufficient for style enforcement",
+    "file contents have not changed between sequential reads in multi-step chains"
   ],
   "strength_patterns": [
-    "Deep investigative chains (>40 steps) show systematic multi-angle verification before concluding, with explicit mutation testing and cross-checking",
-    "Complex multi-session chains demonstrate adaptive redirection when initial approaches fail, avoiding sunk-cost fixation",
-    "High-step chains maintain coherent goal tracking across many sequential tool uses with clear progress signals"
+    "systematic file read-before-edit discipline in complex multi-step sessions",
+    "appropriate task decomposition with tool sequencing in high-step chains",
+    "consistent single-turn pattern for well-scoped atomic tasks (style enforcement, juror verdicts)"
   ],
   "weakness_patterns": [
-    "Over 70% of chains are single-step with no visible reasoning, alternative exploration, or verification before response",
-    "Outcome fields are uniformly empty across all 60 sampled chains, eliminating any calibration feedback loop",
-    "High-step chains show repetitive same-file edits (e.g., +layout.svelte edited 15+ times in one chain) suggesting narrow fixation rather than systematic exploration"
+    "~74% of chains skip verification entirely, firing a single response with no confirmatory tool call",
+    "repeated reads of the same file within a chain (lint.mjs, server.mjs, index.html) indicate looping without clear resolution criteria",
+    "zero alternatives explored across all sampled chains — breadth never exceeds 1 in any single chain"
   ],
   "trend": {
     "calibration_improving": false,

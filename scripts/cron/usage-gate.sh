@@ -21,7 +21,9 @@
 set -uo pipefail
 
 LIMITS="${USAGE_GATE_FILE:-$HOME/.claude/widgets/.limits.json}"
-THRESHOLD="${USAGE_GATE_PCT:-90}"
+# An explicit env value wins (tests, one-off runs); otherwise the owner's policy.
+THRESHOLD="${USAGE_GATE_PCT:-$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get ops.usage_gate_pct 2>/dev/null)}"
+THRESHOLD="${THRESHOLD:-90}"
 MAX_AGE="${USAGE_GATE_MAX_AGE_S:-1800}"
 
 say() { printf '%s\t%s\n' "$1" "$2"; }

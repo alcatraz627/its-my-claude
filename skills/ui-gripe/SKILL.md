@@ -4,7 +4,6 @@ description: Diagnoses WHY a UI feels stupid, confusing, or frustrating — runs
 allowed-tools: Read, Bash
 user-invocable: true
 argument-hint: "[screenshot-path] [the gripe, in the user's words]"
-context: fork
 ---
 
 ## Brief
@@ -24,8 +23,9 @@ judges** — never the reverse.
 /ui-gripe [screenshot-path] [gripe...]
 ```
 
-- `screenshot-path` (optional): PNG/JPEG/WebP of the offending UI. If omitted, ask for
-  one — or offer `see --menubar` capture if the gripe is about something on screen now.
+- `screenshot-path` (optional): PNG/JPEG/WebP of the offending UI. A screenshot attached
+  or shown in the current conversation is also an input. For a live screen, capture it
+  when the app or page is identifiable. Ask for an image only when none is accessible.
 - `gripe` (optional): the complaint in the user's own words ("I can never find the save
   button", "everything looks clickable", "it's just stupid"). Even a vague gripe steers
   the diagnosis; no gripe means a general confusion audit.
@@ -41,16 +41,20 @@ this skill. If it does not exist yet, continue without it.
 
 ## Phase 1 — Resolve the inputs
 
-1. Validate the screenshot path exists and is an image. If no path was given, ask for
-   one (or, when the gripe is about the live screen, offer to capture: full display via
-   `screencapture -x`, or `see --menubar` for the top strip).
+1. Resolve the target in this order: explicit path; image attached or shown in the
+   current conversation; identifiable live app or page that you can capture. An image
+   already in the conversation needs no new path from the user. Validate a path when
+   one exists. Capture a live target before analysis. If the conversation image has no
+   readable filesystem path, inspect it natively and skip path-only `see` commands;
+   state that inventory limitation in the report. If no image or live target can be
+   accessed, request one concrete input and stop with that reason, never an empty report.
 2. Restate the gripe in one line as a testable frustration ("user cannot locate the
    primary action" / "user cannot tell what state the app is in"). If there is no gripe,
    the working question is "what would confuse a first-time user most?"
 
 ## Phase 2 — Local structural inventory ($0 ground truth)
 
-If `see` is on PATH (the local-models vision tool), run both:
+If `see` is on PATH and the resolved image has a filesystem path, run:
 
 ```bash
 command -v see >/dev/null 2>&1 && see "<screenshot-path>" --ui
@@ -67,8 +71,8 @@ see "<screenshot-path>" --region <top|bottom|left|right|center> --ui
 
 Each read lands an artifact folder (`see open -1`) — cite it in the report so the
 evidence is revisitable. Record intermediate observations with `see note "..."`.
-Skip this phase silently if `see` is not installed (the diagnosis then rests on the
-native read alone; say so in the report).
+Skip the local inventory when `see` is unavailable or the image has no readable
+file path. State that evidence limit in the report.
 
 Two more evidence lanes; reach for whichever the case calls for:
 
@@ -84,8 +88,8 @@ Two more evidence lanes; reach for whichever the case calls for:
 
 ## Phase 3 — Native judgment read
 
-`Read` the screenshot yourself. The inventory says WHAT is there; you decide what it
-MEANS. Walk the confusion-forensics rubric against both:
+`Read` the screenshot or inspect the conversation image yourself. The inventory
+says WHAT is there; you decide what it MEANS. Walk the confusion-forensics rubric against both:
 
 1. **Hierarchy fight** — does any single element dominate? Count the elements competing
    at the top visual level (the inventory's HIERARCHY tree gives the census). More than
@@ -121,7 +125,8 @@ Output in this order, prose-first, no scores:
 3. **What to keep** — 1–2 things that are working, so the fix doesn't bulldoze them.
 4. **The one change** — if only one thing gets fixed, which, and why it unblocks the
    gripe.
-5. **Evidence trail** — the `see` artifact folder path(s) for revisiting.
+5. **Evidence trail** — the `see` artifact folder path(s) when a local read ran;
+   otherwise identify the conversation image and name the unavailable path-only read.
 
 Do not pad: a UI with one real problem gets one finding. If the gripe is not supported
 by the evidence (the UI is fine, the user is tired), say that plainly — with the

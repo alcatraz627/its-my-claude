@@ -73,6 +73,12 @@ h3 .idtag { color: var(--dim); font-size: 11px; font-weight: 500;
   font-family: ui-monospace, Menlo, monospace; letter-spacing: 0;
   background: var(--surface-2); border-radius: 5px; padding: 1px 7px; }
 .read { color: var(--dim); font-size: 13.5px; margin: 0 0 12px; }
+/* a terminal mock: a section's `pre` field, shown as the terminal would show it */
+.mock { margin: 10px 0; padding: 12px 14px; background: #0c0e12; color: #d6d9de;
+  border: 1px solid var(--border); border-radius: 8px; overflow-x: auto;
+  font: 12.5px/1.45 ui-monospace, Menlo, "SF Mono", monospace; white-space: pre; }
+:root[data-theme="light"] .mock { background: #14171c; }
+.mock .em { display: inline-block; width: 2ch; text-align: center; font-size: 11px; }
 .shots { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
 .shots img { max-width: 236px; width: 100%; border: 1px solid var(--border);
   border-radius: 8px; cursor: zoom-in; background: #fff; }
@@ -265,6 +271,7 @@ function render() {
     h += `<section class="card screen" data-s="${esc(s.id)}" tabindex="-1">
       <h3>${esc(s.title)} <span class="idtag">${esc(s.id)}</span>${s.prio ? ` <span class="prio">${esc(s.prio)}</span>` : ""}</h3>`;
     if (s.read) h += `<p class="read">${linkify(s.read)}</p>`;
+    if (s.pre) h += `<pre class="mock">${esc(s.pre).replace(/[\u{1F300}-\u{1FAFF}]️?/gu, m => `<span class="em">${m}</span>`)}</pre>`;
     if ((s.images || []).length) h += `<div class="shots">` +
       s.images.map(im => `<img src="${esc(im)}" alt="${esc(s.title)}" loading="lazy">`).join("") + `</div>`;
     if (s.slots) {

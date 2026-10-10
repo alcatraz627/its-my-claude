@@ -1,5 +1,5 @@
-📌 The owner's sharpest recurring cost in this project is being asked something he 
-📌 ADR-004 (external voice + floor-only measurement) is accepted policy and the own
-📌 UI work stack shipped 2026-08-30/31 (callouts Stop gate, forge-v6 seeded, canoni
-📌 A decision page offered a confident pick while the evidence behind it was missin
-📌 Agents treat a failing deploy as a puzzle to solve, because solving it feels lik
+📌 Goal statements written as abstract proclamations get rejected by the owner as a
+📌 Clanky behaviour-correctness plan (fable seat, 2026-10-08), the design of record
+📌 A skill missing from the session's injected available-skills list was taken as n
+📌 gcc-mods session (d0467d09): a TUI mod is only verified by driving a real second
+📌 Clanky earns its place only by finesse on its own surfaces (owner 2026-10-03): S

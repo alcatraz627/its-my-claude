@@ -14,7 +14,7 @@ gcc_export_env
 bash "$CODEX_GCC_ROOT/hooks/drain-outbox.sh" "$SID" >/dev/null 2>&1 || true
 
 ipc_bin=$(gcc_ipc_bin ipc-stop)
-if [ -n "$ipc_bin" ]; then
+if ! gcc_is_managed_host_hook && [ -n "$ipc_bin" ]; then
   out=$(printf '%s' "$INPUT" | timeout 8 "$ipc_bin" 2>/dev/null)
   if [ -n "$out" ] && printf '%s' "$out" | jq -e . >/dev/null 2>&1; then
     printf '%s\n' "$out"

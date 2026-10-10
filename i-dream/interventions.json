@@ -6,7 +6,8 @@
     "form": "nudge",
     "state": "live",
     "trigger": {
-      "tool": "Write"
+      "tool": "Write",
+      "input_pattern": "/(rules|docs|features|conventions)/"
     },
     "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
     "created": "2026-07-24T14:54:37.875879Z",
@@ -67,7 +68,8 @@
     "form": "nudge",
     "state": "live",
     "trigger": {
-      "tool": "Write"
+      "tool": "Write",
+      "input_pattern": "^(?!/private/tmp/|/tmp/|/private/var/folders/|/var/folders/).*\\.(md|html)$"
     },
     "body": "When you mention this file to the user, make the first mention an absolute path starting with / or ~, not a bare filename.",
     "created": "2026-07-24T14:54:37.875879Z",
@@ -80,13 +82,15 @@
     "slug": "speculative-abstractions-without-a-load-bearing-caller",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs)$"
     },
     "body": "Name the current caller for every new exported function/type here. No caller, or an existing primitive already fits? Don't create it.",
     "created": "2026-07-24T14:54:37.875879Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -122,30 +126,19 @@
     "strength": 1.0
   },
   {
-    "id": "7a32a10e40ad8079",
-    "slug": "review-missed-stale-caller-after-rename",
-    "source": "atone-precheck",
-    "form": "hint",
-    "state": "shadow",
-    "trigger": {
-      "prompt_pattern": "\\b(rename|renaming|rename it|change the name of)\\b.*\\b(field|tag|key|column|flag|constant|filename|file name|env var|status)\\b"
-    },
-    "body": "Before renaming: run `rg -F '<old-name>'` across the whole repo and fix every hit outside the file you edit. Updating the writer is not updating the contract.",
-    "created": "2026-07-25T05:00:11.590362Z",
-    "strength": 0.5
-  },
-  {
     "id": "b26957e5af923ced",
     "slug": "sub-agent-material-output-left-in-conversation-only",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "atone(\\.sh)?\\s+add\\b"
     },
     "body": "Persist juror/sub-agent verdicts through the data layer: use `atone add --case-file <path>` so the output lands on disk. Never relay a verdict by hand from a return string.",
     "created": "2026-07-25T05:00:11.590362Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -161,20 +154,22 @@
     "created": "2026-07-27T19:59:36.977558Z",
     "promoted": "2026-08-21T19:13:12.930807Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.9
+    "strength": 0.5
   },
   {
     "id": "ab332bca10f938fc",
     "slug": "shipping-css-ui-changes-without-visual-verification",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(css|scss|sass|less|styl)$|\\.(tsx|jsx|vue|svelte)$"
     },
     "body": "Before calling this UI change fixed, screenshot the changed element this turn and open the component that owns its padding. No screenshot read back = not fixed.",
     "created": "2026-07-29T00:29:17.608852Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -182,13 +177,15 @@
     "slug": "ai-smell-prose-against-stored-voice",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(tsx|jsx|vue|svelte|html)$"
     },
     "body": "User-facing copy: render it and read the words back before shipping. Strip em-dashes and two-sentence explainers; keep the owner's voice, not default card padding.",
     "created": "2026-07-29T00:29:17.608852Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -222,62 +219,6 @@
     "strength": 1.0
   },
   {
-    "id": "19cd4b6c2e53b23a",
-    "slug": "added-scope-without-checking-siblings",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Edit",
-      "input_pattern": "<(select|input|textarea|button)[\\s/>]"
-    },
-    "body": "Before adding a raw JSX form control: grep this file for existing Select/Input/Button/Dropdown imports. If one fills that role, use it — a green typecheck says nothing about convention.",
-    "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.014285714285714301
-  },
-  {
-    "id": "0eee058e090c5109",
-    "slug": "escaped-selector-grep-false-negative",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Grep",
-      "input_pattern": "\\\\\\\\|\\|.*\\||\\.\\*.*\\.\\*"
-    },
-    "body": "This grep is filtered or compound. Do not write an absence claim (none / no X / nothing uses X) from it — re-run the bare symbol over the narrowest tree that would contain it first.",
-    "created": "2026-08-14T00:31:15.433973Z",
-    "strength": 0.014285714285714301
-  },
-  {
-    "id": "3bdb8957ec425538",
-    "slug": "repeatedly-emphasizing-ops-setup-that-user-already-addressed",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Write",
-      "input_pattern": "(blocked|blocker|waiting on you|needs? your|action required|still needs)"
-    },
-    "body": "Check whether the user already declined, deferred, or ignored this blocked-on-user item this session. If so, leave it in the task list and drop it from this message.",
-    "created": "2026-08-16T03:45:46.205718Z",
-    "strength": 0.04285714285714287
-  },
-  {
-    "id": "6c97902d153cf79e",
-    "slug": "status-verdict-from-stale-mental-model-no-re-check",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Edit",
-      "input_pattern": "_checkpoint\\.claude\\.md|checkpoints/"
-    },
-    "body": "Before marking any task done here, trace its deliverable (commit/file/artifact) in the Resume Contract. If it sits under standing caveats or reads unverified, the status is 'open, awaiting verdict'.",
-    "created": "2026-08-16T21:01:57.842342Z",
-    "strength": 0.057142857142857134
-  },
-  {
     "id": "07fe981e338aa9c2",
     "slug": "unmeasured-context-capacity-claim",
     "source": "atone-precheck",
@@ -297,12 +238,15 @@
     "slug": "truncating-write-before-read-on-a-living-file",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
-      "tool": "Write"
+      "tool": "Write",
+      "input_pattern": "^(?!/private/tmp/|/tmp/|/private/var/folders/|/var/folders/)"
     },
     "body": "Before this Write: does the path already exist? If it does and you did not create it this turn, stop and read it first. Never truncate a file another agent may own.",
     "created": "2026-08-18T06:07:25.410846Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -341,14 +285,16 @@
     "slug": "html-outputs-missing-dark-light-mode-toggle",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.html?$"
     },
     "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait — a skill's silence is not an exemption.",
     "created": "2026-08-19T19:49:09.230148Z",
-    "strength": 0.8
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "65cfe4c27a2ad5d1",
@@ -370,41 +316,31 @@
     "slug": "agent-comment-posted-without-agent-attribution",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "gh\\s+(pr|issue)\\s+comment|gh\\s+api\\s+.*(comments|reviews)"
     },
     "body": "Read the first two lines of the body you are about to post. If it does not carry the agent-attribution marker (via 🤖claude), add it before sending — it lands under the owner's account.",
     "created": "2026-08-24T19:34:43.973505Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
-  },
-  {
-    "id": "3025937a7d35fbbd",
-    "slug": "published-to-external-host-unasked",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Bash",
-      "input_pattern": "\\b(vercel|netlify|surge|gh-pages|ngrok)\\s+(deploy|publish)|gh\\s+gist\\s+create|npm\\s+publish"
-    },
-    "body": "Did the user ask for a hosted or shareable surface in this turn, in those words? If not, write the file in the project and offer hosting in one sentence instead.",
-    "created": "2026-08-24T19:34:43.973505Z",
-    "strength": 0.5
   },
   {
     "id": "2026cc3b1134c93a",
     "slug": "supervisory-role-drift-into-implementation",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "\\bgcloud\\s+(secrets|run|iam|projects add-iam)"
     },
     "body": "Cloud-state change from the brains seat: tell gcp-watcher and wait for their answer first. Dispatching a seat does not change who originated the mutation.",
     "created": "2026-08-28T01:22:24.995413Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -427,80 +363,398 @@
     "slug": "delegated-the-judgment-the-owner-assigned-to-me",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "\\b(write|draft|author|produce)\\b[^.]{0,40}\\b(doc|docs|readme|report|rca|write-?up|summary|proposal|spec)\\b"
     },
     "body": "Do not seat a sub-agent to author prose a person will read. Seats gather facts and check links; you write it. If volume blocks that, say so to the owner instead of dispatching.",
     "created": "2026-09-02T05:39:33.700961Z",
-    "strength": 0.6000000000000001
+    "promoted": "2026-09-06T02:09:07.098850Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "b89ae0da4a9a6d81",
     "slug": "heavier-output-medium-than-the-task-needed",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "tool": "Write",
       "input_pattern": "\\.html$"
     },
     "body": "Quote the words in the request that ask for an HTML page. If they said here, in chat, or in the terminal, answer there and offer the page in one sentence.",
     "created": "2026-09-02T05:39:33.700961Z",
-    "strength": 0.2857142857142857
-  },
-  {
-    "id": "359500ec8b5fe450",
-    "slug": "partial-fix-reported-against-a-numeric-ask",
-    "source": "atone-precheck",
-    "form": "hint",
-    "state": "shadow",
-    "trigger": {
-      "prompt_pattern": "\\b(fix|address|resolve|handle)\\b[^.]{0,50}\\b(all|both|each|every|\\d+)\\s+(of\\s+)?(the\\s+|these\\s+|those\\s+)?(issue|item|finding|bug|problem|point|thing)s?\\b"
-    },
-    "body": "List every item named and the diff answering each. Any item with no diff is reported as not done, in the owner's words, above the summary. Never write fixed over an unanswered item.",
-    "created": "2026-09-02T05:39:33.700961Z",
-    "strength": 0.2857142857142857
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "f1bb5cf4998e4ded",
     "slug": "self-adjudicating-goal-with-tradeoff-unstated",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "goal(\\.sh)?\\s+set\\b"
     },
     "body": "Check each clause's subject: it must be the system and what it does, never you or your diligence. Someone else must be able to declare it met, and it must be meetable at all.",
     "created": "2026-09-02T05:39:33.700961Z",
-    "strength": 0.2857142857142857
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "d178058596c639ab",
     "slug": "shipping-surface-without-utility-check",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "\\b(verif(y|ied)|check|done|ready)\\b[^.]{0,40}\\b(page|screen|surface|dashboard|view|ui)\\b"
     },
     "body": "Name the three things a person will try to do here and say what actually happens for each. If the answer is nothing and the page does not say so, it is not done.",
     "created": "2026-09-02T05:39:33.700961Z",
-    "strength": 0.7000000000000001
+    "promoted": "2026-09-06T02:09:07.098850Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
   },
   {
     "id": "c5117fc62db1b837",
     "slug": "doc-committed-without-render-check",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "live",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "(sed -i|perl -[a-z]*i|python[0-9.]* .*(renumber|splice)|awk).*\\.(md|mdx|rst|txt)"
     },
     "body": "You spliced a reader-facing doc programmatically. Read the full result end to end before describing it as done; a cross-reference you had to fix is proof the read is owed.",
     "created": "2026-09-03T04:49:17.316995Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "3ad2f68b50f37010",
+    "slug": "fabricated-timestamp-instead-of-reading-clock",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bdate\\s+(-u\\s+)?['\"]?\\+[^'\"]*%[HMR]"
+    },
+    "body": "Run this date call alone and read its output before writing any HH:MM stamp. A date call batched with the write that uses it does not count.",
+    "created": "2026-09-06T02:09:07.057532Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "264fac32dbed8388",
+    "slug": "shared-index-committed-blind",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "git\\s+add\\s+(-[A-Za-z]*[Au]|\\.|--all)"
+    },
+    "body": "Run git status --short first and name every path this add would take. Add your files by name; if another lane's paths appear, leave them and tell the owner.",
+    "created": "2026-09-06T02:09:07.057532Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "edf8d466b30f765f",
+    "slug": "goal-statement-as-deliverable-list-not-outcome",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "goal\\.sh\\s+(set|armline|box)"
+    },
+    "body": "Check each goal clause: would the work be worth doing if only that clause came true? If not, it is a task row, not a goal. Rewrite as checkable outcomes.",
+    "created": "2026-09-06T02:09:07.057532Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "595b0fe0fc23f577",
+    "slug": "repeatedly-emphasizing-ops-setup-that-user-already-addressed",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(blocked[_ ]on|owner gates?|what (do you )?need from me|gates? (for|on) (me|you)|what'?s blocking)\\b"
+    },
+    "body": "Treat blocked_on as candidates, not verdicts: grep each id in decision-page answers, NIGHT-CHANNEL.md, and store done rows; drop any already ruled before showing the owner.",
+    "created": "2026-09-07T08:15:07.662295Z",
+    "promoted": "2026-09-08T22:23:12.126616Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "d504ce8ab051130d",
+    "slug": "status-verdict-from-stale-mental-model-no-re-check",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "gh\\s+pr\\s+merge"
+    },
+    "body": "Before merging: read the PR review comments against the current HEAD sha. Green checks are not a settled review — findings can stand while CI passes.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "e8c3ac862b73ef60",
+    "slug": "unprompted-infra-scope-creep",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "(crontab\\s+-|launchctl\\s+(load|bootstrap)|pm2\\s+start|LaunchAgents/)"
+    },
+    "body": "Do not arm a recurring job while the owner is interactively present. Say in one line that you have not armed one and why; wait until asked or until they are away.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "386e68d1504fdf6a",
+    "slug": "asked-owner-for-a-value-already-derivable",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "(mint|rotate|create).{0,30}(token|credential|api key)|auth.{0,20}(fail|error|denied)"
+    },
+    "body": "Before asking the owner for a credential, run the tool's own auth status (gh auth status, npm whoami, gcloud auth list) and grep the consumer's config for the variable NAME it reads.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-10T01:17:48.446544Z",
+    "promoted_by": "evidence-auto",
+    "strength": 0.8
+  },
+  {
+    "id": "53f74d55587f358b",
+    "slug": "compressed-or-skipped-requested-atone-filings",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "^\\s*/atone\\b"
+    },
+    "body": "Run the atone ritual end to end — case file, RCA, then atone.sh add — before any unrelated tool call. Do not interleave it with other work.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-16T03:10:17.341254Z",
+    "promoted_by": "evidence-auto",
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "647f15ced348c55f",
+    "slug": "plan-doc-claim-relayed-to-owner-without-verifying-current-state",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(plan doc|the plan|design doc)\\b.{0,60}\\b(next|proceed|implement|wave)\\b"
+    },
+    "body": "A plan doc's claim that something is missing or done is a sentence, not a probe. Run the read-only list/describe check before asking the owner to create, grant, or delete anything.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "b12ac46b19ef4c8d",
+    "slug": "promised-async-wake-without-arming-receiver",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(heartbeat|cron-duty|my lane|arm (the )?cron)\\b"
+    },
+    "body": "Run cron-duty.sh list and find your own lane's row. If it reads DEAD or is missing, arm it with CronCreate before sending any reply.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-10T01:17:48.446544Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "dc466ca4f5535f1b",
+    "slug": "skipped-the-plan-surface-the-owner-explicitly-asked-for",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(the|our) (plan doc|tracker|tracker section|plan document|status section)\\b"
+    },
+    "body": "A doc or section named with 'the' already exists. rg the heading across the full docs tree and write there; if it resolves nowhere, ask one line rather than creating it.",
+    "created": "2026-09-08T22:23:12.115567Z",
+    "promoted": "2026-09-29T03:58:35.531272Z",
+    "promoted_by": "evidence-auto",
+    "strength": 0.9
+  },
+  {
+    "id": "e32634fcb04ae5f2",
+    "slug": "added-scope-without-checking-siblings",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(redesign|restyle|renovate|rework|polish|improve)\\b[^.]{0,40}\\b(ui|page|screen|layout|section|tile|table|form|modal)\\b"
+    },
+    "body": "Before proposing UI: grep 2-3 human-built siblings solving the same shape and follow their grouping idiom. If this surface was agent-built, treat it as the thing to fix, not the canon.",
+    "created": "2026-09-11T02:00:52.014374Z",
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "7baa706b87d6bc39",
+    "slug": "ignored-a-repeating-hook-nudge",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgit\\s+commit\\b.*\\[no(slack|bot)\\]"
+    },
+    "body": "Subject carries [noslack]/[nobot]: keep the whole subject under 72 chars including the tags. If the commit-msg hook flags length, amend before pushing.",
+    "created": "2026-09-11T02:00:52.014374Z",
+    "strength": 0.9
+  },
+  {
+    "id": "5c985b87ff9d9a83",
+    "slug": "stated-acceptance-criteria-traded-for-process-diligence",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "live",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\btask\\.sh\\s+close\\b"
+    },
+    "body": "Before closing: read the task's done text and mark each clause pass, fail, or not exercisable in the --by line. Suites and mutants never prove a criterion they don't touch.",
+    "created": "2026-09-11T02:00:52.014374Z",
+    "promoted": "2026-09-13T07:26:31.157328Z",
+    "promoted_by": "evidence-auto",
+    "strength": 0.8
+  },
+  {
+    "id": "cf602397e751a80f",
+    "slug": "published-to-external-host-unasked",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgh\\s+gist\\s+create\\b|\\b(curl|wget|http)\\b.*\\b(pastebin\\.com|paste\\.rs|0x0\\.st|transfer\\.sh|termbin\\.com|dpaste\\.(com|org)|hastebin|ix\\.io)\\b"
+    },
+    "body": "External publish detected. Can a local file (SendUserFile, local HTML, gcc decision page) do the job instead? If yes, use it. If not, ask the owner first. Never publish externally unasked.",
+    "created": "2026-09-18T23:41:47.620429Z",
+    "strength": 0.057142857142857134
+  },
+  {
+    "id": "b175f25979ecdbd3",
+    "slug": "doc-offered-as-reading-assignment",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "live",
+    "trigger": {
+      "prompt_pattern": "\\b(what'?s the status|status (update|report|check)|where (are|do) we stand|what('?s| is) (left|done|working|unbuilt)|what works now)\\b"
+    },
+    "body": "Put the status in the reply itself: what works now, what is not built yet, what you will do next, and what the owner must do. Link any doc only as optional evidence.",
+    "created": "2026-09-27T11:55:51.063960Z",
+    "promoted": "2026-10-02T01:23:20.535053Z",
+    "promoted_by": "evidence-auto",
+    "strength": 1.0
+  },
+  {
+    "id": "3a514ce466a81613",
+    "slug": "overriding-user-commented-preferences",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "gh\\s+pr\\s+(create|edit)\\b.*\\[nobot\\]"
+    },
+    "body": "Before adding [nobot]: check whether the owner removed it from a recent PR or asked for bot reviews. If they did, leave it out. Their edit overrides the convention.",
+    "created": "2026-09-29T03:58:35.493279Z",
+    "strength": 1.0
+  },
+  {
+    "id": "f6e0260d58a3e589",
+    "slug": "mutating-command-against-unverified-environment",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "^(?!.*CLAUDE_HUB_PORT=\\d+)(?=.*\\bhub\\.sh\\s+(start|stop|restart)\\b)"
+    },
+    "body": "This hub.sh start/stop/restart has no CLAUDE_HUB_PORT, so it targets the owner's :5400 hub. Add CLAUDE_HUB_PORT=<scratch port> or don't run it.",
+    "created": "2026-10-01T05:29:00.582345Z",
+    "strength": 0.5
+  },
+  {
+    "id": "5de28956ccaf6009",
+    "slug": "carried-wrong-path-through-repeated-payload-refreshes",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(refresh|update|re-?arm|re-?issue)\\b.{0,40}\\b(payload|standing (instruction|order)s?|cron prompt|loop prompt)\\b"
+    },
+    "body": "A refresh is not a review. Before you ship the refreshed payload, resolve every path in it (ls/rg) and fix any that no longer exist. Do not carry the old paths forward unchecked.",
+    "created": "2026-10-04T19:09:32.332430Z",
+    "strength": 0.2857142857142857
+  },
+  {
+    "id": "73f81f3d9d2f2e18",
+    "slug": "pr-title-missing-required-flag",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "(?s)\\bgh\\s+pr\\s+create\\b(?!.*\\[noslack\\])"
+    },
+    "body": "Your gh pr create title has no [noslack]. Add [noslack] to --title before you run it. Keep [nobot] too unless a bot review is the point, and if so, say that.",
+    "created": "2026-10-06T23:01:51.581735Z",
+    "strength": 0.3
+  },
+  {
+    "id": "8b901740d345dc36",
+    "slug": "fabricated-link-handed-to-owner",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(give|send|share|paste|drop|post)\\s+(me\\s+)?(the\\s+|a\\s+)?(link|url)s?\\b|\\b(what|where)('?s| is)\\s+the\\s+(link|url)\\b"
+    },
+    "body": "Only give a URL that a tool output this turn contains, vendor URLs included. If no tool output has it, describe where to go in words instead.",
+    "created": "2026-10-09T23:00:59.234443Z",
+    "strength": 0.3
+  },
+  {
+    "id": "80a2767aee0eb187",
+    "slug": "grep-scope-before-claiming-absence",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(skill|slash command)\\b.{0,40}\\b(installed|exists?|available|missing)\\b|\\b(do|don'?t)\\s+(we|you)\\s+have\\s+(a|an|the)\\s+\\S+\\s+skill\\b"
+    },
+    "body": "Before saying a skill is missing, ls ~/.claude/skills/<name> and <project>/.claude/skills/<name>. If either exists, read its SKILL.md and run it. Your skill listing is not the full set.",
+    "created": "2026-10-09T23:00:59.234443Z",
     "strength": 0.3
   }
 ]

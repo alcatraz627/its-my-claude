@@ -27,6 +27,14 @@ command -v jq >/dev/null 2>&1 || exit 0
 input=$(cat 2>/dev/null) || exit 0
 tool_name=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)
 
+# The owner's policy (files.env_read, global with a per-repo override) can allow
+# value reads outright. Block, the default, is this guard's normal behaviour.
+case "$tool_name" in
+  Read|Bash)
+    _cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
+    [ "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get files.env_read --cwd "$_cwd" 2>/dev/null)" = "allow" ] && exit 0 ;;
+esac
+
 # Paths whose contents are secret by shape. Deliberately not "anything with the
 # word secret in it": a name-based net that wide fires on docs and source and
 # teaches people to mute the guard.

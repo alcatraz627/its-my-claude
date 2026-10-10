@@ -39,6 +39,13 @@ set -uo pipefail
 [ "${PROSE_SMELL_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-prose-smell-gate" ] && exit 0
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed prose-smell && exit 0
+# The owner's policy (gates.prose_smell: off, warn, enforce) replaces the
+# PROSE_SMELL_ENFORCE rollout flag when it answers; the mutes above still win.
+case "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get gates.prose_smell 2>/dev/null)" in
+  off) exit 0 ;;
+  warn) PROSE_SMELL_ENFORCE=0 ;;
+  enforce) PROSE_SMELL_ENFORCE=1 ;;
+esac
 
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0

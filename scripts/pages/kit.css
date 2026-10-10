@@ -1,0 +1,87 @@
+/* The shared look for every HTML page an agent builds: reports, previews, decision
+   pages, shared Artifacts. Colours come from conventions/html-assets/colors.css, which
+   pagekit.py inlines above this file. Nothing here names a colour directly, so a theme
+   change is one edit in colors.css. Guide: conventions/pages.md */
+
+:root {
+  --kit-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --kit-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --kit-width: 1100px;
+  --kit-measure: 74ch;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 96px; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 var(--kit-sans); }
+
+/* The bar stays on top. Table headers stop just under it. */
+.kit-bar { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--border); }
+.kit-bar-inner { max-width: var(--kit-width); margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.kit-title { font: 600 17px/1.2 var(--kit-sans); margin: 0; margin-right: auto; }
+.kit-theme { font: 500 12.5px var(--kit-sans); color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.kit-theme:focus-visible, .kit-tab:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.kit-tabs { display: flex; flex-wrap: wrap; gap: 5px; max-width: var(--kit-width); margin: 0 auto; padding: 0 16px 10px; }
+.kit-tab { font: 500 12.5px var(--kit-sans); color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.kit-tab[aria-selected="true"] { color: var(--brand-content); background: var(--brand); border-color: var(--brand); }
+
+.kit-page { max-width: var(--kit-width); margin: 0 auto; padding: 28px 16px 80px; }
+.kit-page h1 { font: 600 30px/1.15 var(--kit-sans); margin: 0 0 14px; text-wrap: balance; }
+.kit-page h2 { font: 600 20px/1.25 var(--kit-sans); margin: 40px 0 12px; text-wrap: balance; }
+.kit-page h3 { font: 600 16px/1.3 var(--kit-sans); margin: 28px 0 8px; }
+.kit-page h4 { font: 600 14px/1.3 var(--kit-sans); margin: 20px 0 6px; }
+.kit-page p, .kit-page li { max-width: var(--kit-measure); }
+.kit-page p { margin: 0 0 12px; }
+.kit-page ul, .kit-page ol { padding-left: 22px; margin: 0 0 14px; }
+.kit-page li { margin: 5px 0; }
+.kit-page a { color: var(--brand); }
+.kit-page code { font: 13px var(--kit-mono); background: var(--surface-2); padding: 1px 5px; border-radius: var(--radius-sm); }
+.kit-page pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; overflow-x: auto; font: 13px/1.45 var(--kit-mono); }
+.kit-page pre code { background: none; padding: 0; }
+.kit-dim { color: var(--dim); }
+
+/* Tables. pagekit.size_columns sets each column's width from what it holds. */
+.kit-table-wrap { overflow-x: auto; }
+.kit-page table { border-collapse: collapse; width: 100%; margin: 14px 0 20px; font-size: 14px; table-layout: fixed; }
+.kit-page table.kit-wide { min-width: 1400px; }
+.kit-page th, .kit-page td { overflow-wrap: anywhere; vertical-align: top; text-align: left; }
+.kit-page thead { position: relative; z-index: 2; }
+.kit-page thead th { font: 600 11px var(--kit-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); padding: 8px 10px; border-bottom: 2px solid var(--border); background: var(--bg); }
+.kit-page thead.kit-stuck th { background: var(--surface); box-shadow: 0 1px 0 var(--border), var(--shadow-sm); }
+.kit-page td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
+.kit-page td:first-child { font-weight: 500; }
+.kit-page tr:hover td { background: var(--surface-2); }
+.kit-page td p { margin: 0 0 4px; max-width: none; }
+.kit-page td ul { margin: 0; padding-left: 16px; }
+.kit-page td li { margin: 2px 0; max-width: none; }
+
+/* Labelled lists that sit side by side, for things a reader compares. */
+.kit-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin: 12px 0 22px; align-items: start; }
+.kit-col { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px 8px; }
+.kit-col.kit-good { border-top-color: var(--ok-line); }
+.kit-col.kit-warn { border-top-color: var(--warn-line); }
+.kit-col.kit-bad { border-top-color: var(--err-line); }
+.kit-col > h4 { font: 600 11px var(--kit-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin: 0 0 6px; }
+.kit-col ul { margin: 0; padding-left: 18px; }
+.kit-col li { max-width: none; font-size: 14px; margin: 4px 0; }
+
+/* A card of key and value pairs, for what a page is and who it is for. */
+.kit-card { display: grid; grid-template-columns: 120px 1fr; gap: 6px 16px; padding: 14px 18px; margin: 0 0 24px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--brand); border-radius: var(--radius-md); font-size: 14px; }
+.kit-card > .k { font: 600 11px var(--kit-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--dim); padding-top: 3px; }
+
+/* The one sentence a reader must not miss. */
+.kit-key { margin: 16px 0; padding: 12px 18px; border-left: 3px solid var(--brand); background: var(--surface-2); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.kit-key p { margin: 0; max-width: none; }
+
+/* Status notes. Use the word as well as the colour. */
+.kit-note { margin: 14px 0; padding: 10px 14px; border: 1px solid var(--border); border-left-width: 3px; border-radius: var(--radius-md); background: var(--surface); }
+.kit-note.kit-good { border-left-color: var(--ok-line); background: var(--ok-soft); }
+.kit-note.kit-warn { border-left-color: var(--warn-line); background: var(--warn-soft); }
+.kit-note.kit-bad { border-left-color: var(--err-line); background: var(--err-soft); }
+.kit-note.kit-info { border-left-color: var(--info-line); background: var(--info-soft); }
+.kit-note p { margin: 0; max-width: none; }
+
+.kit-chip { display: inline-block; font: 500 11.5px var(--kit-mono); padding: 0 6px; border-radius: var(--radius-sm); line-height: 18px; background: var(--surface-2); border: 1px solid var(--border); }
+
+[hidden] { display: none !important; }
+@media (max-width: 640px) { .kit-page h1 { font-size: 24px; } .kit-card { grid-template-columns: 1fr; } }
+@media print { .kit-bar, .kit-theme { display: none; } body { background: #fff; color: #000; } }

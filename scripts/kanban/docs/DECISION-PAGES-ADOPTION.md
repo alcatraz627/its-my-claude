@@ -94,7 +94,9 @@ state/flips/answerString functions are ported unchanged, the keyboard map is
 identical, and the localStorage key string is unchanged. Adopted into the
 charter: shared tokens and theme, the kanban navbar (kinds tabs, crumb
 `All decisions / <title>`), data-tip tooltips (U1), SVG glyphs (U2), an
-answered banner when `.answer.json` exists (D1), scrimmed image zoom (U5).
+answered banner when `.answer.json` exists (D1), scrimmed image zoom (U5;
+superseded 2026-10-01 by the owner: zoom is inline and multi-open, see
+SURFACE-CATALOG).
 
 kinds.js's decisions href now points at `/dp/<slug>/`, so the hub view, the
 palette, the switcher and search all land in-app.

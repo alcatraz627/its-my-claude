@@ -143,7 +143,26 @@ if [ "$gated" = 0 ]; then
   fi
 fi
 
-[ "$gated" = 1 ] || exit 0   # feature-branch push in an unprotected repo → allow
+# ── The owner's policy (pol.sh), for everything the protected list does not own ──
+# A protected repo keeps its per-push approval whatever the policy says: the old
+# store stays authoritative until the owner retires it. Otherwise git.push_main
+# decides main/master (allow skips the approval, block refuses, ask is the flow
+# below) and git.push decides every other branch.
+pol_get() { bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get "$1" --cwd "$target" 2>/dev/null; }
+pol_off() {
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block-policy --heeded unknown --detail "$1" >/dev/null 2>&1 || true
+  blockjson "⛔ The owner has switched off $2 for this repo (policy $1 = block). Do not ask the owner to approve it: tell them the push is off, and that they can turn it on in the menu bar policy panel. The commits stay local; carry on with the rest of the work."
+}
+case "$why" in
+  "protected repo"*) ;;
+  "") [ "$(pol_get git.push)" = "block" ] && pol_off git.push "pushing branches"
+      exit 0 ;;   # feature-branch push in an unprotected repo → allow
+  *) case "$(pol_get git.push_main)" in
+       allow) bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action allow-policy --heeded yes >/dev/null 2>&1 || true
+              exit 0 ;;
+       block) pol_off git.push_main "pushing to main" ;;
+     esac ;;
+esac
 
 # ── Gated: consume a valid approval, or block with a nonce the owner can pick ──
 NONCE_FILE="$HOME/.claude/.push-nonce-${sid_safe}"

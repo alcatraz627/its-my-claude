@@ -111,8 +111,11 @@ leaving it uncommitted in a shared tree.
 ## Phase 3: Hand off
 
 Invoke the chosen skill with: the intent, the target, the capability list (or
-the reason there is none), the file-claim state, and the user's own words
-verbatim. The verbatim ask travels with every hop, because a five-stage
+the reason there is none), the file-claim state, the user's own words verbatim,
+and every image or screenshot the user refers to. Resolve paths before any
+forked invocation. If an image exists only in conversation, keep the work in
+the current context or pass the image itself; never launch a path-only worker
+with an empty path. When the user says "these", preserve all referenced images. The verbatim ask travels with every hop, because a five-stage
 pipeline drifts from the original request one paraphrase at a time.
 
 Every hand-off also carries the size standard as a standing constraint: the

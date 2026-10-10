@@ -173,6 +173,16 @@ patch_filter() { # sets FILTER and ARGJ (jq --arg pairs)
     --append-desc) FILTER="$FILTER | .description=((.description // \"\") + \"\n\n\" + \$adesc)"; ARGJ+=(--arg adesc "$2"); shift 2;;
     --class) FILTER="$FILTER | .metadata.class=\$class"; ARGJ+=(--arg class "$2"); shift 2;;
     --domain) FILTER="$FILTER | .metadata.domain=\$domain"; ARGJ+=(--arg domain "$2"); shift 2;;
+    # The project a task SERVES: an absolute path (a repo root, or ~/.claude for
+    # gcc work). Stored ON THE ROW so a later session in another directory cannot
+    # relabel it (identity contract I1/I2, 2026-09-22). A pathlike value is
+    # canonicalised to its real root; a bare name is kept as given and matched by
+    # basename at read time. An explicit --project is authoritative over the
+    # CWD-inferred default and over the store's .project stamp.
+    --project)
+      _pj="${2/#\~/$HOME}"
+      case "$_pj" in /*) _pj=$(cd "$_pj" 2>/dev/null && pwd -P || printf '%s' "$_pj") ;; esac
+      FILTER="$FILTER | .metadata.project=\$project | .metadata.project_src=\"explicit\""; ARGJ+=(--arg project "$_pj"); shift 2;;
     --batch)
       # A milestone name has to be recallable. Owner 2026-09-05: a three-letter
       # acronym is the floor, "enough to be remembered and associative"; live
@@ -308,6 +318,19 @@ do_add() {
     esac
   fi
   patch_filter "$@" || return 2
+  # Identity contract I5 (2026-09-22): a new row with no explicit --project takes
+  # the CWD's repo root as a DEFAULT, recorded as inferred (not explicit) so the
+  # render can tell a declared project from a guessed one and flag a store whose
+  # rows disagree with its stamp. Only `add` defaults it; `update` never sets a
+  # project unless --project is passed, so reading or editing from another repo
+  # cannot relabel an existing row (I2).
+  case " $* " in
+    *" --project "*) ;;
+    *) _pjdef=$(git -C "$PWD" rev-parse --show-toplevel 2>/dev/null); [ -n "$_pjdef" ] || _pjdef="$PWD"
+       _pjdef=$(cd "$_pjdef" 2>/dev/null && pwd -P || printf '%s' "$_pjdef")
+       FILTER="$FILTER | .metadata.project=\$_pjdef | .metadata.project_src=\"inferred\""
+       ARGJ+=(--arg _pjdef "$_pjdef") ;;
+  esac
   jq -n --arg id "$id" --arg s "$subject" '{id:$id,subject:$s,description:"",status:"pending",activeForm:null,blocks:[],blockedBy:[],metadata:{}}' \
     | jq "${ARGJ[@]+"${ARGJ[@]}"}" "$FILTER" | write_json "$STORE/$id.json"
   # A note draws on the table and a description is what a close is judged

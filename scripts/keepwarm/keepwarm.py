@@ -2,12 +2,23 @@
 """Keep-warm: keep an idle Claude session's prompt cache alive while the owner
 is away, and write its checkpoint while the cache is still warm.
 
-A recurring in-session cron sends "[keepwarm] idle check" every 15 minutes. The
-UserPromptSubmit hook below decides each one: not due yet (or keep-warm is off
-or finished) -> the prompt is blocked before it reaches the model, costing
-nothing. Due (40+ minutes since the last activity) -> the prompt goes through
-with the one piece of upkeep this wake should do. The Stop hook records when
-each turn ended; the owner typing anything resets the count.
+A one-shot in-session cron sends "[keepwarm] idle check" when the session has
+been idle long enough (40 minutes after the last turn). The UserPromptSubmit
+hook below decides each one and always tells the model when to arm the next
+one, so the chain continues without a recurring job. Due -> the prompt goes
+through with the one piece of upkeep this wake should do. Not due yet (the
+owner was active since the cron was armed) -> the prompt goes through with
+nothing to do but re-arm at the right time; one short cached turn, at most
+once per idle window. Off or finished -> blocked, and nothing re-arms.
+
+The earlier design used a recurring 15-minute cron and blocked the not-due
+fires. Claude Code prints every block ("operation blocked by hook") in the
+owner's terminal, so an active session saw the notice at every pause. A chain
+of one-shots never fires when it is not wanted, which is the only way to keep
+the terminal quiet.
+
+The Stop hook records when each turn ended; the owner typing anything resets
+the count.
 
 Plan and economics: ~/.claude/assets/reports/20261010-gcc-fix-list/keepwarm-plan.md
 
@@ -32,8 +43,10 @@ SWITCH = os.environ.get("KEEPWARM_SWITCH", os.path.join(HOME, ".claude", ".keepw
 EVENTS = os.path.join(DIR, "events.jsonl")
 DUE_MIN = float(os.environ.get("KEEPWARM_DUE_MIN", "40"))
 PREFIX = "[keepwarm]"
-CRON = os.environ.get("KEEPWARM_CRON", "7,22,37,52 * * * *")   # tests use "* * * * *"
 WAKE_PROMPT = "[keepwarm] idle check"
+# A one-shot cron is pinned to a minute; firing a little late is harmless, a
+# little early would find the session not yet due, so pad by one minute.
+ARM_PAD_S = 60
 USAGE_GATE = os.path.join(HOME, ".claude", "scripts", "cron", "usage-gate.sh")
 
 # Per context class: the upkeep for wake 1, 2, ... and the wake that is the last.
@@ -150,6 +163,19 @@ def emit(obj):
     return 0
 
 
+def next_cron(at_s):
+    """The 5-field cron line for one firing at the given moment, local time."""
+    t = dt.datetime.fromtimestamp(at_s)
+    return "%d %d %d %d *" % (t.minute, t.hour, t.day, t.month)
+
+
+def rearm_text(last_activity):
+    """What the model must do so the next wake lands when the session is due."""
+    at = max(now_s() + ARM_PAD_S, last_activity + DUE_MIN * 60 + ARM_PAD_S)
+    return ("Re-arm keep-warm: call CronCreate with recurring false, cron '%s', prompt '%s'."
+            % (next_cron(at), WAKE_PROMPT))
+
+
 def skip_wake(reason):
     """Stop this wake before it reaches the model: no turn, no cost."""
     return emit({"decision": "block", "reason": reason, "suppressOutput": True})
@@ -170,9 +196,16 @@ def hook_prompt(inp):
         return skip_wake("keep-warm is off")
     if st.get("stopped"):
         return skip_wake("keep-warm finished for this absence")
-    idle_min = (now_s() - st.get("last_activity", now_s())) / 60.0
+    last = st.get("last_activity", now_s())
+    idle_min = (now_s() - last) / 60.0
     if idle_min < DUE_MIN:
-        return skip_wake("keep-warm: not due (idle %.0f min)" % idle_min)
+        # The owner worked after this wake was armed. Nothing to do but move
+        # the next wake to where it belongs; a block here would print in the
+        # terminal, which is the noise this branch exists to avoid.
+        log(sid, "rearm", idle_min=round(idle_min))
+        text = ("Keep-warm: not due, the owner was active %.0f min ago. %s Then reply with exactly "
+                "one word: warm. Start nothing else." % (idle_min, rearm_text(last)))
+        return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
     if usage_gated():
         st["stopped"] = True
         save(sid, st)
@@ -195,6 +228,8 @@ def hook_prompt(inp):
     log(sid, "wake", n=n, action=action, klass=k, ctx_pct=round(pct, 1), idle_min=round(idle_min))
     text = UPKEEP[action].format(n=n, note=note_path(inp.get("cwd"), sid),
                                  now=dt.datetime.now().strftime("%H:%M"))
+    if not st["stopped"]:
+        text += " " + rearm_text(now_s())
     return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
 
 
@@ -214,9 +249,8 @@ def hook_start(inp):
     st.update(last_activity=now_s(), wakes=0, stopped=False)
     save(sid, st)
     text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: run CronList; "
-            "if no job's prompt starts with [keepwarm], call CronCreate with cron '%s', prompt '%s', "
-            "recurring true. Prompts starting with [keepwarm] are keep-warm wakes: do only the upkeep "
-            "they name." % (CRON, WAKE_PROMPT))
+            "delete any job whose prompt starts with [keepwarm], then %s Prompts starting with [keepwarm] "
+            "are keep-warm wakes: do only what they say." % rearm_text(now_s()))
     return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": text}})
 
 

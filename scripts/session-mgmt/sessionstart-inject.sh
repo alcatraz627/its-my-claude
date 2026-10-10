@@ -55,6 +55,8 @@ INJECTORS=(
   "$HOME/.claude/scripts/validate-settings-hooks.sh"
   "$HOME/.claude/scripts/hooks/backlog-surface.sh"
   "$HOME/.claude/scripts/kanban/session-start-line.sh"
+  # What the owner's policy allows and blocks, and that allowed means no approval ask.
+  "$HOME/.claude/scripts/pol/policy-inject.sh"
 )
 
 # Per-injector cap so one slow/hung script can't freeze session start. Use

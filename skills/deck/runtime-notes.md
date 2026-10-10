@@ -1,3 +1,28 @@
+## session: v6 system of records proposal deck [sor-plan-7f] · 2026-09-28
+
+**Purpose:** a thirteen-slide alignment deck for the CEO, PM, and engineers, built from a nine-doc planning suite and a working mock, in-project at sor/deck.
+
+**Insights:**
+- The outline dropped the second-problem slide and the honest-numbers slide; the mock slide carries the one number (28 checks) and its notes carry what is not built. The diagram sits sixth, after the definition and requirements, because the argument had to be made before the picture.
+- lint went 3 to 0 in one pass, all on one slide: nine principles as bullets became a two-column table, and "import, run, and export" became "every run".
+- Two side-by-side 2880px screenshots in a flex row overflowed sideways and were unreadable; one full-width screenshot with object-fit cover and max-height reads.
+- A leave line said "four paying customers" where the source says three paying and one on speculation; caught by reading the screenshot, not by any script.
+
+---
+
+## session: foundry and walmart deck [forge-brains] · 2026-09-05
+
+**Purpose:** a fourteen-slide briefing on the walmart port, built from the plan of record, integration's audit, the parity and cutover pages and the caller contract.
+
+**Insights:**
+- The outline dropped the second-problem slide and moved the diagram to third; the argument had to open before the picture.
+- render.py read a store row id written as `#637` as a hex colour literal; write row numbers as words or `row 637`.
+- lint went 14 to 0 in one pass: eight bullets over 140 chars, two slides over 90 words, one numbers slide with no source word. The cure was splitting sentences and moving the source phrase into the notes, and the render then flagged the slide the extra bullet pushed over budget.
+- The opus reviewer returned 104 rows, 97 supported: one contradiction (a heading said four rungs done, the table said three), four overstatements (a stale test count in the present tense, "five things" the runbook counts as six, "the same copy" where only bytes are proven, "every row" where only walmart's rows were driven live), two unsourced presenter notes. Every one was in the author's own summarising words, never in a quoted number.
+- The reviewer spot-checked the audit's code citations and found one loose line range; a deck that cites an audit inherits the audit's anchors.
+
+---
+
 ## session: versable-canon deck rebuild [vb-fable] · 2026-08-18
 
 **Purpose:** rebuilt the versable-builder canon deck from the previous night's deck as material only, on the updated skill.

@@ -29,6 +29,8 @@ GUARDS=(
   "$H/hooks/guard-system-dir-writes.sh"        # /usr, /etc, ~/Library ...
   "$H/hooks/block-curl-post-auth.sh"           # no credentialed POSTs from a seat
   "$H/hooks/guard-github-agent-marker.sh"      # gh comments carry the agent marker
+  "$H/hooks/guard-policy.sh"                   # the owner's allow/block policy (gh, wrangler, vercel, models)
+  "$H/hooks/guard-policy-store.sh"             # agents never change the policy store
 )
 
 contexts=()

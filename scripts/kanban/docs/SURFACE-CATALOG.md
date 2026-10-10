@@ -124,7 +124,9 @@ cards, section cards, and the end-of-form notes card.
 **Does.** Pick an option (click or digits 1 to 9), pick a visual variant from a
 gallery, reject them all via the built-in none, agree or disagree a section,
 note any item, filter to flagged only, preview the answer, reset, copy, submit.
-Images zoom against a scrim wherever they appear.
+Images zoom inline: a click widens the image to the card's full width in place,
+a second click (or Escape for all) collapses it, and any number stay open at
+once (owner ruling 2026-10-01, replacing the scrim modal).
 
 **Rules.** The answer contract is the retired `:5197` template's, verbatim.
 `data-digits="own"` claims the number keys so the kind tabs cannot steal them.

@@ -1,6 +1,6 @@
-"""Live check: a real interactive Claude session arms the keep-warm cron, gets
-woken, does its upkeep, and stops. Uses Haiku, a 1-minute cron and a 1-minute
-due time, in a throwaway folder. Takes about 4 minutes and a few cents.
+"""Live check: a real interactive Claude session arms the keep-warm one-shot,
+gets woken by it, does its upkeep, and stops. Uses Haiku and a 1-minute due
+time, in a throwaway folder. Takes about 4 minutes and a few cents.
 
 Run: python3 ~/.claude/scripts/keepwarm/keepwarm-live.test.py
 """
@@ -14,7 +14,7 @@ T = tempfile.mkdtemp(prefix="kw-live-")
 KWDIR = os.path.join(T, "kw")
 SWITCH = os.path.join(T, "on")
 open(SWITCH, "w").close()
-env = dict(os.environ, KEEPWARM_DIR=KWDIR, KEEPWARM_SWITCH=SWITCH, KEEPWARM_CRON="* * * * *",
+env = dict(os.environ, KEEPWARM_DIR=KWDIR, KEEPWARM_SWITCH=SWITCH,
            KEEPWARM_DUE_MIN="1", TERM="xterm-256color")
 
 master, slave = pty.openpty()

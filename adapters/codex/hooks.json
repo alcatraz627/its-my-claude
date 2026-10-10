@@ -37,6 +37,17 @@
             "statusMessage": "gcc guards"
           }
         ]
+      },
+      {
+        "matcher": "^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/adapters/codex/hooks/pre-tool-patch.py",
+            "timeout": 10,
+            "statusMessage": "gcc patch targets"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -50,6 +61,17 @@
             "timeout": 60
           }
         ]
+      },
+      {
+        "matcher": "^Bash$|^apply_patch$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/adapters/codex/hooks/turn-guard.py post",
+            "timeout": 10,
+            "statusMessage": "gcc turn evidence"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -59,6 +81,16 @@
             "type": "command",
             "command": "bash ~/.claude/adapters/codex/hooks/stop.sh",
             "timeout": 30
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/adapters/codex/hooks/turn-guard.py stop",
+            "timeout": 10,
+            "statusMessage": "gcc completion checks"
           }
         ]
       }

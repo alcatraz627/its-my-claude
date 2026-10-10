@@ -1,4 +1,30 @@
+## bloop: speedway PR 81 pause/metering fixes [speedway 767522fd] 2026-09-24
+
+**Purpose:** build eight owner-ruled fixes from an adversarial PR review and gate them with one opus validator.
+
+**Insights:**
+
+1. The gate's best finding was a bug the fix itself made reachable: letting a pausing job take its scrape delivery exposed a resume path that skipped parts. Ask the validator to attack "what did this change newly make reachable", not only "is the change right".
+2. A suite that passes on the first run proved two guards were never exercised: the validator broke them and the suite stayed green. Break every new guard yourself before dispatching the gate; it is one script and saves a round.
+3. A guard that lives at a call site (a flag computed in two modules) cannot be mutation-tested from the suite. Pulling the rule into one exported helper made it testable and removed the drift risk in one move.
+4. The validator could not write its report file; extracting the longest assistant text from its transcript JSONL with a short script persisted it reliably.
+
+---
+
 ## bloop: gcc-map v4 follow-through batch (gcc-map-7e, 2026-09-05 14:55)
+
+## bloop: codex hands-seat loop [codex-gcc-7a] 2026-09-11
+
+**Purpose:** build the Codex hands loop (usage gate, committed brief, PostToolUse steering, review packet, first real run, magi model-mix) and gate it.
+
+**Insights:**
+
+1. The validator found both blockers in the launcher, not in the hooks I had tested to death: the plan's own default ("prose-only dispatch is refused") had no code behind it. Attack lists should include every "Defaults applied" line as a claim to attack; this one was in the prompt and it paid.
+2. A reviewer's naive mutation (`s/Verified/Vxrified/`) stayed green because it rewrote the fixture too. Mutate the logic line, never the string both sides share.
+3. The first real run's rework was a brief defect, not a build defect: the seat followed the attribution rule as written. A reviewer who re-runs the checks on real data catches the spec, which a seat cannot.
+4. A codex seat's `--self-test` plus a reviewer mutation is a cheap, honest gate for a 300-line script; no fixture directory needed.
+
+---
 
 Purpose: ship eight of the map's twelve recommendations plus the async-hook
 canary and gate 1a, with one adversarial sonnet gate over the whole batch.

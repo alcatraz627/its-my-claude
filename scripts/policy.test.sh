@@ -31,6 +31,6 @@ lim 95; out=$(run fable --json); printf '%s' "$out" | jq -e '.tier=="STRONG" and
 out=$(run nope 2>&1); rc=$?; [ "$rc" -eq 64 ] && ok "unknown lane refuses" || bad "unknown lane rc $rc"
 
 echo "== MUTATION: without the 90 branch, 95 reads WARN =="
-sed 's/-gt 90/-gt 990/' "$P" > "$T/mut.sh"; lim 95
+sed 's/-gt "\$fs"/-gt 990/' "$P" > "$T/mut.sh"; lim 95
 out=$(POLICY_LIMITS="$T/limits.json" bash "$T/mut.sh" fable); [[ "$out" == WARN* ]] && ok "mutant drops to WARN, so the STRONG branch is load-bearing" || bad "mutant: $out"
 echo "---- pass=$pass fail=$fail"; [ "$fail" -eq 0 ]

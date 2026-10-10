@@ -1,0 +1,362 @@
+#!/usr/bin/env python3
+"""gs: write to the goal record. The one write path for what is left.
+
+  gs new "<outcome>" --accept "<kind>: <text>" [--accept …] [--project a,b] [--direction "…"]
+                                        creates the record (or links the same outcome) and arms it for this session
+  gs accept <g> "<kind>: <text>"        add an acceptance row  (kinds: visual functional deployed reviewed other)
+  gs prove <g> <aN> --by "<instrument>" mark an acceptance row proven, naming what proved it
+  gs milestone <g> "<state>"            a STATE, true or false after "Right now,"; at least three letters
+  gs task <g> <mN> "<subject>" [--gate "USER: …" --do "…"] [--lane L] [--tier T] [--kind K] [--blocked-by 3,4] [--note "…"] [--desc "…"]
+  gs start|review|defer|ready <g> <id>  move a row (active · review · deferred · ready)
+  gs delegate <g> <id> --to <agent>     hand a row to a seat; `gs ready` takes it back
+  gs gate <g> <id> "USER: …" --do "…"   put a row on the owner; `gs ungate <g> <id>` clears it
+  gs closure <g> <id> "<why>" [--clear] mark closure pain: the known finalization hassle (deploy, migration,
+                                        review round, smoke check) the agent must make space for, never skip
+  gs close <g> <id> --by "<instrument>" done, naming the proof (true = ran it, prod = seen live, false = nothing did)
+  gs met <g> --by "<instrument>"        refuses while rows are open or acceptance is unproven; archives
+  gs fold <g> <src> into <dst>          move a milestone's rows (mN) or one row (#N) under another milestone; the empty milestone goes
+  gs drop <g> [<mN>|<id>] --why "…"     drop a goal, a milestone (and its rows), or a row
+  gs park|revive <g>                    take a goal out of path, or bring it back
+  gs note <g> [goal|mN|id] "<text>"     an ephemeral handoff: no state, consumed on first read
+  gs notes <g>                          print and consume unconsumed notes
+  gs adopt <g> <mN> --session <sid8> [ids…]   lift rows from the agent's session store onto the goal
+  gs link <g>                           point this session at an existing goal (writes goal.sh's pointer)
+  gs import-callouts <g> [--surface s]  the owner's /callouts review findings become acceptance rows
+  gs list [--all] [--project X] [--archived]
+  gs show <g> [--json]
+  gs sweep                              park goals idle 30 days; prints what it parked
+Exit: 0 ok · 2 refused (message names the acceptable set) · 3 no session id where one is needed.
+"""
+import argparse, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import goalstore as G
+
+SID = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
+
+
+def die(msg, code=2):
+    print(f"gs: {msg}", file=sys.stderr); sys.exit(code)
+
+
+def need_sid():
+    if not SID: die("no session id (CLAUDE_CODE_SESSION_ID unset)", 3)
+    return SID
+
+
+def g_of(ref):
+    try: return G.load(G.resolve(ref))
+    except G.GoalError as e: die(str(e))
+
+
+def say(rec, what):
+    print(f"{what}  ·  goal {rec['id']} “{rec['outcome'][:60]}{'…' if len(rec['outcome']) > 60 else ''}”")
+
+
+def cmd_new(a):
+    projects = [G.repo_root(p) if p != "gcc" else os.path.join(os.path.expanduser("~"), ".claude")
+                for p in (a.project.split(",") if a.project else [])]
+    if not projects: projects = [G.repo_root()]
+    try:
+        rec, created = G.new_goal(a.outcome, a.accept or [], projects, a.direction, SID or None, os.getcwd())
+        if SID: G.link(rec, SID, os.getcwd(), by=a.by); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, "new goal" if created else "linked existing goal (same outcome)")
+    for x in rec["accept"]: print(f"   ✅ {x['id']} {x['kind']}: {x['text']}")
+    print(f"/goal {rec['outcome']}")
+
+
+def cmd_accept(a):
+    rec = g_of(a.goal)
+    try: x = G.add_accept(rec, a.spec); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"acceptance {x['id']} {x['kind']}: {x['text']}")
+
+
+def cmd_prove(a):
+    rec = g_of(a.goal)
+    try: x = G.prove(rec, a.aid, a.by); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"proven {x['id']} by: {x['evidence']}")
+
+
+def cmd_milestone(a):
+    rec = g_of(a.goal)
+    try: m = G.add_milestone(rec, a.name, a.emoji); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"milestone {m['id']}: {m['name']}")
+
+
+def cmd_task(a):
+    rec = g_of(a.goal)
+    bb = [x.strip() for x in a.blocked_by.split(",")] if a.blocked_by else []
+    try:
+        t = G.add_task(rec, a.milestone, a.subject, SID or None, gate=a.gate, do=a.do, lane=a.lane,
+                       tier=a.tier, kind=a.kind, domain=a.domain, blocked_by=bb, note=a.note, desc=a.desc)
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"#{t['id']} under {t['milestone']}: {t['subject']}  [{G.effective_state(t, rec)}]")
+    if t.get("note") and len(a.subject) > G.SUBJECT_MAX:
+        print(f"   subject cut at a word under {G.SUBJECT_MAX}; the tail is in the note")
+
+
+def _move(a, state, by=None, to=None):
+    rec = g_of(a.goal)
+    try:
+        t = G.set_state(rec, a.id, state, by=by, delegated_to=to)
+        if state == "done": G.close_milestones_whose_rows_are_done(rec)
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"#{t['id']} → {state}: {t['subject']}")
+
+
+def cmd_close(a):
+    if not a.by.strip(): die("--by names the instrument (true = ran it, prod = seen live, false = nothing did, plus why)")
+    _move(a, "done", by=a.by)
+
+
+def cmd_gate(a):
+    rec = g_of(a.goal)
+    try: t = G._find(rec["tasks"], a.id, "task"); G.set_gate(t, a.text, a.do); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"#{t['id']} gated: {t['gate']['text']}  » {t['gate']['do']}")
+
+
+def cmd_closure(a):
+    rec = g_of(a.goal)
+    try:
+        t = G._find(rec["tasks"], a.id, "task")
+        if a.clear: G.clear_closure(t); what = f"#{t['id']} closure pain cleared"
+        else: G.set_closure(t, a.why or ""); what = f"#{t['id']} 🧷 closure pain: {t['closure']}"
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, what)
+
+
+def cmd_ungate(a):
+    rec = g_of(a.goal)
+    try: t = G._find(rec["tasks"], a.id, "task"); G.clear_gate(t); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"#{t['id']} gate cleared")
+
+
+def cmd_met(a):
+    rec = g_of(a.goal)
+    try: G.met(rec, a.by); G.archive(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"MET by: {a.by} · archived with {len(rec['tasks'])} rows")
+
+
+def cmd_fold(a):
+    rec = g_of(a.goal)
+    try:
+        dst = G._find(rec["milestones"], a.dst, "milestone")["id"]
+        if a.src.startswith("m"):
+            src = G._find(rec["milestones"], a.src, "milestone")
+            moved = [t for t in rec["tasks"] if t["milestone"] == src["id"]]
+            for t in moved: t["milestone"] = dst
+            rec["milestones"] = [m for m in rec["milestones"] if m["id"] != src["id"]]
+            what = f"{len(moved)} row(s) of {src['id']} folded into {dst}; {src['id']} removed"
+        else:
+            t = G._find(rec["tasks"], a.src.lstrip("#"), "task"); t["milestone"] = dst
+            what = f"#{t['id']} moved under {dst}"
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, what)
+
+
+def cmd_drop(a):
+    rec = g_of(a.goal)
+    if not a.why.strip(): die("--why is required: a drop says why")
+    try:
+        if not a.target:
+            G.drop(rec, a.why); G.archive(rec); say(rec, "dropped and archived"); return
+        if a.target.startswith("m"):
+            m = G._find(rec["milestones"], a.target, "milestone")
+            n = len([t for t in rec["tasks"] if t["milestone"] == m["id"]])
+            rec["tasks"] = [t for t in rec["tasks"] if t["milestone"] != m["id"]]
+            rec["milestones"] = [x for x in rec["milestones"] if x["id"] != m["id"]]
+            what = f"milestone {m['id']} and {n} row(s) dropped: {a.why}"
+        else:
+            t = G._find(rec["tasks"], a.target.lstrip("#"), "task")
+            rec["tasks"] = [x for x in rec["tasks"] if x["id"] != t["id"]]
+            for x in rec["tasks"]: x["blocked_by"] = [b for b in x["blocked_by"] if b != t["id"]]
+            what = f"#{t['id']} dropped: {a.why}"
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, what)
+
+
+def cmd_park(a):
+    rec = g_of(a.goal); rec["status"] = "parked"; rec["parked_at"] = G.now(); rec["parked_why"] = "by hand"
+    G.save(rec); say(rec, "parked")
+
+
+def cmd_revive(a):
+    rec = g_of(a.goal)
+    if rec.get("_archived"): die("archived goals do not revive; start a new goal with the same outcome and adopt what you need")
+    rec["status"] = "live"; G.save(rec); say(rec, "revived")
+
+
+def cmd_note(a):
+    rec = g_of(a.goal)
+    try: n = G.add_note(rec, a.on, a.text, SID or None); G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"note {n['id']} on {n['on']}: {n['text']}")
+
+
+def cmd_notes(a):
+    rec = g_of(a.goal)
+    notes = G.consume_notes(rec)
+    if not notes: print("no unconsumed notes"); return
+    G.save(rec)
+    for n in notes: print(f"📝 {n['on']}: {n['text']}   ({n['created'][:10]}{', by ' + n['by'][:8] if n['by'] else ''})")
+
+
+def cmd_adopt(a):
+    rec = g_of(a.goal)
+    store = os.path.join(os.path.expanduser("~"), ".claude", "tasks", f"session-{a.session[:8]}")
+    if not os.path.isdir(store): die(f"no session store at {store}")
+    rows = []
+    for f in sorted(os.listdir(store), key=lambda x: int(x.split(".")[0]) if x.split(".")[0].isdigit() else 0):
+        if not f.endswith(".json") or not f[0].isdigit(): continue
+        j = json.load(open(os.path.join(store, f)))
+        if a.ids and str(j.get("id")) not in a.ids: continue
+        if j.get("status") == "completed" and not a.ids: continue
+        rows.append(j)
+    if not rows: die("nothing to adopt (open rows only unless ids are named)")
+    try:
+        for j in rows:
+            m = j.get("metadata") or {}
+            gate = m.get("blocked_on") if str(m.get("blocked_on", "")).startswith("USER:") else None
+            t = G.add_task(rec, a.milestone, j["subject"], a.session[:8], gate=gate, do=(gate or "")[5:].strip() or None,
+                           lane=m.get("lane"), tier=m.get("tier") if m.get("tier") in G.TIERS else None,
+                           kind=m.get("class"), domain=m.get("domain"), note=m.get("note"), desc=j.get("description") or None,
+                           state="done" if j.get("status") == "completed" else ("active" if j.get("status") == "in_progress" else "ready"))
+            t["adopted_from"] = f"session-{a.session[:8]}#{j['id']}"
+        G.save(rec)
+    except G.GoalError as e: die(str(e))
+    say(rec, f"adopted {len(rows)} row(s) from session-{a.session[:8]} under {a.milestone}")
+
+
+def cmd_import_callouts(a):
+    """The owner's review findings become acceptance rows: what they said was wrong is what accepted means."""
+    rec = g_of(a.goal)
+    store = os.environ.get("CALLOUTS_STORE")
+    if not store:
+        root = G.repo_root()
+        home_claude = os.path.join(os.path.expanduser("~"), ".claude")
+        store = os.path.join(home_claude, "callouts.jsonl") if os.path.realpath(root) == os.path.realpath(home_claude) else os.path.join(root, ".claude", "callouts.jsonl")
+    if not os.path.exists(store): die(f"no callouts store at {store}")
+    kinds = {"visual": "visual", "technical": "functional", "behavior": "functional", "literary": "other"}
+    have = {x.get("source") for x in rec["accept"]}
+    n = 0
+    for line in open(store):
+        try: c = json.loads(line)
+        except ValueError: continue
+        if a.surface and c.get("surface") != a.surface: continue
+        if f"callout:{c['id']}" in have: continue
+        x = G.add_accept(rec, {"kind": kinds.get(c.get("category"), "other"), "text": f"{c.get('surface')}: {c.get('words')}"})
+        x["source"] = f"callout:{c['id']}"
+        passed = [r for r in c.get("rechecks", []) if r.get("result") == "pass"]
+        if c.get("status") == "retired" and passed:
+            x.update(evidence=f"callout {c['id']} retired by owner; recheck: {passed[-1].get('evidence') or 'pass'}", status="proven", proven_at=G.now())
+        n += 1
+    if not n: die("nothing new to import (every callout is already an acceptance row here)")
+    G.save(rec)
+    say(rec, f"imported {n} callout(s) as acceptance rows from {store}")
+
+
+def cmd_link(a):
+    rec = g_of(a.goal); sid = need_sid()
+    G.link(rec, sid, os.getcwd()); G.save(rec)
+    say(rec, f"session {sid[:8]} linked"); print(f"/goal {rec['outcome']}")
+
+
+def cmd_list(a):
+    goals = G.all_goals(include_archived=a.archived) if a.all or a.archived else G.in_scope(SID or None, os.getcwd(), a.project)
+    if not goals:
+        print("no live goal here. Start one:  gs new \"<outcome>\" --accept \"functional: <what you will check>\""); return
+    for r in goals:
+        open_n = len([t for t in r["tasks"] if t["state"] != "done"])
+        proven = len([x for x in r["accept"] if x["status"] == "proven"])
+        d, v = G.drift(r)
+        print(f"{r['id']}  {r['status']:<7} {v:<9} accept {proven}/{len(r['accept'])}  rows open {open_n}/{len(r['tasks'])}  {r['outcome'][:70]}")
+
+
+def cmd_show(a):
+    rec = g_of(a.goal)
+    if a.json:
+        out = dict(rec); out["containment"] = G.containment(rec)
+        out["effective"] = {t["id"]: G.effective_state(t, rec) for t in rec["tasks"]}
+        print(json.dumps(out, indent=2, ensure_ascii=False)); return
+    print(f"{rec['id']}  {rec['status']}  {rec['outcome']}")
+    if rec.get("direction"): print(f"  🧭 {rec['direction']}")
+    for x in rec["accept"]:
+        print(f"  {'✅' if x['status'] == 'proven' else '◻︎'} {x['id']} {x['kind']}: {x['text']}" + (f"  · by {x['evidence']}" if x['evidence'] else ""))
+    print(f"  projects: {', '.join(os.path.basename(p) for p in rec['projects']) or 'none'}   sessions: {', '.join(s[:8] for s in rec['sessions']) or 'none'}")
+    for m in rec["milestones"]:
+        print(f"  ▸ {m['id']} [{m['status']}] {m['name']}")
+        for t in rec["tasks"]:
+            if t["milestone"] != m["id"]: continue
+            st = G.effective_state(t, rec)
+            extra = f"  » {t['gate']['do']}" if t.get("gate") else ""
+            print(f"      #{t['id']:<3} {st:<10} {t['subject']}{extra}")
+    for n in G.unconsumed_notes(rec): print(f"  📝 {n['on']}: {n['text']}")
+    c = G.containment(rec)
+    print("  " + ("MAY CLOSE: nothing stands between here and met" if not c else "to met: " + " · ".join(c)))
+
+
+def cmd_sweep(a):
+    parked = []
+    for r in G.all_goals():
+        if G.park_due(r): G.save(r); parked.append(r)
+    for r in parked: say(r, f"parked: {r['parked_why']}")
+    if not parked: print("nothing to park")
+
+
+def main():
+    p = argparse.ArgumentParser(prog="gs", add_help=False)
+    p.add_argument("-h", "--help", action="store_true")
+    sub = p.add_subparsers(dest="cmd")
+    s = sub.add_parser("new"); s.add_argument("outcome"); s.add_argument("--accept", action="append"); s.add_argument("--project"); s.add_argument("--direction"); s.add_argument("--by", default="agent")
+    s = sub.add_parser("accept"); s.add_argument("goal"); s.add_argument("spec")
+    s = sub.add_parser("prove"); s.add_argument("goal"); s.add_argument("aid"); s.add_argument("--by", required=True)
+    s = sub.add_parser("milestone"); s.add_argument("goal"); s.add_argument("name"); s.add_argument("--emoji")
+    s = sub.add_parser("task"); s.add_argument("goal"); s.add_argument("milestone"); s.add_argument("subject")
+    for f in ("--gate", "--do", "--lane", "--tier", "--kind", "--domain", "--blocked-by", "--note", "--desc"): s.add_argument(f)
+    for name in ("start", "review", "defer", "ready"):
+        s = sub.add_parser(name); s.add_argument("goal"); s.add_argument("id")
+    s = sub.add_parser("delegate"); s.add_argument("goal"); s.add_argument("id"); s.add_argument("--to", required=True)
+    s = sub.add_parser("gate"); s.add_argument("goal"); s.add_argument("id"); s.add_argument("text"); s.add_argument("--do", required=True)
+    s = sub.add_parser("ungate"); s.add_argument("goal"); s.add_argument("id")
+    s = sub.add_parser("closure"); s.add_argument("goal"); s.add_argument("id"); s.add_argument("why", nargs="?"); s.add_argument("--clear", action="store_true")
+    s = sub.add_parser("close"); s.add_argument("goal"); s.add_argument("id"); s.add_argument("--by", required=True)
+    s = sub.add_parser("met"); s.add_argument("goal"); s.add_argument("--by", required=True)
+    s = sub.add_parser("fold"); s.add_argument("goal"); s.add_argument("src"); s.add_argument("into_"); s.add_argument("dst")
+    s = sub.add_parser("drop"); s.add_argument("goal"); s.add_argument("target", nargs="?"); s.add_argument("--why", required=True)
+    for name in ("park", "revive", "notes", "link"):
+        s = sub.add_parser(name); s.add_argument("goal")
+    s = sub.add_parser("note"); s.add_argument("goal"); s.add_argument("on"); s.add_argument("text", nargs="?")
+    s = sub.add_parser("adopt"); s.add_argument("goal"); s.add_argument("milestone"); s.add_argument("--session", required=True); s.add_argument("ids", nargs="*")
+    s = sub.add_parser("import-callouts"); s.add_argument("goal"); s.add_argument("--surface")
+    s = sub.add_parser("list"); s.add_argument("--all", action="store_true"); s.add_argument("--project"); s.add_argument("--archived", action="store_true")
+    s = sub.add_parser("show"); s.add_argument("goal"); s.add_argument("--json", action="store_true")
+    sub.add_parser("sweep")
+    a = p.parse_args()
+    if a.help or not a.cmd:
+        print(__doc__.strip()); sys.exit(0 if a.help else 2)
+    if a.cmd == "note" and a.text is None:
+        a.text, a.on = a.on, "goal"
+    fn = {"new": cmd_new, "accept": cmd_accept, "prove": cmd_prove, "milestone": cmd_milestone, "task": cmd_task,
+          "start": lambda a: _move(a, "active"), "review": lambda a: _move(a, "review"),
+          "defer": lambda a: _move(a, "deferred"), "ready": lambda a: _move(a, "ready"),
+          "delegate": lambda a: _move(a, "delegated", to=a.to),
+          "gate": cmd_gate, "ungate": cmd_ungate, "closure": cmd_closure, "close": cmd_close, "met": cmd_met, "fold": cmd_fold,
+          "drop": cmd_drop, "park": cmd_park, "revive": cmd_revive, "note": cmd_note, "notes": cmd_notes,
+          "adopt": cmd_adopt, "link": cmd_link, "list": cmd_list, "show": cmd_show, "sweep": cmd_sweep,
+          "import-callouts": cmd_import_callouts}[a.cmd]
+    fn(a)
+
+
+if __name__ == "__main__":
+    main()

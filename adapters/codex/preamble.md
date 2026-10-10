@@ -30,12 +30,28 @@ into you (details in `~/.claude/features/codex-adapter.md`):
   POSTs). A block is final; do not route around it.
 - `~/.codex/rules/gcc.rules` forbids `rm`, force pushes, `git reset --hard`,
   `git clean`, and prompts on `git push`, `--amend`, `rebase`.
+- Codex session events enter i-dream through the registered `codex-sessions`
+  domain. SessionStart carries atone guidance; the owner-controlled dream opt-in
+  also enables ranked dream guidance and one first-prompt re-rank.
 
 **Does not apply.** The WAL, the statusline, sub-agent dispatch rules, `context:
-fork`, the Task tool, the dream and atone LOOPS (you may write an event; the
-loops that graduate events into rules are Claude's). When a document explains how
-one of those works, that is background about the owner's other tooling, not an
-instruction to you. Do not emulate it.
+fork`, the Task tool, and the background dream and atone loops. Codex contributes
+records and reads their guidance through the adapter; Claude's services run the
+loops that graduate events. When a document explains those services, treat it as
+background. Do not emulate the daemons or their writes.
+
+**Codex task progress.** For multi-step work, use the `codex-task-ledger` skill
+and `codex_tasks` MCP tools as your live session checklist. Read the full
+`CODEX_THREAD_ID` from the environment. Create actionable tasks when work starts,
+keep one in progress, and record concrete evidence as tasks finish. Add a behavior
+goal only when the work has an expected system outcome and a correctness check;
+completed tasks alone do not complete that goal. This ledger is separate from
+native `/goal`.
+
+**Past local sessions.** When the owner asks what a Codex or Claude Code agent
+said, tried, decided, or missed, use the `local-transcripts` skill. It searches
+both local transcript corpora and returns exact source locations. Open a matching
+turn before drawing a conclusion. ChatGPT web history is outside this route.
 
 ## Read protocol
 
@@ -97,14 +113,16 @@ bash ~/.claude/adapters/codex/bin/gcc <verb> <the underlying tool's own args>
   propose     propose.sh:   add --title "..." --body "..." --category hooks|scripts|skills|config|docs|other --effort small|medium|large
   atone       atone.sh:     add --slug <kebab> --title "..." --issue "..." --cause "..." --fix "..." --what-not "..." --severity S1|S2|S3
   affirm      affirm.sh:    add --slug ... --title ... --behavior ... --why-good ... --trigger-condition ... --instruction ...
-  pin         i-dream pin:  add "<insight>"
+  pin         i-dream pin:  add "<insight>" [--file /abs/path:lineA-lineB]
+  canon       check|apply /absolute/manifest.json (apply only after owner reviews exact placement)
   checkpoint  <handback-path> "<one-line summary>"
   ledger      ledger.sh (read-only):  list · search <q> · show <id>
 ```
 
-It re-keys the environment to YOUR session, stamps `src:codex` on what you file,
-runs the call directly when the sandbox allows, and otherwise queues it; a hook
-applies the queue within seconds and the receipt appears at your next turn. Your
+It re-keys the environment to YOUR session, stamps `src:codex` on ledger events,
+runs the call directly when the sandbox allows, and otherwise queues ledger and IPC
+calls; a hook applies that queue within seconds. `canon apply` never queues: use
+filesystem escalation only after the owner reviews the exact placement. Your
 claude-ipc alias is `cx-<dir>-<id8>` (the session-start briefing names it);
 peers' mail is injected at each of your turns, so you never need to poll.
 

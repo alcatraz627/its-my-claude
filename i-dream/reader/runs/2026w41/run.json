@@ -1,0 +1,583 @@
+{
+  "week": "2026w41",
+  "at": "2026-10-06T10:00:21.566984Z",
+  "forwarded": [
+    {
+      "id": "c-6d0e94f9",
+      "kind": "session-cluster",
+      "key": "14d3a276-2860-4bac-88a4-f063e4763eaf",
+      "summary": "Session 14d3a276 in enhancement-product: the owner corrected the agent, a mistake was recorded (External RCA written as vague euphemism with invented actors and anonymized facts)",
+      "evidence": [
+        "atone:mist-20261005-094856-da",
+        "checkpoints:ckpt-de90b119b8c3eec8",
+        "proposals:prop-20261005-131047-6b",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791180688",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791189826",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791193682",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791205785"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-05T06:11:28.966447Z",
+      "last_ts": "2026-10-05T13:12:46Z",
+      "score": 34.31
+    },
+    {
+      "id": "c-2d8458a5",
+      "kind": "repeat",
+      "key": "ai-smell-prose-against-stored-voice",
+      "summary": "'ai-smell-prose-against-stored-voice' came up 8 times from 2 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20260915-085009-af",
+        "atone:mist-20260915-193139-4c",
+        "atone:mist-20260923-205807-2e",
+        "atone:mist-20260930-222509-5b",
+        "atone:mist-20261005-094856-da",
+        "proposals:prop-20260915-085123-e3",
+        "proposals:prop-20260923-205914-d3",
+        "proposals:prop-20260924-043211-1c",
+        "proposals:prop-20260930-222530-a3"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "agent",
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-15T08:50:09Z",
+      "last_ts": "2026-10-05T09:48:56Z",
+      "score": 29.4
+    },
+    {
+      "id": "c-ab3c677c",
+      "kind": "repeat",
+      "key": "dense-briefing-instead-of-a-direct-answer",
+      "summary": "'dense-briefing-instead-of-a-direct-answer' came up 9 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260908-180453-cc",
+        "atone:mist-20260908-203220-d9",
+        "atone:mist-20260909-103747-9c",
+        "atone:mist-20260909-104542-4b",
+        "atone:mist-20260918-100708-b7",
+        "atone:mist-20260918-112842-f1",
+        "atone:mist-20260918-125452-7f",
+        "atone:mist-20260930-195512-08",
+        "atone:mist-20261006-091256-09",
+        "proposals:prop-20261006-091507-68"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-08T18:04:53Z",
+      "last_ts": "2026-10-06T09:15:07Z",
+      "score": 18.0
+    },
+    {
+      "id": "c-de1656a8",
+      "kind": "repeat",
+      "key": "named-the-next-work-then-stopped",
+      "summary": "'named-the-next-work-then-stopped' came up 8 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260908-180406-45",
+        "atone:mist-20260908-201547-e4",
+        "atone:mist-20260909-185043-71",
+        "atone:mist-20260916-133018-8e",
+        "atone:mist-20260922-102424-96",
+        "atone:mist-20260923-205235-b5",
+        "atone:mist-20261001-180714-c4",
+        "atone:mist-20261004-170654-a5",
+        "proposals:prop-20260910-163459-c9",
+        "proposals:prop-20260922-161646-46",
+        "proposals:prop-20261002-100811-67"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-08T18:04:06Z",
+      "last_ts": "2026-10-04T17:06:54Z",
+      "score": 14.54
+    },
+    {
+      "id": "c-81bd5cf3",
+      "kind": "session-cluster",
+      "key": "59214989-1b0b-41af-9a80-0e188e63251e",
+      "summary": "Session 59214989 in slack-automation: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Asked owner for a staging alias the standard already defines as branches.dev)",
+      "evidence": [
+        "atone:mist-20261005-102858-a4",
+        "atone:mist-20261005-131656-d2",
+        "checkpoints:ckpt-512732b51826cbd5",
+        "signals:59214989-1b0b-41af-9a80-0e188e63251e-1791188964"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-05T08:29:24.254280Z",
+      "last_ts": "2026-10-05T13:23:16Z",
+      "score": 9.65
+    },
+    {
+      "id": "c-0d4db80b",
+      "kind": "repeat",
+      "key": "declared-ready-without-runtime-exercise",
+      "summary": "'declared-ready-without-runtime-exercise' came up 5 times from 1 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20260916-164041-17",
+        "atone:mist-20260918-120258-b1",
+        "atone:mist-20260924-062138-cc",
+        "atone:mist-20260930-203407-4d",
+        "proposals:prop-20260918-120330-8c",
+        "proposals:prop-20260924-081531-6f",
+        "proposals:prop-20260930-224612-e0"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-16T16:40:41Z",
+      "last_ts": "2026-09-30T22:46:12Z",
+      "score": 8.09
+    },
+    {
+      "id": "c-929c72c4",
+      "kind": "session-cluster",
+      "key": "ad55395c-dc91-486c-8069-5ba80015e376",
+      "summary": "Session ad55395c in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-fa4b34a5ce60ac33",
+        "signals:ad55395c-dc91-486c-8069-5ba80015e376-1791208998",
+        "signals:ad55395c-dc91-486c-8069-5ba80015e376-1791230121"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-05T14:03:18.771765Z",
+      "last_ts": "2026-10-06T04:51:39Z",
+      "score": 6.22
+    },
+    {
+      "id": "c-b7855665",
+      "kind": "path-hotspot",
+      "key": "skills/gcc-mods/hooks/register.tsx",
+      "summary": "skills/gcc-mods/hooks/register.tsx is named by 2 event(s) in affirm, atone",
+      "evidence": [
+        "affirm:aff-20261006-080735-a4",
+        "atone:mist-20261006-082745-b9"
+      ],
+      "domains": [
+        "affirm",
+        "atone"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-06T08:07:35Z",
+      "last_ts": "2026-10-06T08:27:45Z",
+      "score": 5.57
+    },
+    {
+      "id": "c-1f725c61",
+      "kind": "repeat",
+      "key": "asked-owner-for-a-value-already-derivable",
+      "summary": "'asked-owner-for-a-value-already-derivable' came up 3 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260908-143224-0d",
+        "atone:mist-20261005-102858-a4",
+        "atone:mist-20261005-131656-d2"
+      ],
+      "domains": [
+        "atone"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-09-08T14:32:24Z",
+      "last_ts": "2026-10-05T13:16:56Z",
+      "score": 4.29
+    },
+    {
+      "id": "c-72dfc060",
+      "kind": "path-hotspot",
+      "key": "pr-board/app.py",
+      "summary": "pr-board/app.py is named by 3 event(s) in atone",
+      "evidence": [
+        "atone:mist-20260908-201547-e4",
+        "atone:mist-20260924-062138-cc",
+        "atone:mist-20261005-102858-a4"
+      ],
+      "domains": [
+        "atone"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-09-08T20:15:47Z",
+      "last_ts": "2026-10-05T10:28:58Z",
+      "score": 2.81
+    }
+  ],
+  "named": {
+    "items": [
+      {
+        "cluster": "c-2d8458a5",
+        "kind": "structural-need",
+        "title": "AI-smell prose keeps shipping",
+        "why": "8 independent atone events across em-dashes in owner replies, vague PR bodies, and audit-register RCAs show text reminders have not moved this count; guard-prose-quality.sh and guard-ai-signature.sh exist but the em-dash case specifically has no blocking Stop hook.",
+        "evidence_ids": [
+          "atone:mist-20261005-094856-da",
+          "atone:mist-20260930-222509-5b",
+          "atone:mist-20260923-205807-2e",
+          "atone:mist-20260915-193139-4c",
+          "proposals:prop-20260930-222530-a3",
+          "proposals:prop-20260915-085123-e3"
+        ],
+        "proposal": {
+          "target": "~/.claude/settings.json PostToolUse Stop hooks",
+          "change": "Register prose-smell-stop.sh as a Stop hook so em-dash and audit-register patterns block delivery rather than only recording after the fact."
+        }
+      },
+      {
+        "cluster": "c-ab3c677c",
+        "kind": "structural-need",
+        "title": "Dense briefings outnumber direct answers",
+        "why": "9 atone events for the same shape (status report leading with what-I-did, restatements of settled plans, word salad) despite the dense-briefing rule; dense-briefing-shapes-stop.sh exists on disk but rg finds zero registration in settings.json.",
+        "evidence_ids": [
+          "atone:mist-20261006-091256-09",
+          "atone:mist-20260930-195512-08",
+          "atone:mist-20260918-125452-7f",
+          "atone:mist-20260918-112842-f1",
+          "atone:mist-20260918-100708-b7",
+          "atone:mist-20260909-104542-4b",
+          "proposals:prop-20261006-091507-68"
+        ],
+        "proposal": {
+          "target": "~/.claude/settings.json PostToolUse Stop hooks",
+          "change": "Register dense-briefing-shapes-stop.sh (already at ~/.claude/scripts/hooks/dense-briefing-shapes-stop.sh) as a Stop hook — the script exists and has tests but is not wired."
+        }
+      },
+      {
+        "cluster": "c-de1656a8",
+        "kind": "structural-need",
+        "title": "Names next work then stops",
+        "why": "8 atone events for halting after narrating the next step despite never-halt-on-authority-you-hold being an always-loaded rule; named-next-work-stop.sh exists on disk but rg finds zero registration in settings.json.",
+        "evidence_ids": [
+          "atone:mist-20261004-170654-a5",
+          "atone:mist-20261001-180714-c4",
+          "atone:mist-20260923-205235-b5",
+          "atone:mist-20260922-102424-96",
+          "atone:mist-20260916-133018-8e",
+          "proposals:prop-20261002-100811-67",
+          "proposals:prop-20260922-161646-46"
+        ],
+        "proposal": {
+          "target": "~/.claude/settings.json PreToolUse or Stop hooks",
+          "change": "Register named-next-work-stop.sh as a Stop hook — the script and tests exist at ~/.claude/scripts/hooks/named-next-work-stop.sh but are not wired into settings.json."
+        }
+      },
+      {
+        "cluster": "c-0d4db80b",
+        "kind": "structural-need",
+        "title": "Declared done without running it",
+        "why": "5 atone events for claiming a path works without exercising it; declared-ready-stop.sh exists, rules/exercise-based-verification.md says it is muted by ~/.claude/.no-declared-ready-gate, but that mute file does not exist — meaning the gate is unregistered rather than deliberately silenced.",
+        "evidence_ids": [
+          "atone:mist-20260930-203407-4d",
+          "atone:mist-20260924-062138-cc",
+          "atone:mist-20260918-120258-b1",
+          "atone:mist-20260916-164041-17",
+          "proposals:prop-20260930-224612-e0",
+          "proposals:prop-20260918-120330-8c"
+        ],
+        "proposal": {
+          "target": "~/.claude/settings.json Stop hooks",
+          "change": "Register declared-ready-stop.sh as a Stop hook; the script exists at ~/.claude/scripts/hooks/declared-ready-stop.sh and the mute file ~/.claude/.no-declared-ready-gate is absent, so this is an unregistered gate, not a deliberately muted one."
+        }
+      },
+      {
+        "cluster": "c-6d0e94f9",
+        "kind": "repeat",
+        "title": "RCAs anonymize known facts",
+        "why": "The extractor blank-jobs RCA invented actor descriptions and removed named customers despite the facts being known; same session drew 4 owner corrections, indicating the writing pattern (vague euphemism) applies even when specifics are on hand.",
+        "evidence_ids": [
+          "atone:mist-20261005-094856-da",
+          "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791205785",
+          "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791193682"
+        ],
+        "proposal": {
+          "target": "~/.claude/skills/ste-writing/SKILL.md or rules/rca-writing.md",
+          "change": "Add an explicit constraint: when known actors, customers, or values are available, name them verbatim — anonymization is only for external-publication RCAs, never internal ones."
+        }
+      },
+      {
+        "cluster": "c-1f725c61",
+        "kind": "repeat",
+        "title": "Asks owner for derivable values",
+        "why": "3 atone events (staging alias already in config, owner blocker list contradicted by memory, registry token already held) show the agent surfaces questions without checking stored context or config files first.",
+        "evidence_ids": [
+          "atone:mist-20261005-131656-d2",
+          "atone:mist-20261005-102858-a4",
+          "atone:mist-20260908-143224-0d"
+        ],
+        "proposal": {
+          "target": "~/.claude/scripts/hooks/guard-lazy-question.sh",
+          "change": "Extend guard-lazy-question.sh to detect questions whose answer is resolvable from memory files or a single grep of the project config before the question reaches the owner."
+        }
+      },
+      {
+        "cluster": "c-b7855665",
+        "kind": "structural-need",
+        "title": "Prompt fill replaced owner text",
+        "why": "atone:mist-20261006-082745-b9 records that gcc-mods used mode:'replace' at 8 prompt-fill sites, destroying owner-typed text; affirm:aff-20261006-080735-a4 confirms the copy-path and attach escapes are the right pattern for other views.",
+        "evidence_ids": [
+          "atone:mist-20261006-082745-b9",
+          "affirm:aff-20261006-080735-a4"
+        ],
+        "proposal": {
+          "target": "skills/gcc-mods/hooks/register.tsx",
+          "change": "Change all 8 prompt-fill insertions from mode:'replace' to mode:'insert' (or 'append') so owner-typed content is preserved; treat replace as an explicit opt-in only when the button label makes overwrite semantics obvious."
+        }
+      },
+      {
+        "cluster": "c-81bd5cf3",
+        "kind": "noise",
+        "title": "Staging alias question already in config",
+        "why": "Covered by c-1f725c61 (asked for derivable value); the session-cluster framing adds no new pattern beyond what that repeat captures.",
+        "evidence_ids": [
+          "atone:mist-20261005-102858-a4",
+          "checkpoints:ckpt-512732b51826cbd5"
+        ]
+      },
+      {
+        "cluster": "c-929c72c4",
+        "kind": "noise",
+        "title": "Pending items in session dump",
+        "why": "Two owner corrections with pending items in core-dump is normal session volume with no distinguishing pattern beyond what c-ab3c677c and c-de1656a8 already cover.",
+        "evidence_ids": [
+          "checkpoints:ckpt-fa4b34a5ce60ac33",
+          "signals:ad55395c-dc91-486c-8069-5ba80015e376-1791230121"
+        ]
+      },
+      {
+        "cluster": "c-72dfc060",
+        "kind": "noise",
+        "title": "pr-board/app.py hotspot",
+        "why": "The three events span different slugs (staging-alias, declared-ready, prod landmine) that coincidentally touch the same file; no common failure mode internal to app.py itself is visible.",
+        "evidence_ids": [
+          "atone:mist-20261005-102858-a4",
+          "atone:mist-20260924-062138-cc",
+          "atone:mist-20260908-201547-e4"
+        ]
+      }
+    ],
+    "rejected": [],
+    "dropped_ids": 0,
+    "process_note": "Four stop hooks (declared-ready-stop.sh, named-next-work-stop.sh, dense-briefing-shapes-stop.sh, prose-smell-stop.sh) appear on disk with tests but are absent from settings.json. The weekly reader would be more useful if it diffed the hooks/ directory against the registered Stop/PostToolUse entries in settings.json and surfaced the gap directly as a 'unregistered gate' cluster type — this would have caught all four in one structural row rather than requiring per-cluster grepping."
+  },
+  "items": [
+    {
+      "cluster": "c-6d0e94f9",
+      "kind": "repeat",
+      "title": "RCAs anonymize known facts",
+      "why": "The extractor blank-jobs RCA invented actor descriptions and removed named customers despite the facts being known; same session drew 4 owner corrections, indicating the writing pattern (vague euphemism) applies even when specifics are on hand.",
+      "evidence_ids": [
+        "atone:mist-20261005-094856-da",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791205785",
+        "signals:14d3a276-2860-4bac-88a4-f063e4763eaf-1791193682"
+      ],
+      "proposal": {
+        "target": "~/.claude/skills/ste-writing/SKILL.md or rules/rca-writing.md",
+        "change": "Add an explicit constraint: when known actors, customers, or values are available, name them verbatim — anonymization is only for external-publication RCAs, never internal ones."
+      }
+    },
+    {
+      "cluster": "c-2d8458a5",
+      "kind": "structural-need",
+      "title": "AI-smell prose keeps shipping",
+      "why": "8 independent atone events across em-dashes in owner replies, vague PR bodies, and audit-register RCAs show text reminders have not moved this count; guard-prose-quality.sh and guard-ai-signature.sh exist but the em-dash case specifically has no blocking Stop hook.",
+      "evidence_ids": [
+        "atone:mist-20261005-094856-da",
+        "atone:mist-20260930-222509-5b",
+        "atone:mist-20260923-205807-2e",
+        "atone:mist-20260915-193139-4c",
+        "proposals:prop-20260930-222530-a3",
+        "proposals:prop-20260915-085123-e3"
+      ],
+      "proposal": {
+        "target": "~/.claude/settings.json PostToolUse Stop hooks",
+        "change": "Register prose-smell-stop.sh as a Stop hook so em-dash and audit-register patterns block delivery rather than only recording after the fact."
+      }
+    },
+    {
+      "cluster": "c-ab3c677c",
+      "kind": "structural-need",
+      "title": "Dense briefings outnumber direct answers",
+      "why": "9 atone events for the same shape (status report leading with what-I-did, restatements of settled plans, word salad) despite the dense-briefing rule; dense-briefing-shapes-stop.sh exists on disk but rg finds zero registration in settings.json.",
+      "evidence_ids": [
+        "atone:mist-20261006-091256-09",
+        "atone:mist-20260930-195512-08",
+        "atone:mist-20260918-125452-7f",
+        "atone:mist-20260918-112842-f1",
+        "atone:mist-20260918-100708-b7",
+        "atone:mist-20260909-104542-4b",
+        "proposals:prop-20261006-091507-68"
+      ],
+      "proposal": {
+        "target": "~/.claude/settings.json PostToolUse Stop hooks",
+        "change": "Register dense-briefing-shapes-stop.sh (already at ~/.claude/scripts/hooks/dense-briefing-shapes-stop.sh) as a Stop hook — the script exists and has tests but is not wired."
+      }
+    },
+    {
+      "cluster": "c-de1656a8",
+      "kind": "structural-need",
+      "title": "Names next work then stops",
+      "why": "8 atone events for halting after narrating the next step despite never-halt-on-authority-you-hold being an always-loaded rule; named-next-work-stop.sh exists on disk but rg finds zero registration in settings.json.",
+      "evidence_ids": [
+        "atone:mist-20261004-170654-a5",
+        "atone:mist-20261001-180714-c4",
+        "atone:mist-20260923-205235-b5",
+        "atone:mist-20260922-102424-96",
+        "atone:mist-20260916-133018-8e",
+        "proposals:prop-20261002-100811-67",
+        "proposals:prop-20260922-161646-46"
+      ],
+      "proposal": {
+        "target": "~/.claude/settings.json PreToolUse or Stop hooks",
+        "change": "Register named-next-work-stop.sh as a Stop hook — the script and tests exist at ~/.claude/scripts/hooks/named-next-work-stop.sh but are not wired into settings.json."
+      }
+    },
+    {
+      "cluster": "c-0d4db80b",
+      "kind": "structural-need",
+      "title": "Declared done without running it",
+      "why": "5 atone events for claiming a path works without exercising it; declared-ready-stop.sh exists, rules/exercise-based-verification.md says it is muted by ~/.claude/.no-declared-ready-gate, but that mute file does not exist — meaning the gate is unregistered rather than deliberately silenced.",
+      "evidence_ids": [
+        "atone:mist-20260930-203407-4d",
+        "atone:mist-20260924-062138-cc",
+        "atone:mist-20260918-120258-b1",
+        "atone:mist-20260916-164041-17",
+        "proposals:prop-20260930-224612-e0",
+        "proposals:prop-20260918-120330-8c"
+      ],
+      "proposal": {
+        "target": "~/.claude/settings.json Stop hooks",
+        "change": "Register declared-ready-stop.sh as a Stop hook; the script exists at ~/.claude/scripts/hooks/declared-ready-stop.sh and the mute file ~/.claude/.no-declared-ready-gate is absent, so this is an unregistered gate, not a deliberately muted one."
+      }
+    },
+    {
+      "cluster": "c-b7855665",
+      "kind": "structural-need",
+      "title": "Prompt fill replaced owner text",
+      "why": "atone:mist-20261006-082745-b9 records that gcc-mods used mode:'replace' at 8 prompt-fill sites, destroying owner-typed text; affirm:aff-20261006-080735-a4 confirms the copy-path and attach escapes are the right pattern for other views.",
+      "evidence_ids": [
+        "atone:mist-20261006-082745-b9",
+        "affirm:aff-20261006-080735-a4"
+      ],
+      "proposal": {
+        "target": "skills/gcc-mods/hooks/register.tsx",
+        "change": "Change all 8 prompt-fill insertions from mode:'replace' to mode:'insert' (or 'append') so owner-typed content is preserved; treat replace as an explicit opt-in only when the button label makes overwrite semantics obvious."
+      }
+    },
+    {
+      "cluster": "c-1f725c61",
+      "kind": "repeat",
+      "title": "Asks owner for derivable values",
+      "why": "3 atone events (staging alias already in config, owner blocker list contradicted by memory, registry token already held) show the agent surfaces questions without checking stored context or config files first.",
+      "evidence_ids": [
+        "atone:mist-20261005-131656-d2",
+        "atone:mist-20261005-102858-a4",
+        "atone:mist-20260908-143224-0d"
+      ],
+      "proposal": {
+        "target": "~/.claude/scripts/hooks/guard-lazy-question.sh",
+        "change": "Extend guard-lazy-question.sh to detect questions whose answer is resolvable from memory files or a single grep of the project config before the question reaches the owner."
+      }
+    }
+  ],
+  "page_slug": "idream-reader-2026w41",
+  "page_url": "http://localhost:5106/dp/idream-reader-2026w41/",
+  "tokens": 5604,
+  "held_by_gate": null,
+  "landed": [
+    {
+      "cluster": "c-6d0e94f9",
+      "title": "RCAs anonymize known facts",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-74",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-2d8458a5",
+      "title": "AI-smell prose keeps shipping",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-28",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-ab3c677c",
+      "title": "Dense briefings outnumber direct answers",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-1d",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-de1656a8",
+      "title": "Names next work then stops",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-36",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-0d4db80b",
+      "title": "Declared done without running it",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-81",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-b7855665",
+      "title": "Prompt fill replaced owner text",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-20",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    },
+    {
+      "cluster": "c-1f725c61",
+      "title": "Asks owner for derivable values",
+      "outcome": "filed",
+      "detail": "prop-20261006-103353-96",
+      "ts": "2026-10-06T10:33:53.602744Z"
+    }
+  ]
+}

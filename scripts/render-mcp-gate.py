@@ -46,6 +46,17 @@ def _block(msg):
     sys.exit(2)
 
 
+def _policy(key):
+    """The owner's policy value for key, or "" when pol.sh has no answer."""
+    import subprocess
+    pol = os.environ.get("POL_SH") or os.path.expanduser("~/.claude/scripts/pol/pol.sh")
+    try:
+        out = subprocess.run(["bash", pol, "get", key], capture_output=True, text=True, timeout=5)
+        return out.stdout.strip() if out.returncode == 0 else ""
+    except Exception:
+        return ""
+
+
 def _load_map(cwd):
     # cwd may be the repo root OR a subdir; the resource map can live in either
     # the cwd's .claude or a frontend/.claude (this project's layout). Search both.
@@ -76,6 +87,17 @@ def main():
 
     tinput = data.get("tool_input", {})
     cwd = data.get("cwd", ".") or "."
+
+    # The owner's policy (deploy.render): allow lets writes through without a
+    # nonce, block refuses them, ask (the default, or no answer) is the nonce flow.
+    policy = _policy("deploy.render")
+    if policy == "allow":
+        sys.exit(0)
+    if policy == "block":
+        _block("The owner has switched off Render writes (policy deploy.render = block). "
+               "Do not ask to approve one: tell the owner it is off, and that they can "
+               "turn it on in the menu bar policy panel.\n")
+
     mapping = _load_map(cwd)
 
     env = "unknown"

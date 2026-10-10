@@ -23,7 +23,8 @@ import time
 HOME = os.path.expanduser("~")
 GCC = os.path.join(HOME, ".claude")
 TASKS = os.path.join(GCC, "tasks")
-TABLE = os.path.join(GCC, "scripts", "task-table", "task-table.sh")
+TABLE = os.path.join(GCC, "scripts", "task-table", "task-table.sh")   # legacy renderer; the store checks below still read its stores
+PATH_VIEW = os.path.join(GCC, "scripts", "goals", "views", "path.py")  # the live /tasks surface since 2026-09-23 (design v2)
 TASK_SH = os.path.join(GCC, "scripts", "task-table", "task.sh")
 GOAL_SH = os.path.join(GCC, "scripts", "goal", "goal.sh")
 KANBAN_SH = os.path.join(GCC, "scripts", "kanban", "kanban.sh")
@@ -71,23 +72,24 @@ def first_screen_same_from_any_cwd():
     for d in dirs:
         if not os.path.isdir(d):
             return "RED", f"directory missing: {d}"
-        rc, out, _ = sh(["bash", TABLE, "--session", "f04ae843"], cwd=d)
+        # --all so the scope is the same from both directories; the property under
+        # test is that the render itself does not change with the shell's cwd.
+        rc, out, _ = sh(["python3", PATH_VIEW, "--all"], cwd=d)
         lines = out.splitlines()
         # A renderer that prints nothing compared equal to itself and passed
         # (review 2026-09-08, exit 9 mutation): the render has to be a table.
         if rc != 0 or not lines or not lines[0].startswith("TASKS") or len(lines) < 2:
             return "RED", f"no table rendered from {d} (rc {rc}): {lines[0][:60] if lines else '(nothing)'}"
-        heads.append(lines[1])
+        heads.append(lines[0])
         fx = os.path.join(GCC, "scripts", "alignment-checks", "fixtures")
         os.makedirs(fx, exist_ok=True)
         # The frozen first-screen-from-<dir>.txt files are what the cold read was
         # judged against and are never rewritten here; the live capture goes beside them.
         open(os.path.join(fx, f"first-screen-from-{os.path.basename(d)}.latest.txt"), "w").write("\n".join(lines[:44]))
-    a = heads[0].split("·")[-1].strip()
-    b = heads[1].split("·")[-1].strip()
+    a, b = heads[0].strip(), heads[1].strip()
     if a and a == b:
-        return "GREEN", f"same grouping from both dirs: {a}"
-    return "RED", f"gcp says '{a}'; foundry/runner says '{b}'"
+        return "GREEN", f"same header from both dirs: {a[:70]}"
+    return "RED", f"gcp says '{a[:60]}'; foundry/runner says '{b[:60]}'"
 
 
 def render_reactions_are_logged():
@@ -114,12 +116,9 @@ def header_says_which_goal_it_counts():
     sid = os.environ.get("CLAUDE_CODE_SESSION_ID", "")
     if not sid:
         return "RED", "no CLAUDE_CODE_SESSION_ID; run inside a session"
-    # Bare run first, as the owner's /tasks resolves; --session <live sid> only
-    # holds when the session owns a store named for it, and from a pinned
-    # session it fed the check a refusal instead of a header.
-    rc, out, _ = sh(["bash", TABLE])
-    if rc != 0 or not out.startswith("TASKS"):
-        rc, out, _ = sh(["bash", TABLE, "--session", sid[:8]])
+    # The path view never resolves a store and never refuses; a session with no
+    # goal in scope prints the "no live goal here" line, which is not a header.
+    rc, out, _ = sh(["python3", PATH_VIEW])
     head = out.splitlines()[0] if out else ""
     if not head.startswith("TASKS"):
         return "RED", f"no table rendered for this session: {head[:70]}"
@@ -141,9 +140,11 @@ def header_says_which_goal_it_counts():
             return "RED", f"a goal is armed but the first screen does not carry it on a /goal line: {head[:80]}"
     elif "no /goal armed" not in head:
         return "RED", f"no goal is armed and line 1 does not say so: {head[:80]}"
-    if "goal tag" in head or "metadata.goal" in head or "no rows" in head.lower():
+    # Since design v2 the count IS goals (records), so the noun "goal" beside the
+    # count is the honest one; "goal tag" was the old renderer's disclaimer.
+    if "goal tag" in head or " goal" in head or "no rows" in head.lower():
         return "GREEN", f"line 1 carries the armed goal and names what it counts: {head[:80]}"
-    return "RED", f"header '{head[:70]}' counts metadata.goal strings without saying so"
+    return "RED", f"header '{head[:70]}' counts something without saying what"
 
 
 def gates_carry_the_date_they_were_believed():

@@ -5,3 +5,4 @@
 {"ts": "2026-09-18T11:50:34Z", "audit": "2026-08-30", "surfaced": 13, "applied": 1, "rejected": 11, "left_open": 1, "source": "manual-review", "session": "review-atone-7c", "note": "owner D2a: recorded honestly knowing the yield SLO trips"}
 {"ts": "2026-09-18T11:50:34Z", "audit": "2026-09-06", "surfaced": 11, "applied": 3, "rejected": 8, "left_open": 0, "source": "manual-review", "session": "review-atone-7c"}
 {"ts": "2026-09-18T11:50:34Z", "audit": "2026-09-13", "surfaced": 12, "applied": 3, "rejected": 8, "left_open": 1, "source": "manual-review", "session": "review-atone-7c"}
+{"ts":"2026-10-06T10:33:53.829821Z","surfaced":7,"applied":7,"source":"idream-reader"}

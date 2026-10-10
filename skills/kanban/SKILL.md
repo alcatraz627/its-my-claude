@@ -11,6 +11,14 @@ user-invocable: true
 mean the gcc-mods hub in the TUI, which draws the goal record: use `gs`
 (`features/gcc-mods.md`, GLOSSARY `/hub`). This board's web page is not it.
 
+**Frozen (owner ruling D2, 2026-09-23).** The board stays readable and the CLI
+works, but nothing writes to it unasked: no automatic `sync`, no harvest at
+session start, no card generation from tasks or checkpoints. Run `sync` only
+when the owner asks for the board in this conversation. The owner's steering
+surface is `/tasks` over the goal record
+(`~/.claude/assets/reports/20260923-tasks-rebuild/design.md`); the board will be
+re-thought once that proves useful.
+
 Thin driver for `~/.claude/scripts/kanban/kanban.sh` (design + decisions:
 `~/.claude/assets/reports/20260721-kanban-board-design/DESIGN.md`). The board is a
 derived mirror plus a human-note overlay, never a source of truth: docs and the Task

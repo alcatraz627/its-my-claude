@@ -1,4 +1,7 @@
 #!/bin/bash
+# i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
+# not feed the daemon (it was downvoting its own intentions, 2026-10-06).
+[ -n "${I_DREAM_CHILD:-}" ] && exit 0
 # i-dream: PreToolUse hook — compiled-intervention nudges (advisory only).
 # stdout carries at most one hookSpecificOutput/additionalContext JSON.
 HOOK_INPUT=$(cat)

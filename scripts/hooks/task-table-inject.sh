@@ -43,8 +43,11 @@ case "$PROMPT" in
   'Wake check'*|'Heartbeat'*) exit 0 ;;
 esac
 
-TABLE="$HOME/.claude/scripts/task-table/task-table.sh"
-[ -x "$TABLE" ] || exit 0
+# The views over the goal record (design v2, 2026-09-23). They never resolve a
+# store and never refuse, so the refusal branch the old renderer needed is gone.
+VIEWS="$HOME/.claude/scripts/goals/views"
+[ -f "$VIEWS/path.py" ] || exit 0
+TABLE="python3 $VIEWS/path.py"
 
 SID8="${SID:0:8}"
 STATE="/tmp/claude-task-table-${SID8:-unknown}"
@@ -84,17 +87,18 @@ if [ "$ASKED" = "1" ]; then
   # table is the defect this whole thing exists to prevent. On a refusal, pass
   # the refusal THROUGH to the agent: the owner asked for the list, so silence
   # is not an acceptable answer. The agent identifies its store and pins it once.
-  RENDERED=$("$TABLE" 2>/dev/null)
-  rc=$?
-  if [ "$rc" -ne 0 ] || [ -z "$RENDERED" ]; then
-    REFUSAL=$("$TABLE" 2>&1 >/dev/null)
-    [ -n "$REFUSAL" ] || exit 0
-    MSG=$(printf 'The owner asked for the task list and the renderer REFUSED to guess which task store is theirs. Do not answer from memory and do not skip it.\n\nIdentify the store by its task subjects below, pin it once, then render:\n  bash ~/.claude/scripts/task-table/task-table.sh --pin <sid8>\n\n%s' "$REFUSAL")
-    jq -n --arg c "$MSG" '{hookSpecificOutput:{hookEventName:"UserPromptSubmit", additionalContext:$c}}'
-    exit 0
-  fi
+  RENDERED=$($TABLE 2>/dev/null)
+  [ -n "$RENDERED" ] || exit 0
   date +%s > "$STATE" 2>/dev/null || true
-  MSG=$(printf 'The owner asked for the task list. Open your reply with the table, inside a code fence, before any prose.\n\nTHE FACTS COME FROM THIS BASELINE. THE PRESENTATION IS YOURS.\nNever re-render from your own memory of the task list; that was the original defect. But the baseline is a floor, not a ceiling: add a context column when THIS queue needs one, and drop back to the baseline when it does not. The vocabulary and the bar each optional column must clear are in skills/tasks/SKILL.md. Do not add a model-tier column unless the queue genuinely mixes planning-grade judgment with straight execution.\n\nCHECK THE HEADER BEFORE YOU SHOW IT. Trusting this data over your memory is right for the CONTENT and is not a reason to skip the sanity check. Does the session id match the store you meant, are the counts near what this session has been doing, do you recognise the task names? If the header disagrees with your expectation, resolve it before rendering. A confident table about another session considered as this one is the worst outcome available.\n\nDereference anything a stranger could not parse. A bare task number, proposal id, or disposition code earns a one-line gloss; run task-table.sh --refs for the resolved set.\n\nSize is the owner ruling of 2026-08-13: width is free, height stays within 44 lines, truncation is loud.\n\n%s' "$RENDERED")
+  MSG=$(printf 'The owner asked for the task list. Open your reply with the table below, inside a code fence, before any prose.\n\nTHE FACTS COME FROM THE VIEW. Never re-render from your own memory of the task list; that was the original defect. Compose per skills/tasks/SKILL.md: a gate open means `now` leads; "what is left" on one goal means `left`; anything that smells wrong means `drift`.\n\nCHECK THE SCOPE LINE BEFORE YOU SHOW IT. Are these the goals the owner meant, do you recognise them? If not, narrow with --goal or --project and re-render; a confident table about the wrong goals is the worst outcome available.\n\nIf the render says "no live goal here", the answer is to file one with the owner: gs new "<outcome>" --accept "<kind>: <what they will check>".\n\nHeight stays within 44 lines and truncation is loud (owner ruling 2026-08-13).\n\n%s' "$RENDERED")
+  # The owner asked, so the model still renders the table (owner 2026-10-06:
+  # the pane must not replace the asked-for render). With gcc-mods loaded a
+  # toast also points at the pane; without it the tag is inert text.
+  . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+  if command -v hook_owner_wrap >/dev/null 2>&1; then
+    MSG="$(printf 'the same record is live in /hub tasks (press 2 in the hub)' | hook_owner_wrap toast task-table-inject)
+$MSG"
+  fi
   jq -n --arg c "$MSG" '{hookSpecificOutput:{hookEventName:"UserPromptSubmit", additionalContext:$c}}'
   exit 0
 fi
@@ -107,10 +111,10 @@ next=$((prev + 1))
 printf '%s' "$next" > "$COUNT_FILE" 2>/dev/null || true
 
 if [ "$next" -ge "$REMIND_AFTER" ]; then
-  DIGEST=$("$TABLE" --compact  2>/dev/null) || exit 0
+  DIGEST=$(python3 "$VIEWS/now.py" 2>/dev/null) || exit 0
   [ -n "$DIGEST" ] || exit 0
   printf '0' > "$COUNT_FILE" 2>/dev/null || true
-  MSG=$(printf 'It has been %s turns since the task table was last shown, and the owner has asked for it repeatedly across sessions. If this turn touches task state, close your reply with the full table (bash ~/.claude/scripts/task-table/task-table.sh). Current state:\n\n%s' "$REMIND_AFTER" "$DIGEST")
+  MSG=$(printf 'It has been %s turns since the task table was last shown, and the owner has asked for it repeatedly across sessions. If this turn touches goal or task state, close your reply with the table (python3 ~/.claude/scripts/goals/views/path.py). What waits on the owner right now:\n\n%s' "$REMIND_AFTER" "$DIGEST")
   jq -n --arg c "$MSG" '{hookSpecificOutput:{hookEventName:"UserPromptSubmit", additionalContext:$c}}'
 fi
 exit 0

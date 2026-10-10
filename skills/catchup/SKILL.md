@@ -272,7 +272,7 @@ test -e "$DOC" && cat "$DOC"
 
 When rendering the briefing in Phase 2, surface the workspace's unchecked Todos as the **immediate next steps** above (or in place of) the checkpoint's Pending Items. The workspace is the user-curated truth; the checkpoint is the agent's synthesis. When they disagree, the workspace wins.
 
-**TaskList first, rehydrate only what is missing.** The Task store has survived /clear on every observed resume since early August (four consecutive by 2026-08-14), so a blind rehydration duplicates every open task. Call TaskList before creating anything: if the store is populated, read the workspace doc for drift only and add just the items genuinely absent. Only when the store is empty (fresh harness, expired store) recreate the unchecked Todos (the `## Todos` machine block plus any human-area items) via TaskCreate, so the session resumes with a populated, syncing task list rather than a stale doc.
+**The goal record first; never rehydrate rows into the Task tool from a doc (D1, 2026-09-23).** Read the Resume Contract's **Goal record** id, run `~/.claude/scripts/goals/gs link <id>` so this session points at it, then `python3 ~/.claude/scripts/goals/views/left.py` for what is left and the unread handoff notes (printed once, then consumed). That is the truth across sessions; the workspace Todos block and the checkpoint's Pending Items are derived from it and are read for drift only. The agent's own Task-tool checklist may be rebuilt from the goal's open rows if the harness has the tool and the list is empty, but the record is what the owner reads. With no goal id in the contract, propose one (Phase 3.5) rather than inventing rows.
 
 Silently skip this phase if neither the session's own doc nor `_active.md` exists. (The `stop-sync` hook auto-creates `<sid>.md` once a session has more than a couple of tasks, so a substantive prior session will have left its own doc.)
 
@@ -645,7 +645,7 @@ Run the task table and show it. Every resume, not only when something looks
 wrong.
 
 ```bash
-bash ~/.claude/scripts/task-table/task-table.sh
+python3 ~/.claude/scripts/goals/views/path.py
 ```
 
 Owner ask, 2026-08-18: *"Good to have: During core-dump or catchup (or after),
@@ -660,19 +660,10 @@ roughly 44 lines, so a table nested in a briefing has to lose most of itself to
 fit, and what it loses is the row detail that made the shape worth ratifying.
 Two surfaces, each whole, beats one surface with both halves crushed.
 
-Resolve the store from the Resume Contract's **Task store** field, not by
-content-match. A resumed session's own transcript matches nothing, so the
-resolver correctly refuses and lists candidates; the contract already holds the
-answer:
-
-```bash
-bash ~/.claude/scripts/task-table/task-table.sh --session <sid8-from-the-contract>
-```
-
-Use `--session`, not `--pin`. `--pin` writes the live-session mapping and exits
-without rendering anything, so an agent following this phase with `--pin` shows
-the owner no table at all. Pin separately if you want the bare command to work
-for the rest of the session.
+The view scopes to the goal this session is linked to plus live goals touching
+the CWD repo, so once `gs link <id>` has run (Phase 0.8) the bare command shows
+the right goals. To narrow: `--goal <id-from-the-contract>`. There is no store
+to resolve and nothing to pin.
 
 Render it as the tool prints it. Constraint, owner 2026-08-19 via gcp-fable:
 every `/tasks` run in every session renders the ratified batched-sequence shape

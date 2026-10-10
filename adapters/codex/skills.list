@@ -9,9 +9,7 @@
 # (AskUserQuestion, mcp__inputs, Task tool), and core-dump/catchup, whose
 # codex-side equivalent is adapters/codex/skills/core-dump.
 # Add a line, re-run install.sh. Remove a line, re-run; the stale link is pruned.
-gcc-proposal
 ipc
-pin-for-dream
 probe
 cleanup-comments
 ste-writing
@@ -19,3 +17,6 @@ pr-description
 write-docs
 callouts
 test
+readme
+banner-fun
+svg

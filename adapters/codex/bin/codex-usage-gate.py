@@ -32,7 +32,18 @@ import time
 from pathlib import Path
 
 HOME = Path.home()
-PCT = int(os.environ.get("CODEX_GATE_PCT", "75") or 75)
+def _policy_pct():
+    """The owner's threshold from the policy store (ops.codex_gate_pct), or None."""
+    pol = os.environ.get("POL_SH") or str(HOME / ".claude/scripts/pol/pol.sh")
+    try:
+        r = subprocess.run(["bash", pol, "get", "ops.codex_gate_pct"], capture_output=True, text=True, timeout=5)
+        return int(r.stdout.strip()) if r.returncode == 0 else None
+    except Exception:
+        return None
+
+
+# An explicit CODEX_GATE_PCT wins (tests, one-off runs); then the policy; then 75.
+PCT = int(os.environ.get("CODEX_GATE_PCT") or _policy_pct() or 75)
 CACHE = Path(os.environ.get("CODEX_GATE_CACHE", HOME / ".claude/adapters/codex/state/limits.json"))
 MAX_AGE = int(os.environ.get("CODEX_GATE_MAX_AGE_S", "600") or 600)
 TIMEOUT = int(os.environ.get("CODEX_GATE_TIMEOUT_S", "20") or 20)

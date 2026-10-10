@@ -93,7 +93,17 @@ if [ "$protected" = 0 ]; then
     protected=1; why="marker file $top/.claude/require-user-commit"
   fi
 fi
-[ "$protected" = 1 ] || exit 0
+if [ "$protected" = 0 ]; then
+  # Not protected by the old store, so the owner's policy decides (git.commit,
+  # global with a per-repo override). Allow is silent; block refuses without
+  # telling the agent to ask for approval, because the owner already decided.
+  pol="${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}"
+  if [ "$(bash "$pol" get git.commit --cwd "$target" 2>/dev/null)" = "block" ]; then
+    bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook commit-gate --action block-policy --heeded unknown >/dev/null 2>&1 || true
+    jq -cn --arg r "⛔ The owner has switched off agent commits for this repo (policy git.commit = block). Do not ask the owner to approve a commit: leave the changes staged or unstaged, tell them commits are off and what is ready to commit, and carry on. They can turn commits on in the menu bar policy panel." '{decision:"block", reason:$r}' 2>/dev/null || true
+  fi
+  exit 0
+fi
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook commit-gate --action block --heeded unknown >/dev/null 2>&1 || true
 

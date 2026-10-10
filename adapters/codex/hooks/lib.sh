@@ -25,10 +25,33 @@ gcc_read_input() {
   export INPUT SID CWD EVENT
 }
 
+# True only for a hook launched by the managed App Server or TUI process.
+# Shell and timeout wrappers are allowed. A nested Claude or Codex process in
+# the ancestry breaks the chain, so it keeps its own IPC identity.
+gcc_is_managed_host_hook() {
+  [ "${CLAUDE_IPC_MANAGED_HOST:-}" = "1" ] || return 1
+  case "${CLAUDE_IPC_MANAGED_HOST_PID:-}" in ''|*[!0-9]*) return 1 ;; esac
+  local marker="$CLAUDE_IPC_MANAGED_HOST_PID" pid="$PPID" comm next depth=0
+  while [ "$pid" -gt 1 ] 2>/dev/null && [ "$depth" -lt 12 ]; do
+    [ "$pid" = "$marker" ] && return 0
+    comm=$(ps -p "$pid" -o comm= 2>/dev/null | awk '{$1=$1; print}')
+    case "${comm##*/}" in claude|codex) return 1 ;; esac
+    next=$(ps -p "$pid" -o ppid= 2>/dev/null | tr -d ' ')
+    case "$next" in ''|*[!0-9]*) return 1 ;; esac
+    pid="$next"
+    depth=$((depth + 1))
+  done
+  return 1
+}
+
 # The alias a codex session answers to on claude-ipc: cx-<dir>-<id8>.
 # Deterministic from cwd + session id so every hook and the gcc CLI agree
 # without coordination. The cx- prefix is what tells a peer "this is codex".
 gcc_alias() {
+  if gcc_is_managed_host_hook && [ -n "${CLAUDE_IPC_ALIAS:-}" ]; then
+    printf '%s' "$CLAUDE_IPC_ALIAS"
+    return
+  fi
   local sid="${1:-$SID}" cwd="${2:-$CWD}" base tag
   base=$(basename "$cwd" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
   tag=$(printf '%s' "$sid" | tr -cd 'A-Za-z0-9' | tr '[:upper:]' '[:lower:]' | cut -c1-8)

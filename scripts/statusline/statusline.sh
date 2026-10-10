@@ -559,6 +559,9 @@ if (( has_rate )); then
   _limits_json+="}"
   mkdir -p "$HOME/.claude/widgets" 2>/dev/null || true
   printf '%s' "$_limits_json" > "$HOME/.claude/widgets/.limits.json" 2>/dev/null || true
+  # The whole rate_limits object as Claude Code sent it, so the Switchboard can
+  # show any per-model window (fable, opus) the moment one appears.
+  printf '%s' "$input" | jq -c '.rate_limits // empty' > "$HOME/.claude/widgets/.rate-limits-raw.json" 2>/dev/null || true
 fi
 # Thinking effort → percentage for visual bar
 # Persist last seen non-zero effort for 10 minutes so the bar stays visible

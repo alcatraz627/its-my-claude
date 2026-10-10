@@ -19,6 +19,14 @@ gcc_export_env
 # a receipt line in the outbox so `codex-gcc status` shows why nothing ran.
 # Born from 2026-08-27 (parallel lanes spent the quota); owner defaults
 # 2026-09-11: gate at 25% remaining, cap 3 seats per project per day.
+# The owner's policy switch comes first: a seat the owner has switched off does
+# not run, whatever the usage gate would say.
+if [ -n "${GCC_DISPATCH:-}${CODEX_COMPANION_SESSION_ID:-}" ] \
+   && [ "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get model.codex --cwd "$CWD" 2>/dev/null)" = "block" ]; then
+  r="codex seats are switched off by the owner (policy model.codex = block); the dispatching session should do the work itself or on a Claude seat"
+  jq -cn --arg r "$r" '{continue:false, stopReason:$r, systemMessage:$r}'
+  exit 0
+fi
 if [ -n "${GCC_DISPATCH:-}${CODEX_COMPANION_SESSION_ID:-}" ] && [ ! -f "$HOME/.claude/.no-codex-usage-gate" ]; then
   verdict=$(python3 "$CODEX_GCC_ROOT/bin/codex-usage-gate.py" 2>/dev/null); grc=$?
   if [ "$grc" -ne 0 ]; then
@@ -41,7 +49,7 @@ fi
 parts=()
 
 ipc_bin=$(gcc_ipc_bin ipc-session-start)
-if [ -n "$ipc_bin" ]; then
+if ! gcc_is_managed_host_hook && [ -n "$ipc_bin" ]; then
   out=$(printf '%s' "$INPUT" | timeout 8 "$ipc_bin" 2>/dev/null)
   ctx=$(gcc_ctx_of "$out")
   [ -n "$ctx" ] && parts+=("$ctx")
@@ -53,11 +61,20 @@ Ledger and IPC writes from inside your sandbox go through ONE command:
   bash ~/.claude/adapters/codex/bin/gcc <ipc|propose|atone|affirm|pin|checkpoint|ledger> <args as the underlying tool takes them>
 It runs the call directly when the sandbox allows, otherwise queues it; a hook applies the queue within seconds and the receipt appears at your next turn. Never call propose.sh, atone.sh, affirm.sh, i-dream pin or claude-ipc directly; the sandbox blocks them and, worse, the environment carries the PARENT Claude session's id, so a direct claude-ipc call would speak as that session."
 
-tldr="$HOME/.claude/atone/derived/_tldr.txt"
-if [ -s "$tldr" ]; then
-  brief="$brief
+# Match Claude's dream lane: atone guidance is always present; ranked dream
+# lessons appear only when the owner's shared opt-in is enabled.
+if [ -f "$HOME/.claude/subconscious/dreams/.inject-on" ] || [ "${INJECT_DREAM:-}" = 1 ]; then
+  dream_out=$(INJECT_CWD="$CWD" INJECT_SID="$SID" bash "$HOME/.claude/scripts/dream/dream-insights.sh" 2>/dev/null || true)
+  dream_ctx=$(gcc_ctx_of "$dream_out")
+  [ -n "$dream_ctx" ] && brief="$brief
+$dream_ctx"
+else
+  tldr="$HOME/.claude/atone/derived/_tldr.txt"
+  if [ -s "$tldr" ]; then
+    brief="$brief
 Mistake patterns this owner is watching (from the atone ledger; the same blind spots apply to you):
 $(sed -n '2,6p' "$tldr")"
+  fi
 fi
 
 pointers=""

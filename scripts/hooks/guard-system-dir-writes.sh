@@ -50,6 +50,8 @@ END='(/|[[:space:]]|$)'
 
 MUTED=0
 [ -f "$HOME/.claude/.allow-system-writes" ] && MUTED=1
+# The owner's policy switch (files.system_write) is the one-click form of the same override.
+[ "$MUTED" = 0 ] && [ "$(bash "${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}" get files.system_write 2>/dev/null)" = "allow" ] && MUTED=1
 WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
 
 block() {

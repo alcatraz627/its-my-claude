@@ -39,6 +39,9 @@ case "${1:-}" in
   gate)
     shift
     exec python3 "$HERE/codex-usage-gate.py" "$@" ;;
+  map)
+    shift
+    exec python3 "$HERE/codex-setup-map.py" "$@" ;;
   exec)
     shift
     brief=""; nobrief=0; args=()

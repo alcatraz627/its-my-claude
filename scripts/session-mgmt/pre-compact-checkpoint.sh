@@ -225,6 +225,12 @@ fi
 
 # ── 3. Write comprehensive checkpoint file ────────────────────────────────────
 dump_dir="${cwd:-$HOME/.claude}"
+# A project whose root cannot hold `_`-prefixed files (an unpacked Chrome
+# extension refuses to load with one) redirects checkpoints by touching
+# <root>/.claude/checkpoints-in-dot-claude. Its /core-dump writes there too.
+if [[ -n "${cwd:-}" && -e "$cwd/.claude/checkpoints-in-dot-claude" ]]; then
+  dump_dir="$cwd/.claude"
+fi
 dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 {
