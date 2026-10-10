@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-09-24
+updated: 2026-10-10
 stale_after_days: 365
 ---
 
@@ -25,11 +25,11 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-09-24 01:36.
+Regenerated 2026-10-10 07:07.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
-| `adversarial-review` | user-only | Prosecutes work already declared done — re-runs the verification paths the author skipped, cross-examines every done/works/tested claim against executed evidence, and … |
+| `adversarial-review` | yes | Prosecutes work already declared done — re-runs the verification paths the author skipped, cross-examines every done/works/tested claim against executed evidence, and … |
 | `affirm` | yes | Records an affirmed-good behavior — non-obvious approach the user explicitly approved. Sibling of /atone. Higher write bar than atone (only fires for genuinely … |
 | `arch-qa` | yes | Answers technical architecture questions by tracing code paths through the codebase — analyzing feature implementations, data flows, auth middleware, and service … |
 | `atone` | yes | Records a mistake — gathers context, classifies severity (S1/S2/S3), and writes a structured entry to ~/.claude/atone/events.jsonl. For S3 events, also drafts an RCA … |
@@ -60,17 +60,20 @@ Regenerated 2026-09-24 01:36.
 | `gcc-explore` | yes | Sit down with the gcc and look around. Renders the config as three panels (SHAPE, what it is; MOVEMENT, which way it is drifting; CYCLE, the loops keeping it alive) from … |
 | `gcc-map` | user-only | Maps how instruction content actually loads into an agent and the CLAUDE.md doc graph, measuring ground truth first and diffing it against what the indices claim, then … |
 | `gcc-proposal` | yes | Files a ~/.claude improvement proposal into the backlog via propose.sh — derives the title, category, effort, and cross-links from a rough description or from the … |
+| `gdoc` | yes | Publishes a set of markdown files as one Google Doc with one tab per file, in a named Drive folder; re-runs rewrite each tab in place so the link and tabs never change. … |
 | `generate-image` | yes | Generates raster images from a text prompt using the LOCAL imagine model (mflux/MLX Flux on Apple Silicon — $0, offline, no cloud). Uses only models already cached on … |
 | `generate-pdf` | yes | Converts a markdown file to a styled PDF with 4 style variants (default, professional, academic, compact), optional cover page, TOC generation, and landscape mode. … |
 | `improve-skill` | yes | Audits skills against the house rules and their run history (runtime notes incl. archives, skill-log outcomes, their own Validation rubric), applies approved fixes, and … |
 | `intake` | yes | Models a request before work starts, restating it as goal, scope ceiling, register, and what the wording exemplifies versus specifies, with one line back when readings … |
 | `ipc` | yes | Work the claude-ipc fabric from any session. Who's live, what's owed, send/reply with the safety rails, triage an inherited or orphaned mailbox, and first-line broker … |
 | `kanban` | yes | Drives the agent-populated kanban board — inits a board for the current project, re-syncs cards from docs/checkpoints/session-notes, pulls the human's unread card notes, … |
+| `linear` | yes | Reads and changes the owner's Linear workspace through one tested script, previewing every change: issues, comments, labels, links, relations, cycles, points, projects, … |
 | `magi` | yes | Multi-agent supervisor-led deliberation. DEFAULTS TO --mode lite (3 voters, no personas/jester/voting, ~$3-8/run with research on) for routine tradeoffs. Opt into --mode … |
 | `migrate` | yes | Create a migration entry for a structural change to ~/.claude/. Required before/alongside any change that moves a canonical path, renames a script other things … |
+| `page` | yes | Routes anything that has to be shown to the surface that fits it (a markdown file, a local HTML page, a decision page, an Artifact, a deck) and makes sure an HTML page … |
 | `persona` | yes | Adopt a working-mode persona (~/.claude/personas/) for the current task — pick by name or let the skill match one, load its role contract into context, and record the … |
 | `pick-skill` | yes | The front door when the right instrument is not obvious. Two jobs. Retrieval, for "I half-remember a skill exists", answered with a ranked shortlist you pick from by … |
-| `pin-for-dream` | yes | Pin a structured insight from the current Claude Code session for i-dream's next dream cycle to examine. Auto-gathers session context (cwd, recent files touched, … |
+| `pin-for-dream` | yes | Pin a structured insight from the current Claude Code session so it reaches the improvement backlog. Auto-gathers session context (cwd, recent files touched, transcript … |
 | `plan` | yes | Routes a planning request to the instrument that fits it, by naming which of six needs the request actually has, and refuses to plan a change to something that already … |
 | `plugs` | yes | Show what context-injecting and learning-capturing "plugs" are wired into the session (start / per-turn / compact / end) — what's registered, what's muted, and the … |
 | `pr-description` | yes | Write a PR description that briefs the reviewer in the author's voice: content-model-first. Extracts the behavioral inventory from the ACTUAL diff (never commit … |
@@ -82,7 +85,7 @@ Regenerated 2026-09-24 01:36.
 | `retro-dump` | yes | Manually trigger a retroactive /core-dump on a past session that ended without one. Headless — spawns `claude -p --resume <uuid>` to read the transcript and synthesize a … |
 | `revive` | yes | Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume … |
 | `roster-budget` | yes | Measures the skill roster against its listing budget and names the skills whose descriptions are being dropped, ranked by what each long description costs. Use when a … |
-| `router` | yes | One prefix for the five routers. /router:pick-skill (find the instrument) · /router:plan (how to approach) · /router:ui (any screen) · /router:validate (before calling … |
+| `router` | yes | One prefix for the six routers. /router:pick-skill (find the instrument) · /router:plan (how to approach) · /router:ui (any screen of a product) · /router:page (anything … |
 | `session-stats` | yes | Full session analytics report — cost, tokens, tools, rate limits, context usage, and activity timeline |
 | `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling … |
 | `ste-writing` | yes | Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, … |
