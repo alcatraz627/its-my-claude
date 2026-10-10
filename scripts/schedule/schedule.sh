@@ -27,6 +27,15 @@ HIST="$SCHED_HOME/history.jsonl"
 PROG="${0##*/}"
 USER_UID=$(id -u)
 
+# Gateway mode: timed jobs are not LaunchAgents of their own. Their plists live
+# in $AGENT_HOME (invisible to macOS Login Items) and gcc-cron, the one shared
+# LaunchAgent, starts them. On/off is the registry's "enabled" flag.
+AGENT_HOME="$SCHED_HOME/agents"
+GATEWAY_MARK="$SCHED_HOME/.gateway"
+GATEWAY=0; [[ -f "$GATEWAY_MARK" ]] && GATEWAY=1
+CRON_LABEL="com.alcatraz.gcc-cron"
+is_timed() { case "$1" in daily|weekly|monthly|one-shot) return 0 ;; *) return 1 ;; esac; }
+
 mkdir -p "$SCHED_HOME" "$LOG_HOME"
 [[ -f "$REGISTRY" ]] || echo '{}' > "$REGISTRY"
 
@@ -644,10 +653,15 @@ cmd_add() {
   local script="$sched_dir/script.sh"
   local meta="$sched_dir/meta.json"
   local plist="$LAUNCHAGENTS/${label}.plist"
+  if (( GATEWAY )); then
+    mkdir -p "$AGENT_HOME"
+    plist="$AGENT_HOME/${label}.plist"   # gcc-cron starts it; never a Login Item
+    do_bootstrap=0
+  fi
   local outlog="$LOG_HOME/${name}.out.log"
   local errlog="$LOG_HOME/${name}.err.log"
 
-  if [[ -e "$plist" ]] || [[ -e "$sched_dir" ]]; then
+  if [[ -e "$plist" ]] || [[ -e "$sched_dir" ]] || [[ -e "$LAUNCHAGENTS/${label}.plist" ]]; then
     if (( force )); then
       warn "overwriting existing schedule '$name' (--force)"
       _retire "$name" silent
@@ -740,6 +754,7 @@ $desc}"
   fi
   local plan_bootstrap="(skipped — --no-bootstrap)"
   (( do_bootstrap )) && plan_bootstrap="yes (will be loaded into gui/$USER_UID)"
+  (( GATEWAY )) && plan_bootstrap="no: gcc-cron starts it (gateway mode)"
   printf '\n%s%s%s\n' "$BLD" "PLANNED:" "$RST"
   printf '  %-12s %s\n' "name:"    "$name"
   printf '  %-12s %s\n' "label:"   "$label"
@@ -801,6 +816,8 @@ $desc}"
     else
       warn "bootstrap failed — files written but agent not loaded"
     fi
+  elif (( GATEWAY )); then
+    ok "runs under gcc-cron (gateway mode; no Login Item of its own)"
   else
     warn "skipped bootstrap per --no-bootstrap (load later with: launchctl bootstrap gui/$USER_UID $plist)"
   fi
@@ -1136,6 +1153,12 @@ cmd_enable() {
   entry=$(_get_entry "$name")
   label=$(jq -r '.label' <<<"$entry")
   plist=$(jq -r '.plist' <<<"$entry")
+  if (( GATEWAY )) && is_timed "$(jq -r '.kind' <<<"$entry")"; then
+    jq_inplace "$REGISTRY" "del(.[\"$name\"].enabled)"
+    ledger_append modified "$name" change enabled
+    ok "enabled: $name (gcc-cron will start it on schedule)"
+    return 0
+  fi
   [[ -f "$plist" ]] || fail "plist missing: $plist (registry desync — consider '$PROG rm $name')"
   if _is_loaded "$label"; then ok "already loaded: $label"; return 0; fi
   if launchctl bootstrap "gui/$USER_UID" "$plist" 2>&1; then
@@ -1151,6 +1174,12 @@ cmd_disable() {
   local name="$1" entry label
   entry=$(_get_entry "$name")
   label=$(jq -r '.label' <<<"$entry")
+  if (( GATEWAY )) && is_timed "$(jq -r '.kind' <<<"$entry")"; then
+    jq_inplace "$REGISTRY" ".[\"$name\"].enabled = false"
+    ledger_append modified "$name" change disabled
+    ok "disabled: $name (gcc-cron skips it; 'enable' to turn it back on)"
+    return 0
+  fi
   if ! _is_loaded "$label"; then ok "already not loaded: $label (plist still on disk)"; return 0; fi
   if launchctl bootout "gui/$USER_UID/$label" 2>&1; then
     ledger_append modified "$name" change disabled
@@ -1207,8 +1236,11 @@ cmd_doctor() {
         entry_issues+="    external script missing: $script  (it was the user's; safe to '$PROG rm $name' if intentionally deleted)"$'\n' || \
         entry_issues+="    script missing: $script"$'\n'
     fi
-    # launchd state vs plist presence
-    if [[ -f "$plist" ]] && ! _is_loaded "$label"; then
+    # launchd state vs plist presence (gateway-mode timers are gcc-cron's to start)
+    if (( GATEWAY )) && is_timed "$(jq -r '.kind' <<<"$entry")"; then
+      _is_loaded "$label" && \
+        entry_issues+="    still loaded as its own LaunchAgent in gateway mode: $label  (suggest: 'launchctl bootout gui/$USER_UID/$label')"$'\n'
+    elif [[ -f "$plist" ]] && ! _is_loaded "$label"; then
       entry_issues+="    plist present but launchd unaware: $label  (suggest: '$PROG enable $name')"$'\n'
     fi
     if [[ ! -f "$plist" ]] && _is_loaded "$label"; then
@@ -1230,11 +1262,17 @@ cmd_doctor() {
     fi
   done < <(jq -r 'keys[]' "$REGISTRY" 2>/dev/null)
 
+  if (( GATEWAY )) && ! _is_loaded "$CRON_LABEL"; then
+    report+="${RED}✗${RST} gateway mode is on but gcc-cron is not loaded: no timed job will run  (fix: launchctl bootstrap gui/$USER_UID $LAUNCHAGENTS/$CRON_LABEL.plist)"$'\n'
+    drift_count=$((drift_count+1))
+  fi
+
   # Pass 2: orphan sched_dirs (filesystem entry without registry knowledge)
   local d short
   for d in "$SCHED_HOME"/*/; do
     [[ -d "$d" ]] || continue
     short=$(basename "$d")
+    [[ "$d" == "$AGENT_HOME/" ]] && continue   # gateway-mode plists, not a job dir
     if ! jq -e --arg n "$short" '.[$n]' "$REGISTRY" >/dev/null 2>&1; then
       report+="${YLW}⚠${RST} orphan sched_dir: $d  (filesystem present but no registry entry; safe to 'trash')"$'\n'
       drift_count=$((drift_count+1))
@@ -1410,6 +1448,7 @@ cmd_register() {
     fire_at_meta="adopted-one-shot@$(printf '%02d-%02d %02d:%02d' "$sci_month" "$sci_day" "${sci_hour:-0}" "${sci_minute:-0}")"
   elif [[ -n "$sci_weekday" ]]; then
     kind="weekly"
+    [[ "$sci_weekday" == 7 ]] && sci_weekday=0   # launchd accepts 7 for Sunday too
     local dows=(sun mon tue wed thu fri sat)
     fire_at_meta="weekly@${dows[$sci_weekday]}@$(printf '%02d:%02d' "${sci_hour:-0}" "${sci_minute:-0}")"
   elif [[ -n "$sci_hour" ]]; then
@@ -1777,6 +1816,70 @@ cmd_interactive() {
   say "${DIM}bye${RST}"
 }
 
+# ── gateway on | off | status ──────────────────────────────────────────────
+# Moves every timed job between "its own LaunchAgent" and "started by gcc-cron".
+# Reversible: off puts each plist back and reloads the enabled ones.
+cmd_gateway() {
+  local action="${1:-status}" name entry kind label plist dest cron_plist
+  cron_plist="$LAUNCHAGENTS/$CRON_LABEL.plist"
+  [[ -f "$cron_plist" ]] || fail "gcc-cron is not installed: $cron_plist missing"
+  case "$action" in
+    status)
+      if (( GATEWAY )); then ok "gateway mode ON: timed jobs run under gcc-cron"; else ok "gateway mode OFF: each timed job is its own LaunchAgent"; fi
+      _is_loaded "$CRON_LABEL" && ok "gcc-cron loaded" || warn "gcc-cron NOT loaded"
+      plutil -extract ProgramArguments raw -o - "$cron_plist" >/dev/null 2>&1
+      plutil -p "$cron_plist" | grep -q -- '--shadow' && warn "gcc-cron is in shadow mode (starts nothing)" || ok "gcc-cron is live"
+      return 0 ;;
+    on)
+      mkdir -p "$AGENT_HOME"
+      while IFS= read -r name; do
+        [[ -z "$name" ]] && continue
+        entry=$(jq --arg n "$name" '.[$n]' "$REGISTRY")
+        kind=$(jq -r '.kind' <<<"$entry"); is_timed "$kind" || continue
+        label=$(jq -r '.label' <<<"$entry"); plist=$(jq -r '.plist' <<<"$entry")
+        _is_loaded "$label" && launchctl bootout "gui/$USER_UID/$label" 2>/dev/null
+        if [[ "$plist" == "$LAUNCHAGENTS"/* && -f "$plist" ]]; then
+          dest="$AGENT_HOME/$(basename "$plist")"
+          mv -f "$plist" "$dest"
+          jq_inplace "$REGISTRY" ".[\"$name\"].plist = \"$dest\""
+        fi
+        ok "moved under gcc-cron: $name"
+      done < <(jq -r 'keys[]' "$REGISTRY")
+      if plutil -p "$cron_plist" | grep -q -- '--shadow'; then
+        plutil -remove ProgramArguments.2 "$cron_plist"
+      fi
+      touch "$GATEWAY_MARK"
+      launchctl bootout "gui/$USER_UID/$CRON_LABEL" 2>/dev/null
+      launchctl bootstrap "gui/$USER_UID" "$cron_plist" && ok "gcc-cron reloaded LIVE"
+      ledger_append modified gcc-cron change gateway-on ;;
+    off)
+      while IFS= read -r name; do
+        [[ -z "$name" ]] && continue
+        entry=$(jq --arg n "$name" '.[$n]' "$REGISTRY")
+        kind=$(jq -r '.kind' <<<"$entry"); is_timed "$kind" || continue
+        label=$(jq -r '.label' <<<"$entry"); plist=$(jq -r '.plist' <<<"$entry")
+        if [[ "$plist" == "$AGENT_HOME"/* && -f "$plist" ]]; then
+          dest="$LAUNCHAGENTS/$(basename "$plist")"
+          mv -f "$plist" "$dest"
+          jq_inplace "$REGISTRY" ".[\"$name\"].plist = \"$dest\""
+          plist="$dest"
+        fi
+        if [[ "$(jq -r '.enabled // true' <<<"$entry")" != "false" ]]; then
+          launchctl bootstrap "gui/$USER_UID" "$plist" 2>/dev/null
+        fi
+        ok "back to its own LaunchAgent: $name"
+      done < <(jq -r 'keys[]' "$REGISTRY")
+      rm -f "$GATEWAY_MARK"
+      if ! plutil -p "$cron_plist" | grep -q -- '--shadow'; then
+        plutil -insert ProgramArguments.2 -string --shadow "$cron_plist"
+      fi
+      launchctl bootout "gui/$USER_UID/$CRON_LABEL" 2>/dev/null
+      launchctl bootstrap "gui/$USER_UID" "$cron_plist" && ok "gcc-cron back in shadow mode"
+      ledger_append modified gcc-cron change gateway-off ;;
+    *) fail "usage: $PROG gateway on|off|status" ;;
+  esac
+}
+
 # ── Dispatch ───────────────────────────────────────────────────────────────
 # Guarded so the script can be SOURCED (test harness, shell completion) without
 # executing a command: dispatch only when run directly, never when sourced.
@@ -1799,6 +1902,7 @@ case "$sub" in
   history|hist)     cmd_history  "$@" ;;
   status)           cmd_status   "$@" ;;
   reconcile)        cmd_reconcile "$@" ;;
+  gateway)          cmd_gateway  "$@" ;;
   _record-run)      cmd__record_run "$@" ;;
   _retire-self)     cmd__retire_self "$@" ;;
   help|--help|-h)   cmd_help ;;

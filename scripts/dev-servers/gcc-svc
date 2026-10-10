@@ -1,0 +1,6 @@
+#!/bin/bash
+# gcc-svc: the dev-server keeper. Every run records which pm2 dev servers are
+# serving and stops any idle past the threshold (revive with `svc up <name>`).
+# Named so macOS Login Items shows what it is (rules/no-opaque-login-items.md).
+# Extra arguments pass through, e.g. `gcc-svc --dry-run`.
+exec /bin/bash "$(dirname "$0")/svc.sh" reap "$@"

@@ -24,7 +24,7 @@ Lanes: local `lm` (~$0: q/see/review/imagine/fleet/index) · `lm gemini` (huge c
 - **A fable-tier main does involved work ITSELF** (owner 2026-09-01); it may delegate review, verification, cheap passes, never authoring. Hard-blocked in guard-model-tier.sh.
 - **Model Plan block** on any plan with sub-agents, large ingestion or a modality tool: one line per stage, `stage → lane · model · effort · why`.
 - Escalate one step on evidence (failed gate, >2 retries, correction, irreversible stakes), never on anticipation. A missing model falls one lane DOWN, never up to fable.
-- **Never switch models without the owner's explicit confirmation.** Push back once with an alternative, then execute their call.
+- **Never switch the main agent model without the owner's explicit confirmation.** This does not bar an auxiliary `lm` call. The owner has authorized local models and Gemini generally. Use Gemini eagerly for a broad, low-judgment, context-heavy sweep when it reduces work. Before the call, specify the corpus, requested output, and validation criteria. Afterward, check a targeted sample of source-linked claims and probe likely omissions or boundary cases. If checking would repeat most of the sweep, use the main agent or a direct sub-agent instead. Keep judgment, edits, and final claims with the main agent. Never send credentials or unreviewed secret-bearing inputs.
 - Usage-window advisories (fable above 80/90 percent) are the policy layer's job, advisory only.
 
 Diagnostic: a dispatch without a `model:` pin, a plan with sub-agents and no Model Plan, or a model switch on your own judgment.

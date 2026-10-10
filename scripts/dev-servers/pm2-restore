@@ -1,0 +1,5 @@
+#!/bin/bash
+# pm2-restore: at login, bring back the pm2 processes saved with `pm2 save`
+# (pm2's own `resurrect`). Named so macOS Login Items shows what it is, not "sh".
+# Not the same as pm2-resurrect.sh, which scans ~/Code and starts every config.
+exec /opt/homebrew/lib/node_modules/pm2/bin/pm2 resurrect "$@"

@@ -1,0 +1,518 @@
+#!/usr/bin/env python3
+"""gcc-hub: one front door to the owner's own tools (Claude, gcc, models, machine).
+
+`gcc <verb> [args]` runs the tool behind that verb with your arguments. With no
+verb it lists them. `gcc agents` is built in: every startup entry (LaunchAgents
+and the timed jobs gcc-cron runs) with a title, note, cadence, state and source,
+and on/off switches.
+
+Meant to be called through a zsh function named `gcc` that sends anything that
+is not a hub verb to the real C compiler, so builds are never affected, and
+falls back to the compiler if the hub is ever missing:
+    gcc() { if command -v gcc-hub >/dev/null 2>&1; then gcc-hub --as-gcc "$@"; else command gcc "$@"; fi; }
+
+Every data command takes --json; colour is off when piped, under NO_COLOR, or
+TERM=dumb. Exit 0 ok, 1 failed, 2 usage. Plan:
+~/.claude/assets/reports/20261010-gcc-fix-list/gcc-hub-plan.md
+"""
+import datetime as dt
+import glob
+import importlib.machinery
+import importlib.util
+import json
+import os
+import plistlib
+import subprocess
+import sys
+
+VERSION = "0.1.0"
+HOME = os.path.expanduser("~")
+CL = os.path.join(HOME, ".claude")
+LAUNCHAGENTS = os.path.join(HOME, "Library", "LaunchAgents")
+SCHED = os.path.join(CL, "scheduled")
+REGISTRY = os.path.join(SCHED, "registry.json")
+HISTORY = os.path.join(SCHED, "history.jsonl")
+META = os.path.join(SCHED, "agents-meta.json")
+ZCMD_MANIFEST = os.path.join(HOME, "Code", "Claude", "its-my-config", "shell", "zcmd", "manifest.tsv")
+REAL_GCC = "/usr/bin/gcc"
+UID = os.getuid()
+
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except (AttributeError, ValueError):
+    pass
+
+
+class C:
+    on = sys.stdout.isatty() and not os.environ.get("NO_COLOR") and os.environ.get("TERM") != "dumb"
+
+    @classmethod
+    def _c(cls, code, s):
+        return "\033[%sm%s\033[0m" % (code, s) if cls.on else s
+
+    @classmethod
+    def b(cls, s): return cls._c("1", s)
+    @classmethod
+    def y(cls, s): return cls._c("1;33", s)
+    @classmethod
+    def c(cls, s): return cls._c("36", s)
+    @classmethod
+    def g(cls, s): return cls._c("32", s)
+    @classmethod
+    def r(cls, s): return cls._c("31", s)
+    @classmethod
+    def d(cls, s): return cls._c("2", s)
+
+
+def die(msg, code=2, hint=None):
+    print("gcc: " + msg, file=sys.stderr)
+    if hint:
+        print("  " + hint, file=sys.stderr)
+    sys.exit(code)
+
+
+def load_json(path, default):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return default
+
+
+# ── verbs ────────────────────────────────────────────────────────────────────
+# (verb, group, argv prefix, one line). The hub only routes; each tool keeps
+# its own help, so `gcc <verb> --help` is that tool's help.
+S = os.path.join(CL, "scripts")
+LM = os.path.join(HOME, "Code", "local-models", "bin")
+VERBS = [
+    ("agents",   "Startup and schedules", None, "every startup entry: view, note, switch on or off (built in)"),
+    ("schedule", "Startup and schedules", [os.path.join(S, "schedule", "schedule.sh")], "add, list, run, enable or retire a timed job"),
+    ("cron",     "Startup and schedules", [os.path.join(S, "schedule", "gcc-cron")], "the one scheduler: what is due, shadow compare"),
+    ("handoff",  "Startup and schedules", [os.path.join(S, "schedule", "handoff.sh")], "cards waiting for you: list, done, tag"),
+    ("seat",     "Claude", ["/usr/bin/python3", os.path.join(S, "seats", "seat")], "sub-agent seats: template, compose, list, land, feedback, weekly"),
+    ("keepwarm", "Claude", ["/usr/bin/python3", os.path.join(S, "keepwarm", "keepwarm.py")], "keep idle sessions' cache warm: status (on/off: ~/.claude/.keepwarm-on)"),
+    ("telemetry", "Claude", ["/usr/bin/python3", os.path.join(S, "telemetry", "telemetry.py")], "tokens, sub-agents, warm and cold returns: report"),
+    ("zrecover", "Machine", ["zrecover"], "crash guard, session restore, wrapped claude"),
+    ("zreclaim", "Machine", ["zreclaim"], "find and clear rebuildable caches"),
+    ("svc",      "Machine", [os.path.join(S, "dev-servers", "svc.sh")], "pm2 dev servers: status, up, reap"),
+    ("pm2-restore", "Machine", [os.path.join(S, "dev-servers", "pm2-restore")], "bring back the saved pm2 list (what login runs)"),
+    ("pm2-resurrect", "Machine", ["pm2-resurrect"], "start every pm2 config found under ~/Code"),
+    ("ipc",      "Claude", ["claude-ipc"], "message other Claude sessions: peers, send, inbox"),
+    ("propose",  "Claude", [os.path.join(S, "propose.sh")], "file or list gcc improvement proposals"),
+    ("atone",    "Claude", [os.path.join(S, "atone.sh")], "the mistake log: list, search, show"),
+    ("affirm",   "Claude", [os.path.join(S, "affirm.sh")], "recorded good calls"),
+    ("pin",      "Claude", ["i-dream", "pin"], "pin an insight for i-dream"),
+    ("tasks",    "Claude", ["python3", os.path.join(S, "goals", "gs")], "goal records: list, left, met"),
+    ("goal",     "Claude", ["bash", os.path.join(S, "goal", "goal.sh")], "the session goal line"),
+    ("idream",   "Claude", ["i-dream"], "the learner: status, reader, domains"),
+    ("codex",    "Claude", [os.path.join(CL, "adapters", "codex", "bin", "codex-gcc")], "run Codex with the gcc adapter"),
+    ("lm",       "Models", [os.path.join(LM, "lm")], "local models: status, doctor, fleet"),
+    ("q",        "Models", [os.path.join(LM, "q")], "ask a local model"),
+    ("see",      "Models", [os.path.join(LM, "see")], "local vision: describe or diff images"),
+    ("imagine",  "Models", [os.path.join(LM, "imagine")], "local image generation"),
+    ("warm",     "Models", [os.path.join(LM, "warm")], "load or unload a local model"),
+    ("mini",     "Models", ["mini"], "quick small-model answer"),
+    ("zcmd",     "Tools", ["zcmd"], "registry of your CLI tools"),
+    ("tools",    "Tools", None, "every tool in zcmd's registry (built in)"),
+]
+VERB_NAMES = {v[0] for v in VERBS} | {"which", "help", "version"}
+
+
+def resolve(argv0):
+    if os.path.isabs(argv0):
+        return argv0 if os.path.exists(argv0) else None
+    for d in os.environ.get("PATH", "").split(":"):
+        p = os.path.join(d, argv0)
+        if os.access(p, os.X_OK):
+            return p
+    return None
+
+
+def verb_rows():
+    rows = []
+    for verb, group, argv, about in VERBS:
+        target = "built in" if argv is None else (resolve(argv[0]) or "")
+        rows.append({"verb": verb, "group": group, "about": about,
+                     "runs": "built in" if argv is None else " ".join(argv),
+                     "found": bool(target)})
+    return rows
+
+
+def cmd_list(as_json):
+    rows = verb_rows()
+    if as_json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    print(C.b("gcc") + C.d("  one front door to your own tools · gcc <verb> --help for each"))
+    group = None
+    for r in rows:
+        if r["group"] != group:
+            group = r["group"]
+            print("\n" + C.y(group))
+        mark = "" if r["found"] else C.r("  (not found)")
+        print("  %s %s%s" % (C.c(r["verb"].ljust(14)), C.d(r["about"]), mark))
+    print("\n" + C.d("gcc which <verb> · gcc agents · gcc tools · gcc --json"))
+    return 0
+
+
+def cmd_which(verb):
+    for v, _, argv, _a in VERBS:
+        if v == verb:
+            print("built in" if argv is None else " ".join(argv))
+            return 0
+    die("no verb '%s'" % verb, 1, "gcc lists them")
+
+
+def cmd_tools(as_json):
+    rows = []
+    try:
+        with open(ZCMD_MANIFEST) as f:
+            for line in f:
+                if not line.strip() or line.startswith("#"):
+                    continue
+                parts = line.rstrip("\n").split("\t")
+                rows.append({"name": parts[0], "kind": parts[1] if len(parts) > 1 else "",
+                             "about": parts[-1] if len(parts) > 2 else ""})
+    except OSError:
+        die("zcmd manifest not found: " + ZCMD_MANIFEST, 1)
+    if as_json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    print(C.y("Tools in zcmd's registry") + C.d("  (zcmd kit for the full cheatsheet)"))
+    for r in rows:
+        print("  %s %s" % (C.c(r["name"].ljust(16)), C.d(r["about"])))
+    return 0
+
+
+# ── agents ───────────────────────────────────────────────────────────────────
+TIMED = ("daily", "weekly", "monthly", "one-shot")
+OURS_PREFIXES = ("com.alcatraz", "dev.", "io.github.alcatraz627", "com.PM2")
+
+
+def short_name(label):
+    for p in ("com.alcatraz627.", "com.alcatraz.", "io.github.alcatraz627.", "dev.", "homebrew.mxcl.", "sh.brew.", "com."):
+        if label.startswith(p):
+            return label[len(p):]
+    return label
+
+
+def source_of(path):
+    if not path:
+        return "?"
+    p = path.replace(HOME, "~")
+    if p.startswith("~/.claude/"):
+        return "gcc (" + p + ")"
+    if p.startswith("~/Code/"):
+        return p.split("/")[2] + " (" + p + ")"
+    if p.startswith("/opt/homebrew/"):
+        return "homebrew"
+    if p.startswith("/Applications/") or "/Applications/" in p:
+        return "app"
+    return p
+
+
+def human_cal(sci):
+    if isinstance(sci, list):
+        return ", ".join(human_cal(s) for s in sci)
+    days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+    t = "%02d:%02d" % (sci.get("Hour", 0), sci.get("Minute", 0))
+    if "Weekday" in sci:
+        return "weekly %s %s" % (days[sci["Weekday"]], t)
+    if "Day" in sci:
+        return "monthly day %d %s" % (sci["Day"], t)
+    return "daily " + t
+
+
+def human_fire_at(kind, fire_at):
+    parts = (fire_at or "").split("@")
+    if kind == "daily":
+        return "daily " + parts[-1]
+    if kind == "weekly" and len(parts) == 3:
+        return "weekly %s %s" % (parts[1], parts[2])
+    if kind == "monthly" and len(parts) == 3:
+        return "monthly %s %s" % (parts[1].replace("day", "day "), parts[2])
+    return "once " + (fire_at or "?")
+
+
+def launchd_state():
+    loaded, disabled = set(), set()
+    out = subprocess.run(["launchctl", "list"], capture_output=True, text=True).stdout
+    for line in out.splitlines()[1:]:
+        parts = line.split("\t")
+        if len(parts) == 3:
+            loaded.add(parts[2])
+    out = subprocess.run(["launchctl", "print-disabled", "gui/%d" % UID], capture_output=True, text=True).stdout
+    for line in out.splitlines():
+        if "=> disabled" in line:
+            disabled.add(line.split('"')[1])
+    return loaded, disabled
+
+
+def last_runs():
+    """Last recorded run per job, in local time."""
+    last = {}
+    try:
+        with open(HISTORY) as f:
+            for line in f:
+                try:
+                    o = json.loads(line)
+                except ValueError:
+                    continue
+                if o.get("ev") == "run" and o.get("outcome") != "missed":
+                    try:
+                        t = (dt.datetime.strptime(o["ts"][:19], "%Y-%m-%dT%H:%M:%S")
+                             .replace(tzinfo=dt.timezone.utc).astimezone().strftime("%a %d %b %H:%M"))
+                    except (KeyError, ValueError):
+                        t = o.get("ts", "?")
+                    last[o.get("name")] = (t, o.get("outcome"))
+    except OSError:
+        pass
+    return last
+
+
+def cron_module():
+    """gcc-cron's own code, so the hub agrees with the scheduler exactly."""
+    path = os.path.join(S, "schedule", "gcc-cron")
+    try:
+        loader = importlib.machinery.SourceFileLoader("gcc_cron", path)
+        spec = importlib.util.spec_from_loader("gcc_cron", loader)
+        mod = importlib.util.module_from_spec(spec)
+        loader.exec_module(mod)
+        return mod
+    except Exception:
+        return None
+
+
+def next_runs(mod, registry):
+    """Next fire per timed job within 32 days (covers monthly jobs)."""
+    if not mod:
+        return {}
+    now = dt.datetime.now()
+    return {n: t.strftime("%a %d %b %H:%M") for n, t in mod.due_jobs(registry, now, now + dt.timedelta(days=32))}
+
+
+def cron_live(loaded):
+    """True when gcc-cron is loaded and not in shadow mode, i.e. timers really run."""
+    if "com.alcatraz.gcc-cron" not in loaded:
+        return False
+    try:
+        with open(os.path.join(LAUNCHAGENTS, "com.alcatraz.gcc-cron.plist"), "rb") as f:
+            return "--shadow" not in (plistlib.load(f).get("ProgramArguments") or [])
+    except Exception:
+        return False
+
+
+def collect():
+    """Every startup entry as one row: LaunchAgents plus gcc-cron's timed jobs."""
+    meta = load_json(META, {})
+    registry = load_json(REGISTRY, {})
+    by_label = {j.get("label"): (n, j) for n, j in registry.items()}
+    loaded, disabled = launchd_state()
+    last = last_runs()
+    mod = cron_module()
+    nxt = next_runs(mod, registry)
+    live = cron_live(loaded)
+    rows = []
+    for plist in sorted(glob.glob(os.path.join(LAUNCHAGENTS, "*.plist"))):
+        try:
+            with open(plist, "rb") as f:
+                p = plistlib.load(f)
+        except Exception:
+            continue
+        label = p.get("Label", os.path.basename(plist))
+        argv = p.get("ProgramArguments") or [p.get("Program", "?")]
+        if p.get("LaunchOnlyOnce"):
+            cadence = "once at login"
+        elif p.get("KeepAlive"):
+            cadence = "always on"
+        elif "StartInterval" in p:
+            secs = p["StartInterval"]
+            cadence = ("every %d min" % (secs // 60)) if secs < 3600 else ("every %g h" % (secs / 3600.0))
+        elif "StartCalendarInterval" in p:
+            cadence = human_cal(p["StartCalendarInterval"])
+        elif p.get("RunAtLoad"):
+            cadence = "once at login"
+        else:
+            cadence = "on demand"
+        ours = label.startswith(OURS_PREFIXES) or argv[0].startswith((CL, os.path.join(HOME, "Code")))
+        # The name is what macOS Login Items shows: the program's file name.
+        name = os.path.basename(argv[0]) if argv[0] not in ("/bin/bash", "/bin/sh", "/usr/bin/python3") \
+            else by_label.get(label, (short_name(label), None))[0]
+        m = meta.get(label, {})
+        rows.append({
+            "name": name, "label": label, "title": m.get("title") or "", "note": m.get("note") or "",
+            "kind": "service" if ours else "vendor", "cadence": cadence,
+            "state": "off" if label in disabled else ("on" if label in loaded else "not loaded"),
+            "login_item": os.path.basename(argv[0]), "program": " ".join(argv),
+            "source": source_of(argv[0]), "plist": plist,
+            "logs": [x for x in (p.get("StandardOutPath"), p.get("StandardErrorPath")) if x],
+        })
+    for name, job in sorted(registry.items()):
+        if job.get("kind") not in TIMED:
+            continue
+        m = meta.get(job.get("label"), {})
+        lr = last.get(name)
+        argv = mod.job_argv(job) if (mod and job.get("adopted")) else None
+        program = " ".join(argv) if argv else (job.get("command") or job.get("script") or "")
+        src = argv[-1] if argv and len(argv) > 1 else job.get("script")
+        state = "off" if job.get("enabled") is False else ("on" if live else "idle")
+        rows.append({
+            "name": name, "label": job.get("label"), "title": m.get("title") or (job.get("description") or "")[:70],
+            "note": m.get("note") or "", "kind": "timer",
+            "cadence": human_fire_at(job.get("kind"), job.get("fire_at")),
+            "state": state,
+            "login_item": "gcc-cron", "program": program,
+            "source": source_of(src), "plist": job.get("plist"),
+            "logs": [x for x in (job.get("out_log"), job.get("err_log")) if x],
+            "last_run": ("%s %s" % lr) if lr else "", "next_run": nxt.get(name, ""),
+            "description": job.get("description") or "",
+        })
+    return rows
+
+
+def find(rows, name):
+    hits = [r for r in rows if name in (r["name"], r["label"])]
+    if not hits:
+        die("no startup entry named '%s'" % name, 1, "gcc agents lists them")
+    return hits[0]
+
+
+STATE_COLOR = {"on": C.g, "off": C.r, "not loaded": C.d, "idle": C.y}   # idle: gcc-cron not running
+
+
+def agents_list(rows, as_json):
+    if as_json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    groups = [("Services (ours)", "service"), ("Timed jobs (run by gcc-cron)", "timer"), ("Vendor", "vendor")]
+    for title, kind in groups:
+        sub = [r for r in rows if r["kind"] == kind]
+        if not sub:
+            continue
+        print(C.y("%s · %d" % (title, len(sub))))
+        for r in sub:
+            st = STATE_COLOR[r["state"]](r["state"].ljust(10))
+            print("  %s %s %s %s" % (st, C.c(r["name"].ljust(26)), r["cadence"].ljust(22),
+                                     r["title"] or C.d("(no title)")))
+            if r["note"]:
+                print("  " + " " * 38 + C.d("note: " + r["note"]))
+        print()
+    print(C.d("gcc agents show <name> · on|off <name> · title|note <name> \"text\" · --json"))
+    return 0
+
+
+def agents_show(r, as_json):
+    if as_json:
+        print(json.dumps(r, indent=2))
+        return 0
+    print(C.b(r["name"]) + "  " + STATE_COLOR[r["state"]](r["state"]))
+    for k in ("title", "note", "kind", "cadence", "login_item", "source", "program", "plist",
+              "last_run", "next_run", "description", "label"):
+        if r.get(k):
+            print("  %s %s" % (C.d(k.replace("_", " ").ljust(12)), r[k]))
+    for lg in r.get("logs", []):
+        print("  %s %s" % (C.d("log".ljust(12)), lg))
+    return 0
+
+
+def agents_toggle(r, on):
+    if r["kind"] == "timer":
+        sub = "enable" if on else "disable"
+        return subprocess.run([os.path.join(S, "schedule", "schedule.sh"), sub, r["name"]]).returncode
+    target = "gui/%d/%s" % (UID, r["label"])
+    if on:
+        subprocess.run(["launchctl", "enable", target])
+        res = subprocess.run(["launchctl", "bootstrap", "gui/%d" % UID, r["plist"]], capture_output=True, text=True)
+        if r["label"] not in launchd_state()[0]:
+            die("could not load %s: %s" % (r["name"], res.stderr.strip() or "launchctl gave no reason"), 1)
+        print("on: %s (loaded, stays on at login)" % r["name"])
+    else:
+        if r["label"] == "com.alcatraz.gcc-cron":
+            print("note: gcc-cron starts every timed job; while it is off, none of them run", file=sys.stderr)
+        subprocess.run(["launchctl", "bootout", target], capture_output=True)
+        subprocess.run(["launchctl", "disable", target])
+        print("off: %s (unloaded, stays off at login; gcc agents on %s to undo)" % (r["name"], r["name"]))
+    return 0
+
+
+def agents_meta(r, field, text):
+    meta = load_json(META, {})
+    meta.setdefault(r["label"], {})[field] = text
+    tmp = META + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(meta, f, indent=2, sort_keys=True)
+    os.replace(tmp, META)
+    print("%s %s: %s" % (field, r["name"], text or "(cleared)"))
+    return 0
+
+
+def cmd_agents(args):
+    as_json = "--json" in args
+    args = [a for a in args if a != "--json"]
+    rows = collect()
+    if not args or args[0] in ("list", "ls"):
+        return agents_list(rows, as_json)
+    sub, rest = args[0], args[1:]
+    if sub in ("show", "on", "off", "title", "note") and not rest:
+        die("usage: gcc agents %s <name>%s" % (sub, ' "text"' if sub in ("title", "note") else ""))
+    if sub == "show":
+        return agents_show(find(rows, rest[0]), as_json)
+    if sub in ("on", "off"):
+        return agents_toggle(find(rows, rest[0]), sub == "on")
+    if sub in ("title", "note"):
+        return agents_meta(find(rows, rest[0]), sub, " ".join(rest[1:]))
+    die("unknown: gcc agents %s" % sub, 2, "gcc agents [list|show|on|off|title|note]")
+
+
+HELP = """gcc-hub %s: one front door to your own tools
+
+USAGE
+  gcc                       grouped list of verbs
+  gcc <verb> [args]         run that tool (its own --help applies)
+  gcc which <verb>          what a verb runs
+  gcc agents [...]          startup entries: list, show, on, off, title, note
+  gcc tools                 everything in zcmd's registry
+
+EXAMPLES
+  gcc agents                # every startup entry with cadence and state
+  gcc agents show gcc-cron  # program, plist, logs, last and next run
+  gcc agents off residue-review
+  gcc ipc peers             # same as claude-ipc peers
+  gcc --json                # verbs as data
+
+  Anything that is not a hub verb goes to the C compiler when called as gcc.
+""" % VERSION
+
+
+def main(argv):
+    as_gcc = bool(argv) and argv[0] == "--as-gcc"
+    if as_gcc:
+        argv = argv[1:]
+        if argv and argv[0] not in VERB_NAMES:   # gcc --help, gcc -o x x.c: the compiler's
+            os.execv(REAL_GCC, [REAL_GCC] + argv)   # gcc -o x x.c and friends
+    if not argv or argv[0] in ("--json",):
+        return cmd_list("--json" in argv)
+    verb, rest = argv[0], argv[1:]
+    if verb in ("-h", "--help", "help"):
+        print(HELP)
+        return 0
+    if verb in ("--version", "version"):
+        print("gcc-hub " + VERSION)
+        return 0
+    if verb == "which":
+        return cmd_which(rest[0]) if rest else die("usage: gcc which <verb>")
+    if verb == "agents":
+        return cmd_agents(rest)
+    if verb == "tools":
+        return cmd_tools("--json" in rest)
+    for v, _, prefix, _a in VERBS:
+        if v == verb and prefix:
+            exe = resolve(prefix[0])
+            if not exe:
+                die("'%s' runs %s, which is not installed" % (verb, prefix[0]), 1)
+            os.execv(exe, [exe] + prefix[1:] + rest)
+    die("no verb '%s'" % verb, 2, "gcc lists them")
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]) or 0)

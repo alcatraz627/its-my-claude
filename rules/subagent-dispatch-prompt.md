@@ -22,6 +22,8 @@ stale_after_days: 180
 4. **Output path.** An absolute path the seat writes BEFORE returning (never a file literally named report.md); the parent verifies the file exists before using any finding.
 5. **One command per Bash call.** "Do not chain commands with `&&`, `;` or a pipe; ask a tool for less output instead of piping."
 
+**Outside a skill, build the prompt with `seat`** (`~/.claude/scripts/seats/seat template`, then `seat compose BRIEF --role R --model M`): it adds the five clauses, persona, role rules and standing constraints, refuses a thin brief, and records the seat. After it lands: `seat feedback ID`. A raw unseated dispatch only warns (owner ruling, 2026-10-10).
+
 Diagnostic: composing an `Agent` prompt and unable to point at each of the five.
 
 Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/subagent-dispatch-prompt.md`

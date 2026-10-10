@@ -53,15 +53,19 @@ One script wires and verifies all of it: `bash ~/.claude/adapters/codex/install.
 | Surface | Mechanism | Source of truth | Stays current by | Proven by |
 |---|---|---|---|---|
 | Behavioral rules (all of `rules/`) | read on demand; AGENTS.md carries the one-line index as a router | `rules/*.md` | live (same files) | canary 2026-08-15 (Codex read a rule file when the gist matched) |
-| Rule index + working agreement | generated `~/.codex/AGENTS.md`, re-sent every turn | `adapters/codex/preamble.md` + `rules/00-index.md` | `install.sh` (or `scripts/export-agents-md.sh`) after a preamble edit or any rule add/rename | generator asserts row count and the 32 KiB cap; 28.2 KB now |
+| Rule index + working agreement | generated `~/.codex/AGENTS.md`, re-sent every turn | `adapters/codex/preamble.md` + `rules/00-index.md` | `install.sh` (or `scripts/export-agents-md.sh`) after a preamble edit or any rule add/rename | generator asserts row count and the 32 KiB cap; `codex-gcc map --check` detects rule-row drift |
 | Conventions, GLOSSARY, mistake-patterns, `memory/global/` | read on demand, addressed from the preamble | those files | live | preamble read protocol |
-| Skills (10 gcc skills + the codex `core-dump`) | symlink `~/.agents/skills/<name>` | `adapters/codex/skills.list`; `adapters/codex/skills/core-dump` | `install.sh` after editing the list; edits to a skill body are live | e2e 2026-09-10: `gcc-proposal` listed with its Claude frontmatter intact |
+| Skills (curated gcc skills + the Codex `core-dump`) | symlink `~/.agents/skills/<name>` | `adapters/codex/skills.list`; `adapters/codex/skills/core-dump` | `install.sh` after editing the list; Codex adapters take precedence when present; skill body edits are live | e2e 2026-09-10: `gcc-proposal` listed with its Claude frontmatter intact |
+| Codex-specific skills (local models, research, gcc records, i-dream, review, validation) | symlink `~/.codex/skills/<name>` | `adapters/codex/skills/<name>` | `install.sh` discovers the adapter skill directories; body edits are live | install canaries and `codex-gcc map --check`, review skills forward-tested 2026-09-23 |
 | Guard hooks (rm, push, protected commits, commit trailers, credentials, secret reads, system dirs, credentialed POSTs, gh marker) | symlink `~/.codex/hooks.json`; `hooks/pre-tool-bash.sh` runs the gcc scripts unchanged | `adapters/codex/hooks.json`, the guard list in `pre-tool-bash.sh`, the scripts under `scripts/` | live, but every edit to `hooks.json` changes the hash Codex trusts: re-trust in `/hooks` | e2e: `rm` blocked by safe-delete; probe: force-push and credential export blocked, `git status` passed |
+| Patch write guard | `PreToolUse` on `apply_patch` checks protected targets, credential assignments, reconstructed settings JSON, project-banned terms, and quality leads | `adapters/codex/hooks/pre-tool-patch.py` | script edits are live; `hooks.json` edits require TUI re-trust | `tests/test_hooks.py` deny/allow and advisory canaries, 2026-09-22 |
+| Turn evidence and completion checks | synchronous `PostToolUse` journals edited paths and executed commands; `Stop` checks high-confidence local artifact links, named next work, open UI callouts, and runtime claims | `adapters/codex/hooks/turn-guard.py` | script edits are live after the existing hook entry is trusted | 15 adapter tests, two guard mutations, 45 response cases, and a real Stop continuation, 2026-09-23 |
 | Execpolicy rules (rm, force push, reset --hard, clean, repo delete forbidden; push, amend, rebase prompt) | symlink `~/.codex/rules/gcc.rules` | `adapters/codex/rules/gcc.rules` | live; `codex execpolicy check` in `install.sh` | `rm -rf build` → forbidden |
 | claude-ipc identity (`cx-<dir>-<id8>`), inbox injection, turn-end nudge | SessionStart / UserPromptSubmit / Stop hooks run claude-ipc's own compiled hook binaries with the env re-keyed | `~/Code/Claude/claude-ipc/dist/ipc-*` | live | e2e: message from `cx-codex-01a08bff` arrived in this session's inbox |
 | Ledger writes (proposals, atone, affirm, pins), checkpoint index, IPC sends | `gcc <verb>` → direct, or outbox → `drain-outbox.sh` from PostToolUse (async), Stop, SessionEnd, UserPromptSubmit | `adapters/codex/bin/gcc`, `hooks/drain-outbox.sh` | live | e2e: pin, checkpoint pointer, proposal `prop-20260910-154423-79` all landed; receipts shown mid-turn |
-| Session briefing (identity, how to write, top mistake patterns, handback pointers) | SessionStart `additionalContext` | `hooks/session-start.sh` reads `atone/derived/_tldr.txt` | live | e2e step 1 quoted the alias |
-| i-dream | domain `codex-sessions`, registered 2026-09-10 (owner ruling) | `adapters/codex/i-dream/`; live copy of the manifest at `~/.claude/i-dream/domains/codex-sessions.toml` | edit the source manifest, re-copy; the extractor runs daily inside i-dream's consolidation | extractor: 71 events from 70 rollouts; `i-dream domain list` shows it |
+| Canonical Markdown placement after owner review | `gcc canon check` previews a schema-1 manifest; `gcc canon apply` checks manifest and base hashes, restricts paths, backs up old files, and requires direct filesystem escalation after owner review; never queues | `adapters/codex/bin/gcc-canon.py`, `bin/gcc`, `hooks/drain-outbox.sh` | live; derived views still use their generators | 3 bridge tests cover preview/apply, stale hash, traversal, symlink, and derived-file refusal; no live owner canon placement has used it yet |
+| Session briefing (identity, how to write, top mistake patterns, handback pointers) | SessionStart `additionalContext`; shared dream guidance uses the owner opt-in flag | `hooks/session-start.sh` and `scripts/dream/dream-insights.sh` | live | e2e step 1 quoted the alias |
+| i-dream | domain `codex-sessions`, registered 2026-09-10 (owner ruling) | `adapters/codex/i-dream/`; live copy of the manifest at `~/.claude/i-dream/domains/codex-sessions.toml` | edit the source manifest, re-copy; the extractor runs daily inside i-dream's consolidation | 2026-09-26: missing extractor wrapper repaired; 198 events and 127 pending shown by `i-dream domain list --json`; full dream pass pending |
 | Claude → Codex dispatch | the `openai-codex` plugin (`codex:codex-rescue`), unchanged | plugin | n/a | AGENTS.md, skills and rules reach those seats too; hooks only once trusted (below) |
 
 **Symlink versus generate.** Codex follows symlinked skill folders (documented),
@@ -70,12 +74,31 @@ e2e runs above). `AGENTS.md` cannot be a symlink to anything that exists: it is
 two sources joined under a byte cap, and Codex TRUNCATES an oversized
 instruction file rather than erroring, so the generator refuses to write past
 32 KiB. Codex re-sends it every turn, which is why the rule corpus (176k chars)
-ships as a 13k index and the full rules are read on demand.
+ships as a compact index and the full rules are read on demand.
+
+The Codex-only skills are centrally maintained in `adapters/codex/skills/`.
+`gcc-discover` routes to useful Claude conventions and skill source files on
+demand. That includes UI charters and categorical visual checks, deploy parity,
+doctor probes, report writing, and agent-facing tool design. The Codex-native
+`skeptical-review` and `adversarial-review` skills preserve the fresh-context,
+persisted-report, evidence, and disposition contracts while using Codex agents. Use
+`codex-gcc map --check` to compare the installed rule menu and links with their
+sources after adapter work.
+
+The completion checks use Codex's `last_assistant_message` and a small
+`/tmp/codex-gcc/turn-evidence/` journal keyed by session and turn. The journal
+stores edited paths and run classifications, not full commands or tool output.
+It records `apply_patch` edits and Bash executions. It cannot attest to changes
+made through unobserved specialized tools or shell scripts that edit files
+without an `apply_patch` call. A runtime pass means a run-like command returned
+an explicit success status; build, lint, typecheck, and test collection do not
+count. The Stop gate accepts an honest `UNCONFIRMED` report when a real run was
+not possible. Codex's transcript format is not used as a hook interface.
 
 ## The constraint ledger
 
 Each Codex limit that shaped the design, with the workaround chosen and its
-status. "Verified" means run and observed this session (2026-09-10).
+status. Historical "verified" entries refer to the 2026-09-10 adapter run unless a later date is stated.
 
 | # | Codex constraint | Workaround | Status |
 |---|---|---|---|
@@ -88,11 +111,11 @@ status. "Verified" means run and observed this session (2026-09-10).
 | 7 | The shell sandbox writes only under the workspace and `/tmp`, and cannot reach the claude-ipc unix socket without `network_access` (full egress) | `gcc` queues to `/tmp/codex-gcc/outbox/<sid>.jsonl`; hooks run OUTSIDE the sandbox and drain it (PostToolUse async lands it within seconds; Stop, SessionEnd and UserPromptSubmit catch the rest); receipts are injected back | verified, no network grant needed |
 | 8 | Codex inherits the launching Claude session's `CLAUDE_CODE_SESSION_ID`, so a direct `claude-ipc register` would rebind the parent's mailbox and a ledger write would carry the parent's id | `hooks/lib.sh` and `gcc` re-key the env to `CODEX_THREAD_ID` (== the hook `session_id`), set `CLAUDE_IPC_ALIAS=cx-<dir>-<id8>`, and unset the parent's messaging socket | verified (attribution correct end to end) |
 | 9 | `claude-ipc register` (the CLI) refuses without `CLAUDE_CODE_SESSION_ID` | registration happens in the SessionStart hook with the re-keyed env; the drainer re-registers and retries once on `not_registered` | verified; native `CODEX_THREAD_ID` support filed as `prop-20260910-154423-79` |
-| 10 | `transcript_path` is `null` under `codex exec` (and the rollout format is not Claude's JSONL) | Stop hooks that read the transcript (declared-ready, structural-claim, absence-claim, filename-dot, relpath ...) are not ported; their rules bind as text in the preamble | not ported, by design |
-| 11 | File edits arrive as `apply_patch` with the patch text in `tool_input.command`, not `file_path` + `content` | Edit/Write gcc guards (prose quality, comment hygiene, banned vocab, settings write) are not ported | not ported; candidate: a patch-target guard for `~/.claude` |
+| 10 | `transcript_path` is `null` under `codex exec` (and the rollout format is not Claude's JSONL) | Text-only completion checks read Codex's documented `last_assistant_message`; transcript-dependent checks remain unported. The local artifact check blocks once only for a relative target under `.claude/output`, `docs`, or `assets`, or for a known local file link followed immediately by a period. Ambiguous links pass. | adapted; real Stop continuation verified 2026-09-23 |
+| 11 | File edits arrive as `apply_patch` with patch text in `tool_input.command`, not `file_path` + `content` | `pre-tool-patch.py` parses targets and added lines; it blocks credential assignment, known invalid settings, and opt-in banned terms; it routes shared prose/comment detectors and env/symbol leads as advisories | 10 behavioral canaries passed 2026-09-22; interactive TUI hook trust must be renewed after `hooks.json` changes |
 | 12 | The initial skills list is budgeted at 2% of the context window (about 5k chars); past that descriptions are shortened, then skills dropped | `skills.list` is curated (10 + core-dump); add a line, re-run install | verified discovery |
-| 13 | Skill bodies name Claude tools and `$ARGUMENTS`; some call `propose.sh` or `claude-ipc` directly | preamble instructs substitution and routes writes through `gcc`; `context: fork` skills are excluded from the list | advisory |
-| 14 | No `context: fork`; Codex has its own sub-agents (`~/.codex/agents/*.toml`, `multi_agent` stable) | not ported; a custom-agent file per forked gcc skill is the candidate if Codex use grows | open |
+| 13 | Shared skill bodies name Claude tools and `$ARGUMENTS`; some call `propose.sh` or `claude-ipc` directly | preamble instructs substitution and routes writes through `gcc`; skills with load-bearing Claude dispatch are excluded unless an adapter-owned Codex version replaces that workflow | advisory |
+| 14 | Claude's `context: fork` is unavailable; Codex has delegated agents with a different dispatch interface | `skeptical-review` and `adversarial-review` use one fresh Codex agent with an explicit model, no nested delegation, and a persisted absolute report path | adapted and installed 2026-09-23; first adversarial forward test recorded in the codex workspace |
 | 15 | AGENTS.md is truncated past `project_doc_max_bytes` (32 KiB) | generator refuses over the cap; 28,249 bytes today, so ~12 more rule rows of headroom before the preamble must shrink or the cap rises | watch |
 | 16 | `codex execpolicy check` does not split `bash -lc "a && b"`; the runtime splits only plain chains | rules are the second layer; the PreToolUse guards see the raw command string first | verified (check tool) |
 | 17 | Codex writes a `trust_level = "trusted"` row into `config.toml` for every project it runs in | trash the rows for scratch dirs when done | cleaned up this session |
@@ -113,7 +136,8 @@ exactly what makes them the right place to land sandboxed writes.
 ## Install, update, trust
 
 ```
-bash ~/.claude/adapters/codex/install.sh      # idempotent; 31 checks; run after any change
+bash ~/.claude/adapters/codex/install.sh      # idempotent; run after source changes
+bash ~/.claude/adapters/codex/bin/codex-gcc map --check
 ```
 
 Then, once per hook definition: open `codex`, type `/hooks`, trust the gcc
@@ -158,13 +182,13 @@ from an unsandboxed shell; it exists for tests only.
 
 ## What is deliberately not ported
 
-The 40 PreToolUse and 20 Stop registrations in `settings.json` are not mirrored.
-Most tune a teammate (ripgrep preference, comment hygiene, WAL, tab title,
-command chaining, which under Codex is not even the problem it is under Claude
-Code's permission model) and a contractor's output is reviewed anyway. The nine
-guards in `pre-tool-bash.sh` are the verbs where review comes after the damage.
-Add one by adding a line there; the payload and output contracts match, and
-the probe in `install.sh` is the place to prove it blocks.
+The Claude hook registrations in `settings.json` are not mirrored as a set.
+Codex runs nine shell guards, one patch write guard, and the narrow completion
+checks described above. Claude's WAL, statusline, auto-format, tab title,
+notification, and Artifact publish hooks still belong to their own runtime.
+The patch quality detectors are advisory because their findings need judgment;
+the owner-given banned vocabulary and credential rules block. Add a shell guard
+in `pre-tool-bash.sh` only after a block and a pass canary show its behavior.
 
 `adapters/codex/hooks/guard-destructive.sh` is the withdrawn Aug-14 regex gate,
 kept as the worked example behind the verdict that regexes over raw shell text
@@ -235,6 +259,20 @@ says what was measured. Read this before asking a seat what it is doing.
 - **AGENTS.md refused.** The generator prints bytes over the cap; shorten the
   preamble or raise `project_doc_max_bytes` in `config.toml` and export with
   `CODEX_DOC_MAX_BYTES` to match.
+
+## Models on this account
+
+Codex here signs in with a ChatGPT account, which limits the models it accepts.
+Checked 2026-10-10 with `codex exec --model <m> "Reply with the single word ok"`:
+
+| Model | Works? | Use |
+|---|---|---|
+| `gpt-6-astra` | yes | the default in `~/.codex/config.toml` |
+| `gpt-6-sol` | yes | pass `--model gpt-6-sol` for a heavier seat |
+| `gpt-6.1-sol` | no | refused: "not supported when using Codex with a ChatGPT account" |
+
+A model missing from this table is untested; run the same one-line check
+before you dispatch a seat on it.
 
 ## Provenance
 

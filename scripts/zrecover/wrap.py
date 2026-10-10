@@ -8,16 +8,54 @@ On the side, the output stream also drives an in-memory terminal emulator
 ~/.claude/zrecover/screens/<child-pid>.txt. After a crash that file holds the
 last thing you saw, including an unsent draft in the Claude prompt box.
 
+The recorder is optional and the relay is not: if the recorder fails, recording
+stops (noted in the screen file and wrap-errors.log) and bytes keep flowing.
+The relay ends only when the child exits or the outer terminal goes away.
+
 Usage: wrap.py [--name LABEL] [--every SECONDS] -- <command> [args...]
 """
-import fcntl, json, os, pty, select, signal, struct, sys, termios, time, tty
+import errno, fcntl, json, os, pty, select, signal, struct, sys, termios, time, traceback, tty
 
 import pyte
+from wcwidth import wcwidth
 
 HOME = os.path.expanduser("~")
 ROOT = os.path.join(HOME, ".claude", "zrecover")
 SCREENS = os.path.join(ROOT, "screens")
 WRAPS = os.path.join(ROOT, "wraps")
+ERRORS = os.path.join(ROOT, "wrap-errors.log")
+FAULT = os.environ.get("ZRECOVER_WRAP_FAULT", "")   # tests only: "flush" or "loop"
+
+
+def log_error(where, pid):
+    """Append the current exception's traceback to wrap-errors.log; never raises."""
+    try:
+        with open(ERRORS, "a") as f:
+            f.write(f"--- {time.strftime('%Y-%m-%d %H:%M:%S')} pid {pid} in {where}\n")
+            f.write(traceback.format_exc())
+    except OSError:
+        pass
+
+
+def render_lines(screen):
+    """The screen as text lines. Replaces pyte's .display, which raises IndexError
+    on the empty placeholder a wide glyph leaves when its left half is overwritten
+    (Claude's emoji spinners do this constantly)."""
+    lines = []
+    for y in range(screen.lines):
+        row, out, skip = screen.buffer[y], [], False
+        for x in range(screen.columns):
+            if skip:
+                skip = False
+                continue
+            ch = row[x].data
+            if not ch:
+                out.append(" ")
+                continue
+            out.append(ch)
+            skip = wcwidth(ch[0]) == 2
+        lines.append("".join(out))
+    return lines
 
 
 def winsize(fd):
@@ -66,9 +104,25 @@ class Recorder:
             "cwd": os.getcwd(), "started": time.time(), "screen": self.screen_path,
             "tty": os.ttyname(0) if os.isatty(0) else None}))
 
+    def _stop(self, where, e):
+        """The recorder failed: stop recording for good, keep the reason."""
+        self.broken = True
+        self.note = f"emulator stopped in {where}: {e!r}"
+        log_error(where, self.pid)
+        try:
+            with open(self.screen_path, "a") as f:
+                f.write(f"# {self.note} at {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        except OSError:
+            pass
+
     def resize(self, rows, cols):
-        self.screen.resize(rows, cols)
-        self.dirty = True
+        if self.broken:
+            return
+        try:
+            self.screen.resize(rows, cols)
+            self.dirty = True
+        except Exception as e:
+            self._stop("resize", e)
 
     def feed(self, data):
         if self.broken:
@@ -77,14 +131,23 @@ class Recorder:
             self.stream.feed(data)
             self.dirty = True
         except Exception as e:  # the emulator must never break passthrough
-            self.broken = True
-            self.note = f"emulator stopped: {e!r}"
+            self._stop("feed", e)
 
     def flush(self, force=False):
+        if self.broken:
+            return
+        try:
+            self._flush(force)
+        except Exception as e:
+            self._stop("flush", e)
+
+    def _flush(self, force):
         now = time.time()
         if not force and (not self.dirty or now - self.last_flush < self.every):
             return
-        lines = [line.rstrip() for line in self.screen.display]
+        if FAULT == "flush":
+            raise IndexError("injected flush fault")
+        lines = [line.rstrip() for line in render_lines(self.screen)]
         while lines and not lines[-1]:
             lines.pop()
         head = (f"# zrecover screen · pid {self.pid} · {self.name} · {time.strftime('%Y-%m-%d %H:%M:%S')}\n"
@@ -102,8 +165,11 @@ class Recorder:
         except OSError:
             pass
         # keep the final screen for a clean exit too; restore prunes by age
-        with open(self.screen_path, "a") as f:
-            f.write(f"# exited status {status} at {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        try:
+            with open(self.screen_path, "a") as f:
+                f.write(f"# exited status {status} at {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        except OSError:
+            pass
 
 
 def run(cmd, name, every):
@@ -135,49 +201,91 @@ def run(cmd, name, every):
     signal.signal(signal.SIGTERM, forward(signal.SIGTERM))
     signal.signal(signal.SIGHUP, forward(signal.SIGHUP))
     status = 1
-    exited = []   # wait status once the child is reaped inside the loop
-    try:
-        tty.setraw(stdin)
+    exited = []          # wait status once the child is reaped
+    master_open = [True]  # False once the child side of the pty has closed
+
+    def hang_up():
+        """The outer terminal is gone: tell the child, as a closed window would."""
+        try:
+            os.kill(pid, signal.SIGHUP)
+        except ProcessLookupError:
+            pass
+        term_deadline[0] = term_deadline[0] or time.time() + 5
+
+    def relay():
+        """Move bytes until the child exits. Returns "exited" or "terminal-gone"."""
         while True:
             if resized[0]:
                 resized[0] = False
-                r, c = winsize(stdin)
-                set_winsize(master, r, c)
-                rec.resize(r, c)
+                try:
+                    r, c = winsize(stdin)
+                    set_winsize(master, r, c)
+                    rec.resize(r, c)
+                except OSError:
+                    pass
             if term_deadline[0] and time.time() > term_deadline[0]:
                 try:
                     os.kill(pid, signal.SIGKILL)
                 except ProcessLookupError:
                     pass
                 term_deadline[0] = None
+            fds = [stdin] + ([master] if master_open[0] else [])
             try:
-                ready, _, _ = select.select([stdin, master], [], [], 0.5)
+                ready, _, _ = select.select(fds, [], [], 0.5)
             except InterruptedError:
                 continue
             # grandchildren (MCP servers, statusline helpers) can hold the pty open
             # after the child dies, so EOF alone is not a reliable exit signal
             done_pid, st = os.waitpid(pid, os.WNOHANG)
             if done_pid == pid:
-                exited = [st]
+                exited.append(st)
                 try:
                     write_all(stdout, os.read(master, 65536))
                 except OSError:
                     pass
-                break
+                return "exited"
             if master in ready:
                 try:
                     data = os.read(master, 65536)
                 except OSError:
                     data = b""
-                if not data:
-                    break
-                write_all(stdout, data)
-                rec.feed(data)
-            if stdin in ready:
-                data = os.read(stdin, 65536)
                 if data:
+                    try:
+                        write_all(stdout, data)
+                    except OSError:
+                        hang_up()
+                        return "terminal-gone"
+                    rec.feed(data)
+                else:
+                    master_open[0] = False   # child closed its side; wait for it to exit
+            if stdin in ready:
+                try:
+                    data = os.read(stdin, 65536)
+                except OSError as e:
+                    if e.errno in (errno.EIO, errno.ENXIO, errno.EBADF):
+                        hang_up()
+                        return "terminal-gone"
+                    raise
+                if data and master_open[0]:
                     write_all(master, data)
             rec.flush()
+            if FAULT == "loop" and not rec.broken:   # fires once: the fallback breaks the recorder
+                raise RuntimeError("injected loop fault")
+
+    try:
+        tty.setraw(stdin)
+        how = None
+        while how is None:
+            try:
+                how = relay()
+            except Exception as e:
+                # Never leave the relay while the child lives: log, drop the
+                # recorder, and go round again as a plain pass-through.
+                if not rec.broken:
+                    rec._stop("relay", e)
+                else:
+                    log_error("relay", pid)
+                time.sleep(0.05)   # a fault that repeats must not spin the CPU
     finally:
         termios.tcsetattr(stdin, termios.TCSADRAIN, old)
         try:

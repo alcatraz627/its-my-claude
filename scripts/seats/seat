@@ -1,0 +1,440 @@
+#!/usr/bin/env python3
+"""seat: dispatch a sub-agent with a complete, checked prompt and a record of it.
+
+A sub-agent starts with nothing; its prompt is its whole world. Hand-written
+dispatch prompts come out thin, so `seat` builds the prompt from a structured
+brief, adds what the parent tends to forget (persona, role rules, the five
+dispatch clauses, standing constraints, input excerpts), refuses a brief too thin
+to act on, and records every seat so it can be seen, landed and reviewed.
+
+Design: ~/.claude/assets/reports/20261010-gcc-fix-list/subagent-seats-design.md
+
+Usage:
+  seat template [--role R]                 print an empty brief to fill
+  seat compose BRIEF.md --role R --model M [--persona P] [--effort E]
+               [--provider claude|codex] [--scope read-only|PATHS] [--no-cold-read]
+                                           check the brief, write the record, print the prompt
+  seat land ID --outcome ok|partial|failed [--note TEXT]
+  seat feedback ID --prompt ok|thin|wrong --persona fit|misfit|none [--note TEXT]
+  seat list [--days N] [--json]  ·  seat show ID [--json]  ·  seat weekly [--days N] [--json]
+Roles: reviewer, adversary, judge, researcher, worker. Exit 0 ok, 1 refused/failed, 2 usage.
+"""
+import argparse
+import datetime as dt
+import glob
+import json
+import os
+import re
+import secrets
+import subprocess
+import sys
+
+HOME = os.path.expanduser("~")
+CL = os.path.join(HOME, ".claude")
+SEATS = os.environ.get("SEATS_DIR", os.path.join(CL, "seats"))
+DOMAIN = os.environ.get("SEATS_DOMAIN", os.path.join(CL, "seats-domain"))
+PERSONAS = os.path.join(CL, "personas")
+Q = os.path.join(HOME, "Code", "local-models", "bin", "q")
+
+SECTIONS = ["Goal", "Background", "Inputs", "Constraints", "Scope", "Method", "Deliverable", "Done when", "Return"]
+HINTS = {
+    "Goal": "The outcome in the owner's terms and why it matters now. Two sentences or more; name a result, not an activity.",
+    "Background": "What you already know, decisions already made, dead ends already tried. Three facts or more, one per line.",
+    "Inputs": "One per line: a path (optionally path:START-END) and why it matters. Paths must exist.",
+    "Constraints": "The owner's standing rules for this work, copied verbatim with their source. Or 'none: <why>'.",
+    "Scope": "One line starting 'Do:' and one starting 'Do not:'.",
+    "Method": "How to work: what to read first, what to run, what evidence counts. Two steps or more.",
+    "Deliverable": "Format, sections, and the absolute output path.",
+    "Done when": "Checkable acceptance criteria a third party could verify. Two or more, one per line.",
+    "Return": "What goes in the reply versus the file, and how to state uncertainty.",
+}
+ROLES = {
+    "reviewer": ("Write nothing in the tree. Produce a report with a findings ledger (severity, file:line, the defect, "
+                 "how you confirmed it, the fix) and intermediate notes if the run is long. Say which areas are clean."),
+    "adversary": ("Write nothing in the tree. Try to break the work; every finding carries its reproduction (command and "
+                  "output). A finding you could not reproduce is marked 'reasoned, not reproduced'."),
+    "judge": ("Write nothing. Give a verdict against the stated criteria, one reason per criterion. You were not shown "
+              "the author's reasoning on purpose; judge the artifact."),
+    "researcher": "Write only your output file. Cite every finding (path:line or URL) and state uncertainty plainly.",
+    "worker": ("Change only the paths in your scope. Hand back: what changed, the checks you ran with their output, and "
+               "what is unverified. To write outside your scope, stop and return a WRITE REQUEST naming the path and why."),
+}
+CLAUSES = [
+    "Do NOT spawn sub-agents.",
+    "Ignore any task-list or board auto-dispatch. When your scoped work is done, stop; do not pick up other tasks.",
+    "Write your output file BEFORE returning; the parent checks it exists.",
+    "One command per Bash call: never chain with &&, ; or a pipe; ask a tool for less output instead of piping.",
+]
+VAGUE = re.compile(r"^(look into|check|handle|review|fix|see|investigate|deal with)\b", re.I)
+
+
+def die(msg, code=2):
+    print("seat: " + msg, file=sys.stderr)
+    sys.exit(code)
+
+
+def parse_brief(text):
+    secs, cur = {}, None
+    for line in text.splitlines():
+        m = re.match(r"^#{1,3}\s*(.+?)\s*$", line)
+        if m and m.group(1).strip().lower() in [s.lower() for s in SECTIONS]:
+            cur = next(s for s in SECTIONS if s.lower() == m.group(1).strip().lower())
+            secs[cur] = []
+        elif cur:
+            secs[cur].append(line)
+    return {k: "\n".join(v).strip() for k, v in secs.items()}
+
+
+def lines_of(s):
+    return [l.strip().lstrip("-*0123456789.) ").strip() for l in s.splitlines() if l.strip()]
+
+
+def parse_input(line):
+    m = re.match(r"^(\S+?)(?::(\d+)-(\d+))?(?:\s+[-:—]?\s*(.*))?$", line)
+    if not m:
+        return None
+    return {"path": os.path.expanduser(m.group(1).rstrip(",")), "start": m.group(2), "end": m.group(3),
+            "why": (m.group(4) or "").strip()}
+
+
+def gate(b):
+    """Mechanical checks. Returns a list of refusals, each naming the section."""
+    bad = []
+    for s in SECTIONS:
+        if not b.get(s):
+            bad.append("%s: missing. %s" % (s, HINTS[s]))
+    if bad:
+        return bad
+    goal = b["Goal"]
+    if len(re.findall(r"[.!?](\s|$)", goal)) < 2 or len(goal.split()) < 20:
+        bad.append("Goal: needs two sentences and 20+ words naming the result and why it matters now.")
+    if VAGUE.match(goal) and len(goal.split()) < 12:
+        bad.append("Goal: reads as a bare activity; name the result.")
+    if len(lines_of(b["Background"])) < 3:
+        bad.append("Background: needs three facts or more, one per line.")
+    ins = [parse_input(l) for l in lines_of(b["Inputs"])]
+    if not ins or any(i is None for i in ins):
+        bad.append("Inputs: one 'path[:start-end] why' per line.")
+    else:
+        for i in ins:
+            if not os.path.exists(i["path"]):
+                bad.append("Inputs: path does not exist: %s" % i["path"])
+            elif len(i["why"].split()) < 3:
+                bad.append("Inputs: say why %s matters (3+ words)." % i["path"])
+    sc = lines_of(b["Scope"])
+    if not any(l.lower().startswith("do:") for l in sc) or not any(l.lower().startswith(("do not:", "don't:", "not:")) for l in sc):
+        bad.append("Scope: needs a 'Do:' line and a 'Do not:' line.")
+    if len(lines_of(b["Method"])) < 2:
+        bad.append("Method: needs two steps or more.")
+    if not re.search(r"(^|\s)(/|~/)\S+", b["Deliverable"]):
+        bad.append("Deliverable: needs the absolute output path.")
+    if len(lines_of(b["Done when"])) < 2:
+        bad.append("Done when: needs two checkable criteria or more.")
+    for s in ("Method", "Deliverable", "Return"):
+        if VAGUE.match(b[s]) and len(b[s].split()) < 5:
+            bad.append("%s: too vague ('%s')." % (s, b[s]))
+    return bad
+
+
+def output_path(b):
+    m = re.search(r"((?:/|~/)\S+)", b["Deliverable"])
+    return os.path.expanduser(m.group(1).rstrip(".,;)")) if m else ""
+
+
+def excerpts(b):
+    out = []
+    for l in lines_of(b["Inputs"]):
+        i = parse_input(l)
+        if i and i["start"] and os.path.isfile(i["path"]):
+            s, e = int(i["start"]), min(int(i["end"]), int(i["start"]) + 80)
+            with open(i["path"], errors="replace") as f:
+                body = f.readlines()[s - 1:e]
+            out.append("### %s:%d-%d\n```\n%s```" % (i["path"], s, e, "".join(body)))
+    return "\n\n".join(out)
+
+
+def resume_constraints(cwd):
+    """Standing constraints and caveats from the newest checkpoint here, verbatim."""
+    files = sorted(glob.glob(os.path.join(cwd, "_*.claude.md")), key=os.path.getmtime, reverse=True)
+    for p in files[:3]:
+        with open(p, errors="replace") as f:
+            text = f.read()
+        found = [l.strip() for l in text.splitlines()
+                 if l.strip().startswith(("- **Standing constraints:**", "- **Standing caveats:**"))]
+        if found:
+            return "From %s:\n%s" % (p, "\n".join(found))
+    return ""
+
+
+def cold_read(prompt_file, out_path):
+    """A cheap local model reads the prompt with nothing else. Only if the local
+    server is already up: it never starts a model (owner rule)."""
+    try:
+        up = subprocess.run(["curl", "-s", "-m", "1", "http://localhost:11434/api/tags"],
+                            capture_output=True, timeout=3).returncode == 0
+    except Exception:
+        up = False
+    if not up or not os.path.exists(Q):
+        return None
+    q = ("You are the agent receiving the attached prompt and nothing else. Answer in three lines: "
+         "DELIVER: what you deliver and the exact path. FIRST: the first thing you do. "
+         "MISSING: anything you would need that the prompt does not give you, or 'none'.")
+    try:
+        r = subprocess.run([Q, "--json", "--no-stats", "--timeout", "90", "--ctx", prompt_file, "qa", q],
+                           capture_output=True, text=True, timeout=120)
+        o = json.loads(r.stdout)
+        text = next((o[k] for k in ("answer", "response", "text", "output") if isinstance(o.get(k), str)), "")
+    except Exception:
+        return None
+    return {"text": text.strip(), "named_output": os.path.basename(out_path) in text}
+
+
+def record_path(sid):
+    return os.path.join(SEATS, sid + ".json")
+
+
+def load(sid):
+    try:
+        with open(record_path(sid)) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        die("no seat %s" % sid, 1)
+
+
+def save(rec):
+    os.makedirs(SEATS, exist_ok=True)
+    tmp = record_path(rec["id"]) + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(rec, f, indent=2)
+    os.replace(tmp, record_path(rec["id"]))
+
+
+def domain_event(kind, rec, **extra):
+    """One event per dispatch, landing and feedback for i-dream's seats domain."""
+    os.makedirs(DOMAIN, exist_ok=True)
+    ev = {"id": "%s-%s" % (rec["id"], kind), "ts": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+          "kind": kind, "seat": rec["id"], "role": rec["role"], "provider": rec["provider"],
+          "model": rec["model"], "persona": rec.get("persona") or "", "provenance": "agent",
+          "session_id": rec.get("parent") or "", "project": rec.get("cwd") or ""}
+    ev.update(extra)
+    with open(os.path.join(DOMAIN, "events.jsonl"), "a") as f:
+        f.write(json.dumps(ev) + "\n")
+
+
+def cmd_template(role):
+    print("<!-- seat brief%s. Fill every section; `seat compose` refuses a thin one. -->" % (" for a " + role if role else ""))
+    for s in SECTIONS:
+        print("\n## %s\n<!-- %s -->\n" % (s, HINTS[s]))
+    return 0
+
+
+def cmd_compose(a):
+    with open(a.brief) as f:
+        b = parse_brief(re.sub(r"<!--.*?-->", "", f.read(), flags=re.S))
+    if a.role not in ROLES:
+        die("role must be one of " + ", ".join(ROLES))
+    refusals = gate(b)
+    sid = "s-%s-%s" % (dt.datetime.now().strftime("%Y%m%d-%H%M%S"), secrets.token_hex(2))
+    persona_text = ""
+    if a.persona:
+        pp = os.path.join(PERSONAS, a.persona + ".md")
+        if not os.path.exists(pp):
+            refusals.append("persona '%s' not found in %s" % (a.persona, PERSONAS))
+        else:
+            with open(pp) as f:
+                persona_text = f.read().strip()
+    if refusals:
+        os.makedirs(SEATS, exist_ok=True)
+        with open(os.path.join(SEATS, "refusals.jsonl"), "a") as f:
+            f.write(json.dumps({"ts": dt.datetime.now().isoformat(timespec="seconds"), "brief": a.brief,
+                                "role": a.role, "reasons": refusals}) + "\n")
+        print("seat: brief refused, fix and resubmit:", file=sys.stderr)
+        for r in refusals:
+            print("  - " + r, file=sys.stderr)
+        return 1
+    out = output_path(b)
+    cons = resume_constraints(os.getcwd())
+    scope = a.scope or ("read-only" if a.role in ("reviewer", "adversary", "judge") else "the output file only"
+                        if a.role == "researcher" else "")
+    if a.role == "worker" and not a.scope:
+        die("a worker seat needs --scope with the paths it may write")
+    header = "[seat %s] role=%s persona=%s provider=%s model=%s effort=%s output=%s" % (
+        sid, a.role, a.persona or "none", a.provider, a.model, a.effort, out)
+    parts = [header, "",
+             "# Who you are",
+             (persona_text + "\n\n" if persona_text else "") +
+             "You are a %s seat, called because: %s" % (a.role, lines_of(b["Goal"])[0]),
+             "# The goal", b["Goal"]]
+    if a.role != "judge":   # a judge sees the artifact and the criteria, not the author's reasoning
+        parts += ["# What we already know", b["Background"],
+                  "# Constraints (verbatim)", b["Constraints"] + ("\n\n" + cons if cons else "")]
+    parts += ["# Your inputs", b["Inputs"]]
+    ex = excerpts(b)
+    if ex:
+        parts += ["## Excerpts", ex]
+    parts += ["# Scope", b["Scope"] + "\nWrite access: %s." % scope,
+              "# How to work", b["Method"] + "\n\nRole rules: " + ROLES[a.role],
+              "# What to deliver", b["Deliverable"], "## Done when", b["Done when"],
+              "# Rules", "\n".join("- " + c for c in CLAUSES),
+              "# What to return", b["Return"]]
+    prompt ="\n\n".join(parts).strip() + "\n"
+    os.makedirs(SEATS, exist_ok=True)
+    pfile = os.path.join(SEATS, sid + ".prompt.md")
+    with open(pfile, "w") as f:
+        f.write(prompt)
+    cr = None if a.no_cold_read else cold_read(pfile, out)
+    if cr is not None and not cr["named_output"]:
+        print("seat: refused by the cold read: a fresh reader could not name the deliverable path.\n" + cr["text"],
+              file=sys.stderr)
+        os.remove(pfile)
+        return 1
+    rec = {"id": sid, "role": a.role, "persona": a.persona, "provider": a.provider, "model": a.model,
+           "effort": a.effort, "scope": scope, "output": out, "brief": os.path.abspath(a.brief), "prompt": pfile,
+           "parent": os.environ.get("CLAUDE_CODE_SESSION_ID", ""), "cwd": os.getcwd(),
+           "started": dt.datetime.now().isoformat(timespec="seconds"), "state": "composed",
+           "cold_read": cr, "feedback": []}
+    save(rec)
+    domain_event("dispatch", rec)
+    if a.provider == "codex":
+        cmd = ("codex-gcc exec --no-brief --model %s \"Read %s in full and follow it.\"" % (a.model, pfile)
+               if a.role != "worker" else
+               "codex-gcc exec --brief <commit the brief first> --model %s \"Read %s in full and follow it.\"" % (a.model, pfile))
+        print("# seat %s composed; run:\n%s" % (sid, cmd))
+        return 0
+    sys.stdout.write(prompt)
+    # A short dispatch that points at the prompt file keeps the parent's context
+    # small; it carries the header (for the Agent hook) and the persistence line.
+    print("\n# dispatch with (Agent prompt):\n%s\n\nRead %s in full and follow it exactly; it is your complete "
+          "brief. Write your full output to %s BEFORE returning; return a short abstract + the path. If the "
+          "file write is refused, return your FULL findings as text and I will persist them to that path. "
+          "Do NOT spawn sub-agents. One command per Bash call, no chaining." % (header, pfile, out), file=sys.stderr)
+    if cr:
+        print("\n<!-- cold read: %s -->" % cr["text"].replace("\n", " | "), file=sys.stderr)
+    return 0
+
+
+def cmd_land(a):
+    rec = load(a.id)
+    exists = bool(rec.get("output")) and os.path.exists(rec["output"])
+    rec.update(state="landed", outcome=a.outcome, ended=dt.datetime.now().isoformat(timespec="seconds"),
+               output_exists=exists, land_note=a.note or "")
+    save(rec)
+    domain_event("land", rec, outcome=a.outcome, output_exists=exists)
+    print("landed %s: %s%s" % (a.id, a.outcome, "" if exists else "  (WARNING: output file missing: %s)" % rec.get("output")))
+    return 0 if exists or a.outcome == "failed" else 1
+
+
+def cmd_feedback(a):
+    rec = load(a.id)
+    fb = {"ts": dt.datetime.now().isoformat(timespec="seconds"), "prompt": a.prompt, "persona": a.persona,
+          "note": a.note or ""}
+    rec.setdefault("feedback", []).append(fb)
+    save(rec)
+    domain_event("feedback", rec, **{"prompt_quality": a.prompt, "persona_fit": a.persona, "note": a.note or ""})
+    print("feedback recorded for %s" % a.id)
+    return 0
+
+
+def records(days):
+    cut = (dt.datetime.now() - dt.timedelta(days=days)).isoformat()
+    out = []
+    for p in glob.glob(os.path.join(SEATS, "s-*.json")):
+        try:
+            with open(p) as f:
+                r = json.load(f)
+        except (OSError, ValueError):
+            continue
+        if r.get("started", "") >= cut:
+            out.append(r)
+    return sorted(out, key=lambda r: r["started"], reverse=True)
+
+
+def cmd_list(a):
+    rs = records(a.days)
+    if a.json:
+        print(json.dumps(rs, indent=2))
+        return 0
+    for r in rs:
+        print("%s  %-9s %-10s %-7s %-14s %s" % (r["started"][5:16], r["state"], r["role"], r["provider"],
+                                               r["model"], r.get("outcome", "")))
+    print("%d seat(s) in %d day(s)" % (len(rs), a.days))
+    return 0
+
+
+def cmd_weekly(a):
+    rs = records(a.days)
+    agg = {"seats": len(rs), "by_role": {}, "by_model": {}, "outcomes": {}, "prompt_quality": {},
+           "persona_fit": {}, "notes": [], "refusals": []}
+    for r in rs:
+        for k, v in (("by_role", r["role"]), ("by_model", r["model"]), ("outcomes", r.get("outcome", "open"))):
+            agg[k][v] = agg[k].get(v, 0) + 1
+        for fb in r.get("feedback", []):
+            agg["prompt_quality"][fb["prompt"]] = agg["prompt_quality"].get(fb["prompt"], 0) + 1
+            key = "%s:%s" % (r.get("persona") or "none", fb["persona"])
+            agg["persona_fit"][key] = agg["persona_fit"].get(key, 0) + 1
+            if fb["note"]:
+                agg["notes"].append("%s (%s): %s" % (r["id"], r["role"], fb["note"]))
+    cut = (dt.datetime.now() - dt.timedelta(days=a.days)).isoformat()
+    rp = os.path.join(SEATS, "refusals.jsonl")
+    if os.path.exists(rp):
+        for line in open(rp):
+            try:
+                o = json.loads(line)
+            except ValueError:
+                continue
+            if o.get("ts", "") >= cut:
+                agg["refusals"].extend(o.get("reasons", []))
+    if a.json:
+        print(json.dumps(agg, indent=2))
+        return 0
+    print("Seats, last %d days: %d" % (a.days, agg["seats"]))
+    for k in ("by_role", "by_model", "outcomes", "prompt_quality", "persona_fit"):
+        print("  %-15s %s" % (k.replace("_", " "), ", ".join("%s %d" % kv for kv in agg[k].items()) or "none"))
+    sections = {}
+    for r in agg["refusals"]:
+        s = r.split(":")[0]
+        sections[s] = sections.get(s, 0) + 1
+    print("  thin sections   " + (", ".join("%s %d" % kv for kv in sorted(sections.items(), key=lambda x: -x[1])) or "none"))
+    for n in agg["notes"][:15]:
+        print("  note: " + n)
+    print("  Promote a pattern that recurs across several seats: a new brief section, a persona edit, a default.")
+    return 0
+
+
+def main(argv):
+    p = argparse.ArgumentParser(prog="seat", description=__doc__.split("\n\n")[0])
+    sub = p.add_subparsers(dest="cmd", required=True)
+    t = sub.add_parser("template"); t.add_argument("--role")
+    c = sub.add_parser("compose")
+    c.add_argument("brief"); c.add_argument("--role", required=True); c.add_argument("--model", required=True)
+    c.add_argument("--persona"); c.add_argument("--effort", default="medium")
+    c.add_argument("--provider", choices=["claude", "codex"], default="claude")
+    c.add_argument("--scope"); c.add_argument("--no-cold-read", action="store_true")
+    l = sub.add_parser("land"); l.add_argument("id"); l.add_argument("--outcome", required=True,
+                                                                    choices=["ok", "partial", "failed"])
+    l.add_argument("--note")
+    fb = sub.add_parser("feedback"); fb.add_argument("id")
+    fb.add_argument("--prompt", required=True, choices=["ok", "thin", "wrong"])
+    fb.add_argument("--persona", required=True, choices=["fit", "misfit", "none"]); fb.add_argument("--note")
+    ls = sub.add_parser("list"); ls.add_argument("--days", type=int, default=7); ls.add_argument("--json", action="store_true")
+    sh = sub.add_parser("show"); sh.add_argument("id"); sh.add_argument("--json", action="store_true")
+    w = sub.add_parser("weekly"); w.add_argument("--days", type=int, default=7); w.add_argument("--json", action="store_true")
+    a = p.parse_args(argv)
+    if a.cmd == "template":
+        return cmd_template(a.role)
+    if a.cmd == "compose":
+        return cmd_compose(a)
+    if a.cmd == "land":
+        return cmd_land(a)
+    if a.cmd == "feedback":
+        return cmd_feedback(a)
+    if a.cmd == "list":
+        return cmd_list(a)
+    if a.cmd == "show":
+        print(json.dumps(load(a.id), indent=2))
+        return 0
+    return cmd_weekly(a)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

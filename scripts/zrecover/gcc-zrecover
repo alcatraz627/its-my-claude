@@ -1,0 +1,5 @@
+#!/bin/bash
+# gcc-zrecover: the crash guard daemon (memory and CPU caps, freeze rule,
+# session snapshots). Named so macOS Login Items shows what it is
+# (rules/no-opaque-login-items.md). Runs the reaper with launchd's python.
+exec /usr/bin/python3 "$(dirname "$0")/reaper.py" run "$@"

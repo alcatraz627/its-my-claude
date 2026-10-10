@@ -19,12 +19,12 @@ SCREENS = os.path.expanduser("~/.claude/zrecover/screens")
 class Term:
     """An outer pty hosting the wrapper, with the wrapper's child pid exposed."""
 
-    def __init__(self, cmd, rows=40, cols=120, cwd=None):
+    def __init__(self, cmd, rows=40, cols=120, cwd=None, env=None):
         self.master, slave = pty.openpty()
         fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
         self.proc = subprocess.Popen([PY, WRAP, "--every", "1", "--"] + cmd, stdin=slave, stdout=slave,
                                      stderr=slave, cwd=cwd, start_new_session=True,
-                                     env={**os.environ, "TERM": "xterm-256color"})
+                                     env={**os.environ, "TERM": "xterm-256color", **(env or {})})
         os.close(slave)
         self.out = b""
 
@@ -77,6 +77,52 @@ t = Term([PY, "-c", "import subprocess, sys; subprocess.Popen([sys.executable, '
 t.pump(3.0)
 expect("wrapper exits when the child dies even if a grandchild holds the pty", t.proc.poll() == 0)
 subprocess.run(["pkill", "-f", "import time; time.sleep\\(30\\)"], capture_output=True)
+
+# 1c. the input that froze a real session on 2026-10-10: a wide glyph whose left
+# half is overwritten leaves a cell pyte's .display cannot render
+import pyte  # noqa: E402
+from wrap import render_lines  # noqa: E402
+s = pyte.Screen(20, 2)
+pyte.ByteStream(s).feed("🤖\ra 漢\x1b[1;4Hx".encode())
+try:
+    lines = render_lines(s)
+    expect("screen read survives an overwritten wide glyph", lines[0].startswith("a"))
+except Exception as e:
+    expect("screen read survives an overwritten wide glyph (raised %r)" % e, False)
+
+# An echo child: the relay is alive if typed lines come back.
+ECHO = [PY, "-u", "-c",
+        "import sys, time\n"
+        "for _ in range(40): print('\\U0001F916\\ra', end='', flush=True); time.sleep(0.05)\n"
+        "print()\n"
+        "for line in sys.stdin:\n"
+        "    if line.strip() == 'quit': break\n"
+        "    print('echo:' + line.strip(), flush=True)\n"]
+
+
+def relay_survives(label, env=None):
+    t = Term(ECHO, env=env)
+    t.pump(3.5)                      # the glyph churn plus a few flushes
+    t.type("ping1\n")
+    t.pump(1.5)
+    expect(label + ": typing still reaches the child and output still returns", b"echo:ping1" in t.out)
+    snap = t.screen()
+    t.type("quit\n")
+    t.pump(2.0)
+    expect(label + ": wrapper exits cleanly with the child", t.proc.poll() == 0)
+    if t.proc.poll() is None:        # a failed run must not leave a frozen wrapper behind
+        child = t.child_pid()
+        if child:
+            subprocess.run(["kill", "-9", str(child)], capture_output=True)
+        t.stop()
+    return snap
+
+
+snap = relay_survives("wide-glyph churn")
+expect("wide-glyph churn: the recorder kept recording", "emulator stopped" not in snap)
+snap = relay_survives("injected recorder failure", {"ZRECOVER_WRAP_FAULT": "flush"})
+expect("injected recorder failure: the screen file says recording stopped", "emulator stopped in flush" in snap)
+relay_survives("injected relay-loop failure", {"ZRECOVER_WRAP_FAULT": "loop"})
 
 # 2. the real claude TUI
 if "--no-claude" not in sys.argv:

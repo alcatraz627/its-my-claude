@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-09-18
+updated: 2026-10-10
 stale_after_days: 365
 ---
 
@@ -22,7 +22,7 @@ The **Load** column: `always` = autoloaded every session; `scoped` = NOT always-
 has a `paths:` block, so it loads only when Claude touches a matching file, or you must
 `Read` it from this menu when it applies).
 
-Regenerated 2026-09-18 17:57.
+Regenerated 2026-10-10 16:27.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -59,6 +59,7 @@ Regenerated 2026-09-18 17:57.
 | `model-tier-routing` | always | Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; … |
 | `never-halt-on-authority-you-hold` | always | Never halt on authority you already hold. … |
 | `never-modify-anthropic-credentials` | always | NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. … |
+| `no-opaque-login-items` | always | Every LaunchAgent the gcc adds must show in macOS Login Items under a name that says what it is, and … |
 | `no-self-permitted-exceptions` | scoped | When a request touches a surface an ADR or hard rule protects, never invent a test-only, temporary, or dev-convenience exception … |
 | `no-silent-ui-surface-deletion` | always | Never delete, remove, or replace a component, page, or route silently: if the surface appeared in any owner-reviewed round, this … |
 | `no-unasked-artifact-publish` | always | Never publish an Artifact (a hosted claude.ai page) unless the owner asked for a hosted page in this conversation. … |
@@ -86,7 +87,7 @@ Regenerated 2026-09-18 17:57.
 | `surface-hook-nudges-to-user` | scoped | When a PreToolUse hook injects an advisory nudge (additionalContext), surface it to the user in your reply as a bordered … |
 | `testing-patterns` | scoped | The 17 topic-tagged testing patterns from recurring mistakes — root-cause probing, pagination/truncation, declared-ready, mutation-test-the-guard, real-input-distribution, and the rest. … |
 | `testing` | always | Test every non-trivial change scaled to task size; … |
-| `todo-discipline` | always | Live todos live in the Task tool, the source of truth FOR THIS SESSION and what the TUI shows; … |
+| `todo-discipline` | always | Live todos live in the Task tool, the agent's checklist FOR THIS SESSION and what the TUI shows. … |
 | `trusted-linter-reminder` | scoped | A "file modified by linter" system-reminder still needs a diff check — linters reformat; … |
 | `ui-visual-verification` | always | A UI claim is verified only by a rendered image read as a person would: describe the whole frame before … |
 | `unprompted-infra-scope-creep` | always | Never add CI workflows, git hooks, cron jobs, or other automation infrastructure the user did not explicitly request in this … |

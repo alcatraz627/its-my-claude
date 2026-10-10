@@ -1,0 +1,5 @@
+#!/bin/bash
+# gcc-startup: once-per-login upkeep (archives scratch files, writes checkpoints
+# for sessions that crashed, rotates service logs). Named so macOS Login Items
+# shows what it is (rules/no-opaque-login-items.md).
+exec /bin/bash "$(dirname "$0")/run.sh" "$@"

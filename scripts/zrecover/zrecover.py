@@ -870,10 +870,9 @@ def write_plist():
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
   <key>Label</key><string>{LABEL}</string>
+  <!-- gcc-zrecover runs reaper.py; named so Login Items shows "gcc-zrecover" -->
   <key>ProgramArguments</key><array>
-    <string>/usr/bin/python3</string>
-    <string>{os.path.join(HERE, 'reaper.py')}</string>
-    <string>run</string>
+    <string>{os.path.join(HERE, 'gcc-zrecover')}</string>
   </array>
   <key>EnvironmentVariables</key><dict>
     <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>

@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""gcc-cron: the one scheduler for gcc's timed jobs.
+
+Wakes once a minute (one LaunchAgent, com.alcatraz.gcc-cron) and starts every
+job in ~/.claude/scheduled/registry.json whose time came up since its last
+wake. It replaces one LaunchAgent per timer, so Login Items shows a single
+named entry. The registry stays the only place a schedule is defined.
+
+Behaviour that matches launchd, so jobs see no difference:
+- A time missed while the Mac slept fires once on the next wake, not once per
+  missed slot.
+- Each job runs its own script.sh with the same out/err logs, and records its
+  outcome through gcc-schedule's _record-run exactly as before.
+- A job with "enabled": false in the registry is skipped (Switchboard's switch).
+
+Shadow mode (--shadow) starts nothing: it appends what it would have started to
+scheduled/gcc-cron-shadow.jsonl, so it can run beside launchd and be compared
+with `gcc-cron compare` before any timer moves over.
+
+Usage:
+  gcc-cron tick [--shadow]        one wake (what the LaunchAgent runs)
+  gcc-cron due  [--since ISO] [--until ISO]   list what falls due in a window
+  gcc-cron compare [--days N]     shadow log vs real fires in history.jsonl
+"""
+import argparse
+import datetime as dt
+import fcntl
+import json
+import os
+import plistlib
+import subprocess
+import sys
+
+HOME = os.path.expanduser("~")
+SCHED = os.path.join(HOME, ".claude", "scheduled")
+REGISTRY = os.path.join(SCHED, "registry.json")
+STATE = os.path.join(SCHED, ".gcc-cron-state.json")
+SHADOW_LOG = os.path.join(SCHED, "gcc-cron-shadow.jsonl")
+HISTORY = os.path.join(SCHED, "history.jsonl")
+DOW = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+TIMED_KINDS = ("daily", "weekly", "monthly", "one-shot")
+
+
+def parse_fire_at(kind, fire_at):
+    """Turn a registry fire_at into a matcher: f(datetime) -> bool for a minute."""
+    if kind == "one-shot" and fire_at.startswith("adopted-one-shot@"):
+        # adopted plists carry month/day only: "adopted-one-shot@MM-DD HH:MM"
+        md, hm = fire_at.split("@", 1)[1].split(" ")
+        mo, d = (int(x) for x in md.split("-"))
+        hh, mm = (int(x) for x in hm.split(":"))
+        return lambda t: (t.month, t.day, t.hour, t.minute) == (mo, d, hh, mm)
+    if kind == "one-shot":
+        at = dt.datetime.strptime(fire_at, "%Y-%m-%dT%H:%M")
+        return lambda t: t == at
+    parts = fire_at.split("@")
+    hh, mm = (int(x) for x in parts[-1].split(":"))
+    if kind == "daily":
+        return lambda t: (t.hour, t.minute) == (hh, mm)
+    if kind == "weekly":
+        dow = DOW[parts[1]]
+        return lambda t: t.weekday() == dow and (t.hour, t.minute) == (hh, mm)
+    if kind == "monthly":
+        day = int(parts[1].replace("day", ""))
+        return lambda t: t.day == day and (t.hour, t.minute) == (hh, mm)
+    raise ValueError("unknown kind %s" % kind)
+
+
+def due_jobs(registry, since, until):
+    """Jobs with at least one scheduled minute in (since, until]. Each job at most once."""
+    out = []
+    start = since.replace(second=0, microsecond=0) + dt.timedelta(minutes=1)
+    end = until.replace(second=0, microsecond=0)
+    for name, job in sorted(registry.items()):
+        if job.get("kind") not in TIMED_KINDS or job.get("enabled") is False:
+            continue
+        try:
+            match = parse_fire_at(job["kind"], job["fire_at"])
+        except (KeyError, ValueError):
+            continue
+        t = start
+        while t <= end:
+            if match(t):
+                out.append((name, t))
+                break
+            t += dt.timedelta(minutes=1)
+    return out
+
+
+def load_json(path, default):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return default
+
+
+def save_state(now):
+    tmp = STATE + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump({"last_tick": now.strftime("%Y-%m-%dT%H:%M:%S")}, f)
+    os.replace(tmp, STATE)
+
+
+def job_argv(job):
+    """The command a job runs. Adopted jobs record only their interpreter
+    (e.g. /bin/bash) in the registry, so their real arguments come from the plist."""
+    if job.get("adopted") and job.get("plist") and os.path.exists(job["plist"]):
+        with open(job["plist"], "rb") as f:
+            p = plistlib.load(f)
+        return p.get("ProgramArguments") or [p["Program"]]
+    return [job["script"]]
+
+
+def job_env(job):
+    """The environment launchd gave the job: its plist's EnvironmentVariables
+    (PATH matters: several jobs no-op without homebrew on it) plus the
+    registry's env_vars ("KEY=VAL" strings)."""
+    env = dict(os.environ)
+    plist = job.get("plist")
+    if plist and os.path.exists(plist):
+        try:
+            with open(plist, "rb") as f:
+                env.update({k: str(v) for k, v in (plistlib.load(f).get("EnvironmentVariables") or {}).items()})
+        except Exception:
+            pass
+    for kv in job.get("env_vars") or []:
+        if isinstance(kv, str) and "=" in kv:
+            k, v = kv.split("=", 1)
+            env[k] = v
+    return env
+
+
+def start_job(job):
+    """Start a job detached, logging where its own plist logged."""
+    for lg in (job.get("out_log"), job.get("err_log")):
+        if lg:
+            os.makedirs(os.path.dirname(lg), exist_ok=True)
+    out = open(job.get("out_log") or os.devnull, "a")
+    err = open(job.get("err_log") or os.devnull, "a")
+    subprocess.Popen(job_argv(job), stdout=out, stderr=err, stdin=subprocess.DEVNULL,
+                     start_new_session=True, cwd=job.get("working_dir") or HOME, env=job_env(job))
+
+
+def cmd_tick(shadow):
+    # One tick at a time: a manual tick overlapping launchd's would read the
+    # same last_tick and start the due jobs twice.
+    lock = open(STATE + ".lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        return 0
+    now = dt.datetime.now()
+    state = load_json(STATE, {})
+    if "last_tick" not in state:
+        save_state(now)          # first wake: start the clock, never backfill
+        return 0
+    try:
+        since = dt.datetime.strptime(state["last_tick"], "%Y-%m-%dT%H:%M:%S")
+    except (TypeError, ValueError):
+        save_state(now)          # unreadable clock: restart it rather than fail every minute
+        return 0
+    since = max(since, now - dt.timedelta(days=7))   # a week asleep fires each job once
+    registry = load_json(REGISTRY, {})
+    due = due_jobs(registry, since, now)
+    save_state(now)              # before starting anything: a failing job must never re-fire the others
+    failed = 0
+    for name, slot in due:
+        try:
+            if shadow:
+                with open(SHADOW_LOG, "a") as f:
+                    f.write(json.dumps({"job": name, "slot": slot.strftime("%Y-%m-%dT%H:%M"),
+                                        "at": now.strftime("%Y-%m-%dT%H:%M:%S")}) + "\n")
+            else:
+                start_job(registry[name])
+        except Exception as e:   # one bad job must not stop the rest
+            failed += 1
+            print("%s could not start %s: %r" % (now.strftime("%F %T"), name, e), file=sys.stderr)
+    return 1 if failed else 0
+
+
+def cmd_due(since, until):
+    registry = load_json(REGISTRY, {})
+    for name, slot in due_jobs(registry, since, until):
+        print("%s  %s" % (slot.strftime("%Y-%m-%d %H:%M"), name))
+    return 0
+
+
+def cmd_compare(days):
+    """Shadow picks vs real launchd fires, per job, over the last N days."""
+    cutoff = dt.datetime.now() - dt.timedelta(days=days)
+    shadow, real = {}, {}
+    for line in open(SHADOW_LOG) if os.path.exists(SHADOW_LOG) else []:
+        o = json.loads(line)
+        if dt.datetime.strptime(o["at"], "%Y-%m-%dT%H:%M:%S") >= cutoff:
+            shadow[o["job"]] = shadow.get(o["job"], 0) + 1
+    for line in open(HISTORY) if os.path.exists(HISTORY) else []:
+        try:
+            o = json.loads(line)
+        except ValueError:
+            continue
+        if o.get("ev") != "run" or "ts" not in o or o.get("outcome") == "missed":
+            continue
+        ts = (dt.datetime.strptime(o["ts"][:19], "%Y-%m-%dT%H:%M:%S")
+              .replace(tzinfo=dt.timezone.utc).astimezone().replace(tzinfo=None))
+        if ts >= cutoff:
+            real[o["name"]] = real.get(o["name"], 0) + 1
+    names = sorted(set(shadow) | set(real))
+    bad = 0
+    for n in names:
+        mark = "ok " if shadow.get(n, 0) == real.get(n, 0) else "DIFF"
+        bad += mark == "DIFF"
+        print("%s  %-32s shadow %d  launchd %d" % (mark, n, shadow.get(n, 0), real.get(n, 0)))
+    print("%d job(s) differ over %d day(s)" % (bad, days))
+    return 1 if bad else 0
+
+
+def main(argv):
+    p = argparse.ArgumentParser(prog="gcc-cron", description=__doc__.split("\n\n")[0])
+    sub = p.add_subparsers(dest="cmd", required=True)
+    t = sub.add_parser("tick"); t.add_argument("--shadow", action="store_true")
+    d = sub.add_parser("due")
+    d.add_argument("--since"); d.add_argument("--until")
+    c = sub.add_parser("compare"); c.add_argument("--days", type=int, default=7)
+    a = p.parse_args(argv)
+    if a.cmd == "tick":
+        return cmd_tick(a.shadow)
+    if a.cmd == "due":
+        now = dt.datetime.now()
+        since = dt.datetime.fromisoformat(a.since) if a.since else now
+        until = dt.datetime.fromisoformat(a.until) if a.until else now + dt.timedelta(days=1)
+        return cmd_due(since, until)
+    return cmd_compare(a.days)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
