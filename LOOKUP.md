@@ -72,6 +72,7 @@
 | `features/macos-menubar-widget.md` | AppKit menu-bar widget patterns: settings window, live-propagation, composited badge, hover popover | `topic:macos-menubar`, `topic:appkit`, `tool:claude-instances` |
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
 | `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence | `tool:pm2`, `topic:dev-servers` |
+| `features/zrecover.md` | Desktop-session safeguard: memory/CPU reaper with rules and grants, `zrecover run claude` screen capture, `zrecover restore` after a crash | `tool:zrecover`, `topic:memory-pressure`, `topic:crash-recovery` |
 | `features/claudew.md` | Plugin-based claude CLI wrapper | `tool:claudew`, `topic:rate-limit-recovery` |
 | `features/shell-memory.md` | shell-mem shell history + BG processes (renamed from diy-mem in mig 0014) | `tool:shell-mem`, `topic:shell-history` |
 | `features/fiber-snatcher.md` | React/Next.js dev-app debugging daemon | `tool:fiber-snatcher`, `topic:react-debugging` |
