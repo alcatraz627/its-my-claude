@@ -137,8 +137,10 @@ def gate(b):
 
 
 def output_path(b):
-    m = re.search(r"((?:/|~/)\S+)", b["Deliverable"])
-    return os.path.expanduser(m.group(1).rstrip(".,;)")) if m else ""
+    """The deliverable's file path: the first path with a file extension, else the first path."""
+    paths = [os.path.expanduser(p.rstrip(".,;)")) for p in re.findall(r"((?:/|~/)\S+)", b["Deliverable"])]
+    files = [p for p in paths if re.search(r"\.[A-Za-z0-9]{1,5}$", os.path.basename(p))]
+    return (files or paths or [""])[0]
 
 
 def excerpts(b):

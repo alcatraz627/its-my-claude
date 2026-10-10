@@ -81,6 +81,8 @@ DEFAULTS = {
         "Finder", "Dock", "SystemUIServer", "ControlCenter", "launchd",
         "kernel_task", "sshd", "Switchboard", "Karabiner", "1Password",
         "reaper.py", "mem-guard.py", "dev-guard.mjs", "pm2", "tmux", "zellij",
+        # the split session wrapper: killing keeper.py or hold.py costs a live session
+        "keeper.py", "hold.py", "record.py", "client.py",
     ],
     "protected_paths": ["/System/", "/usr/libexec/", "/usr/sbin/", "/sbin/",
                         "/Library/Apple/", "/Library/SystemExtensions/"],

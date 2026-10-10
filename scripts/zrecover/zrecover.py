@@ -133,6 +133,7 @@ def help_main():
     row("config show|get|set|unset|path|edit", "overrides in config.json (daemon restart to apply)")
     sec("RECOVER")
     row("run [--name L] [--every S] -- <cmd>", "run a TUI with its screen mirrored to disk")
+    row("run --split … · attach [pid|alias] · end <pid|alias>", "a session that survives its terminal")
     row("sessions [--detail] [--json]", "live Claude sessions; --detail adds last prompt and reply")
     row("restore [--open] [--only 1,3] [--reconstruct]", "sessions from before the last reboot (restore -h)")
     row("bundle list|show [N|latest]|now", "the 15-min resume bundle: one markdown with everything")
@@ -586,12 +587,27 @@ def python_for_wrap():
     return None
 
 
+def split_flag(a):
+    """Whether --split is among run's own options (before the command), and the
+    arguments with it removed. A --split after the command belongs to the command."""
+    i = 0
+    while i < len(a) and a[i].startswith("-") and a[i] != "--":
+        if a[i] == "--split":
+            return True, a[:i] + a[i + 1:]
+        i += 2 if a[i] in ("--name", "--every", "--grace") else 1
+    return False, a
+
+
 def cmd_run(a):
     if not a or wants_help(a):
-        print(f"{C.b('zrecover run')} [--name LABEL] [--every SECONDS] -- <command> [args]")
+        print(f"{C.b('zrecover run')} [--split] [--name LABEL] [--every SECONDS] [--grace SECONDS] -- <command> [args]")
         print(C.d("  passes the terminal straight through and mirrors the screen to ~/.claude/zrecover/screens/<pid>.txt"))
+        print(C.d("  --split: the session survives its terminal; zrecover attach / end (grace: idle detached hang-up, 1800 s)"))
         sys.exit(0 if a else 2)
+    split, a = split_flag(a)
     py = python_for_wrap()
+    if split and py:
+        os.execv(py, [py, os.path.join(HERE, "client.py"), "run"] + a)
     if not py:
         print(f"{SELF}: no python with pyte (set ZRECOVER_PY, or: uv venv {HERE}/.venv; uv pip install pyte); "
               "running bare", file=sys.stderr)
@@ -599,6 +615,24 @@ def cmd_run(a):
         os.execvp(cmd[0], cmd)
     args = a if ("--" in a or a[0].startswith("--")) else ["--"] + a
     os.execv(py, [py, os.path.join(HERE, "wrap.py")] + args)
+
+
+def split_client(verb, a, usage):
+    if wants_help(a):
+        print(usage)
+        sys.exit(0)
+    py = python_for_wrap() or sys.executable
+    os.execv(py, [py, os.path.join(HERE, "client.py"), verb] + a)
+
+
+def cmd_attach(a):
+    split_client("attach", a, f"{C.b('zrecover attach')} [PID|ALIAS]   "
+                              + C.d("bring a --split session back in this terminal (no name: the only detached one)"))
+
+
+def cmd_end(a):
+    split_client("end", a, f"{C.b('zrecover end')} PID|ALIAS   "
+                           + C.d("hang a --split session up: SIGHUP, then SIGKILL 5 s later"))
 
 
 def load_snapshot(path):
@@ -774,8 +808,10 @@ def screens_list():
         p = os.path.join(reaper.SCREENS, n)
         pid = int(n[:-4]) if n[:-4].isdigit() else None
         st = os.stat(p)
+        w = wraps.get(pid) or {}
         out.append({"pid": pid, "path": p, "mtime": st.st_mtime, "bytes": st.st_size,
-                    "live": pid in wraps, "alias": alias_by_pid.get(pid)})
+                    "live": pid in wraps, "alias": alias_by_pid.get(pid),
+                    "detached": bool(w.get("split") and not w.get("attached"))})
     return sorted(out, key=lambda s: -s["mtime"])
 
 
@@ -788,7 +824,7 @@ def cmd_screens(a):
         print(C.d("no captures yet; run claude through `zrecover run`"))
         return
     for s in rows:
-        live = C.g("live") if s["live"] else C.d("gone")
+        live = C.y("detached") if s["detached"] else C.g("live    ") if s["live"] else C.d("gone    ")
         print(f"  {live}  {ago(s['mtime']):>5} ago  pid {s['pid']:<6} {(s['alias'] or ''):<24} {s['path']}")
 
 
@@ -975,10 +1011,10 @@ COMMANDS = {
     "allow": cmd_allow, "revoke": cmd_revoke, "grants": cmd_grants, "pause": cmd_pause, "resume": cmd_resume,
     "rules": cmd_rules, "protect": cmd_protect, "config": cmd_config,
     "run": cmd_run, "sessions": cmd_sessions, "restore": cmd_restore, "screens": cmd_screens, "screen": cmd_screen,
-    "bundle": cmd_bundle,
+    "bundle": cmd_bundle, "attach": cmd_attach, "end": cmd_end,
     "daemon": cmd_daemon, "doctor": cmd_doctor, "test": cmd_test,
 }
-OWN_HELP = ("run", "allow", "explain", "revoke", "screen", "restore")
+OWN_HELP = ("run", "allow", "explain", "revoke", "screen", "restore", "attach", "end")
 
 
 def main():
