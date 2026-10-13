@@ -5,6 +5,12 @@
 # and atone-consolidate/helpers.sh.
 
 build_proposals() {
+  # --read-only (the i-dream daemon's mode) rebuilds views but never files.
+  if [ "${ATONE_READONLY:-0}" = "1" ]; then
+    _info "read-only: no proposals drafted"
+    return 0
+  fi
+
   # Build the "already proposed" exclusion set
   local skip_slugs
   skip_slugs=$(already_proposed_slugs)
@@ -39,9 +45,7 @@ build_proposals() {
 
     # Pull tags + project + precheck from the latest event for this slug
     local latest_event
-    latest_event=$(jq -c --arg slug "$slug" '
-      [.] as $rest | first(.[]? | select(.slug == $slug))
-    ' < <(jq -c --arg slug "$slug" 'select(.slug == $slug)' "${EVENTS_VIEW:-$EVENTS}" 2>/dev/null | tail -1))
+    latest_event=$(jq -c --arg slug "$slug" 'select(.slug == $slug)' "${EVENTS_VIEW:-$EVENTS}" 2>/dev/null | tail -1)
 
     local tags_json project precheck
     tags_json=$(echo "$latest_event" | jq -c '.tags // []')
