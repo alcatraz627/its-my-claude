@@ -6,8 +6,9 @@
 #   1. insight-digest.md: synthesized dream summary (refreshed every 3h by daemon)
 #   2. the derived patterns view: lessons ranked for this session
 #
-# The atone TL;DR this script used to prepend is retired (owner ruling D12,
-# 2026-10-06); see the note where its part was.
+# Part 3 is a short summary of the three most repeated mistakes (restored by the
+# owner 2026-10-13, replacing the longer atone TL;DR retired by D12).
+# Mute for one process: NO_ATONE_SUMMARY=1.
 #
 # The dream half is OFF BY DEFAULT. It was ~1800 chars every session
 # at a measured ~0 of ~922 promoted insights ever becoming a gcc change, it cannot
@@ -237,10 +238,68 @@ if dream_enabled:
     except Exception:
         pass
 
-# The atone TL;DR that used to be Part 3 is retired (owner ruling D12, 2026-10-06):
-# 14,000 injections across the top slugs moved no recurrence count. i-dream's weekly
-# reader lands findings on a decision page instead. The TL;DR file itself is still
-# written by atone-consolidate.sh for anything that reads it on purpose.
+# Part 3: the three mistakes recorded most in the last 14 days, each with its own
+# precheck and what its hook actually did (blocks versus warnings), so the agent
+# knows which ones nothing stops. Owner restored this on 2026-10-13 after D12
+# retired the longer TL;DR; the receipt carries sid so its effect can be measured.
+if part_mode != 'ranked' and os.environ.get('NO_ATONE_SUMMARY') != '1':
+    try:
+        import datetime as _dt
+        from collections import Counter
+        now = _dt.datetime.now(_dt.timezone.utc)
+        since = (now - _dt.timedelta(days=14)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        view = os.path.expanduser("~/.claude/atone/derived/.events-view.jsonl")
+        counts, latest = Counter(), {}
+        with open(view, 'r', encoding='utf-8', errors='replace') as f:
+            for line in f:
+                try:
+                    e = json.loads(line)
+                except Exception:
+                    continue
+                if not isinstance(e, dict) or str(e.get('ts', '')) < since or not e.get('slug'):
+                    continue
+                counts[e['slug']] += 1
+                latest[e['slug']] = e
+        top = [s for s, n in counts.most_common(3) if n >= 2]
+        hooks = {}
+        warn = os.path.expanduser("~/.claude/hooks/warn-events.jsonl")
+        if top and os.path.isfile(warn):
+            with open(warn, 'r', encoding='utf-8', errors='replace') as f:
+                for line in f:
+                    try:
+                        w = json.loads(line)
+                    except Exception:
+                        continue
+                    if not isinstance(w, dict) or w.get('kind') != 'warn' or str(w.get('ts', '')) < since:
+                        continue
+                    h = w.get('hook_id') or ''
+                    hooks.setdefault(h, Counter())[w.get('action') or 'unlabelled'] += 1
+        def hook_line(slug):
+            words = set(slug.split('-'))
+            for h, c in hooks.items():
+                head = h.split('-')[:2]
+                if len(head) == 2 and set(head) <= words:
+                    blocks = c.get('block', 0)
+                    rest = sum(c.values()) - blocks
+                    return f"hook {h}: {blocks} blocks, {rest} warnings"
+            return "no hook catches it"
+        rows = []
+        for s in top:
+            pre = str(latest[s].get('precheck') or latest[s].get('issue') or '').strip().replace('\n', ' ')
+            if len(pre) > 160:
+                pre = pre[:157].rsplit(' ', 1)[0] + '…'
+            rows.append(f"- {s} ({counts[s]} in 14d; {hook_line(s)}). {pre}")
+        if rows:
+            parts.append("## Your most repeated mistakes, last 14 days\n" + "\n".join(rows))
+            if os.environ.get('INJECT_TEST') != '1':
+                rec = {"ts": now.strftime('%Y-%m-%dT%H:%M:%SZ'), "kind": "atone-summary", "slugs": top}
+                sid = os.environ.get('INJECT_SID', '')
+                if sid:
+                    rec["sid"] = sid
+                with open(os.path.expanduser("~/.claude/i-dream/injections.jsonl"), "a", encoding="utf-8") as f:
+                    f.write(json.dumps(rec) + "\n")
+    except Exception:
+        pass
 
 if not parts:
     sys.exit(0)

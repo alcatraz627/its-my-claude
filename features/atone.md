@@ -56,7 +56,7 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
    └── ~/.claude/atone/derived/_meta.json     run metadata + content hash
             │
    ════ INJECTION (read triggers.json + _tldr.txt) ══════════════════
-   ├── [retired 2026-10-06, D12] SessionStart TL;DR injection (dream-insights.sh)
+   ├── SessionStart summary: top 3 slugs in 14d + precheck + hook block/warn counts (dream-insights.sh Part 3; the long TL;DR was retired 2026-10-06, D12; this short one restored 2026-10-13; mute NO_ATONE_SUMMARY=1)
    ├── hinters/10-atone-circuit-breaker   halts a thrash loop
    ├── hinters/30-atone-nudge.sh          you/your+correction → /atone
    └── [disabled] 05-atone-tldr, 50-atone-periodic-refresh (subsumed)
