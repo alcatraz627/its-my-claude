@@ -1,6 +1,6 @@
 ---
 name: core-dump
-description: Writes _checkpoint.claude.md (or a named file) condensing the session into goal, actions, expectation, and pending items; "mini" mode for quick notes. Indexes a session-keyed pointer under ~/.claude/checkpoints/. Hand-off artifact for /catchup after /clear.
+description: Writes a checkpoint (_YYYYMMDD-<session>.claude.md) condensing the session into a resume contract, goal, actions, expectation, pending items and insights, sized to how much the session did. Indexes a session-keyed pointer under ~/.claude/checkpoints/. Hand-off artifact for /catchup after /clear, and the session's journal. Run only when the owner asks or on keep-warm's last wake.
 allowed-tools: Read, Write, Glob, Bash, Edit, mcp__inputs__form, mcp__inputs__confirm
 argument-hint: "[mini] [filename] [--name NAME] [--no-prompt] [instructions]"
 user-invocable: true
@@ -18,30 +18,35 @@ artifact `/catchup` consumes after `/clear`.
 Two outputs make this skill work, and both are load-bearing:
 
 1. The **checkpoint file** with its parse-critical sections (below).
-2. The **global pointer write** in Phase 3.6 — without it, `/catchup` cannot
+2. The **global pointer write**, done by finalize (Phase 3.3); without it, `/catchup` cannot
    locate the checkpoint and the file is orphaned.
 
-## Continuation advisory: recommending /core-dump + /clear vs /compact
+## When this skill runs (owner ruling 2026-10-13)
 
-This skill is one half of a decision the agent should make OUT LOUD. When session
-continuation is expected (a ctx-pressure nudge fired, a natural task boundary was
-reached with more work queued, or the user says they'll come back to this),
-proactively recommend one of the two continuation paths in a single line, with
-the reason:
+Exactly two triggers:
 
-| situation | recommend | why |
-|---|---|---|
-| task boundary reached; next work is separable | `/core-dump` then `/clear` | The checkpoint is auditable and cheap; `/catchup` restores exactly what was written, and a fresh window beats a lossy summary. This is the DEFAULT. |
-| mid-task, and the working state lives in conversation nuance (a long debugging thread, undistilled user decisions, an unfinished deliberation) | `/core-dump mini` then `/compact` | The summary preserves conversational momentum a checkpoint cannot; the mini dump backstops what compaction strips (constraints, caveats, approvals). Prefer a targeted `/compact <instructions>` over bare `/compact` (CLAUDE.md § Compact Instructions). |
-| context under 70% and no boundary | neither | The ctx-pressure hook is the instrument; without its notice, keep working (`rules/communication.md` § context-load claims). |
+1. **The owner asks.** A typed `/core-dump`, including one written inside a longer
+   message ("do X, then /core-dump"), in the owner's own latest message.
+2. **Keep-warm's last wake.** Its hook text says to run the full dump; that is the
+   dump the owner resumes from after the cache goes cold.
 
-Two facts anchor the recommendation. Compaction reliably preserves task momentum
-while stripping constraints, caveats, and not-yet-approved state (the documented
-drift engine behind `rules/invariant-graduation.md`), so anything that must
-survive belongs in a written checkpoint BEFORE compacting; the PreCompact hook's
-shell snapshot is a safety net, not a substitute, because it does no LLM
-synthesis. And approvals for pushes, deploys, and destructive ops expire across
-BOTH paths, so neither choice carries authorization forward.
+An agent never runs it on its own. A wake is not the owner: a task notification,
+ipc mail, a monitor event, a goal check-in or a context-pressure nudge does not
+authorize a dump. The session's transcript is the crash fallback (`/retro-dump`,
+`/revive`), so nothing needs dumping "just in case". Owner, verbatim: "I want to cut
+down on core-dump usage, but make it valuable when it happens."
+
+**Suggesting one is fine, once, in one line.** At a task boundary, with the
+ctx-pressure notice showing 60% or more used and more work queued, say: "Context is
+N%; `/core-dump` then `/clear` would drop each later call from about N k to about
+170k tokens and pays for itself after about 50 calls." Then keep working. Below 60%,
+or mid-task, say nothing. `/compact` is the owner's call; a targeted
+`/compact <instructions>` beats a bare one (CLAUDE.md § Compact Instructions).
+
+**Already dumped?** If gather reports `existing_dump` with no owner turn since (keep-warm
+or an earlier request already wrote it), do not write another: print the existing
+path and its resume line, `/catchup at <path>`, and stop. The owner can say "dump
+again" to force a fresh one.
 
 > **Parse contract — do not rename.** `/catchup` parses the checkpoint by exact
 > headings: `## Resume Contract`, `## Initial Goal`, `## Agent Actions`,
@@ -51,17 +56,39 @@ BOTH paths, so neither choice carries authorization forward.
 > default filename `_checkpoint.claude.md` is also a contract — `/catchup`
 > falls back to it.
 
-## Step 0 — Load shared guidelines and runtime context
+## The shape of a run: gather, one Write, finalize
 
-Read `.claude/skills/GUIDELINES.md` and apply its rules for the whole run:
-forbidden paths, retry logic, tool preferences, verbosity, timeouts, post-run
-insights, and the file-lock protocol. Also read `.claude/skills/runtime-notes.md`
-for past run history; continue without it if absent.
+Every tool call in a dump re-reads the whole session context, often 700k tokens or
+more, so the run is deliberately short: gather, `CronList`, one Write, finalize, and
+only the goal-record or insight writes this session actually needs:
 
-Lock hygiene: run `bash ~/.claude/skills/shared/lock-file.sh cleanup` once at the
-start to clear stale locks from crashed sessions. Acquire a lock before every
-Edit/Write and release it immediately after. Never write to `runtime-notes.md` or
-any SKILL.md without holding its lock.
+1. **Gather** (one Bash call):
+   `bash ~/.claude/scripts/checkpoint/gather.sh --session-id <announced session id> --uuid "$CLAUDE_CODE_SESSION_ID"`.
+   Pass both: a script cannot know the id you announced, and the shared
+   current-session file can belong to another session. It
+   prints every fact the dump must copy rather than recall: project root, working
+   surface, default filename, transcript path, session size and depth hint,
+   `existing_dump`, the previous same-stem dump, goal (harness and gcc), goal record,
+   task store, wake, deadline, ipc alias, this session's atone ids, pending approval
+   codes. Then call `CronList` once for the crons line.
+2. **Write** (one call): the checkpoint, from the template in Phase 3, filled from
+   the gather block plus your synthesis.
+3. **Finalize** (one Bash call):
+   `bash ~/.claude/scripts/checkpoint/finalize.sh <file> --session-id <id> --uuid "$CLAUDE_CODE_SESSION_ID"`.
+   It formats, validates, diffs caveats and constraints against the previous dump,
+   checks every Standing authorization against the transcript, checks ruling paths,
+   symlinks, writes the global pointer, and renders the closing record. On `FIX:`,
+   make one repair Edit and run finalize again.
+
+The checkpoint filename is session-unique, so no lock is taken for it
+(`GUIDELINES.md` lock protocol exemption). Do not read GUIDELINES.md or
+runtime-notes.md for a dump; nothing in the dump consumes them.
+
+**Depth fits the session** (owner ruling 2026-10-13: "If core-dump does not need
+expensive work, then let it not do more than needed"). When gather's depth hint is
+`light` (a one-off session that did one or two things), keep every heading but write
+one or two lines under each, `none` for empty Resume Contract fields, and skip the
+3.6 proposal. Never pad a section to look thorough.
 
 ## Usage
 
@@ -71,10 +98,10 @@ any SKILL.md without holding its lock.
 
 | Argument       | Type     | Description |
 | -------------- | -------- | ----------- |
-| `mini`         | optional | If the first token is literally `mini`, run **mini mode** — an abbreviated checkpoint (done / not-done / next-steps / goal) for quick `/catchup` recovery, not a thorough hand-off. |
+| `mini`         | optional | The headless template `/retro-dump` uses (`retro-dump.sh` runs `/core-dump mini --no-prompt`). Interactive sessions never choose it: the owner rarely did, agents did it in limbo, and mini resumes scored worse (mean 3.40 against 3.91 over 197 handoffs). A light session gets a short full dump instead (depth rule above). |
 | `filename`     | optional | Target filename, must end in `.md`. Defaults to `_YYYYMMDD-<session-id>.claude.md` (e.g. `_20260331-fix-auth-3b.claude.md`). A symlink `_checkpoint.claude.md` → latest is created for `/catchup`. |
-| `--name NAME`  | optional | Human-readable label shown in the `/catchup` picker. Skips the Phase 3.5 name prompt; defaults to the session-id. |
-| `--no-prompt`  | optional | Skip the Phase 3.5 interactive form. Use for headless / sub-agent runs. Defaults are still recorded. |
+| `--name NAME`  | optional | Human-readable label shown in the `/catchup` picker; defaults to the session id. |
+| `--no-prompt`  | optional | Headless run (retro-dump, sub-agents): finalize gets `--headless` and prints the receipt seal instead of the render. |
 | `instructions` | optional | Free-form style notes for this dump (e.g. "focus on design decisions only", "be terse"). Ignored in mini mode. |
 
 If both a filename and instructions are present, the filename is detected first
@@ -155,8 +182,8 @@ optional and appear only when the session's shape warrants them.>
 _Generated by /core-dump mini. Resume with /catchup._
 ```
 
-Then go to **Phase 3** (write) and **Phase 5** (verification). Skip the Phase 4
-visual summary in mini mode — print only the standard verification block.
+Then finalize with `--headless --mini` (Phase 3.3); without `--mini` the full-dump
+contract rejects the mini shape and nothing is indexed.
 
 ---
 
@@ -176,9 +203,10 @@ Cover every item below:
 - Notes for future agents (things not obvious from the code)
 - The immediate next step (what to do right now)
 
-For insights that are broadly applicable (not project-specific), also append a
+Only when an insight is broadly applicable (not project-specific), also append a
 dated entry to `~/.claude/improvement-ideas.md` (create with a
-`# Claude Improvement Ideas` header if absent).
+`# Claude Improvement Ideas` header if absent). Each extra call re-reads the whole
+context, so skip it at light depth and when nothing qualifies.
 
 > **Route insights to the right surface — keep these distinct:**
 > - `improvement-ideas.md` — **general cross-project learnings** (tool bugs, shell
@@ -221,9 +249,9 @@ A bullet list of what's needed to complete the current task — both agent-side 
 user-side.
 
 **The goal record is the truth for what is left across sessions (D1, 2026-09-23).**
-Before writing this section, put the open work ON the goal, not only in this file:
-`python3 ~/.claude/scripts/goals/views/left.py` shows what the record already holds;
-anything the conversation surfaced that is missing goes in with
+When the conversation surfaced open work the goal record lacks (gather prints the
+record's id; skip this at light depth or with no goal), put it ON the goal, not only
+in this file, with
 `~/.claude/scripts/goals/gs task <g> <mN> "<subject>"` (a row) or
 `gs note <g> [id] "<handoff>"` (a one-off the next session should do as part of an
 existing row, never a second row). Then this section CITES the goal
@@ -238,11 +266,9 @@ Capture meta-observations: what worked well, what didn't (dead ends, wasted
 effort), gotchas (non-obvious traps), notes for future agents, user feedback
 (corrections/preferences/constraints), and tangential scope not addressed.
 
-**The session's atone record crosses the clear here.** Check whether /atone
-recorded events during this session
-(`rg "mist-$(date +%Y%m%d)" ~/.claude/atone/events.jsonl`, then keep only ids
-inside this session's time window) and name each in one line: slug, severity,
-and the fix applied or promised. A fresh wound is the highest-value insight a
+**The session's atone record crosses the clear here.** Take gather's `atone_ids`,
+copy them onto the Resume Contract's `Atone this session` line, and name each here in
+one line: slug, severity, and the fix applied or promised. A fresh wound is the highest-value insight a
 resume can inherit, and the SessionStart atone lane shows only the machine-wide
 top patterns, never what THIS session just did. Skip silently when the session
 recorded nothing.
@@ -304,15 +330,38 @@ everything below them:
   artifact. A predecessor's "the run log is already expired" cost a day; the
   failure reproduced via workflow_dispatch in thirty seconds
   (automation-d8ff1149, 2026-08-19).
-- **Expired authorizations** — approvals that die at compact/clear/resume
-  (pushes, deploys, destructive ops, account or identity switches). Listing them
-  is what makes the fresh-confirmation rule mechanical instead of remembered.
+- **Standing authorizations:** the owner's approvals, carried forward so the next
+  session acts on them without asking again. Owner ruling 2026-10-13: "Let the agents
+  inherit auth". Hard limits live in Switchboard policy and its hooks, not in the
+  handoff. One entry per grant:
+  `"<owner's verbatim words>" (<YYYY-MM-DD HH:MM>) · target: <repo[/branch|PR] @<sha or artifact>> · one-shot|standing`.
+  Four fences keep this honest. The words are the owner's own, quoted, never an
+  inferred stance: finalize marks a quote it cannot find in the transcript
+  `UNVERIFIED:`, and an unverified grant is never acted on. The target is named, so a
+  resume re-asks only when the target moved. A one-shot grant that was spent is
+  dropped. A grant binds to its repo. Hook gates (push to main, policy asks) are
+  unaffected and follow Switchboard. Write `none` when there are none.
+- **Pending approval codes:** approval codes the owner was shown and has not
+  answered (gather's `pending_codes`), as `<target> · nonce <code>`, or `none`. A
+  code is keyed to this session and dies at `/clear`; listing it lets the next
+  session re-issue it.
 - **Decaying prerequisites** — environment state you had to fix or start this
   session for a surface to work, which rots silently between write and read:
   credentials/tokens on a timer (gcloud ADC, a refreshed login), tunnels, dev
   daemons/servers, seeded or mutated data. List each with its fix command, so the
   next agent re-arms it instead of hitting a stale failure. Prompt: "what did I
-  have to fix or start this session for this to work?"
+  have to fix or start this session for this to work?" Add a read-only `check:`
+  command where one exists (`gcloud auth print-access-token >/dev/null`,
+  `curl -sf localhost:5117/health`). Catchup runs checks, never fix commands, so a
+  prerequisite the owner already fixed is not reported as expired.
+- **Key files:** the absolute paths the next session will open first, comma
+  separated. Catchup builds its file list from this line, not from Agent Actions.
+- **Atone this session:** gather's `atone_ids`, or `none`. Catchup turns each into a
+  fence, so a fresh mistake crosses the clear.
+- **Rulings this session:** each owner ruling made in this session, as
+  `"<quote>" -> <path where recorded>`. A ruling belongs in the project's docs, a
+  rule or memory the moment it is made, not only in a checkpoint; finalize checks
+  each path exists. `none` when there were none.
 - **Verification state** — last real run + result + the command that produced it
   ("`pnpm typecheck` green after action #7" · "UNCONFIRMED — nothing run").
 - **Live commitments:** the session's GOAL, any armed `/wake`, any `/deadline`.
@@ -323,7 +372,8 @@ everything below them:
   > IF it thinks its still valid (erring to the side of it probably still being),
   > and catchup will either auto-re-arm it or ask the user to re-arm it
 
-  So this field records a JUDGEMENT, not an inventory. For each, write the
+  The re-arm half was superseded on 2026-10-13: catchup now only offers the goal.
+  The judgment below still decides what it offers. So this field records a JUDGEMENT, not an inventory. For each, write the
   commitment and whether it still holds:
 
   - `goal: <the goal, verbatim> · STILL VALID · harness ARMED|not armed · gcc set|none`
@@ -332,10 +382,10 @@ everything below them:
     line is the built-in `/goal` the owner actually ran (parsed from this session's
     transcript, so it is what was set, not what you remember); the `gcc` line is the
     goal file the agent or `/catchup` wrote (`~/.claude/goals/<sid>.json`), the one
-    that survives `/clear`. Record BOTH states. If the harness goal is armed and no
-    gcc goal exists, write it into the gcc store now
-    (`goal.sh set "<text>" --by core-dump`) so the next session inherits it even if
-    this dump is never read. **Err toward still-valid.** Dropping a live goal costs
+    that survives `/clear`. Record BOTH states, from gather. Never write a goal
+    into the gcc store yourself: `goal.sh set` is the owner's move
+    (`rules/goal-statement-on-starting-work.md`). The paste line in the Re-arm block
+    is how the next session's owner re-arms it. **Err toward still-valid.** Dropping a live goal costs
     the owner a re-setup on every resume, which is the exact pain this field exists
     for. Carrying a stale one costs one sentence to retire. The asymmetry is the
     whole rule. If NO goal was set anywhere, write `none` and, in the Re-arm block
@@ -375,37 +425,26 @@ everything below them:
     lives with the skill (`skills/deadline/runtime-notes.md`, plus that run's veto
     ledger and burn projection).
 
-  Write `none` for any never set. An armed commitment carried here is NOT an
-  authorization: a re-armed wake or deadline never revives a push, deploy, or
-  destructive-op approval. Those stay dead under Expired authorizations.
-- **Task list, glanced:** run `python3 ~/.claude/scripts/goals/views/now.py`
-  while writing this section, and let it shape the Next action and the proposed
-  goal in the Re-arm block. Owner ask 2026-08-18 ("good to have: during core-dump or
-  catchup, have the agent run /tasks and also suggest a new / update existing goal").
+  Write `none` for any never set. A commitment is not an authorization; approvals
+  travel only under Standing authorizations.
+- **Task list, glanced:** from gather's goal record and task store lines; let it
+  shape the Next action and the offered goal in the Re-arm block. Owner ask
+  2026-08-18 ("good to have: during core-dump or catchup, have the agent run /tasks
+  and also suggest a new / update existing goal").
 - **Goal record:** the goal id this session works under (`~/.claude/goals/by-id/<id>.json`,
-  from `~/.claude/scripts/goals/gs list`). Carried so a resumed session runs
-  `gs link <id>` and is back on the same record. Write `—` when no goal was filed,
+  from gather). Catchup reads the record by this id and OFFERS `gs link <id>` with
+  the goal paste line; linking also arms the standing-goal hinter, so it is the
+  owner's call, like `/goal`. Write `—` when no goal was filed,
   and say why in one clause.
 - **Task store:** the agent's own checklist store (`session-<sid8>`, under
   `~/.claude/tasks/`), for `gs adopt` if a resumed agent wants rows from it. `—` if empty.
 - **ipc alias** — this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
 - **Key anchor** — the single most load-bearing file:line, or `—`.
 
-**Gather the last three fields, do not recall them.** Live commitments and the
-task store are exactly the values a long session mis-remembers, so read them:
-
-```bash
-SID="${CLAUDE_SESSION_ID:-$(cat ~/.claude/.current-session-id 2>/dev/null)}"
-
-# wake: armed schedule for THIS session, if any
-jq -r '.wake // "none"' ~/.claude/.turn-state/"$SID".json 2>/dev/null
-
-# deadline: most recent run's state
-rg -m1 '^## deadline' ~/.claude/skills/deadline/runtime-notes.md 2>/dev/null
-
-# goal record: the goal this session points at, and every live goal in scope
-~/.claude/scripts/goals/gs list
-```
+**Copy these fields from gather, do not recall them.** Live commitments, the goal
+record and the task store are exactly the values a long session mis-remembers;
+gather.sh reads them (the task store by content, not by this session's id, which
+named an empty store in six resumes).
 
 **The goal record needs no resolver.** It is keyed by the goal, and this session's
 pointer (`~/.claude/goals/<sid>.json`, written by `gs new` / `gs link` / `goal.sh set`)
@@ -416,10 +455,12 @@ prints both. `/goal <text>` is a Claude Code BUILT-IN that installs a session-sc
 Stop hook and lives in memory only; `goal.sh harness` recovers it from this session's
 transcript (`~/.claude/projects/<cwd, slashes and dots as dashes>/<SESSION_ID>.jsonl`,
 the `<command-name>/goal</command-name>` blocks), so record what was SET, not what
-you remember. The gcc goal (`~/.claude/goals/<sid>.json`) is what `/catchup` re-arms
-into and what the `37-goal-standing` hinter injects each session. Judge validity
-against what actually happened this session, then write the goal, its validity, and
-both arm states into Live commitments, and the paste line into the Re-arm block.
+you remember. The gcc goal (`~/.claude/goals/<sid>.json`) is what the
+`37-goal-standing` hinter injects each session. Judge validity against what actually
+happened this session, then write the goal, its validity, and both arm states into
+Live commitments, and the paste line into the Re-arm block. `/catchup` only OFFERS
+that line; it never re-arms a goal (owner ruling 2026-10-13: "only offer it, never
+re-arm. The goal given to me is often vague and general").
 
 **Every clause of a proposed goal must be one the agent can finish alone.** An
 armed `/goal` installs a Stop hook, so a clause whose actor is the owner can
@@ -450,22 +491,13 @@ default balanced style.
 
 ## Phase 3 — Write checkpoint
 
-### 3.1 Locate project root
+### 3.1 Project root and working surface
 
-Use Glob to find `.claude/` in the working-directory tree. The project root is the
-directory containing `.claude/`. Print it.
+Take both from gather (`project_root`, `working_surface`). If the work lives in a
+worktree or a non-default branch, the Quick Summary leads with it, or a `/catchup`
+agent edits the wrong tree.
 
-**Name the working surface.** If the session's work lives in a git worktree or a
-non-default branch that differs from the invoked CWD, capture the absolute
-worktree path + branch — the Quick Summary leads with it, or a `/catchup` agent
-edits the wrong tree. Resolve via `git rev-parse --show-toplevel` +
-`git branch --show-current`.
-
-### 3.2 Acquire lock and write
-
-```bash
-bash ~/.claude/skills/shared/lock-file.sh acquire "_checkpoint.claude.md" "core-dump"
-```
+### 3.2 Write
 
 **Every completion claim carries how it was checked.** A successor reads this file
 as fact and acts on it. "Verified", "done", "passing", and "fixed" each need the
@@ -506,14 +538,19 @@ section headings below are parsed verbatim by `/catchup` — keep them exact:
 > rewrite the next action or drop the stale caveat; never write both. Sections written
 > at different moments of the session drift apart, and the resume pays for it.
 - **Blocked on:** <USER: … | AGENT: none — go>
-- **Expired authorizations:** <list | none>
-- **Decaying prerequisites:** <each with its fix command — creds/tunnels/daemons/seeded data | none>
-- **Verification state:** <last run + result + command | UNCONFIRMED — nothing run>
+- **Standing authorizations:** <"<owner's verbatim words>" (<YYYY-MM-DD HH:MM>) · target: <repo[/branch|PR] @<sha>> · one-shot|standing … | none>
+- **Pending approval codes:** <target · nonce <code> … | none>
+- **Decaying prerequisites:** <each with its fix command, plus · check: <read-only command> where one exists | none>
+- **Verification state:** <last run + result + command | UNCONFIRMED: nothing run>
 - **Live commitments:** goal: <verbatim · STILL VALID|SUPERSEDED by …|none · clauses: <name>=served|UNSERVED … (2+ clause goals only) · harness ARMED|not armed · gcc set|none> · wake: <schedule · ARMED|FIRED|none> · deadline: <commitment due when · LIVE|MET|MISSED|none> · crons: <duty-slug (job, schedule) via CronList|none>
 - **Task list, glanced:** <N open, M done · needs you: #ids · grouped by <key> | —>
-- **Task store:** <session-<sid8> | —>
+- **Goal record:** <goal id | —>
+- **Task store:** <store from gather | —>
 - **ipc alias:** <alias | —>
 - **Key anchor:** <file:line | —>
+- **Key files:** <absolute paths, comma separated | none>
+- **Atone this session:** <atone ids | none>
+- **Rulings this session:** <"<quote>" -> <path where recorded> … | none>
 
 ## Initial Goal
 
@@ -545,7 +582,7 @@ optional and appear only when the session's shape warrants them.>
 
 - goal (STILL VALID, harness ARMED|not armed): `/goal <text>`   <bare, one line, no rail characters: the owner selects and pastes it>
   <EVERY clause must be one the AGENT can finish alone. See 2.6.>
-- (or, when none was set) proposed goal from Pending Items: `/goal <proposed text>`
+- (or, when none was set) offered goal covering every agent-side pending item, in short plain sentences: `/goal <text>`
 - wake, only if work is parked on a clock (a CI run, a peer reply, a cron): `/wake <when> <what>`
 - deadline, only if the owner named a due time or the work has a natural one: `/deadline <when> <commitment>`
 
@@ -554,67 +591,36 @@ optional and appear only when the session's shape warrants them.>
 _Generated by /core-dump. Resume with /catchup._
 ```
 
-The **Quick Summary** is the first section — an agent can read only it to decide
-whether to deep-dive. Write it last (after the other sections) so it reflects the
-complete state. Then release the lock:
+The **Quick Summary** is the first section: an agent can read only it to decide
+whether to deep-dive. Compose it last so it reflects the complete state, but put it
+first in the one Write.
+
+### 3.3 Finalize (one call)
 
 ```bash
-bash ~/.claude/skills/shared/lock-file.sh release "_checkpoint.claude.md" "core-dump"
+bash ~/.claude/scripts/checkpoint/finalize.sh <checkpoint> --session-id <id> --uuid "$CLAUDE_CODE_SESSION_ID" [--name NAME] [--summary TEXT] [--headless] [--mini]
 ```
 
-### 3.3 Format, then validate the parse contract (mandatory)
+It does, in order: format; validate the parse contract (on failure it prints `FIX:`
+and stops before indexing, so you make ONE repair Edit and run it again); diff
+Standing caveats and Standing constraints against the previous same-stem dump
+(`DECIDE:` lines: restore each verbatim or say in the dump that it retired and why;
+a silent drop is the drift `rules/invariant-graduation.md` names); check every
+Standing authorization's quote against this session's transcript (marks misses
+`UNVERIFIED:` in place); check every `Rulings this session` path exists; warn when an
+item is pending in one section and done in another; list constraints with no source
+quote as `CONFIRM OR RETIRE:` (never deletes them); symlink `_checkpoint.claude.md`;
+write the global pointer (`write.sh`, which also feeds the dream ingester); and render
+the closing record from the checkpoint's own headings. The render is the last thing it
+prints. `--headless` prints the receipt seal instead.
 
-```bash
-npx prettier --write <resolved-filename>
-bash ~/.claude/scripts/checkpoint/validate-checkpoint.sh <resolved-filename>   # add --mini in mini mode
-```
+The pointer write is what makes the checkpoint discoverable: `/catchup` reads
+`~/.claude/checkpoints/`, and a checkpoint without its pointer is orphaned. Name
+defaults to the session id and summary to the first sentence of the Initial Goal;
+pass `--name` only when the owner gave one. Do not stop to ask for a name.
 
-The validator refuses any dump missing the four mandatory exact headings, and
-its refusal is the gate, not this sentence: a 2026-08-13 dump with improvised
-headings ("Resume prompt", "Done, and verified") parsed as nothing and orphaned
-the /catchup that read it. On FAIL, rename the sections to the contract
-headings and re-run until OK; never proceed to 3.5 with a failing file.
-
-It also warns, without failing, when a Resume Contract omits a field the
-template specifies. Fill the named field rather than shipping past the warning:
-the 2026-08-19 dump omitted `Task list, glanced` and validated clean, because
-the field lived only in the prose of section 2.6 and never in the template.
-
-**Then diff this dump's caveats against the previous one for this session:**
-
-```bash
-CP="<resolved-filename>"          # quote it: unquoted, the < is a shell redirect
-STEM=$(basename "$CP" .claude.md | sed 's/^_[0-9]\{8\}-//')
-PREV=$(ls -t _*"$STEM".claude.md 2>/dev/null | rg -vF "$(basename "$CP")" | head -1)
-[ -n "$PREV" ] && bash ~/.claude/scripts/checkpoint/validate-checkpoint.sh "$CP" --diff-caveats "$PREV"
-```
-
-Match the previous dump by its NAME STEM, which is what ties a session's dumps
-to each other (`_20260819-gcc-work-78` follows `_20260818-gcc-work-78`). Two
-wrong ways to find it, both tried and rejected on 2026-08-20:
-
-- `resolve.sh --session-id "$CLAUDE_CODE_SESSION_ID"` returns nothing. That flag
-  is keyed by the checkpoint NAME, not the session uuid:
-  `--session-id gcc-work-78` returns the pointer, `--session-id 729c5137-...`
-  returns nothing, and the empty result makes the whole check skip in silence.
-- Newest `_*.claude.md` regardless of stem picks whichever session dumped last.
-  Diffing your caveats against another session's is worse than not checking,
-  because it produces confident output about the wrong pair of files.
-
-No previous dump means no diff, which is the normal case for a first checkpoint.
-
-Exit 3 means one or more caveats present in the previous dump are absent from
-this one. That is a decision, never an omission: restore each verbatim, or say
-in the new dump that it retired and why. Skip silently when no previous dump
-exists, which is the normal case for a session's first checkpoint.
-
-Why this is wired here rather than left as a flag nobody calls: the mode shipped
-with task #37 and sat uncalled for a month while the failure it detects kept
-happening. `rules/invariant-graduation.md` names the engine, in both directions:
-doc-22 lost a UX constraint and the claude-ipc round lost an honest "none of
-these were independently reviewed" caveat, because task momentum survives a
-checkpoint and debt does not. A built check nothing calls is a check that does
-not exist.
+Read finalize's report. Act on `FIX:` and `DECIDE:`; mention `UNVERIFIED:` and
+`CONFIRM OR RETIRE:` lines to the owner in one line each.
 
 ### 3.4 Additional context files (rare)
 
@@ -622,65 +628,7 @@ If the summary is too large for one file, create supplementary `_*.claude.md`
 files (e.g. `_decisions.claude.md`) and reference each under a
 `## Supplementary Files` section. This is the exception, not the default.
 
-### 3.5 Prompt for checkpoint name + summary
-
-Before the global pointer write, give the user a chance to set a human-readable
-name and one-line summary — both appear in the `/catchup` picker.
-
-Skip the prompt when any of: `mode == mini`; `ARG_NO_PROMPT == 1`; `ARG_NAME` was
-supplied; or no TTY / structured-output mode (CI, sub-agent, `claude -p` headless).
-
-Compute defaults first:
-- `DEFAULT_NAME` = `ARG_NAME` if set, else the session-id (e.g. `auth-refactor-a7`).
-- `DEFAULT_SUMMARY` = the first non-empty sentence of the 2.1 goal, ~80 chars.
-
-If skipping: set `CKPT_NAME=$DEFAULT_NAME`, `CKPT_SUMMARY=$DEFAULT_SUMMARY`,
-continue. Otherwise ask in PLAIN TEXT in the conversation, never through
-`mcp__inputs__form` or any dialog tool. The inputs dialogs are unusable in the
-owner's fullscreen TUI (memory `feedback_askuserquestion_tui_fullscreen`).
-Print both defaults and say "reply with overrides, or go". Any terse
-continuation (go, yes, ok, or the next instruction) accepts the defaults.
-Never block on this step.
-
-### 3.6 Write the global pointers — the load-bearing step
-
-> **This is the step that makes the checkpoint discoverable.** Without it, the
-> file you just wrote is orphaned: `/catchup` reads `~/.claude/checkpoints/` to
-> find checkpoints, and a checkpoint that never wrote its pointer simply does not
-> appear. Mini mode runs this step too. Do not skip it.
-
-Call the checkpoint writer — it performs all three writes (session-keyed pointer,
-chronological index, legacy back-compat) atomically:
-
-```bash
-~/.claude/scripts/checkpoint/write.sh \
-  --session-id      "<session id slug>" \
-  --session-uuid    "${CLAUDE_CODE_SESSION_ID:-}" \
-  --project-root    "<absolute project root>" \
-  --checkpoint-path "<absolute path to checkpoint file>" \
-  --name            "$CKPT_NAME" \
-  --summary         "$CKPT_SUMMARY"
-```
-
-`--session-uuid` is the full Claude Code session UUID from
-`$CLAUDE_CODE_SESSION_ID`. It lets `/revive` join checkpoints to the transcript at
-`~/.claude/projects/<encoded>/<uuid>.jsonl`.
-
-This writes:
-- `~/.claude/checkpoints/<session-id>.json` — your session's own pointer (no
-  contention with other sessions).
-- `~/.claude/checkpoints/index.jsonl` — append-only chronological log feeding the
-  `/catchup` picker.
-- `~/.claude/_last-checkpoint.json` — legacy single-slot pointer (back-compat;
-  readers drop it after migration 0008, tracked by `prop-20260515-141140-44`).
-
-The per-session directory + index (instead of one shared file) is why multiple
-long-running agents across projects don't clobber each other — each gets its own
-pointer; no last-writer-wins.
-
-Then print: `Checkpoint indexed as "$CKPT_NAME" — resume with /catchup`.
-
-### 3.7 Workspace doc diff (optional, non-blocking)
+### 3.5 Workspace doc diff (only when the owner asks)
 
 Operate on this session's own doc — `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` — not
 the shared `_active.md` symlink (which may point at another concurrent session's
@@ -699,7 +647,7 @@ TUI; memory `feedback_askuserquestion_tui_fullscreen`). Key the doc by the full
 session UUID so it's the same file the `stop-sync` mirror writes. Skip silently if
 the session's own doc doesn't exist.
 
-### 3.8 Contribute a gcc-improvement proposal (full mode, only when reusable friction surfaced)
+### 3.6 Contribute a gcc-improvement proposal (only when reusable friction surfaced)
 
 End-of-session is the cheapest moment to capture an improvement to `~/.claude`
 itself, because the Session Insights (2.5) are already in front of you. A friction
@@ -739,127 +687,13 @@ headless / sub-agent runs. This is the deliberate, high-quality capture path; th
 `gcc-signal-capture` Stop hook is its data-path safety net (it auto-stubs a proposal
 on a strong signal if this step is skipped), so a missed contribution is never lost.
 
-## Phase 4 (full mode): visual summary
+## Phase 4: close
 
-Render the sealed record via the shared trace renderer, WITH the session's
-content in it: the owner-approved deliverable is the court-sitting record
-(decision page `coredump-visual`, rulings D1/D2/D7), never an empty frame. It
-is not written to the checkpoint file; the checkpoint and the Phase 3.6 pointer
-stay the load-bearing artifacts. Skip the render only in mini mode and
-headless/sub-agent runs, where the Phase 5 `--receipt` seal stands in. The
-renderer itself refuses a sectionless dump JSON without `--receipt`, so
-skipping the data file is a visible failure, not a quiet downgrade.
-
-1. Write session data to `/tmp/core-dump-data-<session-id>.json` (per-session
-   naming avoids a parallel session's stale data). If the file exists, `trash` it
-   first. The full JSON schema and authoring notes are in `EXAMPLES.md`.
-2. Render:
-   ```bash
-   /bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-data-<session-id>.json
-   ```
-
-`/catchup` calls the same script with `--kind catchup`. That shared call is what
-makes the record and the briefing read as one house style. Section vocabulary is
-a court sitting: DECREE, DOCKET, OBJECTION, CHRONICLE, AMENDMENTS, COUNSEL, each
-carrying a one-word plain gloss so nothing needs decoding.
-
-**The section LABELS are not the JSON keys, so here is the mapping.** The labels
-are the only thing an author sees, and guessing the key from the label puts your
-finished work under "next". Two agents made that exact transposition within an
-hour of each other on 2026-08-18, one of them the author of this paragraph.
-
-| section | gloss | JSON key |
-|---|---|---|
-| DECREE | goal | `goal` (string) |
-| DOCKET | next | `pipeline` (array of strings) |
-| OBJECTION | blocked | `interrupts` (array of strings) |
-| CHRONICLE | done | `stack_trace` (array of strings) |
-| AMENDMENTS | files | `files` (array of `{path, change}`) |
-| COUNSEL | learned | `coprocessor.worked` / `.failed` (arrays) |
-
-Note these are NOT catchup's keys. A catchup briefing uses `todos`, `fences`,
-`learnings`; a dump uses the six above. Passing catchup's keys to a dump render
-silently produces a mostly-empty record, because every empty section is omitted
-rather than flagged.
-
-Three regalia are kept and one is picked at random per render. Pass `--theme
-a|b|c` (or set `TRACE_THEME`) to pin one. `--width N` overrides the terminal
-width. Colour is forced by default because a skill's output always goes through
-a pipe, where `gum` and most tools strip it; `NO_COLOR` still wins. File rows are
-project-relative, with OSC 8 hyperlinks available behind `TRACE_LINKS=1`.
-
-The script is macOS bash 3.2 compatible. Every empty state omits its section
-rather than printing a placeholder.
-
----
-
-## Phase 5: verification
-
-1. Read back the written file to confirm it exists and is non-empty.
-2. Confirm the Phase 3.6 pointer write succeeded (the writer prints a confirmation
-   line; a non-zero exit means `/catchup` won't find this checkpoint).
-3. Confirm the parse contract survived:
-   ```bash
-   rg -c '^## (Resume Contract|Initial Goal|Agent Actions|Current Expectation|Pending Items|Session Insights)$' <checkpoint>
-   ```
-   Six hits in full mode. Fewer means `/catchup` will not parse it.
-
-**The Phase 4 render IS the closing statement.** Do not follow it with a plain
-summary box: the render prints the emitted file path(s) as copyable `file` rows
-above its seal (populate `emitted` in the data JSON with every file the run
-wrote, the checkpoint first), the identity on its root line (`ipc` + `model`
-keys), the status in its header, and the pending work in its DOCKET. Timestamps
-in the data are HUMAN-readable ("Thu Aug 14 2026, 1:30 PM IST"), never raw ISO.
-An earlier version of this paragraph claimed the seal carried the file path
-when it did not; the owner's screen falsified it on 2026-08-14, and the file
-rows are the fix. A dry ASCII box printed underneath undoes the whole point of
-the visual and is the last thing the user reads.
-
-**The render hands over the literal resume line.** Under the file rows the
-renderer prints a paste-ready `resume` row: `/catchup at <checkpoint path>`,
-plus ` and <resume_hint>` when the data JSON carries one. This line is how the
-owner consumes a dump 90% of the time (ruling 2026-08-14), so it is generated,
-never hand-typed. Set `resume_hint` to ONE short clause only when the next
-session needs steering the path alone cannot give (e.g. "open with the callout
-exploration"); omit it when the checkpoint's Next action already says it.
-
-**Every file the banner tags must be captured in the checkpoint too.** The
-`emitted` rows are scrollback; the checkpoint is the record. Any extra file
-that earns a `file` row (a workspace doc, a report, a design record, a data
-artifact) must also be named inside the checkpoint itself, in the Resume
-Contract's Key anchor, a Pending item, or the relevant Agent Actions line, so
-`/catchup` inherits it from the file rather than from a screen nobody kept.
-
-**The render runs ALONE in its own Bash call, and last.** The terminal shows the
-raw command above its output, so any bookkeeping batched into the render call
-(a runtime-note heredoc, a WAL write) prints as a wall of command text above the
-visual, and its output trails inside the closing seal. Bookkeeping goes in
-earlier calls; the render call contains one command. Learned from the owner's
-own screen, 2026-08-14.
-
-In **mini mode**, or when Phase 4 was skipped, print the seal alone rather than a
-bare block, so even the abbreviated path closes in the same language:
-
-```bash
-printf '{"session_id":"<sid>","timestamp":"<ts>","status":"<status>",
-        "project_root":"<root>","checkpoint_path":"<file>"}' \
-  > /tmp/core-dump-seal-<sid>.json
-/bin/bash ~/.claude/scripts/render/trace.sh /tmp/core-dump-seal-<sid>.json --receipt
-```
-
-`--receipt` names the bare header+seal shape as intentional; the renderer
-refuses a sectionless dump JSON without it. A FULL interactive dump never uses
-this path: its closing statement is the Phase 4 render with the session inside.
-
-**Then keep the prose short.** The render did the reporting. Say only what the
-render cannot: an unverified claim, a blocker needing the user, or a decision
-awaiting them.
-
-**End with the continuation call and the next agent's first line** (owner batch
-2026-09-18, prop-20260816-155945-34). One line each: `/clear` or `/compact`,
-with the reason from the table at the top of this skill, and the exact resume
-line the next agent runs (`/catchup at <checkpoint path>`). A dump that ends
-without naming the path forward leaves the owner to reconstruct it.
+finalize's render is the closing statement, with the checkpoint path as a `file` row
+and the paste-ready resume line (`/catchup at <checkpoint path>`). Do not follow it
+with a summary box. Say only what the render cannot: an unverified claim, a decision
+the owner owes, a `DECIDE:` you resolved. End with one line naming the path forward:
+`/clear` then the resume line.
 
 ## Notes
 
@@ -877,9 +711,8 @@ without naming the path forward leaves the owner to reconstruct it.
   runs before all compaction (auto and manual `/compact`). It writes a lightweight
   `_precompact-checkpoint.claude.md` and a WAL CHECKPOINT — the shell-level
   counterpart to `/core-dump mini` (faster, less detail).
-- Post-run: write a runtime-notes entry via
-  `~/.claude/skills/shared/prepend-runtime-note.sh` (GUIDELINES.md §7). Always use
-  the absolute path — this skill may run from any directory.
+- No runtime-notes entry per dump: the checkpoint is the record, and each extra call
+  re-reads the whole context.
 
 ## See Also
 
@@ -894,4 +727,4 @@ without naming the path forward leaves the owner to reconstruct it.
   the Task tool + WAL + `/core-dump`/`/catchup` as the plan → status → resume
   backbone.
 - `~/.claude/skills/revive/SKILL.md` — heavier resume; rehydrates the full
-  transcript via the `--session-uuid` recorded in Phase 3.6.
+  transcript via the `--session-uuid` finalize records with the pointer.

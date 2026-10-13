@@ -157,13 +157,22 @@ if rg -q "^## Resume Contract[[:space:]]*$" "$f"; then
   # The field list is DERIVED from the core-dump template, not kept as a second
   # hand-maintained copy. Two lists that must agree are a drift guard that only
   # ever agrees with itself; this one reads the other side.
-  _tmpl="$HOME/.claude/skills/core-dump/SKILL.md"
+  _tmpl="${CHECKPOINT_TEMPLATE:-$HOME/.claude/skills/core-dump/SKILL.md}"
   _fields=$(rg --no-filename -o -- '^- \*\*[^*]+:\*\* <' "$_tmpl" 2>/dev/null \
             | sed 's/^- \*\*//; s/:\*\* <$//' | sort -u)
   [ -n "$_fields" ] || _fields=$(printf '%s\n' "Standing constraints" "Standing caveats" \
-    "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" \
+    "Next action" "Next action's requirements" "Blocked on" "Standing authorizations" \
     "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" \
     "Task store" "Key anchor")
+
+  # Optional fields: newer dumps carry them, older ones never did, so absence is
+  # silent. A present-but-empty one is still reported below.
+  _optional="Pending approval codes|Key files|Atone this session|Rulings this session"
+  # "Standing authorizations" replaced "Expired authorizations"; either name
+  # satisfies the field, so dumps written before the rename keep validating.
+  _fields=$(printf '%s\n' "$_fields" | rg -v '^(Expired authorizations|Standing authorizations)$' \
+            | rg -v -x "$_optional")
+  _fields=$(printf '%s\nStanding authorizations|Expired authorizations\n' "$_fields")
 
   # Scoped to the Resume Contract SECTION, and a present-but-empty field counts as
   # absent: "- **Task store:**" with nothing after it satisfied the old presence
@@ -176,22 +185,35 @@ print(m.group(1) if m else "")
 PYX
 )
   absent_fields=""; empty_fields=""
-  while IFS= read -r lbl; do
-    [ -n "$lbl" ] || continue
-    _line=$(printf '%s\n' "$_contract" | rg -F "**${lbl}:**" | head -1)
+  _check() {  # _check <a|b|…> <required|optional>
+    local names="$1" kind="$2" lbl="" cand _line="" _first="" _val _next
+    _first=${names%%|*}
+    local IFS='|'
+    for cand in $names; do
+      _line=$(printf '%s\n' "$_contract" | rg -F "**${cand}:**" | head -1)
+      [ -n "$_line" ] && { lbl="$cand"; break; }
+    done
+    IFS=$' \t\n'
     if [ -z "$_line" ]; then
-      absent_fields="${absent_fields} '${lbl}'"
-    else
-      _val=${_line#*"**${lbl}:**"}
-      # A value carried as indented bullets under the label is not empty; the
-      # old read pushed authors to pad the label line to silence this warning
-      # (csync, 2026-09-08).
-      _next=$(printf '%s\n' "$_contract" | rg -A1 -F "**${lbl}:**" | sed -n 2p)
-      case "$(printf '%s' "$_val" | tr -d '[:space:]')" in
-        ""|"-"|"—") printf '%s' "$_next" | rg -q '^\s+[-*]\s+\S' || empty_fields="${empty_fields} '${lbl}'" ;;
-      esac
+      [ "$kind" = required ] && absent_fields="${absent_fields} '${_first}'"
+      return
     fi
+    _val=${_line#*"**${lbl}:**"}
+    # A value carried as indented bullets under the label is not empty; the
+    # old read pushed authors to pad the label line to silence this warning
+    # (csync, 2026-09-08).
+    _next=$(printf '%s\n' "$_contract" | rg -A1 -F "**${lbl}:**" | sed -n 2p)
+    # A lone "-" or "—" is the template's explicit "none", not an empty value.
+    case "$(printf '%s' "$_val" | tr -d '[:space:]')" in
+      "") printf '%s' "$_next" | rg -q '^\s+[-*]\s+\S' || empty_fields="${empty_fields} '${lbl}'" ;;
+    esac
+  }
+  while IFS= read -r lbl; do
+    [ -n "$lbl" ] && _check "$lbl" required
   done <<< "$_fields"
+  while IFS= read -r lbl; do
+    [ -n "$lbl" ] && _check "$lbl" optional
+  done <<< "$(printf '%s' "$_optional" | tr '|' '\n')"
   [ -n "$absent_fields" ] && echo "warn: Resume Contract field(s) absent:${absent_fields} (template: core-dump SKILL.md 2.6)"
   [ -n "$empty_fields" ] && echo "warn: Resume Contract field(s) present but EMPTY:${empty_fields} (write the value or 'none')"
 fi

@@ -71,23 +71,20 @@ emit_nudge() {
   case "$tier" in
     gentle)
       cat <<EOF
-[CTX-HINT] Context at ~${pct}% — if you haven't /core-dump'd in the last
-30 minutes, consider \`/core-dump mini\` now. (Auto-compact at
-${CLAUDE_AUTOCOMPACT_PCT_OVERRIDE:-92}%.)
+[CTX-HINT] Context at ~${pct}%. Keep the session notes current. Do not run
+/core-dump yourself; the owner asks for one when they want it.
 EOF
       ;;
     medium)
       cat <<EOF
-[CTX-WARN] Context at ~${pct}% — \`/core-dump\` (or at minimum
-\`/core-dump mini\`) is strongly suggested before the next compaction.
-Synthesis takes a few turns; budget accordingly.
+[CTX-WARN] Context at ~${pct}%. At the next task boundary, suggest
+\`/core-dump\` then \`/clear\` to the owner in one line. Do not run it yourself.
 EOF
       ;;
     urgent)
       cat <<EOF
-[CTX-CRIT] Context at ~${pct}% — auto-compaction is imminent. RUN
-\`/core-dump mini\` NOW (full mode may not fit in the remaining budget).
-After compaction, /catchup will restore from the index.
+[CTX-CRIT] Context at ~${pct}%. Auto-compaction may be near. Tell the owner
+in one line and suggest \`/core-dump\` then \`/clear\`. Do not run it yourself.
 EOF
       ;;
   esac

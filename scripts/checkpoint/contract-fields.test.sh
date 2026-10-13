@@ -12,13 +12,13 @@
 # wrong contract, and would break the day the tier is promoted for a reason.
 
 set -uo pipefail
-V="$HOME/.claude/scripts/checkpoint/validate-checkpoint.sh"
+V="${V:-$HOME/.claude/scripts/checkpoint/validate-checkpoint.sh}"
 
 pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok   $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL $1"; }
 
-ALL="Standing constraints|Standing caveats|Next action|Next action's requirements|Blocked on|Expired authorizations|Decaying prerequisites|Verification state|Live commitments|Task list, glanced|Task store|ipc alias|Key anchor"
+ALL="Standing constraints|Standing caveats|Next action|Next action's requirements|Blocked on|Standing authorizations|Decaying prerequisites|Verification state|Live commitments|Task list, glanced|Goal record|Task store|ipc alias|Key anchor"
 
 mk() {  # mk [label-to-omit …] -> path to a dump carrying every OTHER field
   local t; t=$(mktemp -d)
@@ -54,9 +54,9 @@ case "$OUT" in *"'Next action's requirements'"*) ok "a missing requirements poin
                                               *) bad "the requirements field is in the template but not the check";; esac
 
 echo "== it reports EVERY missing field, not just the first =="
-OUT=$(bash "$V" "$(mk 'Expired authorizations' 'Verification state' 'Key anchor')" 2>&1)
+OUT=$(bash "$V" "$(mk 'Standing authorizations' 'Verification state' 'Key anchor')" 2>&1)
 n=0
-for lbl in "Expired authorizations" "Verification state" "Key anchor"; do
+for lbl in "Standing authorizations" "Verification state" "Key anchor"; do
   case "$OUT" in *"'$lbl'"*) n=$((n+1));; esac
 done
 [ "$n" = 3 ] && ok "all three omissions named" || bad "named only $n of 3 omissions"
@@ -87,7 +87,7 @@ echo "== a value carried as indented bullets under the label is not EMPTY (csync
   printf '# Core Dump\n\n## Resume Contract\n\n'
   printf -- '- **Standing constraints:**\n  - keep the two reports\n  - no push\n'
   printf -- '- **Standing caveats:**\n  - nothing committed\n'
-  for f in "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" "Task store" "Key anchor"; do printf -- '- **%s:** x\n' "$f"; done
+  for f in "Next action" "Next action's requirements" "Blocked on" "Standing authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" "Task store" "Key anchor"; do printf -- '- **%s:** x\n' "$f"; done
   printf '\n## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
 } > "$T/bullets.md"
 OUT=$(bash "$V" "$T/bullets.md" 2>&1)
@@ -95,11 +95,57 @@ case "$OUT" in *"EMPTY"*) bad "bulleted constraints/caveats reported as EMPTY: $
 printf -- '- **Task store:**\n' >> "$T/bullets.md"
 {
   printf '# Core Dump\n\n## Resume Contract\n\n- **Task store:**\n- **Key anchor:** x\n'
-  for f in "Standing constraints" "Standing caveats" "Next action" "Next action's requirements" "Blocked on" "Expired authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced"; do printf -- '- **%s:** x\n' "$f"; done
+  for f in "Standing constraints" "Standing caveats" "Next action" "Next action's requirements" "Blocked on" "Standing authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced"; do printf -- '- **%s:** x\n' "$f"; done
   printf '\n## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
 } > "$T/empty.md"
 OUT=$(bash "$V" "$T/empty.md" 2>&1)
 case "$OUT" in *"EMPTY"*"Task store"*) ok "a genuinely empty label (next line is another label) is still EMPTY";; *) bad "the bullet read silenced a real empty field: $OUT";; esac
+
+echo "== a lone dash or em dash is an explicit none, not EMPTY =="
+D=$(mk)
+sed -i '' 's/^- \*\*Task store:\*\* value$/- **Task store:** —/; s/^- \*\*Key anchor:\*\* value$/- **Key anchor:** -/; s/^- \*\*Goal record:\*\* value$/- **Goal record:** —/' "$D"
+OUT=$(bash "$V" "$D" 2>&1)
+case "$OUT" in *"EMPTY"*) bad "a dash value was reported EMPTY: $OUT";; *) ok "— and - are read as an explicit none";; esac
+D2=$(mk)
+sed -i '' 's/^- \*\*Task store:\*\* value$/- **Task store:**/' "$D2"
+OUT=$(bash "$V" "$D2" 2>&1)
+case "$OUT" in *"EMPTY"*"Task store"*) ok "a truly empty value is still reported EMPTY";; *) bad "an empty value went unreported: $OUT";; esac
+
+echo "== Standing authorizations replaced Expired authorizations; both are accepted =="
+# Built from a fixed template file so these rows do not depend on whatever the
+# live skill template says today.
+TMPL=$(mktemp -d)/tmpl.md
+{
+  for f in "Standing constraints" "Standing caveats" "Next action" "Next action's requirements" "Blocked on" "Standing authorizations" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" "Task store" "Key anchor"; do printf -- '- **%s:** <x>\n' "$f"; done
+} > "$TMPL"
+mkl() {  # mkl <authorizations-label|-> [extra field lines…] -> path
+  local auth="$1" t; t=$(mktemp -d); shift
+  {
+    printf '# Core Dump\n\n## Resume Contract\n\n'
+    for f in "Standing constraints" "Standing caveats" "Next action" "Next action's requirements" "Blocked on" "Decaying prerequisites" "Verification state" "Live commitments" "Task list, glanced" "Task store" "Key anchor"; do printf -- '- **%s:** x\n' "$f"; done
+    [ "$auth" = "-" ] || printf -- '- **%s:** none\n' "$auth"
+    for extra in "$@"; do printf -- '%s\n' "$extra"; done
+    printf '\n## Initial Goal\nx\n## Agent Actions\nx\n## Current Expectation\nx\n## Pending Items\nx\n'
+  } > "$t/cp.md"
+  printf '%s' "$t/cp.md"
+}
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl 'Standing authorizations')" 2>&1)
+case "$OUT" in *"field(s) absent"*) bad "new name flagged as absent: $OUT";; *) ok "Standing authorizations satisfies the field";; esac
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl 'Expired authorizations')" 2>&1); rc=$?
+case "$OUT" in *"field(s) absent"*) bad "legacy name flagged as absent: $OUT";; *) ok "legacy Expired authorizations still accepted";; esac
+[ "$rc" = 0 ] && ok "legacy file exits 0" || bad "legacy file exited $rc"
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl -)" 2>&1)
+case "$OUT" in *"'Standing authorizations'"*) ok "neither name present is reported once, under the new name";; *) bad "missing authorizations went unreported: $OUT";; esac
+
+echo "== the new optional fields: absent is silent, present-but-empty is not =="
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl 'Standing authorizations')" 2>&1)
+for lbl in "Pending approval codes" "Key files" "Atone this session" "Rulings this session"; do
+  case "$OUT" in *"$lbl"*) bad "optional field '$lbl' reported when absent";; *) ok "absent '$lbl' is silent";; esac
+done
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl 'Standing authorizations' '- **Pending approval codes:** none' '- **Key files:** /a/b.md, /c/d.md' '- **Atone this session:** none' '- **Rulings this session:** none')" 2>&1); rc=$?
+case "$OUT" in *"EMPTY"*|*"field(s) absent"*) bad "filled optional fields warned: $OUT";; *) ok "filled optional fields are clean";; esac
+OUT=$(CHECKPOINT_TEMPLATE="$TMPL" bash "$V" "$(mkl 'Standing authorizations' '- **Key files:**')" 2>&1)
+case "$OUT" in *"EMPTY"*"Key files"*) ok "an empty optional field is still reported EMPTY";; *) bad "empty Key files went unreported: $OUT";; esac
 
 echo "== the real dumps on disk =="
 R="$HOME/.claude/_20260819-gcc-work-78.claude.md"

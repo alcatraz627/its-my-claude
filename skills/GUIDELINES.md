@@ -239,6 +239,9 @@ Every agent **must** use `lock-file.sh` to coordinate file access and prevent ra
 - **Stale locks** (>5 minutes old) are auto-cleared by the script. If you see a `STALE_LOCK` message, the previous agent likely crashed without releasing — continue safely.
 - **At skill startup**, run `bash ~/.claude/skills/shared/lock-file.sh cleanup` to sweep all stale locks left by crashed sessions. This is cheap (one `ls` + age check) and prevents stale locks from accumulating.
 - Lock files live in `.claude/skills/shared/locks/` — never commit this directory.
+- **Exemption:** a file only one session ever writes needs no lock. `/core-dump`'s
+  checkpoint is named per session (`_YYYYMMDD-<session>.claude.md`), so it skips the
+  lock; shared files such as `runtime-notes.md` still take one.
 
 **Pattern (wrap every file write):**
 

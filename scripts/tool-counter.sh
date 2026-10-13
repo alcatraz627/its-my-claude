@@ -115,7 +115,7 @@ if (( new_total > 0 && new_total % 30 == 0 )); then
     if (( new_total == 30 )); then
       msg="Tool count 30, context ~${used}% full — consider a WAL checkpoint to preserve session state."
     else
-      msg="Tool count ${new_total}, context ~${used}% full (measured) — consider /core-dump mini at the next task boundary."
+      msg="Tool count ${new_total}, context ~${used}% full (measured). Do not run /core-dump yourself; at 60% or more and a task boundary, you may suggest /core-dump then /clear to the owner in one line."
     fi
     jq -nc --arg m "[auto-checkpoint] $msg" '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$m}}'
   fi

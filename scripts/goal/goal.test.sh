@@ -49,6 +49,19 @@ line t8 '<local-command-stdout>Goal cleared</local-command-stdout>' >> "$TR"
 { $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==false' >/dev/null && ok "stdout 'Goal cleared' disarms" || ko "stdout clear"
 printf '{"type":"user","timestamp":"t9","message":{"role":"user","content":[{"type":"tool_result","content":"<command-name>/goal</command-name> <command-args>quoted in a tool result</command-args>"}]}}\n' >> "$TR"
 { $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==false' >/dev/null && ok "a /goal block inside a tool_result does not count" || ko "tool_result counted"
+# Newer transcripts write /goal as system local_command records, and a met goal
+# leaves a goal_status attachment; missing both read a cleared goal as ARMED.
+sysline(){ printf '{"type":"system","subtype":"local_command","timestamp":"%s","content":"%s"}\n' "$1" "$2"; }
+sysline s1 "$(printf "$CMD" 'system-record goal')" >> "$TR"
+{ $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==true and .text=="system-record goal"' >/dev/null && ok "a system local_command /goal sets" || ko "system set"
+line s1b "$(printf "$CMD" 'user-turn goal')" >> "$TR"
+sysline s2 "$(printf "$CMD" 'clear')" >> "$TR"
+{ $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==false and (.reason|test("clear"))' >/dev/null && ok "a system local_command /goal clear disarms" || ko "system clear"
+sysline s3 "$(printf "$CMD" 'met goal')" >> "$TR"
+printf '{"type":"attachment","timestamp":"s4","attachment":{"type":"goal_status","met":false,"condition":"met goal"}}\n' >> "$TR"
+{ $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==true and .text=="met goal"' >/dev/null && ok "an unmet goal_status keeps the goal armed" || ko "unmet goal_status disarmed"
+printf '{"type":"attachment","timestamp":"s5","attachment":{"type":"goal_status","met":true,"condition":"met goal"}}\n' >> "$TR"
+{ $G harness --sid $SID --cwd $CWD || true; } | jq -e '.armed==false and (.reason|test("auto-cleared"))' >/dev/null && ok "a met goal_status disarms" || ko "met goal_status"
 line t10 "$(printf "$CMD" 'second goal, with; punctuation')" >> "$TR"
 
 echo "== gcc goal =="

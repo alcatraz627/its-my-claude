@@ -255,6 +255,17 @@ if [ "$KIND" = "catchup" ]; then
   # Overflow truncates LOUDLY with a checkpoint pointer, never silently.
   has() { local t; t=$(jqa "$1 // empty"); [ -n "$t" ] && return 0; return 1; }
 
+  # DONE: what landed since the dump, first, because the owner's first question
+  # after a resume was "what is done and what is pending" in a third of resumes.
+  DN=$(jqa '.done | length'); [ "$DN" = "null" ] && DN=0
+  DSHOWN=$DN; [ "$DSHOWN" -gt 6 ] && DSHOWN=6
+  if [ "$DN" -gt 0 ]; then
+    rule "✓" "DONE" "as of the dump, checked where marked" "$DN" "$DIM"
+    jqa '.done[0:6][]' | while IFS= read -r t; do item "·" "$DIM" "$t"; done
+    [ "$DN" -gt 6 ] && printf '    %s… +%d more in checkpoint §Agent Actions%s\n' "$DIM" $((DN - 6)) "$R"
+    echo
+  fi
+
   # NEXT: the single imperative, then one dim line of fence state.
   NEXT=$(jqa '.next_action // ""')
   if [ -n "$NEXT" ]; then
@@ -262,8 +273,13 @@ if [ "$KIND" = "catchup" ]; then
     wrap_hang "$NEXT" $((W - 8)) 0 | { first=1; while IFS= read -r ln; do
       if [ "$first" = 1 ]; then printf '  %s▶%s %s%s%s\n' "$GRN$B" "$R" "$B" "$ln" "$R"; first=0
       else printf '    %s\n' "$ln"; fi; done; }
+    # Standing authorizations carry over (owner ruling 2026-10-13); the old
+    # expired_auth key still renders for checkpoints written before it.
+    SA=$(jqa '.standing_auth | length'); [ "$SA" = "null" ] && SA=0
     AN=$(jqa '.expired_auth | length'); [ "$AN" = "null" ] && AN=0
-    AUTH="none expired"; [ "$AN" -gt 0 ] && AUTH="EXPIRED x${AN}, fresh approval needed"
+    AUTH="none carried"
+    [ "$SA" -gt 0 ] && AUTH="${SA} standing, carried"
+    [ "$AN" -gt 0 ] && AUTH="EXPIRED x${AN}, fresh approval needed"
     BLK=$(jqa '.blocked_on // ""'); [ -z "$BLK" ] && BLK="nothing, go"
     printf '    %sauth: %s · blocked: %s%s\n' "$DIM" "$AUTH" "$BLK" "$R"
     echo
@@ -275,7 +291,7 @@ if [ "$KIND" = "catchup" ]; then
   TSRC='(.todos // [.pipeline // [] | .[] | {p:"ready", text:., note:""}])'
   TN=$(jqa "$TSRC | length"); [ "$TN" = "null" ] && TN=0
   if [ "$TN" -gt 0 ]; then
-    rule "○" "TODO" "priority order" "$TN open" "$GRN"
+    rule "○" "TODO" "○ agent · ◇ needs you" "$TN open" "$GRN"
     jqa "[$TSRC[]][0:8] | to_entries[] | \"\(.key+1)\(.value.p // \"ready\")\(.value.text)\(.value.note // \"\")\"" \
     | while IFS= read -r row; do
       num="${row%%$'\001'*}"; rest="${row#*$'\001'}"
@@ -306,7 +322,7 @@ if [ "$KIND" = "catchup" ]; then
   # fences (🙏) sort ahead of the cap (prop-20260824-082400-f5): they bind like a
   # constraint and were the first thing the old cap ate; commitments stay first.
   TSHOWN=$TN; [ "$TSHOWN" -gt 8 ] && TSHOWN=8
-  FB=$(( (44 - 20 - TSHOWN) / 3 )); [ "$FB" -lt 2 ] && FB=2; [ "$FB" -gt 7 ] && FB=7
+  FB=$(( (44 - 20 - TSHOWN - DSHOWN) / 3 )); [ "$FB" -lt 2 ] && FB=2; [ "$FB" -gt 7 ] && FB=7
   FSORT="[$FSRC[]] | (map(select(.head | test(\"^(Goal|Wake|Deadline)\"))) + map(select(.head | test(\"🙏\"))) + map(select((.head | test(\"^(Goal|Wake|Deadline)\") | not) and (.head | test(\"🙏\") | not))))"
   if [ "$FN" -gt 0 ]; then
     rule "‡" "FENCES" "verbatim, full text in checkpoint §Resume Contract" "" "$GOLD"

@@ -27,7 +27,7 @@ Prefer `bash ~/.claude/scripts/goal/goal.sh armline` or `goal.sh box` over typin
 
 - Three to six short declarative sentences, each true or false on its own. No ticket numbers, filenames or counts. No unbounded quantifiers ("every way X can fail"), no standing behaviours ("every question is answered the turn it arrives"): name the artifact or threshold instead.
 - Every clause is one YOU can finish alone. An armed goal is a Stop condition; a clause whose actor is the owner blocks every stop. The owner half goes in the reply as a blocked-on line.
-- Propose, do not arm. `goal.sh set` is the owner's move; the one exception is /catchup re-arming a checkpoint goal marked STILL VALID.
+- Propose, do not arm. `goal.sh set` is the owner's move, with no exception: /catchup only offers a checkpoint's goal (owner ruling 2026-10-13).
 - The /tasks goal band may differ from the armed goal; nudge toward reconciling, never fight the owner's goal.
 
 Diagnostic: three tool calls into something new and no line to arm; or a clause whose subject is the owner.

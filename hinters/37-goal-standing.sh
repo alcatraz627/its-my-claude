@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 # 37-goal-standing.sh — UserPromptSubmit hinter: the session's goal, kept in view.
 #
-# The built-in /goal Stop hook dies on /clear and nothing re-arms it. When /catchup
-# (or the agent) has written a gcc goal for this session (scripts/goal/goal.sh set)
-# and the harness /goal is NOT armed, this injects the standing objective on the
-# first prompt and then every 8th, with the one line the owner can paste to arm the
-# real Stop hook. When the harness goal IS armed it stays silent: the harness already
-# holds the goal, and a second voice would be noise. Owner ruling 2026-08-18: losing
-# the goal is the one unacceptable outcome; the agent re-arms unless told not to.
+# The built-in /goal Stop hook dies on /clear. When a gcc goal exists for this
+# session (the owner set it, or linked the session with gs link) and the harness
+# /goal is NOT armed, this injects the standing objective on the first prompt and
+# then every 8th, with the one line the owner can paste to arm the real Stop hook.
+# When the harness goal IS armed it stays silent: a second voice would be noise.
+# Since 2026-10-13 catchup only offers a goal and never sets or links one itself.
 #
 # State: /tmp/claude-goalhint-<sid8>, a prompt counter. Mute: touch ~/.claude/.no-goal-hint
 set -uo pipefail

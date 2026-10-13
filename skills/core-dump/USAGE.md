@@ -37,14 +37,15 @@ Writes `_YYYYMMDD-<session-id>.claude.md` (+ `_checkpoint.claude.md` symlink) to
 root with a Quick Summary, four-section detailed dump, insights, and a CPU-dump visual summary
 in the terminal.
 
-### Example 2: Mini checkpoint for quick recovery
+### Example 2: A short session
 
 ```
-/core-dump mini
+/core-dump
 ```
 
-Writes a flat, scannable checkpoint: Goal, Done, Not Done, Next Steps, Key Files. No insights,
-no visual summary, no `improvement-ideas.md` update. Fastest path to `/catchup` recovery.
+A session that did one or two things gets a short full dump: every heading, a line or two
+under each. Mini is the headless `/retro-dump` template only; interactive sessions do not use
+it (owner ruling 2026-10-13).
 
 ### Example 3: Named file with focus instructions
 
@@ -117,15 +118,14 @@ the full conversation context.
 
 | Dependency                  | Type         | Notes                                            |
 | --------------------------- | ------------ | ------------------------------------------------ |
-| `GUIDELINES.md`             | Shared rules | Read at start of every run                       |
-| `lock-file.sh`              | Shared tool  | Used to safely acquire/release file write lock   |
+| `gather.sh`                 | Script       | One call before the Write: every fact to copy    |
+| `finalize.sh`               | Script       | One call after: validate, index, render          |
 | `/catchup`                  | Skill        | Companion skill that reads the checkpoint file   |
 | `pre-compact-checkpoint.sh` | Hook script  | Fires before compaction, writes lightweight dump |
 
 ## Tips
 
-- Run `/core-dump` just before `/clear` to preserve session context across a clean restart.
-- Use `/core-dump mini` when you just need a quick bookmark — don't need the full analysis.
+- Run `/core-dump` just before `/clear` to preserve session context across a clean restart. It runs only when the owner asks, or on keep-warm's last wake; agents never run it on their own.
 - Use the `instructions` arg to tailor the dump for specific use cases — "decisions only" is useful when handing off architectural work to another session.
 - Keep the default filename so `/catchup` can find it without arguments.
 - If you need to preserve multiple snapshots, use named files (`_before-refactor.claude.md`, `_after-auth-fix.claude.md`) — each run overwrites its own file independently.

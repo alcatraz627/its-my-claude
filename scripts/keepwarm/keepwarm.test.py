@@ -53,7 +53,7 @@ def ctx(out):
 # Off: no arming, every wake skipped.
 expect("off: session start asks nothing", hook("hook-start", session_id="s0") == {})
 hook("hook-prompt", session_id="s0", prompt="hello")
-expect("off: a wake is blocked", wake("s0", 60000, 50).get("decision") == "block")
+expect("off: a wake is blocked", wake("s0", 300000, 50).get("decision") == "block")
 
 open(SWITCH, "w").close()
 out = hook("hook-start", session_id="s1")
@@ -63,43 +63,75 @@ env_p = dict(ENV, CLAUDE_CODE_ENTRYPOINT="sdk-cli")
 r = subprocess.run([sys.executable, KW, "hook-start"], input='{"session_id":"h"}', capture_output=True, text=True, env=env_p)
 expect("a headless session is never armed", r.stdout.strip() == "")
 
-# Worked session (60k of 200k = 30%): note, dump, inbox..., stop at wake 10.
+# Small session (60k of 200k = 30%): warm, warm, full dump, stop.
 hook("hook-prompt", session_id="s1", prompt="real work")
-early = wake("s1", 60000, 20)
-expect("a wake 20 min after activity is never blocked (a block prints in the terminal)", "decision" not in early)
+early = wake("s1", 300000, 40)
+expect("a wake 40 min after activity is not due and never blocked", "decision" not in early)
 expect("it only re-arms and says the one word", "not due" in ctx(early) and "recurring false" in ctx(early)
        and "one word: warm" in ctx(early))
-w1 = wake("s1", 60000, 45)
-expect("wake 1 at 45 min writes the note", "workspace note" in ctx(w1))
+w1 = wake("s1", 300000, 56)
+expect("small: wake 1 at 56 min only keeps warm", "only keeps the cache warm" in ctx(w1))
 expect("a due wake also arms the next one", "Re-arm keep-warm" in ctx(w1))
-expect("wake 2 writes the core-dump", "/core-dump" in ctx(wake("s1", 60000, 45)))
-expect("wake 3 checks the inbox", "inbox" in ctx(wake("s1", 60000, 45)))
-for _ in range(6):
-    wake("s1", 60000, 45)
-last = wake("s1", 60000, 45)
-expect("wake 10 is the last and parks", "the last" in ctx(last))
+expect("small: wake 2 keeps warm", "only keeps the cache warm" in ctx(wake("s1", 300000, 56)))
+last = wake("s1", 300000, 56)
+expect("small: wake 3 is the last and writes the full core-dump",
+       "the last" in ctx(last) and "full /core-dump" in ctx(last) and "not mini" in ctx(last))
 expect("the last wake does not arm another", "Re-arm keep-warm" not in ctx(last))
-expect("after the last wake, wakes are skipped", wake("s1", 60000, 45).get("decision") == "block")
+expect("after the last wake, wakes are skipped", wake("s1", 300000, 56).get("decision") == "block")
 hook("hook-prompt", session_id="s1", prompt="I'm back")
-expect("the owner returning resets keep-warm", "workspace note" in ctx(wake("s1", 60000, 45)))
+expect("the owner returning resets keep-warm", "only keeps the cache warm" in ctx(wake("s1", 300000, 56)))
 
-# Full session (150k = 75%): note, then dump and stop.
+# Large session (150k = 75%): warm once, then the full dump, then stop.
 hook("hook-prompt", session_id="s2", prompt="x")
-expect("full: wake 1 notes", "workspace note" in ctx(wake("s2", 150000, 45)))
-expect("full: wake 2 dumps", "/core-dump" in ctx(wake("s2", 150000, 45)))
-expect("full: then stops", wake("s2", 150000, 45).get("decision") == "block")
+expect("large: wake 1 keeps warm", "only keeps the cache warm" in ctx(wake("s2", 750000, 56)))
+expect("large: wake 2 is the full dump", "full /core-dump" in ctx(wake("s2", 750000, 56)))
+expect("large: then stops", wake("s2", 750000, 56).get("decision") == "block")
 
-# Light session (10k = 5%): one note, then stop.
-hook("hook-prompt", session_id="s3", prompt="x")
-expect("light: one note", "workspace note" in ctx(wake("s3", 10000, 45)))
-expect("light: then stops", wake("s3", 10000, 45).get("decision") == "block")
+# The wake's own turn ending must not reset the idle clock (the double-wake bug).
+hook("hook-prompt", session_id="s5", prompt="x")
+wake("s5", 300000, 56)
+p5 = os.path.join(T, "kw", "s5.json")
+at_wake = json.load(open(p5))["last_activity"]
+time.sleep(1.1)
+hook("hook-stop", session_id="s5")
+st5 = json.load(open(p5))
+expect("a wake turn's Stop leaves the clock at the wake", st5["last_activity"] == at_wake
+       and "in_wake" not in st5)
+hook("hook-stop", session_id="s5")
+expect("an ordinary turn's Stop still moves the clock", json.load(open(p5))["last_activity"] > at_wake)
+st5 = json.load(open(p5))
+st5["last_activity"] -= 56 * 60
+json.dump(st5, open(p5, "w"))
+nxt = hook("hook-prompt", session_id="s5", prompt="[keepwarm] idle check", transcript_path=transcript(300000))
+expect("so the next wake 56 min later is due, not a re-arm", "only keeps the cache warm" in ctx(nxt))
 
 # The Stop hook moves the clock: a turn that just ended makes the next wake early.
 hook("hook-prompt", session_id="s4", prompt="x")
 age("s4", 50)
 hook("hook-stop", session_id="s4")
-out = hook("hook-prompt", session_id="s4", prompt="[keepwarm] idle check", transcript_path=transcript(60000))
+out = hook("hook-prompt", session_id="s4", prompt="[keepwarm] idle check", transcript_path=transcript(300000))
 expect("a turn that just ended defers the wake by re-arming, not blocking", "decision" not in out and "not due" in ctx(out))
+
+# A broken one-shot chain is re-linked on the owner's next prompt, once.
+hook("hook-start", session_id="s6")
+expect("an owner prompt while a wake is pending adds nothing",
+       ctx(hook("hook-prompt", session_id="s6", prompt="work")) == "")
+p6 = os.path.join(T, "kw", "s6.json")
+st6 = json.load(open(p6))
+st6["armed_at"] = time.time() - 3600
+json.dump(st6, open(p6, "w"))
+relink = ctx(hook("hook-prompt", session_id="s6", prompt="back after the wake never fired"))
+expect("a missed wake is re-armed on the owner's next prompt",
+       "no wake is pending" in relink and "CronCreate" in relink and "delete any job" in relink)
+expect("and only once", ctx(hook("hook-prompt", session_id="s6", prompt="next")) == "")
+hook("hook-prompt", session_id="s7", prompt="x")
+wake("s7", 750000, 56)
+wake("s7", 750000, 56)
+st7 = json.load(open(os.path.join(T, "kw", "s7.json")))
+st7["armed_at"] = time.time() - 3600
+json.dump(st7, open(os.path.join(T, "kw", "s7.json"), "w"))
+expect("a finished cycle re-arms when the owner returns",
+       "no wake is pending" in ctx(hook("hook-prompt", session_id="s7", prompt="back")))
 
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)

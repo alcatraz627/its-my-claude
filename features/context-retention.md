@@ -10,7 +10,7 @@ triggers:
 related: [features/wal.md, features/proposals.md]
 tier: 1
 category: features
-updated: 2026-04-24
+updated: 2026-10-13
 stale_after_days: 90
 ---
 
@@ -33,15 +33,15 @@ At the start of every session, generate a short session ID based on the initial 
 
 ## Session rules for context retention
 
-- **Implementation sessions** (files edited) → `/core-dump` at end and major milestones
-- **After editing ≥3 files, at user break signals, or ~40 messages** → checkpoint
-- **Exploration/Q&A sessions** → compact is fine, skip `/core-dump`
-- **After compaction** → immediately write a checkpoint of what you still know
-- **Auto-checkpoint at tool #30:** write a WAL checkpoint. At tool #60, run `/core-dump mini`.
+- **`/core-dump` runs only when the owner asks** (a typed `/core-dump`, also inline in a longer message) **or on keep-warm's last wake.** An agent never runs it on its own; a task notification, ipc mail, goal check-in or context nudge is not the owner. Owner ruling 2026-10-13: "I want to cut down on core-dump usage, but make it valuable when it happens." The transcript is the crash fallback (`/retro-dump`, `/revive`).
+- **Suggest, once, in one line:** at a task boundary with 60% or more context used and work queued, say that `/core-dump` then `/clear` would pay for itself after about 50 calls. Then keep working.
+- **Auto-checkpoint at tool #30:** write a WAL checkpoint (cheap, no model synthesis).
+- **After compaction:** re-verify state before acting (`rules/testing-patterns.md` `[post-compact]`).
+- **Approvals carry across compaction and /clear** as Standing authorizations: the owner's verbatim words, the target, one-shot or standing. Re-ask only when the target moved. Push-to-main and policy asks are Switchboard's gates and are unaffected.
 
-## 70% context trigger
+## 70% context
 
-When approaching 70% context usage, proactively offer to generate a structured state summary (WAL checkpoint + `/core-dump mini`) before compaction loses critical details.
+At 70% and above, keep the session workspace notes current. Do not dump on your own.
 
 ## Compaction preservation
 

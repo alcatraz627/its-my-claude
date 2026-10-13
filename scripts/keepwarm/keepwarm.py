@@ -3,7 +3,7 @@
 is away, and write its checkpoint while the cache is still warm.
 
 A one-shot in-session cron sends "[keepwarm] idle check" when the session has
-been idle long enough (40 minutes after the last turn). The UserPromptSubmit
+been idle long enough (55 minutes after the last turn). The UserPromptSubmit
 hook below decides each one and always tells the model when to arm the next
 one, so the chain continues without a recurring job. Due -> the prompt goes
 through with the one piece of upkeep this wake should do. Not due yet (the
@@ -41,7 +41,8 @@ HOME = os.path.expanduser("~")
 DIR = os.environ.get("KEEPWARM_DIR", os.path.join(HOME, ".claude", "keepwarm"))
 SWITCH = os.environ.get("KEEPWARM_SWITCH", os.path.join(HOME, ".claude", ".keepwarm-on"))
 EVENTS = os.path.join(DIR, "events.jsonl")
-DUE_MIN = float(os.environ.get("KEEPWARM_DUE_MIN", "40"))
+# The prompt cache lives one hour; wake just before it lapses.
+DUE_MIN = float(os.environ.get("KEEPWARM_DUE_MIN", "55"))
 PREFIX = "[keepwarm]"
 WAKE_PROMPT = "[keepwarm] idle check"
 # A one-shot cron is pinned to a minute; firing a little late is harmless, a
@@ -49,26 +50,24 @@ WAKE_PROMPT = "[keepwarm] idle check"
 ARM_PAD_S = 60
 USAGE_GATE = os.path.join(HOME, ".claude", "scripts", "cron", "usage-gate.sh")
 
-# Per context class: the upkeep for wake 1, 2, ... and the wake that is the last.
-# Classes by context USED: light <15%, worked 15-50%, heavy 50-65%, full >65%.
+# The upkeep for wake 1, 2, ..., by context USED; the last wake writes a full
+# core-dump and keep-warm stops. With wakes 55 min apart a small session stays
+# warm about 3.5 hours, a large one about 2.75; either way the owner can return
+# inside 2.5 hours for free, and later finds a dump instead of a cold cache.
+LARGE_PCT = 50
+# The sessions here run with the 1M-token window; only the fallback reading uses this.
+CTX_WINDOW = float(os.environ.get("KEEPWARM_CTX_WINDOW", "1000000"))
 PLAN = {
-    "light":  {"wakes": ["note"], "last": 1},
-    "worked": {"wakes": ["note", "dump"], "last": 10},
-    "heavy":  {"wakes": ["note", "dump"], "last": 5},
-    "full":   {"wakes": ["note", "dump"], "last": 2},
+    "small": ["warm", "warm", "dump"],
+    "large": ["warm", "dump"],
 }
 UPKEEP = {
-    "note": ("Keep-warm wake {n}: the owner is away. Write three short lines to this session's "
-             "workspace note ({note}): what is in flight, what waits on the owner, the next action. "
-             "Then reply with one line. Start nothing else."),
-    "dump": ("Keep-warm wake {n}: the owner is away and the cache is still warm. Run /core-dump "
-             "(full) now so the owner can resume cheaply. Then reply with one line. Start nothing else."),
-    "inbox": ("Keep-warm wake {n}: check this session's ipc inbox and background tasks; answer "
-              "anything owed. If nothing is owed, reply only: still parked: <the next action>. "
-              "Start nothing else."),
-    "stop": ("Keep-warm wake {n}, the last: append one line 'parked at {now}: <the next action>' to "
-             "this session's workspace note ({note}), then reply with one line. Keep-warm stops "
-             "here until the owner returns."),
+    "warm": ("Keep-warm wake {n}: the owner is away and this turn only keeps the cache warm. "
+             "Reply with exactly one word: warm. Start nothing else."),
+    "dump": ("Keep-warm wake {n}, the last: the owner is away and the cache is still warm. Run the "
+             "full /core-dump now (not mini), so the owner can /clear and /catchup later instead "
+             "of paying a cold cache. Then reply with one line. Start nothing else. Keep-warm "
+             "stops here until the owner returns."),
 }
 
 
@@ -104,7 +103,7 @@ def log(sid, ev, **kw):
 
 def context_used_pct(transcript):
     """Context used, in percent. Prefers the statusline's own reading for this
-    Claude process; falls back to the last turn's token count over 200k."""
+    Claude process; falls back to the last turn's token count over the window."""
     pid = 0 if os.environ.get("KEEPWARM_NO_STATUSLINE") else os.getppid()   # tests: transcript only
     for _ in range(5 if pid else 0):   # the hook may run under a shell; climb to the Claude process
         try:
@@ -134,14 +133,14 @@ def context_used_pct(transcript):
             if u:
                 tok = (u.get("input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0) + \
                       (u.get("cache_creation_input_tokens") or 0)
-                return 100.0 * tok / 200000.0
+                return 100.0 * tok / CTX_WINDOW
     except OSError:
         pass
     return 30.0   # unknown: treat as a worked session
 
 
 def klass(pct):
-    return "light" if pct < 15 else "worked" if pct < 50 else "heavy" if pct < 65 else "full"
+    return "large" if pct >= LARGE_PCT else "small"
 
 
 def usage_gated():
@@ -169,11 +168,22 @@ def next_cron(at_s):
     return "%d %d %d %d *" % (t.minute, t.hour, t.day, t.month)
 
 
-def rearm_text(last_activity):
-    """What the model must do so the next wake lands when the session is due."""
+def rearm_text(last_activity, st=None):
+    """What the model must do so the next wake lands when the session is due.
+    Records the armed time in the state, so an owner prompt can tell when the
+    one-shot chain has broken (a wake that never fired, or a finished cycle)."""
     at = max(now_s() + ARM_PAD_S, last_activity + DUE_MIN * 60 + ARM_PAD_S)
+    if st is not None:
+        st["armed_at"] = at
     return ("Re-arm keep-warm: call CronCreate with recurring false, cron '%s', prompt '%s'."
             % (next_cron(at), WAKE_PROMPT))
+
+
+def chain_broken(st):
+    """True when no keep-warm wake is pending: never armed, or the armed time
+    has passed (with a few minutes' grace for a late fire)."""
+    at = st.get("armed_at")
+    return at is None or now_s() > at + 10 * 60
 
 
 def skip_wake(reason):
@@ -190,7 +200,18 @@ def hook_prompt(inp):
         if st.get("stopped") or st.get("wakes"):
             log(sid, "owner-return", wakes=st.get("wakes", 0))
         st.update(last_activity=now_s(), wakes=0, stopped=False)
+        st.pop("in_wake", None)
+        relink = (os.path.exists(SWITCH) and os.environ.get("CLAUDE_CODE_ENTRYPOINT") == "cli"
+                  and chain_broken(st))
+        text = None
+        if relink:
+            log(sid, "relink")
+            text = ("Keep-warm: no wake is pending for this session. Once, as part of this reply and "
+                    "without mentioning it: run CronList; delete any job whose prompt starts with "
+                    "[keepwarm], then %s" % rearm_text(now_s(), st))
         save(sid, st)
+        if text:
+            return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
         return 0
     if not os.path.exists(SWITCH):
         return skip_wake("keep-warm is off")
@@ -198,13 +219,18 @@ def hook_prompt(inp):
         return skip_wake("keep-warm finished for this absence")
     last = st.get("last_activity", now_s())
     idle_min = (now_s() - last) / 60.0
+    # The wake's own turn must not count as the owner's activity, or every
+    # cycle lands a minute short of due and fires twice.
+    st["in_wake"] = True
+    save(sid, st)
     if idle_min < DUE_MIN:
         # The owner worked after this wake was armed. Nothing to do but move
         # the next wake to where it belongs; a block here would print in the
         # terminal, which is the noise this branch exists to avoid.
         log(sid, "rearm", idle_min=round(idle_min))
         text = ("Keep-warm: not due, the owner was active %.0f min ago. %s Then reply with exactly "
-                "one word: warm. Start nothing else." % (idle_min, rearm_text(last)))
+                "one word: warm. Start nothing else." % (idle_min, rearm_text(last, st)))
+        save(sid, st)
         return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
     if usage_gated():
         st["stopped"] = True
@@ -215,27 +241,24 @@ def hook_prompt(inp):
     pct = context_used_pct(inp.get("transcript_path") or "")
     k = klass(pct)
     plan = PLAN[k]
-    if k == "light":
-        action = "note"
-        st["stopped"] = True
-    elif n >= plan["last"]:
-        action = "dump" if k == "full" else "stop"
-        st["stopped"] = True
-    else:
-        action = plan["wakes"][n - 1] if n <= len(plan["wakes"]) else "inbox"
+    action = plan[min(n, len(plan)) - 1]
+    st["stopped"] = n >= len(plan)
     st.update(wakes=n, last_activity=now_s())
-    save(sid, st)
-    log(sid, "wake", n=n, action=action, klass=k, ctx_pct=round(pct, 1), idle_min=round(idle_min))
     text = UPKEEP[action].format(n=n, note=note_path(inp.get("cwd"), sid),
                                  now=dt.datetime.now().strftime("%H:%M"))
     if not st["stopped"]:
-        text += " " + rearm_text(now_s())
+        text += " " + rearm_text(now_s(), st)
+    save(sid, st)
+    log(sid, "wake", n=n, action=action, klass=k, ctx_pct=round(pct, 1), idle_min=round(idle_min))
     return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
 
 
 def hook_stop(inp):
     sid = inp.get("session_id") or "unknown"
     st = load(sid)
+    if st.pop("in_wake", False):
+        save(sid, st)
+        return 0
     st["last_activity"] = now_s()
     save(sid, st)
     return 0
@@ -247,10 +270,10 @@ def hook_start(inp):
     sid = inp.get("session_id") or "unknown"
     st = load(sid)
     st.update(last_activity=now_s(), wakes=0, stopped=False)
-    save(sid, st)
     text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: run CronList; "
             "delete any job whose prompt starts with [keepwarm], then %s Prompts starting with [keepwarm] "
-            "are keep-warm wakes: do only what they say." % rearm_text(now_s()))
+            "are keep-warm wakes: do only what they say." % rearm_text(now_s(), st))
+    save(sid, st)
     return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": text}})
 
 

@@ -13,14 +13,14 @@
 #             transcript (<command-name>/goal</command-name> + <command-args>). This
 #             is mechanical, so core-dump records what was set rather than what the
 #             agent remembers. Only the owner can change it, only in the TUI.
-#   gcc       ~/.claude/goals/<sid>.json, a file the AGENT may write. This is what
-#             /catchup re-arms into after /clear, and what the goal hinter injects
-#             back each session so the objective is never lost even when the harness
-#             hook is not armed. It carries no Stop-hook force; it is memory.
+#   gcc       ~/.claude/goals/<sid>.json. The goal hinter injects it back each
+#             session so the objective is never lost even when the harness hook is
+#             not armed. It carries no Stop-hook force; it is memory.
 #
-# The re-arm contract (owner, 2026-08-18): the agent re-arms unless told not to; the
-# bare minimum is that core-dump and catchup call the goal out with a line the owner
-# can copy into the TUI; losing the goal is the one unacceptable outcome.
+# The contract (owner, 2026-08-18, narrowed 2026-10-13): core-dump and catchup call
+# the goal out with a line the owner can copy into the TUI; losing the goal is the
+# one unacceptable outcome. Setting it is the owner's move: catchup only offers the
+# line and never writes the gcc goal or links the session itself.
 #
 # Usage:
 #   goal.sh harness [--sid SID] [--cwd DIR]  the built-in goal from the transcript, JSON
@@ -106,9 +106,11 @@ fi
 #   3. a queue-operation enqueue whose content is "Goal set: X" (typed MID-TURN,
 #      while the agent was working; no command block is written for that case)
 #   4. <local-command-stdout>Goal set: X</local-command-stdout> / Goal cleared
-# Reads only those shapes, in file order, last one wins; an agent QUOTING "/goal foo"
-# in prose or in a tool result never counts. Auto-clear on completion leaves no
-# transcript marker, so "armed" means "armed as of its ts, unless met since".
+#   5. a goal_status attachment with met=true, written when the goal auto-clears
+# Shapes 1 and 4 arrive as user turns in older transcripts and as system
+# local_command records in newer ones; both count. Reads only those shapes, in
+# file order, last one wins; an agent QUOTING "/goal foo" in prose or in a tool
+# result never counts.
 harness_json() {
   if [ -n "${TRANSCRIPT_MISS:-}" ]; then
     jq -n --arg r "$TRANSCRIPT_MISS" '{armed: null, reason: $r}'
@@ -122,7 +124,7 @@ def note(args, ts, how):
     global last
     last = {"args": args, "ts": ts, "how": how}
 for line in open(sys.argv[1], encoding="utf-8", errors="replace"):
-    if "/goal" not in line and "Goal set:" not in line and "Goal cleared" not in line and "session-scoped Stop hook" not in line:
+    if "/goal" not in line and "Goal set:" not in line and "Goal cleared" not in line and "session-scoped Stop hook" not in line and "goal_status" not in line:
         continue
     try: o = json.loads(line)
     except Exception: continue
@@ -132,8 +134,16 @@ for line in open(sys.argv[1], encoding="utf-8", errors="replace"):
         if c.startswith("Goal set: "): note(c[len("Goal set: "):].strip(), ts, "queue")
         elif c.startswith("Goal cleared"): note("clear", ts, "queue")
         continue
-    if t != "user": continue
-    c = o.get("message", {}).get("content")
+    if t == "attachment":
+        a = o.get("attachment") or {}
+        if a.get("type") == "goal_status" and a.get("met") is True: note("clear", ts, "met")
+        continue
+    if t == "system" and o.get("subtype") == "local_command":
+        c = o.get("content")
+    elif t == "user":
+        c = o.get("message", {}).get("content")
+    else:
+        continue
     if isinstance(c, list): c = " ".join(x.get("text", "") for x in c if isinstance(x, dict) and x.get("type") == "text")
     if not isinstance(c, str): continue
     # A real /goal invocation is the name tag followed directly by its args tag.
@@ -156,7 +166,8 @@ for line in open(sys.argv[1], encoding="utf-8", errors="replace"):
 if last is None:
     print(json.dumps({"armed": False, "reason": "no /goal in transcript"})); sys.exit(1)
 if last["args"] in ("", "clear"):
-    print(json.dumps({"armed": False, "reason": "last /goal was clear", "ts": last["ts"]})); sys.exit(1)
+    why = "goal met, auto-cleared" if last["how"] == "met" else "last /goal was clear"
+    print(json.dumps({"armed": False, "reason": why, "ts": last["ts"]})); sys.exit(1)
 print(json.dumps({"armed": True, "text": last["args"], "ts": last["ts"], "source": "harness", "via": last["how"]}))
 PY
 }

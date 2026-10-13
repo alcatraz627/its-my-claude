@@ -57,9 +57,9 @@ cat > "$TMP/catchup.json" <<'EOF'
  "learnings":["A lesson"],"files":[{"path":"src/a.ts","change":"the anchor"}]}
 EOF
 
-measure() { # file, kind, theme, width
+measure() { # file, kind, theme, width, [extra flag]
   local out rc
-  out=$(bash "$TRACE" "$1" --kind "$2" --theme "$3" --width "$4" 2>&1); rc=$?
+  out=$(bash "$TRACE" "$1" --kind "$2" --theme "$3" --width "$4" ${5:+"$5"} 2>&1); rc=$?
   runs=$((runs + 1))
   if [ $rc -ne 0 ]; then
     printf 'FAIL exit=%d  %s %s/%s/%s\n' "$rc" "$(basename "$1")" "$2" "$3" "$4"
@@ -88,21 +88,46 @@ print(n)")
 for th in a b c; do
   for wd in 60 80 100; do
     measure "$TMP/full.json"    dump    "$th" "$wd"
-    measure "$TMP/empty.json"   dump    "$th" "$wd"
+    # A sectionless dump renders only as an intentional receipt; without the
+    # flag trace.sh refuses it, and that refusal is covered below.
+    measure "$TMP/empty.json"   dump    "$th" "$wd" --receipt
     measure "$TMP/sparse.json"  dump    "$th" "$wd"
     measure "$TMP/unicode.json" dump    "$th" "$wd"
     measure "$TMP/catchup.json" catchup "$th" "$wd"
   done
 done
 
-# The empty scenario must produce a header and a seal and nothing between them.
-body=$(bash "$TRACE" "$TMP/empty.json" --theme c --width 80 | sed 's/\x1b\[[0-9;]*m//g' \
+# The empty scenario as a receipt: a header and a seal and nothing between them.
+body=$(bash "$TRACE" "$TMP/empty.json" --theme c --width 80 --receipt | sed 's/\x1b\[[0-9;]*m//g' \
        | grep -cE '^(◆|▸|‡|≡|▤|✓) ')
 runs=$((runs + 1))
 if [ "$body" != "0" ]; then
   printf 'FAIL empty  rendered %s section rule(s), expected none\n' "$body"
   fails=$((fails + 1))
 fi
+
+# Without --receipt a sectionless dump is refused, loudly, with exit 2.
+bash "$TRACE" "$TMP/empty.json" --theme c --width 80 >/dev/null 2>&1; rc=$?
+runs=$((runs + 1))
+if [ "$rc" != "2" ]; then
+  printf 'FAIL empty  a sectionless dump without --receipt exited %s, expected 2\n' "$rc"
+  fails=$((fails + 1))
+fi
+
+# The catchup briefing's status-first blocks: DONE renders, and carried
+# authorizations read as carried, not expired.
+cat > "$TMP/catchup-status.json" <<'EOF'
+{"session_id":"smoke-status","timestamp":"5m ago","status":"post-clear FULL",
+ "done":["one","two","three","four","five","six","seven"],
+ "next_action":"Do the next thing.","standing_auth":["\"push it\" (2026-10-13 10:00) · target: r @abc · one-shot"],
+ "todos":[{"p":"gate","text":"owner item"}]}
+EOF
+st=$(bash "$TRACE" "$TMP/catchup-status.json" --kind catchup --theme a --width 80 | sed 's/\x1b\[[0-9;]*m//g')
+runs=$((runs + 1))
+case "$st" in
+  *"DONE"*"+1 more"*"1 standing, carried"*) ;;
+  *) printf 'FAIL status  catchup DONE block or standing-auth line missing\n'; fails=$((fails + 1)) ;;
+esac
 
 # NO_COLOR must strip every escape byte, not merely most of them.
 esc=$(NO_COLOR=1 bash "$TRACE" "$TMP/full.json" --theme b --width 80 | grep -c $'\033')

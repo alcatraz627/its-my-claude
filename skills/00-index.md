@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-10-10
+updated: 2026-10-13
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-10-10 07:07.
+Regenerated 2026-10-13 16:07.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -40,10 +40,10 @@ Regenerated 2026-10-10 07:07.
 | `build-change` | yes | Plans a non-UI change and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the change, states problems … |
 | `build-ui` | yes | Plans a page-level UI build or renovation and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the … |
 | `callouts` | yes | Persists the owner's review findings as re-runnable acceptance rows per surface, and gates any later "done" claim on re-running the open rows. Use when the owner calls … |
-| `catchup` | yes | Resumes a session from a /core-dump checkpoint. Resolves via the ~/.claude/checkpoints/ index (picker when ambiguous) or a named _checkpoint.claude.md, loads only … |
+| `catchup` | yes | Resumes a session from a /core-dump checkpoint in one gather call plus a status-first briefing (done, pending on the agent, pending on the owner), carries the owner's … |
 | `cleanup-comments` | yes | Prune, simplify, and remove low-value comments in changed code (or a path you pass) per the repo comment-style rubric. Strips [claude@] tags, plan refs … |
 | `codex-handback` | yes | Reviews a Codex hands seat's handback: checks its review packet (sha, diff-stat, pasted check output) against the brief and branch, then runs the skeptical review over … |
-| `core-dump` | yes | Writes _checkpoint.claude.md (or a named file) condensing the session into goal, actions, expectation, and pending items; "mini" mode for quick notes. Indexes a … |
+| `core-dump` | yes | Writes a checkpoint (_YYYYMMDD-<session>.claude.md) condensing the session into a resume contract, goal, actions, expectation, pending items and insights, sized to how … |
 | `create-agent` | yes | Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the … |
 | `create-report` | yes | Takes a markdown file and generates a polished, self-contained HTML report with a clean UI. Supports 13 visual styles (default, notion, dashboard, magazine, terminal, … |
 | `create-skill` | yes | Turns a skill idea (a spec, intent, or checklist answers) into a finished SKILL.md with a tailored validation rubric and ledger steps, reviewed by a fresh seat for … |

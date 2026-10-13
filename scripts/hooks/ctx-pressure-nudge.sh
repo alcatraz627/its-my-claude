@@ -91,11 +91,11 @@ fi
 { echo "ts=$now"; echo "band=$band"; } > "$state"
 
 if (( used >= 90 )); then
-  msg="[ctx-pressure] Context is ~${used}% full. On the 1M-token tier there is no early autocompact, and this is deep in the rate-limit zone (most transient 429s strike above 80% fill). Checkpoint now: /core-dump (Resume Contract included) then /clear as the default; mid-task with conversational nuance worth keeping, /core-dump mini then /compact. Recommend one to the user out loud.${enq}"
+  msg="[ctx-pressure] Context is ~${used}% full, deep in the rate-limit zone (most transient 429s strike above 80% fill). Do not run /core-dump yourself. At the next task boundary, suggest it to the owner in one line: /core-dump then /clear drops each later call to about 170k tokens. Then keep working.${enq}"
 elif (( used >= 80 )); then
-  msg="[ctx-pressure] Context is ~${used}% full — entering the rate-limit danger zone (the large majority of past 429s occurred above 80% fill). Update the session workspace notes now. If continuation is expected, recommend a path to the user: /core-dump + /clear at a task boundary (default), or /core-dump mini + /compact when mid-task conversational nuance matters.${enq}"
+  msg="[ctx-pressure] Context is ~${used}% full, entering the rate-limit danger zone. Update the session workspace notes now. Do not run /core-dump yourself; if a task boundary is near and more work is queued, suggest /core-dump then /clear to the owner in one line.${enq}"
 else
-  msg="[ctx-pressure] Context is ~${used}% full — notes-hygiene checkpoint. Update the session workspace notes (/workspace) with milestones completed so far, and consider /core-dump mini with a fresh Resume Contract while synthesis is still cheap: auto-compact strips whatever isn't written down.${enq}"
+  msg="[ctx-pressure] Context is ~${used}% full. Notes-hygiene checkpoint: update the session workspace notes (/workspace) with milestones completed so far. Do not run /core-dump; the owner asks for one when they want it.${enq}"
 fi
 
 # Record the firing to the plug-events ledger (FIRED side of efficacy).

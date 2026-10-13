@@ -61,15 +61,13 @@ ev = events()
 wakes = [e for e in ev if e.get("ev") == "wake"]
 expect("a real session was woken by keep-warm", len(wakes) >= 1)
 if wakes:
-    expect("the wake named its upkeep (a light session: one note, then stop)",
-           wakes[0].get("action") == "note" and wakes[0].get("klass") == "light")
-notes = []
-for root, _, files in os.walk(T):
-    notes += [os.path.join(root, f) for f in files if f.endswith(".md") and "session-notes" in root]
-expect("the wake wrote the session note", bool(notes))
+    expect("the wake named its upkeep (a small session: wake 1 only keeps warm)",
+           wakes[0].get("action") == "warm" and wakes[0].get("klass") == "small")
 st_files = [f for f in os.listdir(KWDIR) if f.endswith(".json")] if os.path.isdir(KWDIR) else []
 st = json.load(open(os.path.join(KWDIR, st_files[0]))) if st_files else {}
-expect("keep-warm finished after the light session's one wake", st.get("stopped") is True)
+expect("the wake turn left no in-flight marker behind", "in_wake" not in st)
+expect("re-arms only on a real re-arm, never twice per wake",
+       sum(1 for e in ev if e.get("ev") == "rearm") <= 1)
 print("events:", json.dumps(ev)[:600])
 os.write(master, b"\x03")
 pump(1)
