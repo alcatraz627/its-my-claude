@@ -1,38 +1,39 @@
 {
-  "last_recon": "2026-10-09T23:00:05.415940Z",
+  "last_recon": "2026-10-13T11:11:55.257882Z",
   "last_weekly": "2026-10-06T10:00:21.566984Z",
   "weekly_pending_since": null,
   "pending_pages": [],
+  "weekly_failure": null,
   "streams": [
     {
       "domain": "claude-audit",
       "path": "/Users/alcatraz627/.claude/hooks-feedback-domain/events.jsonl",
-      "events_in_window": 117,
-      "newest": "2026-10-05T00:00:00Z"
+      "events_in_window": 99,
+      "newest": "2026-10-12T00:00:00Z"
     },
     {
       "domain": "codex-sessions",
       "path": "/Users/alcatraz627/.claude/adapters/codex/i-dream/events.jsonl",
-      "events_in_window": 248,
-      "newest": "2026-10-08T15:44:08.579Z"
+      "events_in_window": 269,
+      "newest": "2026-10-12T09:57:31.654Z"
     },
     {
       "domain": "claude-ipc",
       "path": "/Users/alcatraz627/.claude-ipc/i-dream-events.jsonl",
-      "events_in_window": 57,
-      "newest": "2026-10-08T15:48:54Z"
+      "events_in_window": 41,
+      "newest": "2026-10-12T12:31:18Z"
     },
     {
       "domain": "proposals",
       "path": "/Users/alcatraz627/.claude/proposals-domain/events.jsonl",
-      "events_in_window": 63,
-      "newest": "2026-10-09T22:05:30Z"
+      "events_in_window": 73,
+      "newest": "2026-10-13T09:58:15Z"
     },
     {
       "domain": "atone",
       "path": "/Users/alcatraz627/.claude/atone/events.jsonl",
-      "events_in_window": 71,
-      "newest": "2026-10-09T19:08:30Z"
+      "events_in_window": 84,
+      "newest": "2026-10-13T09:56:23Z"
     },
     {
       "domain": "affirm",
@@ -49,32 +50,38 @@
     {
       "domain": "sessions-domain",
       "path": "/Users/alcatraz627/.claude/sessions-domain/events.jsonl",
-      "events_in_window": 151,
-      "newest": "2026-10-08T16:28:38Z"
+      "events_in_window": 156,
+      "newest": "2026-10-12T10:40:55Z"
     },
     {
       "domain": "pinned",
       "path": "/Users/alcatraz627/.claude/pinned/events.jsonl",
-      "events_in_window": 22,
-      "newest": "2026-10-09T14:41:14Z"
+      "events_in_window": 23,
+      "newest": "2026-10-10T15:26:05Z"
     },
     {
       "domain": "checkpoints",
       "path": "/Users/alcatraz627/.claude/checkpoints-domain/events.jsonl",
-      "events_in_window": 150,
-      "newest": "2026-10-08T11:53:05Z"
+      "events_in_window": 166,
+      "newest": "2026-10-12T10:27:52Z"
     },
     {
       "domain": "skill-usage",
       "path": "/Users/alcatraz627/.claude/skill-usage-domain/events.jsonl",
-      "events_in_window": 249,
-      "newest": "2026-10-08T14:53:59Z"
+      "events_in_window": 265,
+      "newest": "2026-10-12T14:17:55Z"
+    },
+    {
+      "domain": "seats",
+      "path": "/Users/alcatraz627/.claude/seats-domain/events.jsonl",
+      "events_in_window": 16,
+      "newest": "2026-10-10T15:42:59Z"
     },
     {
       "domain": "signals",
       "path": "/Users/alcatraz627/.claude/subconscious/logs/signals.jsonl",
-      "events_in_window": 78,
-      "newest": "2026-10-09T19:23:43.593791Z"
+      "events_in_window": 96,
+      "newest": "2026-10-13T08:28:45.371117Z"
     }
   ]
 }

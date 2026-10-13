@@ -1,0 +1,841 @@
+{
+  "week": "2026w42",
+  "at": "2026-10-13T10:23:32.879198Z",
+  "forwarded": [
+    {
+      "id": "c-77235594",
+      "kind": "session-cluster",
+      "key": "04f67879-1efb-45c4-98e9-5870ed016be2",
+      "summary": "Session 04f67879 in enhancement-product: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Gave owner a workflow link on a non-existent e2e.yml and the wrong report host)",
+      "evidence": [
+        "atone:mist-20261008-145035-1b",
+        "atone:mist-20261008-145050-66",
+        "atone:mist-20261008-145106-69",
+        "atone:mist-20261008-150555-06",
+        "atone:mist-20261009-104053-51",
+        "checkpoints:ckpt-3c3ef1c8f408bd7f",
+        "checkpoints:ckpt-5f8697d7ebe3be9e",
+        "proposals:prop-20261009-142608-2c",
+        "signals:04f67879-1efb-45c4-98e9-5870ed016be2-1791547719"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-08T14:50:35Z",
+      "last_ts": "2026-10-09T14:38:04Z",
+      "score": 29.06
+    },
+    {
+      "id": "c-4d6db61f",
+      "kind": "session-cluster",
+      "key": "abdb0396-eac0-48b9-9956-2305dc14f907",
+      "summary": "Session abdb0396 in .claude: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Asked for review B while bfb showed filenames and the phone showed nothing)",
+      "evidence": [
+        "atone:mist-20261010-215105-a0",
+        "atone:mist-20261010-215406-ab",
+        "checkpoints:ckpt-3267273471dae184",
+        "proposals:prop-20261010-181743-2d",
+        "signals:abdb0396-eac0-48b9-9956-2305dc14f907-1791669161"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-10T18:17:43Z",
+      "last_ts": "2026-10-10T22:05:19Z",
+      "score": 23.58
+    },
+    {
+      "id": "c-e21c31ba",
+      "kind": "session-cluster",
+      "key": "20e167a6-4a52-4a10-9f7d-fd3dcf1da694",
+      "summary": "Session 20e167a6 in enhancement-product: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Said a named skill did not exist because the truncated skill listing lacked it)",
+      "evidence": [
+        "atone:mist-20261009-190830-23",
+        "checkpoints:ckpt-0a47a85c2f5fb708",
+        "checkpoints:ckpt-bdbc355c3d9448b9",
+        "proposals:prop-20261009-220530-37",
+        "signals:20e167a6-4a52-4a10-9f7d-fd3dcf1da694-1791573823"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-10-09T19:08:30Z",
+      "last_ts": "2026-10-09T22:06:32Z",
+      "score": 21.33
+    },
+    {
+      "id": "c-2d8458a5",
+      "kind": "repeat",
+      "key": "ai-smell-prose-against-stored-voice",
+      "summary": "'ai-smell-prose-against-stored-voice' came up 7 times from 2 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20260915-193139-4c",
+        "atone:mist-20260923-205807-2e",
+        "atone:mist-20260930-222509-5b",
+        "atone:mist-20261005-094856-da",
+        "proposals:prop-20260923-205914-d3",
+        "proposals:prop-20260924-043211-1c",
+        "proposals:prop-20260930-222530-a3",
+        "proposals:prop-20261009-220054-ee"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "agent",
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-15T19:31:39Z",
+      "last_ts": "2026-10-09T22:00:54Z",
+      "score": 20.8
+    },
+    {
+      "id": "c-5430b648",
+      "kind": "session-cluster",
+      "key": "c5afbb2f-25d0-4110-8f23-a29141ec574b",
+      "summary": "Session c5afbb2f in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-124bc1fb7a5771dc",
+        "checkpoints:ckpt-c60695489378b365",
+        "proposals:prop-20261007-135033-51",
+        "proposals:prop-20261008-092943-02",
+        "proposals:prop-20261008-104711-34",
+        "signals:c5afbb2f-25d0-4110-8f23-a29141ec574b-1791381025",
+        "signals:c5afbb2f-25d0-4110-8f23-a29141ec574b-1791381940",
+        "signals:c5afbb2f-25d0-4110-8f23-a29141ec574b-1791450982",
+        "signals:c5afbb2f-25d0-4110-8f23-a29141ec574b-1791452765"
+      ],
+      "domains": [
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-07T13:50:25.394160Z",
+      "last_ts": "2026-10-08T11:53:05Z",
+      "score": 19.74
+    },
+    {
+      "id": "c-11308a85",
+      "kind": "session-cluster",
+      "key": "65da91a2-8cfa-4545-a6ac-e9b099488c2c",
+      "summary": "Session 65da91a2 in slack-automation: the owner corrected the agent, a mistake was recorded (Wrote an unasked /core-dump after the owner asked only for a locked spec)",
+      "evidence": [
+        "atone:mist-20261012-210611-29",
+        "atone:mist-20261012-210740-53",
+        "atone:mist-20261012-212302-5d",
+        "atone:mist-20261012-212317-4c",
+        "atone:mist-20261012-212352-60",
+        "atone:mist-20261012-215343-78",
+        "proposals:prop-20261012-220027-37",
+        "signals:65da91a2-8cfa-4545-a6ac-e9b099488c2c-1791833264",
+        "signals:65da91a2-8cfa-4545-a6ac-e9b099488c2c-1791841674"
+      ],
+      "domains": [
+        "atone",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-10-12T19:27:44.358029Z",
+      "last_ts": "2026-10-12T22:00:27Z",
+      "score": 15.68
+    },
+    {
+      "id": "c-abbc0880",
+      "kind": "session-cluster",
+      "key": "87030741-0301-4303-906a-269d47bc8df0",
+      "summary": "Session 87030741 in enhancement-product: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-2ce7a09f8761a239",
+        "proposals:prop-20261009-144110-4c",
+        "signals:87030741-0301-4303-906a-269d47bc8df0-1791559601",
+        "signals:87030741-0301-4303-906a-269d47bc8df0-1791562106"
+      ],
+      "domains": [
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-09T14:41:10Z",
+      "last_ts": "2026-10-09T16:43:14Z",
+      "score": 14.12
+    },
+    {
+      "id": "c-ab3c677c",
+      "kind": "repeat",
+      "key": "dense-briefing-instead-of-a-direct-answer",
+      "summary": "'dense-briefing-instead-of-a-direct-answer' came up 6 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260918-100708-b7",
+        "atone:mist-20260918-112842-f1",
+        "atone:mist-20260918-125452-7f",
+        "atone:mist-20260930-195512-08",
+        "atone:mist-20261006-091256-09",
+        "atone:mist-20261012-210740-53",
+        "proposals:prop-20261006-091507-68"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-18T10:07:08Z",
+      "last_ts": "2026-10-12T21:07:40Z",
+      "score": 13.37
+    },
+    {
+      "id": "c-0d4db80b",
+      "kind": "repeat",
+      "key": "declared-ready-without-runtime-exercise",
+      "summary": "'declared-ready-without-runtime-exercise' came up 7 times from 1 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20260916-164041-17",
+        "atone:mist-20260918-120258-b1",
+        "atone:mist-20260924-062138-cc",
+        "atone:mist-20260930-203407-4d",
+        "atone:mist-20261010-102753-1c",
+        "atone:mist-20261010-215105-a0",
+        "proposals:prop-20260918-120330-8c",
+        "proposals:prop-20260924-081531-6f",
+        "proposals:prop-20260930-224612-e0"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-16T16:40:41Z",
+      "last_ts": "2026-10-10T21:51:05Z",
+      "score": 12.38
+    },
+    {
+      "id": "c-d72aa2b9",
+      "kind": "repeat",
+      "key": "shipping-surface-without-utility-check",
+      "summary": "'shipping-surface-without-utility-check' came up 4 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20261006-103550-ec",
+        "atone:mist-20261010-215406-ab",
+        "atone:mist-20261012-210354-12",
+        "atone:mist-20261012-210739-e7",
+        "proposals:prop-20261006-111125-de"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-10-06T10:35:50Z",
+      "last_ts": "2026-10-12T21:07:39Z",
+      "score": 11.14
+    },
+    {
+      "id": "c-754aa69a",
+      "kind": "repeat",
+      "key": "pr-title-missing-required-flag",
+      "summary": "'pr-title-missing-required-flag' came up 3 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260918-124132-0d",
+        "atone:mist-20261006-115527-88",
+        "atone:mist-20261013-095552-b7",
+        "proposals:prop-20261013-095815-3e"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-18T12:41:32Z",
+      "last_ts": "2026-10-13T09:58:15Z",
+      "score": 10.8
+    },
+    {
+      "id": "c-6bde404c",
+      "kind": "session-cluster",
+      "key": "f6eee83a-6dfd-48b8-82ca-c81f09fa3dc4",
+      "summary": "Session f6eee83a in enhancement-product: the owner corrected the agent, a mistake was recorded (Handed unrendered wireframes to the owner as designs to pick from)",
+      "evidence": [
+        "atone:mist-20261012-210354-12",
+        "atone:mist-20261012-210739-e7",
+        "atone:mist-20261013-095552-b7",
+        "atone:mist-20261013-095623-d7",
+        "signals:f6eee83a-6dfd-48b8-82ca-c81f09fa3dc4-1791843511",
+        "signals:f6eee83a-6dfd-48b8-82ca-c81f09fa3dc4-1791846734"
+      ],
+      "domains": [
+        "atone",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-12T21:03:54Z",
+      "last_ts": "2026-10-13T09:56:23Z",
+      "score": 8.8
+    },
+    {
+      "id": "c-de1656a8",
+      "kind": "repeat",
+      "key": "named-the-next-work-then-stopped",
+      "summary": "'named-the-next-work-then-stopped' came up 7 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20260916-133018-8e",
+        "atone:mist-20260922-102424-96",
+        "atone:mist-20260923-205235-b5",
+        "atone:mist-20261001-180714-c4",
+        "atone:mist-20261004-170654-a5",
+        "atone:mist-20261006-111559-bc",
+        "atone:mist-20261006-115424-c8",
+        "proposals:prop-20260922-161646-46",
+        "proposals:prop-20261002-100811-67"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-09-16T13:30:18Z",
+      "last_ts": "2026-10-06T11:54:24Z",
+      "score": 8.45
+    },
+    {
+      "id": "c-cd66f67b",
+      "kind": "session-cluster",
+      "key": "3b762759-2007-437f-b3c4-9ae7f7b4dd69",
+      "summary": "Session 3b762759 in i-dream: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Shipped an unreadable reader decision page after seeing the defect)",
+      "evidence": [
+        "atone:mist-20261006-103550-ec",
+        "checkpoints:ckpt-7e85d3ca577a8305",
+        "proposals:prop-20261006-111125-de",
+        "signals:3b762759-2007-437f-b3c4-9ae7f7b4dd69-1791280249"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-10-06T09:50:49.322594Z",
+      "last_ts": "2026-10-06T11:11:25Z",
+      "score": 7.22
+    },
+    {
+      "id": "c-9359e5a6",
+      "kind": "session-cluster",
+      "key": "7c90a619-f5d9-4e8d-9ed1-b402c3461ad8",
+      "summary": "Session 7c90a619 in .claude: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-257b1993c4dec619",
+        "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791710413",
+        "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791711566",
+        "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791712766",
+        "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791713966"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-11T09:20:13.524720Z",
+      "last_ts": "2026-10-11T11:17:21Z",
+      "score": 6.25
+    },
+    {
+      "id": "c-b037883b",
+      "kind": "session-cluster",
+      "key": "97842bf5-40c4-4fa4-90d8-a04d9ee5a7e7",
+      "summary": "Session 97842bf5 in slack-automation: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Runner PRs in six repos opened without [noslack], 37 messages in #pr-review)",
+      "evidence": [
+        "atone:mist-20261006-115527-88",
+        "atone:mist-20261006-115546-f2",
+        "atone:mist-20261006-120721-67",
+        "checkpoints:ckpt-35d881c5a852677e",
+        "signals:97842bf5-40c4-4fa4-90d8-a04d9ee5a7e7-1791282464"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-06T10:27:44.141338Z",
+      "last_ts": "2026-10-06T12:44:13Z",
+      "score": 6.05
+    },
+    {
+      "id": "c-bb712eb3",
+      "kind": "repeat",
+      "key": "compressed-or-skipped-requested-atone-filings",
+      "summary": "'compressed-or-skipped-requested-atone-filings' came up 4 times from 1 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20260915-192849-e7",
+        "atone:mist-20260918-113208-7e",
+        "atone:mist-20261006-114914-e0",
+        "proposals:prop-20260915-192919-a6"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-09-15T19:28:49Z",
+      "last_ts": "2026-10-06T11:49:14Z",
+      "score": 5.43
+    },
+    {
+      "id": "c-b7855665",
+      "kind": "path-hotspot",
+      "key": "skills/gcc-mods/hooks/register.tsx",
+      "summary": "skills/gcc-mods/hooks/register.tsx is named by 3 event(s) in affirm, atone, proposals",
+      "evidence": [
+        "affirm:aff-20261006-080735-a4",
+        "atone:mist-20261006-082745-b9",
+        "proposals:prop-20261006-103353-20"
+      ],
+      "domains": [
+        "affirm",
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "echo",
+        "human"
+      ],
+      "first_ts": "2026-10-06T08:07:35Z",
+      "last_ts": "2026-10-06T10:33:53Z",
+      "score": 4.81
+    },
+    {
+      "id": "c-461b3a67",
+      "kind": "session-cluster",
+      "key": "82bfb6c6-70ad-43df-892c-d1552b411c9c",
+      "summary": "Session 82bfb6c6 in .claude: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-cf35b0fd3ce35370",
+        "checkpoints:ckpt-f9d9426e47c14abc",
+        "signals:82bfb6c6-70ad-43df-892c-d1552b411c9c-1791671462"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-10T22:31:02.212714Z",
+      "last_ts": "2026-10-10T23:57:42Z",
+      "score": 4.76
+    },
+    {
+      "id": "c-e5e3ea62",
+      "kind": "session-cluster",
+      "key": "841ea2f9-f9e8-4a1e-9216-231a4c541b0f",
+      "summary": "Session 841ea2f9 in .claude: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-7f6aef3c78a1032c",
+        "checkpoints:ckpt-a10f1fe8c8bddccf",
+        "signals:841ea2f9-f9e8-4a1e-9216-231a4c541b0f-1791647416"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-10T15:50:16.779552Z",
+      "last_ts": "2026-10-10T18:11:43Z",
+      "score": 4.63
+    }
+  ],
+  "named": {
+    "items": [
+      {
+        "cluster": "c-0d4db80b",
+        "kind": "structural-need",
+        "title": "declared-ready hook exits 0, not 1",
+        "why": "declared-ready-stop.sh is registered yet the slug has 7 atones this cycle; the only explanation consistent with a registered hook and a persisting pattern is that it exits 0 (advisory) — exit 1 would have blocked each of those turns.",
+        "evidence_ids": [
+          "atone:mist-20261010-215105-a0",
+          "atone:mist-20261010-102753-1c",
+          "atone:mist-20260930-203407-4d",
+          "atone:mist-20260924-062138-cc",
+          "atone:mist-20260918-120258-b1"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/declared-ready-stop.sh",
+          "change": "Audit the exit path: if the hook currently exits 0 after printing its warning, change it to exit 1 so the turn is blocked rather than nudged."
+        }
+      },
+      {
+        "cluster": "c-ab3c677c",
+        "kind": "structural-need",
+        "title": "dense-briefing hook exits 0, not 1",
+        "why": "dense-briefing-shapes-stop.sh is registered yet 6 atones record the same pattern; advisory exit cannot suppress a turn, only block can — same diagnosis as c-0d4db80b.",
+        "evidence_ids": [
+          "atone:mist-20261012-210740-53",
+          "atone:mist-20261006-091256-09",
+          "atone:mist-20260930-195512-08",
+          "atone:mist-20260918-125452-7f",
+          "atone:mist-20260918-112842-f1"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/dense-briefing-shapes-stop.sh",
+          "change": "Change the exit path from 0 to 1 after the warning message so the hook blocks the turn."
+        }
+      },
+      {
+        "cluster": "c-de1656a8",
+        "kind": "structural-need",
+        "title": "named-next-work hook exits 0, not 1",
+        "why": "named-next-work-stop.sh is registered yet 7 atones show the agent naming the next work and stopping; same advisory-vs-blocking diagnosis — the slug count is the highest of the three registered-but-repeating hooks.",
+        "evidence_ids": [
+          "atone:mist-20261006-115424-c8",
+          "atone:mist-20261006-111559-bc",
+          "atone:mist-20261004-170654-a5",
+          "atone:mist-20261001-180714-c4",
+          "atone:mist-20260923-205235-b5"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/named-next-work-stop.sh",
+          "change": "Change exit 0 to exit 1 on the blocking path so the hook refuses the turn rather than warning."
+        }
+      },
+      {
+        "cluster": "c-2d8458a5",
+        "kind": "structural-need",
+        "title": "em-dash guard warns but does not block",
+        "why": "guard-banned-vocab.sh and guard-prose-quality.sh are both registered; 7 atones spanning 2026-09 to 2026-10 still record em-dashes in owner-facing replies, meaning those hooks exit 0 on this token — a blocking Stop hook was proposed in prop-20260930-222530-a3 and never acted on.",
+        "evidence_ids": [
+          "atone:mist-20260930-222509-5b",
+          "atone:mist-20260923-205807-2e",
+          "atone:mist-20260915-193139-4c",
+          "atone:mist-20261005-094856-da"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/guard-banned-vocab.sh",
+          "change": "Add the em-dash character (—) to the blocking vocabulary list with exit 1, not the advisory path."
+        }
+      },
+      {
+        "cluster": "c-d72aa2b9",
+        "kind": "structural-need",
+        "title": "No hook catches handing owner an unwalked artifact",
+        "why": "Four atones record pointing the owner at a URL, file, or decision-page tile without ever opening it; declared-ready-stop.sh catches text phrases like 'done' and 'verified' but not the structural pattern of a reply whose deliverable is a localhost URL or file path the agent did not open this turn.",
+        "evidence_ids": [
+          "atone:mist-20261012-210739-e7",
+          "atone:mist-20261012-210354-12",
+          "atone:mist-20261010-215406-ab",
+          "atone:mist-20261006-103550-ec"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/declared-ready-stop.sh",
+          "change": "Add a second trigger pattern: exit 1 when the reply contains 'take a look at', 'review', or 'check out' immediately followed by a localhost URL or a relative file path, and no screenshot or read tool was called this turn on that resource."
+        }
+      },
+      {
+        "cluster": "c-754aa69a",
+        "kind": "structural-need",
+        "title": "[noslack]/[nobot] absent from mechanical PRs",
+        "why": "Three atones record PRs opened without the required title flags; guard-github-agent-marker.sh is registered but targets the PR body agent-marker, not the title flags — the [noslack]/[nobot] check has no blocking hook.",
+        "evidence_ids": [
+          "atone:mist-20261013-095552-b7",
+          "atone:mist-20261006-115527-88",
+          "atone:mist-20260918-124132-0d"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/guard-github-agent-marker.sh",
+          "change": "Add a PreToolUse check on gh pr create: if the --title value lacks both [noslack] and [nobot], exit 1 and print the corrected title string."
+        }
+      },
+      {
+        "cluster": "c-77235594",
+        "kind": "repeat",
+        "title": "Scalar lookups answered from memory, not live",
+        "why": "Four atones record reporting a URL, CI status, merge state, or token scope from a prior session or doc without running the command that gives the current value; guard-structural-claim.sh is registered but its pattern targets structural architecture assertions (file:line), not scalar lookups like dashboard hostnames or merge states.",
+        "evidence_ids": [
+          "atone:mist-20261009-104053-51",
+          "atone:mist-20261008-150555-06",
+          "atone:mist-20261008-145106-69",
+          "atone:mist-20261008-145050-66"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/guard-structural-claim.sh",
+          "change": "Add a second pattern class for scalar lookups: flag replies containing a bare dashboard hostname, 'is green', 'is passing', 'is clean', or 'scopes are unknown' that lack a citation of a command run this turn, and exit 1 with a suggested verification command."
+        }
+      },
+      {
+        "cluster": "c-11308a85",
+        "kind": "repeat",
+        "title": "Core-dump compresses owner corrections to one bullet",
+        "why": "atone:mist-20261012-215343-78 records twelve owner corrections collapsed into a single bullet in a /core-dump; the skill has no structural constraint requiring each correction received this session to appear as its own pending row.",
+        "evidence_ids": [
+          "atone:mist-20261012-215343-78",
+          "atone:mist-20261012-212352-60",
+          "atone:mist-20261012-212317-4c",
+          "atone:mist-20261012-212302-5d"
+        ],
+        "proposal": {
+          "target": "skills/core-dump.md",
+          "change": "Add a mandatory 'Owner corrections this session' section immediately after Pending Items: one row per atone filed or owner correction received this session, never batched; if zero, write 'none'."
+        }
+      },
+      {
+        "cluster": "c-bb712eb3",
+        "kind": "repeat",
+        "title": "Owed atone filings deferred until owner triggers",
+        "why": "Three atones record filing one where four were owed, or framing filing as optional future work; speculative-atone-stop.sh and atone-stop-gate.sh are registered but they gate over-speculative atones, not the failure to file owed ones that were clearly identified.",
+        "evidence_ids": [
+          "atone:mist-20261006-114914-e0",
+          "atone:mist-20260918-113208-7e",
+          "atone:mist-20260915-192849-e7"
+        ],
+        "proposal": {
+          "target": "skills/atone.md",
+          "change": "Add an opening step: before filing the prompted atone, run 'atone.sh list --session' and file any additional owed events identified this session that were not yet filed, then proceed to the prompted one."
+        }
+      },
+      {
+        "cluster": "c-e21c31ba",
+        "kind": "structural-need",
+        "title": "Skill absence claimed from truncated session listing",
+        "why": "atone:mist-20261009-190830-23 records the agent declaring /adversarial-review not installed based on the session skill listing, which was silently truncated; guard-absence-claim.sh is registered but targets filesystem absence checks, not the session-injected listing which can drop entries.",
+        "evidence_ids": [
+          "atone:mist-20261009-190830-23",
+          "proposals:prop-20261009-220530-37"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/guard-absence-claim.sh",
+          "change": "Add a pattern that fires when the reply says a named skill or command 'is not installed', 'does not exist', or 'is not available' and the claim is not supported by an ls or find of ~/.claude/skills/ run this turn — exit 1 with the verification command."
+        }
+      },
+      {
+        "cluster": "c-6bde404c",
+        "kind": "repeat",
+        "title": "Session forks state into new notes instead of updating owner's doc",
+        "why": "atone:mist-20261013-095623-d7 records a session writing its own wrap-up doc (20261013-wrap-up.md) rather than updating the owner's directions file; no hook pattern targets this — the agent creates a fresh notes file rather than locating and editing the canonical one.",
+        "evidence_ids": [
+          "atone:mist-20261013-095623-d7",
+          "atone:mist-20261013-095552-b7"
+        ],
+        "proposal": {
+          "target": "scripts/hooks/guard-subagent-output.sh",
+          "change": "Add a pattern that exits 1 when Write targets a path matching */.claude/notes/*wrap-up* or */*-rulings*.md and the project has an existing directions or rulings doc — require the agent to edit the existing file instead."
+        }
+      },
+      {
+        "cluster": "c-abbc0880",
+        "kind": "noise",
+        "title": "Generic session correction cluster",
+        "why": "c-abbc0880 clusters on signal corrections and a proposal about abstract goal statements with no distinct atone pattern of its own; the underlying issues (abstract goals, correction frequency) are already covered by c-77235594 and the structural hooks above.",
+        "evidence_ids": [
+          "signals:87030741-0301-4303-906a-269d47bc8df0-1791562106",
+          "proposals:prop-20261009-144110-4c"
+        ]
+      },
+      {
+        "cluster": "c-9359e5a6",
+        "kind": "noise",
+        "title": "High-correction session, no distinct pattern",
+        "why": "c-9359e5a6 is four signal corrections in one session with no accompanying atone or proposal that names a specific failure mode distinct from the patterns already classified above.",
+        "evidence_ids": [
+          "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791713966",
+          "signals:7c90a619-f5d9-4e8d-9ed1-b402c3461ad8-1791712766"
+        ]
+      },
+      {
+        "cluster": "c-b7855665",
+        "kind": "noise",
+        "title": "Single-file hotspot, already resolved",
+        "why": "c-b7855665 matches on a path (register.tsx) and its atone is the prompt-fill mode:replace fix; an affirm in the same cluster records the escape-hatch pattern landing correctly — this is a resolved incident, not a recurrence.",
+        "evidence_ids": [
+          "affirm:aff-20261006-080735-a4",
+          "atone:mist-20261006-082745-b9"
+        ]
+      }
+    ],
+    "rejected": [],
+    "dropped_ids": 0,
+    "process_note": "The 2026w42 amendment correctly identifies the missing column. For the three highest-count repeats with registered hooks (c-0d4db80b 7 fires, c-de1656a8 7 fires, c-ab3c677c 6 fires), this week's analysis had to infer 'exits 0' from the persistence of the pattern rather than reading a telemetry column. Adding one derived field to the cluster row — exit-1 fire count vs exit-0 fire count over the last 14 days from hook telemetry — would change three of this week's structural-need proposals from 'audit exit code' to 'confirmed: switch exit path' and eliminate the inference step entirely. The reader should also emit a 'first registration date' for each hook id so the reader can distinguish 'pattern predates hook' from 'hook fires but does not block'."
+  },
+  "items": [
+    {
+      "cluster": "c-77235594",
+      "kind": "repeat",
+      "title": "Scalar lookups answered from memory, not live",
+      "why": "Four atones record reporting a URL, CI status, merge state, or token scope from a prior session or doc without running the command that gives the current value; guard-structural-claim.sh is registered but its pattern targets structural architecture assertions (file:line), not scalar lookups like dashboard hostnames or merge states.",
+      "evidence_ids": [
+        "atone:mist-20261009-104053-51",
+        "atone:mist-20261008-150555-06",
+        "atone:mist-20261008-145106-69",
+        "atone:mist-20261008-145050-66"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/guard-structural-claim.sh",
+        "change": "Add a second pattern class for scalar lookups: flag replies containing a bare dashboard hostname, 'is green', 'is passing', 'is clean', or 'scopes are unknown' that lack a citation of a command run this turn, and exit 1 with a suggested verification command."
+      }
+    },
+    {
+      "cluster": "c-e21c31ba",
+      "kind": "structural-need",
+      "title": "Skill absence claimed from truncated session listing",
+      "why": "atone:mist-20261009-190830-23 records the agent declaring /adversarial-review not installed based on the session skill listing, which was silently truncated; guard-absence-claim.sh is registered but targets filesystem absence checks, not the session-injected listing which can drop entries.",
+      "evidence_ids": [
+        "atone:mist-20261009-190830-23",
+        "proposals:prop-20261009-220530-37"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/guard-absence-claim.sh",
+        "change": "Add a pattern that fires when the reply says a named skill or command 'is not installed', 'does not exist', or 'is not available' and the claim is not supported by an ls or find of ~/.claude/skills/ run this turn — exit 1 with the verification command."
+      }
+    },
+    {
+      "cluster": "c-2d8458a5",
+      "kind": "structural-need",
+      "title": "em-dash guard warns but does not block",
+      "why": "guard-banned-vocab.sh and guard-prose-quality.sh are both registered; 7 atones spanning 2026-09 to 2026-10 still record em-dashes in owner-facing replies, meaning those hooks exit 0 on this token — a blocking Stop hook was proposed in prop-20260930-222530-a3 and never acted on.",
+      "evidence_ids": [
+        "atone:mist-20260930-222509-5b",
+        "atone:mist-20260923-205807-2e",
+        "atone:mist-20260915-193139-4c",
+        "atone:mist-20261005-094856-da"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/guard-banned-vocab.sh",
+        "change": "Add the em-dash character (—) to the blocking vocabulary list with exit 1, not the advisory path."
+      }
+    },
+    {
+      "cluster": "c-11308a85",
+      "kind": "repeat",
+      "title": "Core-dump compresses owner corrections to one bullet",
+      "why": "atone:mist-20261012-215343-78 records twelve owner corrections collapsed into a single bullet in a /core-dump; the skill has no structural constraint requiring each correction received this session to appear as its own pending row.",
+      "evidence_ids": [
+        "atone:mist-20261012-215343-78",
+        "atone:mist-20261012-212352-60",
+        "atone:mist-20261012-212317-4c",
+        "atone:mist-20261012-212302-5d"
+      ],
+      "proposal": {
+        "target": "skills/core-dump.md",
+        "change": "Add a mandatory 'Owner corrections this session' section immediately after Pending Items: one row per atone filed or owner correction received this session, never batched; if zero, write 'none'."
+      }
+    },
+    {
+      "cluster": "c-ab3c677c",
+      "kind": "structural-need",
+      "title": "dense-briefing hook exits 0, not 1",
+      "why": "dense-briefing-shapes-stop.sh is registered yet 6 atones record the same pattern; advisory exit cannot suppress a turn, only block can — same diagnosis as c-0d4db80b.",
+      "evidence_ids": [
+        "atone:mist-20261012-210740-53",
+        "atone:mist-20261006-091256-09",
+        "atone:mist-20260930-195512-08",
+        "atone:mist-20260918-125452-7f",
+        "atone:mist-20260918-112842-f1"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/dense-briefing-shapes-stop.sh",
+        "change": "Change the exit path from 0 to 1 after the warning message so the hook blocks the turn."
+      }
+    },
+    {
+      "cluster": "c-0d4db80b",
+      "kind": "structural-need",
+      "title": "declared-ready hook exits 0, not 1",
+      "why": "declared-ready-stop.sh is registered yet the slug has 7 atones this cycle; the only explanation consistent with a registered hook and a persisting pattern is that it exits 0 (advisory) — exit 1 would have blocked each of those turns.",
+      "evidence_ids": [
+        "atone:mist-20261010-215105-a0",
+        "atone:mist-20261010-102753-1c",
+        "atone:mist-20260930-203407-4d",
+        "atone:mist-20260924-062138-cc",
+        "atone:mist-20260918-120258-b1"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/declared-ready-stop.sh",
+        "change": "Audit the exit path: if the hook currently exits 0 after printing its warning, change it to exit 1 so the turn is blocked rather than nudged."
+      }
+    },
+    {
+      "cluster": "c-d72aa2b9",
+      "kind": "structural-need",
+      "title": "No hook catches handing owner an unwalked artifact",
+      "why": "Four atones record pointing the owner at a URL, file, or decision-page tile without ever opening it; declared-ready-stop.sh catches text phrases like 'done' and 'verified' but not the structural pattern of a reply whose deliverable is a localhost URL or file path the agent did not open this turn.",
+      "evidence_ids": [
+        "atone:mist-20261012-210739-e7",
+        "atone:mist-20261012-210354-12",
+        "atone:mist-20261010-215406-ab",
+        "atone:mist-20261006-103550-ec"
+      ],
+      "proposal": {
+        "target": "scripts/hooks/declared-ready-stop.sh",
+        "change": "Add a second trigger pattern: exit 1 when the reply contains 'take a look at', 'review', or 'check out' immediately followed by a localhost URL or a relative file path, and no screenshot or read tool was called this turn on that resource."
+      }
+    }
+  ],
+  "page_slug": null,
+  "page_url": null,
+  "tokens": 70346,
+  "held_by_gate": null,
+  "skipped": null,
+  "landed": []
+}

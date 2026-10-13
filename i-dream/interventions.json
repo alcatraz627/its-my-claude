@@ -756,5 +756,47 @@
     "body": "Before saying a skill is missing, ls ~/.claude/skills/<name> and <project>/.claude/skills/<name>. If either exists, read its SKILL.md and run it. Your skill listing is not the full set.",
     "created": "2026-10-09T23:00:59.234443Z",
     "strength": 0.3
+  },
+  {
+    "id": "326f849316465520",
+    "slug": "printed-secret-values-into-transcript",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "ssh\\b.*extractor-vm.*(\\bps\\s+(-?e?f\\b|-?aux\\b|.*-o\\s*\\S*\\bargs\\b|.*\\bcmd\\b)|systemctl\\s+cat\\b|/proc/\\S*/cmdline|\\bpgrep\\s+-\\S*[af])"
+    },
+    "body": "This prints process args or unit contents on extractor-vm, which leaks secrets into the transcript. Use ss -tlnp or ps -o pid,stat,etime,comm instead.",
+    "created": "2026-10-10T23:00:58.096034Z",
+    "strength": 0.3
+  },
+  {
+    "id": "950aabdafcab9812",
+    "slug": "scope-creep-past-the-request",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "_checkpoint\\.claude\\.md$"
+    },
+    "body": "Did the owner ask for a checkpoint? If their last message named a deliverable and it is already written, stop here. Don't add a checkpoint, summary or report as an extra artifact.",
+    "created": "2026-10-12T23:01:22.849139Z",
+    "strength": 0.3
+  },
+  {
+    "id": "1b06a73dd595df26",
+    "slug": "added-replacement-without-retiring-predecessor",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Write",
+      "input_pattern": "frontend/\\.claude/notes/[^\"]*\\.md"
+    },
+    "body": "Before creating a new note here, rg -l the topic in frontend/.claude/notes/; if a living tracker exists (e.g. extractor-and-e2e-directions.md), edit it and link any side doc from it.",
+    "created": "2026-10-13T11:12:36.699180Z",
+    "strength": 0.3
   }
 ]
