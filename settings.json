@@ -318,7 +318,7 @@
     ],
     "defaultMode": "bypassPermissions"
   },
-  "model": "fable",
+  "model": "opus",
   "enableAllProjectMcpServers": false,
   "disableClaudeAiConnectors": true,
   "hooks": {
@@ -1361,6 +1361,10 @@
           },
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/terse-reply-stop.sh"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/style-watch-stop.sh"
           }
         ]
@@ -1683,6 +1687,7 @@
     }
   },
   "outputStyle": "Explanatory",
+  "feedbackDrafts": "notify",
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
   "modelSettings": {
@@ -1694,19 +1699,33 @@
     },
     "claude-opus-5": {
       "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "medium"
     }
   },
+  "promptSuggestionEnabled": false,
   "askUserQuestionTimeout": "5m",
   "dialogExpiry": "5m",
+  "pluginConfigs": {
+    "gcc-mods@inline": {
+      "options": {
+        "mailWake": true
+      }
+    }
+  },
   "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
+  "timeFormat": "24-hour",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": false,
   "theme": "dark",
+  "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "ghostty",
-  "autoCompactEnabled": false,
+  "autoCompactEnabled": true,
   "switchModelsOnFlag": false,
+  "terminalProgressBarEnabled": true,
   "teammateMode": "auto",
   "remoteControlAtStartup": true,
   "crossSessionInbound": "accept",
