@@ -33,6 +33,7 @@ import datetime as dt
 import glob
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -199,9 +200,14 @@ def hook_prompt(inp):
         # The owner is back: reset the count and the clock.
         if st.get("stopped") or st.get("wakes"):
             log(sid, "owner-return", wakes=st.get("wakes", 0))
-        st.update(last_activity=now_s(), wakes=0, stopped=False)
+        # An owner-run /core-dump means they are about to leave and /clear, so
+        # warming this context any longer only pays for a cache nobody returns to.
+        dumping = re.search(r"(^|\s)/core-dump\b", prompt) is not None
+        st.update(last_activity=now_s(), wakes=0, stopped=dumping)
         st.pop("in_wake", None)
-        relink = (os.path.exists(SWITCH) and os.environ.get("CLAUDE_CODE_ENTRYPOINT") == "cli"
+        if dumping:
+            log(sid, "stop", why="owner-dump")
+        relink = (not dumping and os.path.exists(SWITCH) and os.environ.get("CLAUDE_CODE_ENTRYPOINT") == "cli"
                   and chain_broken(st))
         text = None
         if relink:
@@ -269,6 +275,15 @@ def hook_start(inp):
         return 0
     sid = inp.get("session_id") or "unknown"
     st = load(sid)
+    if inp.get("source") == "clear":
+        # A cleared context is cheap to rebuild, so there is nothing to keep warm.
+        # A wake armed before the /clear still fires; stopped skips it with no turn.
+        # The owner's next prompt re-links the chain.
+        st.update(last_activity=now_s(), wakes=0, stopped=True)
+        st.pop("armed_at", None)
+        save(sid, st)
+        log(sid, "stop", why="clear")
+        return 0
     st.update(last_activity=now_s(), wakes=0, stopped=False)
     text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: run CronList; "
             "delete any job whose prompt starts with [keepwarm], then %s Prompts starting with [keepwarm] "

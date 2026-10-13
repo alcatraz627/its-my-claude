@@ -133,6 +133,23 @@ json.dump(st7, open(os.path.join(T, "kw", "s7.json"), "w"))
 expect("a finished cycle re-arms when the owner returns",
        "no wake is pending" in ctx(hook("hook-prompt", session_id="s7", prompt="back")))
 
+# An owner-run /core-dump ends keep-warm for this absence (enh-scrape kept waking at 76%).
+hook("hook-prompt", session_id="s8", prompt="x")
+expect("an owner /core-dump adds no re-arm", ctx(hook("hook-prompt", session_id="s8", prompt="/core-dump")) == "")
+expect("a wake after an owner dump is skipped with no turn", wake("s8", 760000, 56).get("decision") == "block")
+expect("even a not-due wake after a dump is skipped", wake("s8", 760000, 20).get("decision") == "block")
+hook("hook-prompt", session_id="s8", prompt="back again")
+expect("the owner's next prompt resumes keep-warm", "only keeps the cache warm" in ctx(wake("s8", 760000, 56)))
+hook("hook-prompt", session_id="s9", prompt="fix the core-dump skill, then /catchup later")
+expect("prose about core-dump does not stop keep-warm", "only keeps the cache warm" in ctx(wake("s9", 300000, 56)))
+
+# A /clear arms nothing; a wake armed before it is skipped; the next prompt re-links.
+expect("a cleared session start asks for no cron", hook("hook-start", session_id="s10", source="clear") == {})
+expect("a pre-clear wake is skipped with no turn", wake("s10", 90000, 56).get("decision") == "block")
+expect("the owner's first prompt after the clear re-links",
+       "no wake is pending" in ctx(hook("hook-prompt", session_id="s10", prompt="/catchup")))
+expect("a startup session start still arms", "CronCreate" in ctx(hook("hook-start", session_id="s11", source="startup")))
+
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)
 expect("bad hook input never blocks", r.returncode == 0 and "block" not in r.stdout)
