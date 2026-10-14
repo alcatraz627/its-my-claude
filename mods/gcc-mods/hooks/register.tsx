@@ -1,246 +1,50 @@
-// gcc-mods draws gcc's owner surfaces in the Claude Code TUI: the /hub pane,
-// the band above the prompt, the status line. It only reads gcc's files and
-// writes through their own CLIs; GUIDE.md lists every surface and key.
-//
-// Everything that touches `$` lives in this file because the plugin validator
-// follows `$` only into functions declared here; lib.ts holds the pure helpers.
+// gcc-mods draws the gcc surfaces that need no opening: clickable paths, a
+// resume offer after a clear, the context gauge, and wakes for an idle session.
+// No Button carries a hotkey and nothing is put over the prompt draft; GUIDE.md
+// says why. Everything that touches `$` lives here because the validator
+// follows `$` only into this file; lib.ts holds the pure helpers.
 
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Audience, Bookmark, Catchup, DecideItem, DecideSet, Doc, DocFilter, Msg, Notice, Nudge, NudgeMode, Preview, Receipt, Scope, Seat, Snippet, Snips, Tab, View, GoalView, GoalsSnap, TaskRow } from '../types'
+import type { Catchup, DecideSet, GoalView, GoalsSnap, Msg, Seat, TaskRow } from '../types'
 import {
-  CURL_RE, DP_REG, GCC, GOAL_SH, GS, HOME, LANDING, PANE, PATH_RE, RUN_RE, SUBJECT_RE, SUCCESS_RE, TRAIL_RE, VIEWS, WORDS,
-  abs, ago, agoPhrase, answerString, clip, docKindOf, dur, emptyDecide, emptyFun, emptyIdle, emptyMail, emptyMeter, emptyReceipt, firstLine, gatedRows,
-  goalCounts, greetingFor, head, hk, hourGlyph, initialView, isGate, jsonOr, openGates, parseEditLine, parseJsonl, plural, readyRows, receiptLine, sid8,
-  splitOwnerBlocks, switchesOf, tablesToBlocks, tilde,
+  DP_REG, DP_URL, GCC, HOME, PATH_RE, TRAIL_RE, VIEWS,
+  abs, ago, agoPhrase, clip, dur, emptyDecide, emptyIdle, emptyMail, emptyMeter, firstLine, goalCounts, initialView, jsonOr, plural, sid8, switchesOf, tilde,
 } from './lib'
-import type { EditLine, El, OwnerBlock, Switches } from './lib'
+import type { El, Switches } from './lib'
 
 type $T = EngineInterface
 
 // The state atoms live here with literal refs: the validator's scan reads a
 // `{ plugin, key }` only when both are spelled out at the call.
 const viewAtom = atom({ plugin: 'gcc-mods', key: 'view' } as const, initialView)
-const docsAtom = atom({ plugin: 'gcc-mods', key: 'docs' } as const, [] as Doc[])
 const goalsAtom = atom({ plugin: 'gcc-mods', key: 'goals' } as const, null as GoalsSnap | null)
 const catchupAtom = atom({ plugin: 'gcc-mods', key: 'catchup' } as const, null as Catchup | null)
 const meterAtom = atom({ plugin: 'gcc-mods', key: 'meter' } as const, emptyMeter)
 const seatsAtom = atom({ plugin: 'gcc-mods', key: 'seats' } as const, [] as Seat[])
 const mailAtom = atom({ plugin: 'gcc-mods', key: 'mail' } as const, emptyMail)
-const nudgesAtom = atom({ plugin: 'gcc-mods', key: 'nudges' } as const, [] as Nudge[])
-const noticesAtom = atom({ plugin: 'gcc-mods', key: 'notices' } as const, [] as Notice[])
-const receiptAtom = atom({ plugin: 'gcc-mods', key: 'receipt' } as const, emptyReceipt)
 const idleAtom = atom({ plugin: 'gcc-mods', key: 'idle' } as const, emptyIdle)
 const decideAtom = atom({ plugin: 'gcc-mods', key: 'decide' } as const, emptyDecide)
-const funAtom = atom({ plugin: 'gcc-mods', key: 'fun' } as const, emptyFun)
-const previewAtom = atom({ plugin: 'gcc-mods', key: 'preview' } as const, null as Preview | null)
 // The per-session master switch. Off, every hook is a pass-through and the
-// session behaves as if the mod were not loaded; /hub turns it on.
+// session behaves as if the mod were not loaded; /hub on turns it on.
 const enabledAtom = atom({ plugin: 'gcc-mods', key: 'enabled' } as const, null as boolean | null)
-const snipsAtom = atom({ plugin: 'gcc-mods', key: 'snips' } as const, { snippets: [], bookmarks: [], at: 0, sel: null, editing: null, scope: 'all' } as Snips)
-const PREVIEW = 'gcc-preview'
-const SNIP_DIR = GCC + '/snippets'
-
-// Snippets and bookmarks: one jsonl per scope under ~/.claude/snippets, files
-// being the truth so any session reads the same lists.
-function snipFile(scope: Scope, project: string, sid: string) {
-  if (scope === 'global') return SNIP_DIR + '/global.jsonl'
-  if (scope === 'project') return SNIP_DIR + '/project-' + project.replace(/[^\w.-]+/g, '_').replace(/^_/, '') + '.jsonl'
-  return SNIP_DIR + '/session-' + sid8(sid) + '.jsonl'
-}
-
-async function loadSnips($: $T) {
-  const cwd = await cwdOf($)
-  const sid = await $.session.id().catch(() => '')
-  const now = await $.clock.now()
-  const snippets: Snippet[] = []
-  const bookmarks: Bookmark[] = []
-  for (const scope of ['global', 'project', 'session'] as const) {
-    for (const row of parseJsonl((await readText($, snipFile(scope, cwd, sid))) ?? '')) {
-      if (row.kind === 'bookmark') bookmarks.push(row as Bookmark)
-      else snippets.push(row as Snippet)
-    }
-  }
-  await update($, snipsAtom, s => ({ ...s, snippets: snippets.sort((a, b) => b.ts - a.ts), bookmarks: bookmarks.sort((a, b) => b.ts - a.ts), at: now }))
-}
-
-type SnipRow = (Snippet | Bookmark) & { kind?: string }
-
-// Change one scope's file by re-reading it and applying a single change by id,
-// so rows other sessions added since this one loaded survive. A file that
-// exists but cannot be read throws rather than being rewritten empty.
-async function mutateSnips($: $T, scope: Scope, change: (rows: SnipRow[]) => SnipRow[]) {
-  const cwd = await cwdOf($)
-  const sid = await $.session.id().catch(() => '')
-  const file = snipFile(scope, cwd, sid)
-  const raw = await readText($, file)
-  if (raw === null && (await fileExists($, file))) throw new Error('could not read ' + file)
-  const rows = change(parseJsonl(raw ?? '') as SnipRow[])
-  const lines = rows.map(r => JSON.stringify('path' in r ? { ...r, kind: 'bookmark' } : { ...r, kind: 'snippet' }))
-  await $.fs.write(file, lines.join('\n') + (lines.length ? '\n' : ''))
-  await loadSnips($)
-}
-
-async function addSnippet($: $T, text: string, scope: Scope = 'project') {
-  const cwd = await cwdOf($)
-  const sid = await $.session.id().catch(() => '')
-  const now = await $.clock.now()
-  const snip: Snippet = { id: 's-' + now.toString(36), ts: now, scope, project: cwd, sid, title: clip(firstLine(text), 60), text, notes: '', tags: [] }
-  await mutateSnips($, scope, rows => [snip, ...rows])
-  await update($, snipsAtom, s => ({ ...s, sel: snip.id, editing: 'title' as const }))
-  return snip
-}
-
-// Edit or delete (patch null) one snippet. A scope change moves it between
-// files. Returns false when no snippet has that id.
-async function editSnippet($: $T, id: string, patch: Partial<Snippet> | null): Promise<boolean> {
-  await loadSnips($)
-  const have = (await read($, snipsAtom)).snippets.find(x => x.id === id)
-  if (!have) return false
-  const moved = patch?.scope && patch.scope !== have.scope ? patch.scope : null
-  await mutateSnips($, have.scope, rows => (patch && !moved ? rows.map(r => (r.id === id ? { ...r, ...patch } : r)) : rows.filter(r => r.id !== id)))
-  if (moved) await mutateSnips($, moved, rows => [{ ...have, ...patch }, ...rows])
-  return true
-}
-
-async function toggleBookmark($: $T, path: string, scope: Scope = 'project') {
-  const cwd = await cwdOf($)
-  const sid = await $.session.id().catch(() => '')
-  const now = await $.clock.now()
-  const have = (await read($, snipsAtom)).bookmarks.find(b => b.path === path)
-  if (have) await mutateSnips($, have.scope, rows => rows.filter(r => r.id !== have.id))
-  else await mutateSnips($, scope, rows => [{ id: 'b-' + now.toString(36), ts: now, scope, project: cwd, sid, path, note: '' }, ...rows])
-  $.ui.toast(have ? 'Bookmark removed.' : 'Bookmarked (' + scope + ').')
-}
-
-// Save one prompt-box edit line. False means nothing was saved (an unknown
-// snippet or decision, or goal.sh refused) and the caller puts the draft back.
-async function saveEditLine($: $T, edit: EditLine): Promise<boolean> {
-  if (edit.kind === 'snip') {
-    const found = await editSnippet($, edit.key, { notes: edit.body })
-    $.ui.toast(found ? 'Snippet note saved. Nothing was sent.' : 'No snippet ' + edit.key + ' here. Nothing was saved or sent; your text is back in the box.', { timeoutMs: 7_000 })
-    return found
-  }
-  if (edit.kind === 'dp') {
-    const [slug, item] = edit.key.split('/')
-    const page = (await read($, decideAtom)).pending.find(s => s.slug === slug)
-    if (!page || !page.items.some(it => it.id === item)) {
-      $.ui.toast('No decision ' + edit.key + ' here. Nothing was saved or sent; your text is back in the box.', { timeoutMs: 7_000 })
-      return false
-    }
-    await update($, decideAtom, x => ({ ...x, notes: { ...x.notes, [edit.key]: edit.body } }))
-    $.ui.toast('Note kept on ' + edit.key + '. Submit sends it with the rulings; nothing was sent now.')
-    return true
-  }
-  if (!edit.body) {
-    $.ui.toast('The goal line was empty. Nothing was saved or sent.')
-    return false
-  }
-  const r = await run($, ['bash', GOAL_SH, 'set', edit.body, '--by', 'owner'], { timeoutMs: 6_000 })
-  $.ui.toast(r.ok ? 'gcc goal saved. Nothing was sent. The /goal paste line (p in the Tasks tab) arms the harness.' : 'goal.sh refused: ' + clip(r.err || r.out, 120), { timeoutMs: 7_000 })
-  if (r.ok) await refreshGoals($)
-  return r.ok
-}
-
-// The last mouse selection, or nothing: fullscreen terminal and desktop only.
-async function selectedText($: $T): Promise<string | null> {
-  try {
-    const s = await $.ui.selection()
-    return s?.text?.trim() ? s.text : null
-  } catch {
-    return null
-  }
-}
-
-const SNIP_SKILLS: [string, string, string][] = [
-  ['pin', '/pin-for-dream', 'd'],
-  ['propose', '/gcc-proposal', 'g'],
-  ['atone', '/atone', 'a'],
-  ['affirm', '/affirm', 'f'],
-]
 
 // The startOn switch from /config, set when the module registers.
 let startOn = false
 const isOn = async ($: $T) => (await read($, enabledAtom)) ?? startOn
 
-// The work a session does when the mod comes on: what a start would have done.
-async function startUp($: $T, sw: Switches) {
-  if (sw.continuity) {
-    await seedDocs($)
-    await offerCheckpoint($)
-  }
-  await refreshAll($, sw)
-}
-
-async function switchMod($: $T, on: boolean, sw: Switches) {
-  const was = await isOn($)
-  await update($, enabledAtom, () => on)
-  if (on) {
-    if (!was) await startUp($, sw)
-    $.ui.toast('gcc-mods is on for this session. /hub off silences it.')
-    return
-  }
-  $.ui.status(undefined)
-  try {
-    for (const p of await $.ui.panes()) await $.ui.close({ id: p.id })
-  } catch {
-    /* nothing open */
-  }
-  $.ui.toast('gcc-mods is off for this session. Hooks behave as before; /hub on brings it back.', { timeoutMs: 7_000 })
-}
-
-const TABS: [Tab, string, string][] = [
-  ['docs', 'Docs', '1'],
-  ['tasks', 'Tasks', '2'],
-  ['nudges', 'Nudges', '3'],
-  ['fleet', 'Fleet', '4'],
-  ['inbox', 'Inbox', '5'],
-  ['decide', 'Decide', '6'],
-  ['snips', 'Snips', '7'],
-]
-const FILTERS: [DocFilter, string][] = [
-  ['session', 'this session'],
-  ['all', 'all recent'],
-  ['reports', 'reports'],
-  ['checkpoints', 'checkpoints'],
-]
-const SNOOZE: { value: string; label: string }[] = [
-  { value: '1h', label: '1 hour' },
-  { value: '4h', label: '4 hours' },
-  { value: '1d', label: '1 day' },
-  { value: '7d', label: '7 days' },
-]
-const FEEDBACK: [string, string, string][] = [
-  ['useful', 'u', 'useful'],
-  ['false-positive', 'x', 'wrong trigger'],
-  ['obstructive', 'b', 'in the way'],
-  ['too-aggressive', 'a', 'too loud'],
-]
 const WAKE_GAP_MS = 10 * 60_000
-// A prompt that starts with this is a goal edit: saved to gcc, never sent.
-const GOAL_PREFIX = 'gcc-goal: '
-// Likewise a decision note, `dp-note <slug>/<item>: text`, saved to the Decide tab.
-const DP_NOTE = 'dp-note '
 const OUTPUT_RE = /(?:~|\/)[\w.@+%\-\/]+\.(?:md|json|txt|html)\b/
-
-// Small wrappers around the engine that never throw into a render.
-
-const setView = ($: $T, patch: Partial<View>) => update($, viewAtom, v => ({ ...v, ...patch }))
-const getView = ($: $T) => read($, viewAtom)
 
 type Ran = { ok: boolean; out: string; err: string; code: number }
 
 // Run a gcc command and never throw: every surface draws "unavailable" rather
 // than failing its render when a script is missing or slow.
-async function run($: $T, argv: string[], opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string> } = {}): Promise<Ran> {
+async function run($: $T, argv: string[], opts: { cwd?: string; timeoutMs?: number } = {}): Promise<Ran> {
   try {
     const sid = await $.session.id().catch(() => '')
-    const r = await $.process.run(argv, {
-      cwd: opts.cwd,
-      timeoutMs: opts.timeoutMs ?? 15_000,
-      env: { CLAUDE_CODE_SESSION_ID: sid, ...(opts.env ?? {}) },
-    })
+    const r = await $.process.run(argv, { cwd: opts.cwd, timeoutMs: opts.timeoutMs ?? 15_000, env: { CLAUDE_CODE_SESSION_ID: sid } })
     return { ok: r.exitCode === 0, out: r.stdout ?? '', err: r.stderr ?? '', code: r.exitCode }
   } catch (e) {
     return { ok: false, out: '', err: String(e), code: -1 }
@@ -271,210 +75,31 @@ async function listDir($: $T, dir: string) {
   }
 }
 
-async function tailJsonl($: $T, path: string, n: number) {
-  const r = await run($, ['tail', '-n', String(n), path], { timeoutMs: 5_000 })
-  return r.ok ? parseJsonl(r.out) : []
-}
-
 const cwdOf = ($: $T) => $.session.cwd().catch(() => HOME)
 
-// Close one of the mod's panes if it is open; quiet when it is not.
-async function closePane($: $T, id: string) {
-  try {
-    if ((await $.ui.panes()).some(p => p.id === id)) await $.ui.close({ id })
-  } catch {
-    /* not open */
-  }
-}
-
-// Open the hub on a tab. A press or a command opened it, so it seats at any width.
-// The engine raises a newly opened pane only while the prompt holds the keys, so
-// a press inside the preview would leave the hub behind it: the preview closes first.
-async function openHub($: $T, tab?: Tab) {
-  if (tab) await setView($, { tab })
-  await closePane($, PREVIEW)
-  await $.ui.open({ id: PANE, title: await hubTitle($), focus: true })
-}
-
-// The hub's tab label carries the counts, so a closed-over hub still says what waits.
-async function hubTitle($: $T): Promise<string> {
-  const c = goalCounts(await read($, goalsAtom))
-  const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
-  const bits = ['gcc']
-  if (c.gates) bits.push(c.gates + ' owed')
-  if (mail) bits.push('✉' + mail)
-  return bits.join(' · ')
-}
-
-// The preview pane: the full text of whatever was last picked, so long text
-// never has to fit in a tab. It takes the hub's place rather than opening
-// behind it (a pane opened from a press in another pane stays at the back);
-// its "back to hub" button swaps them again.
-async function openPreview($: $T, title: string, text: string, path: string | null = null, kind: 'text' | 'goal' = 'text', goalId: string | null = null) {
-  const now = await $.clock.now()
-  await update($, previewAtom, () => ({ title, text, path, at: now, kind, goalId, editing: false }))
-  await closePane($, PREVIEW)
-  await closePane($, PANE)
-  await $.ui.open({ id: PREVIEW, title: (kind === 'goal' ? 'goal · ' : 'preview · ') + clip(title, 24), focus: true })
-}
-
-// Put text in the prompt box at the cursor, never over what the owner typed.
-// A slash command only runs from the start of the prompt, so with a draft
-// already there it goes to the clipboard instead. A line-prefixed edit
-// (gcc-goal:, snip-note, dp-note) starts on a line of its own.
-async function fillPrompt($: $T, text: string, how: 'text' | 'line' | 'command' = 'text'): Promise<boolean> {
+// Put text in the prompt box at the cursor. Never `replace`, and never routed
+// around the draft: the owner's words stay where they were.
+async function insertAtCursor($: $T, text: string) {
   const box = await $.prompt.read()
-  // A draft that is itself a slash command runs as that command on Enter even
-  // when a hook drops the prompt, so an edit line is kept out of it too.
-  if ((how === 'command' && box.text.trim()) || (how === 'line' && box.text.trimStart().startsWith('/'))) {
-    const r = await $.ui.copy({ text })
-    $.ui.toast(r.isCopied ? 'Your prompt has a draft, so this went to the clipboard. Paste it into an empty prompt.' : 'Your prompt has a draft; clear it and try again.', { timeoutMs: 7_000 })
-    return false
+  await $.prompt.fill({ text, mode: 'insert' })
+  if (box.text.trim()) $.ui.toast('Inserted at your cursor. A slash command only runs from the start of an empty prompt.', { timeoutMs: 7_000 })
+}
+
+async function startUp($: $T, sw: Switches, force = false) {
+  if (sw.continuity) await offerCheckpoint($, force)
+  await refreshAll($, sw)
+}
+
+async function switchMod($: $T, on: boolean, sw: Switches) {
+  const was = await isOn($)
+  await update($, enabledAtom, () => on)
+  if (on) {
+    if (!was) await startUp($, sw)
+    $.ui.toast('gcc-mods is on for this session. /hub off silences it.')
+    return
   }
-  // An edit line sits on a line of its own, so text on either side of the
-  // cursor stays the owner's and is never read into the edit.
-  const atLineStart = box.cursor === 0 || box.text[box.cursor - 1] === '\n'
-  const atLineEnd = box.cursor >= box.text.length || box.text[box.cursor] === '\n'
-  const line = (atLineStart ? '' : '\n') + text + (atLineEnd ? '' : '\n')
-  await $.prompt.fill({ text: how === 'line' ? line : text, mode: 'insert' })
-  return true
-}
-
-// A prompt-box edit line was saved and dropped; whatever else was in the draft
-// comes back once the box has cleared, so nothing the owner typed is lost.
-async function restoreDraft($: $T, rest: string) {
-  if (!rest.trim()) return
-  await $.clock.sleep(300)
-  await $.prompt.fill({ text: rest.trim(), mode: 'insert' })
-}
-
-// The goal tab: the outcome, the session goal with an editor, the acceptance rows.
-async function openGoalTab($: $T, g: GoalView) {
-  const rows = g.accept.map(a => '- **' + a.id + '** ' + a.kind + ', ' + a.status + ': ' + a.text + (a.evidence ? '\n  evidence: ' + clip(a.evidence, 160) : '')).join('\n')
-  const text = (g.containment.length ? g.containment.map(c => '> ' + c).join('\n') + '\n\n' : '') + '**Acceptance rows** (what counts as done, each proven or still open)\n\n' + rows
-  await openPreview($, g.id, text, null, 'goal', g.id)
-}
-
-async function saveSessionGoal($: $T, text: string): Promise<boolean> {
-  const r = await run($, ['bash', GOAL_SH, 'set', text.trim(), '--by', 'owner'], { timeoutMs: 6_000 })
-  $.ui.toast(r.ok ? 'Session goal saved. Nothing was sent.' : 'goal.sh refused: ' + clip(r.err || r.out, 120), { timeoutMs: 6_000 })
-  if (r.ok) await refreshGoals($)
-  return r.ok
-}
-
-// The guide ships with the mod; /hub help and h in the hub open it in the preview pane.
-async function openGuide($: $T) {
-  const path = $.plugin.root + '/GUIDE.md'
-  const text = (await readText($, path)) ?? 'GUIDE.md is missing from the plugin folder.'
-  await openPreview($, 'gcc-mods guide', text, path)
-}
-
-function previewButton($: $T, el: El, key: string, title: string, text: string, path: string | null = null, hotkey = 'p') {
-  const { Button } = el
-  return <Button key={key} label="preview" plain {...hk(hotkey)} onPress={() => openPreview($, title, text, path)} />
-}
-
-// Section frame shared by the tabs: a titled rounded box.
-function section(el: El, title: string, children: unknown, color?: string) {
-  const { Box, Text } = el
-  return (
-    <Box flexDirection="column" borderStyle="round" borderColor={color} paddingX={1} marginBottom={1}>
-      <Text bold>{title}</Text>
-      {children}
-    </Box>
-  )
-}
-
-// The row of single-letter buttons at the top of a tab or a detail frame.
-function toolbar(el: El, children: unknown) {
-  const { Box } = el
-  return (
-    <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-      {children}
-    </Box>
-  )
-}
-
-// One column of a list: a fixed width, or the rest of the row when width is left out.
-// `press` marks the cell drawn as the row's button, the click target; without
-// one the first cell is. A Button takes no colour, so the pressed cell is plain.
-type Cell = { text: string; width?: number; color?: string; bold?: boolean; dim?: boolean; press?: true }
-
-// The dim header row over a list; the two leading spaces sit over the selection marker.
-function listHead(el: El, cells: { text: string; width?: number }[]) {
-  const { Box, Text } = el
-  return (
-    <Box flexDirection="row" columnGap={1}>
-      <Box width={2} flexShrink={0}>
-        <Text> </Text>
-      </Box>
-      {cells.map(c =>
-        c.width ? (
-          <Box width={c.width} flexShrink={0}>
-            <Text dimColor>{c.text}</Text>
-          </Box>
-        ) : (
-          <Text dimColor wrap="truncate-end">{c.text}</Text>
-        ),
-      )}
-    </Box>
-  )
-}
-
-// One row of a list. The marker has a column of its own so a narrow first
-// column is never clipped by it; one cell is the button that selects the row.
-function listRow(el: El, key: string, isSel: boolean, onPress: () => unknown, cells: Cell[]) {
-  const { Box, Text, Button } = el
-  const pressAt = Math.max(0, cells.findIndex(c => c.press))
-  const draw = (c: Cell, i: number) => {
-    const inner =
-      i === pressAt ? (
-        <Button key={key} label={c.text} plain dimColor={!isSel} onPress={onPress} />
-      ) : (
-        <Text color={c.color} bold={c.bold} dimColor={c.dim ?? (!isSel && !c.color)} wrap="truncate-end">{c.text}</Text>
-      )
-    return c.width ? (
-      <Box width={c.width} flexShrink={0}>
-        {inner}
-      </Box>
-    ) : (
-      inner
-    )
-  }
-  return (
-    <Box flexDirection="row" columnGap={1}>
-      <Box width={2} flexShrink={0}>
-        <Text color="cyan">{isSel ? '▸' : ' '}</Text>
-      </Box>
-      {cells.map(draw)}
-    </Box>
-  )
-}
-
-// The selected item: a cyan frame, its actions above its text.
-function detailFrame(el: El, title: string, actions: unknown, children: unknown, color = 'cyan') {
-  const { Box, Text } = el
-  return (
-    <Box flexDirection="column" borderStyle="round" borderColor={color} paddingX={1} marginBottom={1}>
-      <Text bold wrap="truncate-end">{title}</Text>
-      {actions && <Box marginBottom={1}>{toolbar(el, actions)}</Box>}
-      {children}
-    </Box>
-  )
-}
-
-// The j and k buttons: move the selection through a list of ids, wrapping.
-function moveButtons($: $T, el: El, ids: string[], current: string | null, select: (id: string) => unknown) {
-  const { Button } = el
-  const step = (by: number) => {
-    if (!ids.length) return
-    const i = Math.max(0, ids.indexOf(current ?? ''))
-    return select(ids[(i + by + ids.length) % ids.length]!)
-  }
-  return [
-    <Button key="next" label="next" plain {...hk('j')} onPress={() => step(1)} />,
-    <Button key="prev" label="prev" plain {...hk('k')} onPress={() => step(-1)} />,
-  ]
+  $.ui.status(undefined)
+  $.ui.toast('gcc-mods is off for this session. Hooks behave as before; /hub on brings it back.', { timeoutMs: 7_000 })
 }
 
 // Transcript hygiene: paths drawn absolute and clickable.
@@ -545,7 +170,14 @@ async function rewritePaths($: $T, text: string, cwd: string): Promise<string> {
   return done.join('')
 }
 
-// Continuity: the checkpoint offer and the docs this session touched.
+// A Stop hook that blocked reads as a raw hook error; say which one, in one dim line.
+function logStopBlock($: $T, block: string) {
+  const first = firstLine(block)
+  const name = first.match(/^\[([\w:-]+)\]/)?.[1] ?? first.match(/^([A-Z][A-Z -]{3,40})/)?.[1]?.trim() ?? 'a Stop hook'
+  $.ui.log('⛔ ' + name + ' sent the reply back: ' + clip(first.replace(/^\[[\w:-]+\]\s*/, ''), 140))
+}
+
+// Continuity: the checkpoint offer after a clear or resume.
 
 type IndexRow = { ts?: string; name?: string; checkpoint_path?: string; project_root?: string; summary?: string; kind?: string }
 
@@ -592,169 +224,9 @@ async function offerCheckpoint($: $T, force = false) {
   if (have && !force) return
   const cwd = await cwdOf($)
   const now = await $.clock.now()
+  await update($, catchupAtom, () => null)
   const found = await findCheckpoint($, cwd, now)
   await update($, catchupAtom, () => found)
-}
-
-async function captureDoc($: $T, filePath: string) {
-  if (!/\.(md|html?|txt|pdf|rst)$/i.test(filePath)) return
-  const now = await $.clock.now()
-  const full = abs(filePath)
-  await update($, docsAtom, docs => {
-    const hit = docs.find(d => d.path === full)
-    if (hit) return docs.map(d => (d === hit ? { ...d, edits: d.edits + 1, at: now, isLive: true, isThisSession: true } : d))
-    const doc: Doc = { id: 'live-' + now.toString(36) + '-' + docs.length, title: full.split('/').pop() ?? full, path: full, kind: docKindOf(full), isThisSession: true, edits: 1, at: now, isLive: true }
-    return [doc, ...docs].slice(0, 200)
-  })
-}
-
-async function seedDocs($: $T) {
-  const cwd = await cwdOf($)
-  const sid = await $.session.id().catch(() => '')
-  const now = await $.clock.now()
-  const found: Doc[] = []
-  const push = (path: string, at: number, isThisSession: boolean) =>
-    found.push({ id: 'seed-' + path, title: path.split('/').pop() ?? path, path, kind: docKindOf(path), isThisSession, edits: 0, at, isLive: false })
-  for (const f of await listDir($, cwd)) if (/^_.*\.claude\.md$/.test(f.name)) push(cwd + '/' + f.name, f.mtimeMs, false)
-  const notesDir = cwd === GCC ? GCC + '/session-notes' : cwd + '/.claude/session-notes'
-  for (const f of await listDir($, notesDir)) {
-    if (!f.name.endsWith('.md') || f.name.startsWith('_')) continue
-    push(notesDir + '/' + f.name, f.mtimeMs, sid !== '' && f.name.startsWith(sid))
-  }
-  const reports = (await listDir($, GCC + '/assets/reports')).filter(d => d.kind === 'dir').sort((a, b) => b.name.localeCompare(a.name)).slice(0, 8)
-  for (const d of reports) {
-    const dir = GCC + '/assets/reports/' + d.name
-    for (const f of await listDir($, dir)) if (/\.(md|html)$/.test(f.name) && now - f.mtimeMs < 14 * 86_400_000) push(dir + '/' + f.name, f.mtimeMs, false)
-  }
-  await update($, docsAtom, docs => {
-    const have = new Set(docs.map(d => d.path))
-    return [...docs, ...found.filter(d => !have.has(d.path))].sort((a, b) => b.at - a.at).slice(0, 200)
-  })
-}
-
-const previewCache = new Map<string, { at: number; text: string }>()
-async function previewOf($: $T, doc: Doc): Promise<string> {
-  const hit = previewCache.get(doc.path)
-  if (hit && hit.at === doc.at) return hit.text
-  const text = (await readText($, doc.path)) ?? '(could not read the file)'
-  const trimmed = text.length > 12_000 ? text.slice(0, 12_000) + '\n\n… (preview cut; open the file for the rest)' : text
-  previewCache.set(doc.path, { at: doc.at, text: trimmed })
-  return trimmed
-}
-
-function visibleDocs(docs: Doc[], v: View): Doc[] {
-  return docs
-    .filter(doc => !v.hidden.includes(doc.id))
-    .filter(doc =>
-      v.docFilter === 'session'
-        ? doc.isThisSession
-        : v.docFilter === 'reports'
-          ? doc.kind === 'report' || doc.kind === 'review' || doc.kind === 'page'
-          : v.docFilter === 'checkpoints'
-            ? doc.kind === 'checkpoint'
-            : true,
-    )
-    .sort((a, b) => b.at - a.at)
-}
-
-async function docsTab($: $T, el: El, v: View, now: number) {
-  const { Box, Text, Button, Markdown } = el
-  const docs = await read($, docsAtom)
-  const list = visibleDocs(docs, v)
-  const selId = list.some(x => x.id === v.docSel) ? v.docSel : (list[0]?.id ?? null)
-  const sel = list.find(x => x.id === selId)
-  const idx = list.findIndex(x => x.id === selId)
-  const filterLabel = FILTERS.find(f => f[0] === v.docFilter)![1]
-  const move = (by: number) => {
-    if (!list.length) return
-    const i = (idx + by + list.length) % list.length
-    return setView($, { docSel: list[i]!.id })
-  }
-  const cycleFilter = () => {
-    const i = FILTERS.findIndex(f => f[0] === v.docFilter)
-    return setView($, { docFilter: FILTERS[(i + 1) % FILTERS.length]![0], docSel: null })
-  }
-  const shown = list.slice(0, 10)
-  const preview = sel ? await previewOf($, sel) : ''
-  const titleW = 36
-
-  return (
-    <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={3}>
-        <Button key="filter" label={'filter: ' + filterLabel} plain {...hk('f')} onPress={cycleFilter} />
-        <Button key="next" label="next" plain {...hk('j')} onPress={() => move(1)} />
-        <Button key="prev" label="prev" plain {...hk('k')} onPress={() => move(-1)} />
-        <Button key="rescan" label="rescan" plain {...hk('r')} onPress={() => seedDocs($)} />
-        {v.hidden.length > 0 && <Button key="unhide" label={'unhide ' + v.hidden.length} plain {...hk('u')} onPress={() => setView($, { hidden: [] })} />}
-      </Box>
-      {section(
-        el,
-        list.length ? plural(list.length, 'doc') + ' · ' + filterLabel : 'no docs under this filter',
-        <Box flexDirection="column">
-          {list.length === 0 && (
-            <Text dimColor>
-              {docs.length ? plural(docs.length, 'doc') + ' under other filters. f widens it.' : 'Nothing found yet. r rescans.'}
-            </Text>
-          )}
-          {list.length > 0 && listHead(el, [{ text: 'title', width: titleW }, { text: 'kind', width: 11 }, { text: 'age', width: 5 }, { text: 'edits' }])}
-          {shown.map(doc =>
-            listRow(el, 'doc-' + doc.id, doc.id === selId, () => setView($, { docSel: doc.id }), [
-              { text: clip(doc.title, titleW), width: titleW },
-              { text: doc.kind, width: 11 },
-              { text: ago(now, doc.at), width: 5 },
-              { text: (doc.edits ? String(doc.edits) : '·') + (doc.isLive ? ' · live' : ''), color: doc.isLive ? 'green' : undefined },
-            ]),
-          )}
-          {list.length > shown.length && <Text dimColor>  +{list.length - shown.length} more (j/k reaches them)</Text>}
-        </Box>,
-      )}
-      {sel && (
-        <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={1}>
-          <Text bold>{sel.title}</Text>
-          <Text dimColor wrap="truncate-start">{tilde(sel.path)}</Text>
-          <Box flexDirection="row" columnGap={3} flexWrap="wrap" marginTop={1}>
-            {previewButton($, el, 'doc-preview', sel.title, preview, sel.path)}
-            <Button
-              key="open"
-              label="open"
-              plain
-              {...hk('o')}
-              onPress={async () => {
-                const r = await run($, ['open', sel.path], { timeoutMs: 5_000 })
-                $.ui.toast(r.ok ? 'Opened ' + sel.title : 'Could not open: ' + clip(r.err, 80))
-              }}
-            />
-            <Button
-              key="copy"
-              label="copy path"
-              plain
-              {...hk('c')}
-              onPress={async (press: UiPressArgument) => {
-                const r = await $.ui.copy({ text: sel.path, surface: press.surface })
-                $.ui.toast(r.isCopied ? 'Copied ' + sel.path : 'Could not copy: ' + r.reason)
-              }}
-            />
-            <Button
-              key="quote"
-              label="attach to prompt"
-              plain
-              {...hk('q')}
-              onPress={async () => {
-                await $.prompt.fill({ text: '@' + sel.path + ' ', mode: 'insert' })
-                $.ui.toast('Added @' + tilde(sel.path) + ' to your prompt. Esc to go type.')
-              }}
-            />
-            <Button key="full" label={v.docFull ? 'shorter' : 'expand here'} plain {...hk('e')} onPress={() => setView($, { docFull: !v.docFull })} />
-            <Button key="bookmark" label={(await read($, snipsAtom)).bookmarks.some(b => b.path === sel.path) ? 'unbookmark' : 'bookmark'} plain {...hk('b')} onPress={() => toggleBookmark($, sel.path)} />
-            <Button key="hide" label="hide" plain {...hk('x')} onPress={() => setView($, { hidden: [...v.hidden, sel.id], docSel: null })} />
-          </Box>
-          <Text> </Text>
-          <Markdown text={v.docFull ? preview : clip(head(preview, 9), 900)} />
-          {!v.docFull && (preview.split('\n').length > 9 || preview.length > 900) && <Text dimColor>… p shows the whole file</Text>}
-        </Box>
-      )}
-    </Box>
-  )
 }
 
 function catchupRow($: $T, el: El, c: Catchup, now: number) {
@@ -769,325 +241,66 @@ function catchupRow($: $T, el: El, c: Catchup, now: number) {
       </Box>
       <Text dimColor wrap="truncate-end">{c.summary ? clip(c.summary, 110) : 'a previous session left this; load runs /catchup, which restores its goal, pending items and caveats'}</Text>
       <Box flexDirection="row" columnGap={2}>
-      <Button
-        key="cu-load"
-        label="load (/catchup)"
-        variant="primary"
-        {...hk('l')}
-        onPress={async () => {
-          await update($, catchupAtom, x => (x ? { ...x, state: 'loaded' as const } : x))
-          $.ui.toast('Running /catchup on ' + c.name + '.')
-          await $.prompt.submit({ text: '/catchup ' + c.path })
-        }}
-      />
-      <Button
-        key="cu-view"
-        label="view"
-        {...hk('v')}
-        onPress={async () => {
-          await captureDoc($, c.path)
-          const docs = await read($, docsAtom)
-          const doc = docs.find(d => d.path === c.path)
-          await setView($, { tab: 'docs', docFilter: 'all', docSel: doc?.id ?? null })
-          await openHub($)
-        }}
-      />
-      <Button key="cu-skip" label="skip" {...hk('s')} onPress={() => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x))} />
+        <Button
+          key="cu-load"
+          label="load (/catchup)"
+          variant="primary"
+          onPress={async () => {
+            await update($, catchupAtom, x => (x ? { ...x, state: 'loaded' as const } : x))
+            $.ui.toast('Running /catchup on ' + c.name + '.')
+            // The host refuses a submitted text that starts with a slash, so the skill runs as a command.
+            await $.command.run({ command: 'catchup', args: c.path })
+          }}
+        />
+        <Button
+          key="cu-copy"
+          label="copy path"
+          onPress={async (press: UiPressArgument) => {
+            const r = await $.ui.copy({ text: c.path, surface: press.surface })
+            $.ui.toast(r.isCopied ? 'Copied ' + tilde(c.path) : 'Could not copy: ' + r.reason)
+          }}
+        />
+        <Button key="cu-skip" label="skip" onPress={() => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x))} />
       </Box>
     </Box>
   )
 }
 
-// Tasks: the goal record, the reads owed by the owner, the rows left.
+// Tasks: counts from the goal record, and the stopped-with-open-rows offer.
 
-type RawGoal = {
-  id: string
-  outcome: string
-  projects?: string[]
-  accept?: { id: string; kind: string; text: string; evidence: string | null; status: string; source: string | null }[]
-  milestones?: { id: string; name: string; status: string }[]
-  tasks?: Record<string, any>[]
-  containment?: string[]
-  cwd?: string | null
-}
-
-// A record field as drawable text: strings and numbers pass, an object gives its
-// `text` or `name`, anything else is absent. Never an object into a Text.
-function textOrNull(v: unknown): string | null {
-  if (v == null) return null
-  if (typeof v === 'string' || typeof v === 'number') return String(v)
-  const o = v as { text?: unknown; name?: unknown }
-  return typeof o.text === 'string' ? o.text : typeof o.name === 'string' ? o.name : null
-}
+type RawGoal = { id: string; outcome: string; accept?: { id: string; kind: string; status: string }[]; tasks?: Record<string, any>[] }
 
 function toGoal(g: RawGoal): GoalView {
   return {
     id: g.id,
     outcome: g.outcome,
-    projects: g.projects ?? [],
-    accept: (g.accept ?? []).map(a => ({ id: a.id, kind: a.kind, text: a.text, evidence: a.evidence ?? null, status: a.status, source: a.source ?? null })),
-    milestones: (g.milestones ?? []).map(m => ({ id: m.id, name: m.name, status: m.status })),
+    accept: (g.accept ?? []).map(a => ({ id: a.id, kind: a.kind, status: a.status })),
     tasks: (g.tasks ?? []).map(
       (t): TaskRow => ({
         id: String(t.id),
-        subject: String(t.subject ?? ''),
-        milestone: textOrNull(t.milestone),
         state: String(t.state ?? ''),
-        // gs writes a gate as a string or as { text, do }; the pane draws text only,
-        // and an object reaching a Text makes the engine drop the whole pane.
+        // gs writes a gate as a string or as { text, do }; only its presence and text matter here.
         gate: t.gate == null ? null : typeof t.gate === 'string' ? t.gate : String(t.gate.text ?? ''),
         blockedBy: Array.isArray(t.blocked_by) ? t.blocked_by.map(String) : [],
-        lane: textOrNull(t.lane),
-        tier: textOrNull(t.tier),
-        note: textOrNull(t.note),
       }),
     ),
-    containment: g.containment ?? [],
-    cwd: g.cwd ?? null,
   }
 }
 
 // Re-read the goal record through the path view. Called on start, on every
-// main-loop stop, after a gs write, and on a slow timer.
+// main-loop stop, and on a slow timer.
 async function refreshGoals($: $T) {
   const cwd = await cwdOf($)
   const now = await $.clock.now()
   const r = await run($, ['python3', VIEWS + '/path.py', '--json'], { cwd, timeoutMs: 12_000 })
-  // The session goal lives in goal.sh's own file, not on the record.
-  const gr = await run($, ['bash', GOAL_SH, 'show', '--json'], { cwd, timeoutMs: 6_000 })
-  const sessionGoal = String(jsonOr<{ gcc?: { text?: string } }>(gr.out, {}).gcc?.text ?? '')
   if (!r.ok) {
-    await update($, goalsAtom, prev => ({ scope: prev?.scope ?? '', armed: prev?.armed ?? '', sessionGoal, goals: prev?.goals ?? [], at: now, error: clip(r.err || r.out || 'path.py failed', 160) }))
+    await update($, goalsAtom, prev => ({ goals: prev?.goals ?? [], at: now, error: clip(r.err || r.out || 'path.py failed', 160) }))
     return
   }
-  const j = jsonOr<{ scope?: string; armed?: string; goals?: RawGoal[] }>(r.out, {})
-  const goals = (j.goals ?? []).map(toGoal)
-  const snap: GoalsSnap = { scope: j.scope ?? '', armed: j.armed ?? '', sessionGoal, goals, at: now, error: null }
+  const goals = (jsonOr<{ goals?: RawGoal[] }>(r.out, {}).goals ?? []).map(toGoal)
+  const snap: GoalsSnap = { goals, at: now, error: null }
   await update($, goalsAtom, () => snap)
   await update($, idleAtom, i => ({ ...i, openRows: goalCounts(snap).ready }))
-  const met = goals.filter(g => g.accept.length > 0 && g.accept.every(a => a.status === 'proven'))
-  const fun = await read($, funAtom)
-  const fresh = met.filter(g => !fun.metGoals.includes(g.id))
-  if (fresh.length) {
-    await update($, funAtom, f => ({ ...f, metGoals: [...f.metGoals, ...fresh.map(g => g.id)] }))
-    // The first good read seeds what was already met; only later ones are news.
-    if (fun.goalsSeeded) for (const g of fresh) $.ui.toast('🎯 every acceptance row is proven: ' + clip(g.outcome, 70), { timeoutMs: 8_000 })
-  }
-  if (!fun.goalsSeeded) await update($, funAtom, f => ({ ...f, goalsSeeded: true }))
-}
-
-// Row states as short words that fit the 9-wide column.
-const STATE_LABEL: Record<string, string> = { 'owner-gate': 'yours', deferred: 'later', delegated: 'handed' }
-
-async function tasksTab($: $T, el: El, v: View, write: boolean) {
-  const { Box, Text, Button, Input } = el
-  const snap = await read($, goalsAtom)
-  const goals = snap?.goals ?? []
-  if (!snap) return <Text dimColor>Reading the goal record…</Text>
-  if (goals.length === 0) {
-    return (
-      <Box flexDirection="column">
-        <Text dimColor>{snap.scope || 'no live goal here'}</Text>
-        {snap.error && <Text color="red" wrap="wrap">{snap.error}</Text>}
-        <Text wrap="wrap">No live goal touches this directory. The agent files one with: gs new "outcome" --accept "kind: what you will check".</Text>
-        <Button key="refresh" label="refresh" plain {...hk('r')} onPress={() => refreshGoals($)} />
-      </Box>
-    )
-  }
-  const gi = ((v.goalSel % goals.length) + goals.length) % goals.length
-  const goal = goals[gi]!
-  const gates = openGates(goal)
-  const gated = gatedRows(goal)
-  const ready = readyRows(goal)
-  const current = gates[0] ?? null
-  const glyph: Record<string, string> = { done: '✓', active: '◐', doing: '◐', review: '◇', todo: '○', ready: '○', open: '○', deferred: '…', dropped: '⊘', blocked: '⊘', 'owner-gate': '◆' }
-  const color: Record<string, string | undefined> = { done: 'green', active: 'yellow', doing: 'yellow', review: 'cyan', dropped: 'red', blocked: 'red' }
-
-  const prove = async (aid: string) => {
-    if (!write) return $.ui.toast('Tasks pane is read-only (tasksWrite is off in /config).')
-    const r = await run($, ['python3', GS, 'prove', goal.id, aid, '--by', 'owner pressed answers in the gcc pane'], { timeoutMs: 10_000 })
-    $.ui.toast(r.ok ? 'Recorded: ' + aid + ' answers.' : 'gs refused: ' + clip(r.err || r.out, 120))
-    await refreshGoals($)
-  }
-  const callout = async (aid: string, words: string) => {
-    if (!write) return $.ui.toast('Tasks pane is read-only (tasksWrite is off in /config).')
-    const r = await run($, ['python3', GS, 'accept', goal.id, 'reviewed: ' + words + ' (on ' + aid + ')'], { timeoutMs: 10_000 })
-    $.ui.toast(r.ok ? 'Your words are now an acceptance row on this goal.' : 'gs refused: ' + clip(r.err || r.out, 120))
-    await refreshGoals($)
-  }
-
-  const milestones = [...new Set(goal.tasks.map(t => t.milestone ?? 'no milestone'))]
-  const mName = (id: string) => goal.milestones.find(m => m.id === id)?.name ?? id
-  const goalText = snap.sessionGoal || goal.outcome
-  const doneCount = goal.tasks.filter(t => t.state === 'done').length
-
-  const goalRecord = (
-    <Box flexDirection="column">
-      <Text wrap="wrap">{goal.outcome}</Text>
-      <Text dimColor wrap="truncate-end">
-        {goal.accept.filter(a => a.status === 'proven').length}/{goal.accept.length} acceptance proven · {goal.tasks.filter(t => t.state !== 'done').length} rows open · {snap.scope.replace(/^scope:\s*/, '')}
-      </Text>
-      {snap.sessionGoal && snap.sessionGoal.trim() !== goal.outcome.trim() && (
-        <Box flexDirection="row" columnGap={1}>
-          <Box width={16} flexShrink={0}>
-            <Text dimColor>🎯 session goal</Text>
-          </Box>
-          <Text wrap="truncate-end">{snap.sessionGoal}</Text>
-        </Box>
-      )}
-      <Box flexDirection="row" columnGap={3} marginTop={1} flexWrap="wrap">
-        <Button key="goal-edit-btn" label="edit goal" plain {...hk('e')} onPress={() => openGoalTab($, goal)} />
-        <Button
-          key="goal-paste"
-          label="paste /goal line"
-          plain
-          {...hk('p')}
-          onPress={async () => {
-            const r = await run($, ['bash', GOAL_SH, 'armline'], { timeoutMs: 5_000 })
-            const line = r.ok ? r.out.trim() : '/goal ' + goalText
-            if (await fillPrompt($, line, 'command')) $.ui.toast('The /goal line is in your prompt; Enter arms it.')
-          }}
-        />
-        <Button
-          key="goal-clear"
-          label="retire gcc goal"
-          plain
-          {...hk('w')}
-          onPress={async () => {
-            const r = await run($, ['bash', GOAL_SH, 'clear'], { timeoutMs: 5_000 })
-            $.ui.toast(r.ok ? 'gcc goal retired for this session. The harness /goal, if armed, is yours to clear.' : clip(r.err || r.out, 100))
-            await refreshGoals($)
-          }}
-        />
-        {goals.length > 1 && <Button key="goal" label={'next goal ' + (gi + 1) + '/' + goals.length} plain {...hk('g')} onPress={() => setView($, { goalSel: gi + 1, rejecting: null })} />}
-        <Button key="refresh" label="refresh" plain {...hk('r')} onPress={() => refreshGoals($)} />
-        <Button key="goal-preview" label="open goal tab" plain {...hk('v')} onPress={() => openGoalTab($, goal)} />
-      </Box>
-    </Box>
-  )
-
-  const waiting = (
-    <Box flexDirection="column">
-      {gates.length + gated.length === 0 && <Text dimColor>Nothing waits on you.</Text>}
-      {gates.map(a => {
-        const isCurrent = a === current
-        return (
-          <Box flexDirection="column" marginBottom={1}>
-            <Box flexDirection="row" columnGap={1}>
-              <Box width={3} flexShrink={0}>
-                <Text bold color={isCurrent ? 'cyan' : undefined}>{isCurrent ? '▸' : '·'}</Text>
-              </Box>
-              <Box width={4} flexShrink={0}>
-                <Text dimColor>{a.id}</Text>
-              </Box>
-              <Box width={9} flexShrink={0}>
-                <Text dimColor>{a.kind}</Text>
-              </Box>
-              <Text bold={isCurrent} wrap="wrap">{a.text}</Text>
-            </Box>
-            {a.evidence && (
-              <Box paddingLeft={17}>
-                <Text dimColor wrap="wrap">evidence: {clip(a.evidence, 160)}</Text>
-              </Box>
-            )}
-            {v.rejecting !== a.id && (
-              <Box flexDirection="row" columnGap={3} paddingLeft={17}>
-                <Button key={'yes-' + a.id} label="answers" plain {...hk('y', isCurrent)} onPress={() => prove(a.id)} />
-                <Button key={'no-' + a.id} label="doesn't, say why" plain {...hk('n', isCurrent)} onPress={() => setView($, { rejecting: a.id })} />
-              </Box>
-            )}
-            {v.rejecting === a.id && (
-              <Box paddingLeft={17}>
-                <Input
-                  key={'why-' + a.id}
-                  label="What is wrong"
-                  placeholder="your words become an acceptance row; empty Enter cancels"
-                  value=""
-                  submitLabel="record"
-                  autoFocus
-                  onSubmit={async (text: string) => {
-                    await setView($, { rejecting: null })
-                    if (text.trim()) await callout(a.id, text.trim())
-                  }}
-                />
-              </Box>
-            )}
-          </Box>
-        )
-      })}
-      {gated.map(t => (
-        <Box flexDirection="row" columnGap={1}>
-          <Box width={3} flexShrink={0}>
-            <Text color="yellow">⊘</Text>
-          </Box>
-          <Box width={4} flexShrink={0}>
-            <Text dimColor>#{t.id}</Text>
-          </Box>
-          <Box width={40} flexShrink={0}>
-            <Text wrap="truncate-end">{clip(firstLine(t.subject), 38)}</Text>
-          </Box>
-          <Text dimColor wrap="truncate-end">{(t.gate ?? '').replace(/^USER:\s*/, '')}</Text>
-        </Box>
-      ))}
-    </Box>
-  )
-
-  const rowsBody = (
-    <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={1}>
-        <Box width={3} flexShrink={0}>
-          <Text dimColor> </Text>
-        </Box>
-        <Box width={4} flexShrink={0}>
-          <Text dimColor>id</Text>
-        </Box>
-        <Box width={9} flexShrink={0}>
-          <Text dimColor>state</Text>
-        </Box>
-        <Text dimColor>subject</Text>
-      </Box>
-      {milestones.map(m => {
-        const rows = goal.tasks.filter(t => (t.milestone ?? 'no milestone') === m)
-        const done = rows.filter(r => r.state === 'done')
-        const rest = v.showDone ? rows : rows.filter(r => r.state !== 'done')
-        if (!rest.length && !done.length) return null
-        return (
-          <Box flexDirection="column" marginTop={1}>
-            <Text dimColor wrap="truncate-end">
-              {'─ ' + done.length + '/' + rows.length + ' done · '}
-              {mName(m)}
-            </Text>
-            {rest.map(t => (
-              <Box flexDirection="row" columnGap={1}>
-                <Box width={3} flexShrink={0}>
-                  <Text color={color[t.state]}>{glyph[t.state] ?? '○'}</Text>
-                </Box>
-                <Box width={4} flexShrink={0}>
-                  <Text dimColor>#{t.id}</Text>
-                </Box>
-                <Box width={9} flexShrink={0}>
-                  <Text dimColor={t.state === 'done'} wrap="truncate-end">{STATE_LABEL[t.state] ?? t.state}</Text>
-                </Box>
-                <Text dimColor={t.state === 'done'} wrap="truncate-end">{firstLine(t.subject)}</Text>
-                {t.blockedBy.length > 0 && <Text dimColor> after {t.blockedBy.join(',')}</Text>}
-              </Box>
-            ))}
-          </Box>
-        )
-      })}
-      <Box marginTop={1}>
-        <Button key="done" label={v.showDone ? 'fold done rows' : 'show done rows'} plain {...hk('d')} onPress={() => setView($, { showDone: !v.showDone })} />
-      </Box>
-    </Box>
-  )
-
-  return (
-    <Box flexDirection="column">
-      {section(el, 'Goal', goalRecord, 'cyan')}
-      {section(el, gates.length + gated.length ? 'Waiting on you · ' + (gates.length + gated.length) : 'Waiting on you', waiting, gates.length + gated.length ? 'yellow' : undefined)}
-      {section(el, 'Rows · ' + ready.length + ' agent-ready · ' + doneCount + '/' + goal.tasks.length + ' done', rowsBody)}
-    </Box>
-  )
 }
 
 // The main loop stopped: note when, and whether agent-ready rows were left open.
@@ -1111,7 +324,6 @@ function continueRow($: $T, el: El, openRows: number) {
         key="idle-continue"
         label="continue"
         variant="primary"
-        {...hk('c')}
         onPress={async () => {
           await update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))
           await $.prompt.submit({
@@ -1119,145 +331,25 @@ function continueRow($: $T, el: El, openRows: number) {
           })
         }}
       />
-      <Button key="idle-dismiss" label="not now" {...hk('x')} onPress={() => update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))} />
+      <Button key="idle-dismiss" label="not now" onPress={() => update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))} />
     </Box>
   )
 }
 
-// Fleet: sub-agent seats, running and landed, and whether each wrote its output.
+// Seats: tracked only so a landing can toast and an unread report can wake.
 
 const runningSeats = (seats: Seat[]) => seats.filter(s => s.endedAt === null)
 
-async function landSeat($: $T, match: (s: Seat) => boolean, resolvedModel: string | null, sw: Switches) {
+async function landSeat($: $T, match: (s: Seat) => boolean) {
   const now = await $.clock.now()
   const seats = await read($, seatsAtom)
   const seat = seats.find(s => s.endedAt === null && match(s))
   if (!seat) return
   const hasOutput = seat.outputPath ? await fileExists($, abs(seat.outputPath)) : null
   const durationMs = now - seat.startedAt
-  await update($, seatsAtom, list => list.map(s => (s.id === seat.id ? { ...s, endedAt: now, durationMs, hasOutput, resolvedModel: resolvedModel ?? s.resolvedModel } : s)))
-  let verb = 'landed'
-  if (sw.fun) {
-    const f = await read($, funAtom)
-    const pool = LANDING.filter(w => w !== f.lastLanding)
-    verb = pool[Math.floor((now / 1000) % pool.length)] ?? 'landed'
-    await update($, funAtom, x => ({ ...x, lastLanding: verb }))
-  }
+  await update($, seatsAtom, list => list.map(s => (s.id === seat.id ? { ...s, endedAt: now, durationMs, hasOutput } : s)))
   const out = seat.outputPath ? (hasOutput ? ' · output ✓' : ' · output MISSING') : ''
-  $.ui.toast('✓ ' + seat.name + ' ' + verb + ' in ' + dur(durationMs) + out, { timeoutMs: 7_000 })
-  if (sw.sound) void run($, ['afplay', '/System/Library/Sounds/Glass.aiff'], { timeoutMs: 4_000 })
-}
-
-async function fleetTab($: $T, el: El, v: View, now: number) {
-  const { Box, Text, Button } = el
-  const seats = await read($, seatsAtom)
-  const live = runningSeats(seats)
-  const landed = seats.filter(s => s.endedAt !== null).sort((a, b) => b.endedAt! - a.endedAt!)
-  const all = [...live, ...landed]
-  const selId = all.some(s => s.id === v.seatSel) ? v.seatSel : (all[0]?.id ?? null)
-  const sel = all.find(s => s.id === selId)
-
-  const shownLanded = landed.slice(0, 8)
-  const choose = (id: string) => setView($, { seatSel: id })
-  const cols = [{ text: 'seat', width: 24 }, { text: 'model', width: 10 }, { text: 'time', width: 8 }, { text: 'output' }]
-  const row = (s: Seat) => {
-    const isLive = s.endedAt === null
-    const out = isLive ? (s.isBackground ? '◐ running · bg' : '◐ running') : !s.outputPath ? '·' : s.hasOutput ? 'output ✓' : 'no output ✗'
-    return listRow(el, 'seat-' + s.id, s.id === selId, () => choose(s.id), [
-      { text: clip(s.name, 24), width: 24 },
-      { text: s.resolvedModel ?? s.model, width: 10 },
-      { text: dur((s.endedAt ?? now) - s.startedAt), width: 8 },
-      { text: out, color: isLive ? 'yellow' : !s.outputPath ? undefined : s.hasOutput ? 'green' : 'red' },
-    ])
-  }
-  const actions = sel && [
-    sel.hasOutput && (
-      <Button
-        key="seat-preview"
-        label="preview output"
-        plain
-        {...hk('p')}
-        onPress={async () => {
-          const text = (await readText($, abs(sel.outputPath!))) ?? '(could not read the file)'
-          await openPreview($, sel.name + ' output', text, abs(sel.outputPath!))
-        }}
-      />
-    ),
-    sel.hasOutput && (
-      <Button
-        key="seat-open"
-        label="open"
-        plain
-        {...hk('o')}
-        onPress={async () => {
-          const r = await run($, ['open', abs(sel.outputPath!)], { timeoutMs: 5_000 })
-          if (!r.ok) $.ui.toast('Could not open: ' + clip(r.err, 80))
-        }}
-      />
-    ),
-    sel.outputPath && (
-      <Button
-        key="seat-copy"
-        label="copy path"
-        plain
-        {...hk('c')}
-        onPress={async (press: UiPressArgument) => {
-          const r = await $.ui.copy({ text: abs(sel.outputPath!), surface: press.surface })
-          $.ui.toast(r.isCopied ? 'Copied ' + abs(sel.outputPath!) : 'Could not copy: ' + r.reason)
-        }}
-      />
-    ),
-    sel.hasOutput && (
-      <Button
-        key="seat-quote"
-        label="attach"
-        plain
-        {...hk('q')}
-        onPress={async () => {
-          await $.prompt.fill({ text: '@' + abs(sel.outputPath!) + ' ', mode: 'insert' })
-          $.ui.toast('Attached ' + sel.name + ' output to your prompt.')
-        }}
-      />
-    ),
-  ].filter(Boolean)
-
-  return (
-    <Box flexDirection="column">
-      {toolbar(el, moveButtons($, el, [...live, ...shownLanded].map(s => s.id), selId, choose))}
-      {section(
-        el,
-        'Running · ' + live.length,
-        <Box flexDirection="column">
-          {live.length === 0 ? <Text dimColor>Nothing running</Text> : listHead(el, cols)}
-          {live.map(row)}
-        </Box>,
-        live.length ? 'yellow' : undefined,
-      )}
-      {section(
-        el,
-        'Landed · ' + landed.length,
-        <Box flexDirection="column">
-          {landed.length === 0 ? <Text dimColor>None yet this session.</Text> : listHead(el, cols)}
-          {shownLanded.map(row)}
-          {landed.length > shownLanded.length && <Text dimColor>  +{landed.length - shownLanded.length} older</Text>}
-        </Box>,
-      )}
-      {sel &&
-        detailFrame(
-          el,
-          sel.name,
-          actions && actions.length ? actions : null,
-          <Box flexDirection="column">
-            <Text wrap="wrap">{sel.desc}</Text>
-            <Text dimColor>
-              {sel.type} · requested {sel.model}
-              {sel.resolvedModel ? ' · ran on ' + sel.resolvedModel : sel.endedAt === null ? ' · resolved model shows on landing' : ' · resolved model not reported'}
-            </Text>
-            <Text dimColor wrap="truncate-start">{sel.outputPath ? 'output: ' + tilde(abs(sel.outputPath)) : 'no output path in the dispatch prompt'}</Text>
-          </Box>,
-        )}
-    </Box>
-  )
+  $.ui.toast('✓ ' + seat.name + ' landed in ' + dur(durationMs) + out, { timeoutMs: 7_000 })
 }
 
 // A background report that landed while the session was idle and nothing has
@@ -1276,13 +368,12 @@ async function wakeForUnreadSeats($: $T) {
   })
 }
 
-// Wakes for an idle session, the ipc inbox, and decision pages.
+// Wakes: the ipc inbox and decision pages.
 
-type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; toAlias?: string; body?: string; ts?: number }
+type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; ts?: number }
 
-// The Inbox shows two read-only sources: the project mailbox (mail waiting for
-// any session here) and the ipc log for this session's own aliases, which holds
-// what it sent and what was sent to it, delivered or not, for the last day.
+// What waits for this session in ipc: the project mailbox plus this session's
+// own inboxes, peeked and never consumed. Bodies are never read into the mod.
 async function refreshMail($: $T) {
   const now = await $.clock.now()
   const project = await run($, ['claude-ipc', 'inbox', '--project'], { timeoutMs: 8_000 })
@@ -1291,35 +382,17 @@ async function refreshMail($: $T) {
     return
   }
   const aliases = (await aliasesOf($)).filter(a => !/^[0-9a-f]{8}$/.test(a))
-  const since = String(Math.floor(now / 1000) - 86_400)
-  const raw: RawMsg[] = [...jsonOr<{ messages?: RawMsg[] }>(project.out, {}).messages ?? []]
-  // New means nobody has handled it yet: still waiting in the project mailbox or
-  // in one of this session's own inboxes (peeked, never consumed).
-  const pending = new Set(raw.map(m => String(m.id)))
+  const raw: RawMsg[] = [...(jsonOr<{ messages?: RawMsg[] }>(project.out, {}).messages ?? [])]
   for (const alias of aliases) {
     const box = await run($, ['claude-ipc', 'inbox', alias], { timeoutMs: 8_000 })
-    if (box.ok) for (const m of jsonOr<{ messages?: RawMsg[] }>(box.out, {}).messages ?? []) pending.add(String(m.id))
-    const log = await run($, ['claude-ipc', 'log', '--peer', alias, '--since', since], { timeoutMs: 8_000 })
-    if (log.ok) raw.push(...(jsonOr<{ messages?: RawMsg[] }>(log.out, {}).messages ?? []))
+    if (box.ok) raw.push(...(jsonOr<{ messages?: RawMsg[] }>(box.out, {}).messages ?? []))
   }
-  const prev = await read($, mailAtom)
-  const seen = new Map(prev.messages.map(m => [m.id, m]))
   const byId = new Map<string, Msg>()
   for (const m of raw) {
     if (!m.id || byId.has(String(m.id))) continue
     const from = String(m.fromAlias ?? m.from ?? '?')
-    const isSent = aliases.includes(from)
-    byId.set(String(m.id), {
-      id: String(m.id),
-      from,
-      to: String(m.toAlias ?? ''),
-      isSent,
-      kind: String(m.kind ?? 'inform'),
-      at: typeof m.ts === 'number' ? (m.ts > 1e12 ? m.ts : m.ts * 1000) : now,
-      text: String(m.body ?? ''),
-      // Sent, or already handled by the session it was for: nothing waits on the owner.
-      isRead: isSent || !pending.has(String(m.id)) || (seen.get(String(m.id))?.isRead ?? false),
-    })
+    const at = typeof m.ts === 'number' ? (m.ts > 1e12 ? m.ts : m.ts * 1000) : now
+    byId.set(String(m.id), { id: String(m.id), from, kind: String(m.kind ?? 'inform'), at, isRead: aliases.includes(from) })
   }
   await update($, mailAtom, m => ({ ...m, messages: [...byId.values()], at: now, error: null }))
 }
@@ -1343,7 +416,7 @@ async function wakeForMail($: $T) {
   })
 }
 
-type Cfg = { title?: string; intro?: string; copyHeader?: string; origin?: { session?: string; project?: string; created?: string }; decisions?: Record<string, any>[]; sections?: Record<string, any>[] }
+type Cfg = { title?: string; origin?: { session?: string; project?: string }; decisions?: unknown[]; sections?: unknown[] }
 
 async function refreshDecide($: $T) {
   const now = await $.clock.now()
@@ -1359,39 +432,12 @@ async function refreshDecide($: $T) {
       continue
     }
     const cfg = jsonOr<Cfg>(await readText($, DP_REG + '/' + slug + '/config.json'), {})
-    sets.push({
-      slug,
-      title: cfg.title ?? slug,
-      intro: cfg.intro ?? '',
-      project: cfg.origin?.project ?? '',
-      session: cfg.origin?.session ?? '',
-      created: cfg.origin?.created ?? '',
-      items: (cfg.decisions ?? []).map((d): DecideItem => ({
-        id: String(d.id),
-        question: String(d.question ?? ''),
-        context: String(d.context ?? ''),
-        options: ((d.options ?? []) as Record<string, any>[]).map(o => ({ code: String(o.code), label: String(o.label ?? ''), rec: o.rec === true })),
-        kind: 'decision' as const,
-      })).concat(
-        (cfg.sections ?? []).map((s): DecideItem => ({
-          id: String(s.id),
-          question: String(s.title ?? s.id) + (s.prio ? ' · ' + String(s.prio) : ''),
-          context: [s.group ? String(s.group) : '', String(s.read ?? ''), ...Object.entries((s.slots ?? {}) as Record<string, unknown>).map(([k, v]) => k + ': ' + String(v))].filter(Boolean).join('\n\n'),
-          options: [
-            { code: 'agree', label: 'agree', rec: true },
-            { code: 'disagree', label: 'DISAGREE', rec: false },
-          ],
-          kind: 'section' as const,
-        })),
-      ),
-    })
+    sets.push({ slug, title: cfg.title ?? slug, project: cfg.origin?.project ?? '', session: cfg.origin?.session ?? '', calls: (cfg.decisions ?? []).length + (cfg.sections ?? []).length })
   }
   // Sets seen pending earlier stay, even once the file drops them: those are
   // the ones whose answer we watch for.
   for (const p of prev.pending) if (!sets.some(s => s.slug === p.slug)) sets.push(p)
-  const picks = { ...prev.picks }
-  for (const s of sets) for (const it of s.items) if (!picks[s.slug + '/' + it.id]) picks[s.slug + '/' + it.id] = it.options.find(o => o.rec)?.code ?? it.options[0]?.code ?? 'a'
-  await update($, decideAtom, d => ({ ...d, pending: sets, picks, at: now }))
+  await update($, decideAtom, d => ({ ...d, pending: sets, at: now }))
 }
 
 const projectMatches = (cwd: string, project: string) => project !== '' && cwd.endsWith(project.replace(/^~/, ''))
@@ -1425,8 +471,7 @@ async function wakeForAnswers($: $T, cwd: string) {
   const idle = await read($, idleAtom)
   const aliases = await aliasesOf($)
   for (const s of d.pending) {
-    if (d.answered.includes(s.slug)) continue
-    if (!(isCurrentPage(s, cwd, aliases) || d.submitted.includes(s.slug))) continue
+    if (d.answered.includes(s.slug) || !isCurrentPage(s, cwd, aliases)) continue
     if (!(await fileExists($, DP_REG + '/' + s.slug + '/.answer.json'))) continue
     await update($, decideAtom, x => ({ ...x, answered: [...x.answered, s.slug] }))
     $.ui.toast('Decision page ' + s.slug + ' was answered.', { timeoutMs: 6_000 })
@@ -1436,657 +481,6 @@ async function wakeForAnswers($: $T, cwd: string) {
       })
     }
   }
-}
-
-async function inboxTab($: $T, el: El, v: View, now: number) {
-  const { Box, Text, Button, Input } = el
-  const mail = await read($, mailAtom)
-  const list = [...mail.messages].sort((a, b) => b.at - a.at)
-  const selId = list.some(m => m.id === v.msgSel) ? v.msgSel : (list[0]?.id ?? null)
-  const sel = list.find(m => m.id === selId)
-  const markRead = (id: string, isRead: boolean) => update($, mailAtom, m => ({ ...m, messages: m.messages.map(x => (x.id === id ? { ...x, isRead } : x)) }))
-
-  const pick = async (id: string) => {
-    await setView($, { msgSel: id, isReplying: false })
-    const m = list.find(x => x.id === id)
-    if (m && !m.isRead) await markRead(id, true)
-  }
-  const unread = list.filter(m => !m.isRead).length
-  const sent = list.filter(m => m.isSent).length
-
-  const actions = sel && !v.isReplying && [
-    !sel.isSent && <Button key="reply-open" label="reply" plain {...hk('y')} onPress={() => setView($, { isReplying: true })} />,
-    <Button
-      key="msg-quote"
-      label="quote into prompt"
-      plain
-      {...hk('i')}
-      onPress={async () => {
-        await $.prompt.fill({ text: '> ' + sel.from + ': ' + sel.text.replace(/\n/g, '\n> ') + '\n\n', mode: 'insert' })
-        $.ui.toast('Quoted into your prompt. Nothing is sent until you press Enter.')
-      }}
-    />,
-    !sel.isSent && <Button key="msg-read" label={sel.isRead ? 'mark unread' : 'mark read'} plain {...hk('m')} onPress={() => markRead(sel.id, !sel.isRead)} />,
-    previewButton($, el, 'msg-preview', sel.isSent ? 'mail to ' + sel.to : 'mail from ' + sel.from, sel.text),
-  ].filter(Boolean)
-
-  return (
-    <Box flexDirection="column">
-      {toolbar(el, [
-        ...moveButtons($, el, list.map(m => m.id), selId, pick),
-        <Button
-          key="mail-refresh"
-          label="refresh"
-          plain
-          {...hk('r')}
-          onPress={async () => {
-            await refreshMail($)
-            await refreshStatus($)
-          }}
-        />,
-        <Text dimColor>{mail.error ? 'ipc: ' + mail.error : mail.at ? 'checked ' + agoPhrase(now, mail.at) : 'not checked yet'}</Text>,
-      ])}
-      {section(
-        el,
-        list.length ? plural(list.length, 'message') + ' · ' + unread + ' new · ' + sent + ' sent' : 'Inbox',
-        <Box flexDirection="column">
-          {list.length === 0 && <Text dimColor>No mail to or from this session, or in this project's mailbox, in the last day.</Text>}
-          {list.length > 0 && listHead(el, [{ text: '', width: 1 }, { text: 'from / to', width: 20 }, { text: 'kind', width: 9 }, { text: 'age', width: 5 }, { text: 'first line' }])}
-          {list.map(m =>
-            listRow(el, 'msg-' + m.id, m.id === selId, () => pick(m.id), [
-              { text: m.isSent ? '↗' : m.isRead ? '○' : '●', width: 1 },
-              { text: clip(m.isSent ? '→ ' + (m.to || '?') : m.from, 20), width: 20, press: true },
-              { text: m.kind, width: 9 },
-              { text: ago(now, m.at), width: 5 },
-              { text: firstLine(m.text), bold: !m.isRead },
-            ]),
-          )}
-        </Box>,
-      )}
-      {sel &&
-        detailFrame(
-          el,
-          sel.isSent ? 'you → ' + (sel.to || '?') : sel.from,
-          actions,
-          <Box flexDirection="column">
-            <Text dimColor wrap="wrap">
-              {sel.isSent ? sel.kind + ' · sent ' + agoPhrase(now, sel.at) + ' by this session' : sel.kind + ' · ' + agoPhrase(now, sel.at) + ' · peer text: shown to you, never handed to the model unless you attach it'}
-            </Text>
-            <Text wrap="wrap">{clip(sel.text, 700)}</Text>
-            {v.isReplying && (
-              <Box marginTop={1}>
-                <Input
-                  key="reply"
-                  label="Reply"
-                  placeholder={'to ' + sel.from + '; empty Enter cancels'}
-                  value=""
-                  submitLabel="send"
-                  autoFocus
-                  onSubmit={async (text: string) => {
-                    await setView($, { isReplying: false })
-                    if (!text.trim()) return
-                    const r = await run($, ['claude-ipc', 'reply', sel.id, text.trim()], { timeoutMs: 8_000 })
-                    $.ui.toast(r.ok ? 'Replied to ' + sel.from + '.' : 'reply failed: ' + clip(r.err || r.out, 100))
-                    await markRead(sel.id, true)
-                  }}
-                />
-              </Box>
-            )}
-          </Box>,
-        )}
-    </Box>
-  )
-}
-
-// Router: hook text tagged for the owner is drawn for them instead of handed to the model.
-
-// Many attachments land on one prompt at once; concurrent writes to the same
-// value exhaust the version retries, so nudge rows are appended one at a time.
-let nudgeQueue: Promise<void> = Promise.resolve()
-function recordNudge($: $T, n: Omit<Nudge, 'id' | 'snoozed' | 'feedback'>): Promise<void> {
-  const id = 'n-' + n.at.toString(36) + '-' + Math.floor(Math.random() * 1e6).toString(36)
-  nudgeQueue = nudgeQueue
-    .then(() => update($, nudgesAtom, list => [{ ...n, id, snoozed: null, feedback: null }, ...list].slice(0, 300)))
-    .then(() => undefined)
-    .catch(() => undefined)
-  return nudgeQueue
-}
-
-// surface="ask": the engine's own question dialog, the answer handed to the
-// model as a row only the owner could have written.
-async function askOwner($: $T, block: OwnerBlock) {
-  const lines = block.text.split('\n').map(l => l.trim()).filter(Boolean)
-  const question = lines[0] ?? 'Your call?'
-  const options = lines.filter(l => l.startsWith('- ')).map(l => l.slice(2).trim()).slice(0, 4)
-  try {
-    const answer = await $.ui.ask(question, options.length >= 2 ? options : ['Yes', 'No'])
-    await $.session.append({
-      message: { type: 'user', content: [{ type: 'text', text: '[owner answered the ' + block.hook + ' question "' + clip(question, 120) + '"] ' + answer }] },
-    })
-    $.ui.toast('Answer sent to the model: ' + clip(answer, 60))
-  } catch {
-    /* dismissed, or nobody to ask */
-  }
-}
-
-async function dispatchBlock($: $T, block: OwnerBlock, event: string) {
-  const now = await $.clock.now()
-  if (block.surface === 'toast') $.ui.toast(block.hook + ': ' + clip(firstLine(block.text), 180), { timeoutMs: 7_000 })
-  else if (block.surface === 'log') $.ui.log(block.hook + ': ' + clip(block.text.replace(/\n+/g, ' · '), 400))
-  else if (block.surface === 'band') await update($, noticesAtom, list => [{ id: 'b-' + now.toString(36) + '-' + list.length, hook: block.hook, text: block.text, at: now }, ...list].slice(0, 12))
-  else if (block.surface === 'ask') void askOwner($, block)
-  else if (block.surface === 'pane:tasks') $.ui.toast(block.hook + ': the task table is in /hub tasks', { timeoutMs: 5_000 })
-  await recordNudge($, { hook: block.hook, event, audience: 'owner', action: block.surface, chars: block.text.length, text: block.text, detail: 'routed to ' + block.surface, at: now, heeded: 'n/a' })
-}
-
-// A Stop hook that blocked reads as a raw hook error; say which one, in one dim line.
-function logStopBlock($: $T, block: string) {
-  const first = firstLine(block)
-  const name = first.match(/^\[([\w:-]+)\]/)?.[1] ?? first.match(/^([A-Z][A-Z -]{3,40})/)?.[1]?.trim() ?? 'a Stop hook'
-  $.ui.log('⛔ ' + name + ' sent the reply back: ' + clip(first.replace(/^\[[\w:-]+\]\s*/, ''), 140))
-}
-
-// Nudges: what fired this session, with snooze and feedback.
-
-// Merge the warn ledger's rows for this session into the panel, so blocks and
-// nudges the router never saw (PreToolUse guards) are listed too.
-async function refreshNudgesFromLedger($: $T) {
-  const sid = await $.session.id().catch(() => '')
-  if (!sid) return
-  const rows = await tailJsonl($, GCC + '/hooks/warn-events.jsonl', 400)
-  const mine = rows.filter(r => r.kind === 'warn' && r.sid === sid)
-  const have = await read($, nudgesAtom)
-  const known = new Set(have.map(n => n.id))
-  const fresh: Nudge[] = []
-  for (const r of mine) {
-    const id = 'w-' + String(r.id ?? r.ts)
-    if (known.has(id)) continue
-    fresh.push({
-      id,
-      hook: String(r.hook_id ?? 'hook'),
-      event: 'ledger',
-      audience: r.action === 'block' ? 'model' : 'both',
-      action: String(r.action ?? 'nudge'),
-      chars: 0,
-      text: String(r.detail ?? r.target ?? ''),
-      detail: [r.action, r.target, r.detail].filter(Boolean).join(' · '),
-      at: r.ts ? Date.parse(String(r.ts)) : 0,
-      heeded: String(r.heeded ?? 'unknown'),
-      snoozed: null,
-      feedback: null,
-    })
-  }
-  if (fresh.length) await update($, nudgesAtom, list => [...fresh, ...list].sort((a, b) => b.at - a.at).slice(0, 300))
-}
-
-async function nudgesTab($: $T, el: El, v: View, now: number) {
-  const { Box, Text, Button, Input, Select } = el
-  const list = [...(await read($, nudgesAtom))].sort((a, b) => b.at - a.at)
-  const selId = list.some(n => n.id === v.nudgeSel) ? v.nudgeSel : (list[0]?.id ?? null)
-  const sel = list.find(n => n.id === selId)
-  const toYou = list.filter(n => n.audience === 'owner').reduce((s, n) => s + n.chars, 0)
-  const toModel = list.filter(n => n.audience !== 'owner').reduce((s, n) => s + n.chars, 0)
-  const blocks = list.filter(n => n.action === 'block').length
-  const badge: Record<Audience, [string, string | undefined]> = { owner: ['you  ', 'cyan'], model: ['model', undefined], both: ['both ', 'yellow'] }
-  const patch = (id: string, p: Partial<Nudge>) => update($, nudgesAtom, data => data.map(n => (n.id === id ? { ...n, ...p } : n)))
-  const mode = (m: NudgeMode) => setView($, { nudgeMode: v.nudgeMode === m ? 'text' : m })
-  const sid = sid8(await $.session.id().catch(() => ''))
-
-  const shown = list.slice(0, 14)
-  const choose = (id: string) => setView($, { nudgeSel: id, nudgeMode: 'text' })
-  const status = (n: Nudge) => [n.heeded === 'no' ? 'ignored' : n.heeded === 'yes' ? 'heeded' : '', n.snoozed ? 'snoozed ' + n.snoozed : '', n.feedback ?? ''].filter(Boolean).join(' · ')
-
-  return (
-    <Box flexDirection="column">
-      {toolbar(el, [...moveButtons($, el, shown.map(n => n.id), selId, choose), <Button key="nudge-refresh" label="refresh" plain {...hk('r')} onPress={() => refreshNudgesFromLedger($)} />])}
-      {section(
-        el,
-        list.length ? plural(list.length, 'nudge') + ' · ' + toYou + 'c drawn for you · ' + toModel + 'c to the model · ' + plural(blocks, 'block') : 'Nudges',
-        <Box flexDirection="column">
-          {list.length === 0 && <Text dimColor>Nothing has fired yet this session.</Text>}
-          {list.length > 0 && listHead(el, [{ text: 'to', width: 6 }, { text: 'hook', width: 24 }, { text: 'action', width: 8 }, { text: 'age', width: 5 }, { text: 'size', width: 6 }, { text: 'status' }])}
-          {shown.map(n => {
-            const [word, color] = badge[n.audience]
-            return listRow(el, 'nudge-' + n.id, n.id === selId, () => choose(n.id), [
-              { text: word.trim(), width: 6, color },
-              { text: clip(n.hook, 24), width: 24, press: true },
-              { text: n.action, width: 8 },
-              { text: n.at ? ago(now, n.at) : '', width: 5 },
-              { text: n.chars ? n.chars + 'c' : '', width: 6 },
-              { text: status(n) },
-            ])
-          })}
-          {list.length > shown.length && <Text dimColor>  +{list.length - shown.length} older</Text>}
-        </Box>,
-      )}
-      {sel && (
-        <Box flexDirection="column">
-          {detailFrame(
-            el,
-            sel.hook,
-            [
-              <Button key="m-text" label="text" plain dimColor={v.nudgeMode !== 'text'} {...hk('t')} onPress={() => mode('text')} />,
-              <Button key="m-why" label="why it fired" plain dimColor={v.nudgeMode !== 'why'} {...hk('w')} onPress={() => mode('why')} />,
-              <Button key="m-snooze" label="snooze" plain dimColor={v.nudgeMode !== 'snooze'} {...hk('s')} onPress={() => mode('snooze')} />,
-              <Button key="m-fb" label="feedback" plain dimColor={v.nudgeMode !== 'feedback'} {...hk('f')} onPress={() => mode('feedback')} />,
-              previewButton($, el, 'nudge-preview', sel.hook, sel.text || '(no text recorded)'),
-            ],
-            <Box flexDirection="column">
-          {v.nudgeMode === 'text' && <Text wrap="wrap">{clip(sel.text || '(no text recorded)', 600)}</Text>}
-          {v.nudgeMode === 'why' && (
-            <Box flexDirection="column">
-              <Text wrap="wrap">{sel.detail || 'No trigger detail was recorded for this one.'}</Text>
-              <Text dimColor>Hook {sel.hook} on {sel.event} · {sel.audience === 'owner' ? 'drawn for you' : 'handed to the model'}</Text>
-            </Box>
-          )}
-          {v.nudgeMode === 'snooze' && (
-            <Box flexDirection="column">
-              <Select key="snooze-for" label="For" options={SNOOZE} value={v.snoozeFor} onSelect={(value: string) => setView($, { snoozeFor: value })} />
-              <Input
-                key="snooze-why"
-                label="Reason (12+ chars)"
-                placeholder="why this is noise right now"
-                value=""
-                submitLabel="snooze"
-                onSubmit={async (reason: string) => {
-                  const why = reason.trim().length >= 12 ? reason.trim() : 'owner snoozed it from the gcc pane: ' + reason.trim()
-                  const r = await run($, ['bash', GCC + '/scripts/hooks/hook-snooze.sh', 'add', sel.hook, '--for', v.snoozeFor, '--scope', 'session', '--reason', why, '--approved-by', 'owner', '--session', sid], { timeoutMs: 8_000 })
-                  if (r.ok) await patch(sel.id, { snoozed: v.snoozeFor })
-                  await setView($, { nudgeMode: 'text' })
-                  $.ui.toast(r.ok ? clip(r.out.trim(), 160) : 'snooze refused: ' + clip(r.err || r.out, 140))
-                }}
-              />
-              <Text dimColor wrap="wrap">
-                runs: hook-snooze.sh add {sel.hook} --for {v.snoozeFor} --scope session --approved-by owner --reason "…"
-              </Text>
-            </Box>
-          )}
-          {v.nudgeMode === 'feedback' && (
-            <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-              {FEEDBACK.map(([kind, key, label]) => (
-                <Button
-                  key={'fb-' + kind}
-                  label={label}
-                  plain
-                  {...hk(key)}
-                  onPress={async () => {
-                    const r = await run($, ['bash', GCC + '/scripts/hooks/hook-feedback.sh', '--hook', sel.hook, '--kind', kind, '--note', 'owner pressed ' + label + ' in the gcc pane'], { timeoutMs: 8_000 })
-                    if (r.ok) await patch(sel.id, { feedback: label })
-                    await setView($, { nudgeMode: 'text' })
-                    $.ui.toast(r.ok ? 'Feedback "' + label + '" recorded on ' + sel.hook : 'feedback failed: ' + clip(r.err || r.out, 120))
-                  }}
-                />
-              ))}
-            </Box>
-          )}
-            </Box>,
-          )}
-        </Box>
-      )}
-    </Box>
-  )
-}
-
-// Decide: decision pages answered without leaving the terminal.
-
-// Submit goes to the same server route the web page uses, so the origin
-// session is told the same way; with the server down the answer file is
-// written directly, which is what the agent's read command looks for.
-async function submitDecision($: $T, set: DecideSet) {
-  const d = await read($, decideAtom)
-  const answer = answerString(set, d.picks, d.notes)
-  let how = ''
-  try {
-    const r = await $.http.fetch('http://localhost:5106/api/dp-submit/' + encodeURIComponent(set.slug), {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ answer }),
-    })
-    if (r.ok) how = 'through the kanban server'
-    else if (r.status === 409) how = 'refused: the page is already answered'
-  } catch {
-    /* server down: write the file the agent reads */
-  }
-  if (!how) {
-    const now = await $.clock.now()
-    await $.fs.write(DP_REG + '/' + set.slug + '/.answer.json', JSON.stringify({ answer, submitted_at: Math.floor(now / 1000) }, null, 1))
-    const pending = ((await readText($, DP_REG + '/.pending.txt')) ?? '').split('\n').filter(s => s.trim() && s.trim() !== set.slug)
-    await $.fs.write(DP_REG + '/.pending.txt', pending.join('\n') + (pending.length ? '\n' : ''))
-    how = 'written to its answer file (server was down)'
-  }
-  if (!how.startsWith('refused')) await update($, decideAtom, x => ({ ...x, submitted: [...x.submitted, set.slug] }))
-  $.ui.toast('Submitted ' + set.slug + ' ' + how + '.', { timeoutMs: 7_000 })
-}
-
-async function decideTab($: $T, el: El, v: View, cwd: string) {
-  const { Box, Text, Button, Input, Select } = el
-  const d = await read($, decideAtom)
-  const aliases = await aliasesOf($)
-  const all = d.pending.filter(s => !d.submitted.includes(s.slug) && !d.answered.includes(s.slug) && !v.dismissed.includes('dp-' + s.slug))
-  const open = v.showOthers ? all : all.filter(s => isCurrentPage(s, cwd, aliases) || d.submitted.includes(s.slug))
-  const stale = all.length - all.filter(s => isCurrentPage(s, cwd, aliases)).length
-  const mineFirst = [...open].sort((a, b) => Number(projectMatches(cwd, b.project)) - Number(projectMatches(cwd, a.project)) || (Date.parse(b.created) || 0) - (Date.parse(a.created) || 0))
-  const slug = mineFirst.some(s => s.slug === v.decideSlug) ? v.decideSlug : (mineFirst[0]?.slug ?? null)
-  const set = mineFirst.find(s => s.slug === slug)
-  const setPick = (key: string, code: string) => update($, decideAtom, x => ({ ...x, picks: { ...x.picks, [key]: code } }))
-  const setNote = (key: string, note: string) => update($, decideAtom, x => ({ ...x, notes: { ...x.notes, [key]: note } }))
-  const staleToggle = stale > 0 && (
-    <Button key="dp-stale" label={(v.showOthers ? 'hide ' : 'show ') + plural(stale, "other agent's page", "other agents' pages")} plain {...hk('o')} onPress={() => setView($, { showOthers: !v.showOthers })} />
-  )
-
-  if (!open.length)
-    return (
-      <Box flexDirection="column">
-        <Text dimColor>Nothing waiting on you here.</Text>
-        {staleToggle}
-      </Box>
-    )
-
-  const items = set?.items ?? []
-  const qSel = items.some(it => it.id === v.decideSel) ? v.decideSel : (items[0]?.id ?? null)
-  const q = items.find(it => it.id === qSel)
-  const pickOf = (it: DecideSet['items'][number]) => d.picks[set!.slug + '/' + it.id] ?? it.options.find(o => o.rec)?.code ?? 'a'
-  const labelOf = (it: DecideSet['items'][number]) => {
-    const o = it.options.find(x => x.code === pickOf(it))
-    return o ? o.label + (o.rec ? ' (drafted)' : '') : pickOf(it)
-  }
-  const choose = (id: string) => setView($, { decideSel: id })
-  const pagePreview = set && '# ' + set.title + '\n\n' + set.intro + '\n\n' + set.items.map(it => '## ' + it.id + ' ' + it.question + '\n\n' + it.context + '\n\n' + it.options.map(o => '- ' + o.code + ') ' + o.label + (o.rec ? ' (drafted)' : '')).join('\n')).join('\n\n')
-
-  return (
-    <Box flexDirection="column">
-      {toolbar(el, [
-        set && <Button key="dp-submit" label="submit these rulings" variant="primary" {...hk('s')} onPress={() => submitDecision($, set)} />,
-        set && (
-          <Button
-            key="dp-copy"
-            label="copy answer string"
-            plain
-            {...hk('c')}
-            onPress={async (press: UiPressArgument) => {
-              const r = await $.ui.copy({ text: answerString(set, d.picks, d.notes), surface: press.surface })
-              $.ui.toast(r.isCopied ? 'Answer string copied.' : 'Could not copy: ' + r.reason)
-            }}
-          />
-        ),
-        ...moveButtons($, el, items.map(it => it.id), qSel, choose),
-        staleToggle,
-        set && <Button key="dp-dismiss" label="dismiss" plain {...hk('x')} onPress={() => setView($, { dismissed: [...v.dismissed, 'dp-' + set.slug], decideSlug: null })} />,
-      ])}
-      {mineFirst.length > 0 &&
-        section(
-          el,
-          plural(mineFirst.length, 'page'),
-          <Box flexDirection="column">
-            {mineFirst.map(s =>
-              listRow(el, 'dp-' + s.slug, s.slug === slug, () => setView($, { decideSlug: s.slug, decideSel: null }), [
-                { text: clip(s.title, 38), width: 38 },
-                { text: clip(isCurrentPage(s, cwd, aliases) ? 'yours' : s.session || 'other', 20), width: 20 },
-                { text: plural(s.items.length, 'call') },
-              ]),
-            )}
-          </Box>,
-        )}
-      {set &&
-        section(
-          el,
-          set.title,
-          <Box flexDirection="column">
-            <Text dimColor wrap="truncate-end">
-              {set.project || 'no project'} · from {set.session || 'a session'} · {set.created}
-            </Text>
-            {set.intro && <Text wrap="wrap">{clip(set.intro, 220)}</Text>}
-            <Box flexDirection="row" columnGap={3} marginBottom={1}>
-              {previewButton($, el, 'dp-preview', set.title, pagePreview ?? '')}
-              <Text dimColor>web page: http://localhost:5106/dp/{set.slug}/</Text>
-            </Box>
-            {items.length === 0 && <Text dimColor wrap="wrap">This page's questions use a layout the hub cannot draw. p previews it; the web page answers it.</Text>}
-            {items.length > 0 && listHead(el, [{ text: 'id', width: 10 }, { text: 'question', width: 32 }, { text: 'your pick' }])}
-            {items.map(it =>
-              listRow(el, 'q-' + set.slug + '/' + it.id, it.id === qSel, () => choose(it.id), [
-                { text: clip(it.id, 10), width: 10 },
-                { text: clip(it.question, 32), width: 32, press: true },
-                { text: labelOf(it) + (d.notes[set.slug + '/' + it.id] ? ' · note' : ''), color: it.id === qSel ? 'cyan' : undefined },
-              ]),
-            )}
-          </Box>,
-          'cyan',
-        )}
-      {set &&
-        q &&
-        detailFrame(
-          el,
-          q.id + ' · ' + q.question,
-          [<Button key={'long-' + set.slug + '/' + q.id} label="note in the prompt box" plain {...hk('l')} onPress={() => fillPrompt($, DP_NOTE + set.slug + '/' + q.id + ': ' + (d.notes[set.slug + '/' + q.id] ?? ''), 'line')} />],
-          <Box flexDirection="column">
-            {q.context && <Text dimColor wrap="wrap">{q.context}</Text>}
-            <Box marginTop={1}>
-              <Select
-                key={'pick-' + set.slug + '/' + q.id}
-                options={q.options.map(o => ({ value: o.code, label: o.label + (o.rec ? '  (drafted)' : '') }))}
-                value={pickOf(q)}
-                onSelect={(value: string) => setPick(set.slug + '/' + q.id, value)}
-              />
-            </Box>
-            <Input
-              key={'note-' + set.slug + '/' + q.id}
-              label="Note"
-              placeholder="your sentence is the ruling; Enter keeps it"
-              value={d.notes[set.slug + '/' + q.id] ?? ''}
-              submitLabel="keep"
-              onSubmit={(text: string) => setNote(set.slug + '/' + q.id, text)}
-            />
-            {d.notes[set.slug + '/' + q.id] && <Text color="green" wrap="wrap">note: {d.notes[set.slug + '/' + q.id]}</Text>}
-          </Box>,
-          'yellow',
-        )}
-    </Box>
-  )
-}
-
-// Snips: kept selections and bookmarked docs.
-
-async function snipsTab($: $T, el: El, now: number) {
-  const { Box, Text, Button, Input, Select } = el
-  const s = await read($, snipsAtom)
-  const list = s.snippets.filter(x => s.scope === 'all' || x.scope === s.scope)
-  const marks = s.bookmarks.filter(x => s.scope === 'all' || x.scope === s.scope)
-  const selId = list.some(x => x.id === s.sel) ? s.sel : (list[0]?.id ?? null)
-  const sel = list.find(x => x.id === selId)
-  const patch = async (id: string, p: Partial<Snippet>) => {
-    await editSnippet($, id, p)
-    await update($, snipsAtom, x => ({ ...x, editing: null }))
-  }
-  const scopes = [
-    { value: 'all', label: 'all scopes' },
-    { value: 'session', label: 'this session' },
-    { value: 'project', label: 'this project' },
-    { value: 'global', label: 'global' },
-  ]
-  const fill = (cmd: string, text: string) => fillPrompt($, cmd + ' ' + text.replace(/\s+/g, ' ').trim(), 'command')
-
-  return (
-    <Box flexDirection="column">
-      <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-        <Button
-          key="snip-add"
-          label="save selection"
-          plain
-          {...hk('s')}
-          onPress={async () => {
-            const text = await selectedText($)
-            if (!text) return $.ui.toast('Select text with the mouse first (fullscreen terminal), then press s.')
-            await addSnippet($, text, s.scope === 'all' ? 'project' : s.scope)
-          }}
-        />
-        <Select key="snip-scope" options={scopes} value={s.scope} onSelect={(value: string) => update($, snipsAtom, x => ({ ...x, scope: value as Snips['scope'] }))} />
-        <Button key="snip-reload" label="reload" plain {...hk('r')} onPress={() => loadSnips($)} />
-      </Box>
-      {section(
-        el,
-        plural(list.length, 'snippet'),
-        <Box flexDirection="column">
-          {list.length === 0 && <Text dimColor>Select text, then s. Or /hub snip from the prompt.</Text>}
-          {list.length > 0 && listHead(el, [{ text: 'scope', width: 9 }, { text: 'title', width: 34 }, { text: 'age · tags' }])}
-          {list.slice(0, 12).map(x =>
-            listRow(el, 'snip-' + x.id, x.id === selId, () => update($, snipsAtom, y => ({ ...y, sel: x.id, editing: null })), [
-              { text: x.scope, width: 9 },
-              { text: clip(x.title, 34), width: 34, press: true },
-              { text: ago(now, x.ts) + (x.tags.length ? ' · ' + x.tags.join(' ') : '') },
-            ]),
-          )}
-        </Box>,
-      )}
-      {sel && (
-        <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={1} marginBottom={1}>
-          {s.editing === 'title' ? (
-            <Input key={'snip-title-' + sel.id} label="Title" value={sel.title} submitLabel="save" autoFocus onSubmit={(t: string) => patch(sel.id, { title: t.trim() || sel.title })} />
-          ) : (
-            <Text bold wrap="wrap">{sel.title}</Text>
-          )}
-          <Text dimColor wrap="wrap">{clip(sel.text, 300)}</Text>
-          {s.editing === 'notes' ? (
-            <Input key={'snip-notes-' + sel.id} label="Notes" value={sel.notes} submitLabel="save" autoFocus onSubmit={(t: string) => patch(sel.id, { notes: t })} />
-          ) : (
-            <Text wrap="wrap" color={sel.notes ? 'green' : undefined} dimColor={!sel.notes}>{sel.notes || 'no notes yet'}</Text>
-          )}
-          {s.editing === 'tags' && (
-            <Input key={'snip-tags-' + sel.id} label="Tags" value={sel.tags.join(' ')} submitLabel="save" autoFocus onSubmit={(t: string) => patch(sel.id, { tags: t.split(/\s+/).filter(Boolean) })} />
-          )}
-          <Box flexDirection="row" columnGap={3} flexWrap="wrap" marginTop={1}>
-            <Button key="snip-edit-title" label="title" plain {...hk('t')} onPress={() => update($, snipsAtom, x => ({ ...x, editing: 'title' as const }))} />
-            <Button key="snip-edit-notes" label="notes" plain {...hk('n')} onPress={() => update($, snipsAtom, x => ({ ...x, editing: 'notes' as const }))} />
-            <Button key="snip-edit-tags" label="tags" plain {...hk('e')} onPress={() => update($, snipsAtom, x => ({ ...x, editing: 'tags' as const }))} />
-            <Button key="snip-long" label="notes in prompt box" plain {...hk('l')} onPress={() => fillPrompt($, 'snip-note ' + sel.id + ': ' + sel.notes, 'line')} />
-            <Button key="snip-preview" label="preview" plain {...hk('p')} onPress={() => openPreview($, sel.title, '> ' + sel.text.replace(/\n/g, '\n> ') + (sel.notes ? '\n\n' + sel.notes : ''))} />
-            <Button key="snip-quote" label="quote" plain {...hk('q')} onPress={() => $.prompt.fill({ text: '> ' + sel.text.replace(/\n/g, '\n> ') + '\n\n', mode: 'insert' })} />
-            <Button
-              key="snip-copy"
-              label="copy"
-              plain
-              {...hk('c')}
-              onPress={async (press: UiPressArgument) => {
-                const r = await $.ui.copy({ text: sel.text, surface: press.surface })
-                $.ui.toast(r.isCopied ? 'Snippet copied.' : 'Could not copy: ' + r.reason)
-              }}
-            />
-            <Button
-              key="snip-move"
-              label={'scope: ' + sel.scope}
-              plain
-              {...hk('o')}
-              onPress={() => patch(sel.id, { scope: sel.scope === 'session' ? 'project' : sel.scope === 'project' ? 'global' : 'session' })}
-            />
-            <Button
-              key="snip-del"
-              label="delete"
-              plain
-              {...hk('x')}
-              onPress={async () => {
-                await editSnippet($, sel.id, null)
-                await update($, snipsAtom, x => ({ ...x, sel: null }))
-              }}
-            />
-          </Box>
-          <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-            <Text dimColor>send to:</Text>
-            {SNIP_SKILLS.map(([label, cmd, key]) => (
-              <Button key={'snip-' + label} label={label} plain {...hk(key)} onPress={() => fill(cmd, sel.text)} />
-            ))}
-          </Box>
-        </Box>
-      )}
-      {section(
-        el,
-        plural(marks.length, 'bookmarked doc'),
-        <Box flexDirection="column">
-          {marks.length === 0 && <Text dimColor>b on a doc in the Docs tab bookmarks it.</Text>}
-          {marks.slice(0, 12).map(b => (
-            <Box flexDirection="row" columnGap={1}>
-              <Box width={9} flexShrink={0}>
-                <Text dimColor>{b.scope}</Text>
-              </Box>
-              <Button key={'mark-' + b.id} label={tilde(b.path).split('/').pop() ?? b.path} plain onPress={async () => {
-                const text = (await readText($, b.path)) ?? '(could not read the file)'
-                await openPreview($, b.path.split('/').pop() ?? b.path, text, b.path)
-              }} />
-              <Text dimColor wrap="truncate-end">{tilde(b.path)}</Text>
-              <Button key={'unmark-' + b.id} label="x" plain onPress={() => toggleBookmark($, b.path, b.scope)} />
-            </Box>
-          ))}
-        </Box>,
-      )}
-    </Box>
-  )
-}
-
-// Receipt: what this turn actually ran, shown beside a claim of done.
-
-async function resetReceipt($: $T) {
-  const now = await $.clock.now()
-  await update($, receiptAtom, () => ({ turnStartedAt: now, lastRun: null, lastShot: null, lastCurl: null, claim: null }))
-}
-
-// The reply claimed done: log what this turn actually exercised beside it.
-async function noteClaim($: $T, msg: string) {
-  if (!(SUCCESS_RE.test(msg) && SUBJECT_RE.test(msg))) return
-  const now = await $.clock.now()
-  const cur = await read($, receiptAtom)
-  const word = msg.match(SUCCESS_RE)?.[0] ?? 'done'
-  await update($, receiptAtom, x => ({ ...x, claim: { text: clip(word, 30), at: now } }))
-  $.ui.log('receipt · the reply claims ' + word + ' · ' + receiptLine(cur, now))
-}
-
-function receiptRow(el: El, r: Receipt, now: number) {
-  const { Box, Text } = el
-  const bare = !r.lastRun && !r.lastShot && !r.lastCurl
-  return (
-    <Box flexDirection="row" columnGap={1}>
-      <Text color={bare ? 'red' : 'green'}>{bare ? '⚠' : '🧾'}</Text>
-      <Text dimColor wrap="truncate-end">
-        claims {r.claim?.text ?? 'done'} · {receiptLine(r, now)}
-      </Text>
-    </Box>
-  )
-}
-
-// Small touches: the greeting, the spinner word, the turn summary.
-
-let toolsThisTurn = 0
-let seatsLandedThisTurn = 0
-let turnKey = 0
-
-function pickWord(list: string[], salt: number) {
-  return list[Math.abs(salt) % list.length] ?? list[0]!
-}
-
-async function situationWord($: $T, now: number): Promise<string> {
-  const seats = await read($, seatsAtom)
-  const meter = await read($, meterAtom)
-  const mail = await read($, mailAtom)
-  const hour = new Date(now).getHours()
-  if (runningSeats(seats).length > 0) return pickWord(WORDS.seats, turnKey)
-  if ((meter.ctx ?? 0) >= 85) return pickWord(WORDS.squeeze, turnKey)
-  if (mail.messages.some(m => !m.isRead)) return pickWord(WORDS.mail, turnKey)
-  if (hour < 5) return pickWord(WORDS.night, turnKey)
-  if (hour < 9) return pickWord(WORDS.dawn, turnKey)
-  return pickWord(WORDS.plain, turnKey)
-}
-
-// One toast at the start of a session that says what waits, in the owner's units.
-async function greet($: $T) {
-  const now = await $.clock.now()
-  const fun = await read($, funAtom)
-  if (fun.greetedAt && now - fun.greetedAt < 30 * 60_000) return
-  const c = goalCounts(await read($, goalsAtom))
-  const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
-  const parts = [
-    c.gates ? plural(c.gates, 'read owed', 'reads owed') : 'nothing owed by you',
-    c.ready ? plural(c.ready, 'row') + ' agent-ready' : null,
-    mail ? plural(mail, 'message') + ' waiting' : 'inbox clear',
-  ].filter(Boolean)
-  $.ui.toast(greetingFor(new Date(now).getHours()) + '. ' + parts.join(' · ') + '. /hub opens the hub.', { timeoutMs: 8_000 })
-  await update($, funAtom, f => ({ ...f, greetedAt: now }))
 }
 
 // The band above the prompt and the status line.
@@ -2101,8 +495,8 @@ async function statusText($: $T): Promise<string> {
   const now = await $.clock.now()
   const cwd = await cwdOf($)
   const aliases = await aliasesOf($)
-  const decisions = d.pending.filter(s => !d.submitted.includes(s.slug) && !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases)).length
-  const parts: string[] = [hourGlyph(new Date(now).getHours())]
+  const decisions = d.pending.filter(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases)).length
+  const parts: string[] = []
   if (meter.ctx !== null) parts.push('ctx ' + meter.ctx + '%')
   if (meter.week !== null) parts.push('wk ' + Math.round(meter.week) + '%')
   if (c.gates) parts.push(plural(c.gates, 'gate'))
@@ -2111,48 +505,32 @@ async function statusText($: $T): Promise<string> {
   if (mail) parts.push('✉ ' + mail)
   if (decisions) parts.push(plural(decisions, 'decision'))
   if (idle.since !== null && now - idle.since > 5 * 60_000) parts.push('idle ' + ago(now, idle.since))
-  return parts.length > 1 ? parts.join(' · ') : parts[0] + ' gcc · nothing waiting'
+  return parts.length ? parts.join(' · ') : 'gcc · nothing waiting'
 }
 
 async function refreshStatus($: $T) {
   $.ui.status(await statusText($))
-  // Retitle the hub if it is open, so its tab carries the counts too.
-  try {
-    const panes = await $.ui.panes()
-    if (panes.some(p => p.id === PANE)) await $.ui.open({ id: PANE, title: await hubTitle($) })
-  } catch {
-    /* no surface */
-  }
 }
 
+// One action row at a time, first match wins, and nothing at all when no row
+// applies. Counts live in the status line, not here.
 async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   const { Box, Text, Button } = el
-  const v = await getView($)
-  const snap = await read($, goalsAtom)
-  const c = goalCounts(snap)
   const catchup = await read($, catchupAtom)
   const idle = await read($, idleAtom)
   const meter = await read($, meterAtom)
-  const notices = (await read($, noticesAtom)).filter(n => !v.dismissed.includes(n.id))
   const d = await read($, decideAtom)
+  const c = goalCounts(await read($, goalsAtom))
   const aliases = await aliasesOf($)
-  const pending = d.pending.filter(s => !d.submitted.includes(s.slug) && !d.answered.includes(s.slug) && !v.dismissed.includes('dp-' + s.slug) && isCurrentPage(s, cwd, aliases))
-  const mine = pending[0]
-  const receipt = await read($, receiptAtom)
-  const docs = (await read($, docsAtom)).filter(x => x.isThisSession).length
-  const seats = runningSeats(await read($, seatsAtom)).length
-  const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
-  const nudges = (await read($, nudgesAtom)).filter(n => n.audience === 'owner').length
-  const firstGoal = snap?.goals.find(g => g.accept.some(isGate))
+  const mine = d.pending.find(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases))
 
   let action = null
-  if (sw.decide && mine) {
+  if (sw.wake && mine) {
     action = (
       <Box flexDirection="row" columnGap={2}>
         <Text color="cyan" wrap="truncate-end">
-          ⚖ {clip(mine.title, 50)} · {plural(mine.items.length, 'call')} drafted for you
+          ⚖ {clip(mine.title, 50)} · {plural(mine.calls, 'call')} drafted for you · {DP_URL + mine.slug + '/'}
         </Text>
-        <Button key="dp-open" label="decide" variant="primary" {...hk('e')} onPress={() => openHub($, 'decide')} />
       </Box>
     )
   } else if (sw.continuity && catchup?.state === 'offered') {
@@ -2163,68 +541,30 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
     action = (
       <Box flexDirection="row" columnGap={2}>
         <Text color="yellow">context at {meter.ctx}%</Text>
-        <Button
-          key="dump"
-          label="put /core-dump in the prompt"
-          {...hk('u')}
-          onPress={async () => {
-            if (await fillPrompt($, '/core-dump ', 'command')) $.ui.toast('/core-dump is in your prompt box, nothing sent. Add mini, a name or notes, then Enter.')
-          }}
-        />
+        <Button key="dump" label="insert /core-dump at the cursor" onPress={() => insertAtCursor($, '/core-dump ')} />
       </Box>
     )
-  } else if (sw.tasks && c.gates && firstGoal) {
-    action = (
-      <Box flexDirection="row" columnGap={2}>
-        <Text wrap="truncate-end">
-          {plural(c.gates, 'read')} owed by you · {clip(firstGoal.outcome, 60)}
-        </Text>
-        <Button key="gates" label="review" variant="primary" {...hk('o')} onPress={() => openHub($, 'tasks')} />
-      </Box>
-    )
+  } else if (sw.tasks && c.gates) {
+    action = <Text wrap="truncate-end">{plural(c.gates, 'read')} owed by you · /tasks now lists them</Text>
   }
-
-  const chip = (key: string, label: string, tab: Tab, isLoud = false) => <Button key={key} label={label} plain dimColor={!isLoud} onPress={() => openHub($, tab)} />
+  if (!action) return null
 
   return (
     <Box flexDirection="column">
-      {notices.slice(0, 2).map(n => (
-        <Box flexDirection="row" columnGap={1}>
-          <Text color="magenta">▮</Text>
-          <Text wrap="truncate-end">
-            {n.hook}: {clip(firstLine(n.text), 90)}
-          </Text>
-          <Button key={'notice-' + n.id} label="x" plain onPress={() => setView($, { dismissed: [...v.dismissed, n.id] })} />
-          <Button key={'notice-open-' + n.id} label="read" plain onPress={() => openHub($, 'nudges')} />
-        </Box>
-      ))}
       {action}
-      {sw.receipt && receipt.claim && receiptRow(el, receipt, now)}
-      <Box flexDirection="row" columnGap={1}>
-        {chip('c-docs', docs + ' docs', 'docs')}
-        <Text dimColor>·</Text>
-        {chip('c-owed', c.gates + ' owed', 'tasks', c.gates > 0)}
-        <Text dimColor>·</Text>
-        {chip('c-run', seats + ' running', 'fleet', seats > 0)}
-        <Text dimColor>·</Text>
-        {chip('c-mail', mail + ' new', 'inbox', mail > 0)}
-        <Text dimColor>·</Text>
-        {chip('c-nudge', nudges + ' nudges', 'nudges')}
-        <Text dimColor>·</Text>
-        {chip('c-decide', pending.length + ' decisions', 'decide', pending.length > 0)}
-        <Text dimColor>   </Text>
-        <Button key="band-hide" label="hide" plain dimColor onPress={() => setView($, { isBandHidden: true })} />
+      <Box flexDirection="row">
+        <Button key="band-hide" label="hide band" plain dimColor onPress={() => update($, viewAtom, v => ({ ...v, isBandHidden: true }))} />
       </Box>
     </Box>
   )
 }
 
 async function refreshAll($: $T, sw: Switches) {
-  await loadSnips($)
   if (sw.tasks) await refreshGoals($)
-  if (sw.wake) await refreshMail($)
-  if (sw.decide) await refreshDecide($)
-  if (sw.nudges) await refreshNudgesFromLedger($)
+  if (sw.wake) {
+    await refreshMail($)
+    await refreshDecide($)
+  }
   await refreshStatus($)
 }
 
@@ -2235,40 +575,30 @@ export const register: Register = (on, options) => {
   startOn = sw.startOn
 
   // /hub and the timers exist in every session, on or off; the timers do
-  // nothing while the mod is off, so /hub can turn it on at any point.
+  // nothing while the mod is off, so /hub on can turn it on at any point.
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'hub',
-      description: 'The owner hub (gcc-mods): docs, tasks, nudges, fleet, inbox, decide, snips. Turns the mod on for this session; /hub off silences it.',
-      argumentHint: '[tab|help|band|on|off|snip|pin|propose|atone|affirm]',
+      description: 'gcc-mods switch for this session: on, off, or band (show or hide the row above the prompt).',
+      argumentHint: '[on|off|band]',
       immediate: true,
     })
-    if (await isOn($)) {
-      await startUp($, sw)
-      if (sw.fun) await greet($)
-    }
+    if (await isOn($)) await startUp($, sw)
 
     // Slow timers: the stores other sessions and the owner write to.
     $.clock.every(60_000, async () => {
       if (!(await isOn($))) return
-      const cwd = await cwdOf($)
       if (sw.wake) {
         await refreshMail($)
         if (sw.mailWake) await wakeForMail($)
         await refreshDecide($)
-        await wakeForAnswers($, cwd)
+        await wakeForAnswers($, await cwdOf($))
       }
       if (sw.fleet) await wakeForUnreadSeats($)
-      if (sw.nudges) await refreshNudgesFromLedger($)
       await refreshStatus($)
     })
     $.clock.every(5 * 60_000, async () => {
       if (sw.tasks && (await isOn($))) await refreshGoals($)
-    })
-    // Running seats' timers tick once a second, only while the Fleet tab shows one.
-    $.clock.every(1000, async () => {
-      const v = await getView($)
-      if (v.tab === 'fleet' && runningSeats(await read($, seatsAtom)).length && (await isOn($))) $.ui.invalidate('ui.render')
     })
     return next(e)
   })
@@ -2276,54 +606,23 @@ export const register: Register = (on, options) => {
   // /clear, /resume, /compact and /fork raise no session.start, and the
   // checkpoint offer is the whole point of this moment.
   on('classic.SessionStart', { source: ['clear', 'resume', 'compact', 'fork', 'startup'] }, async ($, e, next) => {
-    if (!(await isOn($))) return next(e)
-    if (sw.continuity) {
-      await seedDocs($)
-      await offerCheckpoint($, e.source !== 'startup')
-    }
-    await refreshAll($, sw)
-    // session.start already greeted a fresh start; greeting here too doubled the toast.
-    if (sw.fun && e.source !== 'compact' && e.source !== 'startup') await greet($)
+    if (await isOn($)) await startUp($, sw, e.source !== 'startup')
     return next(e)
   })
 
   on('command.run', { command: 'hub' }, async ($, e) => {
-    const want = e.args.trim() as Tab | 'help' | 'on' | 'off' | 'band' | 'snip' | 'pin' | 'propose' | 'atone' | 'affirm'
-    if (want === 'off' || want === 'on') {
-      await switchMod($, want === 'on', sw)
-      return { text: 'the hub mod is ' + want + ' for this session.' }
+    const want = e.args.trim()
+    if (want === 'off') {
+      await switchMod($, false, sw)
+      return { text: 'gcc-mods is off for this session.' }
     }
-    // Any other /hub is a request to use the hub, so it turns the mod on first.
     if (!(await isOn($))) await switchMod($, true, sw)
-    if (want === 'help') {
-      await openGuide($)
-      return {}
-    }
     if (want === 'band') {
-      const v = await getView($)
-      await setView($, { isBandHidden: !v.isBandHidden })
+      const v = await read($, viewAtom)
+      await update($, viewAtom, x => ({ ...x, isBandHidden: !v.isBandHidden }))
       return { text: v.isBandHidden ? 'band shown.' : 'band hidden. /hub band brings it back.' }
     }
-    // /hub snip saves the mouse selection; /hub pin|propose|atone|affirm put
-    // the selection in the prompt box behind that skill, for editing.
-    if (want === 'snip') {
-      const text = await selectedText($)
-      if (!text) return { text: 'Nothing is selected. Select text with the mouse, then /hub snip.' }
-      await addSnippet($, text)
-      await openHub($, 'snips')
-      return {}
-    }
-    const skill = SNIP_SKILLS.find(([label]) => label === want)
-    if (skill) {
-      const text = await selectedText($)
-      if (!text) return { text: 'Nothing is selected. Select text with the mouse, then /hub ' + want + '.' }
-      await fillPrompt($, skill[1] + ' ' + text.replace(/\s+/g, ' ').trim(), 'command')
-      return {}
-    }
-    if (want === 'tasks') await refreshGoals($)
-    const tab = TABS.find(t => t[0] === want)?.[0]
-    await openHub($, tab)
-    return {}
+    return { text: 'gcc-mods is on for this session: paths, the resume offer, the gauge and the wakes. What waits on you: /tasks now.' }
   })
 
   // ── hygiene ──
@@ -2375,52 +674,30 @@ export const register: Register = (on, options) => {
     })
   }
 
-  // ── continuity ──
+  // ── continuity: the gauge ──
   if (sw.continuity) {
     on('session.measure', async ($, e, next) => {
       if (!(await isOn($))) return next(e)
       const now = await $.clock.now()
-      const rl = (kind: string) => e.rateLimits.find(r => r.kind === kind)?.percentUsed ?? null
-      await update($, meterAtom, m => ({
-        ...m,
-        ctx: e.context.percent ?? m.ctx,
-        fiveHour: rl('five_hour') ?? m.fiveHour,
-        week: rl('seven_day') ?? m.week,
-        costUsd: (e.cost as { totalUsd?: number } | undefined)?.totalUsd ?? m.costUsd,
-        at: now,
-      }))
+      const week = e.rateLimits.find(r => r.kind === 'seven_day')?.percentUsed ?? null
+      await update($, meterAtom, m => ({ ctx: e.context.percent ?? m.ctx, week: week ?? m.week, at: now }))
       return next(e)
-    })
-    on('tool.call', { tool: 'Write' }, async ($, e, next) => {
-      const ran = await next(e)
-      if (ran.deny === undefined && ran.isError !== true && (await isOn($))) await captureDoc($, String(e.file_path))
-      return ran
-    })
-    on('tool.call', { tool: 'Edit' }, async ($, e, next) => {
-      const ran = await next(e)
-      if (ran.deny === undefined && ran.isError !== true && (await isOn($))) await captureDoc($, String(e.file_path))
-      return ran
     })
   }
 
-  // ── fleet ──
+  // ── fleet: seats tracked for the landing toast and the unread-report wake ──
   if (sw.fleet) {
     on('tool.call', { tool: 'Agent' }, async ($, e, next) => {
       if (!(await isOn($))) return next(e)
       const now = await $.clock.now()
-      const prompt = String(e.prompt ?? '')
       const seat: Seat = {
         id: e.tool_use_id,
         agentId: null,
         name: String(e.name ?? e.description ?? e.subagent_type ?? 'seat'),
-        type: String(e.subagent_type ?? 'general-purpose'),
-        model: String(e.model ?? 'inherit'),
-        resolvedModel: null,
-        desc: String(e.description ?? ''),
         startedAt: now,
         endedAt: null,
         durationMs: null,
-        outputPath: prompt.match(OUTPUT_RE)?.[0] ?? null,
+        outputPath: String(e.prompt ?? '').match(OUTPUT_RE)?.[0] ?? null,
         hasOutput: null,
         isBackground: true,
         wokeAt: null,
@@ -2433,130 +710,36 @@ export const register: Register = (on, options) => {
       }
       const res = (ran as { result?: Record<string, any> }).result ?? {}
       if (res.status === 'async_launched' || res.isAsync) {
-        await update($, seatsAtom, list =>
-          list.map(s => (s.id === seat.id ? { ...s, agentId: String(res.agentId ?? ''), resolvedModel: res.resolvedModel ?? null, outputPath: s.outputPath ?? res.outputFile ?? null } : s)),
-        )
+        await update($, seatsAtom, list => list.map(s => (s.id === seat.id ? { ...s, agentId: String(res.agentId ?? ''), outputPath: s.outputPath ?? res.outputFile ?? null } : s)))
       } else {
-        const model = res.resolvedModel ?? (Array.isArray(res.modelsUsed) ? res.modelsUsed.at(-1) : null) ?? null
-        await landSeat($, s => s.id === seat.id, model, sw)
+        await landSeat($, s => s.id === seat.id)
         await update($, seatsAtom, list => list.map(s => (s.id === seat.id ? { ...s, isBackground: false } : s)))
       }
       return ran
     })
     on('classic.SubagentStop', async ($, e, next) => {
-      if (await isOn($)) await landSeat($, s => s.agentId === e.agent_id, null, sw)
+      if (await isOn($)) await landSeat($, s => s.agentId === e.agent_id)
       return next(e)
+    })
+    on('ui.render', { component: 'Spinner' }, async ($, e, next) => {
+      if (!(await isOn($))) return next(e)
+      const n = runningSeats(await read($, seatsAtom)).length
+      if (!n) return next(e)
+      return next({ ...e, props: { ...e.props, suffix: ' · ' + plural(n, 'seat') + ' running…' } })
     })
   }
 
-  // ── router ──
-  on('prompt.attachment', async ($, e, next) => {
-    if (e.origin.kind !== 'hook' || !(await isOn($))) return next(e)
-    const text = e.text ?? ''
-    const { rest, blocks } = splitOwnerBlocks(text)
-    if (!blocks.length) {
-      const now = await $.clock.now()
-      const first = firstLine(text)
-      const hook = first.match(/^\[([\w:-]+)\]/)?.[1] ?? first.match(/^┌─ ([^·]+)/)?.[1]?.trim() ?? e.origin.event
-      await recordNudge($, { hook, event: e.origin.event, audience: 'model', action: 'context', chars: text.length, text: clip(text, 2000), detail: 'passed to the model', at: now, heeded: 'unknown' })
-      return next(e)
-    }
-    if (!sw.router) return next(e)
-    for (const b of blocks) await dispatchBlock($, b, e.origin.event)
-    if (!rest) return { text: null }
-    return next({ ...e, text: rest })
-  })
-
-  // ── receipt ──
-  if (sw.receipt) {
-    on('tool.call', { tool: 'Bash' }, async ($, e, next) => {
-      const ran = await next(e)
-      const cmd = String(e.command ?? '').trim()
-      if (ran.deny !== undefined || !(await isOn($))) return ran
-      const now = await $.clock.now()
-      const ok = ran.isError !== true
-      if (CURL_RE.test(cmd)) {
-        const url = cmd.match(/https?:\/\/[^\s'"]+/)?.[0] ?? 'localhost'
-        await update($, receiptAtom, r => ({ ...r, lastCurl: { url: clip(url, 60), at: now } }))
-      } else if (RUN_RE.test(cmd)) {
-        await update($, receiptAtom, r => ({ ...r, lastRun: { cmd: clip(cmd.split('\n')[0] ?? cmd, 48), at: now, ok } }))
-      }
-      return ran
-    })
-    on('tool.call', { tool: 'Read' }, async ($, e, next) => {
-      const ran = await next(e)
-      const p = String(e.file_path ?? '')
-      if (ran.deny === undefined && ran.isError !== true && /\.(png|jpe?g|gif|webp)$/i.test(p) && (await isOn($))) {
-        const now = await $.clock.now()
-        await update($, receiptAtom, r => ({ ...r, lastShot: { path: p, at: now } }))
-      }
-      return ran
-    })
-  }
-
-  // ── fun ──
-  if (sw.fun) {
-    on('tool.call', ($, e, next) => {
-      toolsThisTurn += 1
-      return next(e)
-    })
-    on('ui.render', { component: 'TurnDuration' }, async ($, e, next) => {
-      if ((toolsThisTurn === 0 && seatsLandedThisTurn === 0) || !(await isOn($))) return next(e)
-      const { Text } = $.ui.resolve(e)
-      const secs = Math.round(e.props.durationMs / 1000)
-      const took = secs < 60 ? secs + 's' : Math.floor(secs / 60) + 'm ' + (secs % 60) + 's'
-      const bits = [plural(toolsThisTurn, 'tool call')]
-      if (seatsLandedThisTurn) bits.push(plural(seatsLandedThisTurn, 'seat') + ' landed')
-      return (
-        <Text dimColor>
-          {e.props.word} for {took} · {bits.join(' · ')}
-        </Text>
-      )
-    })
-    on('ui.render', { component: 'PromptHint' }, async ($, e, next) => {
-      if (e.props.isDraft || e.props.isWorking || !(await isOn($))) return next(e)
-      const c = goalCounts(await read($, goalsAtom))
-      const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
-      const waiting = c.gates + mail
-      if (!waiting) return next(e)
-      return next({ ...e, props: { ...e.props, tail: ' · ' + plural(waiting, 'thing') + ' waiting on you · /hub' } })
-    })
-  }
-
-  // ── the unmatched lifecycle hooks, once each ──
-  // An edit line in the prompt box (gcc-goal:, snip-note, dp-note) is saved and
-  // dropped, never sent. The edit is that one line; the rest of the draft goes
-  // back in the box. When the edit cannot be saved the whole draft goes back.
+  // A typed prompt ends the idle stretch and retires the continue offer.
   on('prompt.submit', async ($, e, next) => {
-    if (!(await isOn($))) return next(e)
-    const edit = parseEditLine(e.text)
-    if (edit && (edit.kind !== 'goal' || sw.tasks)) {
-      const saved = await saveEditLine($, edit)
-      void restoreDraft($, saved ? edit.rest : e.text)
-      return { drop: saved ? 'edit line saved by gcc-mods' : 'edit line not saved; the draft is back in the box' }
-    }
-    if (sw.tasks) await update($, idleAtom, i => ({ ...i, since: null, continueOfferedAt: null }))
-    if (sw.receipt) await resetReceipt($)
-    if (sw.fun) {
-      toolsThisTurn = 0
-      seatsLandedThisTurn = 0
-      turnKey = Math.floor((await $.clock.now()) / 1000)
-    }
+    if (await isOn($)) await update($, idleAtom, i => ({ ...i, since: null, continueOfferedAt: null }))
     return next(e)
-  }).catch(($, e, next) => {
-    // A save that threw must not let an edit line through to the model.
-    if (next.called || !parseEditLine(e.text)) return next(e)
-    $.ui.toast('gcc-mods could not save that line. Nothing was sent; your text is back in the box.', { timeoutMs: 8_000 })
-    void restoreDraft($, e.text)
-    return { drop: 'edit line not saved; the draft is back in the box' }
   })
 
   on('turn.complete', async ($, e, next) => {
     const r = await next(e)
     if (!(await isOn($))) return r
     if (e.agentId) {
-      if (sw.fleet) await landSeat($, s => s.agentId === e.agentId, null, sw)
-      if (sw.fun) seatsLandedThisTurn += 1
+      if (sw.fleet) await landSeat($, s => s.agentId === e.agentId)
     } else {
       await refreshStatus($)
     }
@@ -2566,159 +749,16 @@ export const register: Register = (on, options) => {
   on('classic.Stop', async ($, e, next) => {
     const r = await next(e)
     if (e.agent_id || !(await isOn($))) return r
-    if (r.block) logStopBlock($, r.block)
-    if (sw.receipt) await noteClaim($, e.last_assistant_message ?? '')
+    if (sw.hygiene && r.block) logStopBlock($, r.block)
     if (sw.tasks) await noteMainStop($, (e.background_tasks?.length ?? 0) > 0, r.block !== undefined)
     await refreshStatus($)
     return r
   })
 
-  on('ui.render', { component: 'Spinner' }, async ($, e, next) => {
-    if (!(await isOn($))) return next(e)
-    const props = { ...e.props }
-    if (sw.fun) props.word = await situationWord($, await $.clock.now())
-    if (sw.fleet) {
-      const n = runningSeats(await read($, seatsAtom)).length
-      if (n) props.suffix = ' · ' + plural(n, 'seat') + ' running…'
-    }
-    return next({ ...e, props })
-  })
-
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const v = await getView($)
+    const v = await read($, viewAtom)
     if (e.props.hasSurvey || v.isBandHidden || !(await isOn($))) return next(e)
-    return band($, $.ui.resolve(e) as El, await $.clock.now(), sw, await cwdOf($))
-  })
-
-  on('ui.render', { component: 'Pane', requestId: PREVIEW }, async ($, e) => {
-    const el = $.ui.resolve(e) as El
-    const { Box, Text, Button, Markdown } = el
-    const p = await read($, previewAtom)
-    if (!p) return <Text dimColor>Nothing to preview yet.</Text>
-    const cols = Math.max(20, e.props.bodyColumns)
-    const { Input } = el
-    const snap = await read($, goalsAtom)
-    const g = p.kind === 'goal' ? snap?.goals.find(x => x.id === p.goalId) : undefined
-    return (
-      <Box flexDirection="column">
-        <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-          <Text bold>{p.kind === 'goal' ? 'goal ' + p.title : p.title}</Text>
-          {p.kind === 'goal' && !p.editing && (
-            <Button
-              key="pv-edit"
-              label="edit session goal"
-              plain
-              {...hk('e')}
-              onPress={async () => {
-                const now = await $.clock.now()
-                await update($, previewAtom, x => (x ? { ...x, editing: true, at: now } : x))
-              }}
-            />
-          )}
-          {p.kind === 'goal' && <Button key="pv-paste" label="paste /goal line" plain {...hk('p')} onPress={async () => {
-            const r = await run($, ['bash', GOAL_SH, 'armline'], { timeoutMs: 5_000 })
-            await fillPrompt($, r.ok ? r.out.trim() : '/goal ' + (snap?.sessionGoal || g?.outcome || ''), 'command')
-          }} />}
-          {p.path && (
-            <Button
-              key="pv-copy"
-              label="copy path"
-              plain
-              {...hk('c')}
-              onPress={async (press: UiPressArgument) => {
-                const r = await $.ui.copy({ text: p.path!, surface: press.surface })
-                $.ui.toast(r.isCopied ? 'Copied ' + p.path : 'Could not copy: ' + r.reason)
-              }}
-            />
-          )}
-          {p.path && (
-            <Button key="pv-attach" label="attach to prompt" plain {...hk('q')} onPress={() => $.prompt.fill({ text: '@' + p.path + ' ', mode: 'insert' })} />
-          )}
-          <Button key="pv-back" label="back to hub" plain {...hk('b')} onPress={() => openHub($)} />
-          {!p.editing && <Button key="pv-close" label="close" plain {...hk('x')} onPress={() => $.ui.close({ id: PREVIEW })} />}
-        </Box>
-        {p.path && <Text dimColor wrap="truncate-start">{tilde(p.path)}</Text>}
-        <Text dimColor>{'─'.repeat(cols)}</Text>
-        {g && (
-          <Box flexDirection="column" marginBottom={1}>
-            <Text dimColor>outcome on the record</Text>
-            <Text bold wrap="wrap">{g.outcome}</Text>
-            <Text> </Text>
-            <Text dimColor>session goal (what the Stop hook holds the agent to)</Text>
-            {!p.editing && <Text wrap="wrap" dimColor={!snap?.sessionGoal}>{snap?.sessionGoal || 'none yet'}</Text>}
-            {p.editing && (
-              <Box flexDirection="column">
-                <Input
-                  key={'pv-goal-input-' + p.at}
-                  label="Goal"
-                  value={snap?.sessionGoal || g.outcome}
-                  submitLabel="save"
-                  autoFocus
-                  onSubmit={async (text: string) => {
-                    await update($, previewAtom, x => (x ? { ...x, editing: false } : x))
-                    if (text.trim()) await saveSessionGoal($, text)
-                  }}
-                />
-                <Box flexDirection="row" columnGap={3}>
-                  <Button key="pv-goal-cancel" label="cancel" plain {...hk('x')} onPress={() => update($, previewAtom, x => (x ? { ...x, editing: false } : x))} />
-                  <Button
-                    key="pv-goal-long"
-                    label="edit in the prompt box"
-                    plain
-                    {...hk('l')}
-                    onPress={async () => {
-                      await update($, previewAtom, x => (x ? { ...x, editing: false } : x))
-                      await fillPrompt($, GOAL_PREFIX + (snap?.sessionGoal || g.outcome), 'line')
-                    }}
-                  />
-                </Box>
-              </Box>
-            )}
-          </Box>
-        )}
-        <Markdown text={tablesToBlocks(p.text, cols)} />
-      </Box>
-    )
-  })
-
-  on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
-    const el = $.ui.resolve(e) as El
-    const { Box, Text, Button } = el
-    if (!(await isOn($))) return <Text dimColor>gcc-mods is off for this session. /hub on turns it back on.</Text>
-    const v = await getView($)
-    const now = await $.clock.now()
-    const cwd = await cwdOf($)
-    const cols = Math.max(20, e.props.bodyColumns)
-    const snap = await read($, goalsAtom)
-
-    const body =
-      v.tab === 'docs'
-        ? await docsTab($, el, v, now)
-        : v.tab === 'tasks'
-          ? await tasksTab($, el, v, sw.tasksWrite)
-          : v.tab === 'nudges'
-            ? await nudgesTab($, el, v, now)
-            : v.tab === 'fleet'
-              ? await fleetTab($, el, v, now)
-              : v.tab === 'inbox'
-                ? await inboxTab($, el, v, now)
-                : v.tab === 'snips'
-                  ? await snipsTab($, el, now)
-                  : await decideTab($, el, v, cwd)
-
-    return (
-      <Box flexDirection="column">
-        <Box flexDirection="row" columnGap={3} flexWrap="wrap">
-          {TABS.map(([id, label, key]) => (
-            <Button key={'tab-' + id} label={label} plain hotkey={key} dimColor={v.tab !== id} onPress={() => setView($, { tab: id })} />
-          ))}
-          {snap?.error && <Text color="red">views: {snap.error}</Text>}
-          <Button key="tab-help" label="? guide" plain hotkey="h" dimColor onPress={() => openGuide($)} />
-          <Text dimColor>· Esc prompt · ctrl+x x close</Text>
-        </Box>
-        <Text dimColor>{'─'.repeat(cols)}</Text>
-        {body}
-      </Box>
-    )
+    const drawn = await band($, $.ui.resolve(e) as El, await $.clock.now(), sw, await cwdOf($))
+    return drawn ?? next(e)
   })
 }
