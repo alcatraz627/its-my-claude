@@ -56,6 +56,22 @@ PY
 
 [ "$HIT" = "hit" ] || exit 0
 
+# Only worth saying after a turn that changed something (otherwise there is no
+# choice to affirm), and only once per session: 576 nudges produced 2 affirm
+# events in 14 days. When the transcript cannot be found the nudge stays quiet.
+SID="${CLAUDE_HINT_SID:-${CLAUDE_CODE_SESSION_ID:-}}"
+[ -n "$SID" ] || exit 0
+TRANSCRIPT="${AFFIRM_TRANSCRIPT:-}"
+if [ -z "$TRANSCRIPT" ]; then
+  for f in "$HOME"/.claude/projects/*/"$SID".jsonl; do [ -f "$f" ] && TRANSCRIPT="$f" && break; done
+fi
+[ -n "$TRANSCRIPT" ] || exit 0
+python3 "$HOME/.claude/scripts/hooks/turn-changed.py" "$TRANSCRIPT" "$PROMPT" || exit 0
+. "$HOME/.claude/scripts/hooks/inject-once.sh" 2>/dev/null || true
+if command -v inject_once_session >/dev/null 2>&1; then
+  inject_once_session "$SID" affirm-nudge fired || exit 0
+fi
+
 cat <<'NUDGE'
 [affirm-nudge] User language suggests affirmation. If the choice you just made was
 non-obvious / surprising / counter to a default, consider /affirm:

@@ -22,6 +22,13 @@ GLOBAL_WAL="$HOME/.claude/wal.jsonl"
 
 STALE_TURNS=()
 STALE_SESSIONS=()
+ACKED_KEYS=()
+
+# Each orphan is reported once: the first session to start after it names it and
+# leaves a marker here, so the next sessions stay quiet instead of repeating the
+# same crash notice for two days. Delete the directory to hear about them again.
+ACK_DIR="$STATE_DIR/.acked-orphans"
+acked() { [ -e "$ACK_DIR/$1" ]; }
 
 # Check 1: orphan turn-state files
 if [ -d "$STATE_DIR" ]; then
@@ -33,6 +40,8 @@ if [ -d "$STATE_DIR" ]; then
       ts=$(jq -r '.ts // ""' "$f" 2>/dev/null)
       prompt=$(jq -r '.prompt_preview // ""' "$f" 2>/dev/null | head -c 80)
       [ -n "$sid" ] || continue
+      acked "turn-$sid" && continue
+      ACKED_KEYS+=("turn-$sid")
       # A retro-dump is `claude -p --resume <uuid>` driving /core-dump; when the
       # timeout kills it, its turn-state is orphaned like any crash and this list
       # then reads as "your session died" (csync, 2026-09-07, ledger 5). Name it.
@@ -63,6 +72,8 @@ if [ -f "$GLOBAL_WAL" ]; then
     while IFS= read -r sid; do
       [ -z "$sid" ] && continue
       if ! echo "$CLOSED" | grep -qxF "$sid"; then
+        acked "wal-$sid" && continue
+        ACKED_KEYS+=("wal-$sid")
         STALE_SESSIONS+=("$sid")
       fi
     done <<< "$DANGLING"
@@ -73,6 +84,13 @@ fi
 if [ ${#STALE_TURNS[@]} -eq 0 ] && [ ${#STALE_SESSIONS[@]} -eq 0 ]; then
   echo '{}'
   exit 0
+fi
+
+# Leave the markers (a headless i-dream helper starting up must not eat the
+# notice meant for the owner's next session).
+if [ -z "${I_DREAM_CHILD:-}" ] && mkdir -p "$ACK_DIR" 2>/dev/null; then
+  for k in "${ACKED_KEYS[@]}"; do : > "$ACK_DIR/$k" 2>/dev/null || true; done
+  find "$ACK_DIR" -type f -mtime +7 -delete 2>/dev/null || true
 fi
 
 # Build the hint

@@ -74,10 +74,19 @@ fi
 # Output
 if (( ${#warnings[@]} > 0 )); then
   # Build warning string (max 300 chars)
+  # The model hears about a stale worktree once a day per project, not at
+  # every session start; the box above still shows it to the owner each time.
+  . "$HOME/.claude/scripts/hooks/inject-once.sh" 2>/dev/null || true
   msg="[HEALTH] "
+  ctx_count=0
   for w in "${warnings[@]}"; do
+    case "$w" in
+      "Stale worktree:"*)
+        command -v inject_once_day >/dev/null 2>&1 && ! inject_once_day health-worktree "$cwd|${w%% (*}" && continue ;;
+    esac
     if (( ${#msg} + ${#w} + 3 < 300 )); then
       msg+="$w. "
+      ctx_count=$((ctx_count + 1))
     fi
   done
 
@@ -89,7 +98,10 @@ if (( ${#warnings[@]} > 0 )); then
   printf '\033[2m╰────────────────────────────────────────╯\033[0m\n' >&2
 
   # Also inject into context so Claude is aware
-  json_out=$(jq -n --arg ctx "$msg" '{"additionalContext": $ctx}' 2>/dev/null) || json_out=""
+  json_out=""
+  if (( ctx_count > 0 )); then
+    json_out=$(jq -n --arg ctx "$msg" '{"additionalContext": $ctx}' 2>/dev/null) || json_out=""
+  fi
   echo "[health-check] warnings=$(( ${#warnings[@]} )) json_out=$json_out" >> "$LOG" 2>/dev/null
   [ -n "$json_out" ] && echo "$json_out"
 fi

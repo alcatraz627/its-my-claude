@@ -36,4 +36,8 @@ sid8="${sid:0:8}"; [ -n "$sid8" ] || sid8="nosid"
 # Touch the sentinel (create or bump mtime to now). Readers reset a counter whose
 # mtime predates this. Prints nothing — pure side effect.
 : > "/tmp/claude-clear-reset-${sid8}" 2>/dev/null || true
+
+# A cleared context has forgotten what the once-per-session injectors said
+# (all-scope guidance, the affirm nudge), so let them speak again.
+. "$HOME/.claude/scripts/hooks/inject-once.sh" 2>/dev/null && inject_once_reset_session "$sid"
 exit 0

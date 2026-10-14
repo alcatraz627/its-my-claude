@@ -7,7 +7,8 @@
     "state": "live",
     "trigger": {
       "tool": "Write",
-      "input_pattern": "/(rules|docs|features|conventions)/"
+      "input_pattern": "/(rules|docs|features|conventions)/",
+      "content_pattern": "(no existing|does not exist|doesn't exist|does not yet exist|there is no |there are no |nothing (exists|implements)|not implemented|no such |no module|no helper|never built)"
     },
     "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
     "created": "2026-07-24T14:54:37.875879Z",
@@ -66,7 +67,7 @@
     "slug": "file-referenced-without-full-path",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "live",
+    "state": "shadow",
     "trigger": {
       "tool": "Write",
       "input_pattern": "^(?!/private/tmp/|/tmp/|/private/var/folders/|/var/folders/).*\\.(md|html)$"
@@ -114,7 +115,7 @@
     "slug": "source-comment-hygiene",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "live",
+    "state": "shadow",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
@@ -335,6 +336,7 @@
     "state": "live",
     "trigger": {
       "tool": "Bash",
+      "project": "gcp",
       "input_pattern": "\\bgcloud\\s+(secrets|run|iam|projects add-iam)"
     },
     "body": "Cloud-state change from the brains seat: tell gcp-watcher and wait for their answer first. Dispatching a seat does not change who originated the mutation.",

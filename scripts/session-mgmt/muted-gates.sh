@@ -38,17 +38,29 @@ age_of() {
   if [ "$d" -eq 0 ]; then echo "today"; elif [ "$d" -eq 1 ]; then echo "1d"; else echo "${d}d"; fi
 }
 
+names=""
 for f in "$ROOT"/.no-* "$ROOT"/.*-off; do
   [ -e "$f" ] || continue
   name=$(basename "$f")
   # The lane's own mute can never be seen from inside the lane; skip the noise.
   [ "$name" = ".no-sessionstart-inject" ] && continue
+  names="${names} ${name}"
   rows="${rows}${rows:+ · }${name} ($(age_of "$f"), mutes $(owner_of "$name"))"
 done
 
 # Snoozes (owner D3a 2026-09-18): scoped, expiring, reasoned. Listed with who and until.
 snz=$(bash "$ROOT/scripts/hooks/hook-snooze.sh" list 2>/dev/null | rg -v 'no live snoozes' | sed 's/^  //' | paste -sd';' - | sed 's/;/ · /g')
 
+# Spoken once per change: the same set of mutes and snoozes is not repeated into
+# every session, only a different set is. Ages are left out of the comparison
+# because they tick over every day. An empty set is recorded too, so mutes that
+# come back after a clean spell are announced again.
+. "$HOME/.claude/scripts/hooks/inject-once.sh" 2>/dev/null || true
+sig="${names}|${snz}"
+[ "$sig" = "|" ] && sig=""
+if command -v inject_once_changed >/dev/null 2>&1; then
+  inject_once_changed muted-gates "$sig" || exit 0
+fi
 [ -z "$rows" ] && [ -z "$snz" ] && exit 0
 
 # Plain text, no rails: this is a one-line notice, not a gate (callout-boxes.md).

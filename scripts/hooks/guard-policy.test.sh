@@ -280,14 +280,14 @@ v=$(env HOME="$T" POLICY_LIMITS="$T/limits.json" bash "$REAL/scripts/policy.sh" 
 
 echo "== prose gate =="
 PSM="$H/prose-smell-stop.sh"
-smelly="Here is the thing — it works — and it is great — really. **One** **two** **three** **four** **five** **six** **seven**. This paragraph keeps going so that it is well over two hundred characters long, which is the floor the gate uses before it looks at anything at all in the prose. Run $(basename "$T")."
+smelly="Great question! Here is the thing, it works and it is great, really. **One** **two** **three** **four** **five** **six** **seven**. This paragraph keeps going so that it is well over two hundred characters long, which is the floor the gate uses before it looks at anything at all in the prose. Run $(basename "$T")."
 jq -nc --arg t "$smelly" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}' > "$T/ps.jsonl"
 psp=$(jq -nc --arg tp "$T/ps.jsonl" '{session_id:"prosetest-1", transcript_path:$tp}')
 reset_pol
 run "$PSM" "$psp"; expect_block "prose gate enforces at the default (enforce)"
 setpol gates.prose_smell warn
 # A fresh message: the gate never re-fires on text it has already judged.
-jq -nc --arg t "$smelly And a second — different — message." '{type:"assistant", message:{content:[{type:"text", text:$t}]}}' > "$T/ps.jsonl"
+jq -nc --arg t "$smelly And a second, different message." '{type:"assistant", message:{content:[{type:"text", text:$t}]}}' > "$T/ps.jsonl"
 psp=$(jq -nc --arg tp "$T/ps.jsonl" '{session_id:"prosetest-2", transcript_path:$tp}')
 run "$PSM" "$psp"
 if ! blocked && printf '%s' "$OUT" | grep -q 'WOULD-BLOCK'; then ok "prose gate warns at gates.prose_smell=warn"; else bad "prose warn (out=${OUT:0:160})"; fi

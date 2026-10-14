@@ -39,7 +39,7 @@ case "$event" in
     bg=$(printf '%s' "$input" | jq -r '.tool_input.run_in_background | if . == null then "default" else tostring end' 2>/dev/null)
     desc=$(ti description)
     goal=$(ti prompt | tr '\n' ' ' | cut -c1-150)
-    body=$(printf 'seat: %s · bg: %s\ngoal: %s%s\n→ dispatched; the landing box will follow' \
+    body=$(printf 'seat: %s · bg: %s\ngoal: %s%s' \
       "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" \
       "${desc:+$desc — }" "$goal")
     box=$(printf '%s\n' "$body" | hook_box_kind dispatch "${typ:-general-purpose}" "${model:-inherit}")
@@ -79,7 +79,7 @@ case "$event" in
       [ -n "$started" ] && dur="$(( ($(date +%s) - started) / 60 ))m"
       rm -f "$STASH_DIR/$aid" 2>/dev/null || true
     fi
-    body=$(printf 'seat: %s · id: %s\n→ its report is data, not display: read the output file or final text before trusting completion' \
+    body=$(printf 'seat: %s · id: %s' \
       "${typ:-?}" "${aid:-?}")
     box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
     # SubagentStop context delivery is unrouted in this harness (verified
@@ -95,29 +95,15 @@ case "$event" in
     if [ -s "$p" ]; then
       boxes=$(cat "$p" 2>/dev/null); : > "$p" 2>/dev/null || true
     fi
-    # Unmatched-stray delta since the last drain: one ambient line-tag
-    # (conventions/callout-boxes.md: no action owed means no rails).
-    u="$STASH_DIR/unmatched.log"; ud="$STASH_DIR/unmatched.drained"
-    tag=''
-    if [ -s "$u" ]; then
-      total=$(wc -l < "$u" 2>/dev/null | tr -d ' ')
-      last=$(cat "$ud" 2>/dev/null); : "${last:=0}"
-      if [ "${total:-0}" -gt "$last" ]; then
-        tag="🛬 subagent · unmatched ×$((total - last)) (stop-only harness internals, not our dispatches, no action owed · ledger: $u · task #18)"
-        echo "$total" > "$ud" 2>/dev/null || true
-      fi
-    fi
+    # Stop-only strays are harness internals with no action owed: they stay in
+    # unmatched.log (written above) and never reach the model.
     if [ -n "$boxes" ]; then
       # The boxes and the paste instruction are owner text; the duty to verify
       # each agent's output stays outside the block so the model keeps it.
       owner=$(printf '%s\nSubagent landing(s) since your last turn. Surface each box verbatim to the user (rules/surface-hook-nudges-to-user.md).' "$boxes" | hook_owner_wrap log subagent-box)
       ctx="$owner
 Subagent landing(s) since your last turn: verify each agent's output before acting on it."
-      [ -n "$tag" ] && ctx="$ctx
-$tag"
       emit_ctx "UserPromptSubmit" "$ctx"
-    elif [ -n "$tag" ]; then
-      emit_ctx "UserPromptSubmit" "$tag"
     fi
     ;;
 esac

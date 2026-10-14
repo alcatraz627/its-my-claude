@@ -16,7 +16,7 @@ mkdir -p "$T/scripts/hooks" "$T/hinters"
 printf '#!/usr/bin/env bash\n# Mute: touch ~/.claude/.no-foo-gate\n' > "$T/scripts/hooks/foo-gate.sh"
 printf '#!/usr/bin/env bash\n[ -f "$HOME/.claude/.bar-off" ] && exit 0\n' > "$T/hinters/10-bar.sh"
 
-run() { printf '{}' | MUTED_GATES_ROOT="$T" bash "$INJ" 2>/dev/null; }
+run() { printf '{}' | INJECT_ONCE_DIR="$T/.once" MUTED_GATES_ROOT="$T" bash "$INJ" 2>/dev/null; }
 
 out=$(run)
 [ -z "$out" ] && ok "no sentinels: silent" || bad "no sentinels: emitted '$out'"

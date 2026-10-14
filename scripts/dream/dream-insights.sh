@@ -284,13 +284,19 @@ if part_mode != 'ranked' and os.environ.get('NO_ATONE_SUMMARY') != '1':
                     return f"hook {h}: {blocks} blocks, {rest} warnings"
             return "no hook catches it"
         rows = []
-        for s in top:
+        # Newest mistake first, and the whole section held to ATONE_BUDGET so
+        # this block and the i-dream briefing (700) share about 1,200 characters.
+        for s in sorted(top, key=lambda x: str(latest[x].get('ts', '')), reverse=True):
             pre = str(latest[s].get('precheck') or latest[s].get('issue') or '').strip().replace('\n', ' ')
-            if len(pre) > 160:
-                pre = pre[:157].rsplit(' ', 1)[0] + '…'
+            if len(pre) > 90:
+                pre = pre[:87].rsplit(' ', 1)[0] + '…'
             rows.append(f"- {s} ({counts[s]} in 14d; {hook_line(s)}). {pre}")
+        atone_title = "## Your most repeated mistakes, last 14 days\n"
+        ATONE_BUDGET = int(os.environ.get('ATONE_BUDGET', '500'))
+        while len(rows) > 1 and len(atone_title + "\n".join(rows)) > ATONE_BUDGET:
+            rows.pop()
         if rows:
-            parts.append("## Your most repeated mistakes, last 14 days\n" + "\n".join(rows))
+            parts.append(atone_title + "\n".join(rows))
             if os.environ.get('INJECT_TEST') != '1':
                 rec = {"ts": now.strftime('%Y-%m-%dT%H:%M:%SZ'), "kind": "atone-summary", "slugs": top}
                 sid = os.environ.get('INJECT_SID', '')
@@ -312,7 +318,8 @@ header = (
 
 # The prompt lane emits only its own section — the SessionStart block already
 # delivered the header and the atone TL;DR.
-content = ("\n\n".join(parts) if part_mode == 'ranked'
+# Without the dream half the long header only repeats what the section title says.
+content = ("\n\n".join(parts) if part_mode == 'ranked' or not dream_enabled
            else header + "\n\n".join(parts))
 
 # Hard cap at 3500 chars to stay lean

@@ -321,6 +321,9 @@ cmd_inject() {
   local changed codex
   changed=$(jq -r '[.policies[] | select(.value != .default) | "\(.key)=\(.value)\(if .source == "project" then " (this project)" else "" end)"] | join(", ")' <<<"$j")
   codex=$(jq -r '.policies[] | select(.key == "model.codex") | .value' <<<"$j")
+  # On the defaults there is nothing to tell the session: the hooks enforce the
+  # policy either way, and `pol.sh get` answers if it is ever asked.
+  [ -z "$changed" ] && [ "$codex" != "encourage" ] && exit 0
   local msg="[policy] Hooks enforce the owner's menu-bar policy. Allowed: just do it, no approval request. Blocked: say it is off, never ask to approve. Read: bash ~/.claude/scripts/pol/pol.sh get <key> --cwd <dir>."
   [ -n "$changed" ] && msg="$msg Non-default: $changed."
   [ "$codex" = "encourage" ] && msg="$msg Codex is encouraged: prefer a Codex seat for implementation and review work it fits."
