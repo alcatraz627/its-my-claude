@@ -14,42 +14,45 @@ tool_name=$(echo "$input" | jq -r '.tool_name // empty')
 command=$(echo "$input" | jq -r '.tool_input.command // empty')
 [[ -n "$command" ]] || exit 0
 
-# Match against a de-quoted copy so an `rm` named INSIDE a string literal — a
-# commit message, an `echo`, RCA prose passed to another tool — is treated as
-# data, not a command. A real deletion lives OUTSIDE quotes. Same idiom as
-# guard-system-dir-writes.sh; closes the `echo "...; rm ..."` false positive.
-scan=$(printf '%s' "$command" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
-
-# Detect rm commands (rm, rm -f, rm -rf, rm -r, etc.)
-# Match: standalone rm at start of command or after && ; | etc.
-# Skip: commands like "npm rm", "cargo rm", "git rm" (package manager operations)
-if echo "$scan" | grep -qE '(^|[;&|]\s*)rm\s+'; then
-  # Don't intercept git rm (staging area operation, not file deletion)
-  if echo "$scan" | grep -qE '(^|[;&|]\s*)git\s+rm\b'; then
-    exit 0
+# shell-scan.py reads the command like a shell: an `rm` that is only a word in a
+# commit message or an `echo` is data, while `\rm`, `/bin/rm`, `command rm`,
+# `env rm`, `sudo rm`, `xargs rm`, `find -exec rm`, `find -delete`, `unlink` and
+# `bash -c "rm ..."` are all the same deletion. NOT caught, because no static
+# reading can see them: a deletion through a variable or alias (`$RM x`),
+# `rmdir`, and a language runtime (`python3 -c "os.remove(...)"`, `perl unlink`).
+# If the scanner is missing or fails, the older de-quoted grep below decides.
+SHELL_SCAN="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/hooks/shell-scan.py"
+hit=""
+if scanned=$(printf '%s' "$command" | python3 "$SHELL_SCAN" rm 2>/dev/null); then
+  hit=$(printf '%s\n' "$scanned" | head -1)
+else
+  scan=$(printf '%s' "$command" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
+  if echo "$scan" | grep -qE '(^|[;&|]\s*)rm\s+' && ! echo "$scan" | grep -qE '(^|[;&|]\s*)git\s+rm\b'; then
+    hit=$(echo "$command" | tr ';&|' '\n' | grep -E '^\s*rm\s' | head -1)
   fi
+fi
 
-  # Extract the paths being deleted for the warning message
-  # Split command on ; & | separators, find the rm fragment, strip rm + flags
-  paths=$(echo "$command" | tr ';&|' '\n' | while IFS= read -r part; do
-    if echo "$part" | grep -qE '^\s*rm\s'; then
-      # Remove "rm", then remove standalone flags (words starting with -)
-      echo "$part" | sed -E 's/^[[:space:]]*rm[[:space:]]+//' | tr ' ' '\n' | grep -v '^-' | tr '\n' ' ' | xargs
-      break
-    fi
-  done)
+if [[ -n "$hit" ]]; then
+  # The paths being deleted, for the warning message: drop the verb and its flags.
+  paths=$(printf '%s' "$hit" | sed -E 's/^[[:space:]]*(rm|unlink|find)[[:space:]]+//' | tr ' ' '\n' | grep -v '^-' | tr '\n' ' ' | xargs || true)
   [[ -z "$paths" ]] && paths="<files>"
 
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook safe-delete --action block --heeded unknown >/dev/null 2>&1 || true
-  # Output block decision with yellow-highlighted message
-  cat <<BLOCK_JSON
-{
-  "decision": "block",
-  "reason": "\u001b[33m⚠️  SAFE DELETE: 'rm' is blocked. Use 'trash' instead to move files to macOS Trash.\u001b[0m\n\n\u001b[33mBlocked command:\u001b[0m  $command\n\u001b[33mReplacement:\u001b[0m     Replace 'rm [-rf]' with 'trash' — e.g.: trash $paths\n\n\u001b[33m💡 Recovery:\u001b[0m If a file was already deleted, check:\n   • Finder → Trash (⌘+Shift+Delete to empty)\n   • CLI: ls ~/.Trash/\n   • Restore: mv ~/.Trash/<filename> <original-path>"
-}
-BLOCK_JSON
+  # Built with jq: the blocked command is spliced into the text, and a quote in
+  # it (`bash -c "rm x"`) would otherwise make the JSON invalid and the block void.
+  y=$'\033[33m'; z=$'\033[0m'
+  reason="${y}⚠️  SAFE DELETE: 'rm' is blocked. Use 'trash' instead to move files to macOS Trash.${z}
+
+${y}Blocked command:${z}  $command
+${y}Replacement:${z}     Replace 'rm [-rf]' with 'trash' — e.g.: trash $paths
+
+${y}💡 Recovery:${z} If a file was already deleted, check:
+   • Finder → Trash (⌘+Shift+Delete to empty)
+   • CLI: ls ~/.Trash/
+   • Restore: mv ~/.Trash/<filename> <original-path>"
+  jq -cn --arg r "$reason" '{decision:"block", reason:$r}'
   exit 0
 fi
 
-# Not an rm command — allow through
+# Not a deletion — allow through
 exit 0

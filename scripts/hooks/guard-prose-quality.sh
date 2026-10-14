@@ -30,7 +30,7 @@ case "$fp" in
   *) exit 0 ;;
 esac
 case "$fp" in
-  *test*|*spec*|*__tests__*|*fixture*|*mock*) exit 0 ;;
+  *test*|*spec*|*__tests__*|*fixture*|*mock*|*probe*|*/hooks/replay/*) exit 0 ;;
   # A checkpoint is an agent-facing record with its own parse contract: the
   # mini dump REQUIRES "**Done:**", which this gate read as a verdict-first
   # opener, so a valid mini could not be written (sys-monitor, 2026-09-08).

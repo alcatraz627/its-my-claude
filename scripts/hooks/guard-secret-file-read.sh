@@ -51,6 +51,12 @@ SECRET_PATH="(^|/)($SECRET_BASENAME)\$"
 # command form: the same names, bounded by shell token edges instead of ^/\$
 SECRET_TOKEN="(^|[[:space:]=<>|;&\"'/])($SECRET_BASENAME)([[:space:]|;&\")']|\$)"
 
+# .env.example, .env.sample and .env.template are committed templates that exist
+# to be read. They are exempt as a whole token only: `.env.example.local` and a
+# second, real `.env` on the same line still block.
+ENV_TEMPLATE_PATH='(^|/)\.env\.(example|sample|template)$'
+ENV_TEMPLATE_SED='s/\.env\.(example|sample|template)([[:space:]|;&"'"'"')<>]|$)/ENVTEMPLATE\2/g'
+
 block() {
   local what="$1" why="$2" instead="$3"
   jq -nc --arg r "$what
@@ -75,6 +81,8 @@ If you genuinely must see a value, the human reads it: ask them to run it.'
 if [ "$tool_name" = "Read" ]; then
   fp=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
   [ -n "$fp" ] || exit 0
+  # A committed template holds names and placeholders, never values.
+  printf '%s' "$fp" | rg -q "$ENV_TEMPLATE_PATH" 2>/dev/null && exit 0
   printf '%s' "$fp" | rg -q "$SECRET_PATH" 2>/dev/null || exit 0
   block "⛔ SECRET FILE READ BLOCKED — $fp" \
     "The Read tool emits the whole file into the transcript, and this path is secret-shaped. A private key reached a transcript this way on 2026-08-17; the key had to be rotated." \
@@ -113,6 +121,8 @@ cmd="$cmd_scan"
 if ! printf '%s' "$cmd" | rg -q '\|\s*(xargs\b[^|]*)?(ba|z)?sh\b|>\s*\S+\.(sh|bash|zsh)\b|\b(ba|z)?sh\s+\S+\.sh\b' 2>/dev/null; then
   _msg=$(printf '%s' "$cmd" | perl -0777 -pe 's{((?:^|[;&|]\s*|\n\s*)(?:git\s+(?:commit|tag)|gh\s+(?:pr|issue)\s+\w+|claude-ipc\s+(?:send|reply))\b)((?:[^;&|"\x27\n]|"[^"\$`]*"|\x27[^\x27]*\x27)*)}{my($h,$t)=($1,$2); $t=~s/"[^"]*"/""/g; $t=~s/\x27[^\x27]*\x27/\x27\x27/g; $h.$t}gme' 2>/dev/null) && [ -n "$_msg" ] && cmd="$_msg"
 fi
+
+cmd=$(printf '%s' "$cmd" | sed -E "$ENV_TEMPLATE_SED")
 
 printf '%s' "$cmd" | rg -q "$SECRET_TOKEN" 2>/dev/null || exit 0
 

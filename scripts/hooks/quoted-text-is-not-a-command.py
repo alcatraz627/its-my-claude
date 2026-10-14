@@ -13,8 +13,14 @@ the stripped command, the only match was inside quoted text, and the command is
 allowed. In every other case the hook stays silent and the tiers decide as
 before, so a real deploy, a chained deploy, or a deploy hidden behind a pipe is
 untouched.
+
+Quoted text is not always data. The argument of `bash -c`, `sh -c`, `eval` and
+`ssh`, and a heredoc fed to a shell, are commands that run. When a matching glob
+also matches such text, the hook stays silent too, so `bash -c "sudo rm x"` is
+judged by the tiers like `sudo rm x`.
 """
 import fnmatch
+import importlib.util
 import json
 import os
 import re
@@ -50,6 +56,22 @@ def glob_matches(glob: str, command: str) -> bool:
     return fnmatch.fnmatchcase(command, glob)
 
 
+def executed_texts(command: str) -> list[str]:
+    """Quoted text the shell would run (bash -c, eval, ssh, a heredoc fed to a shell).
+
+    If the scanner cannot be loaded, the whole command counts as executed, which
+    makes this hook stay silent rather than allow something it cannot read.
+    """
+    try:
+        here = os.path.dirname(os.path.abspath(__file__))
+        spec = importlib.util.spec_from_file_location("shell_scan", os.path.join(here, "shell-scan.py"))
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.exec_texts(command)
+    except Exception:  # noqa: BLE001
+        return [command]
+
+
 HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1\n.*?\n\s*\2\b", re.S)
 SINGLE = re.compile(r"'[^']*'")
 DOUBLE = re.compile(r'"(?:[^"\\]|\\.)*"')
@@ -75,6 +97,9 @@ def main() -> None:
     globs = load_globs(str(payload.get("cwd") or os.getcwd()))
     hit_full = [g for g in globs if glob_matches(g, command)]
     if not hit_full:
+        return
+    executed = executed_texts(command)
+    if any(glob_matches(g, text) for g in hit_full for text in executed):
         return
     stripped = strip_quoted(command)
     hit_stripped = [g for g in globs if glob_matches(g, stripped)]

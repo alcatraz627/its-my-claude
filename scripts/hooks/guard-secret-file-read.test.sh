@@ -98,6 +98,17 @@ allows "sed -E 's/=.*/=x/' package.json"
 allows "cat environment.md"
 allows "head docs/.env-example.md"
 
+echo "== committed templates are meant to be read =="
+allows "cat .env.example"
+allows "head -5 config/.env.sample"
+allows "cat ~/proj/.env.template"
+allows "sed -n '1,5p' .env.example"
+blocks "cat .env.example.local"
+blocks "cat .env.example .env"
+blocks "cat .env.examples"
+[ "$(verdict "$(read_tool "$HOME/p/.env.example")")" = allow ] && ok "allows Read of .env.example" || bad "Read of .env.example was blocked"
+[ "$(verdict "$(read_tool "$HOME/p/.env.production")")" = deny ] && ok "still blocks Read of .env.production" || bad "Read of .env.production was not blocked"
+
 echo "== a secret-shaped name inside message text is a mention, not a read =="
 allows 'git commit -m "stop printing .env with cat"'
 allows 'git commit -m "guard deploy.pem sed handling"'

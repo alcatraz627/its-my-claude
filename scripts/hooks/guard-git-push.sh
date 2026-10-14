@@ -67,6 +67,18 @@ blockjson() { jq -cn --arg r "$1" '{decision:"block", reason:$r}' 2>/dev/null ||
 # the block message telling the agent not to self-approve — the same trust model
 # guard-user-commit.sh uses for its protection config.
 
+# ── Reduce the command to the pushes it would actually run ──────────────────
+# shell-scan.py reads the string like a shell: `bash -c "git push origin main"`,
+# `/usr/bin/git push origin +main` and `command git push` come out as a plain
+# `git push ...` line, while `echo "git push origin main"` and a commit message
+# naming a push come out as nothing. If the scanner is missing or fails, the raw
+# command is judged as before.
+SHELL_SCAN="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/shell-scan.py"
+if cmd_norm=$(printf '%s' "$cmd" | python3 "$SHELL_SCAN" push 2>/dev/null); then
+  cmd="$cmd_norm"
+fi
+[ -n "$cmd" ] || exit 0
+
 # ── Is this a git push at all? ───────────────────────────────────────────────
 GIT_PUSH_RE='(^|[;&|[:space:](])git([[:space:]]+-C[[:space:]]+[^[:space:]]+|[[:space:]]+-c[[:space:]]+[^[:space:]]+|[[:space:]]+--[[:alnum:]-]+(=[^[:space:]]*)?)*[[:space:]]+push([[:space:]]|$|")'
 printf '%s' "$cmd" | grep -qE "$GIT_PUSH_RE" || exit 0
@@ -130,7 +142,7 @@ if [ "$gated" = 0 ]; then
   # Non-flag tokens after `push`: first is the remote, the rest are refspecs.
   push_args=$(printf '%s' "$push_seg" | sed -E 's/.*[[:space:]]push([[:space:]]|$)/\1/' | tr ' ' '\n' | grep -vE '^-|^$' || true)
   n_args=$(printf '%s' "$push_args" | grep -c . || true)
-  if printf '%s' "$push_seg" | grep -qE '(^|[[:space:]:=/])(main|master)([[:space:]]|$)'; then
+  if printf '%s' "$push_seg" | grep -qE '(^|[[:space:]:=/+])(main|master)([[:space:]]|$)'; then
     gated=1; why="push targets main/master (explicit ref)"
   elif printf '%s' "$push_seg" | grep -qE '[[:space:]]--(all|mirror)([[:space:]]|$)'; then
     gated=1; why="push --all/--mirror can update main/master"

@@ -14,7 +14,12 @@
 #   - exported functions only (component-internal handlers aren't exported);
 #   - skips const/type/interface (per-component `Props`, Next.js `export const
 #     metadata`, etc. legitimately recur);
-#   - stoplists generic names; requires name length >= 5.
+#   - stoplists generic names; requires name length >= 12, because short names
+#     (check, classify, expect, _post) are reused by standalone scripts and
+#     tests by nature and blocked real work daily;
+#   - skips test_* and underscore-private names (not an API anyone reuses);
+#   - ignores a match in a different top-level directory of the project
+#     (backend/ vs scripts/ are separate packages, not a duplicate).
 # Mute: touch ~/.claude/.no-dup-symbol-guard
 
 set -uo pipefail
@@ -125,10 +130,15 @@ fi
 if [ "$lang" = js ]; then globs=(-g '*.ts' -g '*.tsx' -g '*.js' -g '*.jsx' -g '*.mjs' -g '*.cjs')
 else globs=(-g '*.py'); fi
 
+# First path component under the project root: the "package" a file belongs to.
+top_dir() { local rel="${1#"$root"/}"; case "$rel" in */*) printf '%s' "${rel%%/*}" ;; *) printf '' ;; esac; }
+my_top=$(top_dir "$file_path")
+
 hits=""
 while IFS= read -r name; do
   [ -z "$name" ] && continue
-  [ "${#name}" -lt 5 ] && continue
+  [ "${#name}" -lt 12 ] && continue
+  case "$name" in test_*|_*) continue ;; esac
   is_generic "$name" && continue
   is_route_file "$file_path" && is_route_export "$name" && continue
   case "$name" in *'$'*) continue ;; esac   # `$` would mis-anchor the rg regex below
@@ -148,6 +158,7 @@ while IFS= read -r name; do
   while IFS= read -r line; do
     [ -n "$line" ] || continue
     is_build_output "${line%%:*}" && continue
+    [ "$(top_dir "${line%%:*}")" = "$my_top" ] || continue
     found="${found}${line}"$'\n'
   done <<< "$raw"
   found=$(printf '%s' "$found" | head -3)

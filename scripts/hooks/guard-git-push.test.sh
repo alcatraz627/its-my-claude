@@ -6,7 +6,7 @@
 # (the hook emits its block/ask output) versus not-gated (silent exit 0), with
 # osascript stubbed to DENY so a gated case can never pop UI or approve itself.
 set -uo pipefail
-HOOK="$(cd "$(dirname "$0")" && pwd)/guard-git-push.sh"
+HOOK="${GUARD_UNDER_TEST:-$(cd "$(dirname "$0")" && pwd)/guard-git-push.sh}"
 T=$(mktemp -d)
 pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok    $1"; }
@@ -44,6 +44,27 @@ gated "$R" "git push --all origin" "--all"
 gated "$R" "git push" "bare push on main checkout"
 gated "$R" "git push origin" "remote-only push on main checkout"
 gated "$F" "git push origin master" "explicit master from a feature checkout"
+
+# Spellings that used to slip past the pattern (D33 audit, 2026-10-15):
+gated "$R" 'bash -c "git push origin main"' "bash -c wrapper"
+gated "$R" "sh -c 'git push origin main'" "sh -c wrapper"
+gated "$R" "/usr/bin/git push origin main" "absolute path to git"
+gated "$R" "git push origin +main" "force-refspec +main"
+gated "$R" "command git push origin main" "command prefix"
+gated "$R" "env FOO=1 git push origin main" "env prefix"
+gated "$R" 'git push origin "main"' "quoted refspec"
+gated "$R" 'echo "$(git push origin main)"' "push inside command substitution"
+gated "$R" "$(printf 'cat <<EOF | bash\ngit push origin main\nEOF')" "heredoc fed to bash"
+gated "$R" "git push origin 2>&1" "remote-only push with a redirect"
+allowed "$R" 'bash -c "git push origin feat-y"' "bash -c feature push"
+allowed "$R" "/usr/bin/git push origin feat-y" "absolute-path feature push"
+
+# Mentions stay silent: the words are data, not a push.
+allowed "$R" 'echo "git push origin main"' "mention: echo"
+allowed "$R" "rg 'git push origin main' docs/" "mention: rg pattern"
+allowed "$R" 'git commit -m "docs: explain git push origin main"' "mention: commit message"
+allowed "$R" "$(printf 'git commit -m "$(cat <<'"'"'EOF'"'"'\ngit push origin main\nEOF\n)"')" "mention: commit message heredoc"
+allowed "$R" 'echo "bash -c \"git push origin main\""' "mention: quoted wrapper in echo"
 
 # Protected repo gates regardless of branch or refspec:
 mkdir -p "$F/.claude" && touch "$F/.claude/require-user-commit" && (cd "$F" && git add -A >/dev/null 2>&1 && git commit -qm marker)

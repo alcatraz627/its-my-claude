@@ -39,17 +39,30 @@ case "$tool" in
 esac
 [ -n "$cmd" ] || { case "$tool" in mcp__*) ;; *) exit 0 ;; esac; }
 
+# Only a gh that would actually RUN counts. A heredoc that writes a script, an
+# echo, or a commit message can name a gh posting command without posting
+# anything, so the Bash command is reduced to its real gh commands first
+# (shell-scan.py: heredoc bodies and quoted text are data; `bash -c "gh ..."` is
+# a command). If the scanner is missing or fails, the raw command is judged as
+# before.
+gh_cmd="$cmd"
+case "$tool" in
+  mcp__*) ;;
+  *) SHELL_SCAN="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/shell-scan.py"
+     if scanned=$(printf '%s' "$cmd" | python3 "$SHELL_SCAN" gh 2>/dev/null); then gh_cmd="$scanned"; fi ;;
+esac
+
 # Posting surfaces only. Reads (gh pr view, gh api GET) pass untouched, and so
 # does everything that is not a comment/review write.
 posts=0
 case "$tool" in mcp__github__*) posts=1 ;; esac
-if printf '%s' "$cmd" | grep -qE 'gh (pr|issue) comment'; then posts=1; fi
+if printf '%s' "$gh_cmd" | grep -qE 'gh (pr|issue) comment'; then posts=1; fi
 # PR and issue bodies read as the owner too (a body-less `gh pr edit --title` is not gated).
-if printf '%s' "$cmd" | grep -qE 'gh (pr|issue) (create|edit)' \
-   && printf '%s' "$cmd" | grep -qE -- '(--body|--body-file|(^| )-b |(^| )-F )'; then posts=1; fi
-if printf '%s' "$cmd" | grep -qE 'gh api' \
-   && printf '%s' "$cmd" | grep -qE '(comments|reviews)' \
-   && printf '%s' "$cmd" | grep -qE '(-X|--method) *(POST|PATCH|PUT)|-F +body|-f +body|--field +body|--raw-field +body'; then posts=1; fi
+if printf '%s' "$gh_cmd" | grep -qE 'gh (pr|issue) (create|edit)' \
+   && printf '%s' "$gh_cmd" | grep -qE -- '(--body|--body-file|(^| )-b |(^| )-F )'; then posts=1; fi
+if printf '%s' "$gh_cmd" | grep -qE 'gh api' \
+   && printf '%s' "$gh_cmd" | grep -qE '(comments|reviews)' \
+   && printf '%s' "$gh_cmd" | grep -qE '(-X|--method) *(POST|PATCH|PUT)|-F +body|-f +body|--field +body|--raw-field +body'; then posts=1; fi
 [ "$posts" = "1" ] || exit 0
 
 # Body text = the inline command plus every readable file it names as a body source.

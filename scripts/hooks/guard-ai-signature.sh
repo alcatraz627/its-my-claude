@@ -33,7 +33,7 @@ case "$fp" in
   "$HOME/.claude/rules/"*|"$HOME/.claude/conventions/"*|"$HOME/.claude/features/"*|\
   "$HOME/.claude/memory/"*|"$HOME/.claude/atone/"*|"$HOME/.claude/COMMIT.md"|\
   "$HOME/.claude/CLAUDE.md"|"$HOME/.claude/scripts/hooks/"*|\
-  *test*|*spec*|*fixture*|*mock*) exit 0 ;;
+  *test*|*spec*|*fixture*|*mock*|*probe*|*/hooks/replay/*) exit 0 ;;
 esac
 
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
