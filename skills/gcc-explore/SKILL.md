@@ -94,10 +94,9 @@ Then offer the dig-deeper paths and stop:
   →
 ```
 
-Typed numbers and free-form questions both work. **Never use a dialog tool** for
-this (`AskUserQuestion`, `mcp__inputs__*`). They are unusable in the owner's
-fullscreen TUI, and a picker that hangs is a failed exploration. Plain text, then
-wait.
+Typed numbers and free-form questions both work. A picker (`AskUserQuestion` or
+the `mcp__inputs__*` tools) works too, but plain text keeps the exploration
+conversational. Then wait.
 
 ## Phase 3: Dig deeper
 

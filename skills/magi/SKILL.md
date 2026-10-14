@@ -169,7 +169,7 @@ Each agent gets:
 - With `--model-mix "<model=count,...;jester=<model>>"` (example: `--model-mix "fable=1,opus5=2;jester=opus4.8"`): explicit per-seat assignment. Counts must sum to the main-pool size; the jester clause is separate. Overrides `--model` and `--diverse`. Randomize which persona gets which model unless the user pins seats; record every assignment in meta.json `voters[].model`.
   - Bare aliases (`sonnet`, `opus`, `haiku`, `fable`) pass straight to the Agent tool's `model` param.
   - Versioned names (`opus5`, `opus4.8`, or a full model id) need a thin agent definition at `~/.claude/agents/magi-voter-<slug>.md` whose frontmatter pins the exact model id; dispatch that voter with its `subagent_type`. If the harness rejects the pin, fall back one lane DOWN (never up) and log the substitution in meta.json.
-  - `fable` seats: allowed only while the owner sentinel `~/.claude/.allow-fable-subagents` exists, and every fable seat must be declared in the run's Model Plan (`rules/model-tier-routing.md`). In-subscription since 2026-08-25, so name it in the Phase 1 line as a routing choice rather than as a cost.
+  - `fable` seats: allowed by default (owner, 2026-09-18). The opt-out is an active snooze row, which `bash ~/.claude/scripts/hooks/hook-snooze.sh check fable-restrict-subagents` reports (see `scripts/hooks/guard-model-tier.sh:49-52`); when it reports active, drop one lane. Every fable seat must be declared in the run's Model Plan (`rules/model-tier-routing.md`). It is in-subscription, so name it in the Phase 1 line as a routing choice rather than as a cost.
 
 ### 4.2 — Capture cost
 
@@ -242,18 +242,20 @@ After all return, attempt to parse each JSON. If voter-N returns malformed JSON:
 ### 6.3 — Verify + report
 
 ```bash
-RESULT=$(bash ~/.claude/scripts/magi/aggregate-votes.sh "$ARCHIVE")
-echo "$RESULT" | jq '.voters_scored, .voters_dropped, .warnings'
+bash ~/.claude/scripts/magi/aggregate-votes.sh "$ARCHIVE" > "$ARCHIVE/04-voting/result.json"
 ```
+
+Then, as a separate call: `jq '.voters_scored, .voters_dropped, .warnings' "$ARCHIVE/04-voting/result.json"`.
 
 If `voters_dropped > 0`, surface the count + which voters in the final report.
 
 ## Phase 7 — Aggregate votes
 
 ```bash
-RESULT=$(bash ~/.claude/scripts/magi/aggregate-votes.sh "$ARCHIVE")
-echo "$RESULT" | jq
+bash ~/.claude/scripts/magi/aggregate-votes.sh "$ARCHIVE" > "$ARCHIVE/04-voting/result.json"
 ```
+
+Then, as a separate call: `jq . "$ARCHIVE/04-voting/result.json"`.
 
 Returns: winner, winner_score, scope_axis_pstdev, scope_dissent_flagged.
 

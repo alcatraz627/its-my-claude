@@ -11,14 +11,14 @@ user-invocable: true
 A workspace doc is a session-scoped Todos/Notes/Doc-Links/Decisions file at `<project>/.claude/session-notes/<session-id>.md`. It persists across `/clear` and `/compact`. The `_active.md` symlink always points at the currently-active session's doc, so other skills (`/catchup`, `/core-dump`) can find it without knowing the session-id.
 
 Where it slots in:
-- **`/core-dump`** reads `_active.md`, synthesizes proposed updates (todos done, new todos, notes append, doc links, decisions), shows a diff to the user, applies on confirmation. Never blind overwrite.
+- **`/core-dump`**, only when the owner asks, works on the session's own doc (`session-notes/<session-id>.md`, never the shared `_active.md` symlink), proposes updates to notes, doc links and decisions, shows a diff, and applies on confirmation. It skips silently when the session's own doc does not exist. Never blind overwrite.
 - **`/catchup`** reads `_active.md` first when restoring. Surfaces Todos prominently as the immediate next steps.
 - **The dream pipeline** ingests Todos → cross-session unfinished-todo surfacing in the SessionStart briefing (the `/forgotten-todos` browse skill is parked, mig 0048; the ingestion still runs).
 
 ## When to use
 
 - Starting a "serious" session — manually invoke `/workspace init` to create the doc up front
-- Auto-trigger: `/core-dump` will auto-create on its first run for a session if `--init-workspace` is passed or the session has >20 turns
+- `/core-dump` never creates the doc. If the session's doc is missing it skips the workspace step, so create it up front with `/workspace init`
 - Browsing: `/workspace list` to see what's stacked up in this project
 
 ## Usage

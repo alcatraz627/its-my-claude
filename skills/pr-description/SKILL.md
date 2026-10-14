@@ -169,9 +169,8 @@ a score; Phase 1's ruling still stands.
 | signals conflict, or the archetype is unclear | ASK |
 
 When asking, use the `std::claude::tui` library
-(`source ~/.claude/scripts/tui/pick.sh`, then `tui_choose`). Do NOT use
-`AskUserQuestion` or `mcp__inputs__*`: both are unusable in this owner's
-fullscreen TUI, and a picker that hangs is a failed run.
+(`source ~/.claude/scripts/tui/pick.sh`, then `tui_choose`). `AskUserQuestion`
+and the `mcp__inputs__*` tools also work if a structured picker fits better.
 
 ```bash
 source ~/.claude/scripts/tui/pick.sh

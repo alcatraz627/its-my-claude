@@ -107,10 +107,13 @@ the user actually asked for rather than the plan's paraphrase of it. Feed what i
 to the validator as its brief, and carry the skipped list into the report so a check
 nobody ran is visible rather than absent.
 
-0. **Optional $0 pre-gate** (lm suite, when the repo is on this machine): pipe the diff
-   through the local reviewer and the mechanical gate, and fix cheap survivors BEFORE
-   spending the paid seat:
-   `git diff <range> | ~/Code/local-models/bin/review --findings --json -m small | jq '.data // empty' | ~/Code/local-models/.venv/bin/python ~/Code/local-models/lib/findings-gate.py --root <repo>`
+0. **Optional $0 pre-gate** (lm suite, when the repo is on this machine): run the local
+   reviewer and the mechanical gate as separate calls, with a temp file between each, and
+   fix cheap survivors BEFORE spending the paid seat. One command per Bash call, no pipes:
+   1. `git diff <range> > <scratch>/diff.patch`
+   2. `~/Code/local-models/bin/review --findings --json -m small < <scratch>/diff.patch > <scratch>/review.json`
+   3. `jq '.data // empty' <scratch>/review.json > <scratch>/findings.json`
+   4. `~/Code/local-models/.venv/bin/python ~/Code/local-models/lib/findings-gate.py --root <repo> < <scratch>/findings.json`
    The gate mechanically drops findings whose file:line doesn't exist; survivors are
    OPINIONS to triage (verify each against the battery/code before acting), never
    verdicts. Pin a format-honoring tier (`-m small` — the 35b code tier ignores Ollama
@@ -138,20 +141,20 @@ nobody ran is visible rather than absent.
    mutation-test any guard it audits (break the code deliberately, confirm the guard goes
    red, revert, confirm a clean tree); require every finding grounded in a file:line or a
    repro it ran; and ask for a one-line verdict (PASS / PASS-WITH-NOTES / ISSUES-FOUND)
-   then ranked findings with severity. **End with the delivery clause — and keep the two
-   channels asymmetric: the FILE carries the findings; the return message carries ONLY
-   "one-line verdict + the file path."** A validator that goes idle without delivering
-   stalls the loop (first live run needed a chase-up ping), but a message restating the
-   findings creates a second, slower copy that lands stale — mailbox deliveries routinely
-   arrive 1-2 turns after the parent already read the report from disk and TaskStopped
-   the agent. Treat any delivery referencing an already-consumed artifact (or arriving
-   post-stop) as a receipt to acknowledge, never content to re-triage
-   (prop-20260717-104030-3e).
+   then ranked findings with severity. **End with the one delivery contract: the validator
+   writes its findings file at an absolute path BEFORE returning, and returns ONLY "one-line
+   verdict + the file path."** The parent verifies the file exists before using any finding.
+   A validator that goes idle without delivering stalls the loop (first live run needed a
+   chase-up ping), and a message restating the findings creates a second, slower copy that
+   lands stale: mailbox deliveries routinely arrive 1-2 turns after the parent already read
+   the report from disk and TaskStopped the agent. Treat any delivery referencing an
+   already-consumed artifact (or arriving post-stop) as a receipt to acknowledge, never
+   content to re-triage (prop-20260717-104030-3e).
 4. **Persist the findings.** `rules/sub-agent-outputs.md` wants the agent to write its
-   report to an absolute path — but a gcc guard currently BLOCKS sub-agents from writing
-   report files, so instruct it to return findings inline and **the parent (you) writes
-   them** to `<project>/.claude/output/<YYYYMMDD>-<slug>-validation/report.md`. Verify the
-   file exists before relying on it. (Reconciling the two is `prop-20260710-163129-a4`.)
+   report to an absolute path. Give the validator
+   `<project>/.claude/output/<YYYYMMDD>-<slug>-validation/validator.md` (or the path under
+   `~/.claude/assets/reports/` when the project is `~/.claude`), tell it to write there
+   before returning, and verify the file exists before relying on it.
 5. **Close the seat.** Once the findings are verified and persisted, `TaskStop` the
    validator — a finished agent left alive can be commandeered by a board auto-dispatcher
    and spend tokens on work nobody assigned it.

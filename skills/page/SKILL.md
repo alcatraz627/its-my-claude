@@ -14,7 +14,6 @@ The front door for showing something. It names the surface, builds or hands off,
 
 ```
 /page <what needs showing, and to whom>
-/router:page <the same>
 ```
 
 ## Phase 1: Name the surface
@@ -32,7 +31,7 @@ Ask two things: who opens it, and does it need an answer back. Pick the first ro
 
 Say the surface in one line before doing anything, so a wrong pick costs one sentence.
 
-When the ask is about how an existing screen of a product looks or behaves, this is the wrong door. Use `/router:ui`.
+When the ask is about how an existing screen of a product looks or behaves, this is the wrong door. Use `/ui`.
 
 ## Phase 2: Build on the kit
 

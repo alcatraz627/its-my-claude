@@ -39,6 +39,8 @@ invisible to any word ban.
 
 ## The categories (kept after adversarial vet)
 
+Ordered by measured yield, highest first, so a reviewer who stops early has checked the most common defects. Structure and verdict-first lead because the sweep names them the two worst genera and no word ban sees them. Contrastive-scaffold follows at about 8% of scored messages, then bare-ids (32 of 153 friction windows), option-menu (22 windows) and buried-question (an ask in the tail is answered 1 time in 19). Overclaim is last because it is the rarest (about 14 clear matches in 33k messages).
+
 ### structure: the two-split chain and the fused sentence
 
 The reader must read a sentence twice. The core defect is fusion: the
@@ -78,20 +80,6 @@ evidence exists but is placed after the verdict.
 > After: "The write call returned. Now I check that the file exists and is
 > complete."
 
-### overclaim: the claim without its evidence
-
-The message asserts what nothing in it shows: a completion claim with no
-evidence token anywhere, celebration before the verification has run, a
-"should now work" future. It is rare (about 14 clear matches in 33k messages).
-The user kept it standalone anyway (ruling A5b). The behavioral rule lives in
-`rules/exercise-based-verification.md` and the declared-ready Stop hook; this
-category is the prose-level name for the same failure.
-
-> Before: "Updated the config. This should fix the flaky startup."
->
-> After: "I updated the config. I have not re-run the startup path, so the
-> fix is unverified."
-
 ### contrastive-scaffold: "not X, but Y"
 
 The negation frame the thesaurus already bans (thes-20260716-165410-80),
@@ -110,12 +98,6 @@ do a lookup per row. Every id carries three or more words of subject on the
 same line, or it does not ship. Counted by counter-gate-stop.sh (cluster-aware:
 an id inside a run of ids is bare regardless of trailing words).
 
-### buried-question: the ask decided last, written last
-
-Sweep-measured: a question in the tail of a long reply is answered 1 time in
-19; an open question 10/26; a menu 12/23. If a reply needs an answer, the ask
-lives in the first screen, in the lede block, or it is functionally rhetorical.
-
 ### option-menu: the fork that is really a stop
 
 Sweep-confirmed (22 windows): closing menus the owner rejects by reframing.
@@ -123,17 +105,37 @@ A menu is legitimate only when the fork is real and each option carries the
 agent's drafted answer; "what should I do next?" menus are the writer stopping,
 not a decision surface.
 
+### buried-question: the ask decided last, written last
+
+Sweep-measured: a question in the tail of a long reply is answered 1 time in
+19; an open question 10/26; a menu 12/23. If a reply needs an answer, the ask
+lives in the first screen, in the lede block, or it is functionally rhetorical.
+
+### overclaim: the claim without its evidence
+
+The message asserts what nothing in it shows: a completion claim with no
+evidence token anywhere, celebration before the verification has run, a
+"should now work" future. It is rare (about 14 clear matches in 33k messages).
+The user kept it standalone anyway (ruling A5b). The behavioral rule lives in
+`rules/exercise-based-verification.md` and the declared-ready Stop hook; this
+category is the prose-level name for the same failure.
+
+> Before: "Updated the config. This should fix the flaky startup."
+>
+> After: "I updated the config. I have not re-run the startup path, so the
+> fix is unverified."
+
 ## Detection at a glance
 
 | category | mechanical (prose-lint catches it) | judgment-only (review-time) |
 |---|---|---|
 | structure | word tiers >25/>35/>50; connective dashes (digit ranges like L15-L36 never count) | parenthetical-interruption severity |
 | verdict-first | verdict token opening the first sentence | verdict contradicted by its own details |
-| overclaim | the "should now work" phrase family | claim-versus-evidence matching |
 | contrastive-scaffold | "not X, but Y" and "— it's" (the bare "not X —" form fires on plain negation; rejected) | none observed |
 | bare-ids | counter-gate-stop.sh cluster count | whether a gloss is honest |
-| buried-question | counter-gate-stop.sh first-question position | whether the ask needed asking |
 | option-menu | none yet (candidate: closing-region numbered list + trailing ?) | fork-is-real judgment |
+| buried-question | counter-gate-stop.sh first-question position | whether the ask needed asking |
+| overclaim | the "should now work" phrase family | claim-versus-evidence matching |
 
 ## Calibrate the metric before you let it steer
 

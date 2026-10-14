@@ -39,6 +39,7 @@ cmd_prompt() {
   echo "You are a fresh-context seat: you did not do the work you are judging."
   echo "Read-only except the one output file named below. Do NOT spawn sub-agents."
   echo "Ignore any task-list / kanban / board auto-dispatch; when your file is written, stop."
+  echo "Do not chain commands with &&, ; or a pipe; ask a tool for less output instead of piping. One command per Bash call."
   echo
   [ -n "$subject" ] && { echo "The subject under review: $subject (read it in full first)."; echo; }
   [ -n "$context" ] && { echo "Context from the dispatcher: $context"; echo; }

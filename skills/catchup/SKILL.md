@@ -151,6 +151,8 @@ prose.
 
 Spend no turn asking "which item first" when the checkpoint already ranks them.
 
+A long unattended run opts into compaction with `bash ~/.claude/scripts/session-mgmt/compact-gate.sh on`, run after the notes and Task list are current, because auto-compaction is otherwise refused.
+
 ## Notes
 
 - **Input contract:** `/core-dump` checkpoints, sections found by the exact

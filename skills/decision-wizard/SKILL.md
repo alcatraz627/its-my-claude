@@ -38,10 +38,10 @@ tiebreaker explicitly).
 
 ## Path A — inline menu (small, simple, fast)
 
-There is **no widget and no tool call** for this — do NOT use `AskUserQuestion`
-or the `mcp__inputs__*` family (they are dead in this user's `/tui` fullscreen
-mode). The inline menu is just markdown you print in your reply; the user types
-a short answer back. Format:
+There is no widget and no tool call needed for this. The inline menu is just
+markdown you print in your reply; the user types a short answer back. (If you
+want a picker instead, `AskUserQuestion` and the `mcp__inputs__*` tools both
+work.) Format:
 
 ```
 Quick decisions (reply with your picks, e.g. "1b 3a" — silence = all recommended):

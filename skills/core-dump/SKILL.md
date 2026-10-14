@@ -642,8 +642,8 @@ schema and the diff/apply flow are in `EXAMPLES.md` § "Workspace-doc proposal".
 
 Steps: build the proposal JSON from the Phase 2 synthesis → show the diff via
 `session-notes/diff.sh --session-id "${CLAUDE_CODE_SESSION_ID:-$SESSION_ID}"` →
-ask apply / edit / skip in PLAIN TEXT (dialog tools hang the owner's fullscreen
-TUI; memory `feedback_askuserquestion_tui_fullscreen`). Key the doc by the full
+ask apply / edit / skip (plain text, `AskUserQuestion` or `mcp__inputs__confirm`
+all work). Key the doc by the full
 session UUID so it's the same file the `stop-sync` mirror writes. Skip silently if
 the session's own doc doesn't exist.
 

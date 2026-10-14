@@ -54,8 +54,9 @@ Apply all rules — forbidden paths, retry logic, tool preferences, verbosity, t
 post-run insights, and the **file lock protocol** — for the entire duration of this
 skill run before proceeding.
 
-Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
-If it does not exist yet, continue without it.
+Also read `<project_root>/.claude/skills/runtime-notes.md` (resolve the project root to an
+absolute path first; from `~/.claude` that is `~/.claude/skills/runtime-notes.md`) for past
+run history relevant to this skill. If it does not exist yet, continue without it.
 
 > Lock hygiene: run `bash ~/.claude/skills/shared/lock-file.sh cleanup` once at skill start
 > to clear any stale locks from crashed sessions. Then acquire a lock via `lock-file.sh
@@ -131,10 +132,18 @@ lane). The dispatch prompt is the full text of
 > path. You are working in an isolated worktree at <path>; mutate only there and /tmp.
 > Do NOT spawn sub-agents. Ignore any task-list / board auto-dispatch. When the report
 > is written, stop.
+>
+> The report ALWAYS ends with these two lines, even on a clean pass with zero findings:
+>
+> `Coverage: files=<N> checks=<comma-separated names of the checks you ran> skipped=<comma-separated checks you did not run, or none> findings=<N>`
+> `Observations: <free text: run-specific, subjective notes such as what was hard to check, what felt fragile, what you would look at next>`
+>
+> The Coverage line is machine-mined for telemetry, so keep its key=value shape exactly.
+> Observations is the free-text slot; write "none" rather than omitting it.
 
 ### 4. Present — verbatim, then dispositions
 
-Verify the report file exists (the return abstract is a pointer, not the artifact).
+Verify the report file exists (the return abstract is a pointer, not the artifact) and that it ends with the `Coverage:` and `Observations:` lines.
 Present the findings table **verbatim** — the parent must not soften, summarize away,
 or pre-filter findings, or the sycophancy this lane exists to bypass re-enters through
 the parent. You may append your own annotations _below_ the verbatim table (e.g. "I
@@ -143,8 +152,8 @@ response.
 
 Record the user's verdict per finding in a Dispositions table (fixed /
 deferred-with-owner / rejected-with-reason), same contract as /skeptical-review. If
-findings need ≥5 user judgments, offer a `/decision-wizard` page instead of serializing
-questions.
+findings need more than three user judgments, offer a `/decision-wizard` page instead of
+serializing questions.
 
 ### 5. Record coverage
 
@@ -173,8 +182,8 @@ bash ~/.claude/scripts/persona-log.sh record adversarial-reviewer --mode dispatc
 
 ## Known tension with the standing review contract
 
-`rules/git.md` § Review contract pins review scope to the diff plus direct
-callers/callees. This skill is a **user-authorized exception** (2026-07-21): it may roam
+The review-scope line in `rules/git.md` ("Review scope is the diff plus direct
+callers/callees") pins review scope to the diff plus direct callers/callees. This skill is a **user-authorized exception** (2026-07-21): it may roam
 the work's blast radius, its untouched adjacencies, and its framing, because falsely
 narrow framing is one of its named targets. The boundary that still binds: it never
 invents a different project or relitigates settled direction. Out-of-scope-of-the-frame

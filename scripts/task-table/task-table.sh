@@ -16,8 +16,9 @@
 #
 # THE SCRIPT OWNS THE DATA. THE AGENT OWNS THE PRESENTED TABLE.
 # The baseline below is a guaranteed floor, not a ceiling: the agent may add
-# context columns when this queue needs them (see skills/tasks/SKILL.md for the
-# vocabulary and the bar each column has to clear). What the agent may NOT do is
+# context columns when this queue needs them (the owner's steering view is now
+# /tasks, skills/tasks/SKILL.md, which reads the goal record; this renderer is
+# the agent's session checklist only). What the agent may NOT do is
 # render from memory. Facts come from here; presentation is theirs.
 #
 # Usage: task-table.sh              the baseline table

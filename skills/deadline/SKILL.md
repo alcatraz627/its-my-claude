@@ -28,6 +28,8 @@ with a veto list · sequencing strategy proposed per-situation, never hardcoded
 · returns lead with the decision queue, status after · re-baseline continuously
 and surface the cut list unprompted.
 
+A long unattended run opts into compaction with `bash ~/.claude/scripts/session-mgmt/compact-gate.sh on`, run after the notes and Task list are current, because auto-compaction is otherwise refused.
+
 ## Step 0: Load Shared Guidelines and Runtime Context
 
 Read `~/.claude/skills/GUIDELINES.md` and `~/.claude/skills/deadline/runtime-notes.md`
@@ -82,7 +84,9 @@ future blocked ones. In order:
    death 10 minutes into a 2-hour absence is the worst deadline failure;
    wake caps it at ~one interval.
 9. **Write the Deadline state block** (format below) into the session
-   workspace doc `session-notes/<sid>.md` — the authoritative status surface.
+   workspace doc `session-notes/<sid>.md`, as the narrative record. The
+   authoritative status surface is the goal record (`gs`, per
+   `rules/todo-discipline.md`); put the owner-facing rows there.
    Mirror to the Task tool only as a courtesy when it exists; it is
    unprovisioned on some harness versions (prop-20260717-070332-3b), and a
    deadline run must not depend on it.

@@ -67,9 +67,8 @@ most damage). Name the goal in one line first; route the goal.
    the index. Fewer than 3 only when the catalogue genuinely holds fewer
    plausible matches; never exactly 1 unless the match is literal.
 3. **Present as a plain numbered menu.** Mark your top pick with a one-line
-   reason. Numbered plain text only: the inputs dialogs and AskUserQuestion are
-   unusable in the owner's fullscreen TUI
-   (`memory: feedback_askuserquestion_tui_fullscreen`).
+   reason. A numbered plain text list is the default; `AskUserQuestion` or the
+   `mcp__inputs__*` pickers also work.
 4. **The user picks a number, says go (accept the marked pick), or says none.**
    On none: name the 2 or 3 closest partials and offer `/create-skill`. Stop
    there; do not improvise the task without a skill.

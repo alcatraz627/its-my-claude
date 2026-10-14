@@ -27,6 +27,8 @@ session — you're right there, and the wake has nothing to add.
 that true; the owner's requirement is "no wake for sessions that never asked", and
 prose alone wouldn't hold it. Only a human typing `/wake` starts one.
 
+A long unattended run opts into compaction with `bash ~/.claude/scripts/session-mgmt/compact-gate.sh on`, run after the notes and Task list are current, because auto-compaction is otherwise refused.
+
 ## Usage
 
 ```
@@ -148,7 +150,7 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
       agent-ready, whatever its field says.
 
     Any row agent-ready: the park is not over. Do that work now, per the task
-    list, starting with /router:intake on the row and ending with /router:validate
+    list, starting with /intake on the row and ending with /validate
     before marking it done, and leave this job armed; the next fire reconciles
     again. Invent nothing beyond the rows. Two fences on the pick, both from
     2026-09-08:

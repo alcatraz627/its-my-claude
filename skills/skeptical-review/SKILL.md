@@ -60,7 +60,7 @@ findings, and log the pass via `scripts/style/style-log.sh --kind critic-pass`.
 Reviewers write violations into their own reviews; the fresh pass is not
 optional at this tier.
 
-Read the report. Show the user a ranked summary (highest-suspicion first), each
+Read the report and confirm it ends with the `Coverage:` and `Observations:` lines; if either is missing, send it back. Show the user a ranked summary (highest-suspicion first), each
 line: `severity · file:line · one-line claim · which check failed`. Offer to
 deep-dive any item. Don't start fixing unless the user picks items to fix.
 
@@ -151,8 +151,7 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 >    that could shrink without losing meaning — each finding cites the wordy
 >    text and gives the one-line rewrite. Scope discipline still binds: only
 >    comments inside the diff and its direct callers/callees; anything else is
->    a one-line out-of-scope appendix item, never a finding (`rules/git.md`
->    § Review contract).
+>    a one-line out-of-scope appendix item, never a finding (the review-scope line in `rules/git.md`).
 > 7. **Mutation-test any guard the change adds or modifies** — a guard nobody has
 >    watched fail is untested, and a green suite only says it did not fire
 >    (`rules/testing-patterns.md` § `[mutation-test-the-guard]`). COPY the guard plus the
@@ -164,6 +163,14 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 > Write the full report to `<output_path>` before returning, as a table ranked by
 > suspicion: `| confidence | severity | file:line | check | what's suspect | how to verify |`.
 > Return a 5-bullet abstract + the absolute path. Do not fix anything.
+>
+> The report ALWAYS ends with these two lines, even on a clean pass with zero findings:
+>
+> `Coverage: files=<N> checks=<comma-separated names of the checks you ran> skipped=<comma-separated checks you did not run, or none> findings=<N>`
+> `Observations: <free text: run-specific, subjective notes such as what was hard to check, what felt fragile, what you would look at next>`
+>
+> The Coverage line is machine-mined for telemetry, so keep its key=value shape exactly.
+> Observations is the free-text slot; write "none" rather than omitting it.
 
 ## Hard rules
 - **Read-only on all live state** (the one load-bearing guard). The reviewer

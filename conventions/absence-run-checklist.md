@@ -53,8 +53,8 @@ each line is something that was missing in a real run.
    cannot reproduce, `/ui-categorical-check` on any shipped surface.
 
 6. **The routers are the first move of every lane.** A lane's first turn on a new row runs
-   `/router:intake` (model the ask before acting) and, before it calls anything done,
-   `/router:validate`. Owner ruling 2026-08-27 (skills-0826 D1a): the routers are the default
+   `/intake` (model the ask before acting) and, before it calls anything done,
+   `/validate`. Owner ruling 2026-08-27 (skills-0826 D1a): the routers are the default
    path where work starts, and their invocation counts are how the prefix is judged at two weeks.
 
 ## Before the owner leaves: the institution

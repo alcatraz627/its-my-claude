@@ -46,16 +46,16 @@ elif m '\b(review|audit) (my|the|this) (code|change|changes|diff|pr|branch)|is t
   msg="This looks like a code review — run /skeptical-review (it dispatches the skeptical-reviewer persona: coverage-first, grounded findings)."
 elif m '\b(plan|decompose|sequence|break (this|it) down)\b|how should (i|we) approach|roadmap'; then
   persona="task-goal-planner"
-  msg="This is a planning/decomposition task: run /router:pick-skill, which routes to /plan and can seat the task-goal-planner persona (persona.sh seat, logged)."
+  msg="This is a planning/decomposition task: run /pick-skill, which routes to /plan and can seat the task-goal-planner persona (persona.sh seat, logged)."
 elif m 'write (the )?docs?|document (this|the)|technical doc|\badr\b|architecture doc|data-pattern doc'; then
   persona="technical-doc-writer"
-  msg="This is doc authoring: run /router:pick-skill, which routes to /write-docs and seats technical-doc-writer (persona.sh seat, logged)."
+  msg="This is doc authoring: run /pick-skill, which routes to /write-docs and seats technical-doc-writer (persona.sh seat, logged)."
 elif m 'research|look (it|this) up|find out (about|whether)|compare .*(options|tools|libraries|vendors)|state of the|sources for'; then
   persona="web-researcher"
-  msg="This is web research: run /router:pick-skill, which routes to /deep-research or seats web-researcher (cite everything, 2+ sources)."
+  msg="This is web research: run /pick-skill, which routes to /deep-research or seats web-researcher (cite everything, 2+ sources)."
 elif m 'make an? image|generate (art|an image|a picture)|art[- ]direct|design (a|the|my) (logo|poster|visual|cover)'; then
   persona="art-director"
-  msg="This is image generation: run /router:pick-skill, which routes to /generate-image and seats art-director."
+  msg="This is image generation: run /pick-skill, which routes to /generate-image and seats art-director."
 fi
 
 [[ -z "$persona" ]] && exit 0
