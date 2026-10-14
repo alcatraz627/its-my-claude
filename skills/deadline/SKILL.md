@@ -80,9 +80,10 @@ future blocked ones. In order:
 7. **Capture the availability forecast** ("here ~10min, gone 2h, back after
    dinner") and schedule needs-you parts INTO presence windows; mechanical
    parts fill absences.
-8. **Arm `/wake`** (its halt-check discriminates deliberate stops). An API
-   death 10 minutes into a 2-hour absence is the worst deadline failure;
-   wake caps it at ~one interval.
+8. **Ask the owner to type `/wake`** in the step 1 exchange. Only the owner can
+   arm it, and its halt-check discriminates deliberate stops. An API death 10
+   minutes into a 2-hour absence is the worst deadline failure; wake caps it at
+   about one interval.
 9. **Write the Deadline state block** (format below) into the session
    workspace doc `session-notes/<sid>.md`, as the narrative record. The
    authoritative status surface is the goal record (`gs`, per
@@ -225,7 +226,7 @@ falling across runs.
 - [ ] Full state survived /clear + compaction (workspace doc, verbatim in
       any Resume Contract: T, rings, veto list, decision queue)
 - [ ] Ran correctly with NO Task tool present
-- [ ] /wake armed; limits runway checked at arm time
+- [ ] Owner asked to type /wake; limits runway checked at arm time
 
 ## Validation Examples
 

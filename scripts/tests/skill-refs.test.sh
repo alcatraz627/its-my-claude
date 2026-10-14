@@ -65,5 +65,11 @@ for s in skeptical-review adversarial-review; do
   must_present "Observations slot in $s" 'Observations:' "$R/skills/$s/SKILL.md"
 done
 
+# Finding 1c to 1e: routers must not end the turn, loop back, or arm /wake.
+must_absent "plan halts after routing" '^Then stop\.' "$R/skills/plan/SKILL.md"
+must_absent "plan sequences through bloop" 'bloop` Phase 1' "$R/skills/plan/SKILL.md"
+must_absent "validate routes back to bloop" 'bloop` Phase 4' "$R/skills/validate/SKILL.md"
+must_absent "deadline arms wake" '\*\*Arm `/wake`\*\*' "$R/skills/deadline/SKILL.md"
+
 echo "skill-refs: pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

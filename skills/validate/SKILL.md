@@ -29,7 +29,7 @@ skipping is the failure this skill exists to stop.
 
 | # | Question | Instruments |
 |---|---|---|
-| Va | **Does it run?** | `/test`, the harness-bundled `run` skill, `/bloop` Phase 4, and `rules/exercise-based-verification.md` |
+| Va | **Does it run?** | `/test`, the harness-bundled `run` skill, and `rules/exercise-based-verification.md` |
 | Vb | **Is the code right?** | `/skeptical-review` while still in the session, `/adversarial-review` once it has been declared done |
 | Vc | **Does it look right?** | `/ui-categorical-check` for bug classes, `/ui-gripe` for confusion, `/vis-compare` against a reference, `/ui-loop` (`see reshoot`) against a stored baseline, `/designer-reviewer` and `/web-design` for scored critique. `/visual-regression` is parked |
 | Vd | **Is it safe, typed, consistent?** | the harness-bundled `security-review` skill; `npm audit` and `npm outdated` by hand (`/dep-audit` is parked). See the project-gating note below before reaching for the three Next.js audits |

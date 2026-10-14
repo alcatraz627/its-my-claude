@@ -32,7 +32,7 @@ name them all and say which comes first.
 | Pb | **Choose** | which approach, and why not the others | `/magi` for multi-voter deliberation, `/decision-wizard` to batch the human's judgments into one pass |
 | Pc | **Learn** | what is true outside this repo | `/deep-research` for a verified cited report; a durable topic note is written by hand under `~/Documents/Claude/Topics/` (`/cogitate`, which used to do it, is parked) |
 | Pd | **Specify** | turn intent into a plan whose clauses can be checked | `/build-ui` for pages, `/build-change` for everything else |
-| Pe | **Sequence** | what order, tracked where | the Task tool, which is the live status surface, plus `personas/task-goal-planner.md` and `/bloop` Phase 1 |
+| Pe | **Sequence** | what order, tracked where | the goal record (`gs task` rows), which is the owner's status surface, plus `personas/task-goal-planner.md`; the Task tool is the agent's own checklist |
 | Pf | **Gate** | what must the owner rule on before this proceeds | `/gated-plan`, and `/decision-wizard` when the rulings are numerous |
 
 Orient almost always comes first when the target already exists, and skipping it
@@ -86,11 +86,15 @@ the current-behaviour statement or the reason there is none, and the user's own
 words verbatim. The verbatim ask travels with every hop, because a multi-stage
 pipeline drifts from the original request one paraphrase at a time.
 
-When the request carries several needs, hand off to the first and say what comes
-next rather than invoking three instruments at once. Sequencing them is the
-user's call, and their answer to the first often changes the rest.
+When the request carries several needs, hand off to the first rather than
+invoking three instruments at once. If the later needs are already settled, file
+them as rows (`gs task`) and keep working through them after the first; only a
+genuine fork between them goes back to the user, because their answer to it
+often changes the rest.
 
-Then stop. This skill writes no plan, makes no decision, and edits nothing.
+Then hand over. This skill writes no plan, makes no decision, and edits nothing,
+but finishing its routing is never a reason to end the turn while settled work
+remains.
 
 ## Phase 5: Record the routing
 
