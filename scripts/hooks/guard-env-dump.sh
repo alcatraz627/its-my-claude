@@ -27,7 +27,11 @@ fi
 # A segment that is only the dump verb (plus a listing flag), ending at a
 # separator, a pipe, a redirect or the end of the command.
 DUMP='(^|[;&|(]|\n)[[:space:]]*(/usr/bin/)?(env|printenv|set|export([[:space:]]+-p)?|declare[[:space:]]+-[xp]+|typeset[[:space:]]+-x)[[:space:]]*($|[;&|)>]|\n)'
-printf '%s' "$cmd" | grep -qE "$DUMP" || exit 0
+# Process inspectors that print each process's environment: pm2's detail
+# verbs, ps with the macOS environment flags (-e, -E or the e keyword), and
+# docker inspect.
+PROC='(^|[;&|(]|\n)[[:space:]]*(pm2[[:space:]]+(jlist|prettylist|env|show|describe)|ps[[:space:]]+(-[a-zA-Z]*[eE][a-zA-Z]*|[a-z]*e[a-z]*)([[:space:]]|$)|docker[[:space:]]+(container[[:space:]]+)?inspect)'
+printf '%s' "$cmd" | grep -qE "$DUMP|$PROC" || exit 0
 
 reason="[env-dump] Refused: this prints the whole environment, which holds live API tokens the owner keeps exported so tools work (Render, Linear, GitHub, Slack). A dump copies them into the transcript. Read one variable instead: printenv NAME, or check it exists without printing it: [ -n \"\$NAME\" ] && echo set. Owner ruling 2026-10-14. If this blocks real work, tell the owner rather than working around it."
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-env-dump --action block --heeded unknown >/dev/null 2>&1 || true
