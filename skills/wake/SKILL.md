@@ -11,7 +11,7 @@ disable-model-invocation: true
 Arms a repeating wake on **this** session. Every N minutes, while the session sits
 idle, the wake asks one question: were you cut off, or are you done? If it was cut
 off, it re-orients and carries on. If the halt was deliberate, it reconciles the
-task list, works anything agent-ready, and disarms only once every open front is
+goal record, works anything agent-ready, and disarms only once every open front is
 genuinely done or waiting on the owner.
 
 The point is narrow. A turn killed mid-flight by a transient API error does not
@@ -26,6 +26,10 @@ session, since you're right there and the wake has nothing to add.
 **This skill never arms itself.** `disable-model-invocation: true` is what makes
 that true; the owner's requirement is "no wake for sessions that never asked", and
 prose alone wouldn't hold it. Only a human typing `/wake` starts one.
+
+/wake is outage cover, not the queue driver. To work a goal's rows one after
+another without fixating or halting early, use `/blitz`; arm /wake beside it
+when the run will be left alone.
 
 A long unattended run opts into compaction with `bash ~/.claude/scripts/session-mgmt/compact-gate.sh on`, run after the notes and Task list are current, because auto-compaction is otherwise refused.
 
@@ -139,21 +143,22 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     it and do not re-explain. But do not stand down on the halt alone either:
     a clean halt can be a deliberate park that is WAITING for this wake, and
     two parks lost their wake exactly that way (task #25, 2026-08-19/20).
-    Reconcile the task list first:
+    Reconcile the goal record first:
 
-      Run: bash ~/.claude/scripts/task-table/task-table.sh --session <STORE>
-      (<STORE> is the sid8 of the store that holds this session's rows; a bare
-      run resolves by content and can render another session's queue)
+      Run: bash ~/.claude/scripts/goals/queue-run.sh status --sid <SESSION_ID>
+      Then: bash ~/.claude/scripts/goals/queue-run.sh ready --sid <SESSION_ID>
+      (the goal is this session's queue drive, else its linked goal; with
+      neither, the script says so and names the live goals; pick none)
       Read every open row and classify it: blocked on the owner, blocked on
       an external actor, or agent-ready. A row whose stated blocker has since
       cleared (a scheduled time now past, a reply that has arrived) is
-      agent-ready, whatever its field says.
+      agent-ready, whatever its field says: clear it with gs ungate or gs ready.
 
-    Any row agent-ready: the park is not over. Do that work now, per the task
-    list, starting with /intake on the row and ending with /validate
-    before marking it done, and leave this job armed; the next fire reconciles
-    again. Invent nothing beyond the rows. Two fences on the pick, both from
-    2026-09-08:
+    Any row agent-ready: the park is not over. Take the row with
+    bash ~/.claude/scripts/goals/queue-run.sh next --sid <SESSION_ID>, starting
+    with /intake on it and ending with /validate before gs close, and leave
+    this job armed; the next fire reconciles again. Invent nothing beyond the
+    rows. Two fences on the pick, both from 2026-09-08:
       - If the owner has spoken in this session within the last 30 minutes,
         this wake picks NOTHING: say so in one line and stop. A wake that starts
         a row while he is mid-conversation pulls the lane off what he is asking
@@ -167,7 +172,7 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     Nothing agent-ready (every open row is owner-blocked or external, or no
     rows are open): write the state to disk FIRST, so a supervisor can tell a
     finish from a death (both are silence otherwise):
-      bash ~/.claude/scripts/session-state/session-state.sh set finished --reason "<why>" --sid <SESSION_ID> --store <STORE>
+      bash ~/.claude/scripts/session-state/session-state.sh set finished --reason "<why>" --sid <SESSION_ID>
     (or `set blocked --reason "USER: <what>"` when rows wait on the owner). The
     script REFUSES finished while an agent-ready row is open and names the row;
     a refusal means go back one paragraph and do that row. Then conclude in ONE
@@ -184,11 +189,10 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     in-flight step, roll back if it is half-done. Then continue from there.
 ```
 
-When arming, substitute `<SESSION_ID>` in the payload with the actual
-`$CLAUDE_CODE_SESSION_ID`, and `<STORE>` with the task store's sid8
-(`bash ~/.claude/scripts/task-table/task-table.sh --json | jq -r .store`), cron
-payloads don't expand env vars, and a payload that does not name the store is the
-empty-wake shape that measured 93% dead (REMEDY-PLAN P3).
+When arming, substitute every `<SESSION_ID>` in the payload with the actual
+`$CLAUDE_CODE_SESSION_ID`. Cron payloads don't expand env vars, and a payload
+that does not name the session is the empty-wake shape that measured 93% dead
+(REMEDY-PLAN P3).
 
 **Do not execute the payload now.** `/loop` tells you to run the parsed prompt
 immediately rather than wait for the first fire; here that is a trap: the payload
@@ -259,3 +263,4 @@ routine), that form needs a companion and this reasoning does not transfer.
 - `rules/scheduling-discipline.md`: the companion rule, and why it's waived here
 - `features/claudew.md`: the other half: process death, not turn abort
 - `scripts/wake/limits-check.sh`: the budget reading, with its own test beside it
+- `/blitz` and `scripts/goals/queue-run.sh`: the queue driver; the reconcile step reads its `status`, `ready` and `next`

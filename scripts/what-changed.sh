@@ -35,7 +35,7 @@ printf '%s\n' "$rows" | jq -r --argjson c "$cut" 'select(.status=="completed" an
 echo; echo "STARTED since last look"
 printf '%s\n' "$rows" | jq -r --argjson c "$cut" 'select(.status=="in_progress" and .m>$c) | "  \(.id)  \(.subject)"' | head -20
 echo; echo "LANES (session-state changed)"
-for f in "$S"/*.json; do [ -f "$f" ] || continue; m=$(stat -f %m "$f"); [ "$m" -gt "$cut" ] || continue; jq -r '"  \(.sid[0:8])  \(.state)  \(.reason|.[0:80])  store=\(.store)"' "$f"; done
+for f in "$S"/*.json; do [ -f "$f" ] || continue; m=$(stat -f %m "$f"); [ "$m" -gt "$cut" ] || continue; jq -r '"  \(.sid[0:8])  \(.state)  \(.reason|.[0:80])  goal=\(.goal // .store)"' "$f"; done
 echo; echo "REVIVES / WAKES"
 awk -v c="$cutiso" '$1>=c && ($2=="revive" || $2=="ipc-wake") && ($0 ~ /WOKEN|REVIVING|REFUSED|capped|gated|budget/)' "$W/beat.log" 2>/dev/null | cut -c1-140 | tail -20
 [ "$mark" = 1 ] && { printf '%s' "$now" > "$STAMP"; echo; echo "(last look stamped: now)"; }

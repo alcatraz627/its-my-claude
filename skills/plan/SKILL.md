@@ -32,7 +32,7 @@ name them all and say which comes first.
 | Pb | **Choose** | which approach, and why not the others | `/magi` for multi-voter deliberation, `/decision-wizard` to batch the human's judgments into one pass |
 | Pc | **Learn** | what is true outside this repo | `/deep-research` for a verified cited report; a durable topic note is written by hand under `~/Documents/Claude/Topics/` (`/cogitate`, which used to do it, is parked) |
 | Pd | **Specify** | turn intent into a plan whose clauses can be checked | `/build-ui` for pages, `/build-change` for everything else |
-| Pe | **Sequence** | what order, tracked where | the goal record (`gs task` rows), which is the owner's status surface, plus `personas/task-goal-planner.md`; the Task tool is the agent's own checklist |
+| Pe | **Sequence** | what order, tracked where | the goal record (`gs task` rows), which is the owner's status surface, plus `personas/task-goal-planner.md`, and `/blitz` to work the rows in turn; the Task tool is the agent's own checklist |
 | Pf | **Gate** | what must the owner rule on before this proceeds | `/gated-plan`, and `/decision-wizard` when the rulings are numerous |
 
 Orient almost always comes first when the target already exists, and skipping it
@@ -118,6 +118,7 @@ exactly the rework this skill exists to prevent.
 - Nothing is being planned, and the question is what something currently does.
   That is `/arch-qa` directly.
 - The plan already exists and needs building. That is `/bloop`.
+- The rows are already filed and need working through. That is `/blitz`.
 
 ## Done-condition
 

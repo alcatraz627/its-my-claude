@@ -1087,6 +1087,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/queue-stop.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/relpath-stop.sh"
           }
         ]

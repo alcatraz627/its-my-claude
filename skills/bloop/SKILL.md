@@ -112,18 +112,10 @@ the user actually asked for rather than the plan's paraphrase of it. Feed what i
 to the validator as its brief, and carry the skipped list into the report so a check
 nobody ran is visible rather than absent.
 
-0. **Optional $0 pre-gate** (lm suite, when the repo is on this machine): run the local
-   reviewer and the mechanical gate as separate calls, with a temp file between each, and
-   fix cheap survivors BEFORE spending the paid seat. One command per Bash call, no pipes:
-   1. `git diff <range> > <scratch>/diff.patch`
-   2. `~/Code/local-models/bin/review --findings --json -m small < <scratch>/diff.patch > <scratch>/review.json`
-   3. `jq '.data // empty' <scratch>/review.json > <scratch>/findings.json`
-   4. `~/Code/local-models/.venv/bin/python ~/Code/local-models/lib/findings-gate.py --root <repo> < <scratch>/findings.json`
-   The gate mechanically drops findings whose file:line doesn't exist; survivors are
-   OPINIONS to triage (verify each against the battery/code before acting), never
-   verdicts. Pin a format-honoring tier (`-m small` — the 35b code tier ignores Ollama
-   format constraints, discovered 2026-07-13). First-diff measured yield: 3 valid-location
-   opinions, 0 real. This complements the adversarial gate below; it never replaces it.
+0. **Optional $0 local pre-gate.** `~/Code/local-models/bin/review` plus
+   `findings-gate.py` can triage a diff before the paid seat. Across its recorded runs it
+   produced no real finding, only pointers to files worth reading closely; use it when
+   that is worth one minute, never in place of the gate.
 
 1. **Right-size** (`rules/contain-subagent-token-sprawl.md`): one validator for a normal
    change; a small fleet only for a genuinely large/parallel surface. Not a reflex fleet.
@@ -255,19 +247,20 @@ Close the loop legibly.
    ```bash
    bash ~/.claude/scripts/skill-log.sh record bloop \
      --task "add efficacy sensor to two skills" \
-     --outcome accepted \
+     --outcome unknown \
      --loop converged \
      --iterations 1 \
      --corrections 0 \
      --gate issues-found \
-     --note "gate found an empty-metrics crash and a dangling-flag bug"
+     --note "report=<validator file path>; <what the gate found>"
    ```
 
-   `--outcome` is `accepted`/`revised`/`discarded`; `--loop` is `converged`/`partial`;
-   `--gate` is the Phase-4 verdict `pass`/`pass-with-notes`/`issues-found`. Note that
-   `--gate issues-found` with `--outcome accepted` is the HEALTHY signal — the gate
-   earned its cost. `bash ~/.claude/scripts/skill-log.sh summary --skill bloop` reads
-   the trend.
+   `--loop` is `converged`/`partial`; `--gate` is the Phase-4 verdict
+   `pass`/`pass-with-notes`/`issues-found`. `--outcome` stays `unknown` at the end of the
+   run. Record `accepted`, `revised` or `discarded` only from the owner's own words, as a
+   follow-up line. `--corrections` counts owner corrections only; the gate's findings go
+   in `--gate` and `--note`. `bash ~/.claude/scripts/skill-log.sh summary --skill bloop`
+   reads the trend.
 
 ## Validation
 
@@ -286,14 +279,17 @@ validator raised that self-review had not, read from the report, never from the
 - **The gate is the skill.** Skipping validate turns /bloop into an ordinary build. If the
   user wants speed over rigor for a trivial change, that change should not be in /bloop.
 - **The loop has a floor.** A change that fails the validation gate re-enters the loop at
-  most once; a second failure stops and returns to the owner. `/bloop` and `/validate`
-  share this bound, so neither can send work to the other forever.
+  most once; a second failure stops that change and escalates it to the owner once, in the
+  record, with the validation report path. Other units in the same run carry on.
+  `/bloop` and `/validate` share this bound, so neither can send work to the other forever.
+  Under a queue drive (`queue-run.sh on`), park the row with `queue-run.sh park <id> --why
+  "<what failed>; report <path>"` and return to the runner instead of escalating.
 - **Right-sized, not maximal.** One validator, one feature branch, commits per unit. This
   is not "spawn a fleet"; it's structured single-threaded work with one adversarial check.
-- **No gated push on momentum.** On protected repos and on `main`/`master`, approvals
-  never carry across the loop; each push is a fresh ask (the push-gate enforces this).
-  Unprotected feature-branch pushes are normal work and need no ceremony. `--from` and
-  terse continuation resume local work, never a gated mutation.
+- **No gated push on momentum.** A `main`/`master` push goes through the push gate's
+  nonce every time, and a protected repo's commits are the user's (`rules/git.md`).
+  Other approvals carry across `--from`, compaction and `/clear` as standing
+  authorizations, verbatim and bound to their target (owner ruling R2, 2026-10-13).
 - **Resume:** `--from <stage>` skips to a stage; the earlier stages' outputs (plan, commits,
   report) must already exist or it drops back to produce them.
 

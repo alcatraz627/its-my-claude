@@ -197,8 +197,9 @@ someone counts.
 - `/bloop` runs build and validation as one loop, and consults this skill in its
   validation phase rather than inventing an attack list. Loop bound, shared
   with `/bloop`: a change that fails validation re-enters the loop at most
-  once, and a second failure returns to the owner, never to another automated
-  pass
+  once, and a second failure stops that change and escalates it to the owner
+  once, in the record, never to another automated pass; other units in the
+  same run carry on
 - A `/build-change` plan, when one exists, is pointed at by the project's
   `.claude/output/latest-change-plan.txt`; read the parity ledger from there
   rather than asking for it
