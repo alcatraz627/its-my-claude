@@ -73,6 +73,14 @@ ledger_append_checked() {
   else
     local dirlock="${lock}.d" i=0 held=0
     while ! mkdir "$dirlock" 2>/dev/null; do
+      # A lock left by a crashed writer would otherwise slow every later write
+      # by the full wait; one older than 30s is reclaimed.
+      local mt
+      mt=$(stat -f %m "$dirlock" 2>/dev/null || stat -c %Y "$dirlock" 2>/dev/null || echo "")
+      if [ -n "$mt" ] && [ $(( $(date +%s) - mt )) -gt 30 ]; then
+        rmdir "$dirlock" 2>/dev/null
+        continue
+      fi
       i=$((i + 1))
       if [ "$i" -ge 20 ]; then break; fi   # gave up: write unlocked rather than hang
       sleep 0.1

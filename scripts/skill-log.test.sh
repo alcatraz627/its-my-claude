@@ -73,13 +73,13 @@ ok "legacy 'ok' rows are folded into accepted in summary" "$(bash "$SL" summary 
 
 echo "── F1: a stale lock (crashed writer) is reclaimed, record still lands ──"
 : > "$STORE"
-mkdir -p "${STORE}.lock"                       # simulate a crashed holder
+mkdir -p "${STORE}.lock.d"                     # simulate a crashed holder
 # backdate the lock dir past the 30s staleness window
-touch -t "$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 min ago' +%Y%m%d%H%M)" "${STORE}.lock" 2>/dev/null || true
+touch -t "$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 min ago' +%Y%m%d%H%M)" "${STORE}.lock.d" 2>/dev/null || true
 id=$(bash "$SL" record bloop --outcome accepted 2>/dev/null)
 ok "record succeeds despite a stale lock"  "$(printf '%s' "$id" | grep -c '^skl-')"  1
-ok "the stale lock was released after"     "$([ -d "${STORE}.lock" ] && echo held || echo freed)"  freed
-rmdir "${STORE}.lock" 2>/dev/null || true
+ok "the stale lock was released after"     "$([ -d "${STORE}.lock.d" ] && echo held || echo freed)"  freed
+rmdir "${STORE}.lock.d" 2>/dev/null || true
 
 rm -f "$STORE"
 echo
