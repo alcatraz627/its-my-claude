@@ -38,6 +38,7 @@ SENT="/tmp/claude-kanban-nudged-${sid:0:8}"
 
 KROOT="${KANBAN_ROOT:-$HOME/.claude/kanban}"
 REG="$KROOT/registry.json"
+[ -f "$KROOT/.mothballed" ] && exit 0   # owner mothballed the board 2026-10-14
 ITEMS="$KROOT/items.json"
 LANDINGS="$KROOT/landings.json"
 [ -f "$REG" ] && [ -f "$ITEMS" ] || exit 0

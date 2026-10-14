@@ -62,8 +62,9 @@ row again inline, not the whole set.
 S=my-slug   # lowercase-kebab, unique
 bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
   --title "…" --topic "one line: what this page is about" --session "<your session id>"
-# → scaffolds assets/decision-pages/$S/{index.html,config.json} with an `origin`
-#   block (session/project/topic/date), ensures the kanban server, prints the TODO.
+# → scaffolds assets/decision-pages/$S/config.json (no index.html: the server
+#   renders every page from one template) with an `origin` block
+#   (session/project/topic/date), ensures the kanban server, prints the TODO.
 #   origin is shown on the page + hub so the user can tell YOUR page apart from
 #   other concurrent sessions' pages. --session takes your friendly id (e.g. the
 #   one you announced at session start); it falls back to $CLAUDE_SESSION_ID.

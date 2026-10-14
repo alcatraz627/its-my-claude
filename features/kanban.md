@@ -1,5 +1,5 @@
 ---
-brief: The kanban board is a project's communication surface between the human and its agents, spanning sessions, agents and days. Independent of the Task tool, never a mirror of it. Optional, and earned by project shape rather than by todo count.
+brief: MOTHBALLED 2026-10-14 (read-only, silent, data kept; decision pages stay live). The kanban board was a project's communication surface between the human and its agents, spanning sessions, agents and days. Independent of the Task tool, never a mirror of it.
 triggers:
   - tool:kanban.sh
   - skill:kanban
@@ -11,11 +11,13 @@ triggers:
 related: [rules/todo-discipline.md, skills/kanban/SKILL.md]
 tier: 2
 category: features
-updated: 2026-08-10
+updated: 2026-10-14
 stale_after_days: 180
 ---
 
 # The kanban board
+
+**Mothballed by the owner on 2026-10-14**: "we may come back to it in the future, it is good visually and functionally it was the usage where it dropped." While `~/.claude/kanban/.mothballed` exists, `kanban.sh` runs read verbs only, the session-start line and `kanban-nudge.sh` say nothing, and no agent offers or creates a board. Board data is kept as is. The decision pages served from the same process are not mothballed, and the reaper leaves the process up for them. Why: `~/.claude/assets/reports/20261014-1757-kanban-study/report.md`. The rest of this doc describes the board as built, for a revival.
 
 "/hub" is not this board: it is the gcc-mods hub in the TUI, which draws the goal record (`gs`). See `features/gcc-mods.md` and GLOSSARY `/hub`.
 

@@ -140,8 +140,8 @@ hand-renders a task table without calling a view or `gs`. Mute the injector:
 
 ## What is not here
 
-- The kanban board is independent, optional and **frozen** (D2, 2026-09-23):
-  nothing writes to it unasked. `/kanban` reads it.
+- The kanban board is **mothballed** (owner, 2026-10-14): read-only, silent,
+  data kept. `/kanban` reads it.
 - Decisions the owner must make go through `/decision-wizard`; a gate here
   only says one is owed and how to clear it.
 - The old renderer (`scripts/task-table/`) is no longer called by any surface.

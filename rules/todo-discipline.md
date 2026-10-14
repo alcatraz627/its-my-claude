@@ -1,5 +1,5 @@
 ---
-brief: Live todos live in the Task tool, the agent's checklist FOR THIS SESSION and what the TUI shows. What is left ACROSS sessions lives in the goal record (gs, ~/.claude/goals/by-id), the one truth the owner reads through /tasks; session-notes Todos and checkpoint Pending Items are derived from it (D1, 2026-09-23). The kanban board is independent, optional and frozen. Plans in docs carry the reasoning.
+brief: Live todos live in the Task tool, the agent's checklist FOR THIS SESSION and what the TUI shows. What is left ACROSS sessions lives in the goal record (gs, ~/.claude/goals/by-id), the one truth the owner reads through /tasks; session-notes Todos and checkpoint Pending Items are derived from it (D1, 2026-09-23). The kanban board is mothballed (2026-10-14). Plans in docs carry the reasoning.
 triggers:
   - phrase:"update todos"
   - phrase:"update your todos"
@@ -11,7 +11,7 @@ triggers:
 related: [features/kanban.md, features/context-retention.md, skills/workspace/SKILL.md, migrations/0017-todo-sync-task-tool.md]
 tier: 1
 category: rules
-updated: 2026-09-23
+updated: 2026-10-14
 stale_after_days: 120
 ---
 # The Task tool is the todo home for this session
@@ -22,7 +22,7 @@ stale_after_days: 120
 4. Never hand-edit the mirrors: the session-notes Todos block and the memory pointer are machine-owned and overwritten at Stop. Across sessions the goal record is the truth; a checkpoint's Pending Items cite it.
 5. Planning docs carry the reasoning; a plan in a file with an empty Task list leaves the TUI blind.
 
-The project kanban board is a different altitude, never a mirror, and frozen since 2026-09-23 (D2): nothing writes to it unasked. A board that differs from any list is working as designed.
+The project kanban board was a different altitude, never a mirror. It is mothballed since 2026-10-14 (frozen since 2026-09-23 before that): read-only, silent, data kept, and `kanban.sh` refuses writes.
 
 Diagnostic: substantial editing this session and the Task list is empty, or todos about to go into a project file.
 

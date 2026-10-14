@@ -1,6 +1,6 @@
 ---
 name: kanban
-description: Drives the agent-populated kanban board — inits a board for the current project, re-syncs cards from docs/checkpoints/session-notes, pulls the human's unread card notes, and opens the board UI. Use when the user says "kanban", "board", "sync the board", "any notes for me", or at session start in a project with a board.
+description: Reads the mothballed kanban board (read-only since 2026-10-14) and opens its UI. Use only when the owner names the kanban board itself; not at session start, and not for "/hub" or decision pages.
 argument-hint: "[init | sync | notes | open | status]"
 user-invocable: true
 ---
@@ -11,13 +11,16 @@ user-invocable: true
 mean the gcc-mods hub in the TUI, which draws the goal record: use `gs`
 (`features/gcc-mods.md`, GLOSSARY `/hub`). This board's web page is not it.
 
-**Frozen (owner ruling D2, 2026-09-23).** The board stays readable and the CLI
-works, but nothing writes to it unasked: no automatic `sync`, no harvest at
-session start, no card generation from tasks or checkpoints. Run `sync` only
-when the owner asks for the board in this conversation. The owner's steering
-surface is `/tasks` over the goal record
-(`~/.claude/assets/reports/20260923-tasks-rebuild/design.md`); the board will be
-re-thought once that proves useful.
+**Mothballed (owner, 2026-10-14).** "We may come back to it in the future, it
+is good visually and functionally it was the usage where it dropped." The board
+and its data stay as they are and readable. While `~/.claude/kanban/.mothballed`
+exists, `kanban.sh` runs read verbs only (status, show, owed, selected, changed,
+brief, check, open, view, decide list) and refuses writes; the session-start
+line and the edit nudge are silent. Only an owner-asked change may override, with
+`KANBAN_UNFREEZE=1`. The owner's steering surface is `/tasks` over the goal
+record. Decision pages (`/dp/` on the same server) are NOT mothballed. Why:
+`~/.claude/assets/reports/20261014-1757-kanban-study/report.md`. The rest of this
+file documents the board as it was built, for when it is revived.
 
 Thin driver for `~/.claude/scripts/kanban/kanban.sh` (design + decisions:
 `~/.claude/assets/reports/20260721-kanban-board-design/DESIGN.md`). The board is a

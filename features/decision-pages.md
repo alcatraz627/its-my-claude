@@ -92,10 +92,11 @@ sticky header shows `N flagged` progress and the Copy button badges the count.
 
 ## Submit-to-wake — the human answers without touching chat
 
-The registry server (`scripts/decision-page/server.py`, started by `serve`) adds
-`POST /_submit/<slug>` on top of the static GET. The page's **Submit to Claude**
-button posts the answer string there; the server writes `<slug>/.answer.json` and
-clears the pending marker. After handoff the authoring agent watches for that file
+The kanban server (`scripts/kanban/server.ts`, pm2 app `kanban` on :5106) serves
+every page at `/dp/<slug>/` and takes `POST /api/dp-submit/<slug>`. The page's
+**Submit to Claude** button posts the answer string there; the server writes
+`<slug>/.answer.json` and clears the pending marker. (The old `server.py` on :5197
+is retired.) After handoff the authoring agent watches for that file
 (the **Monitor** tool, or polling `decision-page.sh answer <slug>`) and wakes when
 the human clicks Submit — no copy-paste round-trip. **The watcher must be armed in
 the same turn as the handoff, before the turn ends** — an ended turn with no
@@ -103,8 +104,7 @@ Monitor/poll never wakes, and the pending marker is a statusline chip, not a wak
 path. Ending the session instead? Say "read at next session start", never "wake"
 (atone `promised-async-wake-without-arming-receiver`). **Copy answers** remains the
 fallback (and the page falls back to clipboard automatically if the server has no
-submit endpoint). Editing `template.html` only reaches new pages; existing pages
-carry their own `index.html` copy (re-copy to refresh — see the authoring rules).
+submit endpoint).
 
 ## config.json schema
 
@@ -186,13 +186,11 @@ in the progress badge and, on an otherwise-agreed page, suppress the
   every referenced image exists, and checks the page renders (HTTP 200); it exits
   non-zero with fix-proposing lines until READY. Don't hand over an unchecked page.
 - Template renders dark AND light (toggle built in) and is keyboard-first.
-- The template + hub are generic — if they can't express something, extend the
-  TEMPLATE (`scripts/decision-page/template.html`) or `hub.html`, not a one-off
-  copy; that's how the capability compounds. The answer-string logic is mirrored
-  in both the page and the hub — change both if you change the shape.
-- **Editing `template.html` only affects NEW pages.** `new` copies the template
-  into each page's own `index.html`, so already-scaffolded pages keep their old
-  renderer. To refresh an existing page after a template change, re-copy:
-  `cp -f scripts/decision-page/template.html assets/decision-pages/<slug>/index.html`.
+- The template and hub are generic. If they can't express something, extend the
+  template (`scripts/kanban/decision.html`) or `scripts/kanban/hub.html`, not a
+  one-off copy; that's how the capability compounds. The answer-string logic is
+  mirrored in the page and the hub, so change both if you change the shape.
+- Every page renders from that one template, so a template fix reaches every page
+  ever made. There is no per-page `index.html` to refresh.
 - **Favicon** is a self-contained inline-SVG data-URI (a checkmark) baked into the
   template + hub — no external file, works offline.

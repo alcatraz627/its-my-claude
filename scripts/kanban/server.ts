@@ -779,6 +779,13 @@ const server = Bun.serve({
       let pendingSlugs = new Set<string>();
       try { pendingSlugs = new Set(fs.readFileSync(path.join(dpRoot, ".pending.txt"), "utf8")
         .split("\n").map((x) => x.trim()).filter(Boolean)); } catch { /* none pending */ }
+      // Answered means an answer exists, not "not marked pending": an agent that
+      // forgot to mark a page pending used to file it under Answered. A consumed
+      // answer deletes .answer.json, so the answers log covers those.
+      let answeredSlugs = new Set<string>();
+      try { answeredSlugs = new Set(fs.readFileSync(path.join(dpRoot, "answers.jsonl"), "utf8")
+        .split("\n").map((l) => { try { return JSON.parse(l).slug; } catch { return null; } })
+        .filter(Boolean)); } catch { /* no answers logged yet */ }
         try {
           for (const slug of fs.readdirSync(dpRoot)) {
             const dir = path.join(dpRoot, slug);
@@ -810,6 +817,7 @@ const server = Bun.serve({
               milestone: cfg.origin?.milestone ?? null,
               items: (cfg.decisions?.length ?? 0) + (cfg.sections?.length ?? 0),
               pending: pendingSlugs.has(slug),
+              answered: answeredSlugs.has(slug) || fs.existsSync(path.join(dir, ".answer.json")),
               // §12: unseen is a different state from undecided, and only a
               // pending page can be unseen (an answered one was obviously read)
               seen: fs.existsSync(path.join(dir, ".seen.json")),
@@ -849,6 +857,7 @@ const server = Bun.serve({
                 // pending until its horizon passes. Inlined rather than a shared
                 // helper for one more caller; two callsites is where one earns.
                 pending: !d.answer && !(d.deferUntil && Date.parse(d.deferUntil) > Date.now()),
+                answered: !!d.answer,
                 seen: !!d.seenAt,
                 at: d.at ?? null,
               });

@@ -712,7 +712,10 @@ async function loadSurfaces(which) {
     const plans = (j.plans ?? []).map((pl) => ({ ...pl, pending: pl.state === "draft",
       origin: [pl.board, pl.state].filter(Boolean).join(" · ") }));
     group("Plans", plans);
-    group("Answered", rows.filter((r) => !r.pending));
+    // Answered means an answer exists. Pages nobody answered and nobody marked
+    // pending used to sit under Answered too (67 of 104 in October 2026).
+    group("Answered", rows.filter((r) => !r.pending && r.answered));
+    group("Never answered", rows.filter((r) => !r.pending && !r.answered));
   } else group("Previews", rows);
   if (!frag.length) {
     const e = document.createElement("div");
