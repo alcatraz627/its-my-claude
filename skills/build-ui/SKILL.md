@@ -565,6 +565,8 @@ on skeleton:
   `/ui-direction` first, whose memo this skill reads in Phase 6.
 - `/ui-direction`: produces that memo. Its hand-off is sweep constraints and
   candidate precedents, never authored values.
+- `/mock-app variants`: when a taste call inside the build needs the owner's eye,
+  render the options as a gallery on one decision page instead of asking in chat.
 - `/ui-categorical-check`: the permanent gate catalog that directives get promoted into
 - `/ui-gripe`: confusion forensics on one screenshot
 - `/skeptical-review`: grounded review after the build

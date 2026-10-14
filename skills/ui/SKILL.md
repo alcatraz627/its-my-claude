@@ -25,7 +25,7 @@ user leaves with, not what they typed.
 | The ask sounds like | Intent | Goes to |
 |---|---|---|
 | "renovate / restyle / bring X up to the design language", "X feels dated", "make this page better" | **convert** an existing surface | `/build-ui` |
-| "what should it look like", "explore directions", "I don't know what I want yet" | **direct**: find a visual direction | `/ui-direction` |
+| "what should it look like", "explore directions", "I don't know what I want yet" | **direct**: find a visual direction | `/ui-direction`; when the owner must pick between rendered options, `/mock-app variants` |
 | "new page", "new surface", nothing like it exists yet | **greenfield** | `/ui-direction` first, then `frontend-design` to execute |
 | "make this a shared component", "every page hand-rolls this", "promote it into the kit" | **promote** a primitive | `/build-ui` (its primitive-promotion class) |
 | "this is confusing", "why is this stupid", "it annoys me" | **diagnose** confusion | `/ui-gripe` |

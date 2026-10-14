@@ -154,7 +154,9 @@ nobody ran is visible rather than absent.
    report to an absolute path. Give the validator
    `<project>/.claude/output/<YYYYMMDD>-<slug>-validation/validator.md` (or the path under
    `~/.claude/assets/reports/` when the project is `~/.claude`), tell it to write there
-   before returning, and verify the file exists before relying on it.
+   before returning, and verify the file exists before relying on it. When the validator
+   goes quiet, run `~/.claude/scripts/agents/agent-status <name>` before pinging it: it
+   says whether the seat is still running, stalled, or ended without writing its file.
 5. **Close the seat.** Once the findings are verified and persisted, `TaskStop` the
    validator — a finished agent left alive can be commandeered by a board auto-dispatcher
    and spend tokens on work nobody assigned it.
