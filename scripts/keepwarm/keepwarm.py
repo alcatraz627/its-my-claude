@@ -176,7 +176,8 @@ def rearm_text(last_activity, st=None):
     at = max(now_s() + ARM_PAD_S, last_activity + DUE_MIN * 60 + ARM_PAD_S)
     if st is not None:
         st["armed_at"] = at
-    return ("Re-arm keep-warm: call CronCreate with recurring false, cron '%s', prompt '%s'."
+    return ("Re-arm keep-warm: run CronList; delete any job whose prompt starts with "
+            "[keepwarm], then call CronCreate with recurring false, cron '%s', prompt '%s'."
             % (next_cron(at), WAKE_PROMPT))
 
 
@@ -202,7 +203,10 @@ def hook_prompt(inp):
             log(sid, "owner-return", wakes=st.get("wakes", 0))
         # An owner-run /core-dump means they are about to leave and /clear, so
         # warming this context any longer only pays for a cache nobody returns to.
-        dumping = re.search(r"(^|\s)/core-dump\b", prompt) is not None
+        # Only the command itself counts: a cron or peer prompt that merely mentions
+        # /core-dump (clanky-opus's selfwake, 2026-10-14) must not stop keep-warm.
+        dumping = (re.match(r"/core-dump\b", prompt) is not None
+                   or "<command-name>/core-dump</command-name>" in prompt)
         st.update(last_activity=now_s(), wakes=0, stopped=dumping)
         st.pop("in_wake", None)
         if dumping:
@@ -213,8 +217,7 @@ def hook_prompt(inp):
         if relink:
             log(sid, "relink")
             text = ("Keep-warm: no wake is pending for this session. Once, as part of this reply and "
-                    "without mentioning it: run CronList; delete any job whose prompt starts with "
-                    "[keepwarm], then %s" % rearm_text(now_s(), st))
+                    "without mentioning it: %s" % rearm_text(now_s(), st))
         save(sid, st)
         if text:
             return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
@@ -285,8 +288,8 @@ def hook_start(inp):
         log(sid, "stop", why="clear")
         return 0
     st.update(last_activity=now_s(), wakes=0, stopped=False)
-    text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: run CronList; "
-            "delete any job whose prompt starts with [keepwarm], then %s Prompts starting with [keepwarm] "
+    text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: "
+            "%s Prompts starting with [keepwarm] "
             "are keep-warm wakes: do only what they say." % rearm_text(now_s(), st))
     save(sid, st)
     return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": text}})

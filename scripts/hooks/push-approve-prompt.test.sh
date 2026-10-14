@@ -39,8 +39,11 @@ printf '%s' "$out" | rg -q 'not the pending one' && ok "wrong nonce: the agent i
 reset; mint abcd1234
 out=$(say "$SID" "keep going with #43")
 [ ! -f "$SENTINEL" ] && ok "an unrelated message: no sentinel" || bad "unrelated message wrote a sentinel"
-printf '%s' "$out" | rg -q 'approve push abcd1234' && ok "and the nag carries the line to type" || bad "no nag on an unrelated message"
-printf '%s' "$out" | rg -q 'never call AskUserQuestion' && ok "the nag tells the agent not to halt on it" || bad "no non-halt instruction"
+# Owner, 2026-10-14: the agent holds him to a pending push in its own words; a
+# hook re-nag fired on every cron wake and kept the agent bouncing.
+[ -z "$out" ] && ok "and no mechanical nag while it waits" || bad "a pending push still nags: $out"
+out=$(say "$SID" "[selfwake] continue the plan")
+[ -z "$out" ] && ok "nor on a scheduled wake" || bad "a scheduled wake was nagged: $out"
 reset
 out=$(say "$SID" "approve push abcd1234")
 [ ! -f "$SENTINEL" ] && [ -z "$out" ] && ok "no push pending: silent, no sentinel" || bad "no nonce pending but something happened: $out"

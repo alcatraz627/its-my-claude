@@ -221,7 +221,7 @@ case "$key:$val" in
       jq -cn --arg n "$nonce" --arg k "$key" --arg w "$what" --argjson ts "$(date +%s)" \
         '{nonce:$n, key:$k, what:$w, ts:$ts}' > "$base.nonce" 2>/dev/null || true
     fi
-    printf '⛔ %s needs the owner'"'"'s OK first (policy %s = ask). Print this line to the owner, bare on its own line, then keep working on other things; do not call AskUserQuestion for it:\n     approve %s %s\nWhen a [policy-ask] line says it is approved, run the same call again. One approval covers one call. The owner can also type: deny %s\n' "$what" "$key" "$key" "$nonce" "$key" >&2
+    printf '⛔ %s needs the owner'"'"'s OK first (policy %s = ask). Print this line to the owner, bare on its own line, then keep working on other things; do not call AskUserQuestion for it:\n     approve %s %s\nWhen a [policy-ask] line says it is approved, run the same call again; do not retry before that. Until then, hold the owner to it in your own words whenever you report to them. One approval covers one call. The owner can also type: deny %s\n' "$what" "$key" "$key" "$nonce" "$key" >&2
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-policy --action ask-blocked --heeded unknown --detail "$key" >/dev/null 2>&1 || true
     exit 2;;
   model.heavy_local:warn)

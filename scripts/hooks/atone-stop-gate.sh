@@ -53,8 +53,12 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 # CHILD_SESSION is the broader catch for Agent-tool juror sub-agents. The .gate-off
 # mute remains the universal escape if a future runtime ever sets CHILD_SESSION in
 # the top session.
+#
+# CLAUDE_CODE_CHILD_SESSION is NOT a usable signal: Claude Code sets it to 1 for
+# every hook, top-level session included, which kept this gate silent from the
+# day it shipped (found 2026-10-14). Agent-tool sub-agents end on SubagentStop,
+# never Stop, so they cannot reach this hook anyway.
 [ "${ATONE_JUROR_SESSION:-}" = "1" ] && exit 0
-[ "${CLAUDE_CODE_CHILD_SESSION:-}" = "1" ] && exit 0
 
 # Marker key: stdin session_id first (the authoritative per-session identity a
 # hook receives), then the env ids, then the legacy UTC-date key. Sanitized to a

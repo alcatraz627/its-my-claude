@@ -19,9 +19,9 @@
 #   1. Typed line: the block prints a nonce; the owner types "approve push
 #      <nonce>" as an ordinary message from any client, and push-approve-prompt.sh
 #      (UserPromptSubmit) writes the sentinel. Only a human types a prompt, so the
-#      agent cannot actuate it, and nothing waits: the agent keeps working and the
-#      hook nags on every later message while the push is pending. This is the
-#      channel; the two below are fallbacks.
+#      agent cannot actuate it, and nothing waits: the agent keeps working and
+#      raises the push with the owner in its own words until he answers. This is
+#      the channel; the two below are fallbacks.
 #   2. Ask-tool answer: push-approve-ask.sh (PostToolUse on AskUserQuestion)
 #      writes the sentinel on a pick of "Approve push <nonce>". It halts the turn
 #      until the owner answers and the harness skipped it on three of five picks
@@ -233,8 +233,13 @@ Instead:
           approve push ${nonce}
      Do NOT call AskUserQuestion for this: it halts the turn until they answer,
      and the harness skipped its hook on three of five picks (2026-09-08). The
-     nonce never expires; every later message re-nags you with the line until
-     they approve, or type: cancel push
+     nonce never expires. Until they answer, hold them to it in your own words
+     whenever you report to them: say the push is the thing you cannot finish
+     without them, and repeat the line. Do not retry the push before a
+     [push-gate] line says it is approved. If they say pushes here are fine in
+     general, tell them git.push_main can be set to allow for this repo in the
+     menu bar policy panel, so no line is needed next time. They can also type:
+     cancel push
      Fallback in their own terminal shell only (dead from web and mobile):
           ! touch ${SENTINEL}
   3. When a [push-gate] line says the sentinel is written, re-run the same push.

@@ -48,11 +48,9 @@ for f in "${pending[@]}"; do
       notes+=("[policy-ask] the owner's approval for $key does not carry the pending token ($nonce). Nothing was approved. Show the line again, bare:  approve $key $nonce")
       continue ;;
   esac
-  if [ -f "$base.approved" ]; then
-    notes+=("[policy-ask] $what is approved and not yet run. Run it now, before other work.")
-  else
-    notes+=("[policy-ask] $what is still waiting on the owner. Print this line to him, bare on its own line, then keep working; never call AskUserQuestion for it:  approve $key $nonce   (he can also type: deny $key)")
-  fi
+  # Only the approved state is news to the agent; a pending ask is held by the
+  # agent in its own words, never re-nagged by a hook (owner, 2026-10-14).
+  [ -f "$base.approved" ] && notes+=("[policy-ask] $what is approved and not yet run. Run it now, before other work.")
 done
 
 [ ${#notes[@]} -gt 0 ] || exit 0

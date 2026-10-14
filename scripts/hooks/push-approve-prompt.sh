@@ -5,9 +5,9 @@
 # The owner then types, as an ordinary message from any client (terminal, web,
 # mobile):  approve push <nonce>  . This UserPromptSubmit hook sees that message
 # on the Mac where the session runs and writes the single-use sentinel the gate
-# consumes. Nothing waits: the agent keeps working, and this hook nags on every
-# later message while the push is still pending. Owner, 2026-09-08: "Let the
-# agent nag me over and over, but don't let it be halted on this either."
+# consumes. Nothing waits: the agent keeps working. Owner, 2026-09-08: "Let the
+# agent nag me over and over, but don't let it be halted on this either." The
+# nag is the agent's, in conversation; this hook does not repeat it (2026-10-14).
 #
 # Why the agent cannot actuate this channel: only a human types a prompt, so a
 # message carrying the nonce is the owner's act. The nonce never expires here; a
@@ -59,7 +59,8 @@ esac
 
 if [ -f "$SENTINEL" ]; then
   say "[push-gate] a push of $target is approved (sentinel present) and not yet run. Run the same git push now, before other work."
-  exit 0
 fi
-say "[push-gate] a push of $target is still waiting on the owner. Print this line to him, bare on its own line, then keep working on other things; never call AskUserQuestion for it (that halts the turn, owner 2026-09-08):  approve push $nonce   (he can also type: cancel push)"
+# No mechanical nag while the push waits. Holding the owner to it is the agent's
+# job, in its own words when it talks to him (owner, 2026-10-14); a hook re-nag
+# fired on every cron wake and kept the agent bouncing.
 exit 0
