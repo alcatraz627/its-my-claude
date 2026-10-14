@@ -10,7 +10,22 @@
 
 const KINDS = [
   {
+    id: "waiting",
+    label: "Waiting on you",
+    indexLabel: "things waiting on you",
+    href: "/?view=waiting",
+    key: "1",
+    hue: "--amber",
+    tip: "What agents have gated on you, read from the goal records",
+    searchRank: 7,
+    api: "/api/waiting",
+    listOf: (j) => j.rows ?? [],
+    inPage: true,
+    icon: `<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.8" stroke="currentColor" stroke-width="1.2"/><path d="M8 4.8V8l2.2 1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`,
+  },
+  {
     id: "boards",
+    nav: false,                      // mothballed 2026-10-14: reachable, not on the tab bar
     label: "Boards",                 // the human word (charter §2), on the tab
     // What the crumb calls the kind's index: "All <indexLabel>". Separate from
     // label because the tab wants the owner's word and the crumb wants a
@@ -18,7 +33,7 @@ const KINDS = [
     // "All asks", never "All your asks".
     indexLabel: "boards",
     href: "/",
-    key: "1",                        // the number that reaches it
+    key: "7",                        // the number that reaches it
     hue: "--blue",                   // the kind's accelerator tint, on top of grouping
     tip: "Every project an agent is working on",
     // Where this kind's instances come from, and how to read them out of the
@@ -38,10 +53,11 @@ const KINDS = [
   },
   {
     id: "asks",
+    nav: false,                      // mothballed 2026-10-14: reachable, not on the tab bar
     label: "Your asks",
     indexLabel: "asks",
     href: "/?view=asks",
-    key: "2",
+    key: "8",
     hue: "--amber",
     tip: "Things you wrote down for an agent to sort",
     searchRank: 1,
@@ -54,10 +70,11 @@ const KINDS = [
   },
   {
     id: "drafts",
+    nav: false,                      // mothballed 2026-10-14: reachable, not on the tab bar
     label: "Drafts",
     indexLabel: "drafts",
     href: "/drafts",
-    key: "3",
+    key: "9",
     hue: "--violet",
     tip: "Your documents, the rung above an ask",
     searchRank: 2,
@@ -71,7 +88,7 @@ const KINDS = [
     label: "Decisions",
     indexLabel: "decisions",
     href: "/?view=decisions",
-    key: "4",
+    key: "2",
     hue: "--teal",
     tip: "Pages an agent built for you to rule on",
     searchRank: 4,
@@ -87,7 +104,7 @@ const KINDS = [
     label: "Previews",
     indexLabel: "previews",
     href: "/?view=previews",
-    key: "5",
+    key: "3",
     hue: "--pink",
     tip: "One-off pages agents rendered for you to look at",
     searchRank: 5,
@@ -98,6 +115,7 @@ const KINDS = [
   },
   {
     id: "milestones",
+    nav: false,                      // mothballed 2026-10-14: reachable, not on the tab bar
     label: "Milestones",
     indexLabel: "milestones",
     href: "/?view=milestones",

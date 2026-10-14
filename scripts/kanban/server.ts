@@ -885,6 +885,24 @@ const server = Bun.serve({
           out.previews = fs.readFileSync(man, "utf8").split("\n").filter(Boolean)
             .map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
         } catch { /* no manifest yet */ }
+        // Agents' one-off pages: every tier-3 port claim still held, listed only
+        // while something answers on it, so a dead link never shows.
+        try {
+          const held = new Map<number, any>();
+          for (const l of fs.readFileSync(path.join(CROOT, "dev-servers", "port-events.jsonl"), "utf8").split("\n")) {
+            let e: any; try { e = JSON.parse(l); } catch { continue; }
+            if (e.op === "claim" && e.tier === 3) held.set(e.port, e);
+            else if (e.op === "free" || e.op === "reap") held.delete(e.port);
+          }
+          const live = await Promise.all([...held.values()].map(async (e) => {
+            try { await fetch(`http://127.0.0.1:${e.port}/`, { signal: AbortSignal.timeout(400) }); return e; }
+            catch { return null; }
+          }));
+          for (const e of live.filter(Boolean)) out.previews.push({
+            kind: "page", name: e.name, href: `http://localhost:${e.port}/`,
+            origin: [path.basename(e.cwd ?? "") || null, e.note || null, `:${e.port}`].filter(Boolean).join(" · "),
+            session: e.session ?? null, at: e.ts ?? null });
+        } catch { /* no port ledger */ }
 
         return json({ ...out,
           counts: { boards: out.boards.length, decisions: out.decisions.length,
@@ -1076,6 +1094,31 @@ const server = Bun.serve({
           a.order - b.order || a.name.localeCompare(b.name));
         return json({ milestones: out, counts: { total: out.length,
           open: out.filter((m) => !m.doneAt).length } });
+      }
+
+      // What waits on the owner across every live goal: rows an agent gated on
+      // them, with what to do. Read from the goal records, never written here,
+      // so nothing has to keep this list up to date by hand.
+      if (req.method === "GET" && p === "/api/waiting") {
+        const gdir = path.join(path.dirname(KROOT), "goals", "by-id");
+        const goals: any[] = [];
+        let files: string[] = [];
+        try { files = fs.readdirSync(gdir).filter((f) => f.endsWith(".json")); } catch { /* no goals */ }
+        for (const f of files) {
+          let g: any;
+          try { g = JSON.parse(fs.readFileSync(path.join(gdir, f), "utf8")); } catch { continue; }
+          if (g.status !== "live") continue;
+          const rows = (g.tasks ?? [])
+            .filter((t: any) => t.state === "owner-gate" && !t.closed && t.gate)
+            .map((t: any) => ({ id: t.id, subject: t.subject, ask: t.gate.text, do: t.gate.do ?? null,
+                                session: t.session ?? null, at: t.updated ?? t.created ?? null }));
+          if (!rows.length) continue;
+          goals.push({ id: g.id, outcome: g.outcome, projects: g.projects ?? [], cwd: g.cwd ?? null,
+            milestones: (g.milestones ?? []).filter((m: any) => m.status !== "met" && !m.met_at)
+              .map((m: any) => m.name), rows });
+        }
+        goals.sort((a, b) => b.rows.length - a.rows.length);
+        return json({ goals, rows: goals.flatMap((g) => g.rows) });
       }
 
       // What changed on a board, newest first. The transitions, not the state.

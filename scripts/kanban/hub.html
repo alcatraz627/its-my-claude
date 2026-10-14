@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>kanban · all boards</title>
+<title>Owner hub</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/shared.css">
 <style>
@@ -134,6 +134,14 @@
      the thing you scan for so it never truncates; the goal takes the slack and
      clamps to one line with the full text on hover; the chips hold one row at a
      fixed height so a stack of rows reads as a column rather than as rubble. */
+  .surf.wrow{flex-direction:column;align-items:stretch;gap:4px}
+  .surf.wrow .wtop{display:flex;align-items:baseline;gap:10px;min-width:0}
+  .surf.wrow .sn{white-space:normal;flex:1 1 auto}
+  .surf.wrow .so{white-space:normal}
+  .glabel.wgoal{text-transform:none;letter-spacing:0;font-size:13px;color:var(--text-2);
+                overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mothballed{color:var(--text-3);font-size:12px;text-align:center;padding:18px 0 4px}
+  .mothballed a{color:var(--text-2)}
   .surf.surflinks{cursor:pointer;align-items:flex-start;min-height:46px}
   .surf .sn{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1 1 auto}
   .surf .mname{flex:none;color:var(--text);font-weight:620}
@@ -314,7 +322,7 @@ function boardEl(b, quiet) {
 
 // Boards stays the default view; Notes answers "what have I asked for" across
 // every project without opening each board.
-let view = "boards", tagFilter = null;
+let view = "waiting", tagFilter = null;
 const FILTERS = [["!now", "act"], ["/skill", "skills"], [">lane", "moves"], ["#review-me", "review"], ["@me", "me"]];
 
 function noteRow(r) {
@@ -736,6 +744,63 @@ async function loadSurfaces(which) {
   list.replaceChildren(...frag);
 }
 
+// Everything that waits on the owner, in one list: decision pages not yet
+// answered, then each live goal's rows an agent gated on them. Read-only; the
+// goal records and decision pages stay the source.
+async function loadWaiting() {
+  const list = document.getElementById("list");
+  const [w, s] = await Promise.all([
+    fetch("/api/waiting").then((r) => r.json()),
+    fetch("/api/surfaces").then((r) => r.json())]);
+  const frag = [];
+  const group = (label, rows, goal) => {
+    if (!rows.length) return;
+    const g = document.createElement("div");
+    g.className = "group";
+    const l = document.createElement("div");
+    l.className = goal ? "glabel wgoal" : "glabel";
+    l.textContent = `${label} · ${rows.length}`;
+    if (goal) l.title = label;
+    g.append(l, ...rows);
+    frag.push(g);
+  };
+  const row = ({ href, name, sub, at, tip }) => {
+    const a = document.createElement(href ? "a" : "div");
+    a.className = "surf wrow pending";
+    if (href) a.href = href;
+    if (tip) a.title = tip;
+    const top = document.createElement("div"); top.className = "wtop";
+    const nm = document.createElement("span"); nm.className = "sn"; nm.textContent = name;
+    const age = document.createElement("span"); age.className = "sage";
+    age.textContent = at ? `${ago(Date.parse(at))} ago` : "";
+    top.append(nm, age);
+    a.append(top);
+    if (sub) { const so = document.createElement("span"); so.className = "so"; so.textContent = sub; a.append(so); }
+    return a;
+  };
+  group("Decision pages", (s.decisions ?? []).filter((d) => d.pending && d.kind === "decision")
+    .map((d) => row({ href: d.href, name: d.name ?? d.slug, sub: d.origin, at: d.at })));
+  for (const g of w.goals ?? [])
+    group(g.outcome, g.rows.map((r) => row({
+      name: String(r.ask ?? "").replace(/^USER:\s*/, ""),
+      sub: [r.do && `Then: ${r.do}`, r.subject].filter(Boolean).join(" · "),
+      at: r.at, tip: `goal ${g.id} · row ${r.id}${r.session ? ` · session ${r.session.slice(0, 8)}` : ""}` })), true);
+  if (!frag.length) {
+    const e = document.createElement("div");
+    e.className = "empty"; e.textContent = "Nothing waits on you.";
+    frag.push(e);
+  }
+  const foot = document.createElement("div");
+  foot.className = "mothballed";
+  foot.innerHTML = `Mothballed, kept readable: <a href="/?view=boards">Boards</a> · `
+    + `<a href="/?view=asks">Asks</a> · <a href="/drafts">Drafts</a> · <a href="/?view=milestones">Milestones</a>`;
+  frag.push(foot);
+  const sig = frag.map((f) => f.outerHTML).join("");
+  if (list.dataset.sig === sig) return;
+  list.dataset.sig = sig;
+  list.replaceChildren(...frag);
+}
+
 // Milestones (owner ruled a registry kind, 2026-08-26). Same row shape as the
 // other indexes on purpose: a person scanning the hub should not have to learn
 // a new row for each kind. Open ones first, because a shipped milestone is not
@@ -845,6 +910,7 @@ async function loadMilestones() {
 // The header, the tabs, the keys and the theme are shared.js's now; this page
 // only says which view is showing and what it is for.
 const VIEW_COPY = {
+  waiting: ["Waiting on you", "decision pages and goal rows an agent gated on you"],
   boards: ["Your boards", "every project an agent is working on for you"],
   notes: ["Your asks", "things you wrote down for an agent to sort into cards"],
   decisions: ["Decisions", "pages an agent built for you to rule on"],
@@ -921,6 +987,11 @@ registerHelp(helpModal({
 
 async function load() {
   const list = document.getElementById("list");
+  if (view === "waiting") {
+    try { await loadWaiting(); }
+    catch (e) { list.innerHTML = `<div class="empty">Waiting list failed to load: ${e.message}</div>`; }
+    return;
+  }
   if (view === "notes") { try { await loadAsks(); } catch (e) { list.innerHTML = `<div class="empty">Asks failed to load: ${e.message}</div>`; } return; }
   if (view === "milestones") {
     try { await loadMilestones(); }

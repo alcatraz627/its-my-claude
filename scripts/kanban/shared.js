@@ -405,7 +405,7 @@ function searchSelect({ options = [], value = "", placeholder = "Pick…", aria 
 function kindFind() {
   const wrap = document.createElement("div");
   wrap.className = "kfind";
-  wrap.innerHTML = `<input type="search" placeholder="Search boards, asks, drafts" aria-label="search everything">` +
+  wrap.innerHTML = `<input type="search" placeholder="Search" aria-label="search everything">` +
                    `<div class="kflist" hidden role="listbox"></div>`;
   const input = wrap.querySelector("input"), list = wrap.querySelector(".kflist");
   let rows = [], at = 0, timer = null;
@@ -552,7 +552,7 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
       // and nothing here. The hue rides an inline custom property rather than a
       // CSS rule per kind, for the same reason: a rule per kind is a list.
       `<div class="views" role="tablist">` +
-        KINDS.map((k) =>
+        KINDS.filter((k) => k.nav !== false || k.id === active).map((k) =>
           `<a href="${k.href}" data-v="${k.id}" data-k="${k.key}" role="tab"
               class="${k.id === active ? "on" : ""}" style="--nav-hue:var(${k.hue})"
               data-tip="${k.label} · ${k.tip} · press ${k.key}">

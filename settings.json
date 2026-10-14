@@ -634,6 +634,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/session-mgmt/compact-gate.sh hook"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/session-mgmt/pre-compact-checkpoint.sh"
           }
         ]
@@ -1751,6 +1759,7 @@
   "verbose": false,
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": true,
+  "idleCompaction": false,
   "switchModelsOnFlag": false,
   "terminalProgressBarEnabled": true,
   "teammateMode": "auto",
