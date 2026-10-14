@@ -53,34 +53,50 @@ One command per Bash call, no chaining or pipes; ask a tool for less output inst
    names, the caps (description 300, argument-hint 120, Brief 8 lines, emphasis), the
    `Task` tool name, CWD-relative skill writes, a missing `## Validation` rubric or
    skill-log step. Body length is never a finding.
+   Then read the target's recent history: `git -C ~/.claude log -5 --oneline -- <path>`
+   and the diff of any commit from the last few days. A finding fed in from an earlier
+   review is checked against the current text before it becomes a proposal; one already
+   fixed is listed as handled, never re-proposed.
 3. **Run history.** Three sources, all read:
    - The skill's own notes: `~/.claude/skills/<name>/runtime-notes.md` when it exists
      (some skills keep their notes here and never write the global file; bloop has 50+
-     entries there). Read it, do not search around it.
+     entries there). Read it, do not search around it. A long file (500+ lines) gets an
+     order and a budget: list the entry headings first (`rg -n "^## " <file>`), read in
+     three or four chunks of `sed -n` or Read `offset`/`limit`, then confirm each
+     residue candidate with a targeted `rg -n` instead of rereading.
    - The global notes: `rg -n "^## <name>" ~/.claude/skills/runtime-notes.md`, then the
      same pattern over `~/.claude/skills/runtime-notes-archive*.md` (the live file
      rotates quarterly).
    - The ledger: `bash ~/.claude/scripts/skill-log.sh summary --skill <name>` and
      `bash ~/.claude/scripts/skill-log.sh list --skill <name> --limit 20`.
+   - Owner evidence outside the notes: the atone ledger
+     (`rg -c -i "<name>" ~/.claude/atone/events.jsonl`, then `rg -i "<name>"` for the
+     events), and the ledger rows that carry it, as one command:
+     `jq -c 'select(.skill=="<name>" and (.corrections>0 or .outcome=="revised" or .outcome=="discarded"))' ~/.claude/skills/usage/events.jsonl`.
 
    **Mine repeated residue.** Write down each distinct defect an entry names (a
    validator that went idle until chased, a step skipped, a flag misread) with the
    entry date and line. A defect that appears in three or more separate entries is
-   residue, not an anecdote; confirm the count with one `rg -c` on its key phrase over
-   the notes file. Residue is a missing or wrong instruction until shown otherwise,
-   and it outranks any lint finding in the proposed list.
+   residue, not an anecdote; confirm the count with `rg -n` on its key phrase and map
+   the line numbers to entry headings. Count distinct entries, never matching lines
+   (one entry can match fifty times). Residue is a missing or wrong instruction until
+   shown otherwise, and it outranks any lint finding in the proposed list.
 
    **Discount self-graded outcomes.** If the skill's own text tells the agent to record
-   `--outcome accepted` (or any outcome) at its own finish, then those rows are the
-   skill grading itself, and the owner never weighed in. Count them separately and say
-   so in the analysis: "71 of 79 accepted rows are self-graded, so they say nothing
-   about efficacy". Owner evidence is `revised`, `discarded`, nonzero `corrections`,
-   a later note that records a rework, and the owner's own words in the notes.
+   `--outcome accepted` (or any outcome, or any field such as `--corrections` or
+   `--gate`) at its own finish, then those rows are the skill grading itself, and the
+   owner never weighed in. Count them separately and say so in the analysis: "71 of 79
+   accepted rows are self-graded, so they say nothing about efficacy". Owner evidence
+   is `revised`, `discarded`, nonzero `corrections` in a field the skill does not tell
+   the agent to set, atone events naming the skill, a later note that records a
+   rework, and the owner's own words in the notes.
    `unknown` is no evidence either way. With no owner evidence, the efficacy reading
    is "unmeasured", never "healthy".
 
    No history at all is itself a finding: check whether the skill has a step that
-   writes it before concluding it never ran.
+   writes it before concluding it never ran. Evidence a rubric check needs but nothing
+   records (a report path, an owner verdict) becomes a proposal against the skill's own
+   ledger step.
 4. **Its rubric.** The skill's `## Validation` section: the efficacy dimension and its
    checks. If absent, draft one in Phase 2 from the skill's class (table below) and
    propose it.
@@ -116,6 +132,8 @@ its runtime notes; gather → plan → do → check phases in whatever order the
 needs; `## Validation` rubric; runtime-note and skill-log steps; absolute paths.
 
 **Contradictions.** Each is a finding with both sides quoted and a file:line for each.
+- *Itself.* Two places in the target's own text that disagree (a phase that says do not
+  push, another that says push). Quote both.
 - *Siblings.* For every skill that names the target, or that the target names: do the
   two agree on who owns the step, in what order, and who asks the owner? A loop is a
   contradiction (A defers to B, B defers back to A). A claim about a neighbour ("X no
@@ -157,7 +175,7 @@ Then print the analysis block for the skill:
   description     <ok | too long (n) | does not route: why>
   structure       <gaps, or none>
   house rules     <defects, or none>
-  contradictions  <n siblings, n rulings, n dead refs, or none>
+  contradictions  <n itself, n siblings, n rulings, n dead refs, or none>
   run history     <n notes (own file + global), n skill-log runs (n self-graded); n repeated residue, n missing, n wrong, n handled>
   rubric          <present and fit | present but <what is wrong> | missing; proposed: <dimension>>
   proposed
@@ -167,6 +185,11 @@ Then print the analysis block for the skill:
 ```
 
 Print one block per skill, then ask the owner once for the whole run.
+
+**Propose-only mode.** When a parent dispatched this skill as a seat, stop here: write
+the proposals (before and after text, each with its evidence) to the output path the
+parent gave, skip the ask, Phases 3 and 5 and the skill-log line, and say in the
+return that the parent records the outcome after the owner answers.
 
 **Ask once, not once per skill.** Every proposed change across every audited skill
 goes on ONE decision page through `/decision-wizard` (Path B): a card per proposed

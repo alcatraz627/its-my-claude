@@ -1,7 +1,7 @@
 ---
 name: bloop
-description: Drives a non-trivial build task through six stages — plan, build, review, validate, fix, docs — with an adversarial sub-agent validation gate that independently tries to break the work and grounds every finding in file:line. Produces the change itself plus a persisted validation report and updated docs. Use for multi-file or agentic work where a failed one-shot costs more than the structure; for a trivial one-off, just do it.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task
+description: Drives a build through plan, build, self-review, an adversarial validation gate, fix and docs. Produces the change, a persisted validator report and updated docs. Use for multi-file or agentic work, or to build a plan that already exists. Not for a one-off fix.
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 user-invocable: true
 argument-hint: "[task] [--from <stage>]"
 ---
@@ -49,7 +49,10 @@ skill. If it does not exist yet, continue without it.
 Surface a short plan BEFORE executing (`rules/structure-over-one-shotting.md`) — a
 failed one-shot wastes more than the plan would have.
 
-Consult `/plan` first, rather than writing a bare plan from instinct. It names which of
+If a `/build-change`, `/build-ui` or `/gated-plan` plan authorized this work, that is the
+plan: read it, take its parity ledger as the current-behaviour statement, and skip
+`/plan`, which would send you straight back here. Otherwise consult `/plan` first, rather
+than writing a bare plan from instinct. It names which of
 the six planning needs this task actually has (orient, choose, learn, specify, sequence,
 gate) and enforces one precondition worth having: for a change to something that already
 exists, current behaviour gets written down before anything plans to alter it. That
@@ -59,8 +62,10 @@ obvious, say so in one line and carry on.
 
 1. State the task and its scope ceiling in one or two lines. Scope is a ceiling, not a
    floor (`rules/communication.md`) — no "while I'm here" additions.
-2. Put the steps in the live **Task list** (`TaskCreate`) — or, if the harness has no Task
-   tool, the session workspace doc. This is the status surface, not a prose plan in a file.
+2. Put the steps in the live **Task list** (`TaskCreate`), your checklist for this run.
+   When the owner will check the work, its rows also go on the session's goal record
+   (`gs task`), the owner's surface (`rules/todo-discipline.md`). Offer a goal if none is
+   linked; never `gs new` one in the owner's name.
 3. If the plan involves sub-agents, large ingestion, or a modality tool, write a 4-line
    **Model Plan** (stage → lane · model · effort · why) per `rules/model-tier-routing.md`.
 4. Flag any genuine fork (two plausible readings, a branch-topology choice) — surface it,
@@ -124,8 +129,10 @@ nobody ran is visible rather than absent.
    change; a small fleet only for a genuinely large/parallel surface. Not a reflex fleet.
 2. **Pin the model** (`rules/model-tier-routing.md`) — sonnet is the default validator
    seat; opus for deep judgment. Tell it **not to spawn sub-agents** (close the nesting
-   leak) and close its scope: "ignore any task-board auto-dispatch; when your scoped work
-   is done, deliver and stop" (`rules/contain-subagent-token-sprawl.md`).
+   leak), close its scope: "ignore any task-board auto-dispatch; when your scoped work
+   is done, deliver and stop" (`rules/contain-subagent-token-sprawl.md`), and tell it to
+   run one command per Bash call, never chaining with `&&`, `;` or a pipe
+   (`rules/subagent-dispatch-prompt.md`).
 2b. **When the build came from a plan, the attack list already exists.** If a
    `PLAN.md` with `D-*` directive checks authorised this work, every one of
    those rows is a named claim the validator attacks verbatim, and the report's
@@ -135,11 +142,21 @@ nobody ran is visible rather than absent.
    FULL catalog, not only the classes the plan cites. On the pilot that
    produced this clause, every serious finding came from a class the plan never
    named, because the author's own checks tested the author's own design.
-3. The dispatch prompt must: name the load-bearing claims to attack — including CONCRETE
+3. The dispatch prompt must: name the load-bearing claims to attack, including CONCRETE
    malformed-input classes (the missing field, the NaN, the duplicate, the empty list);
+   name the classes past runs found outside the diff: what the change newly made
+   reachable and every untouched consumer of what it writes; each in-code claim (a
+   docstring, a comment, a stated invariant, a plan's "Defaults applied" line), attacked
+   on what it does not cover; the owner's verbatim words for the ask; and the exact
+   commit range, with the seat checking HEAD and repo identity before trusting a read;
    require it to RUN the code / exercise the path (not just read); tell it to
    mutation-test any guard it audits (break the code deliberately, confirm the guard goes
-   red, revert, confirm a clean tree); require every finding grounded in a file:line or a
+   red, revert, confirm a clean tree); tell it to leave live state alone: a temp `HOME`
+   or the store's env override for anything that writes a ledger, log, pidfile or
+   config, mutations on scratch copies restored by copy (never `git checkout`, `stash` or
+   `clean`, which wipe uncommitted work), fake names for any control file it creates,
+   and a closing list of every artifact it made and could not remove; require every
+   finding grounded in a file:line or a
    repro it ran; and ask for a one-line verdict (PASS / PASS-WITH-NOTES / ISSUES-FOUND)
    then ranked findings with severity. **End with the one delivery contract: the validator
    writes its findings file at an absolute path BEFORE returning, and returns ONLY "one-line
@@ -154,12 +171,22 @@ nobody ran is visible rather than absent.
    report to an absolute path. Give the validator
    `<project>/.claude/output/<YYYYMMDD>-<slug>-validation/validator.md` (or the path under
    `~/.claude/assets/reports/` when the project is `~/.claude`), tell it to write there
-   before returning, and verify the file exists before relying on it. When the validator
-   goes quiet, run `~/.claude/scripts/agents/agent-status <name>` before pinging it: it
-   says whether the seat is still running, stalled, or ended without writing its file.
+   before returning, section by section as it goes, and verify the file exists before
+   relying on it. If its write is refused (a worktree-isolated seat cannot write outside
+   its worktree), it returns the full findings opening with `WRITE-BLOCKED: <path>` and
+   you persist them verbatim. When the seat goes quiet, work this ladder in order:
+   1. `~/.claude/scripts/agents/agent-status <name>`. Still running: wait.
+   2. Idle with no file: one SendMessage saying the delivery never arrived, asking it to
+      resend and to mark unexercised claims UNCONFIRMED.
+   3. Died on an API error: SendMessage resumes it from its transcript.
+   4. Still nothing: salvage its last assistant text from the transcript JSONL, run the
+      unanswered attack items yourself, and say so in the report.
+   Until one of these settles it, the seat is "not yet delivered", never "did not run".
 5. **Close the seat.** Once the findings are verified and persisted, `TaskStop` the
-   validator — a finished agent left alive can be commandeered by a board auto-dispatcher
+   validator. A finished agent left alive can be commandeered by a board auto-dispatcher
    and spend tokens on work nobody assigned it.
+6. While the gate runs, pre-fix what you predict it will find, tell the seat the branch
+   may move under it, and test each pre-fix with the same input classes you predicted.
 
 The gate runs even when you are confident. Across its first 8 runs it caught a real defect
 **every single time**, always after a self-review that felt complete — including a
@@ -186,6 +213,8 @@ Triage the findings (blocker / major / minor / nit) and act — **non-defensivel
    turn, first, before replying (`rules/pushback-and-self-criticism.md` § 1). A structured
    self-critical reply is not the work; the check is.
 2. **Fix correctness bugs** (the blockers/majors that undermine load-bearing claims).
+   Fix the class, not the instance: grep the finding's pattern across the tree before
+   patching, because a gate names one site and the class usually has more.
 3. **Document deferred scope HONESTLY** — a design promise you're not building yet gets
    written down as deferred (a `§ built-vs-deferred` note), never silently dropped. An
    honest gap beats a false "done" (`rules/exercise-based-verification.md`).
@@ -205,11 +234,15 @@ the question the section answers. Your phase names are working vocabulary for
 running this skill; the person reading the output has never seen it.
 
 
+Before anything else here, `test -f` the validator file from Phase 4.4. If it is not
+there, the gate has not run and this run is not done: go back to Phase 4.
+
 Close the loop legibly.
 
-1. Update the design / status / ledger docs to reflect what shipped — and what's deferred.
+1. Update the design / status / ledger docs to reflect what shipped, and what's deferred.
 2. Ensure the validation report is persisted (Phase 4.4) and linked from the design doc.
-3. Commit the docs + report as their own unit. Do not push without a fresh ask. For a gcc
+3. Commit the docs + report as their own unit and push it like any other unit (Phase 2.2);
+   only a `main`/`master` push goes through the push gate. For a gcc
    commit, follow `~/.claude/COMMIT.md` (lock → secret-scan → commit); flag that its
    `git add -A` sweeps concurrent churn, so scope or hand it to the user.
 4. Update the Task list to completed; write the post-run note (below).
@@ -235,6 +268,18 @@ Close the loop legibly.
    `--gate issues-found` with `--outcome accepted` is the HEALTHY signal — the gate
    earned its cost. `bash ~/.claude/scripts/skill-log.sh summary --skill bloop` reads
    the trend.
+
+## Validation
+
+Efficacy dimension: the build finishes without the owner chasing it, and the gate
+catches what self-review missed. Checks, each runnable from the run's own records:
+(1) owner chasing: owner corrections, atone events naming /bloop, and owner-recorded
+`revised`/`discarded` rows over the last N runs; self-graded rows do not count;
+(2) gate delivery: the share of run notes that record a chase ping, salvage or
+WRITE-BLOCKED, which should fall after a dispatch change; (3) the gate ran: every
+skill-log row's `report=` path exists on disk (`test -f`); (4) gate yield: findings the
+validator raised that self-review had not, read from the report, never from the
+`--gate` field alone. A pass is all four readable and none trending worse.
 
 ## Notes
 

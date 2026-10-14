@@ -71,5 +71,10 @@ must_absent "plan sequences through bloop" 'bloop` Phase 1' "$R/skills/plan/SKIL
 must_absent "validate routes back to bloop" 'bloop` Phase 4' "$R/skills/validate/SKILL.md"
 must_absent "deadline arms wake" '\*\*Arm `/wake`\*\*' "$R/skills/deadline/SKILL.md"
 
+# bloop: the validator dispatch carries the one-command clause, and Phase 6 opens
+# with the self-check that the validator file exists.
+must_present "bloop validator one-command clause" 'run one command per Bash call' "$R/skills/bloop/SKILL.md"
+if rg -U -q 'Before anything else here, `test -f` the validator file from Phase 4\.4[\s\S]{0,200}Close the loop legibly' "$R/skills/bloop/SKILL.md"; then ok; else bad "bloop Phase 6 lacks the validator-file self-check before Close the loop"; fi
+
 echo "skill-refs: pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]
