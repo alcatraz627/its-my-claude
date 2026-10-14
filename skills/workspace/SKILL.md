@@ -17,7 +17,7 @@ Where it slots in:
 
 ## When to use
 
-- Starting a "serious" session — manually invoke `/workspace init` to create the doc up front
+- Starting a "serious" session: manually invoke `/workspace init` to create the doc up front
 - `/core-dump` never creates the doc. If the session's doc is missing it skips the workspace step, so create it up front with `/workspace init`
 - Browsing: `/workspace list` to see what's stacked up in this project
 
@@ -30,16 +30,16 @@ Where it slots in:
 /workspace open                  # open _active.md in $EDITOR
 ```
 
-## Phase 1 — Parse subcommand
+## Phase 1: Parse subcommand
 
 Default is `show` if no arg.
 
-## Phase 2 — Resolve project + session-id
+## Phase 2: Resolve project + session-id
 
 - Project = CWD if CWD has `.claude/`, else error out
 - Session-id = `$CLAUDE_CODE_SESSION_ID` (env), or fall back to today's checkpoint name if available
 
-## Phase 3 — Dispatch
+## Phase 3: Dispatch
 
 ### `init`
 
@@ -54,7 +54,7 @@ Prints the absolute path to the new doc. Refresh `_active.md` symlink.
 
 ### `show`
 
-Prefer THIS session's own doc (`<sid>.md`) over the shared `_active.md` symlink — with concurrent same-dir sessions, `_active.md` may point at a different session's notes.
+Prefer THIS session's own doc (`<sid>.md`) over the shared `_active.md` symlink. With concurrent same-dir sessions, `_active.md` may point at a different session's notes.
 
 ```bash
 ND="$PROJECT/.claude/session-notes"; { [ "$PROJECT" = "$HOME/.claude" ] || [[ "$PROJECT" == */.claude ]]; } && ND="$PROJECT/session-notes"
@@ -110,6 +110,6 @@ For `/catchup` to read the workspace:
 ## Notes
 
 - `_active.md` is a symlink with a RELATIVE target (`<session-id>.md`), so it survives project moves
-- Per-project location was chosen over a global `~/.claude/sessions/notes/` farm — keeps the artifacts with the project's git history (user can choose to commit them)
+- Per-project location was chosen over a global `~/.claude/sessions/notes/` farm, because it keeps the artifacts with the project's git history (the user can choose to commit them)
 - Dedupe heuristic when /core-dump proposes the same todo twice: lowercase + whitespace-collapse comparison; apply.sh treats existing-checked items as no-op
-- Diff/apply are pure shell+Python — no LLM call. Cost-free.
+- Diff/apply are pure shell+Python: no LLM call. Cost-free.

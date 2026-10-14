@@ -8,7 +8,7 @@ argument-hint: "<input_markdown_path> [--style <name>] [--all-styles]"
 
 ## Brief
 
-Converts any markdown file into a polished, self-contained HTML report with syntax highlighting, a navigation sidebar, and dark theme — no external dependencies required.
+Converts any markdown file into a polished, self-contained HTML report with syntax highlighting, a navigation sidebar, and dark theme. No external dependencies required.
 
 # Create Report Skill
 
@@ -36,10 +36,10 @@ Converts a markdown file into a polished, self-contained HTML report.
 
 **Subcommands:**
 
-- `styles list` — List all available styles with descriptions. Runs `bash .claude/skills/create-report/scripts/list-styles.sh`.
-- `styles add` — Interactively create a new custom style. The agent scaffolds `styles/<name>/` with `meta.json`, `template.ts`, `style.css`, and `style.js`.
-- `styles update <name>` — Modify an existing style. The agent reads the current style files and applies requested changes.
-- `styles delete <name>` — Remove a custom style (not allowed for built-in styles).
+- `styles list`: List all available styles with descriptions. Runs `bash .claude/skills/create-report/scripts/list-styles.sh`.
+- `styles add`: Interactively create a new custom style. The agent scaffolds `styles/<name>/` with `meta.json`, `template.ts`, `style.css`, and `style.js`.
+- `styles update <name>`: Modify an existing style. The agent reads the current style files and applies requested changes.
+- `styles delete <name>`: Remove a custom style (not allowed for built-in styles).
 
 **Available styles:**
 
@@ -51,8 +51,8 @@ Converts a markdown file into a polished, self-contained HTML report.
 | `magazine`   | Editorial magazine layout with serif typography and hero header   |
 | `terminal`   | Green-on-black retro terminal with CRT scanlines                  |
 | `data-table` | Spreadsheet layout optimized for tables and structured data       |
-| `feed`       | Social feed layout for narrative data — timeline cards            |
-| `corporate`  | Formal corporate/legal report — print-ready, numbered sections    |
+| `feed`       | Social feed layout for narrative data, timeline cards            |
+| `corporate`  | Formal corporate/legal report, print-ready, numbered sections    |
 | `academic`   | LaTeX-inspired academic paper with serif fonts, numbered sections |
 | `neon`       | Cyberpunk neon-glow dark theme with gradient accents              |
 | `minimal`    | Ultra-clean reading-focused layout with maximum whitespace        |
@@ -61,18 +61,18 @@ Converts a markdown file into a polished, self-contained HTML report.
 
 **Specific Templates (Reference Library):**
 
-One-off, purpose-built HTML reports are cataloged in `specific-templates.json` — not reusable with arbitrary markdown, but tagged with features, style, and vibe for design reference. Use these as inspiration when creating new styles or custom reports. Run `/create-report specific-templates` to list them.
+One-off, purpose-built HTML reports are cataloged in `specific-templates.json`. They are not reusable with arbitrary markdown, but they are tagged with features, style, and vibe for design reference. Use these as inspiration when creating new styles or custom reports. Run `/create-report specific-templates` to list them.
 
 **Output:** Always written to `.claude/output/<YYYYMMDD-HHMM>-<purpose>/` as a single self-contained HTML file with CSS and JS inlined:
 
-- `index.html` — the complete report (CSS and JS embedded inline, no external local dependencies)
-- `data.json` — the parsed JSON data (enables zero-Claude restyling via `restyle.sh`)
+- `index.html`: the complete report (CSS and JS embedded inline, no external local dependencies)
+- `data.json`: the parsed JSON data (enables zero-Claude restyling via `restyle.sh`)
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the **file lock
-protocol** — for the entire duration of this skill run.
+protocol**, for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -88,8 +88,8 @@ If it does not exist yet, continue without it.
 
 **For report generation**, parse flags:
 
-- `--style <name>` — visual style to use (default: `default`)
-- `--all-styles` — generate all 8 styles in one shot; mutually exclusive with `--style`
+- `--style <name>`: visual style to use (default: `default`)
+- `--all-styles`: generate all 8 styles in one shot; mutually exclusive with `--style`
 
 Then compute the output directory and check if it already exists.
 
@@ -110,7 +110,7 @@ Then compute the output directory and check if it already exists.
    output_html = .claude/output/<datetime>-<purpose>/index.html
    ```
 
-   **Exception — when CWD is `~/.claude` itself:** the default relative path would
+   **Exception when CWD is `~/.claude` itself:** the default relative path would
    resolve to `~/.claude/.claude/output/...` (broken double-nest; a PreToolUse hook
    blocks it). Redirect instead to:
 
@@ -128,14 +128,14 @@ Then compute the output directory and check if it already exists.
    ls <output_dir> 2>/dev/null
    ```
 
-5. **If it exists** — skip Steps 1–6 entirely. Jump directly to Step 7 (open it in Chrome). Print:
+5. **If it exists**: skip Steps 1–6 entirely. Jump directly to Step 7 (open it in Chrome). Print:
 
    ```
    ✓ Report already exists: <output_html>
      Skipping generation — opening existing file.
    ```
 
-6. **If it does not exist** — continue to the full generation workflow below.
+6. **If it does not exist**: continue to the full generation workflow below.
 
 ---
 
@@ -149,18 +149,18 @@ Use the Read tool to load the full markdown content from `input_markdown_path`.
 
 Before the LLM walks the markdown to produce JSON, perform a **pre-processing pass** to handle structured data that the LLM would otherwise parse slowly and error-prone:
 
-**1. Detect fenced data blocks** — scan for fenced code blocks with language tags:
+**1. Detect fenced data blocks.** Scan for fenced code blocks with language tags:
 - `` ```csv `` → parse into table headers + rows using `mcp__file-tools__read_tabular` or Python's csv module
-- `` ```json `` → parse with `JSON.parse()` — if it's an array of objects, convert to table block; if scalar/nested, keep as code block
+- `` ```json `` → parse with `JSON.parse()`: if it's an array of objects, convert to table block; if scalar/nested, keep as code block
 - `` ```yaml `` or `` ```toml `` → parse into structured data via `mcp__file-tools__read_structured`
 
-**2. Replace data blocks in the markdown** — before handing to the LLM, replace each parsed data block with a marker:
+**2. Replace data blocks in the markdown.** Before handing to the LLM, replace each parsed data block with a marker:
 ```
 <!-- DATA_TABLE_1: headers=["Name","Value","Status"], rows=[...] -->
 ```
 The LLM then converts these markers directly to `table` blocks in the JSON instead of parsing raw CSV/JSON text.
 
-**3. Detect input content profile** — categorize the input:
+**3. Detect input content profile.** Categorize the input:
 - **Prose-heavy** (>70% paragraphs, <30% tables/code): suggest `default`, `notion`, `magazine`, `minimal`
 - **Data-heavy** (>50% tables or structured blocks): suggest `data-table`, `dashboard`
 - **Code-heavy** (>50% code blocks): suggest `terminal`, `jupyter`
@@ -175,13 +175,13 @@ Suggested style: data-table (override with --style)
 
 If no `--style` was specified and the profile has a strong signal (>60% in one category), **auto-select** the suggested style. Otherwise keep `default`.
 
-**4. Large table optimization** — for tables with >20 rows:
+**4. Large table optimization.** For tables with >20 rows:
 - Add `<!-- LARGE_TABLE: N rows -->` annotation so the renderer can apply scrollable container styling
 - Consider splitting into multiple page-sized chunks for `corporate` and `academic` styles (print-friendly)
 
 ### Step 2: Parse into Structured JSON (LLM's job)
 
-Walk through the markdown and produce a JSON object matching the schema below. This is where the LLM applies intelligence — understanding what content is a table vs a list, grouping subsections under their parent sections, extracting inline formatting, and building the navigation tree.
+Walk through the markdown and produce a JSON object matching the schema below. This is where the LLM applies intelligence, understanding what content is a table vs a list, grouping subsections under their parent sections, extracting inline formatting, and building the navigation tree.
 
 **JSON Schema:**
 
@@ -260,12 +260,12 @@ Walk through the markdown and produce a JSON object matching the schema below. T
 - Use `math` blocks for equations, formulas, and mathematical expressions. The `latex` field contains raw LaTeX (e.g., `P(A) = \\frac{m_A^r}{m_A^r + m_B^r}`).
 - `display: true` (default) renders as a centered block equation. `display: false` renders inline-sized.
 - Inline math in paragraph `html` fields is also supported: use `$...$` delimiters (e.g., `"html": "The probability is $P(A) = 0.52$ for player A"`). KaTeX auto-render processes these client-side.
-- Do NOT HTML-escape the LaTeX — use raw LaTeX syntax. Backslashes need JSON escaping only (e.g., `\\frac` not `&amp;frac`).
+- Do NOT HTML-escape the LaTeX: use raw LaTeX syntax. Backslashes need JSON escaping only (e.g., `\\frac` not `&amp;frac`).
 - Common LaTeX: `\\frac{a}{b}`, `\\sum_{i=0}^{n}`, `\\alpha`, `\\beta`, `\\cdot`, `\\times`, `\\leq`, `\\geq`, `\\approx`, `\\text{label}`.
 
 **When to use `tree` vs `ul`:**
 
-- Use `tree` for **hierarchical directory structure or component trees** — it renders as expandable `<details>/<summary>` nodes with indented children
+- Use `tree` for **hierarchical directory structure or component trees**. It renders as expandable `<details>/<summary>` nodes with indented children
 - Use `ul` for flat lists, dependency lists, or bullet points
 - Top-level nodes in a `tree` block are expanded by default; child nodes are collapsed
 
@@ -292,7 +292,7 @@ Write the parsed JSON to `.claude/report-data.tmp.json` using the Write tool.
 
 ### Step 4: Locate the Generator Script
 
-The HTML generator is a static TypeScript file that lives alongside this skill. Do **not** write or modify it during a run — it is source-controlled and reused on every invocation.
+The HTML generator is a static TypeScript file that lives alongside this skill. Do **not** write or modify it during a run. It is source-controlled and reused on every invocation.
 
 **Script path (relative to the frontend root):**
 
@@ -336,7 +336,7 @@ This generates all 8 styles into `<outputDir>/<style>/index.html` subdirectories
 
 The script produces a single self-contained `index.html` with CSS and JS inlined. It also writes `data.json` (the parsed JSON for zero-Claude re-rendering) alongside the HTML.
 
-**Retry logic — attempt up to 3 times:**
+**Retry logic: attempt up to 3 times.**
 
 On each attempt:
 
@@ -345,7 +345,7 @@ On each attempt:
 3. If exit code is **non-zero**:
    - Read the full stderr/stdout output (it contains a descriptive validation error message including the exact field path and what was wrong)
    - Read `.claude/report-data.tmp.json` to inspect the current JSON
-   - Fix the specific field(s) cited in the error — do not rebuild the whole JSON from scratch
+   - Fix the specific field(s) cited in the error. Do not rebuild the whole JSON from scratch
    - Overwrite `.claude/report-data.tmp.json` with the corrected JSON using the Write tool
    - Increment attempt counter and retry
 
@@ -391,7 +391,7 @@ After a successful generation, print:
   and copy-able restyle commands for styles not yet generated).
 ```
 
-Do **not** ask the user to choose a style via `AskUserQuestion` — the `restyle.sh` script and the in-browser style picker handle this without any Claude invocation.
+Do **not** ask the user to choose a style via `AskUserQuestion`. The `restyle.sh` script and the in-browser style picker handle this without any Claude invocation.
 
 ### Step 7: Clean Up Temp Files
 
@@ -416,9 +416,9 @@ Print to terminal:
 
 ## Notes
 
-- The LLM's job is **parsing and structuring** — turning messy markdown into clean JSON. Invest effort here so the script output is accurate.
-- `generate-html.ts` is **pure rendering** — it reads the JSON and outputs a single self-contained HTML file (CSS and JS inlined via `inlineAssets()`). It has no intelligence about content. Never modify it during a skill run.
-- Inline markdown in `html` fields must be pre-converted by the LLM before being placed in the JSON — the TypeScript script does not parse markdown.
+- The LLM's job is **parsing and structuring**, turning messy markdown into clean JSON. Invest effort here so the script output is accurate.
+- `generate-html.ts` is **pure rendering**: it reads the JSON and outputs a single self-contained HTML file (CSS and JS inlined via `inlineAssets()`). It has no intelligence about content. Never modify it during a skill run.
+- Inline markdown in `html` fields must be pre-converted by the LLM before being placed in the JSON. The TypeScript script does not parse markdown.
 - On validation errors, the script prints the exact field path (e.g. `[sections[2].blocks[0]]`) and what was wrong, making it easy to do a targeted fix rather than regenerating the whole JSON.
 - `npx tsx` works without any prior `npm install` step since `tsx` is available as an npx package. If the project has `tsx` in devDependencies (this one does), it will use the local version.
 - The generated HTML includes **Open Graph and Twitter Card meta tags** (`og:title`, `og:description`, `og:type`, `twitter:card`, `twitter:title`, `twitter:description`). The description uses `subtitle` if present, otherwise falls back to the stats summary (e.g. "8 sections · 3 tables").

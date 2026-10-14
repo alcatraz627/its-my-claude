@@ -37,34 +37,34 @@ Announce the mode in one line, then let it gate the later phases:
     Contract disagree, the Resume Contract wins, and Standing authorizations
     carry over as the Resume Contract lists them (SKILL.md).
 
-## Phase 0.3 — Direct Resolution (when `--session-id` or `--pick` was used)
+## Phase 0.3: Direct Resolution (when `--session-id` or `--pick` was used)
 
-The JSON entry returned by `resolve.sh` contains `checkpoint_path`, `project_root`, `name`, `summary`, `ts`. It may be preceded by a `note:` line on stderr (collision-preserved pointers exist) — parse only the `{…}` JSON object, or invoke with `2>/dev/null`. Run the Phase 0.4.4 validation + announce sequence on it (same checks as the picker path), then skip to Phase 1.3 (parse the checkpoint file).
+The JSON entry returned by `resolve.sh` contains `checkpoint_path`, `project_root`, `name`, `summary`, `ts`. It may be preceded by a `note:` line on stderr (collision-preserved pointers exist). Parse only the `{…}` JSON object, or invoke with `2>/dev/null`. Run the Phase 0.4.4 validation + announce sequence on it (same checks as the picker path), then skip to Phase 1.3 (parse the checkpoint file).
 
-## Phase 0.4 — Global Checkpoint Resolution (CHECK FIRST when CWD is `~/.claude/` OR no filename arg)
+## Phase 0.4: Global Checkpoint Resolution (CHECK FIRST when CWD is `~/.claude/` OR no filename arg)
 
 This phase exists to defeat the "stale `~/.claude/_checkpoint.claude.md` masquerading as project root" trap. After `/clear`, the new session's CWD often resets to `~/.claude/` rather than the project the previous session was working in. Without this phase, /catchup would Glob from `~/.claude/`, find a stale leftover checkpoint, and confidently load the wrong project's context.
 
-### 0.4.1 — Decide whether to consult the global index
+### 0.4.1: Decide whether to consult the global index
 
 Consult `~/.claude/checkpoints/` when **any** of these conditions hold:
 
-1. CWD is exactly `$HOME/.claude` (the global config dir — never a real project)
+1. CWD is exactly `$HOME/.claude` (the global config dir, never a real project)
 2. CWD does NOT contain a `.claude/` subdirectory (not in a project at all)
 3. No `filename` argument was passed AND no `_checkpoint.claude.md` exists at the resolved project root
 
-If the user passed an explicit `filename` argument, skip this phase — they've named the file they want.
+If the user passed an explicit `filename` argument, skip this phase. They've named the file they want.
 
-### 0.4.2 — Try `--auto` resolution (single fresh entry)
+### 0.4.2: Try `--auto` resolution (single fresh entry)
 
 ```bash
 ~/.claude/scripts/checkpoint/resolve.sh --auto --cwd "$PWD"
 ```
 
 Exit code meaning:
-- `0` — exactly one checkpoint is fresh (<30 min); use it. Stdout is the JSON entry.
-- `2` — multiple fresh entries OR no fresh entries but stale ones exist; **show picker** (next step).
-- `3` — no checkpoints at all; fall through to Phase 0.5.
+- `0`: exactly one checkpoint is fresh (<30 min); use it. Stdout is the JSON entry.
+- `2`: multiple fresh entries OR no fresh entries but stale ones exist; **show picker** (next step).
+- `3`: no checkpoints at all; fall through to Phase 0.5.
 
 `--cwd` is what stops the two confident-wrong resumes of 2026-09-07 (ledger 4
 and 25): the project you sit in wins a tie between fresh entries, a shell-only
@@ -73,7 +73,7 @@ for that project exists at any age, and `_*.claude.md` files on disk in the cwd
 that the index never saw make `--auto` defer to the picker instead of serving
 another project's entry over them.
 
-### 0.4.3 — Show picker (`mcp__inputs__pick_one`)
+### 0.4.3: Show picker (`mcp__inputs__pick_one`)
 
 When `--auto` returned exit 2, render the list and prompt the user to pick:
 
@@ -92,12 +92,12 @@ table to the user AS PLAIN TEXT and ask for a number in the conversation, plus
 though the old fullscreen ban on AskUserQuestion is retired (memory
 `feedback_askuserquestion_tui_fullscreen`, re-verified working 2026-08-20): a
 resume must never hang on a dialog surface, and the inputs-MCP dialogs carry no
-equivalent re-verification on record — that memory is about AskUserQuestion,
+equivalent re-verification on record. That memory is about AskUserQuestion,
 not them. A picker that hangs is a failed resume.
 
 Resolve the typed number via `~/.claude/scripts/checkpoint/resolve.sh --pick <N>` and use that JSON entry; a pasted path is used directly.
 
-### 0.4.4 — Validate and load
+### 0.4.4: Validate and load
 
 For whichever JSON entry was resolved (`--auto` or `--pick`):
 
@@ -126,13 +126,13 @@ pick could be wrong:
 Wrong checkpoint? Re-run as: /catchup <explicit-filename>
 ```
 
-Then read `checkpoint_path` directly and skip to **Phase 1.3** (parse). Do NOT continue to Phase 0.5 / 1.1 — those would re-find the wrong file.
+Then read `checkpoint_path` directly and skip to **Phase 1.3** (parse). Do NOT continue to Phase 0.5 / 1.1. Those would re-find the wrong file.
 
-### 0.4.5 — Back-compat fallback
+### 0.4.5: Back-compat fallback
 
 `resolve.sh` already falls back to the legacy `~/.claude/_last-checkpoint.json` when the new index is empty. That fallback is removed in migration 0008 once all sessions have written to the new index at least once.
 
-### 0.4.6 — CWD-trap hard-stop
+### 0.4.6: CWD-trap hard-stop
 
 If CWD is `$HOME/.claude` AND no entries exist in the index AND no `filename` arg was passed, **stop and ask** rather than scanning `~/.claude/` for `_*.claude.md` files. Print:
 
@@ -149,10 +149,10 @@ Wait for user direction. Do NOT proceed to scan or load anything from `~/.claude
 
 ---
 
-## Phase 0.5 — Check WAL First (Fast Path)
+## Phase 0.5: Check WAL First (Fast Path)
 
 Before looking for a checkpoint file, check if a Write-Ahead Log exists.
-The WAL may be in either format — prefer JSONL, fall back to markdown:
+The WAL may be in either format. Prefer JSONL and fall back to markdown:
 
 1. **Try `.claude/wal.jsonl` first** (canonical format since 2026-04-17):
    - If found and **less than 24 hours old** (check `ts` of the last line):
@@ -179,21 +179,21 @@ The WAL may be in either format — prefer JSONL, fall back to markdown:
        ```bash
        jq -r 'select(.kind == "action" and .target) | .target' .claude/wal.jsonl | tail -20 | sort -u
        ```
-2. **If `wal.jsonl` is missing, stale, or empty** — try `.claude/wal.md` (legacy):
+2. **If `wal.jsonl` is missing, stale, or empty**, try `.claude/wal.md` (legacy):
    - Find the **last `=== CHECKPOINT ===` block**
    - Present Goal / Done / Current / Next / Blockers from the checkpoint
    - Print: `Resumed from WAL (legacy markdown fast path). Last checkpoint at [time].`
    - Skip directly to Phase 2 using the checkpoint's pending items
-3. **If neither exists or both are stale (>24h)** — fall through to Phase 1 (checkpoint file).
+3. **If neither exists or both are stale (>24h)**, fall through to Phase 1 (checkpoint file).
 
 This fast path avoids reading the larger `_checkpoint.claude.md` when the WAL has recent state.
 Format reference: `skills/shared/wal-format.md`.
 
 ---
 
-## Phase 0.8 — Read session workspace (if present)
+## Phase 0.8: Read session workspace (if present)
 
-Before the main checkpoint parse, read the resuming session's workspace doc. **Resolve it by session id, NOT via `_active.md`** — `session_id` is stable across resume, and multiple sessions can share a project dir, so the shared `_active.md` symlink may point at a *different* session's doc. Read `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` first; fall back to `_active.md` only if the session's own doc is absent. Its **Todos** (unchecked) and **Doc Links** are the most direct expression of "what the user was actually trying to do" and should anchor the briefing.
+Before the main checkpoint parse, read the resuming session's workspace doc. **Resolve it by session id, NOT via `_active.md`**. `session_id` is stable across resume, and multiple sessions can share a project dir, so the shared `_active.md` symlink may point at a *different* session's doc. Read `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` first; fall back to `_active.md` only if the session's own doc is absent. Its **Todos** (unchecked) and **Doc Links** are the most direct expression of "what the user was actually trying to do" and should anchor the briefing.
 
 ```bash
 ND="$PROJECT/.claude/session-notes"; { [ "$PROJECT" = "$HOME/.claude" ] || [[ "$PROJECT" == */.claude ]]; } && ND="$PROJECT/session-notes"
@@ -327,22 +327,22 @@ Rendering rules:
    context for you; the briefing cites the file:line and why it matters, one line
    each, under Key files.
 
-### 3.1b ipc — register, peek, then answer what the predecessor owes
+### 3.1b ipc: register, peek, then answer what the predecessor owes
 
 A resumed session is a NEW ipc identity. The alias peers were talking to died with
-the old session, so anyone holding an unanswered query cannot reach you — and
+the old session, so anyone holding an unanswered query cannot reach you, and
 because `send` carries a `--reply-by` contract, that sender gets chased and then
 told nobody answered, for a question you are in fact now able to answer. Three
 steps, all best-effort: a down broker skips silently and never blocks the briefing.
 
-**1 — Be reachable.** The session-start ritual normally registers; re-running is a
+**1. Be reachable.** The session-start ritual normally registers; re-running is a
 harmless no-op and cheap insurance on a resumed session:
 
 ```bash
 claude-ipc register <this-session-id>
 ```
 
-**2 — Peek what is waiting** (non-consuming; the predecessor named by the
+**2. Peek what is waiting** (non-consuming; the predecessor named by the
 checkpoint is the first inbox worth opening):
 
 ```bash
@@ -351,21 +351,21 @@ claude-ipc orphans --project 2>/dev/null  # dead sessions here still holding mai
 claude-ipc inbox <predecessor-alias> 2>/dev/null   # what your predecessor never answered
 ```
 
-**3 — Close the loop on anything owed.** For each unanswered `query`/`request` in
-the predecessor's inbox, reply on its correlation id — you inherit the obligation,
+**3. Close the loop on anything owed.** For each unanswered `query`/`request` in
+the predecessor's inbox, reply on its correlation id. You inherit the obligation,
 the sender is still waiting on it:
 
 ```bash
 claude-ipc reply <corr-id> --from <this-session-id> <answer, or the hand-off>
 ```
 
-Answer it if the checkpoint gives you the answer. If it does not, say exactly that —
-that the predecessor ended and you have taken over as `<alias>` — so their chase
+Answer it if the checkpoint gives you the answer. If it does not, say exactly that:
+the predecessor ended and you have taken over as `<alias>`, so their chase
 resolves instead of dangling. Use `snooze <msg-id> --as <alias>` if it is real work
 you will do later (it stays pending + owed rather than vanishing).
 
 Surface all of it in the briefing's `Mail` row: one line per
-message/orphan (`kind from <alias>: <body head>` · `<dead-alias> holds N — peek:
+message/orphan (`kind from <alias>: <body head>` · `<dead-alias> holds N, peek:
 claude-ipc inbox <dead-alias>`), and say which ones you answered. Post-compact
 LIGHT path: this whole subsection is skipped (Phase 0.2).
 
@@ -397,7 +397,7 @@ one, and the fence tier is the difference.
 
 ### 3.4 Surface live subsystem state
 
-A resumed session loses awareness of what was *running* when the prior session ended — background servers, file watchers, long jobs. The shell-mem subsystem already records these; the checkpoint does not. Surface them so you don't relaunch a server that is already up, or assume a job that was mid-flight never ran.
+A resumed session loses awareness of what was *running* when the prior session ended: background servers, file watchers, long jobs. The shell-mem subsystem already records these; the checkpoint does not. Surface them so you don't relaunch a server that is already up, or assume a job that was mid-flight never ran.
 
 ```bash
 # Background commands still marked active ([BG], not [BG:DONE]) in the last 2 days.
@@ -409,9 +409,9 @@ WAL="$HOME/.claude/wal.md"; [ -f "$WAL" ] || WAL="$PWD/.claude/wal.md"
 [ -f "$WAL" ] && awk '/=== SHELL SNAPSHOT/{buf=""} {buf=buf $0 "\n"} /Resume with/{snap=buf} END{printf "%s", snap}' "$WAL"
 ```
 
-If any active background processes are found, surface them in the briefing's **Running** row: list each command and its port if known. Do **not** assert a process is still running — verify the load-bearing ones (e.g. `lsof -ti :<port>` or a quick curl) before relying on or restarting them, since the prior session may have exited and taken its children with it. Silently skip this step when there is no active background state (the common case).
+If any active background processes are found, surface them in the briefing's **Running** row: list each command and its port if known. Do **not** assert a process is still running. Verify the load-bearing ones (e.g. `lsof -ti :<port>` or a quick curl) before relying on or restarting them, since the prior session may have exited and taken its children with it. Silently skip this step when there is no active background state (the common case).
 
-## Phase 3.6 — Render `/tasks`, below the briefing
+## Phase 3.6: Render `/tasks` below the briefing
 
 Run the task table and show it. Every resume, not only when something looks
 wrong.

@@ -1,4 +1,4 @@
-# arch-qa — Reference Material
+# arch-qa: Reference Material
 
 Extended examples and self-update instructions. Referenced from SKILL.md when needed.
 
@@ -132,10 +132,10 @@ Replace generic paths with actual project paths found during the run.
 
 Update SKILL.md when:
 
-1. **First question answered** — Add actual project structure
-2. **New pattern discovered** — Add to relevant section
-3. **Common question** — Add to examples if asked multiple times
-4. **Better search found** — Replace generic Grep with project-specific
+1. **First question answered**: Add actual project structure
+2. **New pattern discovered**: Add to relevant section
+3. **Common question**: Add to examples if asked multiple times
+4. **Better search found**: Replace generic Grep with project-specific
 
 ### How to Update
 

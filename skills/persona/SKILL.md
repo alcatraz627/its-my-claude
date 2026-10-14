@@ -24,7 +24,7 @@ logging reliable.
 - Argument is a task description (or empty) → list `~/.claude/personas/*.md`
   (skip `_proposed/`, `usage/`, `README.md`, `BUILD_LOG.md`), read each file's
   `role:` frontmatter line only, and pick the best match. If two are plausible,
-  say which two and why you picked one — do not ask unless genuinely blocking.
+  say which two and why you picked one. Do not ask unless genuinely blocking.
 - **Seating a sub-agent** (the primary use since 2026-08-27, owner ruling D4a):
   `bash ~/.claude/scripts/persona/persona.sh seat <persona> <PROMPT.md>` composes the
   brief (`/create-skill subagent-prompt` writes PROMPT.md), pins the persona's
@@ -32,7 +32,7 @@ logging reliable.
   call. `persona.sh list` shows every persona with its type and tier. Five were
   mined from a week of real dispatches: `hands-lane`, `ui-reviewer`,
   `planning-seat`, `fresh-context-judge`, `digest-seat`.
-- Dispatch-only personas (`juror`, `skeptical-reviewer`) are NOT adoptable —
+- Dispatch-only personas (`juror`, `skeptical-reviewer`) are NOT adoptable
   they belong to their owning flows (`atone-juror-dispatch.sh`,
   `/skeptical-review`). If matched, point at the owning flow instead.
 
@@ -40,10 +40,10 @@ logging reliable.
 
 Read the persona file IN FULL. State in one line to the user: which persona,
 at which depth level (L1/L2/L3 per its Depth Levels section), and the one
-behavior it changes for this task. Then work under it — its output
+behavior it changes for this task. Then work under it. Its output
 expectations and anti-patterns bind until the task ends or the user switches.
 
-### 3. Record the adoption (mandatory — this is the step that makes the system honest)
+### 3. Record the adoption (mandatory, since this is the step that makes the system honest)
 
 ```bash
 bash ~/.claude/scripts/persona-log.sh record <name> --mode adopted \
@@ -56,11 +56,11 @@ convention as /skeptical-review's step 5).
 
 At task end (or session end), update the outcome honestly with a second
 `record` call (`--outcome accepted|revised|discarded`) plus a one-line residue
-note — what the persona actually changed. Never fabricate a success bit.
+note on what the persona actually changed. Never fabricate a success bit.
 
 ## Anti-patterns
 
 - Adopting a persona for a task its own Anti-patterns section excludes.
-- Stacking personas — one at a time; the strategic triad
+- Stacking personas: one at a time; the strategic triad
   (closer/platform-builder/pragmatist) goes through /magi, not here.
 - Recording `--outcome accepted` without naming what the persona changed.

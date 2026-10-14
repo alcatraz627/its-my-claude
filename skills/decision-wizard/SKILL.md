@@ -1,12 +1,12 @@
 ---
 name: decision-wizard
-description: Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration go/no-go, config triage, per-item feedback, "which of these should I…" — STOP and use this instead of serializing questions into chat. It routes to one of two surfaces: a tiny inline numbered menu the user answers in one line (for ≤3 simple picks), or a pre-answered HTML decision page served by the kanban server (:5106/dp/) where every item carries YOUR drafted answer + recommendation and the user flips only what is wrong, then pastes back one compact string. Supports optional per-question and end-of-form notes. Use when the user says "decision page", "decision wizard", "ask me a batch", "feedback form", "minimize the work I have to do", "answer complex forms", or any time a task would otherwise spray N questions at the user.
+description: Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments (a design review, a migration go/no-go, config triage, per-item feedback, "which of these should I…"), STOP and use this instead of serializing questions into chat. It routes to one of two surfaces: a tiny inline numbered menu the user answers in one line (for ≤3 simple picks), or a pre-answered HTML decision page served by the kanban server (:5106/dp/) where every item carries YOUR drafted answer + recommendation and the user flips only what is wrong, then pastes back one compact string. Supports optional per-question and end-of-form notes. Use when the user says "decision page", "decision wizard", "ask me a batch", "feedback form", "minimize the work I have to do", "answer complex forms", or any time a task would otherwise spray N questions at the user.
 allowed-tools: Bash, Read, Write, Edit
 user-invocable: true
 argument-hint: "[what you need decided]"
 ---
 
-# /decision-wizard — batch human decisions with one paste back
+# /decision-wizard: batch human decisions with one paste back
 
 The trigger is a **count**: the moment you are about to ask the user more than
 ~3 related judgments, do not serialize them into chat and do not hand over an
@@ -17,7 +17,7 @@ drops to one skim and one paste.
 Engine: `~/.claude/scripts/decision-page/decision-page.sh` (this skill drives it).
 Schema + answer-string shape: `~/.claude/features/decision-pages.md`.
 
-## Step 0 — route: inline menu vs HTML page
+## Step 0: Route between an inline menu and an HTML page
 
 Two surfaces, one rule. **When in doubt, use the HTML page** (the user set this
 tiebreaker explicitly).
@@ -36,7 +36,7 @@ tiebreaker explicitly).
               └───────────────────────────────────────────────────┘
 ```
 
-## Path A — inline menu (small, simple, fast)
+## Path A: inline menu (small, simple, fast)
 
 There is no widget and no tool call needed for this. The inline menu is just
 markdown you print in your reply; the user types a short answer back. (If you
@@ -52,11 +52,11 @@ Untouched = my recommendation. Add "1 note: …" for a free-text aside on any ro
 ```
 
 Rules: exactly one `✓rec` per row; number the rows; keep each option a few
-words. Parse the reply leniently — `2b`, `2 b`, `row 2 → b`, and "go"/"lgtm"
+words. Parse the reply leniently: `2b`, `2 b`, `row 2 → b`, and "go"/"lgtm"
 (= all recommended) all mean the same. If the reply is ambiguous, ask that one
 row again inline, not the whole set.
 
-## Path B — HTML decision page (the default for anything real)
+## Path B: HTML decision page (the default for anything real)
 
 ```bash
 S=my-slug   # lowercase-kebab, unique
@@ -74,18 +74,18 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    Start from the skeleton below; full schema in `features/decision-pages.md`.
    The contract:
    - Every `decisions[]` option group has **exactly one** `{"rec": true}`.
-   - Every `sections[]` item carries your `read` + drafted `slots` — never an
+   - Every `sections[]` item carries your `read` + drafted `slots`, never an
      empty form.
    - `intro` states the contract: "Everything is pre-answered; untouched =
      agreed."
    - Screenshot first if the decision is visual; reference images by relative
      filename inside the slug folder.
    - **Cluster your items** with `group` on each section, and give each cluster a
-     one-line `context` (and optional `color`) via `groups` — it orients the user
+     one-line `context` (and optional `color`) via `groups`. It orients the user
      fast. Set a per-page `accent` if you want the page themed.
-2. **Notes are optional and default off** — see the Notes section below. Only
+2. **Notes are optional and default off.** See the Notes section below. Only
    set them up when you actually want the user to annotate.
-3. **Verify — do not eyeball:**
+3. **Verify, do not eyeball:**
    ```bash
    bash ~/.claude/scripts/decision-page/decision-page.sh check "$S"
    ```
@@ -99,9 +99,9 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    Give the user the URL `http://localhost:5106/dp/$S/` (hub: `:5106/?view=decisions`) and tell them
    to skim, flip what's wrong, then hit **Submit to Claude** (or **Copy answers**
    to paste it themselves). Also set the tab-title (Subsystem links below).
-5. **Get the answer back — two paths:**
+5. **Get the answer back, by one of two paths:**
    - **Submit-to-wake (preferred):** arm the watcher **in the same turn as the
-     handoff, before ending it** — a turn that ends with no Monitor/poll armed
+     handoff, before ending it**. A turn that ends with no Monitor/poll armed
      never wakes, whatever the page promises; the pending chip is visibility,
      not a wake path (atone `promised-async-wake-without-arming-receiver`,
      2026-07-22: the answer sat unread for half a day). Watch for the human's
@@ -118,8 +118,8 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
      apply it and clear the marker yourself:
      `decision-page.sh pending clear "$S"`.
    - **Next-session pickup (deliberate):** if you are ending the session rather
-     than watching, say so — "your Submit will be read at the next session
-     start" — and never use the word "wake". Promising a wake while nothing
+     than watching, say so ("your Submit will be read at the next session
+     start") and never use the word "wake". Promising a wake while nothing
      watches is the recorded failure this step exists to prevent.
 
 The page is keyboard-first (`j`/`k` move, `1`–`9` pick, `a` agree, `n` note,
@@ -155,37 +155,37 @@ add `groups`/`accent`/`notes` only when they earn their place.
 }
 ```
 
-## Notes (optional — default off, keeps the payload lean)
+## Notes (optional, default off, keeps the payload lean)
 
 By default no per-item note fields render and the pasted string stays minimal.
 The one always-visible note surface is the end-of-form **"Notes for Claude"**
-card at the bottom (the escape hatch for anything the form cannot hold) — it
+card at the bottom (the escape hatch for anything the form cannot hold). It
 renders empty and adds nothing to the paste until filled. The user can add a note
 to any item on demand (focus it, press `n`, or the header **notes** toggle
 reveals a field on every item). Notes only appear in the paste when non-empty.
 
 You rarely need to configure anything. Two optional levers in `config.json`:
 - Pre-seed a note on a specific item: add `"note": "…"` to that decision/section
-  (renders expanded — use when you want to prompt the user for reasoning there).
+  (renders expanded, so use it when you want to prompt the user for reasoning there).
 - Hard-disable the whole notes surface: top-level `"notes": false` (rare).
 
 Answer-string additions the user may send back: a `D1 note — …` line per noted
 decision, a `— note` suffix on a section line, and a trailing `notes:` block for
 the end-of-form field. Parse them leniently.
 
-## Subsystem links (do these on handoff — they are cheap and they compound)
+## Subsystem links (do these on handoff, since they are cheap and they compound)
 
-- **tab-title** — on handoff, signal you are blocked on the user:
+- **tab-title**: on handoff, signal you are blocked on the user:
   `~/.claude/scripts/tab-title/tab-title.sh status blocked` and
   `… focus "awaiting your call"`; clear the focus when the answer lands.
-- **statusline** — `pending add`/`clear` already feeds the statusline's
+- **statusline**: `pending add`/`clear` already feeds the statusline's
   "decision waiting" chip (it reads the ledger directly). Keep the ledger honest
   and the chip stays honest.
-- **WAL + workspace** — log the handoff as a `decision` WAL entry
+- **WAL + workspace**: log the handoff as a `decision` WAL entry
   (`~/.claude/scripts/wal/wal.sh`) and record the page URL + the returned answer
   under the workspace **Decisions** region (`/workspace`), so the call survives
   `/clear`.
-- **pin-for-dream** — if a decision revealed a non-obvious tradeoff worth
+- **pin-for-dream**: if a decision revealed a non-obvious tradeoff worth
   propagating, `/pin-for-dream` it (do not derail; just pin).
 
 ## When NOT to use

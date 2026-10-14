@@ -12,7 +12,7 @@ Snapshot the active session into a structured `_checkpoint.claude.md` file (or a
 named alternative) in the project root, then record a session-keyed pointer under
 `~/.claude/checkpoints/` so `/catchup` can find it. The checkpoint captures the
 initial user goal, agent actions in sequence, current user expectation, and
-pending to-dos — task context, not conversational tone. This is the hand-off
+pending to-dos. It holds task context, not conversational tone. This is the hand-off
 artifact `/catchup` consumes after `/clear`.
 
 Two outputs make this skill work, and both are load-bearing:
@@ -48,12 +48,12 @@ or an earlier request already wrote it), do not write another: print the existin
 path and its resume line, `/catchup at <path>`, and stop. The owner can say "dump
 again" to force a fresh one.
 
-> **Parse contract — do not rename.** `/catchup` parses the checkpoint by exact
+> **Parse contract, do not rename.** `/catchup` parses the checkpoint by exact
 > headings: `## Resume Contract`, `## Initial Goal`, `## Agent Actions`,
 > `## Current Expectation`, `## Pending Items`, `## Session Insights`. Keep them
 > verbatim. (Resume Contract + Session Insights are tolerated-missing on mini /
 > precompact / pre-2026-07 checkpoints; the middle four are mandatory.) The
-> default filename `_checkpoint.claude.md` is also a contract — `/catchup`
+> default filename `_checkpoint.claude.md` is also a contract: `/catchup`
 > falls back to it.
 
 ## The shape of a run: gather, one Write, finalize
@@ -107,7 +107,7 @@ one or two lines under each, `none` for empty Resume Contract fields, and skip t
 If both a filename and instructions are present, the filename is detected first
 (starts with `_` or ends in `.md`); all remaining text is treated as instructions.
 
-## Phase 1 — Parse arguments
+## Phase 1: Parse arguments
 
 1. Read the args string (may be empty).
 2. **Mini mode:** if the first token is literally `mini` (case-insensitive), set
@@ -122,21 +122,21 @@ If both a filename and instructions are present, the filename is detected first
 6. Print the resolved mode, filename, name (if any), and instructions.
 7. If `mode = mini`, go to **Phase 2-mini**. Skip Phase 2 (full).
 
-## Phase 2-mini — Abbreviated summary (mini mode only)
+## Phase 2-mini: Abbreviated summary (mini mode only)
 
-Produce a flat, scannable checkpoint — no deep analysis, no insights section, no
+Produce a flat, scannable checkpoint. No deep analysis, no insights section, no
 `improvement-ideas.md` update. Just the essentials for `/catchup`:
 
-1. **Goal** — 1-2 sentences: what the user originally asked for.
-2. **Resume** — ONE imperative sentence: the very first move on resume. Add a
+1. **Goal**: what the user originally asked for, in 1-2 sentences.
+2. **Resume**: the very first move on resume, as ONE imperative sentence. Add a
    `**Blocked on:**` line only when something actually blocks (USER: / external).
    Add a `**Standing constraints:**` line (verbatim, with checks) and a
-   `**Standing caveats:**` line (verbatim) whenever any exist — mini mode is not
+   `**Standing caveats:**` line (verbatim) whenever any exist. Mini mode is not
    exempt from carrying them; omit the lines entirely only when there are none.
-3. **Done** — what was accomplished (files modified, features added, bugs fixed).
-4. **Not Done** — what remains incomplete.
-5. **Next Steps** — numbered immediate actions for the next agent, in priority order.
-6. **Key Files** — file paths central to the work.
+3. **Done**: what was accomplished (files modified, features added, bugs fixed).
+4. **Not Done**: what remains incomplete.
+5. **Next Steps**: numbered immediate actions for the next agent, in priority order.
+6. **Key Files**: file paths central to the work.
 
 Write using this template:
 
@@ -187,7 +187,7 @@ contract rejects the mini shape and nothing is indexed.
 
 ---
 
-## Phase 2 — Summarize session (full mode)
+## Phase 2: Summarize session (full mode)
 
 Analyze the conversation and produce a structured summary. Focus on task context;
 skip session tone, pleasantries, and off-topic exchanges.
@@ -199,7 +199,7 @@ Cover every item below:
 - The original user goal (and any mid-session pivot)
 - User feedback received (corrections, preferences, constraints)
 - Tangential scope that came up but wasn't addressed
-- Insights — what worked, what didn't, problems, gotchas
+- Insights: what worked, what didn't, problems, gotchas
 - Notes for future agents (things not obvious from the code)
 - The immediate next step (what to do right now)
 
@@ -208,17 +208,17 @@ dated entry to `~/.claude/improvement-ideas.md` (create with a
 `# Claude Improvement Ideas` header if absent). Each extra call re-reads the whole
 context, so skip it at light depth and when nothing qualifies.
 
-> **Route insights to the right surface — keep these distinct:**
-> - `improvement-ideas.md` — **general cross-project learnings** (tool bugs, shell
+> **Route insights to the right surface and keep these distinct:**
+> - `improvement-ideas.md`: **general cross-project learnings** (tool bugs, shell
 >   gotchas, workflow patterns, "next time consider X"). Free-form, dated. Future
 >   agents read for context.
-> - `~/.claude/proposals.jsonl` — **actionable system improvements** someone should
+> - `~/.claude/proposals.jsonl`: **actionable system improvements** someone should
 >   ship. Filed via `propose.sh add`.
-> - `runtime-notes.md` — **skill-specific run history** for this project.
+> - `runtime-notes.md`: **skill-specific run history** for this project.
 >
 > Routing: "I learned X" / "X is a gotcha" → `improvement-ideas.md`. "We should
 > build X" / "X needs fixing" → `propose.sh add`. "When `/foo` ran, Y happened" →
-> `runtime-notes.md`. Some learnings later graduate to proposals — don't duplicate
+> `runtime-notes.md`. Some learnings later graduate to proposals. Don't duplicate
 > at write-time.
 
 ### 2.1 Initial goal
@@ -232,7 +232,7 @@ A numbered list of actions in order. For each:
 
 - State what was done and why (one line).
 - For large data (file reads, API results, long code): reference the source path
-  or describe what was found — don't reproduce content verbatim.
+  or describe what was found. Don't reproduce content verbatim.
 - For tool calls: note the tool and the outcome.
 - For decisions: capture the decision, not the deliberation.
 
@@ -245,7 +245,7 @@ waiting for, or about to do?
 
 ### 2.4 Pending items / to-dos
 
-A bullet list of what's needed to complete the current task — both agent-side and
+A bullet list of what's needed to complete the current task. Both agent-side and
 user-side.
 
 **The goal record is the truth for what is left across sessions (D1, 2026-09-23).**
@@ -278,28 +278,28 @@ Broadly-applicable insights also get a dated entry in
 
 ### 2.6 Resume Contract
 
-Synthesize the one block the next agent can act on without reading anything else
-— this is the standardized "continue prompt" (it exists because users had to ask
+Synthesize the one block the next agent can act on without reading anything else.
+This is the standardized "continue prompt" (it exists because users had to ask
 for one by hand). Eight fields, one line each; write `none` rather than omitting
-a field, so absence is legible. The two conservative fields lead — they fence
+a field, so absence is legible. The two conservative fields lead, because they fence
 everything below them:
 
-- **Standing constraints** — plan-level invariants and protected assets that
+- **Standing constraints**: plan-level invariants and protected assets that
   bind every next step: "existing UI is reused, not rebuilt", an API contract
-  that must hold, an asset worth days of iteration — each with the check that
+  that must hold, an asset worth days of iteration. Give each the check that
   would catch its loss (parity ledger, baseline screenshots, a named flow).
   Copy each constraint VERBATIM from its source (doc line, user message);
   paraphrase is where laundering starts. Carry the full list forward into every
   later checkpoint until the user retires an entry. Provenance: doc-22
-  (constraints dropped while task momentum survived — see
+  (constraints dropped while task momentum survived, see
   `rules/invariant-graduation.md`).
-- **Standing caveats** — the honest qualifications that must survive
+- **Standing caveats**: the honest qualifications that must survive
   summarization: unverified claims, `UNCONFIRMED — <reason>` markers,
   "N commits unreviewed", undispositioned review findings (count + ledger
   path). Copied verbatim, never compressed. A summary that drops a caveat is
-  wrong, not shorter ("checkpoint compression laundered the debt" — claude-ipc
+  wrong, not shorter ("checkpoint compression laundered the debt", claude-ipc
   RCA, 2026-07-16).
-- **Next action** — ONE imperative sentence, the first move. Distinct from
+- **Next action**: ONE imperative sentence, the first move. Distinct from
   Pending Items (the backlog): this is what to do right now.
 - **Next action's requirements:** where the asks that define "done" for that
   action live. Pointers, never copies: `file:line`, an ipc `msg-id`, a report
@@ -323,7 +323,7 @@ everything below them:
   The transcript holds the requirements and `/clear` destroys the transcript.
   That is the whole reason this field exists.
 
-- **Blocked on** — `USER: <what>` · `AGENT: none — go` · external actor + what.
+- **Blocked on**: `USER: <what>` · `AGENT: none — go` · external actor + what.
   Before recording any blocker, answer: **is it reproducible on demand right
   now?** Run the thirty-second check (re-trigger the job, hit the endpoint,
   re-run the command) and record the RESULT, not a conclusion from a stale
@@ -345,7 +345,7 @@ everything below them:
   answered (gather's `pending_codes`), as `<target> · nonce <code>`, or `none`. A
   code is keyed to this session and dies at `/clear`; listing it lets the next
   session re-issue it.
-- **Decaying prerequisites** — environment state you had to fix or start this
+- **Decaying prerequisites**: environment state you had to fix or start this
   session for a surface to work, which rots silently between write and read:
   credentials/tokens on a timer (gcloud ADC, a refreshed login), tunnels, dev
   daemons/servers, seeded or mutated data. List each with its fix command, so the
@@ -362,8 +362,8 @@ everything below them:
   `"<quote>" -> <path where recorded>`. A ruling belongs in the project's docs, a
   rule or memory the moment it is made, not only in a checkpoint; finalize checks
   each path exists. `none` when there were none.
-- **Verification state** — last real run + result + the command that produced it
-  ("`pnpm typecheck` green after action #7" · "UNCONFIRMED — nothing run").
+- **Verification state**: last real run + result + the command that produced it
+  ("`pnpm typecheck` green after action #7" · "UNCONFIRMED: nothing run").
 - **Live commitments:** the session's GOAL, any armed `/wake`, any `/deadline`.
   These are what a `/clear` silently drops, and the only ones the next session
   cannot reconstruct by reading code. Owner ruling 2026-08-18, verbatim:
@@ -438,8 +438,8 @@ everything below them:
   and say why in one clause.
 - **Task store:** the agent's own checklist store (`session-<sid8>`, under
   `~/.claude/tasks/`), for `gs adopt` if a resumed agent wants rows from it. `—` if empty.
-- **ipc alias** — this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
-- **Key anchor** — the single most load-bearing file:line, or `—`.
+- **ipc alias**: this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
+- **Key anchor**: the single most load-bearing file:line, or `—`.
 
 **Copy these fields from gather, do not recall them.** Live commitments, the goal
 record and the task store are exactly the values a long session mis-remembers;
@@ -478,7 +478,7 @@ the backstop; the wording is yours.
 
 Keep it 8-12 lines total. Pull the continuation-critical Session Insights here
 (the 2.5 section keeps the full detail); under "be terse" instructions compress
-the values, never drop the field labels — and never "compress" a Standing
+the values, never drop the field labels, and never "compress" a Standing
 constraint or caveat into a paraphrase; those two fields carry verbatim or not
 at all.
 
@@ -489,7 +489,7 @@ only" → collapse 2.2 to decisions; "be terse" → compress each section; "incl
 file references" → cite a file path in every 2.2 action. No instructions → use the
 default balanced style.
 
-## Phase 3 — Write checkpoint
+## Phase 3: Write checkpoint
 
 ### 3.1 Project root and working surface
 
@@ -509,7 +509,7 @@ never true. Across 122 post-gate checkpoints, completion language outnumbers
 hedged language 72 to 1.
 
 Write to `<project-root>/<resolved-filename>` using the Write tool. The `##`
-section headings below are parsed verbatim by `/catchup` — keep them exact:
+section headings below are parsed verbatim by `/catchup`. Keep them exact:
 
 ```markdown
 # Quick Summary (for LLMs), <ISO timestamp>
@@ -630,12 +630,12 @@ files (e.g. `_decisions.claude.md`) and reference each under a
 
 ### 3.5 Workspace doc diff (only when the owner asks)
 
-Operate on this session's own doc — `<notes-dir>/$CLAUDE_CODE_SESSION_ID.md` — not
+Operate on this session's own doc (`<notes-dir>/$CLAUDE_CODE_SESSION_ID.md`) not
 the shared `_active.md` symlink (which may point at another concurrent session's
 notes). If that doc exists, propose updates; never blind-overwrite.
 
 The `## Todos` block (between `<!-- sync:auto:start -->` and
-`<!-- sync:auto:end -->`) is auto-managed by the `stop-sync` hook every turn — do
+`<!-- sync:auto:end -->`) is auto-managed by the `stop-sync` hook every turn, so do
 not propose todos into it; they'd be overwritten. The high-value writeback here is
 the durable narrative (notes, decisions, doc links), not task checkboxes. Proposal
 schema and the diff/apply flow are in `EXAMPLES.md` § "Workspace-doc proposal".
@@ -652,17 +652,17 @@ the session's own doc doesn't exist.
 End-of-session is the cheapest moment to capture an improvement to `~/.claude`
 itself, because the Session Insights (2.5) are already in front of you. A friction
 worth more than a checkpoint note belongs in the improvement backlog, where the
-weekly consolidation triages it — not buried in a checkpoint nobody re-reads.
+weekly consolidation triages it, not buried in a checkpoint nobody re-reads.
 
 From the Session Insights, judge two things: was there a friction that is **(a)
 about the gcc itself** (a hook gap, a missing guard, a skill that misfired, a
-clunky workflow) — not project-specific — **and (b) reusable beyond this one
+clunky workflow, but not project-specific) **and (b) reusable beyond this one
 session**?
 
 - **No** → skip silently. This is the common case; most sessions contribute nothing,
   and that is correct. Do not invent a contribution to fill the slot (see
   `rules/right-sized-code.md` and `speculative-abstractions-without-a-load-bearing-caller`).
-- **Yes** → file **exactly one** proposal (cap: one per session — if several
+- **Yes** → file **exactly one** proposal (cap: one per session; if several
   surfaced, pick the highest-value; do not batch). Cross-link it to the residue
   that motivated it so the weekly consolidation can corroborate it:
 
@@ -679,7 +679,7 @@ bash ~/.claude/scripts/propose.sh add \
 The `--session` stamp lets the `gcc-signal-capture` Stop hook see that this session
 already filed, so it won't also auto-stub a duplicate.
 
-Set only the `link:*` tags you actually have — an atone slug you filed this session,
+Set only the `link:*` tags you actually have. An atone slug you filed this session,
 a dream insight id you acted on, a related open proposal id. Do **not** set a
 value/priority: that is computed at triage from how many independent streams
 corroborate the item, so you never have to guess it. Skip in mini mode and in
@@ -701,7 +701,7 @@ the owner owes, a `DECIDE:` you resolved. End with one line naming the path forw
   all actions, current state). A `context: fork` sub-agent can't see the parent,
   and passing the full conversation as a prompt would exceed limits. Evaluated and
   rejected 2026-04-06.
-- Always overwrite — never append. The checkpoint is a point-in-time snapshot.
+- Always overwrite: never append. The checkpoint is a point-in-time snapshot.
 - If no meaningful work happened (e.g. run right after `/clear`), write a minimal
   checkpoint noting the session was empty rather than skipping the write.
 - Internal context files follow `_*.claude.md` naming (start `_`, end `.claude.md`).
@@ -709,22 +709,22 @@ the owner owes, a `DECIDE:` you resolved. End with one line naming the path forw
 - `/catchup` is the companion that reads this file to restore context after `/clear`.
 - **Pre-compact hook:** `~/.claude/scripts/session-mgmt/pre-compact-checkpoint.sh`
   runs before all compaction (auto and manual `/compact`). It writes a lightweight
-  `_precompact-checkpoint.claude.md` and a WAL CHECKPOINT — the shell-level
+  `_precompact-checkpoint.claude.md` and a WAL CHECKPOINT. It is the shell-level
   counterpart to `/core-dump mini` (faster, less detail).
 - No runtime-notes entry per dump: the checkpoint is the record, and each extra call
   re-reads the whole context.
 
 ## See Also
 
-- `~/.claude/skills/core-dump/EXAMPLES.md` — visual-summary JSON schema,
+- `~/.claude/skills/core-dump/EXAMPLES.md`: visual-summary JSON schema,
   workspace-proposal schema, and the five render-validation scenarios.
-- `~/.claude/skills/catchup/SKILL.md` — the resume consumer; parses the section
+- `~/.claude/skills/catchup/SKILL.md`: the resume consumer; parses the section
   headings above (Resume Contract first) and restores task context.
-- `~/.claude/skills-parked/forgotten-todos/SKILL.md` (parked 2026-08-20) — consumed
+- `~/.claude/skills-parked/forgotten-todos/SKILL.md` (parked 2026-08-20): consumed
   this checkpoint's **Pending Items** via `dreams/pending-todos.jsonl`; the
   ingestion still runs, the browse skill is parked.
-- `~/.claude/personas/task-goal-planner.md` — the planning working-mode that uses
+- `~/.claude/personas/task-goal-planner.md`: the planning working-mode that uses
   the Task tool + WAL + `/core-dump`/`/catchup` as the plan → status → resume
   backbone.
-- `~/.claude/skills/revive/SKILL.md` — heavier resume; rehydrates the full
+- `~/.claude/skills/revive/SKILL.md`: heavier resume; rehydrates the full
   transcript via the `--session-uuid` finalize records with the pointer.

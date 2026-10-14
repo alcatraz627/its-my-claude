@@ -16,9 +16,9 @@ skill is parked).
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol, for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -52,7 +52,7 @@ If it does not exist yet, continue without it.
 
 ## Experienced Defaults
 
-These are the fallback choices for generated UI — sensible starting points that prevent the
+These are the fallback choices for generated UI, sensible starting points that prevent the
 most common "it looks weird" complaints. Apply them **unless the project's own design tokens or
 stack already specify otherwise.** A project with its own font stack, spacing scale, or component
 library wins: read its tokens first (the `system` subcommand does this) and follow them. These
@@ -73,12 +73,12 @@ the surrounding code rather than reaching for the default here.
 - **Component padding:** minimum 12px (never less than 8px for interactive elements)
 - **Section gaps:** 32-48px between major sections
 - **Card padding:** 16-24px internal padding
-- **Never:** arbitrary values like 13px, 17px, 37px — they signal an unplanned layout
+- **Never:** arbitrary values like 13px, 17px, 37px. They signal an unplanned layout
 
 ### Color
-- **Contrast:** Text should meet WCAG AA (4.5:1 for body text, 3:1 for large text / UI components). Don't assert this from looking at the colors — measure it. When a live page is available, drive the `chrome-devtools` MCP to read computed contrast ratios from the rendered DOM (it surfaces the same AA/AAA pass/fail Chrome DevTools' contrast picker shows), or run a Lighthouse accessibility audit through it. A measured ratio is a fact; an eyeballed one is a guess that ships inaccessible text.
-- **Gray scale:** Use a consistent neutral palette (slate, zinc, or gray — pick one, never mix)
-- **Semantic colors:** success (green), warning (amber), error (red), info (blue) — with matching lighter tints for backgrounds
+- **Contrast:** Text should meet WCAG AA (4.5:1 for body text, 3:1 for large text / UI components). Don't assert this from looking at the colors, measure it. When a live page is available, drive the `chrome-devtools` MCP to read computed contrast ratios from the rendered DOM (it surfaces the same AA/AAA pass/fail Chrome DevTools' contrast picker shows), or run a Lighthouse accessibility audit through it. A measured ratio is a fact; an eyeballed one is a guess that ships inaccessible text.
+- **Gray scale:** Use a consistent neutral palette (slate, zinc, or gray: pick one, never mix)
+- **Semantic colors:** success (green), warning (amber), error (red), info (blue), with matching lighter tints for backgrounds
 - **Dark mode:** If requested, use CSS custom properties from the start. Never hardcode colors on elements.
 
 ### Interactive Elements
@@ -98,7 +98,7 @@ the surrounding code rather than reaching for the default here.
 
 ## Subcommand: `review`
 
-### Phase 1 — Capture
+### Phase 1: Capture
 
 **If screenshot path provided:**
 - Read the screenshot image using the Read tool
@@ -117,10 +117,10 @@ elements array) to get a free on-device inventory of regions, elements, hierarch
 and coarse palette before spending native vision. Use it as a structural checklist
 so the scoring below doesn't miss an element; keep the aesthetic and contrast
 judgment on your own visual read, and verify any exact string before quoting it
-with `see <shot> --ocr` (Apple Vision verbatim, ~300ms, no model — the exactness
+with `see <shot> --ocr` (Apple Vision verbatim, ~300ms, no model, the exactness
 lane). Skip silently if `see` isn't installed.
 
-### Phase 2 — Analyze
+### Phase 2: Analyze
 
 Score the UI on 6 dimensions (1-10 each):
 
@@ -136,10 +136,10 @@ Score the UI on 6 dimensions (1-10 each):
 For a live URL (not a static screenshot), measure the Color & Contrast score rather than
 estimating it: drive the `chrome-devtools` MCP against the rendered page to read computed
 contrast ratios, or run its Lighthouse accessibility audit. Report measured ratios with the
-elements that fail. From a flat screenshot you can only flag *suspected* contrast problems —
+elements that fail. From a flat screenshot you can only flag *suspected* contrast problems
 say so, and don't claim AA compliance you didn't measure.
 
-### Phase 3 — Report
+### Phase 3: Report
 
 Format:
 ```
@@ -190,14 +190,14 @@ used to hand off to, is parked (mig 0048; `~/.claude/skills-parked/visual-regres
 
 Extract a consolidated design token set from an existing codebase.
 
-### Phase 1 — Scan
+### Phase 1: Scan
 
 1. **CSS custom properties:** Grep for `--` prefixed variables in all CSS/SCSS files
 2. **Tailwind config:** Read `tailwind.config.ts` or `tailwind.config.js` for extended theme values
 3. **Styled-components / CSS-in-JS:** Grep for `theme.` references
 4. **Inline styles:** Grep for `style={{` or `style=` in component files (flag as tech debt)
 
-### Phase 2 — Analyze
+### Phase 2: Analyze
 
 Detect inconsistencies:
 - How many distinct font sizes? (flag if >8)
@@ -206,7 +206,7 @@ Detect inconsistencies:
 - How many distinct border-radius values? (flag if >3)
 - How many distinct shadows? (flag if >4)
 
-### Phase 3 — Generate Token File
+### Phase 3: Generate Token File
 
 Output a consolidated CSS custom properties file:
 
@@ -267,22 +267,22 @@ Generate a complete page layout using proven patterns.
 | `auth` | Centered card on subtle background | Login/signup form, OAuth buttons, forgot password link |
 | `pricing` | Pricing cards with feature comparison | 2-3 tier cards, toggle monthly/yearly, feature checkmark table |
 
-### Phase 1 — Context
+### Phase 1: Context
 
 1. Detect existing styling approach (Tailwind? CSS Modules? Styled-components?)
 2. Read existing components to match patterns (how are buttons styled? what's the nav structure?)
 3. If no existing code: ask for preferred stack
 
-### Phase 2 — Generate
+### Phase 2: Generate
 
 Generate the page as a complete component file with:
 - All styles following the Experienced Defaults above
 - Responsive layout (mobile-first)
 - All interactive states (hover, focus, disabled, loading)
 - Semantic HTML (proper heading hierarchy, landmark regions, ARIA where needed)
-- Placeholder content that looks realistic (not "Lorem ipsum" — use domain-appropriate text)
+- Placeholder content that looks realistic (use domain-appropriate text, not "Lorem ipsum")
 
-### Phase 3 — Verify
+### Phase 3: Verify
 
 If a dev server is running:
 1. Navigate to the page
@@ -295,17 +295,17 @@ If a dev server is running:
 ## Notes
 
 - This skill writes CSS and component code but never touches backend logic or routes
-- The `review` subcommand is non-destructive — it analyzes and reports, never modifies code unless asked
-- The `system` subcommand proposes a token file but does NOT auto-replace values in existing code — it prints a migration plan the user can execute
+- The `review` subcommand is non-destructive: it analyzes and reports, never modifies code unless asked
+- The `system` subcommand proposes a token file but does NOT auto-replace values in existing code. It prints a migration plan the user can execute
 - For visual regression testing (automated before/after screenshot comparison), use `/vis-compare` or `/ui-loop`; `/visual-regression` is parked
 - Pairs well with: `/designer-reviewer` (terminal aesthetic), `frontend-design` plugin (general frontend), `/vis-compare` (evidence-pack diffing)
 
-### See Also — personas that drive this skill
+### See Also: personas that drive this skill
 
-- `~/.claude/personas/art-director.md` — the visual-direction working mode. Adopt it when the
+- `~/.claude/personas/art-director.md`: the visual-direction working mode. Adopt it when the
   task is "make this look right" rather than "review this UI"; it turns a vague aesthetic
   impulse into a concrete brief, then reaches for `web-design page`/`review` to realize it.
-- `~/.claude/personas/fullstack-engineer.md` — the app-and-dashboard builder. It calls
+- `~/.claude/personas/fullstack-engineer.md`: the app-and-dashboard builder. It calls
   `web-design` for layout generation and review as part of shipping a frontend, alongside
   `/designer-reviewer`, the `chrome-devtools` MCP, and `/skeptical-review` before declaring done.
-- The Experienced Defaults section is the baseline for UI generation and review — applied where the project hasn't already chosen, and yielding to the project's own tokens/stack where it has
+- The Experienced Defaults section is the baseline for UI generation and review, applied where the project hasn't already chosen, and yielding to the project's own tokens/stack where it has

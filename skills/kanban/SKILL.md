@@ -43,7 +43,7 @@ bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack   # displays AND ma
 bash ~/.claude/scripts/kanban/kanban.sh open|status|check
 ```
 
-## Card lifecycle (the model drives this — D4a)
+## Card lifecycle (the model drives this, D4a)
 
 The board's lanes are `inbox backlog active blocked done stale`. The agent, never the
 human UI, changes cards:
@@ -235,7 +235,7 @@ positional args. A human note is deleted by saving an empty note (board UI drawe
   in the drawer, and hovers on the card face.
 - **The owner can hand you a working set.** They tick cards and notes on the board
   (two independent selections) and either leave them there or press "Send to agent".
-  Read it with `kanban.sh selected` — it prints every selected card in full plus the
+  Read it with `kanban.sh selected`. It prints every selected card in full plus the
   selected notes verbatim. A press of the button also pushes that same text at you
   over claude-ipc from `kanban-board`, and the session-start line names a non-empty
   selection either way. Treat it as "this is what I mean right now", not as a command.

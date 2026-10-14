@@ -12,7 +12,7 @@ Scans a project's code, config, and existing docs, asks focused clarifying quest
 then generates technical documentation that reads like a senior engineer wrote it.
 Baked-in anti-fluff rules prevent sycophantic, ChatGPT-style prose.
 
-### Two audiences — keep them separate
+### Two audiences: keep them separate
 
 This SKILL.md is read by Claude as an operating procedure. The docs it produces are
 read by **humans** and follow the human-first house style in
@@ -20,14 +20,14 @@ read by **humans** and follow the human-first house style in
 audiences with different rules: the procedure below is terse and imperative; the docs
 you write can be warm where warmth helps and prose where prose reads better. Don't let
 the clipped tone of this procedure leak into the docs, and don't soften the procedure
-into doc-prose. When in doubt about doc voice, the human-first canon governs the output —
+into doc-prose. When in doubt about doc voice, the human-first canon governs the output
 not this file.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol, for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -64,15 +64,15 @@ If it does not exist yet, continue without it.
 
 These rules govern all text this skill produces.
 
-### Anti-fluff voice — defer to the canon
+### Anti-fluff voice: defer to the canon
 
 Before delivering, run `python3 ~/.claude/scripts/style/prose-lint.py` on each
 authored .md and fix what it flags in earnest prose (taxonomy:
-`conventions/language-quality.md` — two-split chains, verdict-first openers,
+`conventions/language-quality.md`, covering two-split chains, verdict-first openers,
 fused sentences). Quoted examples and tables are exempt by the linter itself.
 
 The canonical anti-AI-voice catalog lives in
-[`conventions/doc-writing.md`](../../conventions/doc-writing.md) §3 — a maintained
+[`conventions/doc-writing.md`](../../conventions/doc-writing.md) §3, a maintained
 list of ~30 prose and structural tells, plus the find-and-flag `rg` in §4. Read it
 and apply it rather than carrying a duplicate list here (a copy here would drift out
 of sync with the canonical source).
@@ -95,7 +95,7 @@ Run the §4 `rg` against every draft. Every hit is a candidate, not an automatic
 ### Voice Principles
 
 1. **Imperative over descriptive.** "Run `npm install`" not "You can install dependencies by running..."
-2. **Code before prose.** Show the example first, then explain what it does — not the reverse.
+2. **Code before prose.** Show the example first, then explain what it does, not the reverse.
 3. **One idea per paragraph.** Max 3 sentences in API docs, 5 in guides.
 4. **Answer "what do I do?" not "what is this?"** Every section must answer a concrete question a reader has.
 5. **No preamble.** Start with the first useful sentence. No "In this section, we will..."
@@ -113,7 +113,7 @@ After generating each section, re-read it with this lens:
 
 ## Mode: `api`
 
-### Phase 1 — Scan
+### Phase 1: Scan
 
 1. Detect the API framework:
    - Express/Fastify: scan `src/routes/`, `src/api/`, or files matching `**/route.{ts,js}`
@@ -141,7 +141,7 @@ After generating each section, re-read it with this lens:
    Types: 8 shared schemas in src/lib/schemas/
    ```
 
-### Phase 2 — Clarify
+### Phase 2: Clarify
 
 Ask the user 2-4 targeted questions (use `mcp__inputs__form`):
 
@@ -150,7 +150,7 @@ Ask the user 2-4 targeted questions (use `mcp__inputs__form`):
 - **Audience:** "Who reads this? (developers integrating the API / internal team / public)"
 - **Exclusions:** "Any routes to skip? (e.g., internal admin, health checks)"
 
-### Phase 3 — Generate
+### Phase 3: Generate
 
 Structure the API doc as:
 
@@ -193,7 +193,7 @@ Authentication: <method>
 
 Group endpoints by resource (Users, Posts, etc.), not by HTTP method.
 
-### Phase 4 — Verify
+### Phase 4: Verify
 
 1. Count: every discovered route has a corresponding section
 2. Check: every endpoint has at least a request and response example
@@ -205,19 +205,19 @@ Group endpoints by resource (Users, Posts, etc.), not by HTTP method.
 
 ## Mode: `guide`
 
-### Phase 1 — Scope
+### Phase 1: Scope
 
 Ask the user: "What feature or workflow should this guide cover?"
 Then ask: "Who is the reader and what are they trying to accomplish?"
 
-### Phase 2 — Scan
+### Phase 2: Scan
 
 Trace the feature through the codebase:
 1. Find the entry point (UI component, API route, CLI command)
 2. Follow the call chain: component → hook → API call → handler → database
 3. Note configuration files, environment variables, and dependencies involved
 
-### Phase 3 — Generate
+### Phase 3: Generate
 
 Structure:
 
@@ -254,7 +254,7 @@ example
 - [Link to related guide or API doc]
 ```
 
-### Phase 4 — Verify
+### Phase 4: Verify
 
 Walk through the guide mentally as a new developer. Flag any step that assumes knowledge not covered in Prerequisites.
 
@@ -262,7 +262,7 @@ Walk through the guide mentally as a new developer. Flag any step that assumes k
 
 ## Mode: `adr`
 
-### Phase 1 — Gather
+### Phase 1: Gather
 
 Ask the user (use `mcp__inputs__form`):
 - **Decision:** "What architectural decision was made?"
@@ -272,7 +272,7 @@ Ask the user (use `mcp__inputs__form`):
 
 If the user is vague, scan recent git history for relevant commits and ask focused follow-ups.
 
-### Phase 2 — Generate
+### Phase 2: Generate
 
 Follow the Michael Nygard ADR format:
 
@@ -316,7 +316,7 @@ Save to `docs/adr/` or `docs/decisions/` (create the directory if needed). Numbe
 
 ## Mode: `changelog`
 
-### Phase 1 — Scan
+### Phase 1: Scan
 
 1. Determine the range: ask for two git refs, or default to `<last-tag>..HEAD`
 2. Get commits: `git log --oneline --no-merges <range>`
@@ -327,7 +327,7 @@ Save to `docs/adr/` or `docs/decisions/` (create the directory if needed). Numbe
    - `tests/` → Testing
    - `package.json` → Dependencies
 
-### Phase 2 — Generate
+### Phase 2: Generate
 
 ```markdown
 # Changelog — <version or date range>
@@ -351,7 +351,7 @@ Collapse trivial commits (typo fixes, linting). Expand user-facing changes with 
 
 ## Mode: `onboarding`
 
-### Phase 1 — Deep Scan
+### Phase 1: Deep Scan
 
 Scan everything a new developer needs:
 1. **Setup:** `package.json` scripts, `Makefile`, `docker-compose.yml`, `.env.example`
@@ -361,14 +361,14 @@ Scan everything a new developer needs:
 5. **Deployment:** CI/CD config, hosting platform, environment management
 6. **Key files:** the 5-10 files a new developer should read first
 
-### Phase 2 — Clarify
+### Phase 2: Clarify
 
 Ask:
 - "Any tribal knowledge that isn't in the code?" (e.g., "always restart Redis after schema changes")
 - "What's the biggest gotcha for new developers?"
 - "Any services/accounts needed? (e.g., Stripe test keys, database access)"
 
-### Phase 3 — Generate
+### Phase 3: Generate
 
 ```markdown
 # Getting Started with <Project>
@@ -435,7 +435,7 @@ Open <url> — you should see <what>.
 | Tests | `__tests__/` |
 ```
 
-### Phase 4 — Verify
+### Phase 4: Verify
 
 Read the onboarding doc as if you have zero context. Flag any step that says "configure X" without saying how.
 
@@ -450,12 +450,12 @@ Read the onboarding doc as if you have zero context. Flag any step that says "co
 
 ### Render-check before declaring done
 
-This skill writes `.md` (and via the integrations above, `.html`) — so it must
+This skill writes `.md` (and via the integrations above, `.html`), so it must
 render-check its own output before claiming the doc is finished, per
 [`rules/sub-agent-outputs.md`](../../rules/sub-agent-outputs.md) (the
 render-before-judge discipline). After writing, run a 10-second check:
 
-- **Markdown:** `glow <file>.md` or `bat -l md <file>.md` — confirm frontmatter is
+- **Markdown:** `glow <file>.md` or `bat -l md <file>.md`: confirm frontmatter is
   present, the H1 isn't wrapped, tables render, and no `…`/2-space-indent artifacts
   from a TTY renderer leaked into the source.
 - **HTML:** open it in a browser (or `tidy -e <file>.html`).
@@ -466,7 +466,7 @@ The "I wrote it" claim is not the same as "I saw it render."
 
 ## Notes
 
-- This skill reads code but never modifies it — documentation only
+- This skill reads code but never modifies it and produces documentation only
 - Voice calibration reads existing project docs before generating. If no docs exist, falls back to terse-technical baseline
 - The anti-fluff rules are checked after every section is generated, not just at the end
 - For `api` mode: the skill prefers reading actual type definitions over inferring from usage
@@ -477,18 +477,18 @@ The "I wrote it" claim is not the same as "I saw it render."
 
 ## See Also
 
-- [`conventions/doc-writing.md`](../../conventions/doc-writing.md) — the canonical
+- [`conventions/doc-writing.md`](../../conventions/doc-writing.md): the canonical
   anti-AI-voice catalog, structural rules, tables-vs-prose, diagram rules, and the
   find-and-flag `rg`. The human-first ruleset the docs this skill writes follow.
-- [`personas/technical-doc-writer.md`](../../personas/technical-doc-writer.md) — the
+- [`personas/technical-doc-writer.md`](../../personas/technical-doc-writer.md): the
   authoring disposition (classify → ground → draft → flag → rewrite → render); adopt
   it to drive a doc all the way to disk.
 - **Content review (accuracy / mental-model / runnability):** route the finished doc
-  through the three review lenses — [`personas/greybeard.md`](../../personas/greybeard.md)
+  through the three review lenses, [`personas/greybeard.md`](../../personas/greybeard.md)
   (engineering correctness + provenance, pairs with `/arch-qa`),
   [`personas/translator.md`](../../personas/translator.md) (product mental-model),
   [`personas/pager-holder.md`](../../personas/pager-holder.md) (ops / can-an-engineer-run-this).
 - **Voice review:** the author is blind to their own AI-smell, so route the final
-  prose pass to a fresh reviewer — [`personas/doc-writer.md`](../../personas/doc-writer.md).
-- [`rules/sub-agent-outputs.md`](../../rules/sub-agent-outputs.md) — render-before-judge:
+  prose pass to a fresh reviewer, [`personas/doc-writer.md`](../../personas/doc-writer.md).
+- [`rules/sub-agent-outputs.md`](../../rules/sub-agent-outputs.md): render-before-judge:
   this skill writes `.md`/`.html`, so it render-checks its own output before declaring done.

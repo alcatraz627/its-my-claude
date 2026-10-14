@@ -1,12 +1,12 @@
 ---
 name: banner-fun
-description: Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner — not dev metrics, which live in the statusline.
+description: Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner, not dev metrics, which live in the statusline.
 user-invocable: true
 ---
 
-# banner-fun — Daily Fun Terminal Banner
+# banner-fun: Daily Fun Terminal Banner
 
-Renders a daily terminal banner with weather, quote, moon phase, and code riddle. Pure fun — no dev metrics (those live in the statusline).
+Renders a daily terminal banner with weather, quote, moon phase, and code riddle. Pure fun. No dev metrics (those live in the statusline).
 
 ## Step 0: Load Shared Guidelines
 
@@ -29,7 +29,7 @@ Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this 
 
 Run with: `/usr/bin/python3 /Users/alcatraz627/Code/Claude/banner-fun/banner-fun.py`
 
-## Phase 1 — Route the Command
+## Phase 1: Route the Command
 
 Parse the user's intent from the `/banner-fun` arguments:
 
@@ -51,7 +51,7 @@ Parse the user's intent from the `/banner-fun` arguments:
 | `--edit-riddle ID [fields]` | Edit riddle by ID |
 | `--import-riddles FILE` | Bulk-import riddles from JSON |
 
-## Phase 2 — Execute
+## Phase 2: Execute
 
 Run the script with appropriate flags:
 
@@ -61,7 +61,7 @@ Run the script with appropriate flags:
 
 Print the output directly to the user. No reformatting.
 
-## Phase 3 — Offer Next Steps
+## Phase 3: Offer Next Steps
 
 After rendering, offer:
 

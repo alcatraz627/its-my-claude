@@ -15,13 +15,13 @@ task list, works anything agent-ready, and disarms only once every open front is
 genuinely done or waiting on the owner.
 
 The point is narrow. A turn killed mid-flight by a transient API error does not
-crash — it stops, and the session sits there alive and idle until a human notices
+crash. It stops, and the session sits there alive and idle until a human notices
 and types "keep going". That gap has cost whole evenings of unattended work.
 
 ## When to use it
 
 Arm it before walking away from long work. Don't arm it for a short interactive
-session — you're right there, and the wake has nothing to add.
+session, since you're right there and the wake has nothing to add.
 
 **This skill never arms itself.** `disable-model-invocation: true` is what makes
 that true; the owner's requirement is "no wake for sessions that never asked", and
@@ -40,7 +40,7 @@ A long unattended run opts into compaction with `bash ~/.claude/scripts/session-
 ## What it does NOT cover
 
 `/wake` fires from inside the session, so it needs the session to exist. If the
-Claude **process** dies — the 5h cap ending it, a crash, a closed terminal — the
+Claude **process** dies (the 5h cap ending it, a crash, a closed terminal), the
 cron dies with it (CronCreate jobs are in-memory and session-only). That failure is
 `claudew`'s job: its `00-auto-resume` plugin runs `on_exit` and respawns.
 
@@ -57,9 +57,9 @@ happened on 2026-07-16, when three aborted turns each waited on a human.
 ## Step 0: Load shared guidelines
 
 Read `~/.claude/skills/GUIDELINES.md` and apply it for this run. (Most projects have
-no local copy — use the global one, don't scaffold one.)
+no local copy, so use the global one and don't scaffold one.)
 
-## Phase 1 — Parse and check
+## Phase 1: Parse and check
 
 1. **`off` / `stop` / `disarm`** → run `CronList`, `CronDelete` any wake job, run
    `bash ~/.claude/scripts/cron/cron-duty.sh clear wake-halt-check`, confirm
@@ -70,10 +70,10 @@ no local copy — use the global one, don't scaffold one.)
    another makes a duplicate. If one exists, say so and keep it.
 2. Parse a leading `Nm` / `Nh`; default **15m** when absent.
 3. **Confirm the session actually wants this.** If the user's work is plainly
-   finished, say so and don't arm — an armed wake on a finished session is pure
+   finished, say so and don't arm. An armed wake on a finished session is pure
    noise. Ask rather than assume when it's unclear.
 
-## Phase 2 — Arm
+## Phase 2: Arm
 
 Convert the interval, then `CronCreate` with `recurring: true`. After it returns
 a job id, record the duty so resumes and siblings can see it is armed:
@@ -86,7 +86,7 @@ approximate, and a wake interval always is. The 15m default uses
 `7,22,37,52 * * * *`. For a custom N that divides 60, offset similarly; otherwise
 `*/N * * * *` is fine.
 
-Arm it with **exactly this payload**. Do not redesign step 2 — the halt-check is
+Arm it with **exactly this payload**. Do not redesign step 2. The halt-check is
 the whole reason it is safe to leave running, and it has been fired for real.
 
 What that claim covers, precisely, because the difference matters:
@@ -101,7 +101,7 @@ What that claim covers, precisely, because the difference matters:
   cap, note it and end the loop") with no script behind it. `limits-check.sh` was
   written _after_ that test and folded in here. It has 30 tests and every guard is
   mutation-pinned, but no wake has ever run step 1 for real. Treat it as
-  unit-tested, not proven. (Caught by the validation gate, 2026-07-17 — the original
+  unit-tested, not proven. (Caught by the validation gate on 2026-07-17: the original
   wording claimed the whole payload was validated.)
 - **Step 2's mechanical halt-check (prev_aborted) is exercised, not live-fired.**
   Added 2026-07-17 after a real complaint: wakes were re-animating sessions that
@@ -186,16 +186,16 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
 
 When arming, substitute `<SESSION_ID>` in the payload with the actual
 `$CLAUDE_CODE_SESSION_ID`, and `<STORE>` with the task store's sid8
-(`bash ~/.claude/scripts/task-table/task-table.sh --json | jq -r .store`) — cron
+(`bash ~/.claude/scripts/task-table/task-table.sh --json | jq -r .store`), cron
 payloads don't expand env vars, and a payload that does not name the store is the
 empty-wake shape that measured 93% dead (REMEDY-PLAN P3).
 
 **Do not execute the payload now.** `/loop` tells you to run the parsed prompt
-immediately rather than wait for the first fire; here that is a trap — the payload
+immediately rather than wait for the first fire; here that is a trap: the payload
 would reach step 2, find the session mid-conversation with the user present, and
 delete the job you just armed. The first real fire is the first run.
 
-## Phase 3 — Confirm
+## Phase 3: Confirm
 
 One short confirmation: interval, fire marks, the job id, that it is
 process-scoped (survives `/clear`, dies when the Claude process exits), that
@@ -208,12 +208,12 @@ recurring jobs auto-expire after 7 days, and that
 
 Step 1 polls how _full_ the 5h window is rather than waiting for it to reset,
 because the reset time is not knowable: Claude Code sends
-`resets_at="9999999999"` when it doesn't know one — the sentinel **is** the
+`resets_at="9999999999"` when it doesn't know one. The sentinel **is** the
 message. There is no clock to schedule against, so `limits-check.sh` reads
 `."5h".pct` from `~/.claude/widgets/.limits.json` (written by every statusline
 render; the freshness merge that keeps it honest was fixed in `dcd49a5`). It
-answers OPEN / NEAR-FULL / UNKNOWN, and keeps UNKNOWN separate from OPEN on purpose
-— a missing reading is not evidence of headroom.
+answers OPEN / NEAR-FULL / UNKNOWN, and keeps UNKNOWN separate from OPEN on purpose.
+A missing reading is not evidence of headroom.
 
 ### No calendar companion, on purpose
 
@@ -224,7 +224,7 @@ reason. This is the reason.
 That rule exists because launchd and cron fail silently, and a calendar event is the
 cheapest human-facing sign that an automation exists at all. Neither half applies
 here. The user armed this by hand seconds ago, so nobody has forgotten it. And the
-job cannot outlive the session — a calendar event mirroring it would still be there
+job cannot outlive the session. A calendar event mirroring it would still be there
 next Tuesday, describing a job that died when the terminal closed, which is exactly
 the stale-automation confusion the rule was written to prevent. A companion here
 would make observability worse, not better.
@@ -248,14 +248,14 @@ routine), that form needs a companion and this reasoning does not transfer.
 - **Built**: opt-in, enforced by `disable-model-invocation: true` rather than prose.
 - **Deferred**: _resuming_ automatically once the 5h window reopens. The spec
   (`prop-20260716-095912-38`) asks for "resume only when the condition clears", and
-  that cannot be built as written — there is no reset time to wait for. `/wake`
+  that cannot be built as written. There is no reset time to wait for. `/wake`
   backs off and stops; re-arming is a human act. Closing this needs Claude Code to
   send a real `resets_at`, or a poller outside the session.
 - **Not covered**: process death. See the table above.
 
 ## See also
 
-- `rules/api-error-recovery.md` — the re-orientation ritual step 2 invokes
-- `rules/scheduling-discipline.md` — the companion rule, and why it's waived here
-- `features/claudew.md` — the other half: process death, not turn abort
-- `scripts/wake/limits-check.sh` — the budget reading, with its own test beside it
+- `rules/api-error-recovery.md`: the re-orientation ritual step 2 invokes
+- `rules/scheduling-discipline.md`: the companion rule, and why it's waived here
+- `features/claudew.md`: the other half: process death, not turn abort
+- `scripts/wake/limits-check.sh`: the budget reading, with its own test beside it

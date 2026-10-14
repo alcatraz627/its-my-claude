@@ -1,20 +1,20 @@
 ---
 name: skeptical-review
-description: Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling conventions, upstream/downstream usage, existing implementations to reuse, documented code smells, and comment quality. Produces a ranked list of suspected issues for the human to deep-dive. Flags, never auto-fixes. Use when the user says "review", "check my work", "is this right", "skeptically review", or before declaring a non-trivial change done.
+description: Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree, surrounding context, sibling conventions, upstream/downstream usage, existing implementations to reuse, documented code smells, and comment quality. Produces a ranked list of suspected issues for the human to deep-dive. Flags, never auto-fixes. Use when the user says "review", "check my work", "is this right", "skeptically review", or before declaring a non-trivial change done.
 ---
 
 # Skeptical Review
 
 A post-work review biased toward suspicion, not approval. Its job is to surface
-things the author (me) plausibly got wrong so the human can deep-dive — not to
+things the author (me) plausibly got wrong so the human can deep-dive, not to
 bless the diff. It flags, it never auto-fixes.
 
 ## Why this forks a fresh context (the load-bearing design choice)
 
 A model reviewing its own diff in its own context is structurally sycophantic:
 it already "knows" why it wrote each line, so it rationalizes. Genuine skepticism
-needs a fresh sub-agent that never saw the reasoning — only the diff and the
-surrounding code — instructed to assume the change is wrong until the tree proves
+needs a fresh sub-agent that never saw the reasoning. Only the diff and the
+surrounding code, instructed to assume the change is wrong until the tree proves
 otherwise. This is the same anti-sycophancy logic as the atone juror gate.
 
 The recurring failures this targets (atone clusters A "ungrounded assertion" and
@@ -39,7 +39,7 @@ block-level):
 ~/.claude/scripts/atone-lint.sh --file <path>
 python3 ~/.claude/skills/cleanup-comments/detect.py <path>
 ```
-Collect the hits — atone-lint seeds documented smells; the comment detector
+Collect the hits: atone-lint seeds documented smells; the comment detector
 seeds the reader's-time lane (heuristic #6) deterministically.
 
 ### 3. Dispatch the fresh adversarial reviewer
@@ -66,7 +66,7 @@ deep-dive any item. Don't start fixing unless the user picks items to fix.
 
 **Dispositions close the loop:** record the user's verdict per finding (fixed /
 deferred-with-owner / rejected-with-reason) in the report's Dispositions table.
-Findings left undispositioned are debt — their count rides the Resume
+Findings left undispositioned are debt. Their count rides the Resume
 Contract's Standing caveats until zero (`conventions/report-writing.md`; the
 claude-ipc sprint left ~50 of 54 findings unactioned, including the one that
 predicted the fire).
@@ -93,14 +93,14 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 > surrounding code proves otherwise. You did not write it and owe it no charity.
 > Your output is a list of suspicions for a human to deep-dive, so bias toward
 > surfacing: report anything you are ≥40% sure of, and cite a `file:line` you
-> actually opened for every finding — no vibes, no "consider maybe".
+> actually opened for every finding. No vibes, no "consider maybe".
 >
-> Your job is coverage, then ranking — two separate stages. Report every in-scope
+> Your job is coverage, then ranking, as two separate stages. Report every in-scope
 > finding you turn up, including low-severity and uncertain ones, and tag each
 > with a confidence and a severity. Do **not** raise the reporting bar to cut the
 > list down: "only flag what matters / don't nitpick / be conservative" is
 > followed faithfully here and silently drops real findings. A separate ranking
-> step sinks the minor items to the bottom — that is where focus comes from.
+> step sinks the minor items to the bottom. That is where focus comes from.
 > Never drop a finding during investigation because it feels small.
 >
 > Read-only: you write only your one report file. Do not run any command that
@@ -110,27 +110,27 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 > Files changed this session: `<list>`
 > Mechanical smell pre-pass already found: `<atone-lint hits>`
 >
-> First read the user's standing directives — `bash ~/.claude/scripts/guidance.sh show`.
+> First read the user's standing directives: `bash ~/.claude/scripts/guidance.sh show`.
 > A change that violates one is a high-confidence finding: the user explicitly
 > asked for this and the agent didn't comply. Cite the directive verbatim.
 >
 > Then hunt across each changed file/symbol, grounding each finding in a real
-> `rg`/`Read`. Lead with the two highest-yield checks — they catch this account's
+> `rg`/`Read`. Lead with the two highest-yield checks. They catch this account's
 > deepest, most-recurring slips:
 >
-> 1. **Upstream/downstream usage** (highest yield) — for each changed/added
+> 1. **Upstream/downstream usage** (highest yield): for each changed/added
 >    symbol, `rg` every caller and importer. Did a signature, return type, prop,
 >    or behavior change break a caller? Are all call sites still compatible?
-> 2. **Surrounding context** — `Read` the full enclosing function/scope of each
+> 2. **Surrounding context**: `Read` the full enclosing function/scope of each
 >    changed hunk, not just the diff. Does the change fit its context, or did it
 >    assume a shape the surrounding code contradicts?
 >
-> Then the remaining heuristics — apply the ones the change-set warrants:
+> Then the remaining heuristics: apply the ones the change-set warrants:
 >
-> 3. **Sibling conventions** — `rg`/`ls` the same directory for siblings of the
+> 3. **Sibling conventions**: `rg`/`ls` the same directory for siblings of the
 >    same kind (component, hook, route, helper). Does the new code match their
 >    shape, or invent a different one?
-> 4. **Right-sizing — fit, both directions** (per `rules/right-sized-code.md`) —
+> 4. **Right-sizing, fit, both directions** (per `rules/right-sized-code.md`)
 >    judge the change against its *goal shape and scope*, not a blanket "less is
 >    better". Over-built: dead code, a speculative abstraction with one caller,
 >    reinvented stdlib/native, a dependency for a few lines (`rg` the tree for the
@@ -139,25 +139,25 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 >    design-system component, an inlined copy that drifts from an existing util), or
 >    a guard / a11y / edge case simplified away to save lines. If the diff matches a
 >    shape the user explicitly asked for (a local helper they requested, a library
->    they named), that intent is not a finding — flag the mismatch, never the
+>    they named), that intent is not a finding. Flag the mismatch, never the
 >    obedience.
-> 5. **Documented code smells** — confirm/expand the pre-pass hits; check the
+> 5. **Documented code smells**: confirm/expand the pre-pass hits; check the
 >    well-known ones for the stack (error-string matching for flow, raw env
 >    reads, missing precondition guards on destructive UI, effect dep arrays).
-> 6. **Comment quality — harsh, as reader's-time violations** — against
+> 6. **Comment quality** (harsh, as reader's-time violations) against
 >    `~/.claude/rules/comments.md` and the user's seeded verdicts in
 >    `~/.claude/style/derived/comment.md`. Extraneous words in a comment are
 >    DEFECTS, not style asides: flag any comment that restates the WHAT, any
 >    comment past one line without a non-obvious constraint, and any wording
->    that could shrink without losing meaning — each finding cites the wordy
+>    that could shrink without losing meaning. Each finding cites the wordy
 >    text and gives the one-line rewrite. Scope discipline still binds: only
 >    comments inside the diff and its direct callers/callees; anything else is
 >    a one-line out-of-scope appendix item, never a finding (the review-scope line in `rules/git.md`).
-> 7. **Mutation-test any guard the change adds or modifies** — a guard nobody has
+> 7. **Mutation-test any guard the change adds or modifies**. A guard nobody has
 >    watched fail is untested, and a green suite only says it did not fire
 >    (`rules/testing-patterns.md` § `[mutation-test-the-guard]`). COPY the guard plus the
 >    code it protects into `/tmp`, break the protected behaviour THERE, and
->    confirm the guard goes red on the copy — never mutate the live file, the
+>    confirm the guard goes red on the copy. Never mutate the live file, the
 >    read-only rule above still binds. If the mutation stays green, the TEST is
 >    the bug: report that as a finding.
 >
@@ -176,14 +176,14 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 ## Hard rules
 - **Read-only on all live state** (the one load-bearing guard). The reviewer
   writes only its report file and never runs a command that mutates a real data
-  file or store — no `guidance.sh add`, `atone.sh add`, `>`/`>>`/`mv`/`tee` onto
-  a live path, no code edits. To exercise a parser or script, copy the input to
+  file or store (`guidance.sh add`, `atone.sh add`, `>`/`>>`/`mv`/`tee` onto
+  a live path), and makes no code edits. To exercise a parser or script, copy the input to
   `/tmp` and run it there. A prior pass clobbered the live `guidance/notes.md` by
   testing `guidance.sh add` against it; that is the failure this guard prevents.
 - Flag, never fix. The human decides what's real and what to change.
 - Coverage, not bar-raising. Report every in-scope finding, including
   low-severity and uncertain ones, each tagged confidence + severity. Don't raise
-  the reporting bar to shorten the list — a separate ranking culls; investigation
+  the reporting bar to shorten the list. A separate ranking culls; investigation
   never drops. Recall over precision: this is a pre-filter for human deep-dive,
   not a high-precision gate. (Contrast `feature-dev:code-reviewer`, ≥80 only.)
 - No ungrounded findings. Every item cites a `file:line` the reviewer opened.
@@ -192,18 +192,18 @@ bash ~/.claude/scripts/persona-log.sh record skeptical-reviewer --mode dispatche
 ## Relationship to the write-time guards
 The PreToolUse guards (`guard-cluster-e-smells.sh`, `guard-duplicate-symbol.sh`)
 block the precise, mechanizable smells as they're written. This skill is the
-judgment layer that catches what a regex cannot — convention mismatch, usage
-incompatibility, subtle reinvention, bad comments — at review time.
+judgment layer that catches what a regex cannot: convention mismatch, usage
+incompatibility, subtle reinvention, and bad comments at review time.
 
 ## See Also
-- `~/.claude/personas/skeptical-reviewer.md` — the dispatch persona this skill forks.
-- `~/.claude/skills/magi/SKILL.md` — when a finding hinges on a real
+- `~/.claude/personas/skeptical-reviewer.md`: the dispatch persona this skill forks.
+- `~/.claude/skills/magi/SKILL.md`: when a finding hinges on a real
   should-we / architecture / correctness-tradeoff call, the reviewer escalates
   that one scoped sub-question to `/magi` rather than ruling on it.
-- `~/.claude/skills/arch-qa/SKILL.md` — traces real code paths to ground a
+- `~/.claude/skills/arch-qa/SKILL.md`: traces real code paths to ground a
   suspected authority / data-flow claim instead of asserting one.
-- `~/.claude/rules/exercise-based-verification.md` — the run-before-done gate this
+- `~/.claude/rules/exercise-based-verification.md`: the run-before-done gate this
   review precedes; the declared-ready Stop hook enforces it mechanically.
-- `~/.claude/rules/right-sized-code.md` — the judgment layer behind heuristic #4:
+- `~/.claude/rules/right-sized-code.md`: the judgment layer behind heuristic #4:
   gate minimize-vs-fit on goal/scope/intent/total-cost before flagging either
   over-building or false-minimalism.

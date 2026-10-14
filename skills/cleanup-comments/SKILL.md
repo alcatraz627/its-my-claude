@@ -273,10 +273,10 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "cleanup-comments" /tmp/cle
 The voice rules in this skill are the operational floor; the canon below is
 where they come from and where the deeper rationale lives.
 
-- `~/.claude/rules/comments.md` — the humans-first canon this skill enforces:
+- `~/.claude/rules/comments.md`: the humans-first canon this skill enforces:
   comments for humans first, AI second, machines never; strip `[claude@]` tags
   and plan refs; keep human and agent-note comments in separate blocks.
-- `~/.claude/doc-writing-guidelines.md` — the anti-AI-voice catalog (em dashes,
+- `~/.claude/doc-writing-guidelines.md`: the anti-AI-voice catalog (em dashes,
   emojis, essays, marketing register) the tier2 rewrites draw on.
-- `~/.claude/personas/technical-doc-writer.md` — adopt when a comment essay
+- `~/.claude/personas/technical-doc-writer.md`: adopt when a comment essay
   should graduate into an actual doc rather than be trimmed in place.

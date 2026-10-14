@@ -10,7 +10,7 @@ Generate a comprehensive analytics report for the current Claude Code session.
 
 ## Data Sources
 
-Gather data from these temp files (all keyed by `$PPID` — the Claude process PID):
+Gather data from these temp files (all keyed by `$PPID`, the Claude process PID):
 
 | File | Content |
 |---|---|
@@ -66,11 +66,11 @@ Adapt to show only panels with data. Omit sections with no data (e.g., skip PM2 
 
 1. **Resolve PID**: Use `$PPID` to find the Claude process PID. All temp files are keyed by this.
 
-2. **Read temp files**: Use Bash to read each temp file. Handle missing files gracefully — they may not exist if the session is young or the daemon hasn't collected data yet.
+2. **Read temp files**: Use Bash to read each temp file. Handle missing files gracefully. They may not exist if the session is young or the daemon hasn't collected data yet.
 
 3. **Read statusline data**: Run `cat /tmp/claude-statusline-$PPID 2>/dev/null` to get daemon-collected stats.
 
-4. **Read tool counters**: Parse `/tmp/claude-tools-$PPID` — format is `toolname=count` per line, with `_total=N` for the grand total.
+4. **Read tool counters**: Parse `/tmp/claude-tools-$PPID`, whose format is `toolname=count` per line, with `_total=N` for the grand total.
 
 5. **Compute derived metrics**:
    - Cost per turn: `cost / turns`
@@ -83,7 +83,7 @@ Adapt to show only panels with data. Omit sections with no data (e.g., skip PM2 
 ## Rules
 
 - This is a **read-only** skill. Never modify any files.
-- If temp files are missing, state "Session data not yet available — run a few more turns to populate."
+- If temp files are missing, state "Session data not yet available. Run a few more turns to populate."
 - Round costs to 2 decimal places, percentages to integers.
 - Use color in output: green for healthy metrics, yellow for warnings, red for critical.
-- The report should be generated in a single output — do not ask the user questions.
+- The report should be generated in a single output. Do not ask the user questions.

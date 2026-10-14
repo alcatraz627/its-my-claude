@@ -1,6 +1,6 @@
 ---
 name: revive
-description: Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume <uuid>` command for the user to run. Use when the user wants to fully rehydrate a past session — not just a summary. Companion to /catchup (which restores task context from a checkpoint summary). /revive is heavier (full conversation rehydration) and runs from a different terminal since a Claude process cannot replace itself.
+description: Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume <uuid>` command for the user to run. Use when the user wants to fully rehydrate a past session, not just a summary. Companion to /catchup (which restores task context from a checkpoint summary). /revive is heavier (full conversation rehydration) and runs from a different terminal since a Claude process cannot replace itself.
 allowed-tools: Read, Glob, Grep, Bash
 argument-hint: "[--project PATH] [--all] [--within DAYS]"
 user-invocable: true
@@ -10,7 +10,7 @@ user-invocable: true
 
 Find past Claude Code session transcripts on disk and surface them with their associated checkpoint name/summary (when one exists). Present a picker. Print the exact `claude --resume <uuid>` command the user copies and runs from another terminal.
 
-`/revive` does NOT exec — a Claude process cannot replace itself with another `claude` invocation. It hands the user a copy-paste command.
+`/revive` does NOT exec. A Claude process cannot replace itself with another `claude` invocation. It hands the user a copy-paste command.
 
 ## When to use
 
@@ -31,13 +31,13 @@ When NOT to use:
 /revive --within DAYS             # constrain by recency (default 30)
 ```
 
-## Phase 1 — Parse arguments
+## Phase 1: Parse arguments
 
 Extract `--project`, `--all`, `--within` from args. Defaults:
 - `--project` = current CWD if it contains `.claude/`, else the project_root from `~/.claude/_last-checkpoint.json` if fresh, else prompt user to pick
 - `--within` = 30 days
 
-## Phase 2 — List candidates
+## Phase 2: List candidates
 
 ```bash
 ~/.claude/scripts/checkpoint/list-transcripts.sh \
@@ -57,7 +57,7 @@ This prints a numbered table:
         └─ Drafting docs-gate ADR for the new module boundary
 ```
 
-Transcripts without checkpoints show their UUID prefix in parens — user can still revive them, just without the named-summary context.
+Transcripts without checkpoints show their UUID prefix in parens. The user can still revive them, just without the named-summary context.
 
 If the list is empty, say so and exit cleanly:
 ```
@@ -65,7 +65,7 @@ No transcripts found in <project> within last <N> days.
 Try: /revive --all  (or widen --within)
 ```
 
-## Phase 3 — Present picker
+## Phase 3: Present picker
 
 Use `mcp__inputs__pick_one` to let the user choose. Build options from the JSON output:
 
@@ -85,11 +85,11 @@ For each row, label format:
 
 Add a final "Open transcript file directly" option that just prints the path (useful if user wants to grep/inspect instead of resume).
 
-## Phase 4 — Output the resume command
+## Phase 4: Output the resume command
 
 For the picked transcript, the JSON entry has `transcript` (full path) and `session_id` (UUID).
 
-**Derive the `cd` target from the transcript's parent folder, NOT from the checkpoint's `project_root`.** `claude --resume` only finds a session when launched from the directory whose project-slug matches the transcript's folder. The folder name is the original launch cwd with every `/` replaced by `-`; decode it back (strip leading `-`, swap `-` → `/`) to get the directory to `cd` into. These two can legitimately diverge — a session launched from a repo root but working in a subdir records `project_root` as the subdir in the checkpoint, while its transcript still lives under the root's slug. Using the checkpoint's `project_root` then reproduces the "no conversation found" failure.
+**Derive the `cd` target from the transcript's parent folder, NOT from the checkpoint's `project_root`.** `claude --resume` only finds a session when launched from the directory whose project-slug matches the transcript's folder. The folder name is the original launch cwd with every `/` replaced by `-`; decode it back (strip leading `-`, swap `-` → `/`) to get the directory to `cd` into. These two can legitimately diverge. A session launched from a repo root but working in a subdir records `project_root` as the subdir in the checkpoint, while its transcript still lives under the root's slug. Using the checkpoint's `project_root` then reproduces the "no conversation found" failure.
 
 Print:
 
@@ -109,23 +109,23 @@ Print:
 
 Do NOT attempt to exec. The user runs it themselves.
 
-### Gotcha — "no conversation found"
+### Gotcha: "no conversation found"
 
-When the user reports `claude --resume <uuid>` says *no conversation found*, the cause is almost always a **cwd / project-slug mismatch** — they launched from a subdirectory (or a sibling) of the directory that owns the slug. Diagnose and fix:
+When the user reports `claude --resume <uuid>` says *no conversation found*, the cause is almost always a **cwd / project-slug mismatch**. They launched from a subdirectory (or a sibling) of the directory that owns the slug. Diagnose and fix:
 
 1. The transcript path is `~/.claude/projects/<slug>/<uuid>.jsonl`. The `<slug>` is the launch cwd with `/`→`-`.
 2. Decode the slug to a real path and have them `cd` there, then re-run `claude --resume <uuid>`.
-3. If the positional UUID still fails, `claude --resume` (no UUID) from that directory opens a picker listing every session for that project — they select by summary.
+3. If the positional UUID still fails, `claude --resume` (no UUID) from that directory opens a picker listing every session for that project. They select by summary.
 4. Last resort: `/catchup <checkpoint-file>` restores task context from the checkpoint summary instead of the full transcript.
 
 ## Tips for the user (in the output)
 
-- `--fork-session` on the resume creates a NEW session UUID — useful for branching off without disturbing the original conversation
+- `--fork-session` on the resume creates a NEW session UUID, useful for branching off without disturbing the original conversation
 - `claude --resume` opens an interactive picker if you omit the UUID
 - For PR-linked sessions: `claude --from-pr <#>` is more direct than `/revive`
 
 ## Notes
 
-- Cannot self-exec. A Claude process running `claude --resume` would either fork a child (the child runs in the new conversation) or attempt to replace itself (which would terminate the current session). Neither is acceptable for an interactive skill — the user MUST run the resume command from a separate terminal/tab.
+- Cannot self-exec. A Claude process running `claude --resume` would either fork a child (the child runs in the new conversation) or attempt to replace itself (which would terminate the current session). Neither is acceptable for an interactive skill. The user MUST run the resume command from a separate terminal/tab.
 - If the user is in a terminal multiplexer (tmux, zellij), `/revive` can suggest opening a new pane/window with the resume command pre-filled.
-- The checkpoint join (HAS-CKPT column) uses `session_uuid` field added in 2026-05-15 enhancement. Older checkpoint entries without `session_uuid` fall back to session-id prefix match — sometimes imperfect.
+- The checkpoint join (HAS-CKPT column) uses `session_uuid` field added in 2026-05-15 enhancement. Older checkpoint entries without `session_uuid` fall back to session-id prefix match, which is sometimes imperfect.

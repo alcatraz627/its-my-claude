@@ -15,9 +15,9 @@ auto-generated TOC, and landscape mode for wide tables.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol, for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -58,7 +58,7 @@ If it does not exist yet, continue without it.
 
 ## Workflow
 
-### Phase 1 — Resolve Input
+### Phase 1: Resolve Input
 
 1. Confirm the provided path exists and ends in `.md`.
 2. Derive the output path: same directory, same stem, `.pdf` extension.
@@ -68,7 +68,7 @@ If it does not exist yet, continue without it.
    Output: /path/to/file.pdf
    ```
 
-### Phase 2 — Generate
+### Phase 2: Generate
 
 Run the generation script with applicable flags:
 
@@ -88,7 +88,7 @@ python3 ~/.claude/skills/generate-pdf/generate_pdf.py /path/to/doc.md --style pr
 python3 ~/.claude/skills/generate-pdf/generate_pdf.py /path/to/doc.md --style compact --landscape
 ```
 
-**Style selection guidance** — if the user didn't specify a style, pick based on content:
+**Style selection guidance**, if the user didn't specify a style, pick based on content:
 - API docs, READMEs, technical specs → `default`
 - Client proposals, business docs, handoff documents → `professional`
 - Research papers, formal reports → `academic`
@@ -106,14 +106,14 @@ The script:
 - Cleans up all temp files after completion
 - Outputs the PDF to the same directory as the input
 
-### Phase 3 — Verify
+### Phase 3: Verify
 
 After the script exits:
 - Confirm the `.pdf` file exists at the expected path
 - Report file size
 - If `--open` was passed, the script will have opened it automatically
 
-### Phase 4 — Report
+### Phase 4: Report
 
 Print a compact summary:
 
@@ -154,6 +154,6 @@ To modify the design, edit the `CSS` constant in `generate_pdf.py`.
 
 - Requires Node.js + `npx`. `md-to-pdf` is auto-downloaded on first run via `npx --yes`.
 - On first run, `npx --yes md-to-pdf` may take 10–30 seconds to download Chromium.
-- The output PDF is always in the same directory as the input — this is intentional.
-- For very long documents with many code blocks, page breaks are hinted with `page-break-inside: avoid` on `pre`, `table`, and `blockquote`. This may cause large gaps near page boundaries — acceptable for technical documents.
+- The output PDF is always in the same directory as the input. This is intentional.
+- For very long documents with many code blocks, page breaks are hinted with `page-break-inside: avoid` on `pre`, `table`, and `blockquote`. This may cause large gaps near page boundaries, which is acceptable for technical documents.
 - LinkedIn and external URLs in the markdown will appear as blue text (non-clickable in most PDF readers without annotation support).

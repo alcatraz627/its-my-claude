@@ -8,7 +8,7 @@ argument-hint: "<when> [goal] | check | off"
 
 ## Brief
 
-The scarce resource is not agent time and not turn count — it is the user's
+The scarce resource is not agent time and not turn count. It is the user's
 attention at unpredictable return moments. An agent that blocks on a question
 at minute 7 of a 2-hour absence wastes 113 minutes; the same agent with a
 pre-authorized default wastes zero. One conversion powers everything here:
@@ -16,7 +16,7 @@ pre-authorized default wastes zero. One conversion powers everything here:
 batched exchange, decisions become defaults-plus-veto-ledger, status becomes
 glanceable state, and blocking becomes pre-authorized shedding.
 
-**Objective (not "minimize turns" — the user rejected the literal reading):
+**Objective (not "minimize turns", since the user rejected that literal reading):
 maximize work-completed per unit of user attention, and never sit idle-blocked
 during an absence.** Two acceptance metrics: away-time utilization (~100%) and
 attention-yield (every return resolved something load-bearing). Asking a cheap
@@ -44,7 +44,7 @@ Read `~/.claude/skills/GUIDELINES.md` and `~/.claude/skills/deadline/runtime-not
 /deadline off               land early: final state, retro, disarm wake
 ```
 
-## Phase 1 — Arm: the single upfront exchange
+## Phase 1: Arm: the single upfront exchange
 
 This is the ONLY guaranteed synchronous turn; it earns its cost by deleting
 future blocked ones. In order:
@@ -52,26 +52,26 @@ future blocked ones. In order:
 1. **Fix T absolutely** (clock time + date, timezone-aware) and subtract a
    safety margin (default 15% of remaining runway). All projections target
    T-minus-margin, never T.
-2. **Define DONE as a checkable artifact** — a demo-able flow, a passing
+2. **Define DONE as a checkable artifact**. A demo-able flow, a passing
    suite, a deployed URL. Never "mostly working". If the user's goal phrasing
    is not checkable, converge it in this exchange.
 3. **Limits-runway check (do not skip):** run
    `bash ~/.claude/scripts/wake/limits-check.sh` and project the usage window
    against T. If the window plausibly closes before T-minus-margin, say so NOW
-   — "your 5h window is the real deadline" — while the user can still act.
+("your 5h window is the real deadline") while the user can still act.
    No plan survives an empty tank; this is the collision both first-draft
    designs missed.
 4. **Decompose into parts**, tagging each: estimate · reversible? ·
    blocks-others? · needs-you? Assign every part a ring:
-   - **CORE** — the commitment itself; what the team sees at T
-   - **HARDENING** — what makes it not embarrassing (error paths, obvious
+   - **CORE**: the commitment itself; what the team sees at T
+   - **HARDENING**: what makes it not embarrassing (error paths, obvious
      edge cases, verification depth beyond smoke)
-   - **POLISH** — everything else
-   The rings ARE the pre-authorized shed order — the user agrees to it here,
+   - **POLISH**: everything else
+   The rings ARE the pre-authorized shed order. The user agrees to it here,
    so shedding later needs no turn.
-5. **Propose a sequencing strategy with reasoning** from the tag counts —
+5. **Propose a sequencing strategy with reasoning** from the tag counts
    riskiest-and-unblocking-first / critical-path-first /
-   fastest-visible-progress-first — user confirms or overrides (their ruling:
+   fastest-visible-progress-first, user confirms or overrides (their ruling:
    situation-chosen, never hardcoded).
 6. **Front-load every foreseeable decision** into one pre-answered surface
    (`/decision-wizard`: inline menu for ≤3 picks, the :5106/dp/ page for more).
@@ -94,35 +94,34 @@ future blocked ones. In order:
 10. **Push back when unwarranted:** if the task gains nothing from deadline
     pressure ("40 minutes of work and you're here"), say so and don't arm.
 
-## Phase 2 — Run: autonomous stretches
+## Phase 2: Run: autonomous stretches
 
 - **Reversible-by-default.** On any fork the agent cannot resolve alone: take
   the most defensible reversible option, log it to the **veto list** with a
-  revert cost, keep working. HALT only for the irreversible set — deploy,
-  delete, external send, spend, destructive migration — plus any per-run
+  revert cost, keep working. HALT only for the irreversible set: deploy,
+  delete, external send, spend, destructive migration, plus any per-run
   additions the user named at arm time.
-- **Three-signal burn ledger** (never blend them — each maps to a different
+- **Three-signal burn ledger** (never blend them, because each maps to a different
   user lever), updated at part boundaries with clock time from WAL/checkpoint
   timestamps, never felt duration:
-  - **DRIFT** = actual/est on completed parts (EWMA) — "are estimates low?"
+  - **DRIFT** = actual/est on completed parts (EWMA): "are estimates low?"
   - **GROWTH** = new parts added mid-run, each with its own estimate,
-    attributed out loud ("added bulk-import, +1.5h — scope, not slippage")
-  - **BURN** = projected finish vs T-minus-margin — the bottom line
+    attributed out loud ("added bulk-import, +1.5h, scope, not slippage")
+  - **BURN** = projected finish vs T-minus-margin. The bottom line
 - **Side goals classify into a ring at intake, out loud:** "lands in POLISH;
   survives only if CORE closes by HH:MM." The tradeoff surfaces when scope
   shifts, never silently at 3 AM.
 - **When BURN crosses T-minus-margin:** shed pre-authorized rings outward
   (POLISH first) automatically and REPORT the shed. If projections demand
   cuts deeper than the pre-authorization (into CORE), compose the
-  regret-ranked cut list for approval — and while it pends, keep executing
+  regret-ranked cut list for approval, and while it pends, keep executing
   the surviving CORE parts; a pending decision never idles the run.
 - **Verify-in-flight (undeclared-slip sweep):** before a ring closes, list
   every active item from the current ring and require each to carry either a
   build-artifact pointer or an explicit NOT-BUILT deferral note in the shed
-  log. Items with neither are flagged as undeclared slips — queued and
-  believed-built is the failure the ring/shed ledger cannot see on its own.
+  log. Items with neither are flagged as undeclared slips. Queued work that is believed built is the failure the ring/shed ledger cannot see on its own.
 - **Fan-out is in scope.** Independent parts (blocks-others: no) may run as
-  parallel sub-agents under the standing model-tier and sprawl rules —
+  parallel sub-agents under the standing model-tier and sprawl rules
   deadline raises parallelism, never the tier ceiling or the gates.
 - **Gates scale per ring:** CORE ships through the adversarial gate
   (/bloop-grade), HARDENING gets targeted verification, POLISH a smoke run.
@@ -157,7 +156,7 @@ Shed log / cut list:
   PENDING    <part>  CORE    needs your call — ranked by regret below
 ```
 
-## Phase 3 — The return brief (fixed shape, decision-first)
+## Phase 3: The return brief (fixed shape, decision-first)
 
 Every user reappearance (any message counts as a return; `/deadline check`
 renders it on demand) gets exactly this, in this order:
@@ -177,29 +176,29 @@ works.
 Lowest-attention channel, live today (verified against the code, not
 assumed): the decision page's Submit button POSTs the kanban server's `/api/dp-submit/<slug>`,
 writing `<slug>/.answer.json`; the agent watches that file (Monitor, or poll
-`decision-page.sh answer <slug> --consume`) and wakes with zero chat traffic
-— `features/decision-pages.md` §Submit-to-wake. `/wake` covers the
+`decision-page.sh answer <slug> --consume`) and wakes with zero chat traffic. See
+`features/decision-pages.md` §Submit-to-wake. `/wake` covers the
 crash-recovery half: an outage that kills the watcher still gets revived.
 Chat messages remain a return channel alongside it.
 
-## Phase 4 — Landing
+## Phase 4: Landing
 
 At T, at DONE, or on `/deadline off`: render the final state block, disarm
 `/wake` (CronDelete), and append the retro to
 `~/.claude/skills/deadline/runtime-notes.md` under lock:
 
 - T hit/missed by how much · final DRIFT · GROWTH total
-- **User turns consumed vs planned — the real success metric**
+- **User turns consumed vs planned: the real success metric**
 - Assumptions vetoed: each one is a mis-modeled preference; graduate it to
   memory/glossary so the next run guesses better
 - If measured user-turns are not falling across uses, the skill is failing
-  its one job — flag for design revisit.
+  its one job, flag for design revisit.
 
 Then emit the same numbers as a structured efficacy event, so the trend is
 queryable and not only prose (the retro above is the human read; this is the
 machine one):
 
-Substitute your real values (this is copy-safe as written — the pipes below are in
+Substitute your real values (this is copy-safe as written, since the pipes below are in
 comments, not the command):
 
 ```bash
@@ -212,13 +211,13 @@ bash ~/.claude/scripts/skill-log.sh record deadline \
 
 `--outcome` is one of `accepted` (hit T on the plan the user signed off), `revised`
 (hit it but with cuts they had to approve), or `discarded` (missed T). `--corrections`
-is the assumptions-vetoed count. `turns_used` is the real success metric —
+is the assumptions-vetoed count. `turns_used` is the real success metric
 `bash ~/.claude/scripts/skill-log.sh summary --skill deadline` shows whether it is
 falling across runs.
 
 ## Acceptance bar (all must hold on a real run)
 
-- [ ] Away-time utilization ≈ 100% — never idle-blocked during an absence
+- [ ] Away-time utilization ≈ 100%. Never idle-blocked during an absence
 - [ ] Zero irreversible actions without the user
 - [ ] Every return led with a pre-drafted one-pass decision queue
 - [ ] DRIFT / GROWTH / BURN reported split, never blended
@@ -236,7 +235,7 @@ falling across runs.
 **Expected behavior:**
 
 - [ ] Phase 1 step 3 projects window-close against T BEFORE decomposition
-- [ ] The collision is stated with the tradeoff ("fits before 02:00, or accept a manual finish") — arming never proceeds silently past it
+- [ ] The collision is stated with the tradeoff ("fits before 02:00, or accept a manual finish"), arming never proceeds silently past it
 - [ ] The state block records the limits runway line
 
 ### Example: Mid-absence slip within pre-authorization
@@ -244,7 +243,7 @@ falling across runs.
 **Scenario:** BURN crosses T-minus-margin during a 2h absence; POLISH parts remain.
 **Expected behavior:**
 
-- [ ] POLISH sheds automatically — no approval turn consumed
+- [ ] POLISH sheds automatically: no approval turn consumed
 - [ ] The shed is logged and reported at the next return, never silent
 - [ ] A cut reaching INTO CORE composes the regret-ranked list, and surviving CORE work continues while it pends
 
@@ -267,7 +266,7 @@ falling across runs.
 
 ## What this is NOT
 
-Not a cron or daemon — a mode over one session's work (fan-out included).
+Not a cron or daemon. A mode over one session's work (fan-out included).
 Not a panic mode: gates never shed. Not frequent-use: rare, real
 commitments only, and the skill says so when invoked without one.
 
@@ -275,6 +274,6 @@ commitments only, and the skill says so when invoked without one.
 
 - Design + comparison: `assets/reports/20260718-deadline-skill-design/`
   (merged from two independent designs; adversarial cross-review on file)
-- `skills/wake/SKILL.md` — the outage defense this arms
+- `skills/wake/SKILL.md`: the outage defense this arms
 - `rules/model-tier-routing.md` · `rules/contain-subagent-token-sprawl.md`
-- `features/decision-pages.md` — the batched-decision surface
+- `features/decision-pages.md`: the batched-decision surface

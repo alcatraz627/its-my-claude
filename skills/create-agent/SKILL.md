@@ -10,15 +10,15 @@ argument-hint: "<instructions | existing-skill-name> [--global | --project]"
 
 Scaffolds new autonomous agent SKILL.md files or converts existing skills to agent format. Reads the full skill catalogue to detect template matches, derives a plan, shows a diff-style preview before writing, and validates that the result has `context: fork`, no interactive prompts, and the Claude-consumption shape (action-oriented routing description + tiered output contract).
 
-The scaffolded agent body follows the Claude-consumption standard in `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — the agent body is system-prompt material read by Claude, so it is shaped for a model, not for a human reader.
+The scaffolded agent body follows the Claude-consumption standard in `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md`. The agent body is system-prompt material read by Claude, so it is shaped for a model, not for a human reader.
 
 # Create Agent
 
-Unlike `/create-skill` which builds interactive Q&A wizards with approval gates, `/create-agent` specializes in **autonomous agents** — skills that run unattended in a forked context, read files or run commands, and return a single structured report with no mid-run user interaction.
+Unlike `/create-skill` which builds interactive Q&A wizards with approval gates, `/create-agent` specializes in **autonomous agents**: skills that run unattended in a forked context, read files or run commands, and return a single structured report with no mid-run user interaction.
 
 **What it produces:**
 
-- `<DEST>/SKILL.md` — agent definition with `context: fork`, autonomous multi-phase workflow, structured terminal report output
+- `<DEST>/SKILL.md`: agent definition with `context: fork`, autonomous multi-phase workflow, structured terminal report output
 
 **Two modes:**
 
@@ -55,9 +55,9 @@ gcc that nests one level too deep and `block-nested-claude.sh` refuses it.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol, for the entire duration of this skill run.
 
 Also read the `## create-agent:` entries in `~/.claude/skills/runtime-notes*.md` for past run history.
 If it does not exist yet, continue without it.
@@ -68,9 +68,9 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Load Skill Catalogue
+## Phase 1: Load Skill Catalogue
 
-### 1.1 — Discover all existing skills
+### 1.1: Discover all existing skills
 
 ```
 bash ~/.claude/scripts/skills-index.sh   # then read ~/.claude/skills/00-index.md; add <cwd>/.claude/skills/*/SKILL.md when in a project
@@ -85,20 +85,20 @@ For each skill found, read the frontmatter (`name`, `description`, `allowed-tool
 
 Print: `  Loaded N existing skills into context.`
 
-### 1.2 — Determine mode
+### 1.2: Determine mode
 
 Parse the `<instructions>` argument:
 
 1. Normalize: strip whitespace, lowercase
 2. Compare against all skill `name` fields in the catalogue (exact match)
-3. **If exact match found:** set `MODE=convert`, `TARGET=<skill-name>` — print: `  Mode: convert → <skill-name>`
-4. **If no match:** set `MODE=new`, `INTENT=<instructions>` — print: `  Mode: new → "<intent>"`
+3. **If exact match found:** set `MODE=convert`, `TARGET=<skill-name>`, print: `  Mode: convert → <skill-name>`
+4. **If no match:** set `MODE=new`, `INTENT=<instructions>`, print: `  Mode: new → "<intent>"`
 
 ---
 
-## Phase 2 — Analysis
+## Phase 2: Analysis
 
-### 2.1 (convert mode) — Analyze the existing skill
+### 2.1 (convert mode): Analyze the existing skill
 
 Read `<DEST-of-TARGET>/SKILL.md` in full (global or project, wherever the index found it).
 
@@ -106,12 +106,12 @@ Scan for agent-incompatible patterns:
 
 | Pattern                                                       | Action                                                         |
 | ------------------------------------------------------------- | -------------------------------------------------------------- |
-| `AskUserQuestion` call                                        | Remove — agents cannot pause for user input in forked context  |
-| `"Wait for input"` string                                     | Remove — same reason                                           |
-| `gum confirm` / `gum choose`                                  | Remove — no interactive TTY in forked context                  |
-| `context: fork` already present                               | Note — skill is already an agent; offer to improve/restructure |
-| Self-modification steps (Edit/Write own SKILL.md)             | Flag — unusual for agents; keep only if clearly intentional    |
-| Self-update instructions ("update this file after answering") | Remove — agents don't learn by editing themselves              |
+| `AskUserQuestion` call                                        | Remove: agents cannot pause for user input in forked context  |
+| `"Wait for input"` string                                     | Remove, same reason                                           |
+| `gum confirm` / `gum choose`                                  | Remove: no interactive TTY in forked context                  |
+| `context: fork` already present                               | Note: skill is already an agent; offer to improve/restructure |
+| Self-modification steps (Edit/Write own SKILL.md)             | Flag: unusual for agents; keep only if clearly intentional    |
+| Self-update instructions ("update this file after answering") | Remove: agents don't learn by editing themselves              |
 
 Print a conversion summary:
 
@@ -123,7 +123,7 @@ Print a conversion summary:
   Phases to preserve: [list exploration/analysis phases]
 ```
 
-### 2.2 (new mode) — Find template candidates
+### 2.2 (new mode): Find template candidates
 
 Score each catalogued skill for similarity to `INTENT` using keyword overlap between the intent and each skill's name, description, and brief. Look for:
 
@@ -147,14 +147,14 @@ If "no" or no candidate found: proceed without a template.
 
 ---
 
-## Phase 3 — Plan
+## Phase 3: Plan
 
 Generate the agent SKILL.md plan. **Do not write files yet.**
 
-### 3.1 — Agent name
+### 3.1: Agent name
 
 - **Convert mode:** Keep `<TARGET>` name. Existing SKILL.md will be overwritten.
-- **New mode:** Derive from intent — lowercase, 2–4 words, hyphens, verb-noun form (e.g., `route-audit`, `api-diff`, `type-scan`). Print:
+- **New mode:** Derive from intent: lowercase, 2–4 words, hyphens, verb-noun form (e.g., `route-audit`, `api-diff`, `type-scan`). Print:
 
 ```
   Proposed name: <name>  (invoked as /<name>)
@@ -164,9 +164,9 @@ Generate the agent SKILL.md plan. **Do not write files yet.**
 
 Wait for input.
 
-### 3.2 — Derive the agent body shape
+### 3.2: Derive the agent body shape
 
-The scaffolded body follows the Claude-consumption shape — **no interactive gates** anywhere. Don't bake a fixed "Information Gathering → Analysis → Report" template into every agent; that rigid three-phase skeleton fits an audit but not, say, a generator or a sync-checker. Instead, fit the body to what the agent actually does, in this order:
+The scaffolded body follows the Claude-consumption shape, **no interactive gates** anywhere. Don't bake a fixed "Information Gathering → Analysis → Report" template into every agent; that rigid three-phase skeleton fits an audit but not, say, a generator or a sync-checker. Instead, fit the body to what the agent actually does, in this order:
 
 ```
 1. ONE-LINE IDENTITY      A single sentence: what this agent is and the one job it does.
@@ -189,22 +189,22 @@ The scaffolded body follows the Claude-consumption shape — **no interactive ga
                           can't be missed.
 ```
 
-This is the shape from `claude-consumption-spec.md` (§ "Shared section shape"). The output contract is what makes the agent's work machine-consumable by the parent — prioritize it over flavor.
+This is the shape from `claude-consumption-spec.md` (§ "Shared section shape"). The output contract is what makes the agent's work machine-consumable by the parent. Prioritize it over flavor.
 
 For convert mode: map the existing skill's phases onto this shape. Remove interactive steps, preserve all exploration logic, keep the step count the original needed.
 
 For new mode: derive the workflow from intent, using template structure if a template was accepted.
 
-### 3.2.1 — Write the routing `description`
+### 3.2.1: Write the routing `description`
 
-The frontmatter `description` drives Claude Code's delegation — Claude reads it to decide when to route work to this agent. Write it **action-oriented**: a job plus its trigger, not a capability list.
+The frontmatter `description` drives Claude Code's delegation: Claude reads it to decide when to route work to this agent. Write it **action-oriented**: a job plus its trigger, not a capability list.
 
 - Good: `"Inspect changed auth routes and flag handlers missing an auth guard or input validation. Use after editing middleware or before a PR touching mutations."`
-- Weak: `"A security expert for Next.js routes."` (an identity, not a trigger — routes poorly.)
+- Weak: `"A security expert for Next.js routes."` (an identity, not a trigger, so it routes poorly.)
 
-The shape is **verb + object + trigger**: what it does, to what, and the situation that should invoke it. Include a "use after X" / "use before declaring Y done" clause when there's a natural trigger moment — it encourages proactive pickup.
+The shape is **verb + object + trigger**: what it does, to what, and the situation that should invoke it. Include a "use after X" / "use before declaring Y done" clause when there's a natural trigger moment. It encourages proactive pickup.
 
-### 3.3 — Print the plan
+### 3.3: Print the plan
 
 ```
 ─────────────────────────────────────────────────────
@@ -256,9 +256,9 @@ Wait for input. Revise and re-print if needed.
 
 ---
 
-## Phase 4 — Execution
+## Phase 4: Execution
 
-### 4.1 — Create directory (new mode only)
+### 4.1: Create directory (new mode only)
 
 ```bash
 mkdir -p "$DEST"
@@ -266,7 +266,7 @@ mkdir -p "$DEST"
 
 Print: `  Created $DEST/`
 
-### 4.2 — Check for existing SKILL.md (new mode only)
+### 4.2: Check for existing SKILL.md (new mode only)
 
 ```bash
 ls "$DEST/SKILL.md" 2>/dev/null
@@ -276,22 +276,22 @@ If exists: print warning and ask `"Overwrite? (yes / no)"`. If "no" → stop.
 
 Convert mode always overwrites the existing SKILL.md.
 
-### 4.3 — Write SKILL.md
+### 4.3: Write SKILL.md
 
-Write a complete agent SKILL.md. The body follows the Claude-consumption shape from `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — it's system-prompt material a model reads, so it's a tight operating procedure, not an essay. **Required elements:**
+Write a complete agent SKILL.md. The body follows the Claude-consumption shape from `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md`. It's system-prompt material a model reads, so it's a tight operating procedure, not an essay. **Required elements:**
 
 - Frontmatter: `name`, action-oriented `description` (§3.2.1, under 300 characters; the roster drops long ones), `allowed-tools` (`Agent`, never `Task`), `user-invocable: true`, `argument-hint` (under 120 characters), **`context: fork`**
 - `## Brief` immediately after frontmatter `---`
 - `## Step 0` preamble (copy verbatim from GUIDELINES.md template)
 - `## Usage` section with argument table
-- The body shape from §3.2: one-line identity → when-to-invoke trigger → numbered workflow (count fit to the task) → checklist/heuristics → the output contract below — with no `AskUserQuestion`, no "Wait for input", no `gum` interactives anywhere
+- The body shape from §3.2: one-line identity → when-to-invoke trigger → numbered workflow (count fit to the task) → checklist/heuristics → the output contract below, with no `AskUserQuestion`, no "Wait for input", no `gum` interactives anywhere
 - `## Validation` rubric: the efficacy dimension this agent is judged on and two or three checks an agent can run (a rubric, not worked examples)
 - a closing ledger step: `bash ~/.claude/scripts/skill-log.sh record <name> --task "…" --outcome unknown --corrections 0 --note "…"`
 - `## Notes` section with any constraints or caveats
 
-Keep emphasis plain. Reserve ALL-CAPS / "MUST" for the rare load-bearing guardrail — on current models they over-trigger when overused.
+Keep emphasis plain. Reserve ALL-CAPS / "MUST" for the rare load-bearing guardrail, because on current models they over-trigger when overused.
 
-**Standard tiered output contract for the generated agent — this is the load-bearing section, the structured block the parent agent consumes:**
+**Standard tiered output contract for the generated agent. This is the load-bearing section: the structured block the parent agent consumes:**
 
 ```
 ─────────────────────────────────────────────────────
@@ -312,7 +312,7 @@ Keep emphasis plain. Reserve ALL-CAPS / "MUST" for the rare load-bearing guardra
 ─────────────────────────────────────────────────────
 ```
 
-That errors/warnings/summary block fits an **audit-style** agent. Tier the contract to what the agent actually returns: a generator reports created files and a next step; a sync-checker reports matches/mismatches; a researcher reports findings with confidence + severity. Keep it tiered and structured so the parent can parse it — that's the invariant, not the specific tier names.
+That errors/warnings/summary block fits an **audit-style** agent. Tier the contract to what the agent actually returns: a generator reports created files and a next step; a sync-checker reports matches/mismatches; a researcher reports findings with confidence + severity. Keep it tiered and structured so the parent can parse it. That's the invariant, not the specific tier names.
 
 Acquire lock before writing:
 
@@ -326,7 +326,7 @@ Write, then release lock. Print: `  Writing $DEST/SKILL.md ...`
 
 No USAGE.md: nothing routes on one (owner ruling cs-02, 2026-08-19).
 
-### 4.4 — Lint, format, index, record
+### 4.4: Lint, format, index, record
 
 ```bash
 python3 ~/.claude/scripts/skill-lint.py "$DEST/SKILL.md"     # fix errors; name leftover warnings in the summary
@@ -337,9 +337,9 @@ bash ~/.claude/scripts/skill-log.sh record create-agent --task "<name>" --outcom
 
 ---
 
-## Phase 5 — Verification
+## Phase 5: Verification
 
-### 5.1 — Mechanical checks
+### 5.1: Mechanical checks
 
 Read back `$DEST/SKILL.md` and confirm:
 
@@ -358,9 +358,9 @@ Read back `$DEST/SKILL.md` and confirm:
 
 Print result for each check. If any check fails, describe what to fix manually.
 
-### 5.2 — Skeptical review before declaring done
+### 5.2: Skeptical review before declaring done
 
-Run `/skeptical-review` on the scaffolded agent before calling it done. It forks a fresh adversarial reviewer grounded in the actual tree to check the new SKILL.md against sibling agents — catching a weak routing description, a vague workflow, or an output contract the parent can't parse that the mechanical checks miss. Address or note its findings; don't print the success summary until the review has run.
+Run `/skeptical-review` on the scaffolded agent before calling it done. It forks a fresh adversarial reviewer grounded in the actual tree to check the new SKILL.md against sibling agents, catching a weak routing description, a vague workflow, or an output contract the parent can't parse that the mechanical checks miss. Address or note its findings; don't print the success summary until the review has run.
 
 Print final summary:
 
@@ -393,9 +393,9 @@ equivalent) and nothing else on stdout; (3) `skill-lint.py` is clean at delivery
 
 ## Notes
 
-- **Key difference from `/create-skill`**: Agents have no interactive prompts. If the task needs mid-run user decisions — approval gates, Q&A loops, menu navigation — use `/create-skill` instead.
-- **`context: fork` scope**: Fork isolates the conversation context window, not the filesystem. Agents still read and write real files and run shell commands — they just don't flood the main conversation with hundreds of tool-call results.
+- **Key difference from `/create-skill`**: Agents have no interactive prompts. If the task needs mid-run user decisions (approval gates, Q&A loops, menu navigation) use `/create-skill` instead.
+- **`context: fork` scope**: Fork isolates the conversation context window, not the filesystem. Agents still read and write real files and run shell commands. They just don't flood the main conversation with hundreds of tool-call results.
 - **Convert mode overwrites**: The existing SKILL.md is replaced. Ensure git is clean before converting so you can revert with `git checkout -- "$DEST/SKILL.md"` if needed.
-- **Template suggestion is heuristic**: Keyword overlap — always review the suggested skill's brief before accepting.
-- **The generated body is Claude-facing**: The agent's SKILL.md body becomes a model's operating procedure, so it follows `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` (the consumption standard), not human-doc style. The routing `description` is a first-class design surface, not boilerplate — it drives Claude Code's delegation, so it reads as a job + trigger, not an identity.
+- **Template suggestion is heuristic**: Keyword overlap. Always review the suggested skill's brief before accepting.
+- **The generated body is Claude-facing**: The agent's SKILL.md body becomes a model's operating procedure, so it follows `~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` (the consumption standard), not human-doc style. The routing `description` is a first-class design surface, not boilerplate. It drives Claude Code's delegation, so it reads as a job + trigger, not an identity.
 - After the skill run, update `runtime-notes.md` via the standard `prepend-runtime-note.sh` pattern from GUIDELINES.md §7.

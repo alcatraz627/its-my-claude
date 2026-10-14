@@ -20,7 +20,7 @@ record if a dream pass ever returns.
 - You notice a non-obvious pattern mid-session that's worth examining
   outside the current scope (don't derail the current task, just pin it).
 - A discovery surfaces that would inform future decisions (architectural
-  tradeoff, common pitfall, "we keep doing X — should we have a rule?").
+  tradeoff, common pitfall, "we keep doing X, should we have a rule?").
 
 If `$ARGUMENTS` is empty, ask the user once: "What's the insight to pin?"
 Then proceed.
@@ -29,7 +29,7 @@ Then proceed.
 
 ### 1. Gather session context
 
-Collect what you can — none of these are strictly required, but more is
+Collect what you can. None of these are strictly required, but more is
 better:
 
 - **Session id**: `$CLAUDE_SESSION_ID` env var, or extract from the
@@ -80,7 +80,7 @@ Default `framing=investigate`. Override only if the user explicitly says:
 }
 ```
 
-`id` + `ts` are intentionally empty — the CLI regenerates them. Leave
+`id` + `ts` are intentionally empty. The CLI regenerates them. Leave
 fields you couldn't gather as `null` or empty arrays.
 
 ### 4. Pipe to the CLI
@@ -89,7 +89,7 @@ fields you couldn't gather as `null` or empty arrays.
 echo '<json>' | i-dream pin add --from-json
 ```
 
-Capture stdout — it'll be the assigned pin id (e.g. `pin-20260517170135-6f`).
+Capture stdout. It'll be the assigned pin id (e.g. `pin-20260517170135-6f`).
 
 ### 5. File it to the backlog
 
@@ -125,14 +125,14 @@ outside the box.
 ## When NOT to invoke
 
 - Routine reminders the user could write to a TODO ("/pin-for-dream:
-  finish the lint fix" — too small)
+  finish the lint fix", too small)
 - Things that belong in `/atone` (a mistake just happened) or `/affirm`
-  (a good behavior just happened) — those have their own skills with
+  (a good behavior just happened). Those have their own skills with
   proper schemas
-- One-off questions ("what does X mean?") — pinning these creates noise
+- One-off questions ("what does X mean?"). Pinning these creates noise
   in the backlog
 
 ## Tone
 
 Single short confirmation, no preamble. The pin event itself is the
-artifact — don't summarize it in conversation.
+artifact, don't summarize it in conversation.

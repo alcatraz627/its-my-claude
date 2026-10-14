@@ -8,9 +8,9 @@ user-invocable: true
 
 ## Brief
 
-Renders a fixed-width terminal banner with aligned Unicode borders. Takes a free-form description of what to display, infers the best sections/layout, picks a theme, and prints to terminal. Uses `std::claude::shared/banner.py` for rendering — all output is guaranteed aligned at W=68.
+Renders a fixed-width terminal banner with aligned Unicode borders. Takes a free-form description of what to display, infers the best sections/layout, picks a theme, and prints to terminal. Uses `std::claude::shared/banner.py` for rendering. All output is guaranteed aligned at W=68.
 
-> ⚠️ **For terminals only.** This banner uses Unicode box-drawing + ANSI colors and is not for README files — colors strip in markdown and box-drawing breaks under proportional fonts. If the user wants a README banner, route them to `/readme` (which writes `assets/cover.svg` and references it via `<img src=...>`); never paste this banner's text or wrap it in ` ``` ` blocks inside a README.
+> ⚠️ **For terminals only.** This banner uses Unicode box-drawing + ANSI colors and is not for README files, because colors strip in markdown and box-drawing breaks under proportional fonts. If the user wants a README banner, route them to `/readme` (which writes `assets/cover.svg` and references it via `<img src=...>`); never paste this banner's text or wrap it in ` ``` ` blocks inside a README.
 
 ## Step 0: Load Shared Guidelines
 
@@ -33,7 +33,7 @@ Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this 
 - `/banner session summary for fix-auth-3b`
 - `/banner` (prompts: "What should the banner display?")
 
-## Phase 1 — Interpret Intent
+## Phase 1: Interpret Intent
 
 1. If no description argument was provided, ask the user:
 
@@ -46,14 +46,14 @@ Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this 
    Wait for a response.
 
 2. From the description (argument or user response), determine:
-   - **Title** — 1-3 words for the header box (e.g., "DEPLOY STATUS", "PM2 PROCS", "SESSION")
-   - **Subtitle** — contextual identifier (e.g., cluster name, session ID, app name)
-   - **Sections** — what logical groups of information to show. Each section has:
+   - **Title**: 1-3 words for the header box (e.g., "DEPLOY STATUS", "PM2 PROCS", "SESSION")
+   - **Subtitle**: contextual identifier (e.g., cluster name, session ID, app name)
+   - **Sections**: what logical groups of information to show. Each section has:
      - A symbol from the safe set: `◆ ◇ ▶ △ ◎ ⊕ ⊙ ● ○ ■`
      - A title (ALL CAPS, 1-2 words)
      - Items with tree prefixes (`├-`, `└-`)
-   - **Theme** — pick from: `default`, `minimal`, `heavy`, `dots`
-   - **Footer** — optional one-liner for the bottom bar
+   - **Theme**: pick one of `default`, `minimal`, `heavy`, `dots`
+   - **Footer**: optional one-liner for the bottom bar
 
 3. **If the description references live data** (e.g., "pm2 process list", "git status", "port registry"), gather that data first:
    - Run the appropriate commands via Bash
@@ -72,7 +72,7 @@ Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this 
      Data:     <live | static>
    ```
 
-## Phase 2 — Build and Render
+## Phase 2: Build and Render
 
 1. Write a Python script to `/tmp/banner-render.py` that:
    - Imports from `std::claude::shared`: `sys.path.insert(0, os.path.expanduser("~/.claude/skills"))` then `from shared import Banner, Section, Item, tree, kv_line, truncate_path, THEMES`
@@ -91,7 +91,7 @@ Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this 
 
 3. If verification fails (any line != W chars), diagnose and fix before showing to user.
 
-## Phase 3 — Offer Customization
+## Phase 3: Offer Customization
 
 After printing the banner, offer:
 
@@ -107,7 +107,7 @@ Adjustments? (theme, width, sections, or "save" to write to file)
 - **"json"**: export the banner config as JSON for reuse with `python3 banner.py --config`
 - **Enter / "done"**: finish
 
-## Phase 4 — Completion
+## Phase 4: Completion
 
 Print:
 
@@ -128,8 +128,8 @@ Print:
 
 ## Notes
 
-- **Rendering library:** `std::claude::shared/banner.py` at `~/.claude/skills/shared/banner.py`. Supports 4 themes, JSON config, CLI, and Python API. All output is verified at the character level — every line must be exactly W chars.
-- **Safe characters only:** ASCII `=`/`-` for horizontal fills. Unicode `╔╗╚╝╠╣║` for corners/verticals. Never use `═` (U+2550) or `─` (U+2500) — they cause cumulative glyph drift over 60+ repetitions.
+- **Rendering library:** `std::claude::shared/banner.py` at `~/.claude/skills/shared/banner.py`. Supports 4 themes, JSON config, CLI, and Python API. All output is verified at the character level. Every line must be exactly W chars.
+- **Safe characters only:** ASCII `=`/`-` for horizontal fills. Unicode `╔╗╚╝╠╣║` for corners/verticals. Never use `═` (U+2550) or `─` (U+2500). They cause cumulative glyph drift over 60+ repetitions.
 - **Section symbols (verified 1-wide):** `◆ ◇ ▶ △ ◎ ⊕ ⊙ ● ○ ■`. Forbidden: `⚡` (2-wide), `⏩` (2-wide), `⊞` (wider in some fonts).
 - **Live data pattern:** When the user asks for something like "pm2 status" or "port registry", gather real data via Bash first, then feed it into the banner. Don't use placeholder values.
-- This skill produces terminal output only — no files are written unless the user asks to save.
+- This skill produces terminal output only. No files are written unless the user asks to save.

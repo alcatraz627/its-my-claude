@@ -25,7 +25,7 @@ Test commands vary wildly: `./.venv/bin/pytest -k X`, `npx vitest run`, `pnpm te
 /test --thorough               # full pass: tests + coverage + adjacent surface
 ```
 
-## Phase 1 — Resolve test command
+## Phase 1: Resolve test command
 
 ```bash
 ~/.claude/scripts/test/detect.sh "$FOLDER"
@@ -33,9 +33,9 @@ Test commands vary wildly: `./.venv/bin/pytest -k X`, `npx vitest run`, `pnpm te
 
 Output is JSON: `{folder, project_root, framework, runner, test_cmd, detected_at}`. Cache lives at `~/.claude/cache/test-patterns/<encoded>.json`.
 
-If `detected: false` (no known config), tell the user: "no test framework detected for `$FOLDER` — supports pytest, vitest, jest, mocha, cargo, go, bun, npm/pnpm/yarn `test` script. Initialize one or pass `--refresh` after setting up." Don't try to guess.
+If `detected: false` (no known config), tell the user: "no test framework detected for `$FOLDER`. Supported: pytest, vitest, jest, mocha, cargo, go, bun, npm/pnpm/yarn `test` script. Initialize one or pass `--refresh` after setting up." Don't try to guess.
 
-## Phase 2 — Run the cached command
+## Phase 2: Run the cached command
 
 ```bash
 cd "$PROJECT_ROOT"
@@ -47,18 +47,18 @@ Where `$EXTRA_ARGS` derives from skill args:
 - `-k <kw>` → append `-k <kw>` for pytest/vitest
 - bare path arg → append the path (works for pytest, vitest, jest)
 
-## Phase 3 — Result analysis
+## Phase 3: Result analysis
 
 Parse the tail output for common failure signatures:
 
 | Pattern | Action |
 |---|---|
-| `test command not found` / `No such file or directory` | Cache stale — re-run with `--refresh` once, then re-execute |
+| `test command not found` / `No such file or directory` | Cache stale. Re-run with `--refresh` once, then re-execute |
 | `FAILED`/`failed`/`Error:` summary | Surface the first failure with file:line; suggest reading the source |
 | `ImportError`/`ModuleNotFoundError` | Surface the missing module; suggest `pip install -e .` or check venv |
 | All pass | Continue to thoroughness phase |
 
-## Phase 4 — Thoroughness nudges (skip if --only)
+## Phase 4: Thoroughness nudges (skip if --only)
 
 Even if tests pass, ask:
 
@@ -67,9 +67,9 @@ Even if tests pass, ask:
 3. **Type/lint?** Ask if `mypy` / `tsc --noEmit` / `eslint` / equivalent should run before declaring done.
 4. **Integration vs unit?** If only unit tests ran, point to integration test paths if they exist (`tests/integration/`, `e2e/`).
 
-These are NUDGES — surface them, let the user pick which to actually run.
+These are NUDGES. Surface them and let the user pick which to actually run.
 
-## Phase 5 — Exit summary
+## Phase 5: Exit summary
 
 ```
 ─────────────────────────────────────────────────────
@@ -101,7 +101,7 @@ These are NUDGES — surface them, let the user pick which to actually run.
 
 ## See also
 
-- `scripts/test/detect.sh` — the cache manager
-- `~/.claude/cache/test-patterns/` — cached entries
-- `rules/exercise-based-verification.md` + the declared-ready Stop hook (`scripts/hooks/declared-ready-stop.sh`) — running this skill *is* the run-before-done exercise; a passing `/test` produces the run signal that satisfies the gate before you claim "done"/"passing".
-- `/skeptical-review` — the companion quality gate: `/test` proves the code runs green, `/skeptical-review` checks whether it's actually right.
+- `scripts/test/detect.sh`: the cache manager
+- `~/.claude/cache/test-patterns/`: cached entries
+- `rules/exercise-based-verification.md` + the declared-ready Stop hook (`scripts/hooks/declared-ready-stop.sh`): running this skill *is* the run-before-done exercise; a passing `/test` produces the run signal that satisfies the gate before you claim "done"/"passing".
+- `/skeptical-review`: the companion quality gate. `/test` proves the code runs green; `/skeptical-review` checks whether it's actually right.

@@ -9,15 +9,15 @@ user-invocable: true
 ## Brief
 
 Turns a description into a real, verified SVG file. Claude's native SVG-authoring
-is the generator — this skill is the scaffolding around it that a throwaway "here's
+is the generator. This skill is the scaffolding around it that a throwaway "here's
 some markup" answer skips: a file on disk (not inline markup that renderers strip),
 a rasterized render-check that gets *looked at* before handoff, optional `svgo`
 optimization, sane viewBox/accessibility defaults, and a real iteration loop.
 
 The one rule that makes this skill worth invoking over just writing markup: **an SVG
-that parses is not verified — it must be rendered and seen.** (`rules/exercise-based-verification.md`.)
+that parses is not verified. It must be rendered and seen.** (`rules/exercise-based-verification.md`.)
 
-## Step 0 — Guidelines + output location
+## Step 0: Guidelines + output location
 
 Read `~/.claude/skills/GUIDELINES.md` and apply it for the whole run (forbidden
 paths, confirm-before-overwrite, completion block).
@@ -25,10 +25,10 @@ paths, confirm-before-overwrite, completion block).
 Resolve the output directory:
 - In a project (a `.claude/` exists up-tree): `<project>/assets/` (create if absent).
 - Global / no project, OR CWD is `~/.claude`: `~/.claude/assets/images/`. **Never**
-  let a relative `.claude/output/...` resolve under `~/.claude` — that becomes the
+  let a relative `.claude/output/...` resolve under `~/.claude`. That becomes the
   hook-blocked `~/.claude/.claude/...` double-nest. Use the absolute assets path.
 
-## Phase 1 — Intent
+## Phase 1: Intent
 
 Classify the ask and let it set the defaults:
 
@@ -41,7 +41,7 @@ Classify the ask and let it set the defaults:
 | background pattern | tile size | none (decorative) | yes |
 
 Also determine the **embed context** (favicon, README cover, standalone asset,
-inline-in-HTML) — it decides whether to set fixed `width`/`height` or leave only
+inline-in-HTML), it decides whether to set fixed `width`/`height` or leave only
 `viewBox` for responsive scaling.
 
 If the arg is a path to an existing `.svg`, skip to Phase 6 (edit/optimize an
@@ -73,33 +73,33 @@ artworks". On tidy templates: fine but forgettable.
    `shape-rendering="crispEdges"`, composed into the scene. A light SMIL touch (a
    blink, a flicker) is fine. The static frame must still read on its own.
 
-## Phase 2 — Author the markup
+## Phase 2: Author the markup
 
 Claude writes the SVG directly. Apply these defaults (they are what separate a
 production SVG from a sketch):
 
 - **Always an explicit `viewBox`**; set `width`/`height` only when the embed needs
   fixed sizing.
-- **Self-contained** — no external `href`, no web-font references, no remote
+- **Self-contained**: no external `href`, no web-font references, no remote
   images. Everything inline so the file works offline and when copied anywhere.
-- **`role="img"` + `<title>`** (and `<desc>` for diagrams) on standalone graphics —
+- **`role="img"` + `<title>`** (and `<desc>` for diagrams) on standalone graphics
   screen readers and it's cheap.
 - Prefer a `<style>` block or presentation attributes over inline `style="..."`
   blobs where it reads cleaner; group with `<g>` and comment the regions of a
   complex drawing.
 - `currentColor` for single-color icons so they inherit CSS `color` at the callsite.
 
-## Phase 3 — Write to disk (file-first, never inline-only)
+## Phase 3: Write to disk (file-first, never inline-only)
 
 Write the `.svg` to the resolved path. **Never present raw `<svg>` markup as the
-deliverable** — most renderers (IDE previews, glow/mdcat, npm/crates pages, chat)
+deliverable**, because most renderers (IDE previews, glow/mdcat, npm/crates pages, chat)
 strip SVG and dump the `<text>` nodes as garbage (`readme/SKILL.md` §3.3). Hand back
 the file path; reference via `<img src=...>` when embedding in HTML/markdown.
 
-## Phase 4 — Render-check (MANDATORY — the load-bearing phase)
+## Phase 4: Render-check (MANDATORY, the load-bearing phase)
 
 Rasterize with the zero-install path and **read the PNG back and actually look at
-it** (the Read tool renders images) — proportions, colors, whether paths/text land
+it** (the Read tool renders images): proportions, colors, whether paths/text land
 as intended:
 
 ```bash
@@ -111,17 +111,17 @@ Escalate to a browser-fidelity render **when the SVG uses features QuickLook
 mishandles** (CSS `filter`, `foreignObject`, animation, complex gradient meshes) OR
 the qlmanage output looks wrong: open `file://<abs-path>.svg` via the chrome-devtools
 MCP (`new_page` / `navigate_page` + `take_screenshot`) and judge that instead.
-QuickLook is a plugin, not a full SVG engine — a false pass is a real risk, so pick
+QuickLook is a plugin, not a full SVG engine. A false pass is a real risk, so pick
 the browser path whenever advanced features are present. For wide banners with a
 lot of text, headless Chrome is the faster exact check:
 `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --window-size=1280,480 --screenshot=<out>.png file://<abs>.svg`.
 Add `--virtual-time-budget=5000` for animated SVGs, or the capture shows frame zero
 (a fade-in reads as blank).
 
-If it looks wrong, go back to Phase 2 — do not hand off an unverified or
+If it looks wrong, go back to Phase 2. Do not hand off an unverified or
 wrong-looking SVG.
 
-## Phase 5 — Optimize (icons/logos/favicons: default on; illustrations: ask/skip)
+## Phase 5: Optimize (icons/logos/favicons: default on; illustrations: ask/skip)
 
 ```bash
 # svgo via npx can take a few seconds on its first (uncached) run, so cap it.
@@ -129,19 +129,19 @@ timeout 120 npx --yes svgo "<file>.svg" -o "<file>.svg"
 ```
 
 Apply by default for icons/logos/favicons/patterns (byte size matters, geometry is
-simple). **Skip for illustrations/detailed diagrams** — svgo's path-simplification
+simple). **Skip for illustrations/detailed diagrams**, because svgo's path-simplification
 can visibly alter linework or shift text. Report bytes before/after. After optimizing,
-**re-run Phase 4's render-check** — svgo occasionally changes rendering, so an
+**re-run Phase 4's render-check**, because svgo occasionally changes rendering, so an
 optimized file is not verified until re-seen.
 
-## Phase 6 — Iterate / edit-existing
+## Phase 6: Iterate / edit-existing
 
 On a change request (or when handed an existing file): `Read` the SVG, edit the
-markup directly (same native authoring as Phase 2), then **re-run Phase 4** — never
+markup directly (same native authoring as Phase 2), then **re-run Phase 4**, never
 skip verification on the second pass because the first passed. For a pure optimize
 request on an existing file, run Phase 5 then Phase 4.
 
-## Phase 7 — Completion block
+## Phase 7: Completion block
 
 Per GUIDELINES.md:
 
@@ -155,7 +155,7 @@ Errors:          <none | ...>
 
 ## Notes
 
-- **No backend.** Unlike `/generate-image`, `/svg` has no external generator —
+- **No backend.** Unlike `/generate-image`, `/svg` has no external generator
   Claude is the generator. The only command that matters is the render-check
   (`qlmanage -t`). This is deliberate: `readme`'s pixel-art cover already proves
   Claude authors SVG natively; the value here is the verification + optimization
@@ -165,14 +165,14 @@ Errors:          <none | ...>
   `/svg`; photographic/painterly/textured → `/generate-image`.
 - **Preview gallery:** for a set of SVGs, write a small `index.html` with the
   mandatory dark/light toggle (`conventions/html-output.md`) referencing each via
-  `<img>`, served or opened locally — don't inline the markup.
+  `<img>`, served or opened locally. Don't inline the markup.
 - **Post-run:** prepend a runtime-notes entry via
   `~/.claude/skills/shared/prepend-runtime-note.sh` if the run surfaced anything
   reusable (a QuickLook fidelity gotcha, an svgo setting that broke a drawing).
 
 ## See Also
 
-- `~/.claude/conventions/html-output.md` — dark/light toggle for any preview page
-- `~/.claude/conventions/asset-management.md` — where assets go
-- `~/.claude/rules/exercise-based-verification.md` — render-and-look, not parse-and-ship
-- `~/.claude/skills/generate-image/SKILL.md` — the raster companion
+- `~/.claude/conventions/html-output.md`: dark/light toggle for any preview page
+- `~/.claude/conventions/asset-management.md`: where assets go
+- `~/.claude/rules/exercise-based-verification.md`: render-and-look, not parse-and-ship
+- `~/.claude/skills/generate-image/SKILL.md`: the raster companion

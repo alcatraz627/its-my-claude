@@ -9,11 +9,11 @@ context: fork
 
 ## Brief
 
-Answers technical architecture questions by systematically tracing code paths through the codebase — from UI entry points down to backend services, auth middleware, and data stores. Runs in an isolated forked context to avoid polluting the main conversation with hundreds of file reads.
+Answers technical architecture questions by systematically tracing code paths through the codebase, from UI entry points down to backend services, auth middleware, and data stores. Runs in an isolated forked context to avoid polluting the main conversation with hundreds of file reads.
 
 # Architecture Q&A
 
-Answers technical architecture questions by systematically exploring the codebase, tracing code paths, and analyzing implementation patterns. Runs as an autonomous agent (`context: fork`) — all file reads happen in an isolated context, returning a single structured answer.
+Answers technical architecture questions by systematically exploring the codebase, tracing code paths, and analyzing implementation patterns. Runs as an autonomous agent (`context: fork`). All file reads happen in an isolated context, returning a single structured answer.
 
 ## Usage
 
@@ -81,8 +81,8 @@ This skill can answer questions in several categories:
 
 ## Step 0: Load Shared Guidelines
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
-retry logic, tool preferences, verbosity, timeouts, and post-run insights — for the entire
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
+retry logic, tool preferences, verbosity, timeouts, and post-run insights, for the entire
 duration of this skill run.
 
 ## Workflow
@@ -341,4 +341,4 @@ See `reference.md` in this directory for:
 - Use the project index (if available) as a starting reference
 - When explaining flows, think: UI → API → Logic → Data → Response
 - Don't assume - trace the actual code, even if you think you know the pattern
-- **Don't read everything** — focus on the specific question, use line offsets for large files
+- **Don't read everything**: focus on the specific question, use line offsets for large files

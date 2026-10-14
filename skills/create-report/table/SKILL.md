@@ -15,9 +15,9 @@ Converts any tabular data source into a polished, fully interactive HTML table p
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules, forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol, for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -76,7 +76,7 @@ If it does not exist yet, continue without it.
 
 ## Workflow
 
-### Phase 1 — Data Ingestion & Analysis
+### Phase 1: Data Ingestion & Analysis
 
 **Goal:** Produce a normalized `table-data.tmp.json` in the standard input format.
 
@@ -105,7 +105,7 @@ If it does not exist yet, continue without it.
 - Handle: quoted fields with commas, empty values (use empty string `""`), trailing whitespace in headers (trim it).
 - Walk the file and produce `headers: string[]` + `rows: string[][]`.
 
-**JSON files — three possible shapes:**
+**JSON files have three possible shapes:**
 1. **Array of objects:** `[{"name":"Alice","age":30}, ...]`
    → headers = `Object.keys(data[0])`, rows = `data.map(obj => headers.map(h => String(obj[h] ?? '')))`
 2. **Already in standard format:** `{"headers":[...],"rows":[...]}` → use as-is.
@@ -137,7 +137,7 @@ Apply any transformations the instructions request **before** writing the JSON:
 - **Type coercion:** Strip currency symbols, percent signs, commas from number columns.
 - **Date normalization:** Convert inconsistent date formats to ISO 8601.
 
-**Do preprocessing in this step (Phase 1), not via flags** — the generate-table.ts script only handles display, not data transformation.
+**Do preprocessing in this step (Phase 1), not via flags**. The generate-table.ts script only handles display, not data transformation.
 
 #### 1e. Write data JSON
 
@@ -145,7 +145,7 @@ Write the normalized data to `.claude/table-data.tmp.json` using the Write tool.
 
 ---
 
-### Phase 2 — Instruction Mapping
+### Phase 2: Instruction Mapping
 
 **Goal:** Translate the `instructions` argument into a set of CLI flags for `generate-table.ts`.
 
@@ -156,7 +156,7 @@ Read the header comment of the generator script to know what flags are available
 head -120 .claude/skills/create-report/table/generate-table.ts
 ```
 
-This is the authoritative source for available flags. **Always read it before mapping** — the script grows over time and may have flags added since this SKILL.md was written.
+This is the authoritative source for available flags. **Always read it before mapping**. The script grows over time and may have flags added since this SKILL.md was written.
 
 #### 2b. Map instructions to flags
 
@@ -184,7 +184,7 @@ For each instruction, determine the matching flag:
 | "column widths" | `--column-widths '{"Col":"120px"}'` |
 | "truncate long cells at N" | `--max-cell-width "300px"` |
 
-**For column types** — combine the inferred types from Phase 1 with any explicit instructions:
+**For column types**, combine the inferred types from Phase 1 with any explicit instructions:
 - If instructions say "Status is a badge" → override inferred type
 - If instructions say "Amount is currency" → set type `number` and add number format flag
 - Build the `--column-types` JSON object from the merged result
@@ -201,7 +201,7 @@ If no features are missing, skip Phase 3a and go directly to Phase 3b.
 
 ---
 
-### Phase 3a — Script Extension (only if missing features were identified)
+### Phase 3a: Script Extension (only if missing features were identified)
 
 **Goal:** Add the missing feature to `generate-table.ts` without breaking existing features.
 
@@ -217,7 +217,7 @@ If no features are missing, skip Phase 3a and go directly to Phase 3b.
    - Add parsing in `parseArgs()`
    - Implement the rendering in `generateHtml()` or the embedded JS
 
-3. Edit `generate-table.ts` using the Edit tool. Make surgical edits — don't rewrite the whole file. Key insertion points:
+3. Edit `generate-table.ts` using the Edit tool. Make surgical edits. Don't rewrite the whole file. Key insertion points:
    - Header docs: under the `─── FLAGS ───` section
    - TypeScript type: `TableConfig` interface
    - Parsing: `parseArgs()` function
@@ -227,13 +227,13 @@ If no features are missing, skip Phase 3a and go directly to Phase 3b.
    ```bash
    npx tsx --noEmit .claude/skills/create-report/table/generate-table.ts 2>&1 || echo "TYPE_CHECK_ONLY_EXIT"
    ```
-   (This will error on missing args but type-check the source — look for TypeScript errors, not runtime errors.)
+   (This will error on missing args but type-check the source. Look for TypeScript errors, not runtime errors.)
 
 5. Re-read the header comment to confirm the new flag is documented.
 
 ---
 
-### Phase 3b — HTML Generation
+### Phase 3b: HTML Generation
 
 **Goal:** Run `generate-table.ts` with the data JSON and mapped flags to produce the HTML file.
 
@@ -264,7 +264,7 @@ npx tsx .claude/skills/create-report/table/generate-table.ts \
 
 Only include flags that are relevant to the request. Omit flags with no applicable instruction.
 
-#### Retry logic — up to 3 attempts
+#### Retry logic: up to 3 attempts
 
 On each attempt:
 1. Run the command, capturing stdout and stderr.
@@ -291,7 +291,7 @@ rm -f .claude/table-data.tmp.json
 
 ---
 
-### Phase 4 — Verification & Open
+### Phase 4: Verification & Open
 
 1. Confirm the output file exists and is non-empty:
    ```bash
@@ -315,15 +315,15 @@ rm -f .claude/table-data.tmp.json
 
 ## Notes
 
-- **Division of labor:** The agent handles all data parsing, type inference, and instruction mapping. `generate-table.ts` handles all HTML/CSS/JS rendering. Never ask the script to do data transformation — do it in Phase 1.
-- **Script is source-controlled** — it lives at `.claude/skills/create-report/table/generate-table.ts`. Modifications in Phase 3a are permanent improvements that benefit all future invocations.
-- **Always read the flag catalog (Phase 2a) before mapping** — flags may have been added since this SKILL.md was last updated.
-- **JSON flags in shell** — when passing JSON values as flag arguments, use single quotes around the JSON to avoid shell interpretation of braces and quotes: `--highlight-rules '[{"column":"Status","value":"Error","color":"red"}]'`
-- **Column names are case-sensitive** — use exact header values from the data when specifying `--columns`, `--sort-by`, `--column-types`, etc.
-- **Dark theme is the default** — use `--theme light` only when explicitly requested.
-- **Self-contained output** — the generated HTML has no external dependencies. It can be emailed, shared, or opened offline.
+- **Division of labor:** The agent handles all data parsing, type inference, and instruction mapping. `generate-table.ts` handles all HTML/CSS/JS rendering. Never ask the script to do data transformation. Do it in Phase 1.
+- **Script is source-controlled**: it lives at `.claude/skills/create-report/table/generate-table.ts`. Modifications in Phase 3a are permanent improvements that benefit all future invocations.
+- **Always read the flag catalog (Phase 2a) before mapping**, because flags may have been added since this SKILL.md was last updated.
+- **JSON flags in shell**: when passing JSON values as flag arguments, use single quotes around the JSON to avoid shell interpretation of braces and quotes: `--highlight-rules '[{"column":"Status","value":"Error","color":"red"}]'`
+- **Column names are case-sensitive**: use exact header values from the data when specifying `--columns`, `--sort-by`, `--column-types`, etc.
+- **Dark theme is the default**: use `--theme light` only when explicitly requested.
+- **Self-contained output**: the generated HTML has no external dependencies. It can be emailed, shared, or opened offline.
 
 ## Related Skills
 
-- `/create-report` — Generates structured HTML reports from markdown (different purpose: narrative reports vs. data tables)
+- `/create-report`: Generates structured HTML reports from markdown (different purpose: narrative reports vs. data tables)
 - any markdown source, then `/create-report`, then `/create-report:table`: a data documentation pipeline. The old first stage, `/project-index`, is parked

@@ -1,6 +1,6 @@
 ---
 name: readme
-description: Scans a git repo's structure, docs, package metadata, and prior skill reports — generates a polished README.md with GitHub-style badges, a pixel-art cover image, a quick-start guide, and a linked documentation index. Writes intermediate repo data to the global scratchpad for inter-skill handoff.
+description: Scans a git repo's structure, docs, package metadata, and prior skill reports, then generates a polished README.md with GitHub-style badges, a pixel-art cover image, a quick-start guide, and a linked documentation index. Writes intermediate repo data to the global scratchpad for inter-skill handoff.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
 user-invocable: true
 argument-hint: "[output-path]"
@@ -9,16 +9,16 @@ argument-hint: "[output-path]"
 ## Brief
 
 Generates a production-quality `README.md` for any git repository. Reads package metadata,
-git history, CI config, existing docs, and previously generated skill outputs — producing a
+git history, CI config, existing docs, and previously generated skill outputs, producing a
 human-friendly entry point with badges, a pixel-art cover image, and a getting-started guide.
 Writes collected repo data to the global scratchpad so future `/git-repo` or `/readme` re-runs
 can skip Phase 1 entirely.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md`. Apply all rules — forbidden paths, retry logic,
-tool preferences, verbosity, timeouts, post-run insights, and the **file lock protocol**
-— for the entire duration of this skill run before proceeding.
+Read `.claude/skills/GUIDELINES.md`. Apply all rules, forbidden paths, retry logic,
+tool preferences, verbosity, timeouts, post-run insights, and the **file lock protocol**,
+for the entire duration of this skill run before proceeding.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -41,11 +41,11 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Repository Reconnaissance
+## Phase 1: Repository Reconnaissance
 
 **Goal:** Collect all raw material needed to write the README without guessing.
 
-### 1.1 — Pre-flight checks
+### 1.1: Pre-flight checks
 
 **Source gum-tui.sh and verify gum is available:**
 
@@ -56,7 +56,7 @@ source ~/.claude/skills/shared/gum-tui.sh
 If gum is not installed, the sourcing will print an install hint and abort. All terminal
 status output throughout this skill (progress lines, warnings, the completion block) MUST
 use gum-tui.sh functions (`gum_info`, `gum_warn`, `gum_success`, `gum_progress`,
-`gum_complete`) — never hand-craft status boxes or ASCII borders.
+`gum_complete`), never hand-craft status boxes or ASCII borders.
 
 **Confirm repo root:**
 
@@ -72,11 +72,11 @@ before doing any scanning work:
 gum confirm "<output-path> already exists — overwrite it?"
 ```
 
-If the user declines, stop immediately and report — do not proceed with Phase 1 scanning.
+If the user declines, stop immediately and report. Do not proceed with Phase 1 scanning.
 If accepted, continue. Record `OVERWRITE_CONFIRMED=true` so Phase 3.1 knows to skip
 re-prompting.
 
-### 1.2 — Package metadata
+### 1.2: Package metadata
 
 Read whichever manifest files exist (check in this order):
 
@@ -90,7 +90,7 @@ Read whichever manifest files exist (check in this order):
 
 If none exist, note "no manifest found" and fall back to git metadata only.
 
-### 1.3 — Git metadata
+### 1.3: Git metadata
 
 Run these commands and record output:
 
@@ -109,7 +109,7 @@ local fallback.
 Derive the repo slug from the remote URL: `owner/repo-name` (used as the scratchpad key).
 If no remote, this is deferred to Phase 2.2.
 
-### 1.4 — CI and tooling detection
+### 1.4: CI and tooling detection
 
 Glob for CI config files:
 
@@ -121,11 +121,11 @@ Jenkinsfile
 .gitlab-ci.yml
 ```
 
-For each found, note the CI provider — this determines which badge URL pattern to use.
+For each found, note the CI provider. This determines which badge URL pattern to use.
 
 Also check for: `Dockerfile`, `docker-compose.yml`, `Makefile`, `.nvmrc`, `.tool-versions`.
 
-### 1.5 — Existing documentation inventory
+### 1.5: Existing documentation inventory
 
 Glob for all markdown files excluding `node_modules/`, `dist/`, `.next/`, `build/`:
 
@@ -139,36 +139,36 @@ wiki/**/*
 Collect file paths, titles (first `# Heading` in each file), and file sizes. Exclude
 `README.md` itself (that's what we're generating).
 
-### 1.6 — Prior skill output scan
+### 1.6: Prior skill output scan
 
-Check `.claude/` for previously generated skill outputs — these contain already-derived
+Check `.claude/` for previously generated skill outputs. These contain already-derived
 insights that are more reliable than re-scanning:
 
 - `.claude/project-index.md`: architecture, directory structure, key files. Present only in projects that ran the now-parked `/project-index`; skip when absent
-- `.claude/output/` — any HTML reports from `/create-report` runs
-- `_*.claude.md` files in the repo root — arch-qa or other context hand-offs
+- `.claude/output/`: any HTML reports from `/create-report` runs
+- `_*.claude.md` files in the repo root, arch-qa or other context hand-offs
 
 Read any that exist and extract: project description, key components, tech stack, notable
 patterns. Log which files were read and what was extracted.
 
 ---
 
-## Phase 2 — Doc Summarization + Scratchpad
+## Phase 2: Doc Summarization + Scratchpad
 
 **Goal:** Summarize all found docs and persist all collected data for future agents.
 
-### 2.1 — Summarize docs
+### 2.1: Summarize docs
 
 For each doc file found in Phase 1.5:
 
-- Read the file (skip if >200KB — note it as "too large to summarize")
+- Read the file (skip if >200KB, note it as "too large to summarize")
 - Generate a 1–2 sentence summary: what the doc covers, who it's for
 - Record: relative path, title, summary, size
 
-For repos with **more than 6 doc files**, use a `Task` agent to parallelize summarization —
+For repos with **more than 6 doc files**, use a `Task` agent to parallelize summarization
 split the list into batches of 5 and run concurrently.
 
-### 2.2 — Write global scratchpad entry
+### 2.2: Write global scratchpad entry
 
 Compute the scratchpad path:
 
@@ -230,16 +230,16 @@ Acquire the lock before writing (`lock-file.sh acquire`), write, release immedia
 
 ---
 
-## Phase 3 — README Assembly
+## Phase 3: README Assembly
 
 **Goal:** Assemble all collected data into a well-structured, visually polished README.
 
-### 3.1 — Overwrite confirmation (already handled)
+### 3.1: Overwrite confirmation (already handled)
 
 Overwrite permission was obtained in Phase 1.1. If `OVERWRITE_CONFIRMED=true`, proceed
-directly to badge assembly. No second prompt — do not ask again.
+directly to badge assembly. No second prompt. Do not ask again.
 
-### 3.2 — Build badge URLs
+### 3.2: Build badge URLs
 
 Construct shields.io badge markdown for each detected source. Use the scratchpad inventory
 from Phase 2. Common patterns:
@@ -270,9 +270,9 @@ from Phase 2. Common patterns:
 ![Issues](https://img.shields.io/github/issues/<owner>/<repo>)
 ```
 
-Only include badges with real data — never emit a badge with a placeholder value like `N/A`.
+Only include badges with real data. Never emit a badge with a placeholder value like `N/A`.
 
-### 3.3 — Generate pixel-art cover SVG
+### 3.3: Generate pixel-art cover SVG
 
 Create a small inline SVG (64×64 viewBox, 8×8 grid of 8px cells) as the cover image.
 The design should loosely reflect the project type:
@@ -290,12 +290,12 @@ Color the SVG using 2-3 colors derived from the project's language or CI badge c
 Keep the SVG self-contained (no external refs).
 
 > ⚠️ **Write the SVG to a file** (e.g. `assets/cover.svg`) and reference it via
-> `<img src="assets/cover.svg" ...>` — **do not paste raw `<svg>` markup into the README**.
+> `<img src="assets/cover.svg" ...>`, and **do not paste raw `<svg>` markup into the README**.
 > GitHub.com renders inline SVG, but most other markdown renderers (IDE previews, terminal
 > viewers like glow/mdcat, AI assistants, npm/crates pages) strip the SVG and dump the
-> `<text>` nodes as plain text — producing an unreadable wall of words. Always go file-first.
+> `<text>` nodes as plain text, producing an unreadable wall of words. Always go file-first.
 
-Example skeleton — write SVG to `assets/cover.svg`:
+Example skeleton (write the SVG to `assets/cover.svg`):
 
 ```xml
 <!-- assets/cover.svg -->
@@ -314,7 +314,7 @@ Then reference it from the README:
 </div>
 ```
 
-### 3.4 — Write README sections
+### 3.4: Write README sections
 
 Write the complete README in this order:
 
@@ -384,11 +384,11 @@ Acquire lock before writing. Write to `output-path` (default: `./README.md`). Re
 
 ---
 
-## Phase 4 — Verification + Preview
+## Phase 4: Verification + Preview
 
 **Goal:** Confirm correctness, cross-check against scratchpad, preview, and offer HTML export.
 
-### 4.1 — Scratchpad cross-check
+### 4.1: Scratchpad cross-check
 
 Re-read the scratchpad entry written in Phase 2. Verify:
 
@@ -399,7 +399,7 @@ Re-read the scratchpad entry written in Phase 2. Verify:
 
 Report any discrepancies found. If a doc is missing from the README, offer to add it.
 
-### 4.2 — Link validation
+### 4.2: Link validation
 
 For every relative link in the README (doc paths, CONTRIBUTING.md, LICENSE), run:
 
@@ -409,7 +409,7 @@ test -f "<resolved-path>" && echo "OK: <path>" || echo "BROKEN: <path>"
 
 Report any broken links.
 
-### 4.3 — Open in viewer
+### 4.3: Open in viewer
 
 ```bash
 open <output-path>
@@ -417,7 +417,7 @@ open <output-path>
 
 This opens the README in the system default handler (typically a Markdown viewer or browser).
 
-### 4.4 — Offer HTML report
+### 4.4: Offer HTML report
 
 Ask the user if they want to generate an HTML version via `/create-report`:
 
@@ -439,13 +439,13 @@ Then invoke:
 
 ---
 
-## Phase 5 — Post-Run Insights
+## Phase 5: Post-Run Insights
 
 **Goal:** Log what was learned and print the completion block.
 
-### 5.1 — Generate insights
+### 5.1: Generate insights
 
-Produce 2–6 concrete observations from this run — things that would make a future `/readme`
+Produce 2–6 concrete observations from this run, things that would make a future `/readme`
 run faster or more accurate. Examples:
 
 - Which manifest file had the most useful metadata
@@ -454,7 +454,7 @@ run faster or more accurate. Examples:
 - Whether the scratchpad already existed and was reused (Phase 1 skipped)
 - Badge sources that were detected but couldn't produce a valid URL
 
-### 5.2 — Write runtime note
+### 5.2: Write runtime note
 
 ```bash
 cat > /tmp/runtime-note-entry.md << 'ENTRY'
@@ -474,7 +474,7 @@ ENTRY
 bash ~/.claude/skills/shared/prepend-runtime-note.sh "readme" /tmp/runtime-note-entry.md
 ```
 
-### 5.3 — Print completion block
+### 5.3: Print completion block
 
 Use `gum_complete` from gum-tui.sh:
 
@@ -537,8 +537,8 @@ workflow, and 3 docs. No `README.md` exists.
 
 ## Notes
 
-- **Overwrite guard:** Always confirm before overwriting an existing README — never silently clobber.
+- **Overwrite guard:** Always confirm before overwriting an existing README. Never silently clobber.
 - **Pixel art is a placeholder:** The SVG cover is intentional placeholders; users can swap it for a real image later. Never attempt to fetch or embed external images.
-- **Scratchpad key:** The global scratchpad file is keyed to the repo slug (e.g., `readme-owner-repo.md`). This is the intended handoff surface for the future `/git-repo` skill — it can read this file instead of re-running Phase 1.
+- **Scratchpad key:** The global scratchpad file is keyed to the repo slug (e.g., `readme-owner-repo.md`). This is the intended handoff surface for the future `/git-repo` skill. It can read this file instead of re-running Phase 1.
 - **`/git-repo` integration:** This skill is designed to be callable as a step within `/git-repo`. When invoked that way, pass the `output-path` argument to avoid prompting for the location.
-- **No external image fetches:** All badge URLs are shields.io pattern strings — they are not fetched at generation time. The SVG cover is inline. The README is fully portable offline.
+- **No external image fetches:** All badge URLs are shields.io pattern strings. They are not fetched at generation time. The SVG cover is inline. The README is fully portable offline.

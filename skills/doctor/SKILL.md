@@ -3,7 +3,7 @@ name: doctor
 description: User asks what is wrong or reports flaky hooks or MCP. Checks worktrees, pm2, disk, WAL, git and hook logs. Not for debugging application code.
 ---
 
-# Doctor — Environment Health Check
+# Doctor: Environment Health Check
 
 Wraps `~/.claude/scripts/health-check.sh` (which already runs silently at SessionStart)
 and adds on-demand extended diagnostics that would be too noisy to emit on every session.
@@ -33,7 +33,7 @@ and adds on-demand extended diagnostics that would be too noisy to emit on every
 
 ---
 
-## Step 0: Init — source gum and print header
+## Step 0: Init (source gum and print header)
 
 Always run this first so gum helpers are available to all subsequent steps.
 
@@ -98,10 +98,10 @@ done
 
 ## Step 2: Event log health
 
-This step is the richest health signal — it tells you whether hooks are firing,
+This step is the richest health signal. It tells you whether hooks are firing,
 what's been active in the last 24h, and shows the most recent 10 events inline.
 
-**Note:** Use `jq` for the "today" check — do NOT use `grep` (the `ugrep` alias on macOS
+**Note:** Use `jq` for the "today" check. Do NOT use `grep` (the `ugrep` alias on macOS
 does not match POSIX grep flags and will fail silently, returning a false-positive zero count).
 
 ```bash
@@ -197,7 +197,7 @@ fi
 Parse `~/.claude/settings.json` hook commands; for each script path found, verify it
 exists and is executable. Flag broken ones.
 
-**Note:** Use `/usr/bin/grep` explicitly — the `ugrep` alias breaks `-oE` flag parsing.
+**Note:** Use `/usr/bin/grep` explicitly. The `ugrep` alias breaks `-oE` flag parsing.
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
@@ -229,7 +229,7 @@ fi
 
 ## Step 3.5: Hook health (last 7d)
 
-Step 3 checks that hook scripts *exist*; this checks how they're *landing* — a
+Step 3 checks that hook scripts *exist*; this checks how they're *landing*. It is a
 3-line read from the fire telemetry (`ledger/hook-health.sh`). A gate that is muted
 but still firing is the signal worth surfacing here.
 
@@ -254,7 +254,7 @@ fi
 ```
 
 **What to look for:**
-- **A hook with a huge fire count** → it may be noisy (a hint firing on every prompt) — drill in with `hook-health.sh --hook <id>`
+- **A hook with a huge fire count** → it may be noisy (a hint firing on every prompt). Drill in with `hook-health.sh --hook <id>`
 - **MUTED but still firing** → the mute file is present yet the gate keeps tripping; either the mute is stale or the gate ignores it
 
 ---
@@ -282,7 +282,7 @@ done
 
 ## Step 5: Backup retention preview
 
-Runs `prune-backups.sh --preview` (read-only — never deletes). Lists candidates older
+Runs `prune-backups.sh --preview` (read-only, never deletes). Lists candidates older
 than `BACKUP_RETENTION_DAYS` (default 180d) so the user can decide.
 
 ```bash
@@ -305,7 +305,7 @@ fi
 
 Read-only view of the event-ledger alert layer (refreshed daily by the
 `ledger-evaluate` cron at 03:15). Shows firing detectors, their latest actionable
-instruction, and any detector-lint findings — a *misconfigured* detector is a
+instruction, and any detector-lint findings. A *misconfigured* detector is a
 silent-failure risk, so surfacing it here is load-bearing.
 
 ```bash
@@ -341,7 +341,7 @@ fi
 
 ### 5.8 Port discipline (three-tier policy, migration 0029)
 
-Surface what `ports.sh scan` flags — untracked listeners and expired one-offs
+Surface what `ports.sh scan` flags, untracked listeners and expired one-offs
 are exactly the "losing track of what is where" failure the policy exists for:
 
 ```bash
@@ -359,7 +359,7 @@ fi
 
 ### 5.9 i-dream pipeline health (nightly jobs fail silently otherwise)
 
-The nightly i-dream jobs can die with zero log output — a binary replaced
+The nightly i-dream jobs can die with zero log output. A binary replaced
 in place invalidates its Mach-O signature cache and launchd's next spawn is
 SIGKILLed (OS_REASON_CODESIGNING) or exits 78/EX_CONFIG before writing a
 byte (2026-07-12 incident: audit + daily + dreampass all lost). launchctl's
@@ -447,17 +447,17 @@ gum_complete "doctor" \
 
 ## Notes
 
-- This skill is **strictly read-only** — it never mutates config, never restarts processes, never deletes files.
+- This skill is **strictly read-only**: it never mutates config, never restarts processes, never deletes files.
 - If a check reveals something fixable (stale WAL, errored pm2, missing script), suggest the fix but do not apply it.
 - Quick turnaround: target <2s total. Skip expensive checks (network, full git log) by design.
 - **grep alias hazard:** macOS ships with `ugrep` aliased as `grep` in some shells. All grep calls in this skill use `/usr/bin/grep` or are replaced by `jq` to avoid this.
-- Complements SessionStart — that fires passively and quietly; `/doctor` is the loud, on-demand variant.
+- Complements SessionStart: that fires passively and quietly; `/doctor` is the loud, on-demand variant.
 
 ## Related
 
-- `~/.claude/scripts/health-check.sh` — the underlying SessionStart check
-- `~/.claude/scripts/find-events-log.sh` — event log path resolver
-- `~/.claude/scripts/rotation/prune-backups.sh` — backup retention helper (Step 5 above)
-- `~/.claude/scripts/validate-memory.sh` — deep-check memory for stale file references. Not run by default (scans every `memory/*.md`); run manually when auditing memory rot: `bash ~/.claude/scripts/validate-memory.sh`
-- `~/.claude/scripts/propose.sh` — file a proposal for any improvement `/doctor` reveals but cannot fix
+- `~/.claude/scripts/health-check.sh`: the underlying SessionStart check
+- `~/.claude/scripts/find-events-log.sh`: event log path resolver
+- `~/.claude/scripts/rotation/prune-backups.sh`: backup retention helper (Step 5 above)
+- `~/.claude/scripts/validate-memory.sh`: deep-check memory for stale file references. Not run by default (scans every `memory/*.md`); run manually when auditing memory rot: `bash ~/.claude/scripts/validate-memory.sh`
+- `~/.claude/scripts/propose.sh`: file a proposal for any improvement `/doctor` reveals but cannot fix
 - `/revive` (full rehydration) or `/catchup` (checkpoint briefing) for prior sessions. `/past-sessions` is parked

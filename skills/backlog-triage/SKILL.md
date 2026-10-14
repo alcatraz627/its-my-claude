@@ -8,7 +8,7 @@ user-invocable: true
 
 ## Brief
 
-The improvement loop captures and ranks on its own (contribution phases file proposals, `gcc-signal-capture` auto-stubs, `backlog-consolidate.py` clusters and gates them weekly). This skill is the **human decision step** — the only thing that moves a backlog item out of "open". It surfaces the triaged PROMOTE candidates and stale DROP-REVIEW items, and for each you decide: act on it now, hand it off, or reject it. Nothing here is automatic; the corroboration gate already filtered out the noise, so this list is short by design.
+The improvement loop captures and ranks on its own (contribution phases file proposals, `gcc-signal-capture` auto-stubs, `backlog-consolidate.py` clusters and gates them weekly). This skill is the **human decision step**, the only thing that moves a backlog item out of "open". It surfaces the triaged PROMOTE candidates and stale DROP-REVIEW items, and for each you decide: act on it now, hand it off, or reject it. Nothing here is automatic; the corroboration gate already filtered out the noise, so this list is short by design.
 
 ## Phase 0: Load the latest triage
 
@@ -23,10 +23,10 @@ The triage file is a derived view; the store is `proposals.jsonl`. One command p
 
 Show, in order:
 
-1. **PROMOTE candidates** — each with title, `value`, `corroboration`, linked residue, and proposal `ids`. These cleared the anti-churn gate (corroboration ≥ 2, or atone S3, or recurrence ≥ 3).
-2. **DROP-REVIEW** — items open > 45 days with no corroboration. Candidates to reject and clear.
+1. **PROMOTE candidates**: each with title, `value`, `corroboration`, linked residue, and proposal `ids`. These cleared the anti-churn gate (corroboration ≥ 2, or atone S3, or recurrence ≥ 3).
+2. **DROP-REVIEW**: items open > 45 days with no corroboration. Candidates to reject and clear.
 
-If PROMOTE is empty, say so plainly (the gate promoted nothing — that is the normal, correct state when corroboration has not accrued) and offer to show the WATCH list or the stale DROP-REVIEW items. Do not invent work.
+If PROMOTE is empty, say so plainly (the gate promoted nothing, which is the normal, correct state when corroboration has not accrued) and offer to show the WATCH list or the stale DROP-REVIEW items. Do not invent work.
 
 ## Phase 2: Decide, on ONE decision page
 
@@ -40,7 +40,7 @@ Apply the returned answer string in Phase 3. An empty PROMOTE and DROP-REVIEW se
 
 ## Phase 3: Apply (the only state change)
 
-For each decision, mutate the canonical store — never edit `proposals.jsonl` by hand:
+For each decision, mutate the canonical store. Never edit `proposals.jsonl` by hand:
 
 ```bash
 # Rejected (dropped): record the reason so the audit trail explains the close.
@@ -60,6 +60,6 @@ Print a one-line summary: how many promoted-and-done, promoted-and-deferred (ids
 
 ## Notes
 
-- **The gate already did the filtering.** If this list feels long, the corroboration bar may be too low — that is a `backlog-consolidate.py` tuning question, not a reason to rush decisions here.
+- **The gate already did the filtering.** If this list feels long, the corroboration bar may be too low. That is a `backlog-consolidate.py` tuning question, not a reason to rush decisions here.
 - **Never auto-apply.** Even a PROMOTE candidate is a human call. The skill mutates status only on explicit selection.
-- **Cross-links are evidence.** An item's `links:` (atone slug, dream id, other proposals) show why it surfaced — read them before deciding, especially for atone-S3-linked items (a serious mistake pattern wants a real fix).
+- **Cross-links are evidence.** An item's `links:` (atone slug, dream id, other proposals) show why it surfaced. Read them before deciding, especially for atone-S3-linked items (a serious mistake pattern wants a real fix).
