@@ -56,8 +56,10 @@ boundary=$(printf '%s\n' "$window" | jq -rc '
        or (.message.content|type=="array" and (any(.[]?; .type=="text"))) ))
   | input_line_number' 2>/dev/null | tail -n 1)
 turn_json="$window"; [ -n "$boundary" ] && turn_json=$(printf '%s\n' "$window" | tail -n +"$boundary")
-claim_text=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1 \
-  | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || exit 0
+# The claim is the Stop input's last_assistant_message (the transcript tail lags one
+# message at Stop time, see hook_last_assistant_text in hook-common.sh).
+claim_text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$claim_text" ] || exit 0
 printf '%s' "$claim_text" | rg -qi '\b(done|fixed|complete|completed|ready|shipped|verified|works now|looks good)\b' || exit 0
 

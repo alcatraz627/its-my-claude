@@ -19,7 +19,9 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty')
 [ -n "$tp" ] && [ -f "$tp" ] && [ -n "$cwd" ] || exit 0
 
-last=$(tail -n 400 "$tp" | jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text' 2>/dev/null | rg -o '^\s*/goal .*' | tail -1 | sed 's/^[[:space:]]*\/goal //')
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || exit 0
+# Judge the reply just sent (Stop input), not the lagging transcript tail.
+last=$(hook_last_assistant_text "$input" "$tp" | rg -o '^\s*/goal .*' | tail -1 | sed 's/^[[:space:]]*\/goal //')
 goal="$last"; kind="proposed"
 if [ -z "$goal" ]; then
   goal=$(bash "$HOME/.claude/scripts/goal/goal.sh" harness --sid "$sid" 2>/dev/null | jq -r 'select(.armed == true) | .text // empty' 2>/dev/null)

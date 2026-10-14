@@ -108,9 +108,10 @@ fi
 [ -n "$turn_json" ] || exit 0
 
 # ── Final assistant message text — the claim lives here.
-last_asst=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1)
-[ -n "$last_asst" ] || exit 0
-text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+# Taken from the Stop input's last_assistant_message, because the transcript tail
+# lags one message at Stop time (hook_last_assistant_text in hook-common.sh).
+# turn_json stays the source of tool evidence only.
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 
 # ── Regexes — TWO paths, tuned on a corpus replay (see ship-gate note) ────────

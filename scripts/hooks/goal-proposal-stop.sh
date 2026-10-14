@@ -19,11 +19,18 @@ command -v jq >/dev/null 2>&1 || exit 0
 [ "$(printf '%s' "$input" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty'); sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 [ -n "$tp" ] && [ -f "$tp" ] || exit 0
-last=$(tail -n 400 "$tp" | jq -c 'select(.type=="assistant")' 2>/dev/null | tail -1)
-[ -n "$last" ] || exit 0
-has_tool=$(printf '%s' "$last" | jq -r '[.message.content[]? | select(.type=="tool_use")] | length')
-[ "${has_tool:-0}" -eq 0 ] || exit 0
-text=$(printf '%s' "$last" | jq -r '.message.content[]? | select(.type=="text") | .text')
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || exit 0
+# The reply is the Stop input's last_assistant_message (the transcript tail lags one
+# message at Stop time). A Stop fires on a message with no tool call, so when the
+# input carries the reply there is no tool call to look for; the transcript record
+# is only consulted for the fallback.
+text=$(hook_last_assistant_text "$input" "$tp")
+[ -n "$text" ] || exit 0
+if [ -z "$(printf '%s' "$input" | jq -r '.last_assistant_message // empty')" ]; then
+  last=$(tail -n 400 "$tp" | jq -c 'select(.type=="assistant")' 2>/dev/null | tail -1)
+  has_tool=$(printf '%s' "$last" | jq -r '[.message.content[]? | select(.type=="tool_use")] | length')
+  [ "${has_tool:-0}" -eq 0 ] || exit 0
+fi
 printf '%s' "$text" | rg -q '^\s*/goal ' || exit 0
 printf '%s' "$text" | rg -qi 'Which pending item|/catchup|checkpoint|core-dump|Resume with' && exit 0
 h=$(printf '%s' "$text" | shasum | cut -c1-12)

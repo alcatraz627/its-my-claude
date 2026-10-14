@@ -29,4 +29,17 @@ mk "$ROOT/c.jsonl" $'Briefing done.\n\n/goal The thing is built.\n\nWhich pendin
 out=$(run "$ROOT/c.jsonl"); [ -z "$out" ] && ok "a catchup hand-off passes" || bad "blocked a hand-off"
 mk "$ROOT/d.jsonl" $'All done here, nothing proposed.'
 out=$(run "$ROOT/d.jsonl"); [ -z "$out" ] && ok "a turn with no proposal passes" || bad "blocked a plain turn"
+
+# Lag regression: the reply judged is the Stop input's last_assistant_message,
+# never the one-message-stale transcript tail.
+runlam(){ printf '{"transcript_path":"%s","session_id":"%s","stop_hook_active":false,"last_assistant_message":%s}' "$1" "$sid" "$(printf '%s' "$2" | jq -Rs .)" | bash "$H"; }
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+mk "$ROOT/clean-tail.jsonl" $'Previous reply, nothing proposed.'
+out=$(runlam "$ROOT/clean-tail.jsonl" $'Now arm this.\n\n/goal The thing is built.\n')
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "current reply proposes, clean tail: blocks" || bad "lag: current bad, clean tail not blocked: $out"
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+mk "$ROOT/bad-tail.jsonl" $'/goal The thing is built.\n'
+out=$(runlam "$ROOT/bad-tail.jsonl" 'Plain reply, nothing proposed.')
+[ -z "$out" ] && ok "current reply clean, proposing tail: silent" || bad "lag: current clean, bad tail blocked: $out"
+
 echo "---- pass=$pass fail=$fail"; [ "$fail" -eq 0 ]

@@ -19,8 +19,12 @@ command -v jq >/dev/null 2>&1 || exit 0
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty'); tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty')
 [ -n "$sid" ] && [ -f "$tp" ] || exit 0
 sid8="${sid:0:8}"
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || exit 0
 tj=$(tail -n 600 "$tp" 2>/dev/null) || exit 0
-text=$(printf '%s\n' "$tj" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -1 | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+# The reply is the Stop input's last_assistant_message: the transcript tail lags one
+# message at Stop time (hook_last_assistant_text in hook-common.sh). The prompt still
+# comes from the transcript, where the user's message is already flushed.
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 prompt=$(printf '%s\n' "$tj" | jq -rc 'select(.type=="user")' 2>/dev/null | tail -1 | jq -r 'if (.message.content|type)=="string" then .message.content else (.message.content[]? | select(.type=="text") | .text) end' 2>/dev/null | head -c 2000)
 rchars=$(printf '%s' "$text" | wc -c | tr -d ' ')

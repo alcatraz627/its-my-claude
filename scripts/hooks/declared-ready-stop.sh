@@ -113,9 +113,11 @@ fi
 [ -n "$turn_json" ] || exit 0
 
 # ── Detection 1: does the FINAL assistant message claim success? ──────────────
-last_asst=$(printf '%s\n' "$turn_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1)
-[ -n "$last_asst" ] || exit 0
-claim_text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+#
+# The reply text comes from the Stop input's last_assistant_message (the transcript
+# tail lags one message at Stop time, see hook_last_assistant_text in hook-common.sh).
+# turn_json stays the source of tool evidence only.
+claim_text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$claim_text" ] || exit 0
 
 # ── Stage P: a verdict about REPO STATE, asserted without re-reading it ───────
