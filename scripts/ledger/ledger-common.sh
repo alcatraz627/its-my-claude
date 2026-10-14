@@ -59,21 +59,33 @@ ledger_id() {
 # Append works even when the store is kernel-sealed with `chflags uappnd` — that
 # is the whole point of the append-only seal.
 #   ledger_append <store-path> <lock-path> <line>
-ledger_append() {
-  local store="$1" lock="$2" line="$3"
+#
+# ledger_append_checked is the same write but tells the caller when it failed:
+# it returns non-zero and says so on stderr, so a writer that prints a receipt
+# ("recorded", "filed") can refuse to print it for an event that never landed.
+# A sandbox that denies the append used to read as success because the status
+# was thrown away. ledger_append keeps the old best-effort contract for hooks
+# and logs that must never fail: it reports on stderr but always returns 0.
+ledger_append_checked() {
+  local store="$1" lock="$2" line="$3" rc=0
   if command -v flock >/dev/null 2>&1; then
-    ( flock -x 9 2>/dev/null || true; printf '%s\n' "$line" >> "$store"; ) 9>>"$lock"
-    return 0
+    ( flock -x 9 2>/dev/null || true; printf '%s\n' "$line" >> "$store"; ) 9>>"$lock" || rc=$?
+  else
+    local dirlock="${lock}.d" i=0 held=0
+    while ! mkdir "$dirlock" 2>/dev/null; do
+      i=$((i + 1))
+      if [ "$i" -ge 20 ]; then break; fi   # gave up: write unlocked rather than hang
+      sleep 0.1
+    done
+    [ "$i" -lt 20 ] && held=1
+    printf '%s\n' "$line" >> "$store" || rc=$?
+    [ "$held" = 1 ] && rmdir "$dirlock" 2>/dev/null
   fi
-  local dirlock="${lock}.d" i=0 held=0
-  while ! mkdir "$dirlock" 2>/dev/null; do
-    i=$((i + 1))
-    if [ "$i" -ge 20 ]; then break; fi   # gave up: write unlocked rather than hang
-    sleep 0.1
-  done
-  [ "$i" -lt 20 ] && held=1
-  printf '%s\n' "$line" >> "$store"
-  [ "$held" = 1 ] && rmdir "$dirlock" 2>/dev/null
+  [ "$rc" -eq 0 ] || echo "ledger_append: could not append to $store (exit $rc); nothing was recorded" >&2
+  return "$rc"
+}
+ledger_append() {
+  ledger_append_checked "$@" || true
   return 0
 }
 
@@ -115,6 +127,17 @@ ledger_seal_immutable() {
       chmod 0444 "$f" 2>/dev/null || true
     fi
   done
+}
+
+# ─── retention ───────────────────────────────────────────────────
+
+# Show (default) or run the retention policy for every ledger: old lines move to a
+# compressed archive, the live file is swapped in by rename, nothing is deleted.
+# The policy lives in ledger-retention.json beside ledger-prune.py. A dry run
+# unless the first argument is `apply`.
+#   ledger_prune [plan|apply|discover] [ledger-prune.py options]
+ledger_prune() {
+  python3 "$(dirname "${BASH_SOURCE[0]}")/ledger-prune.py" "$@"
 }
 
 # ─── jq helpers ──────────────────────────────────────────────────

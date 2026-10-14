@@ -106,9 +106,60 @@ out=$(HOME="$SB2" bash "$R" --as-session "$FSID" --explain 2>/tmp/rs-fresh-err);
 [ "$rc" = 0 ] && [ "$(basename "${out:-}")" = "session-fx000001" ] \
   && ok "seeded session resolves cold to the matching store" \
   || bad "seeded cold resolve failed (rc=$rc out=${out:-none})"
-grep -q 'content-match' /tmp/rs-fresh-err 2>/dev/null \
-  && ok "--explain reports the fresh match" \
-  || bad "--explain silent on a fresh match; python stderr is being swallowed"
+grep -q 'task-assertion' /tmp/rs-fresh-err 2>/dev/null \
+  && ok "--explain reports the task assertion (the preferred rung)" \
+  || bad "--explain silent on a fresh resolve; python stderr is being swallowed"
+
+echo "== the content match still answers when the session created nothing itself =="
+# Same stores, but the transcript only ECHOES the subjects (a tool_result line),
+# which is not a TaskCreate assertion, so the old inference has to carry it.
+FSID2=88888888-7777-6666-5555-444444444444
+{
+  printf '{"type":"user","timestamp":"2026-08-20T00:00:00Z","message":{"role":"user","content":"work the list"}}\n'
+  for subj in "wire the census exporter to the new schema" \
+              "backfill the delivery ledger for July"; do
+    printf '{"type":"user","timestamp":"2026-08-20T00:00:01Z","message":{"role":"user","content":[{"type":"tool_result","content":"listing"}]},"toolUseResult":{"task":{"subject":"%s"}}}\n' "$subj"
+  done
+} > "$FTDIR/$FSID2.jsonl"
+out=$(HOME="$SB2" bash "$R" --as-session "$FSID2" --explain 2>/tmp/rs-cm-err); rc=$?
+[ "$rc" = 0 ] && [ "$(basename "${out:-}")" = "session-fx000001" ] \
+  && ok "echoed subjects still content-match to the store" \
+  || bad "content-match fallback broke (rc=$rc out=${out:-none})"
+grep -q 'content-match' /tmp/rs-cm-err 2>/dev/null \
+  && ok "--explain names the content-match" || bad "--explain did not name the content-match"
+rm -f /tmp/rs-cm-err
+
+echo "== a lone TaskCreate asserts the store where the content match would refuse =="
+# One created subject is below the content match's two-subject floor, so before
+# the assertion rung this session could not be resolved at all.
+FSID3=77777777-6666-5555-4444-333333333333
+printf '{"type":"assistant","timestamp":"2026-08-20T00:00:01Z","message":{"role":"assistant","content":[{"type":"tool_use","name":"TaskCreate","input":{"subject":"backfill the delivery ledger for July"}}]}}\n' > "$FTDIR/$FSID3.jsonl"
+out=$(HOME="$SB2" bash "$R" --as-session "$FSID3" 2>/dev/null); rc=$?
+[ "$rc" = 0 ] && [ "$(basename "${out:-}")" = "session-fx000001" ] \
+  && ok "one TaskCreate names its store" \
+  || bad "lone TaskCreate did not resolve (rc=$rc out=${out:-none})"
+# The same subject in a second store is no longer an assertion: refuse, say why.
+mkdir -p "$SB2/.claude/tasks/session-fx000003"
+cp "$fd_store/2.json" "$SB2/.claude/tasks/session-fx000003/1.json"
+out=$(HOME="$SB2" bash "$R" --as-session "$FSID3" 2>/tmp/rs-amb-err); rc=$?
+[ "$rc" = 4 ] && ok "a subject held by two stores asserts nothing (rc 4)" \
+  || bad "ambiguous subject resolved anyway (rc=$rc out=${out:-none})"
+rm -f /tmp/rs-amb-err
+
+echo "== --contains-task names the one store that holds a subject =="
+out=$(HOME="$SB2" bash "$R" --contains-task "retire the legacy webhook shim" 2>/dev/null); rc=$?
+[ "$rc" = 0 ] && [ "$(basename "${out:-}")" = "session-fx000001" ] \
+  && ok "a unique subject prints its store" || bad "unique subject: rc=$rc out=${out:-none}"
+out=$(HOME="$SB2" bash "$R" --contains-task "backfill the delivery ledger for July" 2>/tmp/rs-ct-err); rc=$?
+[ "$rc" = 4 ] && [ -s /tmp/rs-ct-err ] && ok "a subject in two stores refuses with a reason" \
+  || bad "shared subject: rc=$rc err=$(head -1 /tmp/rs-ct-err)"
+out=$(HOME="$SB2" bash "$R" --contains-task "no such task anywhere" 2>/tmp/rs-ct-err); rc=$?
+[ "$rc" = 4 ] && [ -s /tmp/rs-ct-err ] && ok "an unknown subject refuses with a reason" \
+  || bad "unknown subject: rc=$rc"
+out=$(HOME="$SB2" bash "$R" --contains-task 2>/dev/null); rc=$?
+[ "$rc" = 4 ] && ok "a bare --contains-task refuses" || bad "bare flag: rc=$rc"
+rm -f /tmp/rs-ct-err
+trash "$SB2/.claude/tasks/session-fx000003" 2>/dev/null || true
 
 echo "== an EMPTY session-named store yields to a content match (#54) =="
 # A resumed session owns an empty store named for itself while its rows live in

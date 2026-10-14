@@ -1211,6 +1211,7 @@ _HOW = {"explicit": "the --session you passed",
         "pin": "the pin for this session",
         "pin (legacy location)": "the pin for this session (old location)",
         "content-match": "matching your transcript",
+        "task-assertion": "the tasks you created this session",
         "session-name": "the store named for this session"}
 _how = _HOW.get(resolved_by, resolved_by)
 if not data:

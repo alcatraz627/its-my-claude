@@ -129,6 +129,49 @@ case "$st" in
   *) printf 'FAIL status  catchup DONE block or standing-auth line missing\n'; fails=$((fails + 1)) ;;
 esac
 
+# QUIET: one line per non-empty key, each item whole. The old merged row cut
+# every item at 36 characters and hard-cut the line at the width.
+cat > "$TMP/catchup-quiet.json" <<'EOF'
+{"session_id":"smoke-quiet","timestamp":"5m ago","status":"post-clear FULL",
+ "checkpoint_path":"_ckpt.claude.md","next_action":"Do the next thing.",
+ "drift":["checkpoint said 24 ahead; git says 2 (+1), not cut"],
+ "mail":[],
+ "running":["playground-dev :5104 online (pm2, pid 42)","a second one"]}
+EOF
+qt=$(bash "$TRACE" "$TMP/catchup-quiet.json" --kind catchup --theme a --width 80 | sed 's/\x1b\[[0-9;]*m//g')
+runs=$((runs + 1))
+case "$qt" in
+  *"drift   checkpoint said 24 ahead; git says 2 (+1), not cut"*) ;;
+  *) printf 'FAIL quiet  the drift item was cut or merged into another row\n'; fails=$((fails + 1)) ;;
+esac
+runs=$((runs + 1))
+case "$qt" in
+  *"running playground-dev :5104 online (pm2, pid 42) (+1 more)"*) ;;
+  *) printf 'FAIL quiet  the running row lost its tail or its count\n'; fails=$((fails + 1)) ;;
+esac
+runs=$((runs + 1))
+case "$qt" in
+  *"mail"*) printf 'FAIL quiet  an empty mail key still rendered a row\n'; fails=$((fails + 1)) ;;
+esac
+
+# A resume_hint with no checkpoint_path is an authoring miss; the render must say
+# the resume row was skipped, and a complete dump must not carry the notice.
+echo '{"session_id":"smoke-hint","goal":"g","resume_hint":"carry on with the plan"}' > "$TMP/hint-only.json"
+echo '{"session_id":"smoke-hint2","goal":"g","checkpoint_path":"/x/_c.claude.md","resume_hint":"carry on"}' > "$TMP/hint-full.json"
+hn=$(bash "$TRACE" "$TMP/hint-only.json" --kind dump --theme c --width 80 | sed 's/\x1b\[[0-9;]*m//g')
+runs=$((runs + 1))
+case "$hn" in
+  *"resume row skipped: checkpoint_path missing"*) ;;
+  *) printf 'FAIL resume  a hint without checkpoint_path vanished silently\n'; fails=$((fails + 1)) ;;
+esac
+hf=$(bash "$TRACE" "$TMP/hint-full.json" --kind dump --theme c --width 80 | sed 's/\x1b\[[0-9;]*m//g')
+runs=$((runs + 1))
+case "$hf" in
+  *"resume row skipped"*) printf 'FAIL resume  a complete dump carried the skipped notice\n'; fails=$((fails + 1)) ;;
+  *"/catchup at /x/_c.claude.md and carry on"*) ;;
+  *) printf 'FAIL resume  the resume row is missing from a complete dump\n'; fails=$((fails + 1)) ;;
+esac
+
 # NO_COLOR must strip every escape byte, not merely most of them.
 esc=$(NO_COLOR=1 bash "$TRACE" "$TMP/full.json" --theme b --width 80 | grep -c $'\033')
 runs=$((runs + 1))

@@ -19,6 +19,26 @@ files = sorted(glob.glob(os.path.join(vote_dir, "voter-*-scores.json")))
 if not files:
   print("no voter score files found", file=sys.stderr); sys.exit(2)
 
+# Anonymised ballots score voter-A..E, not the true voter ids. Phase 6.0 writes
+# the permutation to _anon-map.json (either true_of: label->true, or
+# label_of/anon: true->label); fold labels back to true ids so the Own->Self
+# cells and the dropped-voter count line up. Ids already true pass through.
+label_to_true = {}
+try:
+  with open(os.path.join(vote_dir, "_anon-map.json")) as fp: amap = json.load(fp)
+  if isinstance(amap.get("true_of"), dict):
+    label_to_true.update(amap["true_of"])
+  for key in ("label_of", "anon"):
+    if isinstance(amap.get(key), dict):
+      label_to_true.update({lab: tru for tru, lab in amap[key].items()})
+except FileNotFoundError:
+  pass
+except Exception as e:
+  print(f"anon-map unreadable, scoring labels as-is: {e}", file=sys.stderr)
+
+def unmap(x):
+  return label_to_true.get(x, x)
+
 # Collect all voter IDs (union of voter_ids in score files + own ids)
 all_voters = set()
 scores = {}  # voter_id -> {target_voter_id -> {axis: val}}
@@ -30,10 +50,11 @@ for f in files:
   vid = d.get("voter_id")
   if not vid:
     print(f"skip {f}: no voter_id", file=sys.stderr); continue
+  vid = unmap(vid)
   all_voters.add(vid)
-  for target, axes in d.get("scores", {}).items():
-    all_voters.add(target)
-  scores[vid] = d.get("scores", {})
+  row = {unmap(t): axes for t, axes in d.get("scores", {}).items()}
+  all_voters.update(row)
+  scores[vid] = row
 
 voters = sorted(all_voters)
 

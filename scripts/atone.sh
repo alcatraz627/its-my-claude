@@ -678,7 +678,16 @@ EOF
        suspect_fields: ($suspect_fields_str | split("|") | map(select(length > 0)))
      }')
 
-  ledger_append "$STORE" "$LOCK_FILE" "$line"
+  if ! ledger_append_checked "$STORE" "$LOCK_FILE" "$line"; then
+    # No event row exists, so the RCA drafted for it would be an orphan.
+    if [ -n "$rca_path" ] && [ -f "$rca_path" ]; then
+      chflags nouchg "$rca_path" 2>/dev/null || true
+      chmod u+w "$rca_path" 2>/dev/null || true
+      rm -f "$rca_path" 2>/dev/null || true
+    fi
+    _err "atone add: could not write $STORE, so $id ($slug) was NOT recorded"
+    exit 6
+  fi
 
   _git_commit "atone: $id $slug ($severity)"
 

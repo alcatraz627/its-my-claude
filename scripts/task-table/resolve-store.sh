@@ -45,14 +45,23 @@
 #            case above cannot otherwise be tested: the resolver answers for the
 #            live session, and nobody can be a session from June. Also useful for
 #            inspecting another session's store without guessing.
+#        resolve-store.sh --contains-task <subject>
+#            Print the one store that holds a task with exactly this subject.
+#            TaskCreate returns the new task, and the store is by definition the
+#            directory that holds it, so this is an assertion where the content
+#            match is an inference. Exit 4 with a reason when no store, or more
+#            than one, holds it. The bare run uses the same assertion first, fed
+#            from the TaskCreate calls in the live transcript, and only falls
+#            back to content-matching when those subjects do not settle it.
 set -uo pipefail
 export PATH="/opt/homebrew/bin:$PATH"
 
-EXPLAIN=0; AS_SESSION=""
+EXPLAIN=0; AS_SESSION=""; CONTAINS=""; HAVE_CONTAINS=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --explain)    EXPLAIN=1; shift ;;
     --as-session) AS_SESSION="${2:-}"; shift 2 ;;
+    --contains-task) HAVE_CONTAINS=1; CONTAINS="${2:-}"; shift $(( $# > 1 ? 2 : 1 )) ;;
     *)            shift ;;
   esac
 done
@@ -76,6 +85,30 @@ if [ -n "$AS_SESSION" ]; then
     [ -n "$_m" ] && AS_SESSION=$(basename "$_m" .jsonl)
   fi
   LIVE="$AS_SESSION"; NO_CACHE=1
+fi
+
+if [ "$HAVE_CONTAINS" = 1 ]; then
+  [ -n "$CONTAINS" ] || { echo "resolve-store: --contains-task needs a subject" >&2; exit 4; }
+  CONTAINS="$CONTAINS" TASKS="$TASKS" python3 - <<'PY'
+import json, os, pathlib, sys
+want = os.environ["CONTAINS"].strip()
+hits = []
+for d in sorted(pathlib.Path(os.environ["TASKS"]).glob("session-*")):
+    for f in d.glob("*.json"):
+        try: subj = (json.load(open(f)).get("subject") or "").strip()
+        except Exception: continue
+        if subj == want:
+            hits.append(d); break
+if len(hits) == 1:
+    print(hits[0]); sys.exit(0)
+if not hits:
+    print(f"resolve-store: no store holds a task with the subject {want!r}", file=sys.stderr)
+else:
+    print(f"resolve-store: {len(hits)} stores hold a task with the subject {want!r}, so it does not name one:", file=sys.stderr)
+    for h in hits: print(f"    {h.name}", file=sys.stderr)
+sys.exit(4)
+PY
+  exit $?
 fi
 
 LIVE8="${LIVE:0:8}"
@@ -169,6 +202,38 @@ def _unescape(s):
         # Truncated mid-escape by the {12,60} bound; fall back to the common pair.
         return s.replace('\\"', '"').replace('\\\\', '\\')
 
+# PREFERRED RUNG: assertion from TaskCreate. A TaskCreate this session made put
+# its task in exactly one store, so a subject that exactly one store holds names
+# that store with no margin to argue about. Echoed subjects (the harness
+# re-prints the whole list) are NOT used here: only the session's own creates
+# are assertions. If the creates point at two stores, or none still exist (a
+# completed task's file is reaped), fall through to the content match below.
+created = set()
+for line in blob.splitlines():
+    if '"name":"TaskCreate"' not in line: continue
+    try: msg = json.loads(line).get("message", {})
+    except Exception: continue
+    content = msg.get("content") if isinstance(msg, dict) else None
+    if not isinstance(content, list): continue
+    for part in content:
+        if isinstance(part, dict) and part.get("type") == "tool_use" and part.get("name") == "TaskCreate":
+            subj = ((part.get("input") or {}).get("subject") or "").strip()
+            if subj: created.add(subj)
+if created:
+    owners = {}
+    for d in tasks.glob("session-*"):
+        for f in d.glob("*.json"):
+            try: subj = (json.load(open(f)).get("subject") or "").strip()
+            except Exception: continue
+            if subj in created: owners.setdefault(subj, set()).add(d.name)
+    unique = {next(iter(v)) for v in owners.values() if len(v) == 1}
+    if len(unique) == 1:
+        only = next(iter(unique))
+        if explain:
+            print(f"resolved by: task-assertion, {sum(1 for v in owners.values() if len(v) == 1)} of {len(created)} created subjects found only in {only}", file=sys.stderr)
+        print("ASSERT " + only.replace("session-", ""))
+        sys.exit(0)
+
 subs = {_unescape(s)[:60] for s in re.findall(r'"subject":"((?:[^"\\]|\\.){12,60})', blob)}
 if len(subs) < 2: sys.exit(1)          # too little evidence to be decisive
 scores = []
@@ -194,8 +259,10 @@ if explain:
 print(top[1].replace("session-", ""))
 PY
 )
+HOW="content-match"
+case "$OUT" in ASSERT\ *) HOW="task-assertion"; OUT="${OUT#ASSERT }" ;; esac
 if [ -n "$OUT" ] && [ -d "$TASKS/session-$OUT" ]; then
-  [ "$NO_CACHE" = 0 ] && { mkdir -p "$CACHE" 2>/dev/null && printf '%s' "$OUT" > "$CACHE/$LIVE8" 2>/dev/null && printf 'content-match' > "$CACHE/$LIVE8.by" 2>/dev/null || true; }
+  [ "$NO_CACHE" = 0 ] && { mkdir -p "$CACHE" 2>/dev/null && printf '%s' "$OUT" > "$CACHE/$LIVE8" 2>/dev/null && printf '%s' "$HOW" > "$CACHE/$LIVE8.by" 2>/dev/null || true; }
   printf '%s' "$TASKS/session-$OUT"; exit 0
 fi
 

@@ -362,10 +362,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/no-task-nudge.sh"
-          },
-          {
-            "type": "command",
             "command": "~/.claude/scripts/hooks/kanban-nudge.sh"
           }
         ]

@@ -141,7 +141,8 @@ cmd_add() {
        tags: ($tags_str | split(" ") | map(select(length > 0)))
      } | with_entries(select(.value != "" and .value != null and .value != []))')
 
-  ledger_append "$STORE" "$LOCK" "$line"
+  ledger_append_checked "$STORE" "$LOCK" "$line" \
+    || { echo "propose add: could not write $STORE, so $id was NOT filed" >&2; exit 1; }
 
   echo "✓ filed $id"
   echo "  title:    $title"

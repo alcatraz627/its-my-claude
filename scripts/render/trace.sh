@@ -343,16 +343,26 @@ if [ "$KIND" = "catchup" ]; then
     echo
   fi
 
-  # QUIET: the situational rows merged to one line; detail lives in chat and
-  # in the checkpoint. First item of a busy list shows truncated with a count.
-  qsum() { # jq path -> "none" | "first item (+N)"
-    local n f; n=$(jqa "$1 | length"); [ "$n" = "null" ] && n=0
-    if [ "$n" -eq 0 ]; then printf 'none'; return; fi
-    f=$(jqa "$1[0]" | cut -c1-36)
-    if [ "$n" -gt 1 ]; then printf '%s (+%d)' "$f" $((n - 1)); else printf '%s' "$f"; fi
-  }
-  printf '%s≡ QUIET%s  %sdrift %s · mail %s · running %s%s\n' "$DIM$B" "$R" "$DIM" \
-    "$(qsum '.drift')" "$(qsum '.mail')" "$(qsum '.running')" "$R"
+  # QUIET: the situational rows, one line per key that has something to say, so
+  # no item is ever cut mid-word. The first item of a busy list shows in full
+  # (wrapped, at most two lines) with a count; detail lives in the checkpoint.
+  qn=0
+  for qk in drift mail running; do
+    qc=$(jqa ".$qk | length"); { [ "$qc" = "null" ] || [ -z "$qc" ]; } && qc=0
+    [ "$qc" -eq 0 ] && continue
+    qt=$(jqa ".$qk[0]"); [ "$qc" -gt 1 ] && qt="$qt (+$((qc - 1)) more)"
+    qlead="$(pad '' 7)  "; [ "$qn" -eq 0 ] && qlead="${DIM}${B}≡ QUIET${R}  "
+    qlines=$(wrap_hang "$qt" $((W - 19)) 0)
+    qi=0
+    while IFS= read -r ln; do
+      qi=$((qi + 1))
+      if [ "$qi" = 1 ]; then printf '%s%s%s%s%s\n' "$qlead" "$DIM" "$(pad "$qk" 8)" "$ln" "$R"
+      elif [ "$qi" = 2 ]; then printf '%s  %s%s%s%s\n' "$(pad '' 7)" "$DIM" "$(pad '' 8)" "$ln" "$R"
+      elif [ "$qi" = 3 ]; then printf '%s  %s%s… full text in checkpoint%s\n' "$(pad '' 7)" "$DIM" "$(pad '' 8)" "$R"; fi
+    done <<< "$qlines"
+    qn=$((qn + 1))
+  done
+  [ "$qn" -eq 0 ] && printf '%s≡ QUIET%s  %snothing situational: drift, mail, running all clear%s\n' "$DIM$B" "$R" "$DIM" "$R"
   echo
 
   # CONTEXT: two lines. The checkpoint holds the rest; the header cites it.
@@ -459,9 +469,14 @@ emit_files() {
 # instructions ride .resume_hint ("/catchup at <path> and <hint>").
 resume_line() {
   local f h
-  [ -n "$CKPT" ] || return 0
-  case "$CKPT" in /*) f="$CKPT" ;; *) f="$ROOT/$CKPT" ;; esac
   h=$(jqa '.resume_hint // empty'); [ "$h" = "null" ] && h=''
+  if [ -z "$CKPT" ]; then
+    # A hint with no checkpoint can only be an authoring miss; say so instead of
+    # dropping the row the dump is mostly consumed through.
+    [ -n "$h" ] && printf '  %sresume row skipped: checkpoint_path missing%s\n' "$DIM" "$R"
+    return 0
+  fi
+  case "$CKPT" in /*) f="$CKPT" ;; *) f="$ROOT/$CKPT" ;; esac
   printf '  %sresume%s  /catchup at %s%s\n' "$DIM$B" "$R" "$f" "${h:+ and $h}"
 }
 if [ "$KIND" = "catchup" ]; then

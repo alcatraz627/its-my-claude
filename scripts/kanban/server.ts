@@ -18,6 +18,7 @@ import {
   VIEW_LIMITS, isKnownClause, isOperator, matchView, type Plan, type TagKind,
   type Item, type Pin, type Draft,
 } from "./lib.ts";
+import { wakeOrigin } from "./dp-wake.ts";
 
 const portArg = process.argv.indexOf("--port");
 const PORT = portArg >= 0 ? Number(process.argv[portArg + 1]) : NaN;
@@ -182,14 +183,10 @@ function boardDecisions(slug: string, plan: any): any[] {
 }
 
 function dpNotifyOrigin(slug: string, dir: string): void {
-  try {
-    const cfg = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
-    const origin = cfg?.origin?.session ?? "";
-    if (!origin) return;
-    Bun.spawn(["claude-ipc", "send", "--from", "dp-server", "--to", origin,
-      `decision page ${slug} answered — read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer ${slug}`],
-      { stdout: "ignore", stderr: "ignore" });
-  } catch { /* best-effort */ }
+  let session = "";
+  try { session = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"))?.origin?.session ?? ""; } catch {}
+  const reachState = session ? reachOf(session, seenAgoByAlias()).state : undefined;
+  wakeOrigin({ slug, dir, reachState }).catch((e) => console.error(`dp-wake ${slug}:`, e));
 }
 
 // Reading a decision PAGE's answer back onto the board decisions it covers. Owner, 2026-08-26: "The older decision page worked fine WHY THE FUCK
