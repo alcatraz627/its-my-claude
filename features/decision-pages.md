@@ -1,5 +1,5 @@
 ---
-brief: Interactive decision/feedback pages — when an agent needs a human verdict on MANY items (design review, migration plan, per-screen feedback), scaffold a pre-answered HTML page from the template instead of asking N questions; the human flips what's wrong and pastes ONE compact answer string back. Registry ~/.claude/assets/decision-pages/ served by the kanban server at :5106/dp/<slug>/ (adopted 2026-08-25; the old :5197 server is retired).
+brief: Interactive decision/feedback pages. When an agent needs a human verdict on MANY items (design review, migration plan, per-screen feedback), scaffold a pre-answered HTML page from the template instead of asking N questions; the human flips what's wrong and pastes ONE compact answer string back. Registry ~/.claude/assets/decision-pages/ served by the kanban server at :5106/dp/<slug>/ (adopted 2026-08-25; the old :5197 server is retired).
 triggers:
   - tool:decision-page.sh
   - skill:decision-wizard
@@ -17,26 +17,26 @@ updated: 2026-07-10
 stale_after_days: 180
 ---
 
-# Decision pages — structured human feedback with near-zero human effort
+# Decision pages: structured human feedback with near-zero human effort
 
-> **Front door: `/decision-wizard`.** The skill decides inline-menu vs HTML page,
-> drives the workflow, and carries the efficacious instructions. This file is the
-> engine reference (CLI + schema); reach for the skill first, drop to the CLI when
-> you want the mechanics.
+> **Front door: `/decision-wizard`.** The skill decides between an inline menu and
+> an HTML page, drives the workflow, and carries the efficacious instructions. This
+> file is the engine reference (CLI and schema). Reach for the skill first and drop
+> to the CLI when you want the mechanics.
 
 ## When to reach for this
 
-The moment a task needs the human to make **more than ~4 related judgments**
+When a task needs the human to make **more than about 4 related judgments**
 (per-screen design feedback, a migration go/no-go list, config triage), do NOT
 serialize questions into chat and do NOT hand them an empty form. Build a
-decision page: every item carries YOUR drafted answer + recommendation, the
-human only flips what's wrong, then one button copies a compact answer string
-they paste back. Authoring effort moves to the agent; the human's cost drops to
-one skim + one paste.
+decision page. Every item carries YOUR drafted answer and recommendation, the
+human flips only what is wrong, and one button copies a compact answer string
+they paste back. Authoring effort moves to the agent, and the human's cost drops
+to one skim and one paste.
 
-Born 2026-07-09 in the versable-builder MVP-rework session: a 13-screen design
-feedback pass became a 3-line paste. The owner asked for it as a standing
-capability ("minimize the work I have to do").
+The owner asked for this as a standing capability ("minimize the work I have to do"),
+after a 13-screen design feedback pass in the versable-builder MVP-rework session
+(2026-07-09) shrank to a 3-line paste.
 
 ## Mechanics
 
@@ -68,43 +68,44 @@ Full command set (each failure proposes its fix, agent-first per
 | `open [slug]` | open the page (or the hub) in the browser |
 | `serve` | ensure the pm2 server + regenerate the hub manifest |
 | `pending <add\|clear\|list\|count> [slug]` | mark/unmark "handed off, awaiting the human"; feeds the statusline `decide:N` chip. `add` on handoff, `clear` once the answer is in |
-| `answer <slug> [--consume]` | print the answer the human hit **Submit** with; exits non-zero until they do. Poll it (or Monitor the file) after handoff — no copy-paste needed |
+| `answer <slug> [--consume]` | print the answer the human hit **Submit** with; exits non-zero until they do. Poll it (or Monitor the file) after handoff, so no copy-paste is needed |
 | `rm <slug>` | trash a page |
 | `prune --older-than <days>` | trash old pages (confirms on a TTY) |
 
-The **hub** (the kanban Decisions view, `:5106/?view=decisions`) lists every page, pending first,
-(`untouched` / `viewed · as drafted` / `N flipped` / `broken config`), reads each
-page's answers straight from localStorage, and can copy any page's answer string
-without opening it. Regenerated (`pages.json` + `index.html`) on every mutating op.
+The **hub** (the kanban Decisions view, `:5106/?view=decisions`) lists every page,
+pending first, each marked `untouched`, `viewed · as drafted`, `N flipped` or `broken config`.
+It reads each page's answers straight from localStorage and can copy any page's
+answer string without opening it. It is regenerated (`pages.json` + `index.html`)
+on every mutating op.
 
-Pages are TEMPORARY — the registry is a scratch surface, prune freely. State
+Pages are temporary. The registry is a scratch surface, so prune freely. State
 (the human's picks) lives in THEIR browser localStorage, keyed per page.
 
 ## The page is keyboard-first (power-user surface)
 
 The human never has to hunt with a mouse. On any page: `j`/`k` move between items,
 `1`–`9` pick an option in the focused decision, `a` toggles agree, `n` opens the
-focused item's note, `m` notes-mode (a note field on every item), `f` shows only
-flagged items, `p` opens the answer-preview drawer (the exact paste text, live),
-`c` copies, `s` submits to Claude, `t` themes, `?` shows the shortcut card. A
-sticky header shows `N flagged` progress and the Copy button badges the count.
-"Untouched = agreed" so a full agree is one keystroke.
+focused item's note, `m` switches to notes mode (a note field on every item), `f`
+shows only flagged items, `p` opens the answer-preview drawer (the exact paste
+text, live), `c` copies, `s` submits to Claude, `t` themes, and `?` shows the
+shortcut card. A sticky header shows `N flagged` progress and the Copy button
+badges the count. Untouched means agreed, so a full agree is one keystroke.
 
-## Submit-to-wake — the human answers without touching chat
+## Submit-to-wake: the human answers without touching chat
 
 The kanban server (`scripts/kanban/server.ts`, pm2 app `kanban` on :5106) serves
 every page at `/dp/<slug>/` and takes `POST /api/dp-submit/<slug>`. The page's
-**Submit to Claude** button posts the answer string there; the server writes
+**Submit to Claude** button posts the answer string there. The server writes
 `<slug>/.answer.json` and clears the pending marker. (The old `server.py` on :5197
-is retired.) After handoff the authoring agent watches for that file
-(the **Monitor** tool, or polling `decision-page.sh answer <slug>`) and wakes when
-the human clicks Submit — no copy-paste round-trip. **The watcher must be armed in
-the same turn as the handoff, before the turn ends** — an ended turn with no
-Monitor/poll never wakes, and the pending marker is a statusline chip, not a wake
-path. Ending the session instead? Say "read at next session start", never "wake"
-(atone `promised-async-wake-without-arming-receiver`). **Copy answers** remains the
-fallback (and the page falls back to clipboard automatically if the server has no
-submit endpoint).
+is retired.) After handoff the authoring agent watches for that file (the
+**Monitor** tool, or polling `decision-page.sh answer <slug>`) and wakes when the
+human clicks Submit, so there is no copy-paste round trip. **Arm the watcher in
+the same turn as the handoff, before the turn ends.** A turn that ends with no
+Monitor or poll never wakes, and the pending marker is a statusline chip, not a
+wake path. If you are ending the session instead, say "read at next session
+start", never "wake" (atone `promised-async-wake-without-arming-receiver`).
+**Copy answers** remains the fallback, and the page falls back to the clipboard
+automatically if the server has no submit endpoint.
 
 ## config.json schema
 
@@ -149,7 +150,7 @@ submit endpoint).
 }
 ```
 
-Answer string shape (what the human pastes back — parse it leniently):
+Answer string shape (what the human pastes back; parse it leniently):
 
 ```
 rework feedback:
@@ -165,32 +166,31 @@ end-of-form notes for Claude, when the human filled that field
 
 Notes stay out of the way unless wanted. By default no per-item note fields render
 and the paste stays minimal. The one always-visible note surface is the
-end-of-form **"Notes for Claude"** card (the escape hatch for anything the form
-can't hold) — it renders empty and adds nothing to the paste until filled. The
-human can add a note to any item on demand (focus it + `n`, or the header
-**notes** toggle reveals a field on every item). A note only reaches the paste
-when non-empty. Levers: pre-seed `"note": "…"` on a
-decision/section to prompt reasoning there; `"notes": false` hard-disables the
-surface. Notes count as a "flag" (the human went out of their way), so they show
-in the progress badge and, on an otherwise-agreed page, suppress the
-"all items: agree as drafted" line.
+end-of-form **"Notes for Claude"** card, the escape hatch for anything the form
+can't hold. It renders empty and adds nothing to the paste until filled. The
+human can add a note to any item on demand (focus it and press `n`, or use the
+header **notes** toggle to reveal a field on every item). A note reaches the paste
+only when it is non-empty. To prompt reasoning on a decision or section, pre-seed
+`"note": "…"` there. `"notes": false` hard-disables the surface. Notes count as
+a flag (the human went out of their way), so they show in the progress badge and,
+on an otherwise-agreed page, suppress the "all items: agree as drafted" line.
 
 ## Rules for the authoring agent
 
-- **Every option/section carries your draft + a recommendation** (`rec: true`
+- **Every option and section carries your draft and a recommendation** (`rec: true`
   on exactly one option per decision). An empty form defeats the purpose.
-- Untouched = agreed is the contract — state it in `intro`.
-- Images are optional but load-bearing for design feedback; screenshot first,
+- Untouched means agreed. State that contract in `intro`.
+- Images are optional but load-bearing for design feedback. Screenshot first and
   reference by relative filename inside the slug folder.
-- **Verify with `check <slug>`, not by eye** — one call lints the schema, confirms
-  every referenced image exists, and checks the page renders (HTTP 200); it exits
+- **Verify with `check <slug>`, not by eye.** One call lints the schema, confirms
+  every referenced image exists, and checks the page renders (HTTP 200). It exits
   non-zero with fix-proposing lines until READY. Don't hand over an unchecked page.
-- Template renders dark AND light (toggle built in) and is keyboard-first.
+- The template renders dark AND light (toggle built in) and is keyboard-first.
 - The template and hub are generic. If they can't express something, extend the
-  template (`scripts/kanban/decision.html`) or `scripts/kanban/hub.html`, not a
-  one-off copy; that's how the capability compounds. The answer-string logic is
+  template (`scripts/kanban/decision.html`) or `scripts/kanban/hub.html` instead of
+  making a one-off copy, so the capability compounds. The answer-string logic is
   mirrored in the page and the hub, so change both if you change the shape.
 - Every page renders from that one template, so a template fix reaches every page
   ever made. There is no per-page `index.html` to refresh.
-- **Favicon** is a self-contained inline-SVG data-URI (a checkmark) baked into the
-  template + hub — no external file, works offline.
+- The **favicon** is a self-contained inline-SVG data-URI (a checkmark) baked into the
+  template and hub. It needs no external file and works offline.

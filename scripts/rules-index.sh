@@ -60,7 +60,9 @@ EOF
     # every rule twice in every session (owner D1a, 2026-09-18).
     br=$(sed -n 's/^gist: *//p' "$f" | head -1)
     [ -z "$br" ] && br=$(sed -n 's/^brief: *//p' "$f" | head -1 | awk '{ n=split($0,w," "); s=""; for(i=1;i<=n&&i<=20;i++){ s=s (i>1?" ":"") w[i]; if(w[i] ~ /[.;]$/) break } if(i<n) s=s " …"; print s }')
-    br=$(printf '%s' "$br" | sed 's/|/\\|/g')
+    # An em/en-dash never reaches the index: prose-lint budgets them at zero and
+    # copying them out of a brief leaked them into the always-loaded menu.
+    br=$(printf '%s' "$br" | perl -CSD -pe 's/\s[\x{2014}\x{2013}]\s/, /g; s/[\x{2014}\x{2013}]/-/g' | sed 's/|/\\|/g')
     [ -z "$br" ] && br="(no brief; add frontmatter)"
     load=always
     grep -q '^paths:' "$f" && load=scoped

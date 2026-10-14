@@ -17,21 +17,21 @@ stale_after_days: 90
 ---
 
 # Corrections
-When the user corrects a mistake — any pushback, "why did you do X", "revert this", "stop doing that" — follow this exact ritual before continuing other work.
+When the user corrects a mistake (any pushback, "why did you do X", "revert this", "stop doing that"), follow this exact ritual before continuing other work.
 
 ## The five steps
 
-1. **State the mistake** — one sentence: what you did wrong.
-2. **Identify the pattern** — the reusable category, not the specific instance (e.g., "batch verification skip", "number heuristic without rendering", "overrode user preference"). **Generalize the correction to its class, not the user's literal example.** Failure signal: you copied the user's specific examples verbatim into the rule (the exact reference doc, the exact strings they cited) instead of the underlying class — that over-fits and reads as gospel. If the rule only catches the one case the user named, you haven't found the pattern yet.
-3. **Invoke `/atone`** — the skill gathers context, classifies severity (S1/S2/S3), reuses an existing slug if one matches, writes a structured event to `~/.claude/atone/events.jsonl`, and for S3 also drafts an RCA with a runnable `## Procedure` section.
-4. **Check if a hook can prevent recurrence** — if yes, file via `bash ~/.claude/scripts/propose.sh add --category hooks ...`. The consolidate cron will surface it; you (the human) decide.
-5. **Fix the mistake** — revert, then apply the correct change.
+1. **State the mistake.** One sentence: what you did wrong.
+2. **Identify the pattern.** Name the reusable category and skip the specific instance (for example "batch verification skip", "number heuristic without rendering", "overrode user preference"). **Generalize the correction to its class, and leave the user's literal example behind.** The failure signal is copying the user's specific examples verbatim into the rule (the exact reference doc, the exact strings they cited) instead of the underlying class. That over-fits and reads as gospel. If the rule only catches the one case the user named, you haven't found the pattern yet.
+3. **Invoke `/atone`.** The skill gathers context, classifies severity (S1/S2/S3), reuses an existing slug if one matches, writes a structured event to `~/.claude/atone/events.jsonl`, and for S3 also drafts an RCA with a runnable `## Procedure` section.
+4. **Check if a hook can prevent recurrence.** If yes, file via `bash ~/.claude/scripts/propose.sh add --category hooks ...`. The consolidate cron will surface it, and you (the human) decide.
+5. **Fix the mistake.** Revert, then apply the correct change.
 
 The goal is to externalize the learning so future agents (including yourself after compaction) benefit without needing the full story in context.
 
 ## How `/atone` writes the event
 
-`~/.claude/atone/events.jsonl` is **append-only**, kernel-locked (`chflags uappnd`), and snapshot-backed. It is deliberately **not** git-tracked: `.gitignore` runs an allowlist model (ignore everything, un-ignore only the config/code layer), so data ledgers travel by rsync per `mac-migration/MANIFEST.md` §6 rather than in the repo. Each event is one JSON line:
+`~/.claude/atone/events.jsonl` is **append-only**, kernel-locked (`chflags uappnd`), and snapshot-backed. It is deliberately **not** git-tracked. `.gitignore` runs an allowlist model (ignore everything, un-ignore only the config and code layer), so data ledgers travel by rsync per `mac-migration/MANIFEST.md` §6 and stay out of the repo. Each event is one JSON line:
 
 ```json
 {"id": "mist-YYYYMMDD-HHMMSS-NN", "slug": "kebab-case-pattern",
@@ -41,15 +41,15 @@ The goal is to externalize the learning so future agents (including yourself aft
  "tags": [...], "rca_id": "..."}
 ```
 
-Recurrences are **new lines with the same slug** — never edits to existing lines. The system measures severity-by-recurrence-count automatically.
+Recurrences are **new lines with the same slug**, and existing lines are never edited. The system measures severity-by-recurrence-count automatically.
 
-The curated `~/.claude/mistake-patterns.md` is regenerated from `events.jsonl` by `bash ~/.claude/scripts/atone-consolidate.sh` (cron, every 2 days). Hand-editing `mistake-patterns.md` is overwritten on next consolidation.
+The curated `~/.claude/mistake-patterns.md` is regenerated from `events.jsonl` by `bash ~/.claude/scripts/atone-consolidate.sh` (cron, every 2 days). Hand edits to `mistake-patterns.md` are overwritten on the next consolidation.
 
 **Rules for the file:**
-- Max 20 patterns — if full, merge similar ones or drop the oldest with only 1 occurrence
-- Check this file when starting work that touches areas with known patterns (CSS, file transforms, user preferences)
-- Sub-agents don't read this file — only the main agent does at session start when relevant
+- Max 20 patterns. If it is full, merge similar ones or drop the oldest with only 1 occurrence.
+- Check this file when starting work that touches areas with known patterns (CSS, file transforms, user preferences).
+- Sub-agents don't read this file. Only the main agent does, at session start when relevant.
 
 ## Promotion path
 
-High-confidence patterns (repeat occurrences, user-cited as recurring) graduate from `mistake-patterns.md` → a proper `rules/*.md` entry or a hook. See `features/proposals.md` for the self-feedback → canon workflow.
+High-confidence patterns (repeat occurrences, user-cited as recurring) graduate from `mistake-patterns.md` to a proper `rules/*.md` entry or a hook. See `features/proposals.md` for the self-feedback to canon workflow.

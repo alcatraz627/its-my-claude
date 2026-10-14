@@ -150,7 +150,7 @@ Real result: 20 issues inspected, 5 ranked `high`, no exact duplicate, recommend
 
 **Pitfall: prefix-stem search bites you.** Verified 2026-06-19 on GH: searching `"interleav"` returns zero hits even though `#68755` title contains "interleaved". GitHub's search is doing prefix-stem matching, not substring. Run multiple inflections (`interleav` / `interleave` / `interleaving`) or use a broader keyword and filter in the body check.
 
-**Pitfall: pagination cap masks scope.** GitHub's `search_issues` returns 30 per page by default. If 9 of 10 queries hit the per-call token cap at 30 results, the scan covered only 30 of N total — fine for sampling, not for completeness. Document this in the analysis (`## Query log` with hit counts) so future scans know what was missed.
+**Pitfall: pagination cap masks scope.** GitHub's `search_issues` returns 30 per page by default. If 9 of 10 queries hit the per-call token cap at 30 results, the scan covered only 30 of N total. That is fine for sampling and not for completeness. Document this in the analysis (`## Query log` with hit counts) so future scans know what was missed.
 
 **Pitfall: voice agents re-impose generic anti-AI rules over the venue's actual style.** The internal `conventions/doc-writing.md` is calibrated for our internal docs. When the goal is "write a doc the external venue will accept," the venue's house style wins over the generic anti-AI list. A voice-extract sub-agent's findings about local conventions take precedence on conflict.
 
@@ -168,7 +168,7 @@ The orchestrator after the sub-agents return:
 
 Per scan, on the order of 100–200K sub-agent tokens for a 2-role fan-out scanning 30–50 items. Wall time: 3–6 minutes per role, parallel. Orchestrator context cost: ~10 KB per sub-agent return + whatever synthesis files the orchestrator reads.
 
-If a scan needs 4+ roles to cover the goal, batch them in two waves rather than one — the parallel cap and API rate limits start hurting above ~4 simultaneous sub-agents on a single MCP server.
+If a scan needs 4+ roles to cover the goal, batch them in two waves rather than one, because the parallel cap and API rate limits start hurting above ~4 simultaneous sub-agents on a single MCP server.
 
 ## Reuse and reference
 
@@ -189,6 +189,6 @@ If a recent scan covers the same goal, read its `_analysis.md` first and only re
 
 ## See also
 
-- `rules/sub-agent-outputs.md` — the mandate that material sub-agent content must be persisted to disk (this convention is one application).
-- `features/proposals.md` — if a scan surfaces a system-improvement candidate, route it to `proposals.jsonl` rather than another markdown doc.
+- `rules/sub-agent-outputs.md`: the mandate that material sub-agent content must be persisted to disk (this convention is one application).
+- `features/proposals.md`: if a scan surfaces a system-improvement candidate, route it to `proposals.jsonl` rather than another markdown doc.
 - The 2026-06-19 anthropic/claude-code scan at `~/.claude/cache/github-issue-scans/anthropics-claude-code/20260619-tui-corruption-search/` is the canonical worked example.

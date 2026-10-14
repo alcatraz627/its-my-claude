@@ -15,7 +15,7 @@ stale_after_days: 90
 # Hinter Pipeline
 User prompts pass through `~/.claude/scripts/hint-injector.sh` (UserPromptSubmit hook) before Claude sees them. Hinters in `~/.claude/hinters/` run in sort order, each emitting optional hints as `additionalContext`.
 
-**Prompts are never rewritten — hinters only add context.**
+**Prompts are never rewritten. Hinters only add context.**
 
 ## Active hinters
 
@@ -25,18 +25,18 @@ User prompts pass through `~/.claude/scripts/hint-injector.sh` (UserPromptSubmit
 
 ## Autocorrect dictionaries (`~/.claude/assets/autocorrect/`)
 
-- `custom-terms.txt` — 118 known-good terms
-- `typo-map.txt` — 213 mappings
-- `blacklist.txt` — 3 never-correct entries
+- `custom-terms.txt` holds 118 known-good terms
+- `typo-map.txt` holds 213 mappings
+- `blacklist.txt` holds 3 never-correct entries
 
-Manage via `/autocorrect` skill.
+Manage them via the `/autocorrect` skill.
 
 ## Correction log
 
-`~/.claude/.autocorrect-log.jsonl` — every correction logged with timestamp, session ID, original word, corrected form.
+`~/.claude/.autocorrect-log.jsonl` logs every correction with timestamp, session ID, original word and corrected form.
 
 ## Autocorrect rules
 
-Never touches: backtick code spans, paths, ALL_CAPS constants, function calls, flags, dotted identifiers.
+It never touches backtick code spans, paths, ALL_CAPS constants, function calls, flags or dotted identifiers.
 
-When you see `[autocorrect] Detected likely typos:` in context, treat corrections as suggestions — use the corrected form if it fits, ignore if the original was intentional.
+When you see `[autocorrect] Detected likely typos:` in context, treat the corrections as suggestions. Use the corrected form if it fits, and ignore it if the original was intentional.

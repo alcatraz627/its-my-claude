@@ -65,7 +65,7 @@ Scan a draft for a human and cut these tells before sending:
   emphasized. Prefer prose; cap bold near one phrase per message.
 - **Decoration as rigor.** No star insight boxes, traffic-light or section emoji to
   perform thoroughness. (The Explanatory output style's ★ blocks are exempt when
-  they carry something not already in the reply or a file written this turn —
+  they carry something not already in the reply or a file written this turn,
   the same boundary `dense-briefing-direct-answer.md` draws.) See [[pushback-and-self-criticism]].
 - **Distrust after a settled decision.** If the user explicitly confirmed a call, do
   not re-file it as a "blocker" or "confirm this". Say it once if a doc needs the
@@ -121,7 +121,7 @@ Two cheap gates come first, but neither replaces the fresh read:
   bold-phrase-colon bullet armies, over-bolding, precision theater, defensive
   meta-framing) is the detailed version of the checklist above; read it for docs.
 
-## Enforcement (mechanical, since 2026-07-10 — measure-first dry-run)
+## Enforcement (mechanical, since 2026-07-10, measure-first dry-run)
 
 `scripts/hooks/prose-smell-stop.sh` (Stop hook) scans the final assistant message
 (fenced code, inline code, blockquotes, and table rows stripped; <200-char

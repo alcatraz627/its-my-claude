@@ -33,23 +33,23 @@ stale_after_days: 180
 
 **The one rule:** Comments are for humans first, AI agents second,
 machines never. Code is read by humans first, AI agents second, and
-machines just care about correctness — they don't care about the
+machines just care about correctness. They don't care about the
 prose at all. Every comment-style decision follows from this.
 
 ## What this means in practice
 
-1. **First sentence of every non-trivial module/function docstring
-   is code-agnostic** — explains what the thing IS at the system
-   level. A non-engineer should roughly understand it. Mechanism
+1. **First sentence of every non-trivial module or function docstring
+   is code-agnostic.** It explains what the thing IS at the system
+   level, so a non-engineer should roughly understand it. Mechanism
    comes after.
 
 2. **Speak from the human perspective**, not the machine's.
    - Bad: "Sets `_draining=True` so the main loop breaks before
      claiming new work."
    - Good: "Ask the worker to stop. Safe to call from a signal
-     handler — the actual shutdown work happens in `drain()`."
+     handler, because the actual shutdown work happens in `drain()`."
 
-3. **Plan-reference noise rots — strip it.** The following ALWAYS
+3. **Plan-reference noise rots, so strip it.** The following ALWAYS
    become obsolete the moment the work ships and confuse later
    readers:
    - `Tier 1 v1 Track H`, `Phase 2.B8`, `Round 3 #N.M` plan refs
@@ -58,17 +58,17 @@ prose at all. Every comment-style decision follows from this.
    - "See PR #1234" / "as discussed on YYYY-MM-DD"
 
    Historical context belongs in commit messages, PR descriptions, or
-   design docs — never in source.
+   design docs, and never in source.
 
 4. **`[claude@<ts>]` tags are allowed BUT MUST BE SEPARATE from
-   human-readable comments.** Two distinct comment audiences in
-   source:
-   - **Human comments** — doc-style WHY/WHAT/HOW/WHERE, long-term
-     relevant. NEVER carry `[claude@]` tags or plan references.
-   - **Agent-note comments** — agent-specific technical detail
+   human-readable comments.** Source holds two distinct comment
+   audiences:
+   - **Human comments** are doc-style WHY/WHAT/HOW/WHERE, long-term
+     relevant. They NEVER carry `[claude@]` tags or plan references.
+   - **Agent-note comments** hold agent-specific technical detail
      needed for future Claude work (load-bearing for a plan or
-     ongoing refactor). Marked with `[claude@<ts>]`, kept as a
-     SEPARATE block from any human comment, dense / technical.
+     ongoing refactor). They are marked with `[claude@<ts>]` and kept as a
+     SEPARATE block from any human comment, dense and technical.
 
    Don't mix them. A human comment with a claude-tag suffix or
    embedded planning narrative is the failure mode this rule
@@ -82,19 +82,19 @@ prose at all. Every comment-style decision follows from this.
    # mode; module:team_id in per-customer mode.
 
    # [claude@2026-05-11] When the consensus PR lands, audit ALL
-   # callsites for the resolve_bucket pattern — anywhere still
+   # callsites for the resolve_bucket pattern. Anywhere still
    # caching breaker instance at decoration time will skip per-customer.
    def resilient(name: str, ...):
        ...
    ```
 
-5. **Docstrings >8 lines are essays** — break out to a doc and link.
+5. **Docstrings over 8 lines are essays.** Break them out to a doc and link.
    Per-field comments stay one line each.
 
-6. **Inline comments never restate WHAT; the payload is the non-obvious
+6. **Inline comments never restate WHAT, and the payload is the non-obvious
    WHY or HOW.** Self-documenting code makes WHAT-comments redundant. WHY
    (the constraint, the workaround's reason, the deliberate surprise) is
-   the usual payload, and a non-obvious HOW earns a comment too — the
+   the usual payload, and a non-obvious HOW earns a comment too: the
    mechanism a reader could not infer from the code (the trick, the
    ordering dependency, the protocol). The test is never "WHY versus HOW"
    but "could the next reader derive this from the code alone?"
@@ -102,22 +102,22 @@ prose at all. Every comment-style decision follows from this.
    WHAT but HOW"; verdict ledger: thes-20260716-165411-99.)
 
 7. **Stale comments are worse than missing ones.** After modifying
-   code, scan nearby comments and delete or update — TODOs that
-   shipped, "currently X" claims when X changed, references to
-   deleted symbols. When in doubt: delete.
+   code, scan nearby comments and delete or update them: TODOs that
+   shipped, "currently X" claims when X changed, and references to
+   deleted symbols. When in doubt, delete.
 
-8. **Major entrypoints get a 2–3 sentence orientation** ("the worker
-   process entrypoint" / "the request handler for X") so a reader
+8. **Major entrypoints get a 2-3 sentence orientation** ("the worker
+   process entrypoint" or "the request handler for X") so a reader
    landing there knows where they are without reading the whole file.
 
 ## The structure for a non-trivial docstring
 
-Three paragraphs, in order, skip any you don't need:
+Three paragraphs, in order, and skip any you don't need:
 
-1. **Code-agnostic purpose** — what this does in the system, no
-   jargon, no code refs.
-2. **Runtime contract** — inputs, outputs, side effects.
-3. **Technical caveats** — race conditions, gotchas, why-not-the-
+1. **Code-agnostic purpose.** What this does in the system, with no
+   jargon and no code refs.
+2. **Runtime contract.** Inputs, outputs, side effects.
+3. **Technical caveats.** Race conditions, gotchas, why-not-the-
    obvious-thing. Can be dense.
 
 A simple helper gets para 1 alone. Most things need para 1 + 2.
@@ -125,14 +125,14 @@ Para 3 is rare and load-bearing when present.
 
 ## When in doubt, link
 
-If the same context appears in ≥3 places, write it ONCE in a doc and
+If the same context appears in 3 or more places, write it ONCE in a doc and
 link from the code. Copy-pasted context creates drift.
 
 ## Project-specific elaborations
 
 Repos in this account have a longer rubric with worked before/after
-examples — read it when a project's CLAUDE.md links to it. The local
-doc supersedes anything here that conflicts; defer to it.
+examples. Read it when a project's CLAUDE.md links to it. The local
+doc supersedes anything here that conflicts, so defer to it.
 
 For Versable enhancement-product specifically:
 `frontend/docs/boring-technical-stuff/comment-style.md`.

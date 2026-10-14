@@ -23,9 +23,9 @@ session or **capture learning from** it, at four lifecycle points: session start
 each turn, compaction, and session end. This is the catalog the `/plugs` reader
 renders, and the basis for measuring whether each plug earns its tokens.
 
-Scope: this lists **context/learning** plugs only — not the guard hooks
-(safe-delete, prefer-rg, the Stop gates) or pure side-effects (tab-title,
-emit-event). Those are real hooks but they neither inject context nor learn from
+Scope: this lists **context and learning** plugs only. It leaves out the guard hooks
+(safe-delete, prefer-rg, the Stop gates) and pure side-effects (tab-title,
+emit-event). Those are real hooks, but they neither inject context nor learn from
 the session, so they are out of scope for "what's shaping my context."
 
 Direction legend: **inject** = adds to the agent's context · **capture** = records
@@ -36,7 +36,7 @@ condition holds (the cheaper, lower-noise kind).
 ## Session start (the injection lane)
 
 All start-time injectors run through `scripts/session-mgmt/sessionstart-inject.sh`
-(synchronous; merges each one's additionalContext into one SessionStart object).
+(synchronous; it merges each one's additionalContext into one SessionStart object).
 Mute the whole lane: `~/.claude/.no-sessionstart-inject`.
 
 | Plug | Dir | Trigger | ~Cost | Mute | Observability today |
@@ -49,8 +49,8 @@ Mute the whole lane: `~/.claude/.no-sessionstart-inject`.
 | validate-settings-hooks | inject | conditional (misconfig) | silent | none | none |
 | backlog-surface | inject | conditional (PROMOTE + cooldown) | 1 line | .no-backlog-surface | .backlog-surface-last marker |
 
-Also at start (not injectors): claude-ipc session register; the async orchestrator
-runs side-effect tasks (tab title, retro-queue, shell-mem init, daemon notify,
+Also at start (not injectors): claude-ipc session register. The async orchestrator
+runs the side-effect tasks (tab title, retro-queue, shell-mem init, daemon notify,
 sync-todos pull).
 
 ## Per turn (UserPromptSubmit)
@@ -89,26 +89,26 @@ sync-todos pull).
 | catchup post-catchup contribution (3.5) | capture | conditional (reusable friction) | /catchup |
 | catchup subsystem-state (3.4) | inject | conditional (active bg) | /catchup |
 
-## Why this registry exists (noise + efficacy)
+## Why this registry exists (noise and efficacy)
 
 Every **inject** plug spends tokens in the agent's context. The risk is noise: a
 blanket injector that fires every session but is rarely acted on costs tokens for
-no benefit. The prime suspect, dream-insights, was addressed 2026-07-13: its dream
+no benefit. The prime suspect, dream-insights, was addressed 2026-07-13. Its dream
 half (~1800 ch, ~0 of ~922 promoted insights ever became a gcc change) is now
-opt-in and default OFF, leaving only the load-bearing atone TL;DR. It could not be
-conversion-measured — acting on it leaves no machine residue, which is why
-`ledger/acted.toml` excludes it — so the call was made on the historical figure
+opt-in and default OFF, leaving only the load-bearing atone TL;DR. Its conversion
+could not be measured, because acting on it leaves no machine residue, which is why
+`ledger/acted.toml` excludes it. So the call was made on the historical figure
 plus redundancy: migration 0031 now routes high-confidence dream insights onto the
 backlog, where they get a real decision.
 
 The defense is the value-system in `ledger/goals.toml` (`attention-scarcity`:
 precision over recall, single-digit interrupts/day) plus a measurement: per plug,
 **fired vs acted-on**. The "Observability today" column above is deliberately
-sparse — most plugs leave no trace, so the ratio cannot be computed yet. Closing
+sparse. Most plugs leave no trace, so the ratio cannot be computed yet. Closing
 that gap (one `plug-events` ledger line per firing, via `ledger-common.sh`) is the
 next step, and this registry names exactly where those log calls go.
 
-`conditional` plugs are inherently low-noise (they cost nothing when idle);
+`conditional` plugs are inherently low-noise (they cost nothing when idle).
 `blanket` plugs must earn their place by the fired-vs-acted measure or graduate to
 a mechanical gate (`goals.toml` `graduate-to-mechanism`) rather than re-inject
 forever.

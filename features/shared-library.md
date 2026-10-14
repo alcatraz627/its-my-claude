@@ -13,7 +13,7 @@ stale_after_days: 90
 ---
 
 # Shared Library
-`std::claude::shared` — utility library at `~/.claude/skills/shared/`. (Renamed from plain `std::claude` in v0.2.0.)
+`std::claude::shared` is the utility library at `~/.claude/skills/shared/`. (It was renamed from plain `std::claude` in v0.2.0.)
 
 ## Python imports
 
@@ -31,9 +31,9 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "<skill>" /tmp/note.md
 bash ~/.claude/skills/shared/check-path.sh "<filepath>"
 ```
 
-## Styled terminal output — `gum-tui.sh`
+## Styled terminal output: `gum-tui.sh`
 
-Use for **all** non-interactive Bash output (tables, status lines, headers, panels). **Source it; never call raw `gum style` directly:**
+Use it for **all** non-interactive Bash output (tables, status lines, headers, panels). **Source it, never call raw `gum style` directly:**
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh

@@ -1,5 +1,5 @@
 ---
-brief: NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential — a bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand.
+brief: NEVER set/modify/rotate/unset the Anthropic API key or any global-blast-radius credential. A bad value crashes EVERY Claude instance at once. Stop and ask the user to do it by hand.
 triggers:
   - topic:api-key
   - topic:credentials
@@ -20,7 +20,7 @@ A bad value crashes every Claude instance on the machine at once, including the 
 
 Forbidden surfaces for `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, `CLAUDE_API_KEY`, `ANTHROPIC_BASE_URL`: shell env files (`~/.zshenv`, `~/.zshrc`, `~/.zprofile`, `~/.bashrc`, `~/.profile`), `~/.claude.json` auth fields, the `env` block of `~/.claude/settings.json`, `launchctl setenv`, the macOS keychain, `claude config set` of any auth field, any `export ANTHROPIC_API_KEY=` in a script the owner runs.
 
-Detecting, reading or mentioning the key is fine; the line is set/modify versus read. Enforced by `guard-anthropic-credentials.sh`.
+Detecting, reading or mentioning the key is fine. The line is set or modify versus read. Enforced by `guard-anthropic-credentials.sh`.
 
 Diagnostic: about to run or edit anything that ASSIGNS an Anthropic auth value.
 

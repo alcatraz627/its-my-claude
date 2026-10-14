@@ -1,5 +1,5 @@
 ---
-brief: Never add CI workflows, git hooks, cron jobs, or other automation infrastructure the user did not explicitly request in this task — a feasibility question is not a build order
+brief: Never add CI workflows, git hooks, cron jobs, or other automation infrastructure the user did not explicitly request in this task. A feasibility question is not a build order
 triggers:
   - topic:ci
   - topic:hooks
@@ -22,7 +22,7 @@ stale_after_days: 120
 Before creating a CI workflow, git hook, cron, LaunchAgent, pm2 service, or registering a binary on PATH: name the owner's words that requested it. If you cannot, do not build it.
 
 1. A feasibility question is not a build order. Answer first, offer second, build on a yes.
-2. Automation gets its own approval, even mid-task; authorization for a code change does not extend to the workflow that would "complete" it.
+2. Automation gets its own approval, even mid-task. Authorization for a code change does not extend to the workflow that would "complete" it.
 3. Side effects of unrequested infra are unrequested too (a generated test once pulled a 24 GB model download).
 
 Proposing is fine (one line, or `propose.sh`). When the deferred infra is the ENFORCEMENT of a ban you are recording, say so in the same reply: "recorded, advisory-only until the gate is built; want the gate now?" Repo-required scaffolding named by the task is in scope.

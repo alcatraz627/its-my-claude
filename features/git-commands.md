@@ -17,7 +17,7 @@ stale_after_days: 90
 
 # Git Commands
 
-Command reference and `gh` usage patterns. Rules and dangerous-command list live in [`rules/git.md`](../rules/git.md) — this file is the cheatsheet for the safe, common stuff.
+Command reference and `gh` usage patterns. Rules and dangerous-command list live in [`rules/git.md`](../rules/git.md). This file is the cheatsheet for the safe, common stuff.
 
 ## Verification triad (before any push, branch op, or merge)
 
@@ -98,7 +98,7 @@ git revert <sha>                                # create new commit that undoes 
 git cherry-pick <sha>                           # apply a single commit to current branch
 ```
 
-**For dangerous recovery** (`reset --hard`, `clean -f`, `branch -D`, `push --force`) — see dangerous-command table in [`rules/git.md`](../rules/git.md). Always confirm first.
+**For dangerous recovery** (`reset --hard`, `clean -f`, `branch -D`, `push --force`), see the dangerous-command table in [`rules/git.md`](../rules/git.md). Always confirm first.
 
 ## Rebase (local only — see rules for public-history caveat)
 
@@ -174,7 +174,7 @@ gh api repos/<owner>/<name>/actions/runs?branch=main   # CI runs on branch
 gh api --paginate rate_limit                           # throttle diagnostics
 ```
 
-Use when the first-class CLI doesn't expose a field you need — `gh api` gives full REST access.
+Use when the first-class CLI doesn't expose a field you need. `gh api` gives full REST access.
 
 ## Tagging & releases
 

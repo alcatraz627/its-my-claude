@@ -18,7 +18,7 @@ When explaining architecture, data flows, state machines, request lifecycles, di
 ## Rules
 
 - Use Unicode box-drawing characters: `┌─┐│└─┘├┤┬┴┼──▶`
-- Place the diagram **before** the text explanation, but below the direct answer line — `rules/dense-briefing-direct-answer.md` owns line 1
+- Place the diagram **before** the text explanation, but below the direct answer line, because `rules/dense-briefing-direct-answer.md` owns line 1
 - Max width: **78 chars**
 - Wrap in code blocks so rendering is monospaced
 - Use `/diagram` skill for complex layouts
@@ -30,7 +30,7 @@ When explaining architecture, data flows, state machines, request lifecycles, di
 - Config examples
 - Error messages
 
-## Example — when useful
+## Example: when useful
 
 ```
 ┌─────────────┐     write       ┌──────────────┐
@@ -45,7 +45,7 @@ When explaining architecture, data flows, state machines, request lifecycles, di
 
 ## Complex layouts
 
-For multi-box architecture diagrams, dashboards, or anything with tables + boxes side-by-side, use the `/diagram` skill — it invokes `gum-tui.sh` for box-accurate rendering.
+For multi-box architecture diagrams, dashboards, or anything with tables + boxes side-by-side, use the `/diagram` skill, which invokes `gum-tui.sh` for box-accurate rendering.
 
 ## Using `gum-tui.sh` directly
 
@@ -55,7 +55,7 @@ When you need a single styled block without invoking `/diagram`, source `gum-tui
 source ~/.claude/skills/shared/gum-tui.sh
 ```
 
-**Example 1 — bordered status panel:**
+**Example 1, a bordered status panel:**
 
 ```bash
 gum_panel "Deploy Status" \
@@ -64,7 +64,7 @@ gum_panel "Deploy Status" \
   "nginx     ⚠ reload needed"
 ```
 
-**Example 2 — table (column alignment for free):**
+**Example 2, a table (column alignment for free):**
 
 ```bash
 gum_table "Skill,Tier,Updated" \
@@ -73,10 +73,10 @@ gum_table "Skill,Tier,Updated" \
   "desktop-automation,2,2026-04-24"
 ```
 
-**Example 3 — header + completion block at task end:**
+**Example 3, a header and completion block at task end:**
 
 ```bash
-gum_header "Migration 0007 — Scripts cleanup"
+gum_header "Migration 0007: Scripts cleanup"
 # ...work...
 gum_complete "scripts-cleanup" \
   "files moved=27" \
@@ -88,4 +88,4 @@ For every other `gum_*` helper (`gum_success`, `gum_warn`, `gum_error`, `gum_kv`
 
 ## Full gallery
 
-Read [`~/.claude/assets/docs/gum-rendering-examples.md`](../assets/docs/gum-rendering-examples.md) when composing multi-box layouts, dashboards, or choosing border styles — it has box-accurate examples of every pattern with exact `gum style` / `gum join` / `gum table` invocations.
+Read [`~/.claude/assets/docs/gum-rendering-examples.md`](../assets/docs/gum-rendering-examples.md) when composing multi-box layouts, dashboards, or choosing border styles. It has box-accurate examples of every pattern with exact `gum style` / `gum join` / `gum table` invocations.

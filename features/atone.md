@@ -1,5 +1,5 @@
 ---
-brief: atone+affirm system — append-only mistake/compliment event logs, derived curated views, kernel-protected raw data, hinter-based session injection
+brief: atone+affirm system: append-only mistake/compliment event logs, derived curated views, kernel-protected raw data, hinter-based session injection
 triggers:
   - tool:atone
   - tool:affirm
@@ -21,16 +21,16 @@ stale_after_days: 90
 
 # Atone + Affirm System
 
-Two-axis behavioral tracker: `/atone` records mistakes (so they don't recur), `/affirm` records non-obvious good calls (so they get repeated). Both feed a unified `triggers.json` lookup consumed by hinters that inject context at session start, on correction signals, and every N turns.
+Atone and affirm are a two-sided behavior tracker. `/atone` records mistakes so they don't recur. `/affirm` records non-obvious good calls so they get repeated. Both feed a unified `triggers.json` lookup that hinters read to inject context at session start, on correction signals, and every N turns.
 
-Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 lines, 2× over its size cap) with a structured event log + auto-regenerated curated views.
+It replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 lines, twice its size cap) with a structured event log and auto-regenerated curated views.
 
 ## Architecture in one diagram
 
 ```
    USER says "mistake/sloppy/wrong"
             │
-   UserPromptSubmit hinter (30-atone-nudge.sh) — fires on you/your+keyword
+   UserPromptSubmit hinter (30-atone-nudge.sh), fires on you/your+keyword
             │
             ▼
    AGENT invokes /atone or /affirm
@@ -40,7 +40,7 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
             │
    ════ MUTABILITY BOUNDARY ════════════════════════════════════════
             │
-   RAW (kernel uappnd, snapshot-backed; NOT git-tracked — data moves by rsync)
+   RAW (kernel uappnd, snapshot-backed; NOT git-tracked, data moves by rsync)
    ├── ~/.claude/atone/events.jsonl      append-only
    ├── ~/.claude/atone/rca/<id>.md       chflags uchg per file
    └── ~/.claude/affirm/events.jsonl     append-only
@@ -66,15 +66,15 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
 
 | What you want to do | How |
 |---------------------|-----|
-| Log a mistake the user just corrected | invoke `/atone` (skill prompts for severity, slug, etc) |
-| Log a non-obvious good call user affirmed | invoke `/affirm` (higher bar — only for surprising approaches) |
+| Log a mistake the user just corrected | invoke `/atone` (the skill prompts for severity, slug, etc.) |
+| Log a non-obvious good call the user affirmed | invoke `/affirm` (higher bar, only for surprising approaches) |
 | List recent S3 mistakes | `bash ~/.claude/scripts/atone.sh list --severity S3` |
 | Search for a known pattern | `bash ~/.claude/scripts/atone.sh search "<keyword>"` |
-| Show one event + its RCA | `bash ~/.claude/scripts/atone.sh show <id>` |
+| Show one event and its RCA | `bash ~/.claude/scripts/atone.sh show <id>` |
 | Find triggers matching a topic | `bash ~/.claude/scripts/atone.sh triggers <keyword>` |
 | Top recurring slugs | `bash ~/.claude/scripts/atone.sh slugs` |
 | Force a re-consolidation | `bash ~/.claude/scripts/atone-consolidate.sh --force` |
-| Just refresh triggers (fast) | `bash ~/.claude/scripts/atone-consolidate.sh --triggers-only` |
+| Refresh triggers only (fast) | `bash ~/.claude/scripts/atone-consolidate.sh --triggers-only` |
 
 ## Severity rubric (for /atone)
 
@@ -84,7 +84,7 @@ Replaces the old hand-edited `~/.claude/mistake-patterns.md` (39 entries, 1167 l
 | **S2** | user had to correct output · debug-time waste · no irreversible damage |
 | **S1** | cosmetic / re-work caught early · no downstream cost |
 
-When ambiguous → pick the higher tier. S3 also writes a separate RCA file with a runnable `## Procedure` section.
+When the tier is ambiguous, pick the higher one. S3 also writes a separate RCA file with a runnable `## Procedure` section.
 
 ## Cluster letters
 
@@ -101,7 +101,7 @@ When ambiguous → pick the higher tier. S3 also writes a separate RCA file with
 | I | Verify-before-claim *(affirm)* | rendered/exercised before declaring done |
 | J | Convention-following *(affirm)* | used project helper instead of stdlib |
 
-A–E are mistake clusters; F–J are affirm clusters (separate to avoid namespace collision in `triggers.json`).
+A to E are mistake clusters and F to J are affirm clusters, kept separate to avoid a namespace collision in `triggers.json`.
 
 ## Six-layer protection model
 
@@ -109,14 +109,14 @@ A–E are mistake clusters; F–J are affirm clusters (separate to avoid namespa
 |---|-------|--------------|
 | 1 | Kernel `chflags uappnd` / `uchg` | `unlink`, `truncate`, non-EOF writes at syscall level |
 | 2 | PreToolUse hook `protect-atone-raw.sh` | Agent invoking any tool that touches raw paths |
-| 3 | Git history in `atone/.git` and `affirm/.git` | Per-add commits — recoverable from any prior SHA |
+| 3 | Git history in `atone/.git` and `affirm/.git` | Per-add commits, recoverable from any prior SHA |
 | 4 | Daily snapshots (`atone-snapshot.sh`) | Catastrophic loss; rsync `--link-dest` deduplicates |
 | 5 | Existing `safe-delete.sh` rm-block hook | Accidental shell deletion |
 | 6 | atone.sh / affirm.sh have NO destructive subcommands | Code-path-level deletion |
 
-**Escape hatch:** `bash ~/.claude/scripts/atone-unsafe-unlock.sh` (phrase-gated; logged). Only humans can satisfy the literal phrase `I UNDERSTAND THIS REMOVES PROTECTION`.
+**Escape hatch:** `bash ~/.claude/scripts/atone-unsafe-unlock.sh` (phrase-gated, logged). Only a human can satisfy the literal phrase `I UNDERSTAND THIS REMOVES PROTECTION`.
 
-## Mute / control surfaces
+## Mute and control surfaces
 
 | Surface | Mute file |
 |---------|-----------|
@@ -124,7 +124,7 @@ A–E are mistake clusters; F–J are affirm clusters (separate to avoid namespa
 | Correction nudge | `touch ~/.claude/atone/.nudge-off` |
 | Periodic refresh | `touch ~/.claude/atone/.refresh-off` |
 
-Periodic-refresh frequency tunable in `~/.claude/atone/config.json` (`periodic_refresh_n`, default 12).
+Tune the periodic-refresh frequency in `~/.claude/atone/config.json` (`periodic_refresh_n`, default 12).
 
 ## Files at a glance
 
@@ -156,13 +156,13 @@ Periodic-refresh frequency tunable in `~/.claude/atone/config.json` (`periodic_r
 ~/.claude/affirm/             raw affirm log + .git
 ~/.claude/atone-snapshots/    daily/weekly/monthly snapshots
 ~/.claude/atone/config.json   tunables
-~/.claude/mistake-patterns.md DERIVED — do not hand-edit
-~/.claude/compliments.md      DERIVED — do not hand-edit
+~/.claude/mistake-patterns.md DERIVED, do not hand-edit
+~/.claude/compliments.md      DERIVED, do not hand-edit
 ```
 
 ## Migration backup
 
-The 65 patterns from v1 `mistake-patterns.md` were migrated to 73 events on 2026-05-15. Backup of the migration artifacts (events.jsonl.draft + report + v1 source) lives at:
+The 65 patterns from v1 `mistake-patterns.md` were migrated to 73 events on 2026-05-15. The migration artifacts (events.jsonl.draft, report and v1 source) are backed up at:
 
 ```
 ~/.claude/atone-snapshots/_migration-2026-05-15/
@@ -172,7 +172,7 @@ The 65 patterns from v1 `mistake-patterns.md` were migrated to 73 events on 2026
 └── mistake-patterns.md.v1.bak  (pristine v1 source)
 ```
 
-Pruneable after ~30 days of clean atone usage with no recovery needed (~2026-06-15).
+Prune them after about 30 days of clean atone usage with no recovery needed (around 2026-06-15).
 
 ## Reference docs
 

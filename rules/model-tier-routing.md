@@ -1,5 +1,5 @@
 ---
-brief: Route every piece of work to the smallest adequate lane (local lm / gemini / haiku→sonnet→opus; fable = main-only) with right-sized effort; every plan with sub-agents, large ingestion, or modality tools carries a 4-line Model Plan; never switch models without explicit user confirmation. Enforced by guard-model-tier.sh.
+brief: Route work to the smallest adequate lane (local lm, gemini, haiku, sonnet, opus), carry a 4-line Model Plan, and never switch models without explicit user confirmation. Enforced by guard-model-tier.sh.
 triggers:
   - tool:Agent
   - tool:Workflow
@@ -18,14 +18,14 @@ stale_after_days: 180
 ---
 # Route every piece of work to the smallest adequate lane, out loud
 
-Lanes: local `lm` (~$0: q/see/review/imagine/fleet/index) · `lm gemini` (huge context, untrusted output) · haiku (trivial) · sonnet (DEFAULT sub-agent) · opus (main driver; judgment seats) · fable (vague+complex; in-subscription, still declared).
+Lanes: local `lm` (about $0: q/see/review/imagine/fleet/index), `lm gemini` (huge context, untrusted output), haiku (trivial), sonnet (DEFAULT sub-agent), opus (main driver, judgment seats), fable (vague, complex work; still declared).
 
-- **Every dispatch carries an explicit `model:` pin.** Sub-agent effort ≤ a high main; sonnet liberal, opus medium unless real judgment, xhigh needs the owner.
-- **A fable-tier main does involved work ITSELF** (owner 2026-09-01); it may delegate review, verification, cheap passes, never authoring. Hard-blocked in guard-model-tier.sh.
+- **Every dispatch carries an explicit `model:` pin.** Sub-agent effort stays at or below a high main. Sonnet gets liberal effort, opus medium unless real judgment is needed, and xhigh needs the owner.
+- **A fable-tier main does involved work ITSELF** (owner 2026-09-01). It may delegate review, verification and cheap passes, never authoring (guard-model-tier.sh blocks it).
 - **Model Plan block** on any plan with sub-agents, large ingestion or a modality tool: one line per stage, `stage → lane · model · effort · why`.
-- Escalate one step on evidence (failed gate, >2 retries, correction, irreversible stakes), never on anticipation. A missing model falls one lane DOWN, never up to fable.
-- **Never switch the main agent model without the owner's explicit confirmation.** This does not bar an auxiliary `lm` call. The owner has authorized local models and Gemini generally. Use Gemini eagerly for a broad, low-judgment, context-heavy sweep when it reduces work. Before the call, specify the corpus, requested output, and validation criteria. Afterward, check a targeted sample of source-linked claims and probe likely omissions or boundary cases. If checking would repeat most of the sweep, use the main agent or a direct sub-agent instead. Keep judgment, edits, and final claims with the main agent. Never send credentials or unreviewed secret-bearing inputs.
-- Usage-window advisories (fable above 80/90 percent) are the policy layer's job, advisory only.
+- Escalate one step on evidence (failed gate, over 2 retries, correction, irreversible stakes), never on anticipation. A missing model falls one lane DOWN, never up to fable.
+- **Never switch the main agent model without the owner's explicit confirmation.** An auxiliary `lm` or Gemini call is not a switch (owner-authorized). Before a Gemini sweep, state the corpus, output and validation criteria; afterward, sample-check its claims. Judgment, edits and final claims stay with the main agent. Never send credentials or secret-bearing inputs. 
+- Fable usage-window advisories (80/90 percent) belong to the policy layer.
 
 Diagnostic: a dispatch without a `model:` pin, a plan with sub-agents and no Model Plan, or a model switch on your own judgment.
 

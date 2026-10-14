@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-10-13
+updated: 2026-10-15
 stale_after_days: 365
 ---
 
@@ -25,18 +25,18 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-10-13 16:07.
+Regenerated 2026-10-15 01:05.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
-| `adversarial-review` | yes | Prosecutes work already declared done — re-runs the verification paths the author skipped, cross-examines every done/works/tested claim against executed evidence, and … |
-| `affirm` | yes | Records an affirmed-good behavior — non-obvious approach the user explicitly approved. Sibling of /atone. Higher write bar than atone (only fires for genuinely … |
-| `arch-qa` | yes | Answers technical architecture questions by tracing code paths through the codebase — analyzing feature implementations, data flows, auth middleware, and service … |
-| `atone` | yes | Records a mistake — gathers context, classifies severity (S1/S2/S3), and writes a structured entry to ~/.claude/atone/events.jsonl. For S3 events, also drafts an RCA … |
+| `adversarial-review` | yes | Prosecutes work already declared done, re-runs the verification paths the author skipped, cross-examines every done/works/tested claim against executed evidence, and … |
+| `affirm` | yes | Records an affirmed-good behavior, non-obvious approach the user explicitly approved. Sibling of /atone. Higher write bar than atone (only fires for genuinely … |
+| `arch-qa` | yes | Answers technical architecture questions by tracing code paths through the codebase, analyzing feature implementations, data flows, auth middleware, and service … |
+| `atone` | yes | Records a mistake, gathers context, classifies severity (S1/S2/S3), and writes a structured entry to ~/.claude/atone/events.jsonl. For S3 events, also drafts an RCA file … |
 | `backlog-triage` | yes | Review the triaged gcc improvement backlog and act on it. Reads the ranked triage file produced by backlog-consolidate.py (PROMOTE / WATCH / DROP-REVIEW), presents the … |
-| `banner` | yes | Generates a customized terminal banner by prompting for title, sections, and theme — renders using std::claude::shared banner.py with guaranteed alignment. |
-| `banner-fun` | yes | Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner — not dev metrics, which live in the statusline. |
-| `bloop` | yes | Drives a non-trivial build task through six stages — plan, build, review, validate, fix, docs — with an adversarial sub-agent validation gate that independently tries to … |
+| `banner` | yes | Generates a customized terminal banner by prompting for title, sections, and theme, renders using std::claude::shared banner.py with guaranteed alignment. |
+| `banner-fun` | yes | Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner, not dev metrics, which live in the statusline. |
+| `bloop` | yes | Drives a non-trivial build task through six stages, plan, build, review, validate, fix, docs, with an adversarial sub-agent validation gate that independently tries to … |
 | `build-change` | yes | Plans a non-UI change and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the change, states problems … |
 | `build-ui` | yes | Plans a page-level UI build or renovation and produces an execution plan whose every clause has a command, a file:line, or a named artifact behind it. Classifies the … |
 | `callouts` | yes | Persists the owner's review findings as re-runnable acceptance rows per surface, and gates any later "done" claim on re-running the open rows. Use when the owner calls … |
@@ -47,65 +47,65 @@ Regenerated 2026-10-13 16:07.
 | `create-agent` | yes | Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the … |
 | `create-report` | yes | Takes a markdown file and generates a polished, self-contained HTML report with a clean UI. Supports 13 visual styles (default, notion, dashboard, magazine, terminal, … |
 | `create-skill` | yes | Turns a skill idea (a spec, intent, or checklist answers) into a finished SKILL.md with a tailored validation rubric and ledger steps, reviewed by a fresh seat for … |
-| `deadline` | yes | Run work against a hard deadline while spending the user's scarce return visits as the true currency — one front-loaded decision exchange, reversible-default autonomy … |
-| `decision-wizard` | yes | Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments — a design review, a migration … |
+| `deadline` | yes | Run work against a hard deadline while spending the user's scarce return visits as the true currency, one front-loaded decision exchange, reversible-default autonomy … |
+| `decision-wizard` | yes | Collect a batch of human decisions with near-zero human effort. When you are about to ask the user more than ~3 related judgments, a design review, a migration go/no-go, … |
 | `deck` | yes | Turns a source document (or the conversation) into one self-contained HTML slide deck with a synced presenter-notes window, verifies that no slide overflows by measuring … |
 | `deep-research` | yes | Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against … |
 | `deploy-parity-testing` | user-only | Runs a parity test cycle when a service moves work to a new execution path (runner, provider, flag): plan rows with a spend class each, a seat brief, a fresh seat's … |
 | `designer-reviewer` | user-only | Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, … |
-| `doctor` | yes | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", … |
+| `doctor` | yes | On-demand environment health check, worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", … |
 | `feature-doc-set` | yes | Reads a feature branch and writes its audience doc set (owner brief, engineering guide, team brief, PR description) plus a review contract of the behaviors a build … |
 | `file-gh-issue` | yes | File a MINOR technical issue to the current repo's GitHub Issues, with a human gate. Dry-run by default. Use when an agent surfaces a small technical cleanup worth … |
 | `gated-plan` | yes | The planning process for owner-gated work, meaning anything that cannot correctly proceed until a human decides. Investigates until it can falsify its own proposal, … |
 | `gcc-explore` | yes | Sit down with the gcc and look around. Renders the config as three panels (SHAPE, what it is; MOVEMENT, which way it is drifting; CYCLE, the loops keeping it alive) from … |
 | `gcc-map` | user-only | Maps how instruction content actually loads into an agent and the CLAUDE.md doc graph, measuring ground truth first and diffing it against what the indices claim, then … |
-| `gcc-proposal` | yes | Files a ~/.claude improvement proposal into the backlog via propose.sh — derives the title, category, effort, and cross-links from a rough description or from the … |
+| `gcc-proposal` | yes | Files a ~/.claude improvement proposal into the backlog via propose.sh, derives the title, category, effort, and cross-links from a rough description or from the current … |
 | `gdoc` | yes | Publishes a set of markdown files as one Google Doc with one tab per file, in a named Drive folder; re-runs rewrite each tab in place so the link and tabs never change. … |
-| `generate-image` | yes | Generates raster images from a text prompt using the LOCAL imagine model (mflux/MLX Flux on Apple Silicon — $0, offline, no cloud). Uses only models already cached on … |
+| `generate-image` | yes | Generates raster images from a text prompt using the LOCAL imagine model (mflux/MLX Flux on Apple Silicon, $0, offline, no cloud). Uses only models already cached on … |
 | `generate-pdf` | yes | Converts a markdown file to a styled PDF with 4 style variants (default, professional, academic, compact), optional cover page, TOC generation, and landscape mode. … |
 | `improve-skill` | yes | Audits skills against the house rules and their run history (runtime notes incl. archives, skill-log outcomes, their own Validation rubric), applies approved fixes, and … |
 | `intake` | yes | Models a request before work starts, restating it as goal, scope ceiling, register, and what the wording exemplifies versus specifies, with one line back when readings … |
 | `ipc` | yes | Work the claude-ipc fabric from any session. Who's live, what's owed, send/reply with the safety rails, triage an inherited or orphaned mailbox, and first-line broker … |
-| `kanban` | yes | Drives the agent-populated kanban board — inits a board for the current project, re-syncs cards from docs/checkpoints/session-notes, pulls the human's unread card notes, … |
+| `kanban` | yes | Reads the mothballed kanban board (read-only since 2026-10-14) and opens its UI. Use only when the owner names the kanban board itself; not at session start, and not for … |
 | `linear` | yes | Reads and changes the owner's Linear workspace through one tested script, previewing every change: issues, comments, labels, links, relations, cycles, points, projects, … |
 | `magi` | yes | Multi-agent supervisor-led deliberation. DEFAULTS TO --mode lite (3 voters, no personas/jester/voting, ~$3-8/run with research on) for routine tradeoffs. Opt into --mode … |
 | `migrate` | yes | Create a migration entry for a structural change to ~/.claude/. Required before/alongside any change that moves a canonical path, renames a script other things … |
 | `page` | yes | Routes anything that has to be shown to the surface that fits it (a markdown file, a local HTML page, a decision page, an Artifact, a deck) and makes sure an HTML page … |
-| `persona` | yes | Adopt a working-mode persona (~/.claude/personas/) for the current task — pick by name or let the skill match one, load its role contract into context, and record the … |
+| `persona` | yes | Adopt a working-mode persona (~/.claude/personas/) for the current task, pick by name or let the skill match one, load its role contract into context, and record the … |
 | `pick-skill` | yes | The front door when the right instrument is not obvious. Two jobs. Retrieval, for "I half-remember a skill exists", answered with a ranked shortlist you pick from by … |
 | `pin-for-dream` | yes | Pin a structured insight from the current Claude Code session so it reaches the improvement backlog. Auto-gathers session context (cwd, recent files touched, transcript … |
 | `plan` | yes | Routes a planning request to the instrument that fits it, by naming which of six needs the request actually has, and refuses to plan a change to something that already … |
-| `plugs` | yes | Show what context-injecting and learning-capturing "plugs" are wired into the session (start / per-turn / compact / end) — what's registered, what's muted, and the … |
+| `plugs` | yes | Show what context-injecting and learning-capturing "plugs" are wired into the session (start / per-turn / compact / end), what's registered, what's muted, and the … |
 | `pr-description` | yes | Write a PR description that briefs the reviewer in the author's voice: content-model-first. Extracts the behavioral inventory from the ACTUAL diff (never commit … |
 | `preference-graduation` | user-only | Harvests recurring preference and vocabulary signals from the post-insight streams (atone, affirm, i-dream, runtime-notes, checkpoints), dedupes them against existing … |
 | `probe` | yes | Drives a defect to its confirmed mechanism before any fix: a runnable probe isolates the one unknown, the harness is ruled out first, and a second fix attempt on the … |
-| `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep — mine a large transcript corpus for candidate items with cheap mechanical passes, then refine through progressively smarter … |
-| `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports — generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
+| `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep, mine a large transcript corpus for candidate items with cheap mechanical passes, then refine through progressively smarter … |
+| `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports, generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
 | `recommend` | yes | Answers what to do next on a session, project, or plan file as a call already made, splitting what it needs from you into gates you can clear today and defaults it took … |
-| `retro-dump` | yes | Manually trigger a retroactive /core-dump on a past session that ended without one. Headless — spawns `claude -p --resume <uuid>` to read the transcript and synthesize a … |
+| `retro-dump` | yes | Manually trigger a retroactive /core-dump on a past session that ended without one. Headless, spawns `claude -p --resume <uuid>` to read the transcript and synthesize a … |
 | `revive` | yes | Lists Claude Code session transcripts under ~/.claude/projects/, cross-references with the checkpoint index, presents a picker, and prints the exact `claude --resume … |
 | `roster-budget` | yes | Measures the skill roster against its listing budget and names the skills whose descriptions are being dropped, ranked by what each long description costs. Use when a … |
 | `router` | yes | One prefix for the six routers. /router:pick-skill (find the instrument) · /router:plan (how to approach) · /router:ui (any screen of a product) · /router:page (anything … |
-| `session-stats` | yes | Full session analytics report — cost, tokens, tools, rate limits, context usage, and activity timeline |
-| `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree — surrounding context, sibling … |
+| `session-stats` | yes | Full session analytics report, cost, tokens, tools, rate limits, context usage, and activity timeline |
+| `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree, surrounding context, sibling … |
 | `ste-writing` | yes | Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, … |
 | `summarize-changes` | yes | Generates a categorized changelog of recent work, scoped by three orthogonal axes (time / topic / source) and rendered in a user-selected format. Treats git as ONE … |
-| `svg` | yes | Authors, edits, optimizes, and render-checks SVG graphics — icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen … |
+| `svg` | yes | Authors, edits, optimizes, and render-checks SVG graphics, icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen backend); … |
 | `tag` | user-only | Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct … |
 | `tasks` | yes | The owner's steering view of live goals. Bare /tasks composes the views that fit the ask (gates first, then convergence, drift as one loud line); /tasks now \| path \| … |
 | `test` | yes | Run tests for the current folder using a cached per-folder framework detection. First run probes the folder for pyproject.toml/package.json/Cargo.toml/go.mod etc and … |
 | `ui` | yes | Routes a UI request to the one instrument that fits it, and refuses to start until an existing surface has a written capability list. The account holds a whole cluster … |
-| `ui-categorical-check` | yes | Checks a UI change for CATEGORICAL bug-classes — the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating … |
+| `ui-categorical-check` | yes | Checks a UI change for CATEGORICAL bug-classes, the non-primitive defects that pass every DOM/behavioral assertion and only a human notices (a transparent floating … |
 | `ui-direction` | yes | Finds and rules on a visual direction before anyone plans or builds. Grounds the work in a cited research sheet that reads the owner's rejection record FIRST, runs the … |
-| `ui-gripe` | yes | Diagnoses WHY a UI feels stupid, confusing, or frustrating — runs the local see --ui structural inventory as $0 ground truth, then a native-vision judgment pass to name … |
+| `ui-gripe` | yes | Diagnoses WHY a UI feels stupid, confusing, or frustrating, runs the local see --ui structural inventory as $0 ground truth, then a native-vision judgment pass to name … |
 | `ui-loop` | yes | Drives a UI change to convergence through the local-models loop, where scripts measure, Claude judges, the ledger tracks, and `see reshoot` re-captures. Use for … |
 | `validate` | yes | Routes a finished or nearly-finished change to the checks it actually needs, by first naming every validation question the change raises and then saying which instrument … |
-| `vis-compare` | yes | Judges whether a recreated image faithfully imitates a reference — runs the local `see diff A B` deterministic evidence pack (text/color/hash/shape, zero-cost, … |
+| `vis-compare` | yes | Judges whether a recreated image faithfully imitates a reference, runs the local `see diff A B` deterministic evidence pack (text/color/hash/shape, zero-cost, … |
 | `wake` | user-only | Arm an opt-in wake monitor that revives THIS session if an outage leaves it alive-but-idle. A turn killed by a transient API error stops dead until a human types "keep … |
-| `web-design` | yes | Reviews, generates, and systematizes web UI designs — screenshot-based critique with actionable CSS fixes, design token extraction, and page layout generation with … |
+| `web-design` | yes | Reviews, generates, and systematizes web UI designs, screenshot-based critique with actionable CSS fixes, design token extraction, and page layout generation with … |
 | `word-doc` | yes | Turns a markdown file, notes, or the conversation into a .docx that reads well in Word and Google Docs, planning the structure from the content and rendering the house … |
 | `workspace` | yes | Manage per-session workspace docs at <project>/.claude/session-notes/<session-id>.md. Each serious session has its own Todos, Notes, Doc Links, and Decisions file that … |
-| `write-docs` | yes | Scans a codebase to generate focused technical documentation — API references, guides, ADRs, changelogs, or onboarding docs — with anti-fluff voice calibration. |
+| `write-docs` | yes | Scans a codebase to generate focused technical documentation, API references, guides, ADRs, changelogs, or onboarding docs, with anti-fluff voice calibration. |
 
 ## Parked (32, not loaded)
 

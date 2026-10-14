@@ -17,7 +17,7 @@ updated: 2026-07-28
 stale_after_days: 365
 ---
 
-# Language quality — the ratified defect taxonomy
+# Language quality: the ratified defect taxonomy
 
 What actually degrades this account's agent prose, measured rather than assumed.
 Source: the 2026-07-27 pyramid sweep over 60 days of transcripts (2,106
@@ -39,7 +39,7 @@ invisible to any word ban.
 
 ## The categories (kept after adversarial vet)
 
-### structure — the two-split chain and the fused sentence
+### structure: the two-split chain and the fused sentence
 
 The reader must read a sentence twice. The core defect is fusion: the
 two-split pattern (a clause, then a dash-elaboration) overused, stacked
@@ -61,7 +61,7 @@ sentence that parses linearly is fine. Evidence-density never excuses it
 > 2. Verify each in code (file:line) and in the live app at :5101, read-only.
 > 3. Classify each item: BUILT, PARTIAL, or MISSING. …"
 
-### verdict-first — the conclusion before the facts
+### verdict-first: the conclusion before the facts
 
 A verdict or done-state placed before the status facts that would justify it,
 even when those facts follow and are true. Shapes: a "Done."/"Perfect." opener
@@ -78,7 +78,7 @@ evidence exists but is placed after the verdict.
 > After: "The write call returned. Now I check that the file exists and is
 > complete."
 
-### overclaim — the claim without its evidence
+### overclaim: the claim without its evidence
 
 The message asserts what nothing in it shows: a completion claim with no
 evidence token anywhere, celebration before the verification has run, a
@@ -92,7 +92,7 @@ category is the prose-level name for the same failure.
 > After: "I updated the config. I have not re-run the startup path, so the
 > fix is unverified."
 
-### contrastive-scaffold — "not X, but Y"
+### contrastive-scaffold: "not X, but Y"
 
 The negation frame the thesaurus already bans (thes-20260716-165410-80),
 promoted to a category after the vet found it in ~8% of scored messages with
@@ -102,7 +102,7 @@ no category home. State what the thing is; drop the "not X" preamble.
 >
 > After: "The bug is a race in the loader."
 
-### bare-ids — the store's coordinates shown to the reader
+### bare-ids: the store's coordinates shown to the reader
 
 Confirmed at volume by the 2026-08-20 register-friction sweep (32 of 153
 verified friction windows): a run of #NN ids without subjects makes the reader
@@ -110,13 +110,13 @@ do a lookup per row. Every id carries three or more words of subject on the
 same line, or it does not ship. Counted by counter-gate-stop.sh (cluster-aware:
 an id inside a run of ids is bare regardless of trailing words).
 
-### buried-question — the ask decided last, written last
+### buried-question: the ask decided last, written last
 
 Sweep-measured: a question in the tail of a long reply is answered 1 time in
 19; an open question 10/26; a menu 12/23. If a reply needs an answer, the ask
 lives in the first screen, in the lede block, or it is functionally rhetorical.
 
-### option-menu — the fork that is really a stop
+### option-menu: the fork that is really a stop
 
 Sweep-confirmed (22 windows): closing menus the owner rejects by reframing.
 A menu is legitimate only when the fork is real and each option carries the

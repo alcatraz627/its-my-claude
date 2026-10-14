@@ -29,10 +29,27 @@ DASH = re.compile(r"\s[—–]\s|(?<=[A-Za-z])[—–](?=[A-Za-z])")
 # two high-precision forms only; bare "not X —" catches plain negation (validated 2026-07-27)
 CONTRASTIVE = re.compile(r"\bnot\s+[^.;,]{2,40},?\s+but\s+|[—–]\s*it'?s\b", re.I)
 
+# Named tells reported but not yet scored (weight 0), so existing gates keep
+# their thresholds while the backlog is rewritten. Proposed once it lands:
+# weight 1.5 each, which puts a doc with one per 100 words near the block line.
+#
+# contrast_list: chained negations ("not X, not Y, but Z", "isn't X, isn't Y")
+# and the semicolon/colon antithesis ("It's not about A; it's about B").
+CONTRAST_LIST = re.compile(
+    r"\b(?:not|isn'?t|aren'?t|wasn'?t|doesn'?t|don'?t)\s+[^.;:,]{2,40},\s*(?:and\s+|nor\s+)?(?:not|isn'?t|aren'?t|never|no)\s+[^.;:]{2,40}"
+    r"|\b(?:it|this|that|these|those)(?:'s|\s+is|\s+isn'?t|\s+is\s+not)\s+(?:not\s+)?(?:just\s+|only\s+)?(?:about\s+)?[^.;:]{2,40}[;:]\s*(?:it|this|that)'?s\b",
+    re.I)
+# split_phrase: one sentence cut in two by a colon or semicolon, each half long
+# enough to stand alone, the second half starting lowercase (a spliced
+# elaboration). Dashes are counted by two_split_dash; list intros (the tail has
+# two or more commas) and short label rows never match.
+SPLIT_PHRASE = re.compile(r"^[^:;\u2014\u2013]{25,}[:;]\s+[a-z][^:;\u2014\u2013]{20,}$")
+
 WEIGHTS = {"fused_25_35": 1, "fused_35_50": 3, "fused_over_50": 6, "two_split_dash": 1,
            "contrastive_scaffold": 1.5, "verdict_first_opener": 3, "unverified_claim": 4,
            "filler_hedge": 1.5, "hedged_assertion": 1, "jargon_marketing": 2,
-           "passive": 1, "nominalization": 1, "semicolon": 0.5}
+           "passive": 1, "nominalization": 1, "semicolon": 0.5,
+           "split_phrase": 0, "contrast_list": 0}
 
 def _sentences(text):
     out = []
@@ -79,6 +96,14 @@ def lint(text):
     for m in CONTRASTIVE.finditer(prose):
         if len(spans["contrastive_scaffold"]) < 3:
             spans["contrastive_scaffold"].append(prose[max(0, m.start()-20):m.end()+30].strip())
+    sp = [x for x in sents if not x.lstrip().startswith(("-", "*", "#", "|")) and SPLIT_PHRASE.match(x)
+          and x.split(":")[-1].count(",") < 2 and x.split(";")[-1].count(",") < 2]
+    v["split_phrase"] = len(sp)
+    spans["split_phrase"] = [x[:100] for x in sp[:3]]
+    v["contrast_list"] = len(CONTRAST_LIST.findall(prose))
+    for m in CONTRAST_LIST.finditer(prose):
+        if len(spans["contrast_list"]) < 3:
+            spans["contrast_list"].append(prose[max(0, m.start()-20):m.end()+30].strip())
     first = sents[0] if sents else ""
     v["verdict_first_opener"] = 1 if VERDICT_OPENER.match(first) else 0
     if v["verdict_first_opener"]: spans["verdict_first_opener"] = [first[:100]]
@@ -116,8 +141,10 @@ def main(argv):
             print(f"{os.path.basename(f):32} skipped ({r['skipped']})")
         else:
             top = sorted(r["violations"].items(), key=lambda kv: -WEIGHTS[kv[0]] * kv[1])[:3]
+            named = [f"{k} x{r['violations'][k]}" for k in ("split_phrase", "contrast_list") if k in r["violations"]]
             print(f"{os.path.basename(f):32} score={r['score']:6.2f} words={r['words']:5d}  worst: " +
-                  (", ".join(f"{k} x{n}" for k, n in top) or "clean"))
+                  (", ".join(f"{k} x{n}" for k, n in top) or "clean") +
+                  ("  tells: " + ", ".join(named) if named else ""))
     return 0
 
 if __name__ == "__main__":

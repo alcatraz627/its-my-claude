@@ -1,5 +1,5 @@
 ---
-brief: JS inside server-side backtick template literals needs DOUBLE escapes; `node --check` won't catch it; verify in a real browser
+brief: JS inside server-side backtick template literals needs DOUBLE escapes; `node --check` won't catch it, so verify in a real browser
 triggers:
   - topic:template-literals
   - topic:server-side-rendering
@@ -23,9 +23,9 @@ stale_after_days: 90
 
 # JS escape sequences inside server-side template literals
 
-When emitting JavaScript from inside a backtick template literal (e.g. a Node `renderPage()` returning HTML with an inline `<script>`), every escape sequence in the JS source is consumed by the **server-side template** before the browser ever sees it.
+When emitting JavaScript from inside a backtick template literal (for example a Node `renderPage()` returning HTML with an inline `<script>`), every escape sequence in the JS source is consumed by the **server-side template** before the browser ever sees it.
 
-Graduated from atone slug `js-escape-sequences-inside-server-side-template-literals` (S3, broke pm2-manage page interactions 2026-05-01, recurred minutes later same session).
+Graduated from atone slug `js-escape-sequences-inside-server-side-template-literals` (S3, broke pm2-manage page interactions 2026-05-01, and recurred minutes later in the same session).
 
 ## What happens
 
@@ -48,13 +48,13 @@ const k = '         <-- literal newline, unterminated string → SyntaxError
 el.value = 'Enter';   <-- the quotes don't match anymore
 ```
 
-One SyntaxError kills **every** interactive control on the page — theme toggle, navbar, buttons. Catastrophic from a single line.
+One SyntaxError kills **every** interactive control on the page, including the theme toggle, navbar and buttons. A single line does catastrophic damage.
 
 ## Why `node --check` doesn't catch it
 
-The server-side JS (the template literal *containing* the inline script) is syntactically valid Node — the template is just a string. Only after template substitution does the browser-bound JS become broken. `node --check` never sees the substituted output.
+The server-side JS (the template literal *containing* the inline script) is syntactically valid Node, because the template is just a string. Only after template substitution does the browser-bound JS become broken. `node --check` never sees the substituted output.
 
-`curl /` + grep also misses this — the HTML looks fine; the bug only surfaces when the JS executes in a browser.
+`curl /` plus grep also misses this. The HTML looks fine, and the bug only surfaces when the JS executes in a browser.
 
 ## The rule
 
@@ -68,13 +68,13 @@ When writing JS code that lives inside a backtick template literal:
 
 2. **Better:** extract the emitted JS to a static `.js` file served via `<script src="...">`. Then `node --check` covers it.
 
-3. **Mandatory:** before declaring the page ready, open it in a real browser and click a button. Not curl, not test runner — actual browser interaction.
+3. **Mandatory:** before declaring the page ready, open it in a real browser and click a button. Curl and the test runner do not count. Only actual browser interaction does.
 
 ## Diagnostic signal that this pattern is firing
 
-A user reports "page buttons stopped working" or "console shows SyntaxError on line N" — and the file most recently edited is a renderer with a backtick-string-wrapped `<script>` block.
+A user reports "page buttons stopped working" or "console shows SyntaxError on line N", and the file most recently edited is a renderer with a backtick-string-wrapped `<script>` block.
 
 ## Related
 
-- `rules/testing.md` § "UI/frontend verification" — start dev server, exercise in browser
+- `rules/testing.md` § "UI/frontend verification": start the dev server and exercise it in a browser
 - Atone event: `bash ~/.claude/scripts/atone.sh search js-escape`

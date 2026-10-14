@@ -13,7 +13,7 @@ stale_after_days: 90
 ---
 
 # Claudew
-`claudew` wraps the `claude` CLI with a plugin-based lifecycle system. Drop-in replacement: `claudew "Fix the login bug"`. Repo: `~/.claude/claudew/`, symlinked at `~/.local/bin/claudew`.
+`claudew` wraps the `claude` CLI with a plugin-based lifecycle system. It is a drop-in replacement: `claudew "Fix the login bug"`. Repo: `~/.claude/claudew/`, symlinked at `~/.local/bin/claudew`.
 
 ## Lifecycle phases
 
@@ -36,11 +36,11 @@ stale_after_days: 90
 
 ## HINT protocol
 
-Plugins emit `HINT:` lines on stdout → collected by host → injected into next turn's `additionalContext`. All other stdout discarded.
+Plugins emit `HINT:` lines on stdout. The host collects them and injects them into the next turn's `additionalContext`. All other stdout is discarded.
 
 ## Config
 
-`~/.claude/claudew/config.toml` — host settings, enabled plugin list, per-plugin overrides. Uses single-line TOML arrays only (the minimal parser doesn't support multiline).
+`~/.claude/claudew/config.toml` holds host settings, the enabled plugin list and per-plugin overrides. Use single-line TOML arrays only, because the minimal parser does not support multiline.
 
 ## Plugin development
 
@@ -48,4 +48,4 @@ See `~/.claude/claudew/PLUGIN-CONTRACT.md`. Scaffold with `claudew new-plugin 60
 
 ## State
 
-Per-plugin state in `~/.claude/claudew/state/<name>/`. Host event log in `~/.claude/claudew/events.jsonl`.
+Per-plugin state lives in `~/.claude/claudew/state/<name>/`. The host event log is `~/.claude/claudew/events.jsonl`.

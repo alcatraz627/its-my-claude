@@ -1,5 +1,5 @@
 ---
-brief: Before adding a raw env var read, grep how existing vars are read in the project — route through the central config module/schema if one exists, don't scatter raw reads
+brief: Before adding a raw env var read, grep how existing vars are read in the project. Route through the central config module or schema if one exists, and don't scatter raw reads
 triggers:
   - topic:env-var
   - topic:configuration
@@ -37,8 +37,8 @@ through modules create drift and bypass validation.
 
 ## This is usually a project-local convention
 
-The *specific* config module is per-project — the universal part is "find the
-project's pattern and follow it" rather than introducing a new access style.
+The *specific* config module is per-project. The universal part is to find the
+project's pattern and follow it, and to avoid introducing a new access style.
 When a project's `.claude/rules/` documents its own config module, that local
 rule supersedes this one.
 

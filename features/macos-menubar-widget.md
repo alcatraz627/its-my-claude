@@ -49,7 +49,7 @@ cross-project scaffolding and the non-obvious gotchas that cost real debugging t
 
 An `.accessory` app has no Dock icon and no key window by default, so a Settings
 window needs an explicit activation dance. Use a plain owner class (NOT an
-`NSWindowController` subclass, and NOT `@MainActor` unless the whole codebase is —
+`NSWindowController` subclass, and NOT `@MainActor` unless the whole codebase is, since
 menu actions already run on main) that hosts an existing SwiftUI view via
 `NSHostingController`, so the dashboard tab and the window render one implementation.
 
@@ -94,7 +94,7 @@ control writes a `UserDefaults` key then posts ONE `Notification` (e.g.
 (invalidate caches, restart timers, re-render rows, redraw the badge). Adding a
 control is then mechanical: define a key, expose it (`@AppStorage` + `.onChange {
 post() }`), read it via a global accessor. Prefer this over per-setting Combine
-sinks unless the app already uses them (sys-monitor does) — the broadcast avoids
+sinks unless the app already uses them (sys-monitor does), because the broadcast avoids
 wiring a new sink per control.
 
 ## 3. Menu-bar badge as a composited NSImage
@@ -134,7 +134,7 @@ popover content; guard on "menu not open" so the hover and the click-menu don't 
 - `NSScreen.main` may be an **asleep** external/built-in display; a window centered
   there is invisible. Center on the cursor's screen (see §1).
 - `cliclick` cursor positioning is **badly skewed** across a dual-display setup
-  (asked-for vs landed coords differ by 40–170px) — don't trust it for pixel-precise
+  (asked-for vs landed coords differ by 40–170px), so don't trust it for pixel-precise
   automated hover tests; drive UI via a programmatic one-shot trigger + `screencapture`
   instead, and `caffeinate -u` so the display doesn't sleep mid-capture.
 
@@ -184,5 +184,5 @@ draws its own hover) and `ClosureMenuItem` for plain closure items.
 - `~/.claude/widgets/claude-instances/native/SettingsWindowController.swift` (§1),
   `Bar.swift` (`updateButton` §3, `checkHover`/`showUsagePopover` §4, the
   `.menuBehaviorDidChange` observer §2), `Dashboard.swift` (the SwiftUI sections).
-- `~/Code/Claude/sys-monitor/Sources/sys-monitor/` — the Combine-sink variant of §2.
+- `~/Code/Claude/sys-monitor/Sources/sys-monitor/` holds the Combine-sink variant of §2.
 - Full research notes: `~/.claude/widgets/claude-instances/.claude/output/20260704-widget/`.

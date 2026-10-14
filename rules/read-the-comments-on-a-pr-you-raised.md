@@ -81,14 +81,14 @@ Every PR you raise, without exception:
 From the prime-demotion-0901 notes, and it reshapes the loop above:
 
 - **A review that FAILS is flagged, not waited on.** Check the run logs and docs
-  for why when they are in reach, or just flag it — either way tell the owner why
+  for why when they are in reach, or just flag it. Either way, tell the owner why
   it failed, and continue working. Halting is not necessary.
 - **The review = a comment.** Comment presence is what "reviewed" means here.
 - **No review comment AND no action running → this rule does not apply.**
 
 And the versable-git standing default (same ruling, r2 note): in versable-git
 projects, replies to review findings always go through `/claude-bot ask (via
-🤖claude)` — the standing default there, not a per-finding choice.
+🤖claude)`. This is the standing default there and no per-finding choice.
 
 ## Confidence decays across rounds, and the check before "ready" is mechanical
 

@@ -14,14 +14,14 @@ stale_after_days: 90
 ---
 
 # Wal
-Write-ahead log at `.claude/wal.jsonl` (project-local) or `~/.claude/wal.jsonl` (global). Canonical format since 2026-04-17. **Maintain automatically — don't wait for the user to ask.**
+The write-ahead log lives at `.claude/wal.jsonl` (project-local) or `~/.claude/wal.jsonl` (global). The format has been canonical since 2026-04-17. **Maintain it automatically, without waiting for the user to ask.**
 
 ## Core rules
 
-- Append-only during session. Keep only last 2 sessions.
-- JSONL: one JSON object per line. Required fields: `ts`, `kind`, `session_id`, plus kind-specific body.
-- Skip trivial reads. Compress aggressively — one event per line.
-- `jq`-queryable. Last checkpoint: `jq -c 'select(.kind == "checkpoint")' .claude/wal.jsonl | tail -1`
+- Append-only during the session. Keep only the last 2 sessions.
+- JSONL: one JSON object per line. Required fields: `ts`, `kind`, `session_id`, plus a kind-specific body.
+- Skip trivial reads. Compress aggressively, with one event per line.
+- It is `jq`-queryable. Last checkpoint: `jq -c 'select(.kind == "checkpoint")' .claude/wal.jsonl | tail -1`
 
 ## Event kinds
 
@@ -29,20 +29,20 @@ Write-ahead log at `.claude/wal.jsonl` (project-local) or `~/.claude/wal.jsonl` 
 
 ## Checkpoint body
 
-`goal` / `done[]` / `current` / `next` / `blockers[]` / `learnings[]` — all one line. Written at tool count ~30, before risky operations, and on user break signals.
+`goal` / `done[]` / `current` / `next` / `blockers[]` / `learnings[]`, each on one line. Written at tool count ~30, before risky operations, and on user break signals.
 
 ## /catchup contract
 
-`/catchup` reads `.claude/wal.jsonl` first → finds last `checkpoint` line → resumes from `current` / `next`. Falls back to `.claude/wal.md` (legacy markdown), then to `_checkpoint.claude.md`.
+`/catchup` reads `.claude/wal.jsonl` first, finds the last `checkpoint` line, and resumes from `current` / `next`. It falls back to `.claude/wal.md` (legacy markdown), then to `_checkpoint.claude.md`.
 
 ## Writing WAL entries safely
 
-Never hand-compose JSONL. Use `bash ~/.claude/scripts/wal/wal.sh <kind> '<fields>'` which wraps `jq -cn` for safe escaping.
+Never hand-compose JSONL. Use `bash ~/.claude/scripts/wal/wal.sh <kind> '<fields>'`, which wraps `jq -cn` for safe escaping.
 
 ## Full format spec
 
-See `~/.claude/skills/shared/wal-format.md` for complete field reference, parser states, and migration history.
+See `~/.claude/skills/shared/wal-format.md` for the complete field reference, parser states and migration history.
 
 ## Legacy markdown WAL
 
-`.claude/wal.md` is still honored by `/catchup` as a fallback. No migration required for existing projects — new sessions write JSONL, old markdown keeps working.
+`/catchup` still honors `.claude/wal.md` as a fallback. Existing projects need no migration: new sessions write JSONL, and old markdown keeps working.

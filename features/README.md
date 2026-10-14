@@ -1,6 +1,6 @@
-# `~/.claude/features/` — Subsystem & integration docs
+# `~/.claude/features/`: subsystem and integration docs
 
-> Features document **how a thing works**. Reference material for tools, MCPs, hooks, and integrations — not behavioral rules.
+> Features document **how a thing works**. They hold reference material for tools, MCPs, hooks and integrations, not behavioral rules.
 
 ## When to write here
 
@@ -18,12 +18,12 @@
 
 ## File shape
 
-YAML frontmatter required (`brief`, `triggers:`, `related`, `tier`, `category`, `updated`, `stale_after_days`). Triggers prefixed `tool:` / `topic:` / `phrase:` / `skill:` / `mcp:`.
+YAML frontmatter is required (`brief`, `triggers:`, `related`, `tier`, `category`, `updated`, `stale_after_days`). Triggers are prefixed `tool:` / `topic:` / `phrase:` / `skill:` / `mcp:`.
 
-Body: open with what the thing IS (code-agnostic), then how to invoke / configure, then caveats. Cross-link related features with `[[feature-name]]`-style links when natural.
+Body: open with what the thing IS (code-agnostic), then how to invoke and configure it, then caveats. Cross-link related features with `[[feature-name]]`-style links when natural.
 
 ## See also
 
-- `PLACEMENT.md` — placement rules
-- `LOOKUP.md` — global address book
-- `NAMESPACE.md` — std::claude::\* clusters that often touch features
+- `PLACEMENT.md` for placement rules
+- `LOOKUP.md`, the global address book
+- `NAMESPACE.md` for std::claude::\* clusters that often touch features

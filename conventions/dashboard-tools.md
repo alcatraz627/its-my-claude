@@ -1,5 +1,5 @@
 ---
-brief: Implementation template for small single-user dashboard tools — Node/HTTP/watcher/JSON-state architecture, mutex discipline, hot-path rules, recoverable destructive ops, dashboard UX
+brief: Implementation template for small single-user dashboard tools: Node/HTTP/watcher/JSON-state architecture, mutex discipline, hot-path rules, recoverable destructive ops, dashboard UX
 triggers:
   - topic:dashboard-tool
   - topic:small-tool
@@ -22,7 +22,7 @@ stale_after_days: 180
 
 How to build small single-user dashboard tools (Node + Express + chokidar + JSON state file + vanilla-JS dashboard) without the data-loss class of bugs.
 
-This document was forged in the wreckage of Screenshot Sherpa, where ignoring every rule below cost the user a deadline. **Apply these rules from line 1 of any new tool — retrofitting is hard.**
+This document was forged in the wreckage of Screenshot Sherpa, where ignoring every rule below cost the user a deadline. **Apply these rules from line 1 of any new tool, because retrofitting is hard.**
 
 ---
 
@@ -50,7 +50,7 @@ This document was forged in the wreckage of Screenshot Sherpa, where ignoring ev
 └──────────────────┘
 ```
 
-Single process, single state file, multiple writers — and they all need to coordinate.
+Single process, single state file, multiple writers, and they all need to coordinate.
 
 ## The non-negotiables
 
@@ -59,7 +59,7 @@ These are listed first because every one of them was violated in the Sherpa data
 ### 1. One mutex per state file. Wrap the entire load-mutate-save cycle.
 
 ```ts
-// state.ts — the only safe API
+// state.ts: the only safe API
 const sessionLocks = new Map<string, Promise<unknown>>();
 
 export async function withStateLock<T>(
@@ -68,8 +68,8 @@ export async function withStateLock<T>(
 ): Promise<T> {
   const prev = sessionLocks.get(key) || Promise.resolve();
   const run = prev.then(() => fn());
-  // Swallow rejections in the chain link only — the original caller still
-  // sees its rejection — so one failing mutator doesn't poison the queue.
+  // Swallow rejections in the chain link only. The original caller still
+  // sees its rejection, so one failing mutator doesn't poison the queue.
   sessionLocks.set(
     key,
     run.catch(() => undefined),
@@ -94,7 +94,7 @@ Rules:
 
 - The lock scopes `load → mutate → save`, NOT just `save`. Wrapping only `save` serializes writes but each handler still loaded a stale snapshot.
 - Every writer uses the same lock. HTTP handlers, watcher events, background jobs, startup tasks. If any path skips the lock, you lose the guarantee.
-- Prefer making the unsafe pattern impossible to express — e.g. expose only `updateState(fn)`, keep `load` + `save` as internal primitives.
+- Prefer making the unsafe pattern impossible to express, for example by exposing only `updateState(fn)` and keeping `load` + `save` as internal primitives.
 
 ### 2. GETs MUST NOT WRITE.
 
@@ -102,7 +102,7 @@ A GET handler that mutates state turns every dashboard auto-refresh into a write
 
 - "Self-heal", "lazy-init", "fix-up if broken" patterns belong in startup OR a dedicated POST endpoint, never in a GET.
 - Same rule for any HTTP method whose semantic is read-only. PUT/POST/DELETE = writes; everything else = no state mutation.
-- The dashboard SSE broadcasting the new state is fine — that's the response side, not a mutation.
+- The dashboard SSE broadcasting the new state is fine, because that's the response side and no mutation.
 
 ### 3. Atomic file writes only.
 
@@ -119,13 +119,13 @@ Never write directly to the target. A crash mid-write leaves an invalid JSON fil
 When "redo"/"replace" semantics overwrite a user file, rotate the previous version with a timestamp:
 
 ```ts
-// Bad — unlink is unrecoverable:
+// Bad: unlink is unrecoverable:
 try {
   await fs.unlink(dest);
 } catch {}
 await fs.rename(src, dest);
 
-// Good — rotate the existing file out of the way:
+// Good: rotate the existing file out of the way:
 try {
   await fs.access(dest);
   await fs.rename(dest, `${dest}.prev-${Date.now()}.bak`);
@@ -153,7 +153,7 @@ With 5+ writers and no audit trail, you cannot diagnose lost-update races. With 
 
 ### 6. Reject self-heal as a primary repair mechanism.
 
-If you find yourself writing a function that detects and "fixes" corrupt state on every read, the better fix is to make the corruption impossible at the source — usually with the mutex in rule #1. Self-heal is a band-aid that adds complexity, hides bugs, and (as the Sherpa RCA shows) becomes its own bug source.
+If you find yourself writing a function that detects and "fixes" corrupt state on every read, the better fix is to make the corruption impossible at the source, usually with the mutex in rule #1. Self-heal is a band-aid that adds complexity, hides bugs, and (as the Sherpa RCA shows) becomes its own bug source.
 
 When self-heal is genuinely needed (e.g., recover from a previous-version data format), it goes at startup, runs once, and is loud about what it changed.
 
@@ -179,7 +179,7 @@ If your tool changes a global system setting (`defaults write com.apple.screenca
 
 1. **On start**: read the current value, persist it to a sidecar file (`.saved-<setting-name>` in your session dir), then apply your override.
 2. **On graceful stop**: read the sidecar and restore the user's saved value, then delete the sidecar.
-3. **Detect self-capture on start**: if the current value already points at _your tool_ (e.g., a previous sherpa pending dir), do NOT save it as the prior value — that bakes in your override and the user can never get back to their real setting. Instead: try a previous saved sidecar from any session, falling back only to a sensible user-default (e.g. `~/Pictures/Screenshots`), NEVER to "the system factory default" (which on older macOS is `~/Desktop` and is not what most users expect).
+3. **Detect self-capture on start**: if the current value already points at _your tool_ (e.g., a previous sherpa pending dir), do NOT save it as the prior value, because that bakes in your override and the user can never get back to their real setting. Instead: try a previous saved sidecar from any session, falling back only to a sensible user-default (e.g. `~/Pictures/Screenshots`), NEVER to "the system factory default" (which on older macOS is `~/Desktop` and is not what most users expect).
 4. **Crash recovery**: provide a standalone `restore` subcommand that reads the saved-value file independently of the main process so the user can recover from a `kill -9`.
 5. **Don't use `kill -9` to stop the tool**: SIGKILL skips the shutdown handler, leaves the override in place, leaves the sidecar stale, and is what causes the self-capture-on-restart bug. Always SIGTERM.
 
@@ -215,7 +215,7 @@ await setLocation(myToolPendingDir);
 
 ## Process / scaffolding rules
 
-### Bootstrap order — write infrastructure before features
+### Bootstrap order: write infrastructure before features
 
 Order matters. Write in this sequence, get each working before moving to the next:
 
@@ -229,32 +229,32 @@ Order matters. Write in this sequence, get each working before moving to the nex
 
 If you skip step 2 ("I'll add the mutex later"), you'll spend 10× the time debugging races that step 2 would have prevented.
 
-### State shape — keep it boring
+### State shape: keep it boring
 
 - One JSON file per session. Flat-ish; deep nesting is harder to merge correctly.
 - Every entry has a stable `id` (hash of content), not an array index. Reordering must not break references.
 - User-edited fields and system-derived fields live side-by-side but the merge algorithm must explicitly preserve user fields when re-deriving from source.
-- Status is an enum string (`"pending" | "captured" | "applied"`), not a boolean — you'll need a third state by week 2.
+- Status is an enum string (`"pending" | "captured" | "applied"`), not a boolean, because you'll need a third state by week 2.
 - Always include `createdAt` / `updatedAt` ISO timestamps. They cost nothing and save you in debugging.
 
-### Dashboard rules — vanilla JS, single page, no framework
+### Dashboard rules: vanilla JS, single page, no framework
 
 - One `dashboard.html` served from `/`. No build step. View-source readable. (See `conventions/html-output.md` for theme/toggle requirements.)
 - Auto-refresh via SSE OR a 5s poll, never both. SSE only if you have a real reason; polling is simpler and cannot loop-trigger races as easily.
 - localStorage for UI-only state (which tab is open, which filter is applied, theme). Server state is server-owned.
 - Explicit confirm popovers for destructive ops, never `window.confirm` (jarring + can't be styled).
-- Optimistic UI is forbidden until rule #1 (mutex) is verified — racy state will produce phantom items.
+- Optimistic UI is forbidden until rule #1 (mutex) is verified, because racy state will produce phantom items.
 
-### Error handling — never silent
+### Error handling: never silent
 
 - Any path that swallows an error MUST log it with enough context to diagnose. `try { ... } catch {}` without a log is a silent failure factory.
 - Distinguish ENOENT from other errors. ENOENT is often expected (file moved by another path); other errors are bugs.
 - Surface user-visible errors in the dashboard with the actual reason, not "something went wrong". A user reading the error can often diagnose it themselves.
 
-### Single source of truth — pick one
+### Single source of truth: pick one
 
 - The state file is authoritative. Don't mirror it in an in-memory cache that needs syncing.
-- If you need an in-memory copy for performance, make it strictly a read-through cache that's invalidated on every write. Do not let handlers mutate the cached object directly — that becomes a second source of truth that drifts.
+- If you need an in-memory copy for performance, make it strictly a read-through cache that's invalidated on every write. Do not let handlers mutate the cached object directly, because that becomes a second source of truth that drifts.
 
 ---
 
@@ -275,7 +275,7 @@ If you skip step 2 ("I'll add the mutex later"), you'll spend 10× the time debu
 
 ---
 
-## Concrete example — Screenshot Sherpa skeleton (the right way)
+## Concrete example: Screenshot Sherpa skeleton (the right way)
 
 ```ts
 // state.ts
@@ -328,7 +328,7 @@ export async function updateState<T>(
   });
 }
 
-// Read-only — does NOT acquire the lock; loadState alone is safe for reads.
+// Read-only: does NOT acquire the lock; loadState alone is safe for reads.
 export const readState = loadState;
 ```
 
@@ -340,7 +340,7 @@ import { readState, updateState, withStateLock } from "./state.js";
 const app = express();
 app.use(express.json());
 
-// Mutating-request serializer — every POST/PUT/DELETE under /api/* runs
+// Mutating-request serializer: every POST/PUT/DELETE under /api/* runs
 // end-to-end under the same per-session mutex the watcher uses.
 app.use((req, res, next) => {
   if (req.method === "GET" || req.method === "HEAD") return next();
@@ -362,7 +362,7 @@ app.get("/api/state", async (_req, res) => {
 });
 
 app.post("/api/entries/:id/select", async (req, res) => {
-  // The middleware already holds the lock — handlers can load+save freely.
+  // The middleware already holds the lock, so handlers can load+save freely.
   await updateState(SESSION_KEY, "select-entry", async (s) => {
     const e = s.entries.find((x) => x.id === req.params.id);
     if (e) e.selected = true;
@@ -370,7 +370,7 @@ app.post("/api/entries/:id/select", async (req, res) => {
   res.json({ ok: true });
 });
 
-// Startup self-heal (if needed) — runs once, under the lock, before listen().
+// Startup self-heal (if needed): runs once, under the lock, before listen().
 await withStateLock(SESSION_KEY, async () => {
   const s = await readState(SESSION_KEY);
   if (selfHeal(s)) await saveState(s, "startup-self-heal");
@@ -387,7 +387,7 @@ import { withStateLock, updateState } from "./state.js";
 chokidar
   .watch(WATCH_DIR, { ignoreInitial: true })
   .on("add", async (filePath) => {
-    // Acquires the SAME lock the HTTP middleware uses — watcher and HTTP
+    // Acquires the SAME lock the HTTP middleware uses, so watcher and HTTP
     // never interleave their mutations.
     await updateState(SESSION_KEY, "watcher-add", async (s) => {
       // ...mutate s based on the new file...
@@ -411,7 +411,7 @@ That skeleton, deployed in this order from day one, would have prevented the ent
 - **High-throughput**: the chained-promise mutex serializes everything per session. Fine for a single user clicking around; not fine for 1000 req/s.
 - **Distributed state**: if state lives across machines, you need a real database (SQLite even; not JSON).
 
-For all small single-user dashboard tools — capture/edit/review/track/audit/triage tools — this template is the right starting point.
+For all small single-user dashboard tools (capture, edit, review, track, audit and triage tools), this template is the right starting point.
 
 ---
 

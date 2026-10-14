@@ -18,9 +18,9 @@ Standards for HTML files Claude generates.
 
 > Start at [`pages.md`](pages.md). It says which surface to use, and it carries the shared kit and the page check. A page built with `scripts/pages/pagekit.py` already has the theme switch and the colours below, so neither is written by hand. This file stays for its colour system, its complexity tiers and its snippets.
 
-## MANDATORY — Dark/light mode toggle
+## MANDATORY: Dark/light mode toggle
 
-Every HTML file written to disk **must** include a dark/light mode toggle button in the top-right corner. Dark mode is the default. This applies to ALL HTML outputs: reports, matrices, previews, visualizations — no exceptions.
+Every HTML file written to disk **must** include a dark/light mode toggle button in the top-right corner. Dark mode is the default. This applies to ALL HTML outputs (reports, matrices, previews, visualizations) with no exceptions.
 
 ### Implementation pattern
 
@@ -37,7 +37,7 @@ Every HTML file written to disk **must** include a dark/light mode toggle button
 </button>
 ```
 
-Use CSS custom properties (`--bg`, `--surface`, `--text`, `--dim`, `--border`) with a `body.light { ... }` override block. Never hardcode colors directly on elements — always go through the CSS vars so the toggle works.
+Use CSS custom properties (`--bg`, `--surface`, `--text`, `--dim`, `--border`) with a `body.light { ... }` override block. Never hardcode colors directly on elements. Always go through the CSS vars so the toggle works.
 
 ### Default dark palette
 
@@ -62,7 +62,7 @@ Those five greys are the floor. They carry a report, but there is nothing here t
 build a status pill or a filled button out of. When the page needs real colour, use
 [`html-assets/colors.css`](html-assets/colors.css) rather than extending this block.
 It defines these same five names, so the toggle above keeps working untouched, and
-adds ramps, brand/accent, and status pairs on top. Rebrand it by editing the hues in
+adds ramps, brand and accent colours, and status pairs on top. Rebrand it by editing the hues in
 its Layer 0. Don't reach past the slots into a ramp from your markup, or the next
 theme change stops being one edit.
 
@@ -74,27 +74,27 @@ Pick the lightest tier that does the job. Complexity escalates only on evidence.
 |------|---------|-------|
 | **Simple** (default) | Reports, logs, matrices, index pages, single-column docs | Plain HTML + CSS vars + the toggle button above |
 | **Medium** | Multi-column dashboards, interactive tables, tabbed panels | Add vanilla JS; still no framework |
-| **Complex** | Rich dashboards, complex layouts, themable component-heavy pages, user-facing UI prototypes | Tailwind v4 + DaisyUI v5 — only if clear signal that simpler didn't suffice |
+| **Complex** | Rich dashboards, complex layouts, themable component-heavy pages, user-facing UI prototypes | Tailwind v4 + DaisyUI v5, only if there is a clear signal that simpler didn't suffice |
 
 ### When to escalate to Complex
 
-- User has given **repeated** feedback that a Simple/Medium output looks bad or unclear
-- The output needs a dozen+ components that would be tedious to hand-style
+- The user has given **repeated** feedback that a Simple or Medium output looks bad or unclear
+- The output needs a dozen or more components that would be tedious to hand-style
 - A prototype will be handed to a human designer who expects a utility-class codebase
 
-### Complex stack — Tailwind v4 + DaisyUI v5
+### Complex stack: Tailwind v4 + DaisyUI v5
 
 Primary sources (pull these in when escalating):
 
-- **DaisyUI v5 llms.txt** — [https://daisyui.com/llms.txt](https://daisyui.com/llms.txt) — start here for component names + class patterns
-- **DaisyUI MCP** — [https://github.com/birdseyevue/daisyui-mcp](https://github.com/birdseyevue/daisyui-mcp) — install as MCP if repeated use
-- **Tailwind v4 Agent Skills** — [https://github.com/Lombiq/Tailwind-Agent-Skills](https://github.com/Lombiq/Tailwind-Agent-Skills) — local skill for tailwind-heavy projects
+- **DaisyUI v5 llms.txt**: [https://daisyui.com/llms.txt](https://daisyui.com/llms.txt). Start here for component names and class patterns
+- **DaisyUI MCP**: [https://github.com/birdseyevue/daisyui-mcp](https://github.com/birdseyevue/daisyui-mcp). Install it as an MCP if repeated use
+- **Tailwind v4 Agent Skills**: [https://github.com/Lombiq/Tailwind-Agent-Skills](https://github.com/Lombiq/Tailwind-Agent-Skills). A local skill for tailwind-heavy projects
 
-Only add these to a project's MCP/skill set if the user has asked for repeated HTML work with them — don't burn context on a one-shot.
+Only add these to a project's MCP or skill set if the user has asked for repeated HTML work with them, and don't burn context on a one-shot.
 
 ## Snippet promotion workflow
 
-When generating HTML (via `/create-report`, by hand, or in a skill), if a snippet proves genuinely reusable — not just a one-off — promote it here so future runs start with a battle-tested version instead of reinventing.
+When generating HTML (via `/create-report`, by hand, or in a skill), if a snippet proves genuinely reusable and not just a one-off, promote it here so future runs start with a battle-tested version instead of reinventing.
 
 **Criteria for promotion:**
 
@@ -104,28 +104,28 @@ When generating HTML (via `/create-report`, by hand, or in a skill), if a snippe
 
 **Where snippets live:**
 
-- Small snippets (<20 lines): inline in this file, labeled
+- Small snippets (under 20 lines): inline in this file, labeled
 - Larger snippets or collections: `~/.claude/conventions/html-assets/<name>.{html,css,js}`, indexed in the table below
 
 ### Asset index
 
 | Asset | Purpose | Path |
 |-------|---------|------|
-| Dark/light toggle button | MANDATORY — see top of file | inline above |
+| Dark/light toggle button | MANDATORY, see top of file | inline above |
 | Searchable data dashboard | Summary cards + live text filter + click-to-expand rows with nested sub-entity detail tables; self-contained, dark/light persists. For "counts at a glance + drill into specifics" over entity→sub-entities→detail data. Adapt `cards()`/`row()`/detail render + the summary grid columns. | `conventions/html-assets/data-dashboard.html` |
-| Color-palette picker | Per-group color chooser: a full design-system palette in `<optgroup>` dropdowns (header + body per group), live mock preview, auto white/dark header text by WCAG contrast (reddens below 4.5:1), and a copy-paste summary of the picks. For letting a human dial in colors before you hard-code them. `.build.py` regenerates the HTML from a palette dict — edit the `TW` map / `COLS` / `GROUPS` for a different palette or preview shape. | `conventions/html-assets/color-palette-picker.{html,build.py}` |
+| Color-palette picker | Per-group color chooser: a full design-system palette in `<optgroup>` dropdowns (header + body per group), live mock preview, auto white/dark header text by WCAG contrast (reddens below 4.5:1), and a copy-paste summary of the picks. For letting a human dial in colors before you hard-code them. `.build.py` regenerates the HTML from a palette dict. Edit the `TW` map / `COLS` / `GROUPS` for a different palette or preview shape. | `conventions/html-assets/color-palette-picker.{html,build.py}` |
 | Theming system (colors.css) | The palette-variables + scheme-switcher component this file's TODO used to ask for. Two layers: seven OKLCH ramps at full 50→950 (neutral/brand/accent/success/warning/danger/info), then the semantic slots your markup actually uses. It defines the five vars the mandatory toggle above needs (`--bg`, `--surface`, `--text`, `--dim`, `--border`), so dropping it in satisfies the dark/light rule instead of restating it. Dark is default; `body.light` flips it, and `:root[data-theme="light"]` works too. Also ships `--surface-2`, three text tiers, brand/accent with `-content` pairs, status soft/line pairs, shadows and radii. **To rebrand, change the hue numbers in Layer 0 and stop**, since nothing downstream hardcodes a color. Ported from the versable-builder kit's Layer-0/Layer-1 split with brand-neutral placeholder hues. Verified in both modes. | `conventions/html-assets/colors.css` |
 | _(add entries as they're promoted)_ | | |
 
-When the index grows past ~8 rows, break snippets out to their own file per category (`buttons.html`, `tables.html`, `modals.html`, etc.) and keep this table as the directory.
+When the index grows past about 8 rows, break snippets out to their own file per category (`buttons.html`, `tables.html`, `modals.html`, etc.) and keep this table as the directory.
 
-## TODO — future component library (for a later session)
+## TODO: future component library (for a later session)
 
 Capture this for future reference. Build out when repeated use justifies the context cost:
 
 - Reference navbar + footer (dark-mode aware)
 - Button component variants (primary/secondary/danger, sizes)
-- JS-embed icon collection (single-file icon set, bundled or CDN) → may branch to sub-doc
+- JS-embed icon collection (single-file icon set, bundled or CDN), which may branch to a sub-doc
 - Basic modal + dialog pattern
 - Code-block component with syntax coloring for: markdown, JSON, TypeScript, YAML, TOML, `.env`, Python, Rust
 - Print stylesheet baseline

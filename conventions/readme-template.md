@@ -1,5 +1,5 @@
 ---
-brief: The standard README structure for this account's projects — banner + badges, What is this, Architecture diagram, Quick start, By-what-you-came-to-do table, Documentation with GFM callouts, How work happens here, Repo structure. Promoted 2026-08-25 from versable-builder's README via the kanban rewrite.
+brief: The standard README structure for this account's projects: banner + badges, What is this, Architecture diagram, Quick start, By-what-you-came-to-do table, Documentation with GFM callouts, How work happens here, Repo structure. Promoted 2026-08-25 from versable-builder's README via the kanban rewrite.
 triggers: ["skill:readme", "topic:readme", "phrase:\"write a readme\""]
 related: [skills/readme]
 tier: 2

@@ -1,7 +1,15 @@
 #!/bin/sh
 # Chain-forward to the repo's own hook. This dir is a global core.hooksPath
 # (migration 0039); without this wrapper, git would silently skip per-repo
-# hooks of this name. No behavior of its own.
+# hooks of this name. Its only behavior of its own: in the ~/.claude repo,
+# refuse added doc prose that carries banned tells (scripts/hooks/git-prose-gate.py;
+# one-shot bypass PROSE_GATE_BYPASS=1). Every other repo passes straight through.
+TOP="$(git rev-parse --show-toplevel 2>/dev/null)"
+GATE="$HOME/.claude/scripts/hooks/git-prose-gate.py"
+HOME_CLAUDE="$(cd "$HOME/.claude" 2>/dev/null && pwd -P)"
+if [ -n "$TOP" ] && [ "$TOP" = "$HOME_CLAUDE" ] && [ -f "$GATE" ]; then
+  python3 "$GATE" || exit 1
+fi
 REPO_HOOK="$(echo "$(git rev-parse --git-dir)/hooks/$(basename "$0")" 2>/dev/null)"
 if [ -n "$REPO_HOOK" ] && [ -x "$REPO_HOOK" ] && [ "$REPO_HOOK" != "$0" ]; then
   exec "$REPO_HOOK" "$@"

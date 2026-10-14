@@ -31,15 +31,15 @@ Direct copy to the right subdirectory:
 - PDFs → `~/.claude/assets/pdfs/`
 - Data exports → `~/.claude/assets/data/`
 
-## Diagrams — dual-save
+## Diagrams: dual-save
 
 Always save to `~/.claude/assets/diagrams/` as the **canonical copy**. If the user wants a local project copy, write to both locations (global first, then copy to local). This ensures diagrams are discoverable across projects and survive project deletions.
 
-## When CWD is `~/.claude` itself — MANDATORY
+## When CWD is `~/.claude` itself (MANDATORY)
 
-Skill templates (e.g. `/create-report`) often use relative paths like `.claude/output/...` assuming CWD is a project root with a `.claude/` subdirectory. When CWD is `~/.claude` itself, these relative paths resolve to `~/.claude/.claude/...` — a broken double-nest.
+Skill templates (e.g. `/create-report`) often use relative paths like `.claude/output/...` assuming CWD is a project root with a `.claude/` subdirectory. When CWD is `~/.claude` itself, these relative paths resolve to `~/.claude/.claude/...`, a broken double-nest.
 
-**Never let a relative `.claude/…` output path resolve into `~/.claude/.claude/`.** The accident is the relative resolution, not the directory: `~/.claude/.claude/` is this project's own project-scoped `.claude/` and legitimately holds `settings.local.json` and `worktrees/`. Redirect your *outputs*; leave the directory alone. (Cross-referenced in [`rules/shell.md`](../rules/shell.md) and [CLAUDE.md quick-rules](../CLAUDE.md) — watch for it whenever CWD is `~/.claude`.)
+**Never let a relative `.claude/…` output path resolve into `~/.claude/.claude/`.** The accident is the relative resolution, and the directory is fine: `~/.claude/.claude/` is this project's own project-scoped `.claude/` and legitimately holds `settings.local.json` and `worktrees/`. Redirect your *outputs*; leave the directory alone. (Cross-referenced in [`rules/shell.md`](../rules/shell.md) and [CLAUDE.md quick-rules](../CLAUDE.md), so watch for it whenever CWD is `~/.claude`.)
 
 Correct targets when CWD is `~/.claude`:
 

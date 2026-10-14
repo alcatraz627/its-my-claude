@@ -1,5 +1,5 @@
 ---
-brief: Run the code in the state that matters before declaring done — collecting/compiling/linting is not running. Enforced by the declared-ready Stop hook.
+brief: Run the code in the state that matters before declaring done. Collecting, compiling and linting are not running. Enforced by the declared-ready Stop hook.
 triggers:
   - topic:verification
   - topic:declared-ready

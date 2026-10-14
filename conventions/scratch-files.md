@@ -16,13 +16,13 @@ Hygiene rules for `~/.claude/_*.claude.md` scratch and checkpoint files.
 
 ## Naming convention
 
-- `_checkpoint.claude.md` — session-rolling checkpoint (overwritten each session)
-- `_precompact-checkpoint.claude.md` — auto-saved before compaction
-- `_YYYYMMDD-<slug>-<sid2hex>.claude.md` — dated scratch files (per session)
+- `_checkpoint.claude.md`: session-rolling checkpoint (overwritten each session)
+- `_precompact-checkpoint.claude.md`: auto-saved before compaction
+- `_YYYYMMDD-<slug>-<sid2hex>.claude.md`: dated scratch files (per session)
 
 All scratch files at the `~/.claude/` root start with `_` and end with `.claude.md`. They are `.gitignore`d.
 
-## Monthly archival — MANDATORY (going forward)
+## Monthly archival (MANDATORY going forward)
 
 Scratch files older than **14 days** must be archived monthly to:
 
@@ -30,7 +30,7 @@ Scratch files older than **14 days** must be archived monthly to:
 ~/.claude/assets/checkpoints/YYYYMM/
 ```
 
-Archive command (to be wired into `/core-dump` or a weekly hook — see proposals):
+Archive command (to be wired into `/core-dump` or a weekly hook, see proposals):
 
 ```bash
 # month_ago=$(date -v-14d +%Y-%m-%d)
@@ -39,11 +39,11 @@ Archive command (to be wired into `/core-dump` or a weekly hook — see proposal
 
 ## Why this matters
 
-As of 2026-04-24, **30** `_20260*-*.claude.md` files had accumulated at the root since March — no archival was happening. This produces visual noise in `ls ~/.claude/`, increases risk of accidental load into context, and makes `/catchup` harder (it can't tell stale from current).
+As of 2026-04-24, **30** `_20260*-*.claude.md` files had accumulated at the root since March, because no archival was happening. This produces visual noise in `ls ~/.claude/`, increases the risk of accidental load into context, and makes `/catchup` harder (it can't tell stale from current).
 
-## Quick retrieval — common commands
+## Quick retrieval: common commands
 
-Browse / search live and archived scratch files:
+Browse and search live and archived scratch files:
 
 ```bash
 # Most recent scratch at root (excluding session-rolling checkpoints)
@@ -70,10 +70,10 @@ mkdir -p ~/.claude/assets/checkpoints/"$YYYYMM" && mv ~/.claude/"$SF" ~/.claude/
 
 ## Related
 
-- **Scratchpad system** (different concept — plans/learnings, not session checkpoints): [`~/.claude/scratchpad/README.md`](../scratchpad/README.md)
-- **Scratchpad scripts:** `~/.claude/scratchpad/scripts/` — CLI helpers for the scratchpad feature
+- **Scratchpad system** (a different concept: plans and learnings, not session checkpoints): [`~/.claude/scratchpad/README.md`](../scratchpad/README.md)
+- **Scratchpad scripts:** `~/.claude/scratchpad/scripts/`, the CLI helpers for the scratchpad feature
 - **core-dump / catchup lifecycle:** [`features/context-retention.md`](../features/context-retention.md)
 
 ## Exceptions
 
-`_checkpoint.claude.md` and `_precompact-checkpoint.claude.md` are session-rolling — **never archive these**, they always reflect the most recent state.
+`_checkpoint.claude.md` and `_precompact-checkpoint.claude.md` are session-rolling, so **never archive these**. They always reflect the most recent state.

@@ -13,14 +13,14 @@ stale_after_days: 90
 ---
 
 # Llm Mini
-Fast sub-second mini-model for quick tasks: session titles, doc lookups, command composition, short summaries. Ollama (llama3.2) with automatic fallback to cloud Haiku. Cold-start serverless.
+A fast, sub-second mini-model for quick tasks: session titles, doc lookups, command composition and short summaries. It runs Ollama (llama3.2) with automatic fallback to cloud Haiku, and cold-starts serverless.
 
 ## Surfaces (all delegate to `scripts/llm-mini/llm-mini-core.sh`)
 
 | Surface       | Usage |
 |---------------|-------|
 | CLI           | `llm-mini "question"` or `echo text \| llm-mini summarize` |
-| Chat          | `llm-mini chat` — interactive REPL with context retention |
+| Chat          | `llm-mini chat`, an interactive REPL with context retention |
 | MCP           | `mcp__llm-mini__ask` (registered globally in `.mcp.json`) |
 | Hook callable | `source ~/.claude/scripts/llm-mini/llm-mini-hook.sh; mini_quick "question"` |
 
@@ -32,13 +32,13 @@ Fast sub-second mini-model for quick tasks: session titles, doc lookups, command
 
 - `--local` (Ollama, <500ms warm)
 - `--quality` (Haiku API, ~1-2s)
-- Auto (default — local first, cloud fallback)
+- Auto (the default): local first, cloud fallback
 
-Cloud method configurable: `cli` (subscription via `claude -p`, cheaper), `api` (direct Anthropic API, faster), `auto` (API first, CLI fallback). Set via `cloud_method` in `~/.claude/llm-mini.conf`.
+The cloud method is configurable: `cli` (subscription via `claude -p`, cheaper), `api` (direct Anthropic API, faster) or `auto` (API first, CLI fallback). Set it via `cloud_method` in `~/.claude/llm-mini.conf`.
 
 ## Chat mode
 
-`llm-mini chat [--local|--quality|--tools]`. Multi-turn REPL. `--tools` enables tool use (shell, read_file, list_dir) via cloud API. Commands: `/help`, `/clear`, `/exit`, `/tools`, `/model`, `/backend`, `/history`.
+`llm-mini chat [--local|--quality|--tools]` starts a multi-turn REPL. `--tools` enables tool use (shell, read_file, list_dir) via the cloud API. Commands: `/help`, `/clear`, `/exit`, `/tools`, `/model`, `/backend`, `/history`.
 
 ## Engine management
 
@@ -46,8 +46,8 @@ Cloud method configurable: `cli` (subscription via `claude -p`, cheaper), `api` 
 
 ## When to use vs full Claude
 
-**Use llm-mini for:** short labels, one-line definitions, single shell command composition — tasks that need speed over depth.
+**Use llm-mini for** short labels, one-line definitions and single shell command composition, where speed matters more than depth.
 
-**Do NOT use llm-mini for:** reasoning, code generation, multi-step analysis.
+**Do NOT use llm-mini for** reasoning, code generation or multi-step analysis.
 
 **Source:** github.com/alcatraz627/llm-mini

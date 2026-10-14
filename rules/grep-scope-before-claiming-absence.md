@@ -19,8 +19,8 @@ Before "there is no existing module / helper for X" or proposing to create one, 
 1. scope = the full project root (`rg -n "keyword" backend/`), or
 2. an explicit multi-directory list with a stated reason for what is excluded.
 
-A single-directory grep is fine for locating a known thing, never for an existence claim. The thing usually lives where the TRIGGER fires, not where the catalog says it belongs; the 30-second wider grep is always cheaper than a duplicate module or a correction round-trip. Search the concept, not just the symbol: `rg -n "(ensure|create|init|setup)_indexe?s?" backend/`.
+A single-directory grep is fine for locating a known thing, never for an existence claim. The thing usually lives where the TRIGGER fires, not where the catalog says it belongs. The 30-second wider grep is always cheaper than a duplicate module or a correction round-trip. Search the concept, not just the symbol: `rg -n "(ensure|create|init|setup)_indexe?s?" backend/`.
 
-Diagnostic: a sentence reading "No existing X — proposing to add…" and you grepped one subdirectory.
+Diagnostic: a sentence reading "No existing X, proposing to add…" and you grepped one subdirectory.
 
 Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/grep-scope-before-claiming-absence.md`

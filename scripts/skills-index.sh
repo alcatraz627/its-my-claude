@@ -77,6 +77,9 @@ def frontmatter(text):
 
 def gist(desc, limit=170):
     d = re.sub(r"\s+", " ", desc).strip().lstrip(">|").strip()
+    # No em/en-dash in the generated index (prose-lint budget is zero).
+    d = re.sub(r"\s[\u2014\u2013]\s", ", ", d)
+    d = re.sub(r"[\u2014\u2013]", "-", d)
     if len(d) <= limit:
         return d
     return d[:limit].rsplit(" ", 1)[0] + " …"

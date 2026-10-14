@@ -1,10 +1,10 @@
-# Designer-Reviewer Persona — Build Log
+# Designer-Reviewer Persona: Build Log
 
 > This file documents every sub-agent call used to construct and iterate
 > on the `designer-reviewer` persona. Future agents (and the user) can
 > reuse this pattern to create similar expert personas.
 
-**Session:** `mobi-dash-a4` — 2026-04-09
+**Session:** `mobi-dash-a4`, 2026-04-09
 **Target output:** `~/.claude/personas/designer-reviewer.md`
 
 ---
@@ -23,7 +23,7 @@ Each entry: **ID → type → model → purpose → prompt file → output file*
 | A5 | general-purpose | opus | Write persona v3 (final) | v2 + v2-review | `~/.claude/personas/designer-reviewer.md` |
 | A6 | general-purpose | opus | Validate persona v3 (sanity pass) | final persona | `/tmp/designer-persona-v3-review.md` |
 
-Phase C (screenshot reviews) — 8 calls, one per screenshot, using the
+Phase C (screenshot reviews) made 8 calls, one per screenshot, using the
 `designer-reviewer` persona as a system-prompt prelude. See
 `~/.claude/assets/screenshots/pm2-manage-review/REVIEW_LOG.md`.
 
@@ -43,8 +43,8 @@ Phase C (screenshot reviews) — 8 calls, one per screenshot, using the
      actionability for screenshot review, coverage gaps
    - Outputs a numbered issue list with severity + suggested fix
 
-3. **Rule:** writer never sees its own previous version's critique until
-   a fresh validator call — keeps validation independent.
+3. **Rule:** the writer never sees its own previous version's critique until
+   a fresh validator call, which keeps validation independent.
 
 ---
 
@@ -66,4 +66,3 @@ and run the same 3-iteration write/validate loop.
 ## Call Transcripts
 
 _Populated below as each sub-agent completes._
-

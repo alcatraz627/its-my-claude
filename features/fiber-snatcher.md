@@ -1,5 +1,5 @@
 ---
-brief: Agent-first driver for a local React/Next.js dev app — intent-targeted clicks, digests, fiber state, closed-overlay signal reads, via the `fs` daemon (V2)
+brief: Agent-first driver for a local React/Next.js dev app, with intent-targeted clicks, digests, fiber state and closed-overlay signal reads, via the `fs` daemon (V2)
 triggers:
   - tool:fiber-snatcher
   - tool:fs
@@ -16,20 +16,20 @@ stale_after_days: 90
 # Fiber Snatcher (V2)
 
 fiber-snatcher (repo: `~/Code/Claude/invasion-of-the-fiber-snatchers`, branch
-`v2`) gives Claude deterministic drive/inspect/assert access to a local React or
-Next.js dev app. V2 is the current version (CLI `fs`, `~/.local/bin/fs`); the old
-`fiber-snatcher` CLI is frozen for un-migrated V1 projects. Design + full rules:
+`v2`) gives Claude deterministic drive, inspect and assert access to a local React or
+Next.js dev app. V2 is the current version (CLI `fs`, `~/.local/bin/fs`). The old
+`fiber-snatcher` CLI is frozen for un-migrated V1 projects. Design and full rules are in
 the repo's `CLAUDE.md`.
 
-It is built to be driven by an agent: one action pipeline (resolve → wait → act →
-settle → digest → journal), every verb auto-waits and returns a digest, and a
-per-project daemon holds the browser across calls (~30ms warm vs a fresh launch).
+An agent drives it through one action pipeline (resolve → wait → act →
+settle → digest → journal). Every verb auto-waits and returns a digest, and a
+per-project daemon holds the browser across calls (about 30ms warm, against a fresh launch).
 
 ## When to use
 
-Any task touching a local React/Next.js dev app that needs to drive UI, read
-component state, or diagnose behavior. **Default preference** over hand-rolled
-`browser_evaluate` / Playwright MCP for state reads and intent-based clicks.
+Use it for any task on a local React/Next.js dev app that needs to drive UI, read
+component state, or diagnose behavior. It is the **default preference** over hand-rolled
+`browser_evaluate` or Playwright MCP for state reads and intent-based clicks.
 
 ## Detect setup
 
@@ -51,34 +51,34 @@ fs navigate /path · fs fill · fs hover · fs macro · fs watch console|route|n
 fs stop                         # at session end (see the daemon-stop caveat below)
 ```
 
-Per-project **adaptation** (`.fiber-snatcher/config.json` `adapt` block:
+Per-project **adaptation** (the `.fiber-snatcher/config.json` `adapt` block:
 `surfaceSelectors`, `overlayComponents`, `contentPropKeys`) teaches the tool a
 codebase's non-ARIA overlays and prop conventions.
 
 ## Rules
 
-- Start the daemon once, reuse across calls — never re-launch per tool call.
-- Every command supports `--json`; results also persist to `.fiber-snatcher/last-run.json`.
-- Failure codes carry actionable `next_steps`; refs are generation-stamped (stale refs fail loudly).
+- Start the daemon once and reuse it across calls. Never re-launch per tool call.
+- Every command supports `--json`, and results also persist to `.fiber-snatcher/last-run.json`.
+- Failure codes carry actionable `next_steps`, and refs are generation-stamped (stale refs fail loudly).
 - **Session caveat (auth apps):** the login session lives in the running browser
   and dies on a daemon restart. For an app behind auth, drive the already-running
-  logged-in daemon in place; don't `fs stop` mid-flow expecting the session to survive.
+  logged-in daemon in place. Don't `fs stop` mid-flow expecting the session to survive.
 
 ## Testing it
 
-- Fixture e2e/unit/protocol: `bun test tests/e2e/<wpN>.test.ts` (run per-file; the
+- Fixture e2e, unit and protocol tests: `bun test tests/e2e/<wpN>.test.ts` (run per file; the
   full fan has a load-sensitive boot flake).
 - Live-app integration: `tests/integration/versable.test.ts` drives a real running
   dev app through its authenticated session (optional hands-free auto-login via a
-  gitignored creds file / env). See `tests/integration/README.md`.
+  gitignored creds file or env). See `tests/integration/README.md`.
 
 ## Do NOT use for
 
-- Cross-browser testing (Playwright MCP) · perf traces (Chrome DevTools MCP) ·
-  production/staging targets.
+- Cross-browser testing (use Playwright MCP), perf traces (use Chrome DevTools MCP),
+  or production/staging targets.
 
 ## Full docs
 
 `~/Code/Claude/invasion-of-the-fiber-snatchers/CLAUDE.md` (V2 operating
 instructions), `docs/DRIVING.md` (owner quickstart), `USAGE.md` (target-project
-setup + auth-bypass patterns), `CHANGELOG.md` (2.1.0 is current on `v2`).
+setup and auth-bypass patterns), `CHANGELOG.md` (2.1.0 is current on `v2`).

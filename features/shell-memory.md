@@ -13,7 +13,7 @@ stale_after_days: 90
 ---
 
 # Shell Memory
-Shell command history is logged automatically via hooks. Use MCP tools (preferred) or the CLI dispatcher — **never read log files directly**.
+Shell command history is logged automatically via hooks. Use MCP tools (preferred) or the CLI dispatcher, and **never read log files directly**.
 
 ## Access patterns
 
@@ -26,14 +26,14 @@ Shell command history is logged automatically via hooks. Use MCP tools (preferre
 
 ## Log storage
 
-`~/.claude/shell-logs/YYYY-MM-DD.md` — one file per day. Files older than 2 months can be deleted.
+`~/.claude/shell-logs/YYYY-MM-DD.md` holds one file per day. Files older than 2 months can be deleted.
 
 ## Auto-injection
 
-Context is auto-injected only when active `[BG]` entries exist. You do not need to check manually — if the injection fires, it appears in your context.
+Context is auto-injected only when active `[BG]` entries exist. You do not need to check manually. If the injection fires, it appears in your context.
 
 ## When to use
 
-- User asks "what did I run earlier?" → `shell_tail` or `shell_search`
-- User mentions a background process → `shell_search` + `shell_mark_done` when confirmed
-- Starting work in a new project → check recent commands for context
+- User asks "what did I run earlier?": use `shell_tail` or `shell_search`
+- User mentions a background process: use `shell_search`, then `shell_mark_done` when confirmed
+- Starting work in a new project: check recent commands for context

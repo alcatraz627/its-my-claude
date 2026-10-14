@@ -129,3 +129,7 @@ Model Plan naming it, or switching models on your own judgment. Stop — route i
 
 - [[contain-subagent-token-sprawl]] — the width axis (how many agents), sibling decision
 - `features/model-tier-harness.md` — mechanics: hook, telemetry, reviews, lm gemini
+
+## Auxiliary lm and Gemini use (full text moved from the rule)
+
+The owner has authorized local models and Gemini generally. Use Gemini eagerly for a broad, low-judgment, context-heavy sweep when it reduces work. Before the call, specify the corpus, requested output, and validation criteria. Afterward, check a targeted sample of source-linked claims and probe likely omissions or boundary cases. If checking would repeat most of the sweep, use the main agent or a direct sub-agent instead. Keep judgment, edits, and final claims with the main agent. Never send credentials or unreviewed secret-bearing inputs.

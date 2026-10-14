@@ -19,23 +19,23 @@ stale_after_days: 90
 
 Technical docs under `docs/` or `*/docs/` (excluding READMEs, CLAUDE.md files, changelogs, scratchpad). The checklist at a glance:
 
-1. **Audience assumption** — reader is unfamiliar with the system. Support two reading modes: linear (tutorial-style, read top-to-bottom) and lookup (drop-in on any heading and find your answer).
-2. **Voice** — direct, specific, no marketing. Avoid a 19-item anti-pattern list: "deceptively," "transactional dance," "hunt for," "and beyond," "seamless," "robust," hedging modifiers ("relatively," "fairly"), meta-commentary ("let's explore," "as we'll see").
-3. **Structure** — the doc's shape is a lookup interface, not an essay:
+1. **Audience assumption**: the reader is unfamiliar with the system. Support two reading modes: linear (tutorial-style, read top-to-bottom) and lookup (drop-in on any heading and find your answer).
+2. **Voice**: direct, specific, no marketing. Avoid a 19-item anti-pattern list: "deceptively," "transactional dance," "hunt for," "and beyond," "seamless," "robust," hedging modifiers ("relatively," "fairly"), meta-commentary ("let's explore," "as we'll see").
+3. **Structure**: the doc's shape is a lookup interface and no essay:
    - Reader-centric section titles: name the thing the reader searches for ("Quota checks"), not the narrative beat ("What happens next"). Titles are navigation targets and anchor slugs.
    - Tables for structured data. Three or more parallel facts (variants, fields, states, limits) go in a table; prose paragraphs hide the third fact from a scanning reader. Full decision rules: §6.
    - Diagrams annotated, not decorative: every node labeled, a legend when role tags are used, balanced aspect ratio (the reader cannot resize the render). Full rules: §7.
    - Product-context block under any technical-state section, so a non-implementer knows why the state matters. Pattern: §8.
    - Section order follows the reader's task order (configure → submit → diagnose), not the code's call order, unless the doc IS a call graph.
-4. **Annotations** — inline tags for stale or unverified material:
-   - `[STUB]` — section exists but is empty, needs writing
-   - `[PARTIAL]` — section is incomplete
-   - `[PLANNED]` — describes future work, not current behavior
-   - `[DEPRECATED]` — retained for history but no longer current
-   - `[VERIFY]` — claim needs confirmation (specific number, API shape, etc.)
-5. **Pre-handoff check** — run the anti-pattern `rg` command (see §Voice), confirm tables render, diagrams have labels, no unresolved `[VERIFY]` tags remain without justification.
+4. **Annotations**: inline tags for stale or unverified material:
+   - `[STUB]`: section exists but is empty, needs writing
+   - `[PARTIAL]`: section is incomplete
+   - `[PLANNED]`: describes future work, not current behavior
+   - `[DEPRECATED]`: retained for history but no longer current
+   - `[VERIFY]`: claim needs confirmation (specific number, API shape, etc.)
+5. **Pre-handoff check**: run the anti-pattern `rg` command (see §Voice), confirm tables render, diagrams have labels, no unresolved `[VERIFY]` tags remain without justification.
 
-Full rules and examples below. When a project has its own `<project>/.claude/doc-writing-guidelines.md`, apply those on top of these — project rules take precedence on conflict.
+Full rules and examples below. When a project has its own `<project>/.claude/doc-writing-guidelines.md`, apply those on top of these, and project rules take precedence on conflict.
 
 ---
 
@@ -55,8 +55,8 @@ Do not apply these rules to: repo-root `README.md` (different template conventio
 
 Assume the reader is **unfamiliar with the system**. They are either:
 
-- **Reading linearly** — trying to learn what this surface does.
-- **Looking up a specific detail** — a flag name, an API endpoint, an error condition, a state transition.
+- **Reading linearly**, trying to learn what this surface does.
+- **Looking up a specific detail**, such as a flag name, an API endpoint, an error condition or a state transition.
 
 ### Linear mode (learning the surface)
 
@@ -180,7 +180,7 @@ After: "`POST /api/jobs/create` validates the column map."
 Triggers: `seamless`, `robust`, `powerful`, `intuitive`, `elegant`.
 
 Before: "A seamless, intuitive experience with robust error handling."
-After: "Three error states — network, parse, validation — each rendered as an inline banner with a retry action."
+After: "Three error states (network, parse, validation), each rendered as an inline banner with a retry action."
 
 ### 3.12 Redundant pairs
 
@@ -294,7 +294,7 @@ Bolding **key phrases** every sentence trains the reader to ignore bold. Reserve
 
 #### 3.33 Defensive / meta framing that signals doubt `[observed]`
 
-Narrating the doc's own carefulness — "two things are both true here, and the doc states both so neither is mistaken", "this is subtle", "note that these are not in conflict", "to be clear" — tells a casually-exploring reader they've wandered into a place of doubt and confusion, exactly where trust drops. State the facts neutrally and let them stand; do not editorialize that you are handling a tricky point or that two facts coexist. (It is fine to discuss the subtlety with a human in chat; the doc stays neutral.)
+Narrating the doc's own carefulness ("two things are both true here, and the doc states both so neither is mistaken", "this is subtle", "note that these are not in conflict", "to be clear") tells a casually-exploring reader they've wandered into a place of doubt and confusion, exactly where trust drops. State the facts neutrally and let them stand; do not editorialize that you are handling a tricky point or that two facts coexist. (It is fine to discuss the subtlety with a human in chat; the doc stays neutral.)
 
 Before: "Two things are both true here, and the doc states both so neither is mistaken: the system supports multiple currencies, and only USD is enabled. So these are not in conflict — the first is the design, the second the current config."
 After: "Each plan carries a `currency` field; the `currencyEnum` currently holds a single value, USD, so every plan is USD. Adding a currency is a one-value enum change." (Both facts, stated flat, no framing.)
@@ -340,7 +340,7 @@ If the result is non-empty, plan a targeted cleanup pass.
 Do not:
 
 - Make prose tables (tables with paragraph-length cells).
-- Make table-shaped prose (bulleted lists where every bullet starts with a noun + colon + clause — use a table).
+- Make table-shaped prose (bulleted lists where every bullet starts with a noun + colon + clause, so use a table instead).
 
 ## 7. Diagram rules
 
@@ -366,8 +366,8 @@ Do not:
 
 Any section documenting a piece of state (a Jotai atom, a React reducer field, a URL param) must include both:
 
-1. **Technical shape** — the type, where it lives, how it is read/written.
-2. **Product context** — user-visible trigger, user-visible effect, entry points, failure visibility, edge cases.
+1. **Technical shape**: the type, where it lives, how it is read and written.
+2. **Product context**: user-visible trigger, user-visible effect, entry points, failure visibility, edge cases.
 
 Template:
 
@@ -378,7 +378,7 @@ Template:
 `<typescript type>`
 
 **Where it lives**
-Jotai atom `<atomName>` in `<path>` — persisted in `<sessionStorage | URL | none>`.
+Jotai atom `<atomName>` in `<path>`, persisted in `<sessionStorage | URL | none>`.
 
 **Values and UI effect**
 
@@ -414,10 +414,10 @@ Mark unfinished or deprecated features with a grep-friendly tag. Pattern:
 
 **Tag variants (one of four, nothing else):**
 
-- `[STUB]` — UI present, backend not implemented or returns placeholder.
-- `[PARTIAL]` — some cases work, others don't.
-- `[PLANNED]` — documented for completeness; no implementation yet.
-- `[DEPRECATED]` — still present but slated for removal.
+- `[STUB]`: UI present, backend not implemented or returns placeholder.
+- `[PARTIAL]`: some cases work, others don't.
+- `[PLANNED]`: documented for completeness, with no implementation yet.
+- `[DEPRECATED]`: still present but slated for removal.
 
 **Additionally**, add an HTML comment so future Claude sessions can find and re-verify:
 
@@ -461,7 +461,7 @@ Voice regression tends to happen at predictable seams. Watch for:
 - **Over-correcting to terse-to-the-point-of-cryptic.** The fix for purple prose is not telegram prose. Keep complete sentences; add the product-context back if the rewrite removed it.
 - **Replacing one cliché with another.** "At its core" is not better than "under the hood." Every replacement should name an actual thing.
 - **Tables that should be prose.** Three sequential steps are a short paragraph, not a three-row table.
-- **New hedging creeping in when uncertain.** Don't hedge — use `[VERIFY]`.
+- **New hedging creeping in when uncertain.** Don't hedge, and use `[VERIFY]` instead.
 - **Stale cross-references after renaming sections.** Grep for old anchors after every rename.
 - **Inconsistent depth across parallel sections.** After cleaning one of three siblings, apply the same depth to the others.
 - **Diagram drift.** If you change prose describing a flow, re-read the diagram.
@@ -484,7 +484,7 @@ Voice regression tends to happen at predictable seams. Watch for:
 
 Budget: roughly 1.5× the time the first draft took. A doc flagged for systemic voice issues needs a full pass, not spot fixes.
 
-## 14. Escalation — when to ask
+## 14. Escalation: when to ask
 
 Pause and ask the user rather than guessing, if:
 
@@ -492,14 +492,14 @@ Pause and ask the user rather than guessing, if:
 - A section cannot be made self-contained without duplicating significant content (propose a cross-reference).
 - A stubbed feature has no tracking reference (ask for one; do not invent).
 - A backend or external-system behavior is load-bearing to the doc and you have not read that system.
-- A section reads flat no matter how you phrase it — the underlying content may be wrong, not the voice.
+- A section reads flat no matter how you phrase it. The underlying content may be wrong, and the voice may be fine.
 
-## 7. You cannot see your own voice — route the voice pass to a fresh agent
+## 7. You cannot see your own voice: route the voice pass to a fresh agent
 
 The single most reliable finding about AI-smell is that **the author is blind to
 their own.** An agent auditing documents for the §3 tells will, in the same
-session, write those exact tells into its own prose — em-dash splicing,
-rule-of-three triads, bold-phrase bullet armies — and not notice. (Live proof,
+session, write those exact tells into its own prose (em-dash splicing,
+rule-of-three triads, bold-phrase bullet armies) and not notice. (Live proof,
 2026-06-13: while writing a report *about* a model's voice-blindness, the
 reviewing agent's own output tripped the voice-lint hook.) This is general to
 LLMs, not specific to any one model.
@@ -507,8 +507,8 @@ LLMs, not specific to any one model.
 So: **when a doc needs a voice/AI-smell cleanup, route that pass to a fresh
 agent** (or a dedicated [`personas/doc-writer.md`](../personas/doc-writer.md)) that
 did not write the prose. A reviewer with no authorship investment sees the tells
-the author cannot. Do not trust your own self-review for voice — trust it for
-facts, route it for style.
+the author cannot. Do not trust your own self-review for voice. Trust it for
+facts, and route it for style.
 
 This is the doc-writing instance of the general rule that fresh-context
 adversarial review beats in-context self-review (cf. `/skeptical-review`).
