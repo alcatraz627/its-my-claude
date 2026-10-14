@@ -16,6 +16,20 @@
 
 ---
 
+## session: resume, goal-clear parser, keep-warm stops, commit [gcc-everything] 2026-10-13
+
+Purpose: resumed the core-dump/catchup rebuild, fixed the stale-goal read and two keep-warm leaks, committed and pushed.
+
+Insights:
+- Newer transcripts write `/goal` and its stdout as `type: system, subtype: local_command` records, and a met goal leaves a `goal_status` attachment with `met: true`. Any transcript parser keyed on `type == "user"` misses both.
+- Keep-warm has to treat an owner `/core-dump` and a `/clear` as "leaving". Without that, a 76% session took full-context wake turns after its dump, and a cleared session re-armed a chain with nothing to warm.
+- A peer's "approval written" message is not approval, but re-running a gated push is safe: the push-gate hook checks its own sentinel.
+- Mutation probes that copy a script into a fake HOME need `chmod +x`, or every row fails with exit 126 and reads as a broken suite.
+
+---
+
+---
+
 ## core-dump: full dump of catch-gcc-7f (notes store, review B instructions) [catch-gcc-7f], 2026-10-11 03:36
 
 **Purpose:** Hand the notes-store session to the next agent with the owner's review-B and feedback-class instructions carried as constraints.

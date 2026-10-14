@@ -59,7 +59,6 @@
     "id": "fd84cf81-77dd-40e5-b24b-c310611f67e1",
     "patterns_linked": [
       "e4efcb5c-cf8e-40cb-8624-e47ac91c7880",
-      "4c0f5deb-8853-48c9-96dc-6bfed0a9f1da",
       "85ad7652-14a2-491e-849d-890369621fec"
     ],
     "hypothesis": "Terminal output formatting failures (trailing periods on paths, basenames without directories) are all instances of the agent treating its output as prose rather than as a UI surface rendered by a terminal emulator — the terminal is a renderer with its own parse rules, and the agent writes for a human reader while the terminal reads first.",
@@ -71,7 +70,6 @@
     "auto_intention_id": null,
     "patterns_linked_stable": [
       "d5201b249ed8de27",
-      "81c45748e046cd9f",
       "f6b15a1750c37cdb"
     ]
   },
@@ -153,7 +151,6 @@
     "id": "1a11f1f9-f14f-4a82-b9c8-a76048e9ed5b",
     "patterns_linked": [
       "e4efcb5c-cf8e-40cb-8624-e47ac91c7880",
-      "4c0f5deb-8853-48c9-96dc-6bfed0a9f1da",
       "85ad7652-14a2-491e-849d-890369621fec"
     ],
     "hypothesis": "Path-rendering failures (trailing periods, basenames without directory, relative paths) are all instances of a single defect: the agent treats paths as semantic tokens (meaningful to the agent's reasoning) rather than as interactive UI elements (clickable in the user's terminal) — every path in output is a tiny UI surface with its own usability contract.",
@@ -165,7 +162,6 @@
     "auto_intention_id": null,
     "patterns_linked_stable": [
       "d5201b249ed8de27",
-      "81c45748e046cd9f",
       "f6b15a1750c37cdb"
     ]
   },

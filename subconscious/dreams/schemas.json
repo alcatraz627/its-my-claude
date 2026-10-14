@@ -382,14 +382,12 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 10,
-    "member_count": 10,
+    "occurrences": 8,
+    "member_count": 8,
     "rep_pattern_id": "5d0bde8a-621a-4034-ae93-731b3653ac7c",
     "member_ids": [
       "62f08b0b-e9cb-42ff-bd1e-e8cd87c15c72",
       "5d0bde8a-621a-4034-ae93-731b3653ac7c",
-      "311448f9-25ac-403c-a757-71bb00526e7e",
-      "9f1a4e28-a5a6-4336-b3c1-9b1e3b71f174",
       "ab1185a7-a1c8-45b4-a44a-e89975b4d4cc",
       "6999726d-b32c-4c1c-8b43-49bbd8ffc07d",
       "31a43d68-8551-4f8c-92d4-3a88cd4af186",
@@ -400,8 +398,6 @@
     "member_texts": [
       "The agent generates em-dashes and excessive bold spans in prose even after a stop-hook explicitly flags them and demands re-emission, requiring multiple correction cycles within the same session before the pattern clears",
       "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in the very next reply, requiring multiple correction cycles within the same session; the pattern does not clear from a single correction alone.",
-      "After a stop hook flags AI-smell prose tells (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in the very next reply; the correction does not clear from a single warning and requires multiple cycles within the same session.",
-      "After a prose-smell hook fires and the agent rewrites a response, the regenerated reply frequently contains the same violations (em-dashes, bold-span excess, Label:fragment rows) that triggered the hook, requiring multiple correction cycles within the same session.",
       "Em-dashes in prose and excessive bold spans are style violations that a stop hook enforces; the agent must not use them even when composing status replies or handoff summaries.",
       "When the agent uses em-dashes or excessive bold spans in its own prose replies, the house style ban applies to agent output just as it does to enforced content — the style rules are not limited to reviewed files.",
       "The agent repeatedly outputs em-dashes and excessive bold spans in prose responses despite an explicit zero-budget rule, requiring a stop-hook re-emit cycle to correct output register.",
@@ -420,16 +416,6 @@
       "-Users-alcatraz627--claude",
       "claudebook",
       "slack-automation",
-      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src",
-      "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs",
-      "-Users-alcatraz627-Code-Versable-versable-builder-docs-design-language",
-      "-Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
-      "ig-download",
-      "studio_search_jul_26-fable",
-      "staging-enhancement-product",
-      ".claude",
-      "-Users-alcatraz627-Code-Claude-i-dream",
       "-Users-alcatraz627-Code-Personal-controlelr",
       "-Users-alcatraz627-Code-Personal",
       "-Users-alcatraz627-Code-Claude-sys-monitor",
@@ -449,7 +435,8 @@
       "-Users-alcatraz627-Code-local-models",
       "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
       "enhancement-product",
-      "local-models"
+      "local-models",
+      "-Users-alcatraz627-Code-Claude-i-dream"
     ],
     "first_seen": "2026-08-12T05:39:10.860157+00:00",
     "last_seen": "2026-09-17T04:35:26.359775+00:00"
@@ -631,477 +618,6 @@
     "last_seen": "2026-08-13T02:29:05.067404+00:00"
   },
   {
-    "id": "78eec68a1c9d8b32",
-    "text": "Running a refactoring or simplification tool that produces no meaningful changes wastes the user's attention and is treated as a cost, not a neutral no-op.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "231f2fe7-3c24-47e6-b505-82903c3ed8ac",
-    "member_ids": [
-      "231f2fe7-3c24-47e6-b505-82903c3ed8ac"
-    ],
-    "member_texts": [
-      "Running a refactoring or simplification tool that produces no meaningful changes wastes the user's attention and is treated as a cost, not a neutral no-op."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "98b490d797fe712a",
-    "text": "When a project has auto-formatting hooks that rewrite on write, checking `git diff -w` before interpreting diff size prevents misreading formatting noise as substantive change.",
-    "category": "tool-use",
-    "valence": "positive",
-    "confidence": 0.75,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b1a279c4-482b-4a4f-bc74-a75b5689c91e",
-    "member_ids": [
-      "b1a279c4-482b-4a4f-bc74-a75b5689c91e"
-    ],
-    "member_texts": [
-      "When a project has auto-formatting hooks that rewrite on write, checking `git diff -w` before interpreting diff size prevents misreading formatting noise as substantive change."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "53b6f920ccb0261a",
-    "text": "Planning work sequences that embed user-dependent manual steps alongside automated phases leads the user to intervene and re-scope; automated and manual phases should be visibly separated in the plan.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.78,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "7c409914-b26c-48c5-8c4d-230718a70140",
-    "member_ids": [
-      "7c409914-b26c-48c5-8c4d-230718a70140"
-    ],
-    "member_texts": [
-      "Planning work sequences that embed user-dependent manual steps alongside automated phases leads the user to intervene and re-scope; automated and manual phases should be visibly separated in the plan."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "f25c6dfc6e109af1",
-    "text": "When the user asks a specific operational question (e.g., how to trigger a deploy for a recently merged PR), answering with context about an adjacent but irrelevant deployment path before addressing the actual question reads as over-answering and forces the user to re-ask.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "92f86508-7a8a-466b-aa06-a20538560bf3",
-    "member_ids": [
-      "92f86508-7a8a-466b-aa06-a20538560bf3"
-    ],
-    "member_texts": [
-      "When the user asks a specific operational question (e.g., how to trigger a deploy for a recently merged PR), answering with context about an adjacent but irrelevant deployment path before addressing the actual question reads as over-answering and forces the user to re-ask."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "078719e7841716a4",
-    "text": "When ambiguous task numbering or labeling is used (e.g., 'do #2'), proceeding without confirming which item is meant leads to direction corrections that require the user to re-surface the full task list.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "bd2354d0-6044-400d-9e5c-d40137980b88",
-    "member_ids": [
-      "bd2354d0-6044-400d-9e5c-d40137980b88"
-    ],
-    "member_texts": [
-      "When ambiguous task numbering or labeling is used (e.g., 'do #2'), proceeding without confirming which item is meant leads to direction corrections that require the user to re-surface the full task list."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "8da0b6f401ad6b78",
-    "text": "Kanban board synchronization does not happen proactively during multi-stage work; the user must explicitly request it after each stage, suggesting the agent should treat board updates as a mandatory milestone step rather than an optional end-of-session task.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "4d89f4b9-9e31-4a13-9009-e7f3de5c314b",
-    "member_ids": [
-      "4d89f4b9-9e31-4a13-9009-e7f3de5c314b"
-    ],
-    "member_texts": [
-      "Kanban board synchronization does not happen proactively during multi-stage work; the user must explicitly request it after each stage, suggesting the agent should treat board updates as a mandatory milestone step rather than an optional end-of-session task."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable--claude-output-20260814-0210-adversarial-review",
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "staging-enhancement-product",
-      ".claude"
-    ],
-    "first_seen": "2026-08-14T00:29:04.010438+00:00",
-    "last_seen": "2026-08-14T00:29:04.010438+00:00"
-  },
-  {
-    "id": "ad14ead5af760b4b",
-    "text": "When multiple related push or mutating operations need user approval, batching them into a single script that requests one approval is preferred over sequential individual approvals — the user explicitly requested this pattern to reduce interruption.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "a99c2de4-61e3-4cca-af55-6b951bb29a5e",
-    "member_ids": [
-      "a99c2de4-61e3-4cca-af55-6b951bb29a5e"
-    ],
-    "member_texts": [
-      "When multiple related push or mutating operations need user approval, batching them into a single script that requests one approval is preferred over sequential individual approvals — the user explicitly requested this pattern to reduce interruption."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend"
-    ],
-    "first_seen": "2026-08-14T02:36:55.370082+00:00",
-    "last_seen": "2026-08-14T02:36:55.370082+00:00"
-  },
-  {
-    "id": "813ee2a670e712fa",
-    "text": "After completing a content-creation task (writing a PR description, updating documentation, drafting a message), the agent must echo the created content in its reply; completing the task silently and only confirming 'done' leaves the user unable to see or review the output without asking a follow-up question.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "4fa7a464-dc11-42ac-8d71-3486b6be8635",
-    "member_ids": [
-      "4fa7a464-dc11-42ac-8d71-3486b6be8635"
-    ],
-    "member_texts": [
-      "After completing a content-creation task (writing a PR description, updating documentation, drafting a message), the agent must echo the created content in its reply; completing the task silently and only confirming 'done' leaves the user unable to see or review the output without asking a follow-up question."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-automation"
-    ],
-    "first_seen": "2026-08-14T04:41:02.830794+00:00",
-    "last_seen": "2026-08-14T04:41:02.830794+00:00"
-  },
-  {
-    "id": "fac908f8917e1419",
-    "text": "When documentation describes a migration, refactor, or deployment as completed that is actually still pending, the agent will make multiple wrong design conclusions before the error surfaces — verify current state against code or infrastructure, not prose, before using docs as architectural truth.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.78,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "697555bd-27c1-4afd-b458-9c6c08e8d395",
-    "member_ids": [
-      "697555bd-27c1-4afd-b458-9c6c08e8d395"
-    ],
-    "member_texts": [
-      "When documentation describes a migration, refactor, or deployment as completed that is actually still pending, the agent will make multiple wrong design conclusions before the error surfaces — verify current state against code or infrastructure, not prose, before using docs as architectural truth."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      ".claude",
-      "slack-automation",
-      "staging-enhancement-product",
-      "speedway"
-    ],
-    "first_seen": "2026-08-15T01:33:48.426282+00:00",
-    "last_seen": "2026-08-15T01:33:48.426282+00:00"
-  },
-  {
-    "id": "c2e48c5dbd6e5cac",
-    "text": "Test guards that use substring matching on connection strings or URLs can false-positive when the guard substring appears in credentials (e.g., a username) rather than the database or host name — guard on the database name field specifically, or against an allowlist of known test hostnames.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b461a379-0c7a-4358-a7aa-2dd372980cd0",
-    "member_ids": [
-      "b461a379-0c7a-4358-a7aa-2dd372980cd0"
-    ],
-    "member_texts": [
-      "Test guards that use substring matching on connection strings or URLs can false-positive when the guard substring appears in credentials (e.g., a username) rather than the database or host name — guard on the database name field specifically, or against an allowlist of known test hostnames."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      ".claude",
-      "slack-automation",
-      "staging-enhancement-product",
-      "speedway"
-    ],
-    "first_seen": "2026-08-15T01:33:48.426282+00:00",
-    "last_seen": "2026-08-15T01:33:48.426282+00:00"
-  },
-  {
-    "id": "73f2c64ed813aadf",
-    "text": "Mechanical automated text rewrites applied across a codebase can introduce rendering or functional regressions when the substitution pattern appears in markup or code contexts (not just prose), where altering punctuation changes behavior rather than only meaning.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.76,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "bff768c6-ff3d-44cb-83d6-4f49b04c572c",
-    "member_ids": [
-      "bff768c6-ff3d-44cb-83d6-4f49b04c572c"
-    ],
-    "member_texts": [
-      "Mechanical automated text rewrites applied across a codebase can introduce rendering or functional regressions when the substitution pattern appears in markup or code contexts (not just prose), where altering punctuation changes behavior rather than only meaning."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      ".claude",
-      "slack-automation",
-      "staging-enhancement-product",
-      "speedway"
-    ],
-    "first_seen": "2026-08-15T01:33:48.426282+00:00",
-    "last_seen": "2026-08-15T01:33:48.426282+00:00"
-  },
-  {
-    "id": "1db7c6c78351ff49",
-    "text": "Independent adversarial gate sub-agents instructed to re-derive claims from code rather than trust prose reliably surface structural claims that were written without reading the source — the gate's value is highest when it is explicitly forbidden from accepting the agent's own prose as evidence.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "63ff9705-c903-491f-ad4b-d9b62e9a60d2",
-    "member_ids": [
-      "63ff9705-c903-491f-ad4b-d9b62e9a60d2"
-    ],
-    "member_texts": [
-      "Independent adversarial gate sub-agents instructed to re-derive claims from code rather than trust prose reliably surface structural claims that were written without reading the source — the gate's value is highest when it is explicitly forbidden from accepting the agent's own prose as evidence."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      ".claude",
-      "slack-automation",
-      "staging-enhancement-product",
-      "speedway"
-    ],
-    "first_seen": "2026-08-15T01:33:48.426282+00:00",
-    "last_seen": "2026-08-15T01:33:48.426282+00:00"
-  },
-  {
-    "id": "3670d4012f42d59e",
-    "text": "Large-scale codebase audits are effectively handled by dispatching dimension-specific sub-agents in parallel (each writing findings to a dedicated output file), with a main orchestrator that reads each file, synthesizes across dimensions, and TaskStops verified agents — this pattern scales to many concurrent concerns without serializing the work.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "01205678-4595-4734-8c85-cb1c07ae672a",
-    "member_ids": [
-      "01205678-4595-4734-8c85-cb1c07ae672a"
-    ],
-    "member_texts": [
-      "Large-scale codebase audits are effectively handled by dispatching dimension-specific sub-agents in parallel (each writing findings to a dedicated output file), with a main orchestrator that reads each file, synthesizes across dimensions, and TaskStops verified agents — this pattern scales to many concurrent concerns without serializing the work."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "staging-enhancement-product"
-    ],
-    "first_seen": "2026-08-15T03:41:42.311101+00:00",
-    "last_seen": "2026-08-15T03:41:42.311101+00:00"
-  },
-  {
-    "id": "c4dd490d0eabbe59",
-    "text": "After a terse continuation on a multi-task plan, the agent can proceed in the wrong direction without re-anchoring; the user must ask to see the full task list again to correct course — suggesting the agent should re-read the task list before acting on terse directionals.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.78,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b556302a-a32a-4db9-9a9a-1b9b1783847a",
-    "member_ids": [
-      "b556302a-a32a-4db9-9a9a-1b9b1783847a"
-    ],
-    "member_texts": [
-      "After a terse continuation on a multi-task plan, the agent can proceed in the wrong direction without re-anchoring; the user must ask to see the full task list again to correct course — suggesting the agent should re-read the task list before acting on terse directionals."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-15T15:55:02.394234+00:00",
-    "last_seen": "2026-08-15T15:55:02.394234+00:00"
-  },
-  {
-    "id": "428da79a42908540",
-    "text": "Tasks that require the owner to be present ('owner-court', 'joint review') must never be started on autonomous momentum, even when the agent has been given a broad autonomous directive; these should be explicitly held as PENDING until the user is present.",
-    "category": "user-preference",
-    "valence": "neutral",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "ca8b57cb-f141-4291-b249-7163b526cb7c",
-    "member_ids": [
-      "ca8b57cb-f141-4291-b249-7163b526cb7c"
-    ],
-    "member_texts": [
-      "Tasks that require the owner to be present ('owner-court', 'joint review') must never be started on autonomous momentum, even when the agent has been given a broad autonomous directive; these should be explicitly held as PENDING until the user is present."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-15T15:55:02.394234+00:00",
-    "last_seen": "2026-08-15T15:55:02.394234+00:00"
-  },
-  {
-    "id": "040062ad0cd49c86",
-    "text": "Guard tests can be vacuous: they pass their own assertions while failing to protect the thing they guard (e.g., mutation-testing reveals the core fix survives with the guard removed). Each guard must be individually mutation-tested to confirm it actually fires on the failure it was written to catch.",
-    "category": "domain",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "4acfa952-1105-47a3-8346-499b27648aac",
-    "member_ids": [
-      "4acfa952-1105-47a3-8346-499b27648aac"
-    ],
-    "member_texts": [
-      "Guard tests can be vacuous: they pass their own assertions while failing to protect the thing they guard (e.g., mutation-testing reveals the core fix survives with the guard removed). Each guard must be individually mutation-tested to confirm it actually fires on the failure it was written to catch."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-15T15:55:02.394234+00:00",
-    "last_seen": "2026-08-15T15:55:02.394234+00:00"
-  },
-  {
-    "id": "823805a613431548",
-    "text": "When the user asks for 'better, more usable data' it signals the agent delivered data that was technically present but not actionable or well-structured; re-examine data shape and surface-level presentation rather than simply re-running the same pipeline.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.68,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b138bf93-6bfc-4e48-9c87-fea6f8122642",
-    "member_ids": [
-      "b138bf93-6bfc-4e48-9c87-fea6f8122642"
-    ],
-    "member_texts": [
-      "When the user asks for 'better, more usable data' it signals the agent delivered data that was technically present but not actionable or well-structured; re-examine data shape and surface-level presentation rather than simply re-running the same pipeline."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-15T15:55:02.394234+00:00",
-    "last_seen": "2026-08-15T15:55:02.394234+00:00"
-  },
-  {
-    "id": "6b811d451c31c3e5",
-    "text": "When a hook fires repeatedly for the same already-acknowledged condition (e.g., 'unreviewed substantial change'), the agent should surface the callout once with the user's stated reason for deferring, then stop re-acknowledging it on every turn.",
-    "category": "tool-use",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "fe84e89a-ec83-4638-abc7-1e7d830fa768",
-    "member_ids": [
-      "fe84e89a-ec83-4638-abc7-1e7d830fa768"
-    ],
-    "member_texts": [
-      "When a hook fires repeatedly for the same already-acknowledged condition (e.g., 'unreviewed substantial change'), the agent should surface the callout once with the user's stated reason for deferring, then stop re-acknowledging it on every turn."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-15T15:55:02.394234+00:00",
-    "last_seen": "2026-08-15T15:55:02.394234+00:00"
-  },
-  {
     "id": "671c212e8883c950",
     "text": "When the user explicitly defers, ignores, or skips a topic multiple times across turns, re-raising it without explicit invitation from the user is a scope violation; three or more deferral signals constitute a permanent hold that must not be broken until the user lifts it.",
     "category": "user-preference",
@@ -1115,33 +631,6 @@
     ],
     "member_texts": [
       "When the user explicitly defers, ignores, or skips a topic multiple times across turns, re-raising it without explicit invitation from the user is a scope violation; three or more deferral signals constitute a permanent hold that must not be broken until the user lifts it."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "versable-builder",
-      "studio_search_jul_26-fable"
-    ],
-    "first_seen": "2026-08-16T03:43:31.916664+00:00",
-    "last_seen": "2026-08-16T03:43:31.916664+00:00"
-  },
-  {
-    "id": "fe5563ab8a04be05",
-    "text": "When a user says 'wrong direction' after a terse continuation or numbered choice, the root cause is often that the agent raised a topic the user had previously deferred rather than a misread of the selection itself; investigate scope creep before assuming a selection was misunderstood.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "3d804319-b4c6-4d56-b67e-a0ed0fe47253",
-    "member_ids": [
-      "3d804319-b4c6-4d56-b67e-a0ed0fe47253"
-    ],
-    "member_texts": [
-      "When a user says 'wrong direction' after a terse continuation or numbered choice, the root cause is often that the agent raised a topic the user had previously deferred rather than a misread of the selection itself; investigate scope creep before assuming a selection was misunderstood."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
@@ -1196,33 +685,6 @@
     ],
     "member_texts": [
       "When a late sub-agent notification arrives for work already read, gated, and committed in the same session, acknowledge it silently and take no further action rather than re-processing it."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627--claude",
-      "versable-builder",
-      "slack-automation"
-    ],
-    "first_seen": "2026-08-16T20:59:41.312515+00:00",
-    "last_seen": "2026-08-16T20:59:41.312515+00:00"
-  },
-  {
-    "id": "a66bc2d7f436b4bc",
-    "text": "When multiple parallel research seats each produce independent findings, consolidating them into a single structured decision interface (rather than per-seat loose outputs) lets the user evaluate options and make picks in one pass instead of reviewing N separate documents.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "cece0479-181a-4f64-8e86-66dde9e7a5ea",
-    "member_ids": [
-      "cece0479-181a-4f64-8e86-66dde9e7a5ea"
-    ],
-    "member_texts": [
-      "When multiple parallel research seats each produce independent findings, consolidating them into a single structured decision interface (rather than per-seat loose outputs) lets the user evaluate options and make picks in one pass instead of reviewing N separate documents."
     ],
     "source_projects": [
       "-Users-alcatraz627-Documents-studio-search-jul-26-fable",
@@ -1354,32 +816,6 @@
     ],
     "member_texts": [
       "Organizing a task backlog by behavioral or functional goal clusters — rather than by implementation order or ticket number — helps the user assess goal-level completion and prioritize remaining work more effectively."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-automation",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "slack-automation",
-      "versable-builder"
-    ],
-    "first_seen": "2026-08-17T03:14:11.269047+00:00",
-    "last_seen": "2026-08-17T03:14:11.269047+00:00"
-  },
-  {
-    "id": "b25392f4940d9d75",
-    "text": "Before sending IPC messages to peer sessions, the agent should verify the target session is alive; messages dispatched to offline sessions are silently lost and the work item is left unresolved with no fallback.",
-    "category": "tool-use",
-    "valence": "negative",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "41f776e5-63b5-4619-860e-e48af0fab44b",
-    "member_ids": [
-      "41f776e5-63b5-4619-860e-e48af0fab44b"
-    ],
-    "member_texts": [
-      "Before sending IPC messages to peer sessions, the agent should verify the target session is alive; messages dispatched to offline sessions are silently lost and the work item is left unresolved with no fallback."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -7096,36 +6532,27 @@
     "last_seen": "2026-09-17T02:26:52.367905+00:00"
   },
   {
-    "id": "61891122ccd82ddc",
-    "text": "Adding browser infrastructure (e.g., a headless browser) to a unit test suite is rejected; the preferred fix is to decouple the unit from the browser dependency instead.",
-    "category": "user-preference",
+    "id": "f06196eadfb05950",
+    "text": "Adding browser-based test mechanisms to unit test suites is rejected as architecturally inappropriate; the user treats it as a category error, not a tradeoff.",
+    "category": "approach",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "964a9604-03e3-414c-a8d3-92afee64dc6d",
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ce55d8e5-5689-4969-b7a7-255dda5df1d1",
     "member_ids": [
-      "ce55d8e5-5689-4969-b7a7-255dda5df1d1",
-      "964a9604-03e3-414c-a8d3-92afee64dc6d"
+      "ce55d8e5-5689-4969-b7a7-255dda5df1d1"
     ],
     "member_texts": [
-      "Adding browser-based test mechanisms to unit test suites is rejected as architecturally inappropriate; the user treats it as a category error, not a tradeoff.",
-      "Adding browser infrastructure (e.g., a headless browser) to a unit test suite is rejected; the preferred fix is to decouple the unit from the browser dependency instead."
+      "Adding browser-based test mechanisms to unit test suites is rejected as architecturally inappropriate; the user treats it as a category error, not a tradeoff."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
       "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code-better-file-browser",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "slack-automation",
-      "csync"
+      "-Users-alcatraz627-Code-Claude-csync"
     ],
     "first_seen": "2026-09-17T04:35:26.359775+00:00",
-    "last_seen": "2026-09-20T21:52:06.763087+00:00"
+    "last_seen": "2026-09-17T04:35:26.359775+00:00"
   },
   {
     "id": "aec78761a493d5f7",
@@ -7659,6 +7086,35 @@
     ],
     "member_texts": [
       "When adversarial review or a skeptical sub-agent is configured as part of a team workflow, it should still run as an independent sub-agent rather than being collapsed into a rubber-stamp pass by the same agent."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Personal-controlelr",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-csync",
+      "slack-automation",
+      "csync"
+    ],
+    "first_seen": "2026-09-20T21:52:06.763087+00:00",
+    "last_seen": "2026-09-20T21:52:06.763087+00:00"
+  },
+  {
+    "id": "61891122ccd82ddc",
+    "text": "Adding browser infrastructure (e.g., a headless browser) to a unit test suite is rejected; the preferred fix is to decouple the unit from the browser dependency instead.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "964a9604-03e3-414c-a8d3-92afee64dc6d",
+    "member_ids": [
+      "964a9604-03e3-414c-a8d3-92afee64dc6d"
+    ],
+    "member_texts": [
+      "Adding browser infrastructure (e.g., a headless browser) to a unit test suite is rejected; the preferred fix is to decouple the unit from the browser dependency instead."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-better-file-browser",
@@ -12349,21 +11805,23 @@
     "last_seen": "2026-10-12T23:01:13.926405+00:00"
   },
   {
-    "id": "3f2181b2bd51e926",
-    "text": "PR descriptions generated by the agent tend to be overly verbose and spammy; keep PR descriptions terse, structured, and signal-dense — not padded with boilerplate",
+    "id": "65ce513978d96fdc",
+    "text": "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate commentary.",
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 2,
-    "member_count": 2,
-    "rep_pattern_id": "5db8f743-f77a-4df0-aa3b-257bc36c7e61",
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "22a8ae07-962e-41a6-aa13-1af799a4cc09",
     "member_ids": [
       "5db8f743-f77a-4df0-aa3b-257bc36c7e61",
-      "c31c9b4c-82af-42d5-befa-4651f94a56b7"
+      "c31c9b4c-82af-42d5-befa-4651f94a56b7",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09"
     ],
     "member_texts": [
       "PR descriptions generated by the agent tend to be overly verbose and spammy; keep PR descriptions terse, structured, and signal-dense — not padded with boilerplate",
-      "Agent-generated PR descriptions tend toward verbosity that the user finds spammy; PR descriptions must be concise and signal-dense, not comprehensive recaps."
+      "Agent-generated PR descriptions tend toward verbosity that the user finds spammy; PR descriptions must be concise and signal-dense, not comprehensive recaps.",
+      "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate commentary."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -12372,10 +11830,11 @@
       "slack-automation",
       "-Users-alcatraz627-Code-Claude-i-dream",
       "-Users-alcatraz627--claude",
-      ".claude"
+      ".claude",
+      "i-dream"
     ],
     "first_seen": "2026-10-12T23:01:13.926405+00:00",
-    "last_seen": "2026-10-13T11:12:29.314804+00:00"
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   },
   {
     "id": "a20f31a62b12b527",
@@ -12450,28 +11909,36 @@
     "last_seen": "2026-10-12T23:01:13.926405+00:00"
   },
   {
-    "id": "d7ed84a0722e206e",
-    "text": "UI pages and reports produced by the agent showed a quality regression toward flat, low-contrast, hard-to-skim layouts; generated HTML UIs must use clear visual hierarchy, appropriate color contrast, and gestalt grouping rather than minimal/defaulted styling",
+    "id": "ca82efc1a26d2202",
+    "text": "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to parse, even when the information itself is correct.",
     "category": "domain",
     "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "9895363d-680b-42ac-b71f-61adf6087ad8",
+    "confidence": 0.85,
+    "occurrences": 3,
+    "member_count": 3,
+    "rep_pattern_id": "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
     "member_ids": [
-      "9895363d-680b-42ac-b71f-61adf6087ad8"
+      "9895363d-680b-42ac-b71f-61adf6087ad8",
+      "eb14127e-e2d2-4a60-b609-2314c028aba7",
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2"
     ],
     "member_texts": [
-      "UI pages and reports produced by the agent showed a quality regression toward flat, low-contrast, hard-to-skim layouts; generated HTML UIs must use clear visual hierarchy, appropriate color contrast, and gestalt grouping rather than minimal/defaulted styling"
+      "UI pages and reports produced by the agent showed a quality regression toward flat, low-contrast, hard-to-skim layouts; generated HTML UIs must use clear visual hierarchy, appropriate color contrast, and gestalt grouping rather than minimal/defaulted styling",
+      "UI output that lacks visual hierarchy, intentional color contrast, and gestalt grouping reads as low-quality even when functionally correct; any UI surface must apply proper typographic scale and color weight before being shown to the user.",
+      "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to parse, even when the information itself is correct."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
       "-Users-alcatraz627-Code-Versable-enhancement-product",
       "enhancement-product",
-      "slack-automation"
+      "slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "i-dream"
     ],
     "first_seen": "2026-10-12T23:01:13.926405+00:00",
-    "last_seen": "2026-10-12T23:01:13.926405+00:00"
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   },
   {
     "id": "e9f9657286b58469",
@@ -12580,14 +12047,16 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.88,
-    "occurrences": 1,
-    "member_count": 1,
+    "occurrences": 2,
+    "member_count": 2,
     "rep_pattern_id": "d3691add-19d6-42ed-a0df-9977d5c837d3",
     "member_ids": [
-      "d3691add-19d6-42ed-a0df-9977d5c837d3"
+      "d3691add-19d6-42ed-a0df-9977d5c837d3",
+      "1b241fe7-b8ee-4910-b627-8ee1e1a3c44a"
     ],
     "member_texts": [
-      "When the user says they are stepping away and asks for autonomous work, proactively arm a keep-warm mechanism before they leave; failing to do so forces the user to pay cold-cache cost on return."
+      "When the user says they are stepping away and asks for autonomous work, proactively arm a keep-warm mechanism before they leave; failing to do so forces the user to pay cold-cache cost on return.",
+      "The agent should proactively arm a keep-warm cron at the start of any long multi-turn session; failing to do so forces the user to re-pay cold-cache cost when they return."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -12596,25 +12065,28 @@
       "-Users-alcatraz627--claude",
       "enhancement-product",
       "slack-automation",
-      ".claude"
+      ".claude",
+      "i-dream"
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-13T11:12:29.314804+00:00"
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   },
   {
-    "id": "8d1749399c67b47a",
-    "text": "A session stop condition that requires all background work to be finished is not satisfied while background tasks are still running; the agent must wait for or collect all in-flight workflows before declaring the condition met.",
+    "id": "26c2a0944ac5e873",
+    "text": "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish before declaring the condition met — ending a turn with background work still running does not satisfy the condition.",
     "category": "approach",
     "valence": "negative",
-    "confidence": 0.9,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "e3d37ac7-31a0-43b5-886c-f3279305b5a9",
+    "confidence": 0.95,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "deb2807b-986f-4cc7-a8fa-18525e3a6273",
     "member_ids": [
-      "e3d37ac7-31a0-43b5-886c-f3279305b5a9"
+      "e3d37ac7-31a0-43b5-886c-f3279305b5a9",
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273"
     ],
     "member_texts": [
-      "A session stop condition that requires all background work to be finished is not satisfied while background tasks are still running; the agent must wait for or collect all in-flight workflows before declaring the condition met."
+      "A session stop condition that requires all background work to be finished is not satisfied while background tasks are still running; the agent must wait for or collect all in-flight workflows before declaring the condition met.",
+      "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish before declaring the condition met — ending a turn with background work still running does not satisfy the condition."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -12623,10 +12095,11 @@
       "-Users-alcatraz627--claude",
       "enhancement-product",
       "slack-automation",
-      ".claude"
+      ".claude",
+      "i-dream"
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-13T11:12:29.314804+00:00"
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   },
   {
     "id": "c1290748b4e31a17",
@@ -12634,14 +12107,16 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
+    "occurrences": 2,
+    "member_count": 2,
     "rep_pattern_id": "03a33fac-2337-4cf7-b967-d4c5b74ae225",
     "member_ids": [
-      "03a33fac-2337-4cf7-b967-d4c5b74ae225"
+      "03a33fac-2337-4cf7-b967-d4c5b74ae225",
+      "8371cb5b-0982-4a6f-b005-a40c80e6a707"
     ],
     "member_texts": [
-      "Reply length violations (terse-reply hook) recur even after prior warnings; replies must stay under the configured character limit, offloading detail to a linked file rather than inline prose."
+      "Reply length violations (terse-reply hook) recur even after prior warnings; replies must stay under the configured character limit, offloading detail to a linked file rather than inline prose.",
+      "Replies that exceed the terse-reply character limit recurred across multiple sessions; detail belongs in a linked file, not inline prose."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -12650,37 +12125,11 @@
       "-Users-alcatraz627--claude",
       "enhancement-product",
       "slack-automation",
-      ".claude"
+      ".claude",
+      "i-dream"
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-13T11:12:29.314804+00:00"
-  },
-  {
-    "id": "2a5313fa3aa45f1e",
-    "text": "UI output that lacks visual hierarchy, intentional color contrast, and gestalt grouping reads as low-quality even when functionally correct; any UI surface must apply proper typographic scale and color weight before being shown to the user.",
-    "category": "domain",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "eb14127e-e2d2-4a60-b609-2314c028aba7",
-    "member_ids": [
-      "eb14127e-e2d2-4a60-b609-2314c028aba7"
-    ],
-    "member_texts": [
-      "UI output that lacks visual hierarchy, intentional color contrast, and gestalt grouping reads as low-quality even when functionally correct; any UI surface must apply proper typographic scale and color weight before being shown to the user."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "enhancement-product",
-      "slack-automation",
-      ".claude"
-    ],
-    "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-13T11:12:29.314804+00:00"
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   },
   {
     "id": "441d33c304402540",
@@ -12735,5 +12184,140 @@
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
     "last_seen": "2026-10-13T11:12:29.314804+00:00"
+  },
+  {
+    "id": "6ccac8ae9d6688ac",
+    "text": "Before updating a shared record (Linear ticket, issue body) the agent must read and reconcile the existing state — body, sub-issues, status, labels — rather than overwriting or duplicating; when in doubt, surface a preview of what is already there and ask targeted merge decisions.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "0fdff309-73c1-4685-a280-2e344e46f583",
+    "member_ids": [
+      "0fdff309-73c1-4685-a280-2e344e46f583"
+    ],
+    "member_texts": [
+      "Before updating a shared record (Linear ticket, issue body) the agent must read and reconcile the existing state — body, sub-issues, status, labels — rather than overwriting or duplicating; when in doubt, surface a preview of what is already there and ask targeted merge decisions."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "enhancement-product",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-10-13T23:01:01.984227+00:00",
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
+  },
+  {
+    "id": "770e0346fd356ae2",
+    "text": "The agent must render and screenshot a UI change at full width and read it visually before reporting it as done; triggering /atone for 'not giving the proper preview yet' recurred twice in the same session.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "63da8949-5c62-42f3-95bb-ece19d02d0e1",
+    "member_ids": [
+      "63da8949-5c62-42f3-95bb-ece19d02d0e1"
+    ],
+    "member_texts": [
+      "The agent must render and screenshot a UI change at full width and read it visually before reporting it as done; triggering /atone for 'not giving the proper preview yet' recurred twice in the same session."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "enhancement-product",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-10-13T23:01:01.984227+00:00",
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
+  },
+  {
+    "id": "a61848c96f829d33",
+    "text": "Claiming a test or verification passed when only a collect, compile, lint, or syntax check ran is a repeated hook-caught violation; only an assertion execution satisfies the done bar.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "ce030797-1277-4427-b242-6585b345b657",
+    "member_ids": [
+      "ce030797-1277-4427-b242-6585b345b657"
+    ],
+    "member_texts": [
+      "Claiming a test or verification passed when only a collect, compile, lint, or syntax check ran is a repeated hook-caught violation; only an assertion execution satisfies the done bar."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "enhancement-product",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-10-13T23:01:01.984227+00:00",
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
+  },
+  {
+    "id": "0cd429dda63f31cf",
+    "text": "Keep-warm sessions running overnight beyond the user's expectation (2–3 hours) are invisible to the user and consume unexpected budget; the keep-warm policy and its TTL should be surfaced and bounded at setup time.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "409c9bc1-4984-4e71-86ca-89cb895ee8f1",
+    "member_ids": [
+      "409c9bc1-4984-4e71-86ca-89cb895ee8f1"
+    ],
+    "member_texts": [
+      "Keep-warm sessions running overnight beyond the user's expectation (2–3 hours) are invisible to the user and consume unexpected budget; the keep-warm policy and its TTL should be surfaced and bounded at setup time."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "enhancement-product",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-10-13T23:01:01.984227+00:00",
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
+  },
+  {
+    "id": "49791f5b2a519ee4",
+    "text": "A monitoring or status widget that does not show what is scheduled, what is pending, and how to trigger or defer an action is functionally useless; actionability must be a first-class design goal.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.78,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "d6f5baf5-2a13-4ee3-bffc-450a41b7157d",
+    "member_ids": [
+      "d6f5baf5-2a13-4ee3-bffc-450a41b7157d"
+    ],
+    "member_texts": [
+      "A monitoring or status widget that does not show what is scheduled, what is pending, and how to trigger or defer an action is functionally useless; actionability must be a first-class design goal."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "enhancement-product",
+      "i-dream",
+      ".claude"
+    ],
+    "first_seen": "2026-10-13T23:01:01.984227+00:00",
+    "last_seen": "2026-10-13T23:01:01.984227+00:00"
   }
 ]

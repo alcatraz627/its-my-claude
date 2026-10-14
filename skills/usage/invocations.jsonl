@@ -478,3 +478,11 @@
 {"ts":"2026-10-13T09:55:20Z","skill":"atone","session_id":"f6eee83a-6dfd-48b8-82ca-c81f09fa3dc4","src":"dispatch"}
 {"ts":"2026-10-13T11:10:01Z","skill":"core-dump","session_id":"70d5f656-f656-43f0-a918-717151891f96","src":"dispatch"}
 {"ts":"2026-10-13T13:33:58Z","skill":"core-dump","session_id":"f6eee83a-6dfd-48b8-82ca-c81f09fa3dc4","src":"dispatch"}
+{"ts":"2026-10-13T14:48:49Z","skill":"backlog-triage","session_id":"340bff0c-0570-4a30-89ff-97d7b315366f","src":"dispatch"}
+{"ts":"2026-10-13T16:51:06Z","skill":"core-dump","session_id":"607cc8c3-4792-4a3e-ac05-537818b21ed2","src":"dispatch"}
+{"ts":"2026-10-13T19:36:04Z","skill":"core-dump","session_id":"7eb9670d-f36c-4e73-b621-ab524e13ec6e","src":"dispatch"}
+{"ts":"2026-10-13T19:49:06Z","skill":"core-dump","session_id":"340bff0c-0570-4a30-89ff-97d7b315366f","src":"dispatch"}
+{"ts":"2026-10-14T00:06:59Z","skill":"core-dump","session_id":"842e701b-c03e-4749-ac5d-de30cc16cb73","src":"dispatch"}
+{"ts":"2026-10-14T09:33:38Z","skill":"catchup","session_id":"0ede9853-8b36-4bb9-9ea7-9f21af9ecad2","src":"dispatch"}
+{"ts":"2026-10-14T09:54:10Z","skill":"skeptical-review","session_id":"0ede9853-8b36-4bb9-9ea7-9f21af9ecad2","src":"dispatch"}
+{"ts":"2026-10-14T10:08:08Z","skill":"claude-api","session_id":"0ede9853-8b36-4bb9-9ea7-9f21af9ecad2","src":"dispatch"}
