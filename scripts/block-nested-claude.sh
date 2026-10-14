@@ -43,6 +43,9 @@ why=""
 for p in "$file_path" "$notebook_path"; do
   [ -n "$p" ] || continue
   case "$p" in
+    # The nested dir is also this repo's own project-scoped .claude/, where
+    # settings.local.json legitimately lives.
+    */.claude/.claude/settings.local.json) ;;
     */.claude/.claude/*|*/.claude/.claude) offender="$p"; why="write target is already nested"; break ;;
   esac
 done
@@ -53,6 +56,9 @@ if [ -z "$offender" ] && [ -n "$command_str" ]; then
   blanked=$(printf '%s' "$command_str" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g")
   # Noise redirects never write the nest; leaving them in reads as a write.
   blanked=$(printf '%s' "$blanked" | sed -E 's/[0-9]*>&[0-9]+//g; s/[0-9]*>>?[[:space:]]*\/dev\/null//g')
+
+  # settings.local.json is the one legitimate resident of the nested dir.
+  blanked=$(printf '%s' "$blanked" | sed -E 's#\.claude/settings\.local\.json([[:space:]]|$)#SETTINGS_LOCAL\1#g')
 
   writes_cmd='(^|[;&|(]|&&|\|\|)[[:space:]]*(sudo[[:space:]]+)?(mkdir|touch|cp|mv|tee|install|ln|dd|rsync)([[:space:]]|$)'
   writes_redir='>>?[[:space:]]*[^[:space:]|&;<]'

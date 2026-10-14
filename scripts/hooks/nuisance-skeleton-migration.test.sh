@@ -3,8 +3,8 @@
 #
 # Every mention row carries its OWN mutation control, because the first draft of
 # this suite did not and shipped two dead fixtures. `echo "do not cat /etc/hosts"`
-# never matched prefer-read-over-cat's raw pattern at all (it needs ^ or a ;
-# before `cat`), so the row passed identically with the migration reverted. A
+# never matched the retired prefer-read-over-cat's raw pattern at all (it needed
+# ^ or a ; before `cat`), so the row passed identically with the migration reverted. A
 # fixture that cannot fire proves nothing about the filter that silenced it.
 #
 # The control: run the same command with HOME pointed at an empty directory. The
@@ -17,6 +17,8 @@
 #   guard-commit-signature   its matcher reads the CONTENTS of commit -m "..."
 #   guard-zsh-path-var       zsh-path-scan.py already blanks quotes, and better
 #                            (state across lines, $'...' quoting, heredoc bodies)
+#   warn-git-add-enumeration moved to strip-payloads.py 2026-10-14; its own
+#                            suite, warn-git-add-enumeration.test.sh, covers it
 # See the third-category note in hook-common.sh for the rule separating them.
 
 set -uo pipefail
@@ -68,17 +70,9 @@ mention() {
 }
 
 echo "== real invocations still fire =="
-invocation prefer-glob-over-find           "find -name"   'find /tmp -name "*.log"'
-invocation warn-kill-9                     "kill -9"      'kill -9 12345'
-invocation prefer-read-over-head-tail-file "head -N file" 'head -50 /etc/hosts'
-invocation prefer-read-over-cat            "cat file"     'cat /etc/hosts'
 invocation guard-dev-server-port           "npm run dev"  'npm run dev'
 
 echo "== quoted mentions silent, each with its pre-migration control =="
-mention prefer-glob-over-find     "find in prose"    'echo "use find . -name x instead"'
-mention warn-kill-9               "kill in prose"    'echo "never kill -9 1234 here"'
-mention prefer-read-over-cat      "cat in prose"     'echo "; cat /etc/hosts"'
-mention prefer-read-over-head-tail-file "head in prose" 'echo "; head -50 notes.md"'
 mention guard-dev-server-port     "launcher in a search pattern" "ps aux | rg 'next dev|vite'"
 # This hook only nudges above its own threshold (inline -c with >5 newlines,
 # line 86), so a one-line body can never fire and would be a dead fixture. The
@@ -90,7 +84,6 @@ c
 d
 e
 f'"'"' instead"'
-mention warn-git-add-enumeration  "git add in prose" 'echo "avoid git add a.py b.py c.py d.py"'
 
 # The weld case the replaced perl/sed blankers got wrong: deleting a quoted span
 # joins its neighbours, so vi'x'te read as a `vite` launch. Blanking to spaces of

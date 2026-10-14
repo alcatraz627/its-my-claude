@@ -18,7 +18,8 @@
 
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-HOOK="$HERE/block-nested-claude.sh"
+# GUARD_UNDER_TEST points the suite at a deliberately broken copy for mutation runs.
+HOOK="${GUARD_UNDER_TEST:-$HERE/block-nested-claude.sh}"
 
 # Compose the nested literal from parts: a test that spells it out cannot be
 # grepped for, edited, or run without tripping the very guard under test.
@@ -66,6 +67,13 @@ ok "write to a normal path, content mentions nest" \
 # redirect, making every silenced read of the nested dir a block.
 ok "read of nested dir silenced with 2>/dev/null" \
    "$(verdict "$(bash_j "$GCC" "ls -la $NEST/ 2>/dev/null")")" allow
+
+echo "── settings.local.json is the nested dir's legitimate resident: must ALLOW ──"
+ok "Write absolute settings.local.json"   "$(verdict "$(write_j "$GCC" "$NEST/settings.local.json")")"          allow
+ok "Bash redirect into settings.local.json (absolute)" "$(verdict "$(bash_j "$GCC" "echo {} > $NEST/settings.local.json")")" allow
+ok "Bash cp relative settings.local.json in gcc" "$(verdict "$(bash_j "$GCC" "cp /tmp/s.json $C/settings.local.json")")" allow
+ok "...but a sibling file is still refused" "$(verdict "$(bash_j "$GCC" "cp /tmp/s.json $C/settings.local.json.bak")")" block
+ok "...and Write of another nested file"  "$(verdict "$(write_j "$GCC" "$NEST/other.json")")"                  block
 
 echo "── a project's own .claude/ is legitimate: must ALLOW ──"
 ok "relative write, cwd is a PROJECT"     "$(verdict "$(bash_j "$PROJ" "mkdir -p $C/output")")"    allow

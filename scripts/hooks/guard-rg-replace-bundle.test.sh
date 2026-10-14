@@ -20,7 +20,8 @@ set -uo pipefail
 # how 102 test events were read as live adherence data (audit 2026-08-18).
 export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/warnlog-test-XXXXXX")"
 HERE="$(cd "$(dirname "$0")" && pwd)"
-HOOK="$HERE/guard-rg-replace-bundle.sh"
+# GUARD_UNDER_TEST points the suite at a deliberately broken copy for mutation runs.
+HOOK="${GUARD_UNDER_TEST:-$HERE/guard-rg-replace-bundle.sh}"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
@@ -41,7 +42,16 @@ ok "bundled -nr"            "$(verdict 'rg -nr foo src/')"           BLOCK
 ok "-r after a quoted arg"  "$(verdict 'rg "pat" -r x src/')"        BLOCK
 ok "behind an xargs wrapper" "$(verdict 'xargs -I{} rg -r foo')"     BLOCK
 
+echo "── the same bundles where rg is not at the start of a segment: must BLOCK ──"
+ok "-rn inside \$( )"        "$(verdict 'echo $(rg -rn foo src/)')"   BLOCK
+ok "-nr in an assignment"   "$(verdict 'x=$(rg -nr foo src/)')"      BLOCK
+ok "-nr inside backticks"   "$(verdict 'echo `rg -nr foo`')"         BLOCK
+ok "-rn in a subshell"      "$(verdict '(rg -rn foo src/)')"         BLOCK
+ok "-nr after env prefix"   "$(verdict 'LC_ALL=C rg -nr foo src/')"  BLOCK
+
 echo "── deliberate or unrelated: must ALLOW ──"
+ok "jq -r inside \$( )"      "$(verdict 'echo $(jq -r .cwd f.json)')"  allow
+ok "heredoc prose naming rg -rn" "$(verdict "$(printf 'cat <<EOF > n.md\nrg -rn foo is wrong\nEOF')")" allow
 ok "explicit --replace"     "$(verdict 'rg foo --replace bar src/')" allow
 ok "-r in another segment"  "$(verdict 'rg foo src/ | sort -r')"     allow
 ok "not an rg command"      "$(verdict 'jq -r .cwd f.json')"         allow

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# 39-goal-arm-lint.test.sh — the arm lint mirrors the owner's /goal into the gcc
+# 37-goal-arm-lint.test.sh: the arm-lint branch of 37-goal.sh mirrors the owner's /goal into the gcc
 # store, nags only on a clause the owner would have to finish, and retires the
 # mirror when he clears the goal. Three ledger entries on 2026-09-08 were the
 # lint asking him to re-arm his own register; one was a cleared goal that left
 # no trace any tool reads.
 set -uo pipefail
-H=/Users/alcatraz627/.claude/hinters/39-goal-arm-lint.sh; G=/Users/alcatraz627/.claude/scripts/goal/goal.sh
+H=/Users/alcatraz627/.claude/hinters/37-goal.sh; G=/Users/alcatraz627/.claude/scripts/goal/goal.sh
 WL=/Users/alcatraz627/.claude/scripts/hooks/warn-log.sh
 pass=0; fail=0; ok(){ pass=$((pass+1)); echo "  ok    $1"; }; ko(){ fail=$((fail+1)); echo "  FAIL  $1"; }
 T=$(mktemp -d); REAL="$HOME"; export HOME="$T"
 mkdir -p "$HOME/.claude/goals" "$HOME/.claude/scripts/goal" "$HOME/.claude/scripts/hooks" "$HOME/.claude/hinters" "$HOME/.claude/projects/-"
 cp "$G" "$HOME/.claude/scripts/goal/"; cp "$H" "$HOME/.claude/hinters/"; [ -f "$WL" ] && cp "$WL" "$HOME/.claude/scripts/hooks/"
-H="$HOME/.claude/hinters/39-goal-arm-lint.sh"
+H="$HOME/.claude/hinters/37-goal.sh"
 SID=cccccccc-0000-0000-0000-000000000039; export CLAUDE_HINT_SID=$SID
 ST="/tmp/claude-goalarm-${SID:0:8}"; trash "$ST" 2>/dev/null || true
 export WARN_LOG_STORE="$T/warnlog"

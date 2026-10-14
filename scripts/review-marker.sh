@@ -40,6 +40,9 @@ case "$cmd" in
   files)      current ;;
   unreviewed) unreviewed ;;
   count)      n=$(unreviewed | awk 'NF{c++} END{print c+0}'); printf '%s\n' "${n:-0}" ;;
-  write)      current > "$MARK.tmp" && mv -f "$MARK.tmp" "$MARK" ;;
+  # The pipeline can exit non-zero with correct output (an rg with no match), so
+  # the marker is promoted on the output, not the status.
+  write)      [ -x ~/.claude/scripts/review-scope.sh ] || { echo "review-marker: review-scope.sh missing; marker left as is" >&2; exit 1; }
+              { current || true; } > "$MARK.tmp"; mv -f "$MARK.tmp" "$MARK" ;;
   *) echo "usage: review-marker.sh {files|unreviewed|count|write} <sid8>" >&2; exit 2 ;;
 esac

@@ -1,5 +1,5 @@
 ---
-brief: One reader for every usage window (policy.sh: fable, codex, general with the owner's 80/90 thresholds, advisory only), the owner-approved expiring snooze (hook-snooze.sh, scoped, reasoned, listed in the brief), and the lifecycle header the tune-able dozen carry so hook-health can say whether a hook still earns its fire.
+brief: One reader for every usage window (policy.sh: fable, codex, general with the owner's 80/90 thresholds, advisory only), the owner-approved expiring snooze (hook-snooze.sh, scoped, reasoned, listed in the brief), and the lifecycle header the tune-able set carry so hook-health can say whether a hook still earns its fire.
 triggers:
   - tool:policy.sh
   - tool:hook-snooze.sh
@@ -54,7 +54,7 @@ Groups: `reviews`, `fable`, `atone`, `prose`. Ledger `~/.claude/hooks/snooze.jso
 **The agent never writes a snooze on its own.** It asks with AskUserQuestion,
 and the option text carries all three fields, in this shape:
 
-> Snooze `prose` (prose-smell, reply-lede, dense-shapes) for **this session**,
+> Snooze `prose` (prose-smell, terse-reply, dense-shapes) for **this session**,
 > **4 hours**, because you are dictating a spec in your own register and every
 > reply trips the gate?  a) yes  b) global instead  c) no
 
@@ -63,11 +63,11 @@ STRONG tier is snoozable at session scope only. A snoozed hook says so once
 per session (`hook_snoozed` in hook-common.sh); the SessionStart brief lists
 live snoozes with who, until and why.
 
-## Lifecycle headers: the tune-able dozen
+## Lifecycle headers: the tune-able set
 
-persona-suggest, prefer-tmp-py-over-inline, prefer-ripgrep, skill-lint-nudge,
-no-task-nudge, guard-env-access, guard-speculative-export, prose-smell,
-reply-lede, dense-briefing-shapes, declared-ready, guard-duplicate-symbol,
+persona-suggest, prefer-tmp-py-over-inline, prefer-ripgrep,
+no-task-nudge, guard-env-access, prose-smell,
+dense-briefing-shapes, declared-ready, guard-duplicate-symbol,
 weekly-usage. Each carries:
 
 ```

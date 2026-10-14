@@ -103,6 +103,17 @@ else
 fi
 cmd="$cmd_scan"
 
+# Message text is prose, not a path the command opens. For the verbs that only
+# carry a message (git commit/tag, gh pr/issue, claude-ipc send), blank their
+# quoted arguments so a commit message that says "stop cat-ing .env" is not read
+# as a read of .env. A quoted span holding `$` or a backtick is left alone, so
+# `-m "$(cat .env)"` is still seen. echo and printf are not on the list: their
+# text can be piped into a shell. Nothing is blanked when the command feeds a
+# shell or writes a script, so `... | sh` is judged on the raw text.
+if ! printf '%s' "$cmd" | rg -q '\|\s*(xargs\b[^|]*)?(ba|z)?sh\b|>\s*\S+\.(sh|bash|zsh)\b|\b(ba|z)?sh\s+\S+\.sh\b' 2>/dev/null; then
+  _msg=$(printf '%s' "$cmd" | perl -0777 -pe 's{((?:^|[;&|]\s*|\n\s*)(?:git\s+(?:commit|tag)|gh\s+(?:pr|issue)\s+\w+|claude-ipc\s+(?:send|reply))\b)((?:[^;&|"\x27\n]|"[^"\$`]*"|\x27[^\x27]*\x27)*)}{my($h,$t)=($1,$2); $t=~s/"[^"]*"/""/g; $t=~s/\x27[^\x27]*\x27/\x27\x27/g; $h.$t}gme' 2>/dev/null) && [ -n "$_msg" ] && cmd="$_msg"
+fi
+
 printf '%s' "$cmd" | rg -q "$SECRET_TOKEN" 2>/dev/null || exit 0
 
 # The command is judged one SEGMENT at a time (split on ; && || |), each segment

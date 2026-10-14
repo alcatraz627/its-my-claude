@@ -84,7 +84,8 @@ Neither of us had named the asymmetry until they did.
   which the user explicitly values. Only the *ungroundable* fire classes
   (meta-claims, person-owns, already-cited) were cut. Source affirm:
   `aff-20260702-121112-21`.
-- `guard-speculative-export.sh` sits at a **~35% FP floor** and is deliberately
+- `guard-speculative-export.sh` (retired 2026-10-14, now in
+  `scripts/hooks/retired/`) sat at a **~35% FP floor** and was deliberately
   **warn-only** — its header notes a block at that floor "would be muted on
   sight." A cheap-to-dismiss nudge at 35% FP is a good bet; a block at 35% FP is
   a self-inflicted mute.

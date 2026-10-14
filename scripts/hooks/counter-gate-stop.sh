@@ -3,11 +3,11 @@
 # reply as numbers; never judge taste (regfric D2, owner-approved 2026-08-20).
 #
 # gcp-fable's evidence: four same-day atones, prose review caught none, counting
-# caught all. This gate turns each reply into a numbers row in
+# caught all. This hook turns each reply into a numbers row in
 # ~/.claude/logs/counter-gate.jsonl: reply chars, prompt words, budget breach,
-# first-question position, completion verbs, bare ids lacking subjects. A
-# would-block note fires only on a BUDGET breach (short ask, long reply); real
-# blocking waits for two weeks of telemetry (COUNTER_GATE_ENFORCE=1).
+# first-question position, completion verbs, bare ids lacking subjects. It
+# shows nothing: length is judged by terse-reply-stop.sh, voice by prose-smell,
+# structure by dense-briefing-shapes.
 # Deliberately does NOT re-count what prose-smell owns (em-dash, bold, labels).
 #
 # Mute: COUNTER_GATE_OFF=1 · touch ~/.claude/.no-counter-gate
@@ -46,7 +46,6 @@ breach=$([ "$rchars" -gt "$budget" ] && echo true || echo false)
 mkdir -p "$HOME/.claude/logs"
 printf '{"ts":"%s","sid":"%s","rchars":%s,"pwords":%s,"budget":%s,"breach":%s,"qpos":%s,"verbs":%s,"bare_ids":%s}\n' \
   "$(date -u +%FT%TZ)" "$sid8" "$rchars" "${pwords:-0}" "$budget" "$breach" "$qpos" "${verbs:-0}" "${bare:-0}" >> "$HOME/.claude/logs/counter-gate.jsonl"
-[ "$breach" = "true" ] || exit 0
-h=$(printf '%s' "$text" | shasum | cut -c1-12); mk="/tmp/claude-cgate-$sid8-$h"; [ -f "$mk" ] && exit 0; touch "$mk"
-jq -n --arg m "[counter-gate · numbers, not judgment] reply ${rchars}c against a ${pwords}-word ask (budget ${budget}c). If the ask was small, the answer's first screen should be too. (telemetry-only; enforce later on evidence · mute: touch ~/.claude/.no-counter-gate)" '{systemMessage: $m}'
+# Numbers only: reply length is terse-reply-stop.sh's to judge (2026-10-14), so
+# a breach is recorded above and never shown.
 exit 0

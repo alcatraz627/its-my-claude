@@ -456,7 +456,7 @@ Stop hook and lives in memory only; `goal.sh harness` recovers it from this sess
 transcript (`~/.claude/projects/<cwd, slashes and dots as dashes>/<SESSION_ID>.jsonl`,
 the `<command-name>/goal</command-name>` blocks), so record what was SET, not what
 you remember. The gcc goal (`~/.claude/goals/<sid>.json`) is what the
-`37-goal-standing` hinter injects each session. Judge validity against what actually
+`37-goal` hinter injects each session. Judge validity against what actually
 happened this session, then write the goal, its validity, and both arm states into
 Live commitments, and the paste line into the Re-arm block. `/catchup` only OFFERS
 that line; it never re-arms a goal (owner ruling 2026-10-13: "only offer it, never

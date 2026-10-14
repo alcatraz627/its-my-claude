@@ -21,8 +21,10 @@ It NEVER mutates the store and NEVER auto-applies. The human PROMOTE/DROP decisi
 The anti-churn triage gate — an item is PROMOTE-worthy iff ANY of:
   - corroboration >= 2 (two independent streams point at the same idea), OR
   - a linked atone slug is severity S3, OR
-  - a linked atone slug has recurrence >= 3, OR
-  - it is a human contribution (src:session-contrib / src:post-catchup) with effort <= medium.
+  - a linked atone slug has recurrence >= 3.
+Who filed it does not count: a lone human-filed small or medium proposal used to
+promote on that alone, which promoted 93 of 230 clusters, so it now waits like any
+other single signal.
 Everything else -> WATCH (visible, still accruing corroboration, not presented as actionable).
 Open > STALE_DAYS with corroboration < 2 and no S3 -> DROP-REVIEW (graveyard cleanup).
 A single weak signal is, by the user's own right-sized-code / speculative-abstractions
@@ -58,7 +60,6 @@ SIDECAR = os.path.join(GCC, ".backlog-triage-latest.json")
 WEEKLY_SECONDS = 6 * 24 * 3600
 DEFAULT_STALE_DAYS = 45
 
-HUMAN_SRCS = {"src:session-contrib", "src:post-catchup"}
 
 
 def now_utc():
@@ -389,14 +390,12 @@ def assess(items, triggers, stale_days, use_content=True, explain=False):
         # systems (len(types)). A lone item linking one system is corroboration 1.
         corroboration = max(len(grp), len(types))
         rep = sorted(grp, key=lambda x: (effort_rank(x.get("effort", "medium")), -age_days(x)))[0]
-        human = bool(HUMAN_SRCS & {t for t in rep.get("tags", []) if t.startswith("src:")})
         oldest_age = max(age_days(it) for it in grp)
 
         promote = (
             corroboration >= 2
             or atone_severity == "S3"
             or atone_recurrence >= 3
-            or (human and rep.get("effort", "medium") in ("small", "medium"))
         )
         if promote:
             bucket = "PROMOTE"

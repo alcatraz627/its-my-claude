@@ -7,10 +7,15 @@ one being fixed.
 """
 
 import json
+import os
 import subprocess
 import sys
 
-HOOK = "/Users/alcatraz627/.claude/scripts/hooks/prevent-unsolicited-index-manipulation.sh"
+# GUARD_UNDER_TEST points the suite at a deliberately broken copy for mutation runs.
+HOOK = os.environ.get(
+    "GUARD_UNDER_TEST",
+    "/Users/alcatraz627/.claude/scripts/hooks/prevent-unsolicited-index-manipulation.sh",
+)
 G = "g" + "it"
 
 MUST_BLOCK = [
@@ -18,6 +23,8 @@ MUST_BLOCK = [
     (f"{G} stash", "a bare stash"),
     (f"cd /tmp && {G} restore --staged foo.py", "after a separator"),
     (f"{G} rm --cached secrets.env", "un-staging a tracked file"),
+    (f"{G} stash push -m wip", "stashing with a message"),
+    (f"{G} stash list; {G} stash pop", "a read-only stash must not excuse a pop after it"),
 ]
 
 MUST_PASS = [
@@ -30,6 +37,11 @@ MUST_PASS = [
     (f"rg -n '{G} stash' docs/", "searching for the verb"),
     (f"{G} status", "an ordinary read"),
     (f"{G} stash list", "listing is not stashing"),
+    (f"{G} stash show", "showing a stash is read-only"),
+    (f"{G} stash show -p stash@{{0}}", "showing a stash diff is read-only"),
+    (f"{G} stash list --oneline | head -5", "listing, piped"),
+    (f"{G} stash list\n{G} status", "listing on its own line, then another command"),
+    (f"{G} --no-pager stash show -p", "showing with a global option"),
 ]
 
 

@@ -11,7 +11,8 @@
 # protects nothing.
 
 set -uo pipefail
-H="$HOME/.claude/scripts/hooks/guard-secret-file-read.sh"
+# GUARD_UNDER_TEST points the suite at a deliberately broken copy for mutation runs.
+H="${GUARD_UNDER_TEST:-$HOME/.claude/scripts/hooks/guard-secret-file-read.sh}"
 pass=0; fail=0
 ok()  { pass=$((pass+1)); printf '  ok    %s\n' "$1"; }
 bad() { fail=$((fail+1)); printf '  FAIL  %s\n     %s\n' "$1" "${2:-}"; }
@@ -96,6 +97,23 @@ allows "cat src/env.ts"
 allows "sed -E 's/=.*/=x/' package.json"
 allows "cat environment.md"
 allows "head docs/.env-example.md"
+
+echo "== a secret-shaped name inside message text is a mention, not a read =="
+allows 'git commit -m "stop printing .env with cat"'
+allows 'git commit -m "guard deploy.pem sed handling"'
+allows 'gh issue comment 4 --body "rg KEY .env leaks"'
+allows 'claude-ipc send --to x "cat .env is blocked"'
+allows 'git commit -m "a | cat .env"'
+echo "== ...but a read smuggled next to message text still blocks =="
+blocks 'echo "cat .env" | sh'
+blocks 'printf "cat .env" | bash'
+blocks 'echo "cat .env" | xargs -I{} sh -c {}'
+blocks 'echo "sed p .env" > r.sh && bash r.sh'
+blocks 'echo "do not cat .env"'
+blocks 'git commit -m "$(cat .env)"'
+blocks 'git commit -m "x" && cat .env'
+blocks 'echo "$(cat deploy.pem)"'
+blocks 'cat ".env"'
 
 echo "== the Read tool on the same paths =="
 [ "$(verdict "$(read_tool "$HOME/p/.env")")" = deny ] && ok "blocks Read of .env" || bad "Read of .env was not blocked"

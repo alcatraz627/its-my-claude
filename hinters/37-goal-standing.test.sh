@@ -2,10 +2,10 @@
 # 37-goal-standing.test.sh — the goal hinter fires on prompt 1 and every 8th, only when a
 # gcc goal exists and the harness /goal is not armed; machine turns cost no slot.
 set -uo pipefail
-H=/Users/alcatraz627/.claude/hinters/37-goal-standing.sh; G=/Users/alcatraz627/.claude/scripts/goal/goal.sh
+H=/Users/alcatraz627/.claude/hinters/37-goal.sh; G=/Users/alcatraz627/.claude/scripts/goal/goal.sh
 pass=0; fail=0; ok(){ pass=$((pass+1)); echo "  ok    $1"; }; ko(){ fail=$((fail+1)); echo "  FAIL  $1"; }
 T=$(mktemp -d); REAL="$HOME"; export HOME="$T"; mkdir -p "$HOME/.claude/goals" "$HOME/.claude/scripts/goal" "$HOME/.claude/hinters"
-cp "$G" "$HOME/.claude/scripts/goal/"; cp "$H" "$HOME/.claude/hinters/"; H="$HOME/.claude/hinters/37-goal-standing.sh"; G="$HOME/.claude/scripts/goal/goal.sh"
+cp "$G" "$HOME/.claude/scripts/goal/"; cp "$H" "$HOME/.claude/hinters/"; H="$HOME/.claude/hinters/37-goal.sh"; G="$HOME/.claude/scripts/goal/goal.sh"
 SID=bbbbbbbb-0000-0000-0000-000000000002; export CLAUDE_HINT_SID=$SID; ST="/tmp/claude-goalhint-${SID:0:8}"; trash "$ST" 2>/dev/null || true
 run(){ echo "$1" | bash "$H"; }
 [ -z "$(run hi)" ] && ok "no goal file: silent" || ko "no goal silent"

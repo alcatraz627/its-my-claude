@@ -142,6 +142,25 @@ ok "F6 94  npx vite-node one-off runner     (prop-20260825-215830-94)" \
 ok "F6b    npx vite-plugin-inspect          (same word-boundary defect)" \
    "$(verdict 'npx vite-plugin-inspect --help')"                       allow
 
+ok "F7    vite --help prints and exits"           "$(verdict 'vite --help')"        allow
+ok "F7b   vite --version prints and exits"        "$(verdict 'npx vite --version')" allow
+ok "F7c   --help does not excuse a chained launch" "$(verdict 'vite --help; vite')"  BLOCK
+
+# npm script indirection (prop-20260910-145536-02): the script body decides.
+NPMDIR=$(mktemp -d "${TMPDIR:-/tmp}/devport-npm-XXXXXX")
+printf '{"scripts":{"dev:build":"vite build","dev:types":"tsc --noEmit","dev:raw":"vite","dev:chain":"npm run start","start":"vite","dev:conc":"concurrently \\"vite\\" \\"node server.js\\"","dev:sh":"sh -c vite","dev:node":"node scripts/dev.mjs"}}\n' > "$NPMDIR/package.json"
+ok "F8    npm run dev:build wrapping vite build" "$(verdict 'npm run dev:build' "$NPMDIR")" allow
+ok "F8e   npm run dev:types wrapping tsc" "$(verdict 'npm run dev:types' "$NPMDIR")" allow
+ok "F8f   a script that calls another script still blocks" "$(verdict 'npm run dev:chain' "$NPMDIR")" BLOCK
+ok "F8g   concurrently around vite still blocks" "$(verdict 'npm run dev:conc' "$NPMDIR")" BLOCK
+ok "F8h   sh -c vite still blocks" "$(verdict 'npm run dev:sh' "$NPMDIR")" BLOCK
+ok "F8i   a node script still blocks" "$(verdict 'npm run dev:node' "$NPMDIR")" BLOCK
+ok "F8j   cd elsewhere first: this package.json is not the one" "$(verdict 'cd web && npm run dev:build' "$NPMDIR")" BLOCK
+ok "F7d   flask run -h 0.0.0.0 is a host, not help" "$(verdict 'flask run -h 0.0.0.0')" BLOCK
+ok "F8b   npm run dev:raw wrapping vite still blocks" "$(verdict 'npm run dev:raw' "$NPMDIR")" BLOCK
+ok "F8c   unknown script, no package.json entry blocks" "$(verdict 'npm run dev-other' "$NPMDIR")" BLOCK
+ok "F8d   npm run dev itself still blocks" "$(verdict 'npm run dev' "$NPMDIR")" BLOCK
+
 echo
 echo "── CONTROL: the suite can tell a block from an allow ──"
 # Without this, a hook that never fires at all would show a perfect score.

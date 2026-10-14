@@ -48,7 +48,7 @@ Fires log via `warn-log.sh` (`--hook model-tier --action block|nudge`) for FP-ra
 per `features/hook-design.md`. A mis-tier heuristic (research-verbs on opus-high, etc.) is
 deliberately NOT nudging yet — telemetry accumulates first, revisit at the reviews below.
 
-## The plan-time nudge — `scripts/hooks/nudge-model-plan.sh` (PreToolUse · ExitPlanMode)
+## The plan-time nudge — `scripts/hooks/retired/nudge-model-plan.sh` (RETIRED 2026-10-14, never registered)
 
 The Phase C half: a plan whose text signals sub-agents / workflows / large ingestion /
 modality tools but carries no `Model plan:` block gets one `additionalContext` nudge

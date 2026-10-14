@@ -95,15 +95,12 @@ if since is None and str(within_s).strip():
 MUTE_MAP = {
     "prefer-tmp-py-over-inline": ".no-inline-py-hint",
     "guard-duplicate-symbol":    ".no-dup-symbol-guard",
-    "guard-speculative-export":  ".no-speculative-export-gate",
     "guard-rg-replace-bundle":   ".no-rg-replace-guard",
     "guard-cluster-e-smells":    ".no-cluster-e-nudge",
     "persona-suggest":           "personas/usage/.suggest-off",
-    "prefer-glob-over-find":     ".no-find-hint",
     "warn-git-add-enumeration":  "atone/.add-warn-off",
     "guard-env-access":          ".env-access-off",
     "guard-subagent-output":     ".subagent-output-off",
-    "warn-kill-9":               ".no-kill-9-hint",
     "guard-comment-verbosity":   ".no-comment-verbosity-gate",
     # hard gates — no per-session mute file:
     "cli-gating":     None, "prefer-ripgrep": None, "safe-delete": None,

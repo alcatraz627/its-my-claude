@@ -49,10 +49,24 @@ blank_quotes() {
   fi
   printf '%s' "$1" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g"
 }
-scan=$(blank_quotes "$command")
+# A heredoc body is stdin, never rg's arguments: blank it before the quotes.
+# Falls back to the unstripped command if the helper is missing or fails.
+STRIP="$HOME/.claude/scripts/hooks/strip-payloads.py"
+body_free="$command"
+if [ -r "$STRIP" ]; then
+  _h=$(printf '%s' "$command" | python3 "$STRIP" --heredocs-only 2>/dev/null) && [ -n "$_h" ] && body_free="$_h"
+fi
+scan=$(blank_quotes "$body_free")
+scan=${scan//\$\(/$'\n'}                                      # a substitution starts a new command
+scan=${scan//\`/$'\n'}
 footgun=0
 while IFS= read -r seg; do
   s="${seg#"${seg%%[![:space:]]*}"}"                          # ltrim
+  # rg is still rg inside `( … )`, `{ …; }` or after VAR=value prefixes.
+  while [[ "$s" =~ ^(\(|\{[[:space:]]|[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)(.*)$ ]]; do
+    s="${BASH_REMATCH[2]}"
+    s="${s#"${s%%[![:space:]]*}"}"
+  done
   # Strip a leading runner/wrapper chain (xargs/time/env/…) AND its option
   # tokens, so we land on the real rg command and inspect only rg's OWN args.
   # This catches `xargs -I{} rg -r …` (a flag between xargs and rg) and avoids

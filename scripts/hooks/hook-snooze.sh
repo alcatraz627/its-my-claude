@@ -22,11 +22,11 @@ set -uo pipefail
 LEDGER="${SNOOZE_LEDGER:-$HOME/.claude/hooks/snooze.jsonl}"
 NOW="${SNOOZE_NOW:-$(date +%s)}"
 command -v jq >/dev/null 2>&1 || exit 0
-SNZ_GROUPS='{"reviews":["review-gate","codex-review","skill-lint-nudge"],
+SNZ_GROUPS='{"reviews":["codex-review"],
          "fable":["model-tier-fable"],
          "fable-restrict":["fable-restrict-subagents","fable-restrict-delegation"],
          "atone":["speculative-atone-hint","speculative-atone-stop","atone-circuit-breaker"],
-         "prose":["prose-smell","reply-lede","dense-briefing-shapes"]}'
+         "prose":["prose-smell","terse-reply","dense-briefing-shapes"]}'
 iso() { date -u -r "$1" +%FT%TZ 2>/dev/null || date -u -d "@$1" +%FT%TZ; }
 dur_s() { case "$1" in *h) echo $(( ${1%h} * 3600 ));; *d) echo $(( ${1%d} * 86400 ));; *m) echo $(( ${1%m} * 60 ));; *) return 1;; esac; }
 live() { # prints live rows (json lines), dropping expired

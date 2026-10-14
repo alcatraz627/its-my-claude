@@ -83,9 +83,29 @@ printf '%s' "$SCAN" | rg -q "$LAUNCH_RE" 2>/dev/null || exit 0
 # A build, typecheck or lint subcommand binds no port. `vite build` tripped the
 # gate in data-forge (prop-20260710-122025-76, six corroborations); only
 # dev / preview / serve / start forms are launches. Owner batch 2026-09-18.
-printf '%s' "$SCAN" | rg -q '\b(vite|next|astro|nuxt|remix|react-router)\s+(build|typecheck|lint|optimize|check|generate|info)\b' 2>/dev/null && exit 0
+BUILD_RE='\b(vite|next|astro|nuxt|remix|react-router)\s+(build|typecheck|lint|optimize|check|generate|info)\b'
+printf '%s' "$SCAN" | rg -q "$BUILD_RE" 2>/dev/null && exit 0
+
+# `vite --help` and `--version` print and exit; no server starts. A bare `-h`
+# counts only as the last token: for flask and uvicorn it means --host.
+printf '%s' "$SCAN" | rg -q '\b(vite|next|astro|nuxt|remix|react-router|webpack|uvicorn|flask|serve)\b[^;&|]*\s((--help|--version)(\s|$)|-h\s*$)' 2>/dev/null && exit 0
 
 CWD=$(printf '%s' "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
+
+# `npm run dev:build` whose script is a build or a typecheck starts no server.
+# Only a body that is plainly one of those is exempt: a body that calls another
+# script, a shell, `concurrently` or `node` may launch one, so it still blocks.
+# A missing file or script falls through to the launch verdict, as before.
+SCRIPT_NAME=$(printf '%s' "$SCAN" | rg -o -r '$2' -e '(^|[;&|(]\s*)(?:[A-Za-z_]+=\S+\s+)*(?:npm|pnpm|yarn|bun)\s+(?:run\s+)?(dev[A-Za-z0-9:_-]+)(\s|$)' 2>/dev/null | head -1)
+# A `cd` or `--prefix` first means the package.json in cwd is the wrong one.
+if [ -n "$SCRIPT_NAME" ] && [ -n "$CWD" ] && [ -f "$CWD/package.json" ] \
+  && ! printf '%s' "$SCAN" | rg -q '(^|[;&|(]\s*)(cd|pushd)\s|--prefix|-C\s|--cwd' 2>/dev/null; then
+  BODY=$(jq -r --arg n "$SCRIPT_NAME" '.scripts[$n] // empty' "$CWD/package.json" 2>/dev/null)
+  if [ -n "$BODY" ] \
+    && printf '%s' "$BODY" | rg -q "^\s*(($BUILD_RE)|tsc|eslint|prettier|vitest run|jest)\b[^;&|]*$" 2>/dev/null; then
+    exit 0
+  fi
+fi
 PORTS="$HOME/.claude/scripts/dev-servers/ports.sh"
 
 # Port extraction: --port N / --port=N / -p N / PORT=N / http.server N.

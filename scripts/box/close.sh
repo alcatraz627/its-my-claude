@@ -6,7 +6,7 @@
 # owners read verdict -> needs-you -> next, while agents write in production
 # order. This script emits the consumption-order block so the shape lives in
 # a renderer, not in session memory. Ledger: the emitted nonce is written to
-# /tmp/claude-lede-<sid8>/nonce; reply-lede-stop.sh checks the reply carries it.
+# /tmp/claude-lede-<sid8>/nonce (reply-lede-stop.sh, which checked it, retired 2026-10-14).
 #
 # Usage:
 #   close.sh --sid <sid8> --verdict "<what is true now>" --next "<one action>" \

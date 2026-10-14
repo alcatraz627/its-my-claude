@@ -1157,10 +1157,6 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/reply-lede-stop.sh"
-          },
-          {
-            "type": "command",
             "command": "~/.claude/scripts/hooks/dense-briefing-shapes-stop.sh"
           },
           {
@@ -1198,6 +1194,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/ui-callouts-gate.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/ui-verified-stop.py"
           }
         ]
       },

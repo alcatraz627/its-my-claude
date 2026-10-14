@@ -72,13 +72,12 @@ claude-ipc sprint left ~50 of 54 findings unactioned, including the one that
 predicted the fire).
 
 ### 5. Record coverage
-Mark this change-set reviewed so the Stop review-required gate stops blocking:
+Mark this change-set reviewed:
 ```bash
 bash ~/.claude/scripts/review-marker.sh write <SID>
 ```
-One review covers later fixes to the SAME files; touching new code files re-arms
-the gate. (This is what makes "auto-invoke" work: the gate refuses "done" on a
-substantial unreviewed change until this marker is written or the gate is muted.)
+`review-marker.sh unreviewed <SID>` then lists files touched since the review. No
+Stop gate reads the marker any more (review-gate-stop.sh was retired 2026-10-14).
 
 Then log the persona usage for the efficacy trail (`features/persona-activation.md`):
 ```bash

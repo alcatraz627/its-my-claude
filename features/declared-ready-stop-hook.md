@@ -6,7 +6,7 @@ triggers:
   - phrase:"declared ready"
 related:
   - rules/testing.md
-  - scripts/hooks/review-gate-stop.sh
+  - scripts/hooks/retired/review-gate-stop.sh
 tier: 2
 category: features
 updated: 2026-06-01
@@ -32,7 +32,7 @@ The mistake isn't in a tool *input* — it's in the agent's *claim* at end-of-tu
 Only a Stop hook sees the completed turn and can refuse to let it end. That
 makes this a real guard (blocks premature "done"), not an ignorable advisory.
 
-## Mechanism (mirrors review-gate-stop.sh — a DIRECT settings.json Stop hook)
+## Mechanism: a direct settings.json Stop hook
 
 - **Input:** stdin JSON has `.session_id` and `.transcript_path`.
 - **Block:** emit `{"decision":"block","reason":"…"}` on stdout, `exit 0`. The

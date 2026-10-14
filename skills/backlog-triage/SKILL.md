@@ -28,7 +28,7 @@ Read the sidecar with a JSON parser (NOT `cat` — a terminal wrapper renders it
 
 Show, in order:
 
-1. **PROMOTE candidates** — each with title, `value`, `corroboration`, linked residue, and proposal `ids`. These cleared the anti-churn gate (corroboration ≥ 2, or atone S3, or recurrence ≥ 3, or a human contribution ≤ medium effort).
+1. **PROMOTE candidates** — each with title, `value`, `corroboration`, linked residue, and proposal `ids`. These cleared the anti-churn gate (corroboration ≥ 2, or atone S3, or recurrence ≥ 3).
 2. **DROP-REVIEW** — items open > 45 days with no corroboration. Candidates to reject and clear.
 
 If PROMOTE is empty, say so plainly (the gate promoted nothing — that is the normal, correct state when corroboration has not accrued) and offer to show the WATCH list or the stale DROP-REVIEW items. Do not invent work.

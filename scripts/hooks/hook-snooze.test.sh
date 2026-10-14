@@ -11,7 +11,7 @@ out=$(bash "$S" add prose --for 3d --scope global --reason "owner is drafting a 
 [ "$rc" -eq 3 ] && ok "add without --approved-by owner is refused" || bad "unapproved add rc $rc: $out"
 out=$(bash "$S" add prose --for 3d --scope global --reason "owner is drafting a spec in his own register" --approved-by owner --by abcdef12 2>&1); rc=$?
 [ "$rc" -eq 0 ] && ok "approved add lands" || bad "add: $out"
-[ "$(jq -c 'select(.hook=="reply-lede")' "$SNOOZE_LEDGER" | wc -l | tr -d ' ')" = 1 ] && ok "group expands to its hooks" || bad "group expansion"
+[ "$(jq -c 'select(.hook=="terse-reply")' "$SNOOZE_LEDGER" | wc -l | tr -d ' ')" = 1 ] && ok "group expands to its hooks" || bad "group expansion"
 bash "$S" check prose-smell >/dev/null && ok "global scope matches any cwd" || bad "global check"
 bash "$S" check declared-ready >/dev/null && bad "an unsnoozed hook reads snoozed" || ok "unsnoozed hook is not matched"
 
