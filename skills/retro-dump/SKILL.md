@@ -86,4 +86,4 @@ The script handles timeout, log capture (`~/.claude/logs/retro-dump.log`), and q
 - The retro-dumped checkpoint lands in `index.jsonl` with `kind=retro` and name `retroactive-<uuid8>`.
 - Failures are NOT auto-retried — they sit in `retro-queue/failed/` with the return code and timestamp. Inspect with `ls ~/.claude/checkpoints/retro-queue/failed/`.
 - Cost guardrail: `--max-per-run 3` is a hard cap. Override with care.
-- The SessionStart hook (`40-retro-checkpoint-queue.sh`) and startup task (`30-retro-checkpoint-flush.sh`) handle the AUTO path. `/retro-dump` is for MANUAL control.
+- There is no automatic path. The SessionStart queueing hook and the login flush task were retired because nothing needs dumping just in case (owner ruling 2026-10-13); `/retro-dump` runs only when asked. `--queue` drains files already in `~/.claude/checkpoints/retro-queue/`.

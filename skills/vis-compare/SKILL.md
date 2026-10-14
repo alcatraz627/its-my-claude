@@ -233,7 +233,7 @@ MANDATORY, every run (unlogged usage is invisible to the adoption audits):
 
 ```bash
 bash ~/.claude/scripts/skill-log.sh record vis-compare \
-  --task "<A vs B, one line>" --outcome <ok|revised|failed> --corrections <n> \
+  --task "<A vs B, one line>" --outcome <accepted|revised|discarded> --corrections <n> \
   --note "verdict=<overall> divergences=<n> loop_round=<n-or-none>"
 ```
 

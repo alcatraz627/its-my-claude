@@ -149,7 +149,7 @@ MANDATORY, every run (unlogged usage is invisible to the adoption audits; the
 
 ```bash
 bash ~/.claude/scripts/skill-log.sh record ui-gripe \
-  --task "<surface griped, one line>" --outcome <ok|revised|failed> --corrections <n> \
+  --task "<surface griped, one line>" --outcome <accepted|revised|discarded> --corrections <n> \
   --note "findings=<n> surface=<path-or-url>"
 ```
 

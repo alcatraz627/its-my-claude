@@ -2,7 +2,8 @@
 """gs: write to the goal record. The one write path for what is left.
 
   gs new "<outcome>" --accept "<kind>: <text>" [--accept …] [--project a,b] [--direction "…"]
-                                        creates the record (or links the same outcome) and arms it for this session
+                                        files the record (or finds the same outcome) and prints the paste lines; it never arms
+                                        the goal, the owner does (`/goal …`, `gs link <g>`)
   gs accept <g> "<kind>: <text>"        add an acceptance row  (kinds: visual functional deployed reviewed other)
   gs prove <g> <aN> --by "<instrument>" mark an acceptance row proven, naming what proved it
   gs milestone <g> "<state>"            a STATE, true or false after "Right now,"; at least three letters
@@ -20,7 +21,7 @@
   gs note <g> [goal|mN|id] "<text>"     an ephemeral handoff: no state, consumed on first read
   gs notes <g>                          print and consume unconsumed notes
   gs adopt <g> <mN> --session <sid8> [ids…]   lift rows from the agent's session store onto the goal
-  gs link <g>                           point this session at an existing goal (writes goal.sh's pointer)
+  gs link <g>                           arm: point this session at an existing goal (writes goal.sh's pointer); the owner's move
   gs import-callouts <g> [--surface s]  the owner's /callouts review findings become acceptance rows
   gs list [--all] [--project X] [--archived]
   gs show <g> [--json]
@@ -56,13 +57,16 @@ def cmd_new(a):
     projects = [G.repo_root(p) if p != "gcc" else os.path.join(os.path.expanduser("~"), ".claude")
                 for p in (a.project.split(",") if a.project else [])]
     if not projects: projects = [G.repo_root()]
+    # Filing is not arming: arming a goal is the owner's move (ruling 2026-10-13), so no pointer is written here.
+    # The session is still recorded on the goal (provenance; drift reads it), which is not the goal.sh pointer.
     try:
         rec, created = G.new_goal(a.outcome, a.accept or [], projects, a.direction, SID or None, os.getcwd())
-        if SID: G.link(rec, SID, os.getcwd(), by=a.by); G.save(rec)
     except G.GoalError as e: die(str(e))
-    say(rec, "new goal" if created else "linked existing goal (same outcome)")
+    say(rec, "new goal filed (not armed)" if created else "goal already filed (same outcome); not armed")
     for x in rec["accept"]: print(f"   ✅ {x['id']} {x['kind']}: {x['text']}")
+    print("Offer these to the owner; arming is theirs:")
     print(f"/goal {rec['outcome']}")
+    print(f"gs link {rec['id']}")
 
 
 def cmd_accept(a):

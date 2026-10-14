@@ -18,6 +18,7 @@ git -C "$SB/repo" init -q 2>/dev/null; cd "$SB/repo" || exit 1
 
 "$GS" new "The owner sees every decision they owe on one page" --accept "visual: the page shows all open decisions" --accept "reviewed: owner rules on it" >/dev/null 2>&1
 G1=$(python3 -c "import sys;sys.path.insert(0,'$SRC');import goalstore as G;print(G.goal_id('The owner sees every decision they owe on one page'))")
+"$GS" link "$G1" >/dev/null 2>&1   # gs new files only; the owner arms
 "$GS" milestone "$G1" "DEC: the decisions group opens when any is pending" >/dev/null 2>&1
 "$GS" task "$G1" m1 "Rule on the notes-and-asks redesign" --gate "rule on it" --do "open the decision page and rule" --lane owner --tier opus --kind decide --domain kanban >/dev/null 2>&1
 "$GS" task "$G1" m1 "Force the Decisions group open when any decision is pending" --lane hands --tier sonnet --kind build --domain kanban >/dev/null 2>&1
@@ -26,6 +27,7 @@ G1=$(python3 -c "import sys;sys.path.insert(0,'$SRC');import goalstore as G;prin
 export CLAUDE_CODE_SESSION_ID="bbbbbbbb-1111-2222-3333-444444444444"
 "$GS" new "A person drives the job page end to end without stumbling" --accept "functional: a stranger completes a job unaided" >/dev/null 2>&1
 G2=$(python3 -c "import sys;sys.path.insert(0,'$SRC');import goalstore as G;print(G.goal_id('A person drives the job page end to end without stumbling'))")
+"$GS" link "$G2" >/dev/null 2>&1
 "$GS" milestone "$G2" "PARTS: the parts table loads with a skeleton" >/dev/null 2>&1
 "$GS" task "$G2" m1 "Skeleton for the parts table while it loads" --lane hands --tier opus --kind ui --domain forge >/dev/null 2>&1
 "$GS" review "$G2" 1 >/dev/null 2>&1

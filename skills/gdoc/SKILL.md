@@ -115,4 +115,4 @@ the Doc the config publishes to and any Doc outside the config's folder; without
 
 Prepend a `## gdoc:` entry via `bash ~/.claude/skills/shared/prepend-runtime-note.sh gdoc <entry.md>`
 when a run taught something, then
-`bash ~/.claude/scripts/skill-log.sh record gdoc --task "<gist>" --outcome <success|fail> --corrections <n>`.
+`bash ~/.claude/scripts/skill-log.sh record gdoc --task "<gist>" --outcome <accepted|revised|discarded> --corrections <n>`.

@@ -32,7 +32,7 @@ skill's `runtime-notes.md` if present.
 ## Post-run (MANDATORY, every run)
 
 Unlogged usage is invisible to the adoption audits. Record the run:
-`bash ~/.claude/scripts/skill-log.sh record ui-categorical-check --task "<surface>" --outcome <ok|revised|failed> --corrections <n> --note "classes_fired=<n>"`
+`bash ~/.claude/scripts/skill-log.sh record ui-categorical-check --task "<surface>" --outcome <accepted|revised|discarded> --corrections <n> --note "classes_fired=<n>"`
 
 ## Phase 1 — Load the pattern catalog (the checklist is DATA, not prose here)
 

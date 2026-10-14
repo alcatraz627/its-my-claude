@@ -24,15 +24,18 @@ else rg -q "acceptance row" "$SB/err" && ok "refuses a goal with no acceptance r
   && ok "creates a goal with two acceptance rows" || bad "create failed: $(cat "$SB/out")"
 GID=$(ls "$HOME/.claude/goals/by-id" | sed 's/.json//' | head -1)
 [ -n "$GID" ] && ok "record at by-id/$GID.json" || bad "no by-id record written"
-rg -q "^/goal A teammate ships" "$SB/out" && ok "prints the armline" || bad "no armline printed"
-[ -f "$HOME/.claude/goals/$CLAUDE_CODE_SESSION_ID.json" ] && ok "session pointer written (goal.sh's file)" || bad "no session pointer"
+rg -q "^/goal A teammate ships" "$SB/out" && ok "prints the armline for the owner" || bad "no armline printed"
+rg -q "^gs link $GID" "$SB/out" && ok "prints the gs link line for the owner" || bad "no gs link line printed"
+[ ! -e "$HOME/.claude/goals/$CLAUDE_CODE_SESSION_ID.json" ] && ok "gs new writes NO session pointer (filing is not arming, ruling 2026-10-13)" || bad "gs new armed the goal: pointer written"
+"$GS" link "$GID" >/dev/null 2>&1 && ok "gs link arms on the owner's say" || bad "gs link failed"
+[ -f "$HOME/.claude/goals/$CLAUDE_CODE_SESSION_ID.json" ] && ok "session pointer written by gs link (goal.sh's file)" || bad "no session pointer after link"
 pg=$(python3 -c "import json;print(json.load(open('$HOME/.claude/goals/$CLAUDE_CODE_SESSION_ID.json'))['goal_id'])")
 [ "$pg" = "$GID" ] && ok "pointer goal_id matches the record id (same hash as goal.sh)" || bad "pointer goal_id $pg != $GID"
 # goal.sh's own hash, computed the way goal.sh computes it, must agree
 h=$(printf '%s' "a teammate ships one workbook alone" | shasum -a 256 | cut -c1-12)
 [ "$h" = "$GID" ] && ok "id equals goal.sh's sha256 of normalised text" || bad "id $GID differs from goal.sh hash $h"
 "$GS" new "a teammate SHIPS one   workbook alone" --accept "other: x" > "$SB/out" 2>&1
-rg -q "linked existing" "$SB/out" && ok "same outcome, different spacing and case, links the same goal" || bad "re-create made a second goal"
+rg -q "already filed" "$SB/out" && ok "same outcome, different spacing and case, finds the same goal" || bad "re-create made a second goal"
 [ "$(ls "$HOME/.claude/goals/by-id" | wc -l | tr -d ' ')" = 1 ] && ok "still one record" || bad "two records for one outcome"
 
 echo "── milestones and rows ──"

@@ -59,6 +59,18 @@ err=$(bash "$SL" record edge --task 2>&1 >/dev/null)
 ok "dangling flag prints a clean message, not 'unbound variable'" \
    "$(printf '%s' "$err" | grep -c 'unbound variable')" 0
 
+echo "── outcome is a closed set: a new invalid value is refused, never written ──"
+before=$(wc -l < "$STORE" | tr -d ' ')
+err=$(bash "$SL" record edge --outcome banana 2>&1 >/dev/null); rc=$?
+ok "--outcome banana exits 2"                 "$rc" 2
+ok "the refusal names the valid set"          "$(printf '%s' "$err" | grep -c 'accepted|revised|discarded|unknown')" 1
+ok "nothing was appended for the bad value"   "$(wc -l < "$STORE" | tr -d ' ')" "$before"
+for v in accepted revised discarded unknown; do
+  bash "$SL" record edge --outcome "$v" >/dev/null 2>&1; ok "--outcome $v accepted" "$?" 0
+done
+echo '{"ts":"2026-01-01T00:00:00Z","skill":"legacy","outcome":"ok"}' >> "$STORE"
+ok "legacy 'ok' rows are folded into accepted in summary" "$(bash "$SL" summary --skill legacy 2>/dev/null | grep -c 'accepted×1')" 1
+
 echo "── F1: a stale lock (crashed writer) is reclaimed, record still lands ──"
 : > "$STORE"
 mkdir -p "${STORE}.lock"                       # simulate a crashed holder

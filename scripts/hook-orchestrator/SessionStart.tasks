@@ -12,8 +12,8 @@
 # Tab title initialization
 input=$(cat); cwd=$(echo "$input" | jq -r '.cwd'); shortdir=$(basename "$cwd"); git_branch=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null); title="Claude: $shortdir"; [ -n "$git_branch" ] && title="$title ($git_branch)"; printf '\033]0;%s\007' "$title" > /dev/tty 2>/dev/null || true
 
-# Retro-checkpoint queue (detects unmatched previous session)
-~/.claude/scripts/session-mgmt/40-retro-checkpoint-queue.sh
+# [retired 2026-10-15] Retro-checkpoint queue: no just-in-case dumps (owner ruling 2026-10-13).
+# The script sits in scripts/session-mgmt/retired/; /retro-dump stays a manual command.
 
 # diy-mem session init
 ~/.claude/scripts/shell-mem.sh init-session

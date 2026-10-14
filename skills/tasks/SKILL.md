@@ -60,7 +60,7 @@ wrong-queue defect in reverse).
 | doing · what are you on · running | `doing` |
 | `drift` non-empty | one loud line appended; the full view on "what's wrong" |
 | mark done · fold X into Y · drop · group by · "give me a goal for all this" | `shape`: translate to `gs`, print the commands, apply, re-render |
-| nothing live | "no live goal here" and the `gs new` line |
+| nothing live | "no live goal here"; offer to file one with `gs new` (it files only, the owner arms it) |
 
 Put each rendered view in a code fence before any prose. Read the header
 before showing it: is the scope the one the owner meant, are the goals ones you
@@ -85,7 +85,8 @@ $G adopt <g> <mN> --session <sid8> [ids]   ·   $G import-callouts <g> [--surfac
 - "Fold the one-off UI fixes into the general UI sweep" → `fold mN into mN`.
 - "Give me a goal for all this" → draft the outcome and the acceptance rows
   from what the owner said they will check, draft milestones as states, then
-  `new` + `milestone` + `task`, and print the `/goal` line. Every clause one the
+  `new` (files the record, never arms it) + `milestone` + `task`, and print the
+  `/goal` and `gs link` lines for the owner to paste. Every clause one the
   agent can finish alone (`rules/goal-statement-on-starting-work.md`).
 - "Finish the tail of #3 before anything else" is a **note on #3**, never row #4
   (owner ruling D1, 2026-09-23: a handoff must not become a second nagging task).

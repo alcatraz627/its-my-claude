@@ -77,6 +77,13 @@ cmd_record() {
   done
   [ -n "$session" ] || session="${CLAUDE_CODE_SESSION_ID:-unknown}"
 
+  # --outcome is a closed set. A free-form word (ok, success, kept) splits the same
+  # verdict across labels and the summary stops meaning anything.
+  case "$outcome" in
+    ""|accepted|revised|discarded|unknown) ;;
+    *) echo "skill-log record: --outcome '$outcome' is not one of accepted|revised|discarded|unknown" >&2; exit 2;;
+  esac
+
   # A /validate record must name a real second seat and >=1 parity row run, or
   # carry the owner's waiver; the SKILL.md mandate binds only at this write.
   if [ "$skill" = "validate" ] && ! printf '%s' "$note" | rg -q 'seat-waived=owner'; then
@@ -125,7 +132,7 @@ cmd_summary() {
       ( .[] |
         ( .[0].skill ) as $s
         | "▸ \($s)  (\(length) run\(if length==1 then "" else "s" end))"
-        , "    outcome:    " + ( [ .[] | .outcome // "unrecorded" ] | group_by(.) | map("\(.[0])×\(length)") | join("  ") )
+        , "    outcome:    " + ( [ .[] | (.outcome // "unrecorded") | ({ok:"accepted",success:"accepted",kept:"accepted",failed:"discarded",fail:"discarded"}[.] // .) ] | group_by(.) | map("\(.[0])×\(length)") | join("  ") )
         , "    loop:       " + ( [ .[] | .loop // "unrecorded" ]    | group_by(.) | map("\(.[0])×\(length)") | join("  ") )
         , "    gate:       " + ( [ .[] | .gate // "unrecorded" ]    | group_by(.) | map("\(.[0])×\(length)") | join("  ") )
         , "    corrections:" + ( [ .[] | .corrections // empty ] as $c | if ($c|length)>0 then " avg \(($c|add)/($c|length)|.*10|round/10) over \($c|length)" else " n/a" end )
@@ -155,7 +162,8 @@ skill-log.sh — efficacy residue trail for ~/.claude skills
 
   record <skill> [flags]   append one usage event (prints the event id)
     --task "<1-line>"       what the skill run was asked to do
-    --outcome accepted|revised|discarded|unknown   did the user keep the output
+    --outcome accepted|revised|discarded|unknown   did the user keep the output (a skill grading itself
+                            is not the user's verdict; say so in --note)
     --loop converged|partial|skipped               did the refine/validate loop close
     --iterations N          fix/refine rounds run
     --corrections N         user corrections that followed
@@ -168,6 +176,9 @@ skill-log.sh — efficacy residue trail for ~/.claude skills
   summary [--skill X] [--since YYYY-MM-DD]   per-skill efficacy aggregation
   list    [--skill X] [--limit N]            recent raw events
   help
+
+Outcomes are a closed set; any other value is refused (exit 2). Rows written before the check
+(ok, success, kept, failed, fail) are folded into accepted/discarded by `summary`, never rewritten.
 
 Events: ~/.claude/skills/usage/events.jsonl (append-only JSONL)
 Efficacy = result per unit of the user's effort counting rework — never speed.

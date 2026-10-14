@@ -34,15 +34,18 @@ rg -q "1 open agent row\(s\) in session-aaaaaaaa under no goal" "$SB/d0.txt" && 
 rg -q "gate untouched" "$SB/d0.txt" && bad "a fresh gate flagged stale" || ok "a fresh gate is not stale"
 
 echo "── drift: induced findings ──"
-python3 - "$HOME/.claude/goals/by-id/$G1.json" <<'PY'
+# Dates are relative to now so the idle window (14 to 30 days: drifting, not yet park-due) never expires.
+IDLE_TS=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)-d.timedelta(days=25)).strftime('%Y-%m-%dT%H:%M:%SZ'))")
+RULING_TS=$(python3 -c "import datetime as d;print((d.datetime.now(d.timezone.utc)-d.timedelta(days=20)).strftime('%Y-%m-%dT%H:%M:%SZ'))")
+python3 - "$HOME/.claude/goals/by-id/$G1.json" "$IDLE_TS" <<'PY'
 import json, sys
-p = sys.argv[1]; r = json.load(open(p))
-r["updated"] = "2026-09-01T00:00:00Z"
+p = sys.argv[1]; ts = sys.argv[2]; r = json.load(open(p))
+r["updated"] = ts
 for t in r["tasks"]:
-    if t["gate"]: t["updated"] = "2026-09-01T00:00:00Z"
+    if t["gate"]: t["updated"] = ts
 json.dump(r, open(p, "w"))
 PY
-printf '{"ts":"2026-09-20T10:00:00Z","slug":"vendor-ruling"}\n' > "$SB/answers.jsonl"
+printf '{"ts":"%s","slug":"vendor-ruling"}\n' "$RULING_TS" > "$SB/answers.jsonl"
 printf '{"peers":[{"alias":"gcp-hands","sessionId":"bbbbbbbb-0000","status":"online"}]}' > "$SB/peers.json"
 TASKS_RULINGS_JSONL="$SB/answers.jsonl" TASKS_PEERS_JSON="$SB/peers.json" python3 "$V/drift.py" > "$SB/d1.txt" 2>&1
 rg -q "⏳ drifting .*idle 2[0-9]d" "$SB/d1.txt" && ok "a goal idle over 14 days is drifting" || bad "drift missing: $(cat "$SB/d1.txt")"

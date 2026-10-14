@@ -1,7 +1,7 @@
 ---
 name: backlog-triage
-description: Review the triaged gcc improvement backlog and act on it. Reads the ranked triage file produced by backlog-consolidate.py (PROMOTE / WATCH / DROP-REVIEW), presents the PROMOTE candidates and the stale DROP-REVIEW items, and drives a human PROMOTE/DROP decision per item — implementing or handing off the promoted ones and rejecting the dropped ones via propose.sh. The one place where backlog items change state.
-allowed-tools: Read, Bash, Glob, mcp__inputs__pick_many, mcp__inputs__confirm
+description: Review the triaged gcc improvement backlog (PROMOTE, WATCH, DROP-REVIEW from backlog-consolidate.py) and decide it on one decision page, then apply the promote and reject calls via propose.sh. The one place backlog items change state.
+allowed-tools: Read, Write, Bash, Glob
 argument-hint: "[--refresh]"
 user-invocable: true
 ---
@@ -10,21 +10,16 @@ user-invocable: true
 
 The improvement loop captures and ranks on its own (contribution phases file proposals, `gcc-signal-capture` auto-stubs, `backlog-consolidate.py` clusters and gates them weekly). This skill is the **human decision step** — the only thing that moves a backlog item out of "open". It surfaces the triaged PROMOTE candidates and stale DROP-REVIEW items, and for each you decide: act on it now, hand it off, or reject it. Nothing here is automatic; the corroboration gate already filtered out the noise, so this list is short by design.
 
-## Phase 0 — Load the latest triage
+## Phase 0: Load the latest triage
 
-The triage file is a derived view; the store is `proposals.jsonl`. Read both the machine sidecar and the human report.
+The triage file is a derived view; the store is `proposals.jsonl`. One command per Bash call, no chaining.
 
-```bash
-# Refresh first if asked, or if the sidecar is stale / missing.
-[ "$1" = "--refresh" ] && python3 ~/.claude/scripts/backlog-consolidate.py --force
-SIDECAR="$HOME/.claude/.backlog-triage-latest.json"
-test -s "$SIDECAR" || python3 ~/.claude/scripts/backlog-consolidate.py --force
-REPORT=$(python3 -c "import json;print(json.load(open('$SIDECAR'))['report'])" 2>/dev/null)
-```
+1. If the argument was `--refresh`, run `python3 ~/.claude/scripts/backlog-consolidate.py --force`.
+2. Check the sidecar exists and is non-empty: `test -s ~/.claude/.backlog-triage-latest.json`. If that exits non-zero, run the same `--force` command from step 1.
+3. Read `~/.claude/.backlog-triage-latest.json` with the Read tool (never `cat`: a terminal wrapper renders it and corrupts it). Its `report` field is the path of the human report.
+4. Read that report path with the Read tool for the full ranked detail (titles, corroboration, links, ids per bucket).
 
-Read the sidecar with a JSON parser (NOT `cat` — a terminal wrapper renders it and corrupts pipes). Use Read on `$REPORT` for the full ranked detail (titles, corroboration, links, ids per bucket).
-
-## Phase 1 — Present the decision set
+## Phase 1: Present the decision set
 
 Show, in order:
 
@@ -33,11 +28,17 @@ Show, in order:
 
 If PROMOTE is empty, say so plainly (the gate promoted nothing — that is the normal, correct state when corroboration has not accrued) and offer to show the WATCH list or the stale DROP-REVIEW items. Do not invent work.
 
-## Phase 2 — Decide per item
+## Phase 2: Decide, on ONE decision page
 
-Use `mcp__inputs__pick_many` to let the user select, from the PROMOTE set, which to **act on now** vs **defer** (leave open). Then, separately, present DROP-REVIEW for **reject** selection. For an ambiguous single high-stakes item, use `mcp__inputs__confirm` instead.
+The whole decision set goes on a single page through `/decision-wizard` (Path B), never one prompt per item and never a separate pass for DROP-REVIEW. Owner rulings: a decision set is one page (`rules/owner-decisions-go-through-a-wizard.md`).
 
-## Phase 3 — Apply (the only state change)
+- One `sections[]` card per PROMOTE candidate and per DROP-REVIEW item, grouped as `PROMOTE` and `DROP-REVIEW`. Each card carries your read (title, value, corroboration, links) and a drafted answer.
+- Options per PROMOTE card: act now, leave open. Options per DROP-REVIEW card: reject, keep. Exactly one `rec` each; default the ones you hold a confident pick for, and say so in the page intro.
+- If the set is three or fewer simple picks, `/decision-wizard` Path A (the inline numbered menu) is enough. A single high-stakes item is one sentence in chat.
+
+Apply the returned answer string in Phase 3. An empty PROMOTE and DROP-REVIEW set needs no page.
+
+## Phase 3: Apply (the only state change)
 
 For each decision, mutate the canonical store — never edit `proposals.jsonl` by hand:
 
@@ -49,13 +50,13 @@ bash ~/.claude/scripts/propose.sh reject <id> "<why dropped>"
 bash ~/.claude/scripts/propose.sh done <id>
 ```
 
-For a promoted item that is **small** and in scope, implement it now (follow the normal plan → change → verify discipline), then mark it `done`. For a **larger** item, do NOT implement inline — leave it `open`, and create a Task (TaskCreate) or a short plan so it is picked up deliberately in a focused session. Promotion is a decision to act, not a license to sprawl (scope-as-ceiling).
+For a promoted item that is **small** and in scope, implement it now (follow the normal plan → change → verify discipline), then mark it `done`. For a **larger** item, do NOT implement inline: leave it `open` in the store, where the next triage run resurfaces it, and name it in the Phase 4 summary. Do not park it in TaskCreate: the owner reads the goal record, not the session task list (`rules/todo-discipline.md`). If the owner wants it driven, offer `gs new` (it files a goal and prints the `/goal` line for them to paste; it never arms it). Promotion is a decision to act, not a license to sprawl (scope-as-ceiling).
 
 A promoted item carries a suggested target in its category (`hooks` → a hook, `skills` → a skill, `rules`/`config` → CLAUDE.md or a rule). Use it as the routing hint.
 
-## Phase 4 — Confirm
+## Phase 4: Confirm
 
-Print a one-line summary: how many promoted-and-done, promoted-and-deferred (with their new Tasks), and rejected. Re-running `backlog-consolidate.py --force` after a triage pass refreshes the file so the closed items drop off.
+Print a one-line summary: how many promoted-and-done, promoted-and-deferred (ids left open), and rejected. Re-running `backlog-consolidate.py --force` after a triage pass refreshes the file so the closed items drop off.
 
 ## Notes
 

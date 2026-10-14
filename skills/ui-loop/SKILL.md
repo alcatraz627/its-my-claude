@@ -37,7 +37,7 @@ Read `~/.claude/skills/GUIDELINES.md` and this skill's `runtime-notes.md` if pre
 
 ## Post-run (MANDATORY, every run)
 
-`bash ~/.claude/scripts/skill-log.sh record ui-loop --task "<target>" --outcome <ok|revised|failed> --corrections <n> --note "rounds=<n> stop=<signal> open=<n>"`
+`bash ~/.claude/scripts/skill-log.sh record ui-loop --task "<target>" --outcome <accepted|revised|discarded> --corrections <n> --note "rounds=<n> stop=<signal> open=<n>"`
 
 ## See also
 
