@@ -638,6 +638,12 @@ function openRuling(r, panel, row) {
   });
 }
 
+// Newest first by the row's own timestamp; undated rows sink to the bottom.
+const stamp = (r) => Date.parse(r.at ?? "") || 0;
+const byNewest = (rs) => [...rs].sort((a, b) => stamp(b) - stamp(a));
+const fullDate = (at) => new Date(at).toLocaleString(undefined,
+  { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
 async function loadSurfaces(which) {
   const list = document.getElementById("list");
   const j = await (await fetch("/api/surfaces")).json();
@@ -682,6 +688,7 @@ async function loadSurfaces(which) {
       const age = document.createElement("span");
       age.className = "sage";
       age.textContent = r.at ? `${ago(Date.parse(r.at))} ago` : "";
+      if (r.at) age.title = fullDate(r.at);
       a.append(nm, so, age);
       g.appendChild(a);
       if (!whole) {
@@ -700,31 +707,19 @@ async function loadSurfaces(which) {
     // belongs to while they scan, which is work the heading can do for free.
     // Boards with the most waiting come first, because that is where the reader
     // is going anyway.
-    const pending = rows.filter((r) => r.pending);
-    const byProject = new Map();
-    for (const r of pending) {
-      const k = r.boardName || r.board || r.origin || "No project";
-      if (!byProject.has(k)) byProject.set(k, []);
-      byProject.get(k).push(r);
-    }
-    if (byProject.size > 1) {
-      for (const [name, rs] of [...byProject.entries()].sort((a, b) => b[1].length - a[1].length))
-        group(`Waiting on you · ${name}`, rs);
-    } else {
-      // One project, or none named: a per-project band would be a heading that
-      // says what the page already says.
-      group("Waiting on you", pending);
-    }
+    // Every list here is newest first (owner, 2026-10-14: project bands ordered
+    // by count read as scrambled). The project rides on each row instead.
+    group("Waiting on you", byNewest(rows.filter((r) => r.pending)));
     // plans ride the Decisions view: a plan is the thing a decision page is
     // about, and a draft one is awaiting a ruling
     const plans = (j.plans ?? []).map((pl) => ({ ...pl, pending: pl.state === "draft",
       origin: [pl.board, pl.state].filter(Boolean).join(" · ") }));
-    group("Plans", plans);
+    group("Plans", byNewest(plans));
     // Answered means an answer exists. Pages nobody answered and nobody marked
     // pending used to sit under Answered too (67 of 104 in October 2026).
-    group("Answered", rows.filter((r) => !r.pending && r.answered));
-    group("Never answered", rows.filter((r) => !r.pending && !r.answered));
-  } else group("Previews", rows);
+    group("Answered", byNewest(rows.filter((r) => !r.pending && r.answered)));
+    group("Never answered", byNewest(rows.filter((r) => !r.pending && !r.answered)));
+  } else group("Previews", byNewest(rows));
   if (!frag.length) {
     const e = document.createElement("div");
     e.className = "empty";
@@ -773,14 +768,18 @@ async function loadWaiting() {
     const nm = document.createElement("span"); nm.className = "sn"; nm.textContent = name;
     const age = document.createElement("span"); age.className = "sage";
     age.textContent = at ? `${ago(Date.parse(at))} ago` : "";
+    if (at) age.title = fullDate(at);
     top.append(nm, age);
     a.append(top);
     if (sub) { const so = document.createElement("span"); so.className = "so"; so.textContent = sub; a.append(so); }
     return a;
   };
-  group("Decision pages", (s.decisions ?? []).filter((d) => d.pending && d.kind === "decision")
+  group("Decision pages", byNewest((s.decisions ?? []).filter((d) => d.pending && d.kind === "decision"))
     .map((d) => row({ href: d.href, name: d.name ?? d.slug, sub: d.origin, at: d.at })));
-  for (const g of w.goals ?? [])
+  // goals by their newest waiting row, rows newest first
+  const goals = (w.goals ?? []).map((g) => ({ ...g, rows: byNewest(g.rows) }))
+    .sort((a, b) => stamp(b.rows[0]) - stamp(a.rows[0]));
+  for (const g of goals)
     group(g.outcome, g.rows.map((r) => row({
       name: String(r.ask ?? "").replace(/^USER:\s*/, ""),
       sub: [r.do && `Then: ${r.do}`, r.subject].filter(Boolean).join(" · "),
