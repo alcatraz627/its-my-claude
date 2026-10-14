@@ -42,6 +42,9 @@ INJECTORS=(
   # the sentinel it writes must exist BEFORE the first PostToolUse, and only this
   # synchronous lane guarantees that ordering. See the script's own header.
   "$HOME/.claude/scripts/session-mgmt/post-clear-counter-reset.sh"
+  # After /clear in the same window, loads the checkpoint the cleared session
+  # just dumped; in a new tab, offers one recent checkpoint in one line.
+  "$HOME/.claude/scripts/session-mgmt/resume-inject.sh"
   "$HOME/.claude/scripts/dream/dream-insights.sh"
   # pending-proposals.sh retired (migration 0031). Dream-learned rules used to be
   # injected here from their own untriaged store, every session, with no path to a

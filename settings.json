@@ -6,6 +6,7 @@
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
+    "CLAUDE_CODE_ENABLE_TODO_TOOLS": "1",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
     "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": "5000",
     "CLAUDE_CODE_STOP_HOOK_BLOCK_CAP": "2",
@@ -1520,7 +1521,7 @@
       }
     }
   },
-  "outputStyle": "Explanatory",
+  "outputStyle": "Concise",
   "feedbackDrafts": "notify",
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
