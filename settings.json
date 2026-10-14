@@ -621,6 +621,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/prefer-ripgrep.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-env-dump.sh"
           }
         ]
       },

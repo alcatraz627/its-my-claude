@@ -4,7 +4,7 @@
 set -u
 G="$(dirname "$0")/compact-gate.sh"
 SB=$(mktemp -d /private/tmp/claude-501/compact-gate-XXXX)
-export COMPACT_GATE_DIR="$SB/through" COMPACT_GATE_MUTE="$SB/mute"
+export COMPACT_GATE_DIR="$SB/through" COMPACT_GATE_MUTE="$SB/mute" COMPACT_GATE_LOG="$SB/events.jsonl"
 pass=0; fail=0
 check() { # name expected-exit trigger sid
   jq -cn --arg t "$3" --arg s "$4" '{trigger:$t,session_id:$s}' | bash "$G" hook 2>/dev/null
@@ -20,6 +20,8 @@ CLAUDE_CODE_SESSION_ID=s1 bash "$G" off >/dev/null
 check "auto after off" 2 auto s1
 touch "$SB/mute"
 check "auto with mute" 0 auto s2
+evs=$(jq -r '.ev' "$SB/events.jsonl" | tr '\n' ' ')
+if [[ "$evs" == "manual refused on allowed refused off refused allowed " ]]; then pass=$((pass+1)); else fail=$((fail+1)); echo "FAIL log order: $evs"; fi
 trash "$SB"
 echo "$pass passed, $fail failed"
 [[ $fail == 0 ]]

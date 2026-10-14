@@ -707,18 +707,16 @@ async function loadSurfaces(which) {
     // belongs to while they scan, which is work the heading can do for free.
     // Boards with the most waiting come first, because that is where the reader
     // is going anyway.
-    // Every list here is newest first (owner, 2026-10-14: project bands ordered
-    // by count read as scrambled). The project rides on each row instead.
-    group("Waiting on you", byNewest(rows.filter((r) => r.pending)));
+    // One log of every decision, newest first, its state on the row. What needs
+    // the owner now lives on Waiting on you; this is where to look one up.
+    const state = (r) => r.waiting ? "Waiting on you" : r.answered ? "Answered" : "Never answered";
+    group("All decisions", byNewest(rows).map((r) => ({ ...r, pending: r.waiting,
+      origin: [state(r), r.origin ?? r.boardName].filter(Boolean).join(" · ") })));
     // plans ride the Decisions view: a plan is the thing a decision page is
     // about, and a draft one is awaiting a ruling
     const plans = (j.plans ?? []).map((pl) => ({ ...pl, pending: pl.state === "draft",
       origin: [pl.board, pl.state].filter(Boolean).join(" · ") }));
-    group("Plans", byNewest(plans));
-    // Answered means an answer exists. Pages nobody answered and nobody marked
-    // pending used to sit under Answered too (67 of 104 in October 2026).
-    group("Answered", byNewest(rows.filter((r) => !r.pending && r.answered)));
-    group("Never answered", byNewest(rows.filter((r) => !r.pending && !r.answered)));
+    group("Board plans (mothballed)", byNewest(plans));
   } else group("Previews", byNewest(rows));
   if (!frag.length) {
     const e = document.createElement("div");
@@ -744,9 +742,7 @@ async function loadSurfaces(which) {
 // goal records and decision pages stay the source.
 async function loadWaiting() {
   const list = document.getElementById("list");
-  const [w, s] = await Promise.all([
-    fetch("/api/waiting").then((r) => r.json()),
-    fetch("/api/surfaces").then((r) => r.json())]);
+  const w = await (await fetch("/api/waiting")).json();
   const frag = [];
   const group = (label, rows, goal) => {
     if (!rows.length) return;
@@ -774,8 +770,8 @@ async function loadWaiting() {
     if (sub) { const so = document.createElement("span"); so.className = "so"; so.textContent = sub; a.append(so); }
     return a;
   };
-  group("Decision pages", byNewest((s.decisions ?? []).filter((d) => d.pending && d.kind === "decision"))
-    .map((d) => row({ href: d.href, name: d.name ?? d.slug, sub: d.origin, at: d.at })));
+  group("Decisions", byNewest(w.decisions ?? [])
+    .map((d) => row({ href: d.href, name: d.name ?? d.slug, sub: d.origin ?? d.boardName, at: d.at })));
   // goals by their newest waiting row, rows newest first
   const goals = (w.goals ?? []).map((g) => ({ ...g, rows: byNewest(g.rows) }))
     .sort((a, b) => stamp(b.rows[0]) - stamp(a.rows[0]));

@@ -460,7 +460,7 @@ function kindFind() {
 // It counts the very list the palette offers, so the pill and the list can
 // never disagree.
 const kindCounts = (opts) => kindIndex(opts).then((ix) =>
-  Object.fromEntries(KINDS.map((k) => [k.id, ix[k.id]?.length ?? null])));
+  Object.fromEntries(KINDS.map((k) => [k.id, k.count === false ? null : ix[k.id]?.length ?? null])));
 
 // How an instance of a kind reads and where it goes, in one place, so the
 // palette and search show the same row for the same thing. `text` is what a

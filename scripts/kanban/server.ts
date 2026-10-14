@@ -865,6 +865,12 @@ const server = Bun.serve({
           }
         } catch (e: any) { out.recordedError = String(e?.message ?? e); }
 
+        // Waiting on the owner: marked pending, or unanswered and under a week
+        // old. Agents often forget the pending mark, so a fresh unanswered page
+        // counts without it; an old one has gone stale and drops to the log.
+        const WEEK = 7 * 864e5;
+        for (const d of out.decisions)
+          d.waiting = d.pending || (!d.answered && d.kind === "decision" && Date.now() - Date.parse(d.at ?? "") < WEEK);
         // pending first: a page waiting on the owner outranks one they answered
         out.decisions.sort((a: any, b: any) =>
           Number(b.pending) - Number(a.pending) || String(b.at ?? "").localeCompare(String(a.at ?? "")));
@@ -887,7 +893,7 @@ const server = Bun.serve({
         } catch { /* no manifest yet */ }
         // Agents' one-off pages: every tier-3 port claim still held, listed only
         // while something answers on it, so a dead link never shows.
-        try {
+        if (url.searchParams.get("previews") !== "0") try {
           const held = new Map<number, any>();
           for (const l of fs.readFileSync(path.join(CROOT, "dev-servers", "port-events.jsonl"), "utf8").split("\n")) {
             let e: any; try { e = JSON.parse(l); } catch { continue; }
@@ -1118,7 +1124,14 @@ const server = Bun.serve({
               .map((m: any) => m.name), rows });
         }
         goals.sort((a, b) => b.rows.length - a.rows.length);
-        return json({ goals, rows: goals.flatMap((g) => g.rows) });
+        // the decisions half comes from /api/surfaces so the two views agree on "waiting"
+        let decisions: any[] = [];
+        try {
+          const s: any = await (await fetch(`http://127.0.0.1:${server.port}/api/surfaces?previews=0`)).json();
+          decisions = (s.decisions ?? []).filter((d: any) => d.waiting);
+        } catch { /* surfaces unreadable: goal rows still show */ }
+        return json({ goals, decisions, rows: goals.flatMap((g) => g.rows),
+                      count: decisions.length + goals.reduce((n, g) => n + g.rows.length, 0) });
       }
 
       // What changed on a board, newest first. The transitions, not the state.

@@ -17,6 +17,7 @@ stale_after_days: 90
 
 - **One command per Bash call. No `&&`, `;` or `|`.** Every segment of a compound must match an allow entry, so one unlisted segment prompts the owner about the whole chain and halts the session. Ask the tool for less output (`rg -m 5`, `sed -n '1,40p'`, `git log -5`); redirect to a file and read it next call. No `VAR=x cmd`, no inline functions; multi-line python goes in a file. Settings are read at session start; a list fix lands only after a restart.
 - Every sub-agent dispatch prompt carries the one-command clause.
+- **Never dump the environment** (`env`, `printenv`, `set` bare): live API tokens are exported on purpose, and a dump copies them into the transcript. Read one var: `printenv NAME`. Hook: guard-env-dump.sh.
 - **`trash`, never `rm`** (hook blocks it; no `\rm`, no `/bin/rm`).
 - Never Glob/Grep from `~/`; resolve to a project root first.
 - Non-interactive flags always (`-y`, `-f`).
