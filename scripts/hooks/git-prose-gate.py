@@ -5,7 +5,7 @@ The write-time gate (guard-prose-quality.sh) only sees the Edit and Write
 tools, so text added through sed, python or a heredoc skipped it. This runs
 the same scoring engine (scripts/style/prose-lint.py) at commit time over the
 lines the commit ADDS, and refuses on an em/en-dash, a verdict-first opener,
-or a block-level score. Run from a pre-commit hook inside the repo.
+a contrast list, or a block-level score. Run from a pre-commit hook inside the repo.
 
 Scope: rules/, features/, conventions/, personas/, skills/ (not skills/synced/)
 and CLAUDE.md, markdown only. Exempt, like the write-time gate: style/, atone/,
@@ -94,6 +94,8 @@ def main():
             why.append(f"{v['two_split_dash']} em/en-dash(es) in earnest prose (budget: zero)")
         if v.get("verdict_first_opener"):
             why.append("verdict-first opener")
+        if v.get("contrast_list"):
+            why.append(f"{v['contrast_list']} contrast list(s) (\"not X, not Y, but Z\")")
         if r.get("score", 0) > BLOCK_SCORE:
             why.append(f"prose-lint score {r['score']}/100w (block line {BLOCK_SCORE:g})")
         if why:

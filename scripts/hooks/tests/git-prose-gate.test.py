@@ -124,6 +124,16 @@ class GateDirect(unittest.TestCase):
         self.stage("personas/p.md", "Done. The loader now reads the config file correctly.\n")
         self.assertEqual(self.gate().returncode, 1)
 
+    def test_contrast_list_refused(self):
+        self.stage("rules/r.md", "The fix is not a rule, not a reminder, but a hook that runs at commit time.\n")
+        r = self.gate()
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("contrast list", r.stderr)
+
+    def test_single_negation_passes(self):
+        self.stage("rules/r.md", "The hook runs at commit time, not at write time, so shell edits are seen.\n")
+        self.assertEqual(self.gate().returncode, 0)
+
 
 class StubWiring(unittest.TestCase):
     """The real pre-commit stub, run by git, with HOME pointed at a temp dir."""
