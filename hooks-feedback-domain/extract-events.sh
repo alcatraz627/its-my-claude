@@ -15,7 +15,7 @@ python3 - "$DIR" <<'PY'
 import json, os, sys, datetime
 
 dom = sys.argv[1]
-H = os.path.expanduser("~/.claude/hooks")
+H = os.environ.get("HOOKS_FEEDBACK_HOOKS_DIR") or os.path.expanduser("~/.claude/hooks")
 fb = os.path.join(H, "feedback.jsonl")
 we = os.path.join(H, "warn-events.jsonl")
 out = os.path.join(dom, "events.jsonl")
@@ -120,7 +120,9 @@ for (h, week), rec in sorted(pulse.items()):
         "impact": "low",
         "hook_id": h,
         "note": (f"auto-pulse {week}: {rec['fires']} fires, "
-                 f"heeded {rec['heeded_true']}/{rec['heeded_true'] + rec['heeded_false']} of tracked"),
+                 + (f"heeded {rec['heeded_true']}/{rec['heeded_true'] + rec['heeded_false']} of tracked"
+                    if rec["heeded_true"] + rec["heeded_false"] else
+                    "heed UNMEASURED (no heed rows; missing instrumentation, not evidence of no effect)")),
         "command_or_context": "",
         "heeded": None,
         "fire_count_14d": fire_14d.get(h, 0),

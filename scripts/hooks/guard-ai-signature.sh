@@ -22,6 +22,11 @@ command -v jq >/dev/null 2>&1 || exit 0
 input=$(cat 2>/dev/null)
 fp=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
 [ -n "$fp" ] || exit 0
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+# Heed tracking: a block on a file is heeded when the next write to that file is
+# clean (hook_heed_note in hook-common.sh).
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+heed() { type hook_heed_note >/dev/null 2>&1 && hook_heed_note guard-ai-signature "$sid" "$fp" "$1"; return 0; }
 
 case "$fp" in
   # Policy and ledger surfaces that legitimately QUOTE signature strings.
@@ -32,7 +37,7 @@ case "$fp" in
 esac
 
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
-[ -n "$content" ] || exit 0
+[ -n "$content" ] || { heed clean; exit 0; }
 
 old=$(printf '%s' "$input" | jq -r '.tool_input.old_string // empty' 2>/dev/null)
 if [ -z "$old" ] && [ -f "$fp" ]; then
@@ -44,15 +49,14 @@ import os
 old = set(os.environ.get("OLD", "").splitlines())
 new = os.environ.get("NEW", "").splitlines()
 print("\n".join(l for l in new if l not in old))' 2>/dev/null)
-  [ -n "$content" ] || exit 0
+  [ -n "$content" ] || { heed clean; exit 0; }
 fi
 
 hits=$(printf '%s' "$content" | rg -n -i \
   'Co-Authored-By:.*Claude|Claude-Session:|Generated with \[?Claude Code|🤖 Generated with|noreply@anthropic\.com' \
   2>/dev/null | head -3)
-[ -n "$hits" ] || exit 0
+[ -n "$hits" ] || { heed clean; exit 0; }
 
-. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
 # No box here. The harness renders a block `reason` as a one-line
 # "Stop hook error:" string and CLIPS it, so a multi-line box arrives truncated
 # and the actionable half (how to fix, how to mute) never reaches anyone. Boxes
@@ -62,5 +66,7 @@ hits=$(printf '%s' "$content" | rg -n -i \
 hits_flat=$(printf '%s' "$hits" | tr '\n' ' ' | tr -s ' ' | sed 's/^ *//;s/ *$//')
 reason="ai-signature: this write adds a harness signature to a document a human reads. Offending: ${hits_flat}. Remove the signature line(s) and retry; the ban covers every artifact surface, not just commits. Quoting one in a policy doc is excluded, log a false positive via hook-feedback.sh. Mute: touch ~/.claude/.no-ai-signature-gate"
 
+heed fired
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-ai-signature --action block --heeded unknown --target "$fp" >/dev/null 2>&1 || true
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}'
 exit 0

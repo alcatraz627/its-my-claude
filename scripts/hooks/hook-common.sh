@@ -264,3 +264,70 @@ hook_snoozed() {
   fi
   return 0
 }
+
+# hook_last_assistant_text <stop-input-json> [transcript_path] — the reply this Stop is about.
+#
+# The text of the message that just ended the turn, for a Stop hook to inspect.
+# Claude Code hands every Stop hook that message as `last_assistant_message`, so
+# read it from there. The transcript is only a fallback (an older harness, a test
+# fed a bare transcript), because the transcript on disk lags: when a Stop hook
+# runs, the newest assistant record is often not flushed yet, so a hook that tails
+# the file sees the PREVIOUS message. Measured over 3 days of real transcripts
+# (2026-10-12..15): 10 of 11 filename-dot blocks quoted the message before the
+# one just sent, and 54 of 65 offending messages were never checked at all.
+#
+# Prints the text (possibly empty) and returns 0 when it found a message, 1 when it
+# found none. Callers keep their own `[ -n "$text" ] || exit 0`.
+hook_last_assistant_text() {
+  local input="${1:-}" tp="${2:-}" lam last
+  lam=$(printf '%s' "$input" | jq -r '.last_assistant_message // empty' 2>/dev/null)
+  if [ -n "$lam" ]; then printf '%s\n' "$lam"; return 0; fi
+  [ -n "$tp" ] && [ -f "$tp" ] || return 1
+  last=$(tail -n 400 "$tp" 2>/dev/null | jq -rc 'select(.type=="assistant") | select(any(.message.content[]?; .type=="text"))' 2>/dev/null | tail -n 1)
+  [ -n "$last" ] || return 1
+  printf '%s' "$last" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null
+}
+
+# hook_heed_note <hook-id> <session_id> <key> fired|clean — heed tracking for a hook
+# that fires on a tool call and is answered by the NEXT call on the same thing.
+#
+# A hook that blocks or nudges a Write, an Edit or a Bash call cannot see whether
+# the advice was taken unless it remembers what it said. This remembers, per
+# (hook, session, key), and the next time the hook runs on the same key it settles
+# the earlier fire into a kind:heed row:
+#   fired  this run fires on <key>. An earlier unsettled fire on the same key was
+#          NOT heeded (the same thing came back), so record heeded:false for it;
+#          then remember this fire.
+#   clean  this run looked at <key> and did not fire. An earlier fire on the same
+#          key WAS heeded (the call changed), so record heeded:true and forget it.
+# <key> names what the advice was about: a file path for an edit hook, "grep" for a
+# session-wide Bash nudge. A key that is never looked at again stays unsettled,
+# which is an honest gap, never a fabricated miss. Markers live in /tmp, are keyed
+# by session so one session never settles another's fires, and need no cleanup.
+# Never fails and never prints: a hook must not break on its own telemetry.
+hook_heed_note() {
+  local hook="${1:-}" sid8="${2:-}" key="${3:-}" what="${4:-}" m h
+  [ -n "$hook" ] && [ -n "$key" ] && [ -n "$what" ] || return 0
+  sid8=$(hook_sid8 "$sid8")
+  # The common case on a busy hook is "clean with nothing pending": answer it with
+  # a shell glob, before paying for a hash.
+  if [ "$what" = clean ] && ! compgen -G "/tmp/claude-heedkey-${hook}-${sid8}-*" >/dev/null; then return 0; fi
+  h=$(printf '%s' "$key" | shasum 2>/dev/null | cut -c1-10)
+  [ -n "$h" ] || return 0
+  m="/tmp/claude-heedkey-${hook}-${sid8}-${h}"
+  case "$what" in
+    fired)
+      if [ -f "$m" ]; then
+        bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook "$hook" --heed-of "${hook}:${sid8}" --heeded false >/dev/null 2>&1 || true
+      fi
+      : > "$m" 2>/dev/null || true
+      ;;
+    clean)
+      if [ -f "$m" ]; then
+        bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook "$hook" --heed-of "${hook}:${sid8}" --heeded true >/dev/null 2>&1 || true
+        rm -f "$m" 2>/dev/null || true
+      fi
+      ;;
+  esac
+  return 0
+}

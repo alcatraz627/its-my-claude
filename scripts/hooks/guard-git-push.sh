@@ -220,16 +220,19 @@ fi
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block --heeded unknown >/dev/null 2>&1 || true
 # A refused call runs nothing, so a commit chained before the push never landed
-# either; agents kept assuming it had (prop-20260821-120243-1a).
-chained=""
-case "$cmd" in
-  *"&&"*|*";"*|*"||"*)
-    chained="
-This refused the WHOLE Bash call, not just the push: nothing in it ran. If it chained a commit or other work before the push, that did not happen either; run it on its own first, then ask for the push.
-" ;;
-esac
+# either; agents kept assuming it had (prop-20260821-120243-1a). The nonce file is
+# the registration of the pending push, so say whether it really exists
+# (prop-20261006-081004-a1).
+if [ -s "$NONCE_FILE" ] && [ "$(jq -r '.nonce // empty' "$NONCE_FILE" 2>/dev/null)" = "$nonce" ]; then
+  registration="The pending push is registered in the nonce file $NONCE_FILE (it holds the nonce below); the owner's \"approve push $nonce\" is matched against that file. The push itself has not run."
+else
+  registration="The nonce file $NONCE_FILE could not be written, so the pending push is NOT registered and \"approve push $nonce\" will not be matched. Tell the owner the push is stuck, and use the terminal fallback below."
+fi
+refused="This refused the WHOLE Bash call, not just the push: nothing in it ran. If it chained a commit or other work before the push, that did not happen either; run that on its own first, then ask for the push.
+$registration
+"
 blockjson "⛔ PUSH GATE: this push needs fresh user approval ($why).
-$chained
+$refused
 Pushing to a shared branch is a per-push approval — one approval is never blanket,
 and a context compaction may have wiped an earlier one. Do NOT work around this
 (no --no-verify, no editing the protection config, no creating the sentinel yourself).

@@ -239,6 +239,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-comment-verbosity.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/hhmm-drift-post.py"
           }
         ]
       },
@@ -859,6 +863,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-dev-server-port.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/guard-db-target.py"
           }
         ]
       },
@@ -1162,6 +1170,10 @@
           },
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/emdash-stop.sh"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/terse-reply-stop.sh"
           },
           {
@@ -1195,6 +1207,10 @@
           {
             "type": "command",
             "command": "python3 ~/.claude/scripts/hooks/ui-verified-stop.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/review-nudge-stop.sh"
           }
         ]
       },
@@ -1382,6 +1398,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/persona-suggest.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/ui-verified-hint.sh"
           }
         ]
       },

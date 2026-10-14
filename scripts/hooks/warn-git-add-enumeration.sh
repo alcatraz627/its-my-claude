@@ -27,6 +27,12 @@ TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 [ -z "$CMD" ] && exit 0
 
+SID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+# Heed tracking: a fire is heeded when the next `git add` in the session is not an
+# enumeration of 4 or more paths (hook_heed_note in hook-common.sh).
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+heed() { type hook_heed_note >/dev/null 2>&1 && hook_heed_note warn-git-add-enumeration "$SID" git-add "$1"; return 0; }
+
 # Mute via env (one-shot) or file (per-session)
 [ "${ATONE_NO_ADD_WARN:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/atone/.add-warn-off" ] && exit 0
@@ -74,7 +80,7 @@ N_PATHS=$(echo "$GIT_ADD_LINE" | awk '{
   print count
 }')
 
-[ "$N_PATHS" -lt 4 ] && exit 0
+[ "$N_PATHS" -lt 4 ] && { heed clean; exit 0; }
 
 # Try to find a common parent directory for the args (best-effort hint).
 COMMON_PARENT=$(echo "$GIT_ADD_LINE" | awk '{
@@ -110,6 +116,7 @@ END {
     --notes "advisory fired: git add with $N_PATHS path args" \
     >/dev/null 2>&1 & ) &
 
+heed fired
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook warn-git-add-enumeration --action nudge --heeded unknown >/dev/null 2>&1 || true
 
 msg="[warn-git-add-enumeration] git add has $N_PATHS path args — consider generalizing first (generalize-before-enumerate, atone S3). Risk: enumerated commit recipes get executed literally by the user before the abstraction is noticed. Pre-check: 'git status ${COMMON_PARENT:-<parent-dir>}' — if clean (no leaks), the parent IS the answer. (mute: touch ~/.claude/atone/.add-warn-off ; one-shot: ATONE_NO_ADD_WARN=1)  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."

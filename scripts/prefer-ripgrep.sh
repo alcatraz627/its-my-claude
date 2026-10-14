@@ -13,6 +13,11 @@ tool_name=$(echo "$input" | jq -r '.tool_name // empty')
 
 command=$(echo "$input" | jq -r '.tool_input.command // empty')
 [[ -n "$command" ]] || exit 0
+sid=$(echo "$input" | jq -r '.session_id // empty')
+# Heed tracking: a nudge is heeded when the next Bash call in the session does not
+# grep (hook_heed_note in hooks/hook-common.sh).
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+heed() { type hook_heed_note >/dev/null 2>&1 && hook_heed_note prefer-ripgrep "$sid" grep "$1"; return 0; }
 
 # ── Detect grep usage ────────────────────────────────────────────────────────
 # Match: bare `grep`, `/usr/bin/grep`, `/bin/grep` at the start of a command
@@ -75,6 +80,7 @@ if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*(\/usr\/bin\/grep|\/bin\/grep
     USAGE_HINT="For file/directory search:\n   [36mrg --no-ignore --hidden \"PATTERN\" /path/          # full scope (equiv to grep -r)[0m\n   [36mrg --no-ignore --hidden -i \"PATTERN\" /path/       # case-insensitive[0m\n   [36mrg --no-ignore --hidden -l \"PATTERN\" /path/       # list files only[0m\n   [36mrg --no-ignore --hidden -g \"*.jsonl\" \"PATTERN\" /  # file-type scoped[0m\n   [36mrg --no-ignore --hidden -E \"REGEX\" /path/         # extended regex[0m"
   fi
 
+  heed fired
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prefer-ripgrep --action nudge --heeded unknown >/dev/null 2>&1 || true
   MESSAGE=$(printf '%b' "\033[33m⚡ PREFER RIPGREP: rg is much faster here. This ran; use rg next time.\033[0m\n\n\033[33mCommand:\033[0m  $command\n\033[33mStatus:\033[0m $AVAIL_LINE$INSTALL_NOTE\n\n\033[33mReplacement:\033[0m\n   $USAGE_HINT\n\n\033[33mFlag reference:\033[0m\n   grep -r   ->  rg --no-ignore --hidden\n   grep -i   ->  rg -i\n   grep -l   ->  rg -l\n   grep -c   ->  rg -c\n   grep -E   ->  rg (default)\n   grep -v   ->  rg -v\n   grep -n   ->  rg -n (on by default)\n\nWhen grep is genuinely required (rg missing, strict POSIX BRE, binary offsets), say so rather than switching silently.")
   jq -nc --arg m "$MESSAGE" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$m}}'
@@ -83,4 +89,5 @@ if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*(\/usr\/bin\/grep|\/bin\/grep
 fi
 
 # Not a grep command — allow through
+heed clean
 exit 0

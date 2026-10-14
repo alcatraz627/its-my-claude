@@ -40,8 +40,15 @@ case "$fp" in
   */style/*|*/atone/*|*/i-dream/*|*/sweep/*|*language-quality*|*/ste-writing/*|*/node_modules/*|*/derived/*|*thesaurus*) exit 0 ;;
 esac
 
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+# Heed tracking: a block on a file is heeded when the next write to that file is
+# clean (hook_heed_note in hook-common.sh).
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+heed() { type hook_heed_note >/dev/null 2>&1 && hook_heed_note guard-prose-quality "$sid" "$fp" "$1"; return 0; }
+blocked() { heed fired; bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-prose-quality --action block --heeded unknown --target "$fp" >/dev/null 2>&1 || true; }
+
 content=$(printf '%s' "$input" | jq -r '.tool_input.content // .tool_input.new_string // empty' 2>/dev/null)
-[ -n "$content" ] || exit 0
+[ -n "$content" ] || { heed clean; exit 0; }
 
 # Lint only ADDED lines (D9, 2026-08-14). Carried context kept re-triggering
 # the gate on pre-existing dashes the edit never touched: old_string text
@@ -58,7 +65,7 @@ import os
 old = set(os.environ.get("OLD", "").splitlines())
 new = os.environ.get("NEW", "").splitlines()
 print("\n".join(l for l in new if l not in old))' 2>/dev/null)
-  [ -n "$content" ] || exit 0
+  [ -n "$content" ] || { heed clean; exit 0; }
 fi
 
 # An .html file is often an application, not a document. Its <style> and
@@ -85,7 +92,7 @@ KEEP = re.compile(r"[–—]")
 sys.stdout.write("\n".join(l for l in s.split("\n") if KEEP.search(l) or not CODE.search(l)))' 2>/dev/null)
       # A pure code/markup edit leaves no prose worth judging.
       words=$(printf '%s' "$content" | tr -cs "[:alpha:]" " " | wc -w | tr -d " ")
-      [ "${words:-0}" -ge 25 ] 2>/dev/null || exit 0
+      [ "${words:-0}" -ge 25 ] 2>/dev/null || { heed clean; exit 0; }
       ;;
   esac
 fi
@@ -93,9 +100,12 @@ fi
 if [ "$mode" = "code" ]; then
   findings=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/code-copy-lint.py" --json - 2>/dev/null | jq -r '.findings[:3] | map("  [" + (.tells|join("|")) + "] " + .text) | join("\n")' 2>/dev/null)
   if [ -n "$findings" ]; then
+    blocked
     jq -n --arg r "COPY BLOCKED for $fp — user-facing string literals carry banned language tells:
 $findings
 UI copy follows the same rules as prose (conventions/language-quality.md): no connective dashes, no unverified claims, no marketing words. Reword the strings and retry. Placeholder glyphs and comments are not counted." '{decision:"block", reason:$r}'
+  else
+    heed clean
   fi
   exit 0
 fi
@@ -112,10 +122,12 @@ over=$(python3 -c "print(1 if float('${score:-0}' or 0) > 8 else 0)" 2>/dev/null
 [ "${over:-0}" = "1" ] && fail="$fail prose-lint score ${score}/100w (block line: 8)."
 
 if [ -n "$fail" ]; then
+  blocked
   spans=$(printf '%s' "$report" | jq -r '[.spans.two_split_dash[]?, .spans.verdict_first_opener[]?] | .[:3] | map("  > " + .) | join("\n")' 2>/dev/null)
   jq -n --arg r "PROSE BLOCKED for $fp —$fail
 $spans
 Rewrite per conventions/language-quality.md (short sentences, no two-split chains, facts first), then retry. Check any draft: python3 ~/.claude/scripts/style/prose-lint.py" '{decision:"block", reason:$r}'
   exit 0
 fi
+heed clean
 exit 0

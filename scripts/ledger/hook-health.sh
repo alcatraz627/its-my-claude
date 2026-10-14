@@ -55,7 +55,7 @@ hook-health — per-hook health from warn-events telemetry (read-only)
   hook-health.sh --json          machine output
 
 Columns: hook | fires | by-action | heed | top-project | last-fired | MUTED?
-  heed  = heeded/(heeded+ignored) from kind:heed lines, or "-" if no heed data yet
+  heed  = heeded/(heeded+ignored) from kind:heed lines, or UNMEASURED if no heed data yet
   MUTED = the hook's mute file exists AND it is still firing (worth a look)
 H
     exit 0;;
@@ -244,7 +244,7 @@ def build_rows(fire_list, heed_list):
             "by_action_str": by_action_str(h["actions"]),
             "heed_rate": None if rate is None else round(rate, 2),
             "heed_yes": hy, "heed_no": hn,
-            "heed_str": "-" if rate is None else f"{hy}/{hy+hn}",
+            "heed_str": "UNMEASURED" if rate is None else f"{hy}/{hy+hn}",
             "top_project": top_proj,
             "last_ts": h["last"].strftime("%Y-%m-%dT%H:%M:%SZ") if h["last"] else None,
             "last_age": humanize_age(h["last"]) if h["last"] else "-",
@@ -328,13 +328,13 @@ def cell(v, w, right=False):
     if len(s) > w: s = s[:w-1] + "…"
     return s.rjust(w) if right else s.ljust(w)
 
-HK, FR, BA, HD, PJ, LF, MU, RB, LC = 28, 5, 22, 6, 14, 8, 6, 10, 18
+HK, FR, BA, HD, PJ, LF, MU, RB, LC = 28, 5, 22, 10, 14, 8, 6, 10, 18
 hdr = (cell("hook", HK) + "  " + cell("fires", FR, True) + "  " + cell("by-action", BA) + "  " +
        cell("heed", HD) + "  " + cell("top-project", PJ) + "  " + cell("last", LF, True) + "  " + cell("mute", MU) +
        "  " + cell("review-by", RB) + "  " + cell("lifecycle", LC))
 win = since.strftime('%Y-%m-%d %H:%M') + "Z → now" if since else "all time"
 print(f"hook health  ·  now={now.strftime('%Y-%m-%d %H:%M')}Z  ·  window={win}  ·  {len(fires_w)} fires across {len(rows)} hooks")
-print(f"heed = heeded/(heeded+ignored) from kind:heed lines (\"-\" = none yet)  ·  MUTED = mute file exists while still firing")
+print(f"heed = heeded/(heeded+ignored) from kind:heed lines (UNMEASURED = no heed rows: missing instrumentation, never a reason to remove)  ·  MUTED = mute file exists while still firing")
 print(hdr)
 print("-" * len(hdr))
 for r in rows:

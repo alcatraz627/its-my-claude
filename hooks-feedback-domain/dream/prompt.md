@@ -25,6 +25,16 @@ counter can't make:
   meant to prevent?* (e.g. a `cli-gating` false-positive the agent bypassed,
   followed by a guard-evasion atone event.)
 
+## Unmeasured is not zero
+
+A hook whose events say `heed UNMEASURED`, or whose tracked heed count is 0/0, has
+no instrument, so nothing can be said about whether it works. Never emit a
+`decay_candidate` with action tune, downgrade or remove for it, and never say it is
+"structurally ignored". At most emit a `summary` line naming it as UNMEASURED so
+someone adds heed tracking and the audit is re-run. A quiet hook is not a dead
+hook: deterrence, internalization, and another mechanism absorbing the job all look
+the same as decay in a fire-rate chart.
+
 ## Severity weighting
 
 Each event carries an `impact` tag: **high** (false-positive / obstructive /

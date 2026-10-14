@@ -12,7 +12,7 @@
 #
 # Tells, tiered by confidence (fenced code, inline code, and blockquotes are
 # stripped first; messages under 200 prose chars are skipped):
-#   block-tier: em-dash in prose · decoration-emoji headers/status lines ·
+#   block-tier: decoration-emoji headers/status lines (em-dash moved to emdash-stop.sh) ·
 #               ≥3 "**Label**: fragment" rows · >5 bold spans ·
 #               praise-without-evidence opener
 #   warn-tier:  ★ insight boxes (NOTE: the Explanatory output style legitimately
@@ -61,11 +61,11 @@ tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
 [ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
 sid8="${sid:0:8}"
 
-# Last assistant message text (same extraction as filename-dot-stop.sh).
+# The reply that just ended the turn, from the Stop input; the transcript tail
+# lags one message at Stop time (hook_last_assistant_text). tail_json is still
+# read for the last USER prompt in tell 8.
 tail_json=$(tail -n 400 "$tp" 2>/dev/null) || exit 0
-last_asst=$(printf '%s\n' "$tail_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1)
-[ -n "$last_asst" ] || exit 0
-text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 
 # Prose = text minus fenced code blocks, inline code spans, blockquotes, and
@@ -79,12 +79,8 @@ prose=$(printf '%s\n' "$text" \
 tells=""        # human-readable list of what fired
 block_hits=0    # count of block-tier categories
 
-# 1 · em-dash in prose (stored preference: budget zero — audience-aware-writing).
-emdash_n=$(printf '%s' "$prose" | rg -c '—' 2>/dev/null || true)
-if [ "${emdash_n:-0}" -ge 1 ] 2>/dev/null; then
-  tells="${tells}\n- em-dash ×${emdash_n} (budget is zero — use commas, periods, parentheses, or 'and')"
-  block_hits=$((block_hits + 1))
-fi
+# 1 · em-dash: owned by emdash-stop.sh since 2026-10-15 (one em-dash blocks on its
+# own, with its own heed row), so this hook no longer counts it.
 
 # 2 · decoration-emoji headers / traffic-light status lines.
 if printf '%s\n' "$prose" | rg -q '^[[:space:]]*(#{1,6}[[:space:]]*)?(🔴|🟡|🟢|🟠|🚦|🎯|🚀|🔥|💡|📊|🧠|✨|🛑|📌|⚡|❗|✅|⚠️|❌)' 2>/dev/null; then

@@ -86,7 +86,9 @@ fi
 
 # ── the hinter registry: hint-injector.sh silently skips a non-executable hinter ─
 echo "== every ~/.claude/hinters/*.sh is executable (the injector skips 644 silently) =="
-badh=$(for h in "$HOME"/.claude/hinters/*.sh; do [ -x "$h" ] || echo "notexec $h"; done)
+# Test suites sit beside their hinter and are skipped by hint-injector.sh, so
+# their mode does not matter.
+badh=$(for h in "$HOME"/.claude/hinters/*.sh; do [[ "$h" == *.test.sh ]] && continue; [ -x "$h" ] || echo "notexec $h"; done)
 [ -z "$badh" ] && ok "all hinters carry the x bit" || { bad "non-executable hinters:"; printf '       %s\n' $badh; }
 
 # ── fixtures: prove the checker can fail, and does not over-fire ─────────────

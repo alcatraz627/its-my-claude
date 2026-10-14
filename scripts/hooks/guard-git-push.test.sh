@@ -49,6 +49,15 @@ gated "$F" "git push origin master" "explicit master from a feature checkout"
 mkdir -p "$F/.claude" && touch "$F/.claude/require-user-commit" && (cd "$F" && git add -A >/dev/null 2>&1 && git commit -qm marker)
 gated "$F" "git push origin feat-z" "protected repo, feature refspec"
 
+# The refusal says the whole call was refused and where the registration lives,
+# for a lone push as well as a chained one; an unwritable nonce file says so.
+msg=$(run "$R" "git push origin main" | jq -r '.reason // empty')
+case "$msg" in *"refused the WHOLE Bash call"*"nonce file"*"is registered"*|*"refused the WHOLE Bash call"*"registered in the nonce file"*) ok "lone push: whole-call and registration sentences" ;; *) bad "lone push: whole-call and registration sentences" ;; esac
+mkdir -p "$T/ro/.claude" && chmod a-w "$T/ro/.claude"
+msg=$(jq -nc --arg c "git push origin main" --arg w "$R" '{tool_input:{command:$c}, cwd:$w}' | HOME="$T/ro" PATH="$T/bin:$PATH" bash "$HOOK" 2>/dev/null | jq -r '.reason // empty')
+case "$msg" in *"NOT registered"*) ok "unwritable nonce file: says the push is NOT registered" ;; *) bad "unwritable nonce file: says the push is NOT registered" ;; esac
+chmod u+w "$T/ro/.claude"
+
 echo "---- pass=$pass fail=$fail"
 trash "$T" 2>/dev/null || true
 [ $fail -eq 0 ]

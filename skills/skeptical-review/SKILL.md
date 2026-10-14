@@ -76,8 +76,9 @@ Mark this change-set reviewed:
 ```bash
 bash ~/.claude/scripts/review-marker.sh write <SID>
 ```
-`review-marker.sh unreviewed <SID>` then lists files touched since the review. No
-Stop gate reads the marker any more (review-gate-stop.sh was retired 2026-10-14).
+`review-marker.sh unreviewed <SID>` then lists files touched since the review. The
+`review-nudge-stop.sh` Stop hook reads the marker and stops warning about the
+files it covers. `<SID>` may be the full id, the first 8 characters, or omitted.
 
 Then log the persona usage for the efficacy trail (`features/persona-activation.md`):
 ```bash

@@ -16,7 +16,8 @@
 #   surface: {"systemMessage":…}              → non-blocking note
 #   silent:  exit 0
 # Loop-safe: blocks once per offending-message signature, then steps aside.
-# Checks ONLY the final assistant message, with fenced code blocks stripped.
+# Checks ONLY the final assistant message (the Stop input's last_assistant_message),
+# with fenced code blocks stripped.
 # Mute: touch ~/.claude/.no-filename-dot-gate
 
 set -uo pipefail
@@ -32,14 +33,13 @@ HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
-[ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
+[ -n "$sid" ] || exit 0
 sid8=$(hook_sid8 "$sid")
 
-# Last assistant message text (precise — not the whole tail).
-tail_json=$(tail -n 400 "$tp" 2>/dev/null) || exit 0
-last_asst=$(printf '%s\n' "$tail_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1)
-[ -n "$last_asst" ] || exit 0
-text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+# The reply that just ended the turn. Taken from the Stop input, not the transcript:
+# the transcript lags one message at Stop time, so tailing it checked the previous
+# reply and let the current one through (see hook_last_assistant_text).
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 
 # Strip fenced code blocks so legit code paths inside ``` ``` don't trip it.

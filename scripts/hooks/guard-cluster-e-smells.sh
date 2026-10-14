@@ -9,8 +9,8 @@
 #     → prints an advisory and allows the edit; it cannot be mechanically
 #     confirmed, so it must not block.
 #
-# Backstopped by the Stop review gate (hooks/review-gate-stop.sh), which re-runs
-# the same catalog at "done" time on every file touched this session.
+# At Stop, review-nudge-stop.sh warns when substantial code edits have no
+# /skeptical-review covering them.
 #
 # Mute: touch ~/.claude/.no-cluster-e-nudge
 
@@ -25,6 +25,11 @@ INPUT=$(cat 2>/dev/null || true)
 
 file_path=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
 [ -z "$file_path" ] && exit 0
+sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+# Heed tracking: a fire on a file is heeded when the next edit of the same file is
+# clean (hook_heed_note in hook-common.sh).
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
+heed() { type hook_heed_note >/dev/null 2>&1 && hook_heed_note guard-cluster-e-smells "$sid" "$file_path" "$1"; return 0; }
 
 payload=$(printf '%s' "$INPUT" | jq -r '
   .tool_input.content
@@ -43,6 +48,7 @@ $(printf '%s' "$block_hits" | msg_lines)
 
 Blocked at write-time because it recurs. Conform to the sibling inline pattern
 instead of wrapping a function. Genuine exception? mute: touch ~/.claude/.no-cluster-e-nudge"
+  heed fired
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action block --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 &
   jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
@@ -59,5 +65,8 @@ $hint_lines
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -cn --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' 2>/dev/null || true
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-cluster-e-smells --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true
+  heed fired
+else
+  heed clean
 fi
 exit 0

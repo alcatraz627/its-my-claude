@@ -64,9 +64,9 @@ used=$(awk -v r="$rem" 'BEGIN { printf "%d", 100 - r }' 2>/dev/null)
 
 # ── the final message ────────────────────────────────────────────────────────
 tail_json=$(tail -n 400 "$tp" 2>/dev/null) || exit 0
-last_asst=$(printf '%s\n' "$tail_json" | jq -rc 'select(.type=="assistant")' 2>/dev/null | tail -n 1)
-[ -n "$last_asst" ] || exit 0
-text=$(printf '%s' "$last_asst" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null)
+# The reply that just ended the turn comes from the Stop input; the transcript tail
+# lags one message at Stop time (hook_last_assistant_text in hook-common.sh).
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 prose=$(printf '%s\n' "$text" | awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; next} !f{print}')
 [ -n "$prose" ] || exit 0
