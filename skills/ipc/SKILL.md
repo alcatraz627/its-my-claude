@@ -1,6 +1,6 @@
 ---
 name: ipc
-description: Work the claude-ipc fabric from any session. Who's live, what's owed, send/reply with the safety rails, triage an inherited or orphaned mailbox, and first-line broker diagnostics. Use when the user says "check the fabric", "who's around", "message that session", "anything owed", or when debugging cross-session mail.
+description: Checking the claude-ipc fabric (who is live, what is owed) or messaging another session. Sends and replies with safety rails, triages mailboxes. Not for non-IPC chat.
 ---
 
 # /ipc: drive the claude-ipc fabric

@@ -1,6 +1,6 @@
 ---
 name: kanban
-description: Reads the mothballed kanban board (read-only since 2026-10-14) and opens its UI. Use only when the owner names the kanban board itself; not at session start, and not for "/hub" or decision pages.
+description: Owner names the kanban board itself. Reads the mothballed, read-only board and opens its UI. Not for session start, /hub or decision pages.
 argument-hint: "[init | sync | notes | open | status]"
 user-invocable: true
 ---

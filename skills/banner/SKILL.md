@@ -1,6 +1,6 @@
 ---
 name: banner
-description: Generates a customized terminal banner by prompting for title, sections, and theme — renders using std::claude::shared banner.py with guaranteed alignment.
+description: A custom terminal banner is wanted. Prompts for title, sections and theme and renders aligned output. Not for the daily banner (use banner-fun).
 allowed-tools: Read, Bash, Glob
 argument-hint: "[description of what to display]"
 user-invocable: true

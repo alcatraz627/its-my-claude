@@ -1,6 +1,6 @@
 ---
 name: doctor
-description: On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirtiness, plus hook/event-log integrity. Use when the user asks "what's wrong", "check health", "/doctor", or reports flaky hook/MCP behavior.
+description: User asks what is wrong or reports flaky hooks or MCP. Checks worktrees, pm2, disk, WAL, git and hook logs. Not for debugging application code.
 ---
 
 # Doctor — Environment Health Check

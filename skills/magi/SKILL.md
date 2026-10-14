@@ -1,6 +1,6 @@
 ---
 name: magi
-description: Multi-agent supervisor-led deliberation. DEFAULTS TO --mode lite (3 voters, no personas/jester/voting, ~$3-8/run with research on) for routine tradeoffs. Opt into --mode full (5 voters + jester + personas + voting + thorough rubric, ~$6-12/run) for architecture / design / "should we" / rewrite decisions. Sonnet downgrade cuts cost ~5x. Use when multiple perspectives + reasoned dismissal of dissent are valuable. Archive at ~/.claude/assets/magi/<task>/ for review. Token-aware. Per design doc 20260518-magi-design.md.
+description: An architecture or "should we" decision needs several perspectives. Runs supervisor-led voters, lite by default, full for big calls, several dollars a run. Not for simple choices.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch, Agent, mcp__inputs__form
 argument-hint: "<task> [--voters N] [--model M] [--model-mix \"m=n,...;jester=m\"] [--personas] [--jester] [--no-voting] [--temp-mode auto|shared|spread] [--no-research] [--validation light|thorough]"
 user-invocable: true

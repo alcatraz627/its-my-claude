@@ -1,6 +1,6 @@
 ---
 name: page
-description: Routes anything that has to be shown to the surface that fits it (a markdown file, a local HTML page, a decision page, an Artifact, a deck) and makes sure an HTML page is built on the shared kit and passes the page check. Use when something needs showing and the form is not obvious, such as "make me a report", "show me a preview", "write it up", "I need a page for this", "share this with the team". Not a designer. It picks the surface, hands off, and checks the result.
+description: Something must be shown and the surface is unclear (report, preview, share). Picks markdown, local page, decision page or Artifact, and checks the page kit. Not a designer.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 argument-hint: "<what needs showing, and to whom>"
 user-invocable: true

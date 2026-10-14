@@ -1,6 +1,6 @@
 ---
 name: session-stats
-description: Full session analytics report — cost, tokens, tools, rate limits, context usage, and activity timeline
+description: Asked for session cost, tokens, tools, rate limits or context usage. Renders a full analytics report. Not for project or code metrics.
 allowed-tools: [Read, Bash, Glob, Grep]
 ---
 

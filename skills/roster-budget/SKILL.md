@@ -1,6 +1,6 @@
 ---
 name: roster-budget
-description: Measures the skill roster against its listing budget and names the skills whose descriptions are being dropped, ranked by what each long description costs. Use when a skill stops auto-triggering, the roster shows bare names, or before adding or lengthening a description.
+description: A skill stops auto-triggering, or before lengthening a description. Measures the roster against its listing budget and ranks costly descriptions. Not for editing skills.
 allowed-tools: Read, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "[--top N] [--json]"

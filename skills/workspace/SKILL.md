@@ -1,6 +1,6 @@
 ---
 name: workspace
-description: Manage per-session workspace docs at <project>/.claude/session-notes/<session-id>.md. Each serious session has its own Todos, Notes, Doc Links, and Decisions file that survives /clear and /compact. Read by /catchup at resume time, updated by /core-dump (with diff-confirm — never blind overwrite), and feeds the cross-session forgotten-todos surfacing. Use /workspace to create a workspace, open the current one, or list workspaces in this project.
+description: Need a per-session notes file (todos, decisions, doc links) that survives /clear. Creates, opens or lists workspaces. Not for checkpoints (use core-dump).
 allowed-tools: Read, Write, Edit, Bash, Glob
 argument-hint: "[init | show | list | open]"
 user-invocable: true

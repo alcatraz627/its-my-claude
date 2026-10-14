@@ -1,6 +1,6 @@
 ---
 name: svg
-description: Authors, edits, optimizes, and render-checks SVG graphics — icons, logos, diagrams, illustrations, patterns. Claude writes the SVG markup directly (no image-gen backend); the skill adds the scaffolding that makes it production-grade: a file-first output path, a mandatory rasterized render-check you actually look at, svgo optimization, accessibility/viewBox defaults, and an iteration loop. Use when the user wants a vector graphic, an icon set, a logo, an inline diagram, a favicon, or wants an existing SVG cleaned up or resized.
+description: Vector graphic wanted (icon, logo, diagram, favicon) or an SVG to clean up. Writes the SVG, render-checks it, runs svgo. Not for raster images (use generate-image).
 allowed-tools: Read, Write, Edit, Bash, Glob, mcp__plugin_chrome-devtools-mcp_chrome-devtools__navigate_page, mcp__plugin_chrome-devtools-mcp_chrome-devtools__new_page, mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot
 argument-hint: "[what to draw, or a path to an existing .svg to edit/optimize]"
 user-invocable: true

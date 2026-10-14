@@ -1,6 +1,6 @@
 ---
 name: tag
-description: Captures something worth keeping (a rule, convention, feature doc, glossary term, code snapshot, or note) and files it into the ~/.claude global config at its correct home per PLACEMENT.md, updates every index and cross-reference, and promotes it into CLAUDE.md's always-loaded core only when the tier heuristics justify it.
+description: Something worth keeping (rule, convention, term, note) must be filed in ~/.claude at its right home. Updates indices, promotes to CLAUDE.md only when tiers justify. Not for project docs.
 argument-hint: '[target | "concept"]'
 user-invocable: true
 disable-model-invocation: true

@@ -1,6 +1,6 @@
 ---
 name: preference-graduation
-description: Harvests recurring preference and vocabulary signals from the post-insight streams (atone, affirm, i-dream, runtime-notes, checkpoints), dedupes them against existing GLOSSARY and memory, and routes each fresh signal to its durable home (a glossary term, a global memory, or a rule) after per-signal confirmation.
+description: Harvesting recurring preferences from atone, affirm, notes and checkpoints. Dedupes and files each signal to a glossary term, memory or rule after confirmation. Not for one-off memory saves.
 argument-hint: "[--days N]"
 user-invocable: true
 disable-model-invocation: true

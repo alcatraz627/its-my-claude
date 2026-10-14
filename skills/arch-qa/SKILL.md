@@ -1,6 +1,6 @@
 ---
 name: arch-qa
-description: Answers technical architecture questions by tracing code paths through the codebase — analyzing feature implementations, data flows, auth middleware, and service integrations — and outputting a structured architecture analysis.
+description: A question about how a feature, data flow or auth path works in a codebase. Traces the code and returns a structured analysis. Not for making changes.
 allowed-tools: Read, Glob, Grep, Bash
 user-invocable: true
 argument-hint: "<question>"

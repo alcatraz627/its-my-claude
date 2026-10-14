@@ -1,6 +1,6 @@
 ---
 name: word-doc
-description: Turns a markdown file, notes, or the conversation into a .docx that reads well in Word and Google Docs, planning the structure from the content and rendering the house typography. Use when someone wants a Word document, a docx, a Google Doc, a memo, a design note, a report, an RCA, or a guide.
+description: A .docx or Word-style doc is wanted (memo, report, RCA, guide). Plans structure from the content and renders house typography. Not for PDFs (use generate-pdf).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "<source.md | topic> [--outline] [--out <dir>] [--paper a4|letter] [--toc] [--check-only <file.docx>]"

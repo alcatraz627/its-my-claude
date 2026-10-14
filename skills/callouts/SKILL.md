@@ -1,6 +1,6 @@
 ---
 name: callouts
-description: Persists the owner's review findings as re-runnable acceptance rows per surface, and gates any later "done" claim on re-running the open rows. Use when the owner calls out a defect in review, before claiming done on a surface they have reviewed, or to list what they are still owed.
+description: Owner calls out a defect in review, or before claiming done on a reviewed surface. Persists findings as re-runnable acceptance rows and gates done on them. Not for unreviewed work.
 allowed-tools: Read, Bash, Grep, Glob
 user-invocable: true
 argument-hint: "[list | gate <surface> | retire <id>]"

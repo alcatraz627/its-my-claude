@@ -1,6 +1,6 @@
 ---
 name: ui-loop
-description: Drives a UI change to convergence through the local-models loop, where scripts measure, Claude judges, the ledger tracks, and `see reshoot` re-captures. Use for iterative UI fix rounds against a live page or a reference pair, when a one-shot /ui-gripe or /vis-compare is not enough.
+description: Iterating UI fixes against a live page or reference pair. Scripts measure, Claude judges, the ledger tracks, see reshoot recaptures. Not for one-shot critique (use ui-gripe).
 allowed-tools: Read, Bash, Grep, Glob, Edit, Write
 user-invocable: true
 argument-hint: "<url-or-image-pair> [claims-or-reference]"

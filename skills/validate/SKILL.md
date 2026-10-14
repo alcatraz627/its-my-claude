@@ -1,6 +1,6 @@
 ---
 name: validate
-description: Routes a finished or nearly-finished change to the checks it actually needs, by first naming every validation question the change raises and then saying which instrument covers each one and which are being skipped and why. The failure this prevents is not picking the wrong checker, it is never asking the third question at all. Use when a change is about to be called done, when a review keeps missing what the user then catches on sight, or when you have fifteen audit skills and no idea which apply here. Not a checker itself: it classifies, enforces one precondition, and hands off.
+description: A change is about to be called done. Names each validation question it raises and routes to the checker that covers it. Not a checker itself, not for trivial edits.
 allowed-tools: Read, Grep, Glob, Bash, Agent
 argument-hint: "<what changed> [path or diff scope]"
 user-invocable: true

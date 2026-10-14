@@ -1,6 +1,6 @@
 ---
 name: codex-handback
-description: Reviews a Codex hands seat's handback: checks its review packet (sha, diff-stat, pasted check output) against the brief and branch, then runs the skeptical review over the seat's commits. Use after codex-gcc exec --brief, on a "codex done" doorbell, or when asked to review Codex's work.
+description: A Codex hands seat has handed back, or you are asked to review Codex's work. Checks its review packet against the brief, then skeptical-reviews its commits. Not for other seats.
 allowed-tools: Read, Bash, Grep, Glob, Skill
 user-invocable: true
 argument-hint: "[handback path] [--base <ref>]"

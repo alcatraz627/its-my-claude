@@ -1,6 +1,6 @@
 ---
 name: deadline
-description: Run work against a hard deadline while spending the user's scarce return visits as the true currency — one front-loaded decision exchange, reversible-default autonomy with a veto ledger during absences, pre-authorized scope shedding as the burn projection slips, and a fixed decision-first brief at every return. Rare-use, high-stakes; arm it when a real commitment with a clock is at risk. For ordinary work with the user present, don't — the skill itself pushes back if deadline machinery adds nothing.
+description: A real commitment with a clock is at risk and the owner will be away. One decision exchange, reversible defaults with a veto ledger, scope shedding. Not for ordinary work.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, Agent, Skill
 user-invocable: true
 argument-hint: "<when> [goal] | check | off"

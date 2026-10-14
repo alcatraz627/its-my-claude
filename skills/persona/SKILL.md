@@ -1,6 +1,6 @@
 ---
 name: persona
-description: Adopt a working-mode persona (~/.claude/personas/) for the current task — pick by name or let the skill match one, load its role contract into context, and record the adoption to the efficacy log. The mechanical surface persona-suggest nudges point at; replaces "go read the persona file" (which telemetry shows never converts).
+description: A task fits a working mode in ~/.claude/personas, or a persona nudge fires. Loads the named or matched persona's role contract and logs the adoption. Not for sub-agent dispatch.
 allowed-tools: Read, Bash, Grep, Glob
 user-invocable: true
 argument-hint: "[persona-name or task description]"

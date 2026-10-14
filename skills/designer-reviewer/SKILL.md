@@ -1,6 +1,6 @@
 ---
 name: designer-reviewer
-description: Reviews UI screenshots against the user's terminal-dashboard aesthetic fingerprints. Gives scored critiques with actionable CSS fixes. Use when reviewing pm2-manage, visualize-claude, or any developer tool UI for visual consistency against the established dark/dense/semantic design system.
+description: Reviewing a developer-tool UI screenshot against the owner's dark, dense terminal-dashboard style. Gives a scored critique with CSS fixes. Not for confusion audits (use ui-gripe).
 disable-model-invocation: true
 allowed-tools: Read, Bash
 user-invocable: true

@@ -1,10 +1,6 @@
 ---
 name: feature-doc-set
-description: >
-  Reads a feature branch and writes its audience doc set (owner brief,
-  engineering guide, team brief, PR description) plus a review contract of
-  the behaviors a build cannot assert: transient states, idempotence, counted
-  numbers, cross-surface effects. Use when a feature PR is raised or reviewed.
+description: A feature PR is raised or reviewed. Writes the owner brief, engineering guide, team brief, PR text and a review contract. Not for a lone PR body (use pr-description).
 user-invocable: true
 argument-hint: "[base..head | branch | PR number] [--out <dir>] [--contract-only]"
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Agent

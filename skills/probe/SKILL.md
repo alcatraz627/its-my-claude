@@ -1,6 +1,6 @@
 ---
 name: probe
-description: Drives a defect to its confirmed mechanism before any fix: a runnable probe isolates the one unknown, the harness is ruled out first, and a second fix attempt on the same spot is refused without new evidence. Use when a fix did not work or a cause is still a guess.
+description: A fix did not work or a cause is still a guess. Isolates the mechanism with a runnable probe before any fix. Not for defects whose cause is already confirmed.
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 user-invocable: true
 argument-hint: "<the symptom, or the file:line being re-edited>"

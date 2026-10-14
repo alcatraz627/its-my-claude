@@ -1,6 +1,6 @@
 ---
 name: generate-image
-description: Generates raster images from a text prompt using the LOCAL imagine model (mflux/MLX Flux on Apple Silicon — $0, offline, no cloud). Uses only models already cached on this machine (qwen is the kept default; ~3–8 min per image, stated up front), NEVER downloads a model without explicit confirmation, drives the backend headlessly, reads the result back to actually look at it, and offers the real refine/vary/redo iteration loop. Use when the user wants a photo, texture, painterly image, concept art, a cover image, or any raster (non-vector) graphic. For icons/logos/diagrams/vector art use /svg instead.
+description: A raster image is wanted (photo, texture, concept art, cover). Runs the local imagine model, slow and offline, then looks at the result. Not for icons or vectors (use svg).
 allowed-tools: Read, Bash, Write
 argument-hint: "[image prompt] [--model qwen (default; use a CACHED model)] [--style ...]"
 user-invocable: true

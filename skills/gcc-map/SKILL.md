@@ -1,6 +1,6 @@
 ---
 name: gcc-map
-description: Maps how instruction content actually loads into an agent and the CLAUDE.md doc graph, measuring ground truth first and diffing it against what the indices claim, then runs a deterministic health battery (orphans, broken links, staleness, always-loaded budget, tier/paths drift) plus an unconstrained blindspot pass, and writes a durable map under assets/reports/.
+description: Check how instruction content loads and whether the indices match reality. Measures, runs a health battery, writes a map under assets/reports. Not for browsing (use gcc-explore).
 argument-hint: "[--deep]"
 user-invocable: true
 disable-model-invocation: true

@@ -1,6 +1,6 @@
 ---
 name: create-agent
-description: Scaffolds an autonomous agent SKILL.md (context: fork, no prompts, structured output) from instructions, or converts an existing skill to agent form, after reading the skill index for a template. Use when a workflow should run unattended and return a parsable report.
+description: A workflow should run unattended and return a parsable report. Scaffolds an autonomous agent SKILL.md or converts a skill. Not for ordinary skills (use create-skill).
 allowed-tools: Read, Write, Edit, Bash, Glob, Skill
 user-invocable: true
 argument-hint: "<instructions | existing-skill-name> [--global | --project]"

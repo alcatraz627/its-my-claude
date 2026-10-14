@@ -38,13 +38,9 @@ stale_after_days: 365
 
 # Rules index
 
-One line per behavioral rule in \`rules/\`. This is the menu: scan it, then read the
-full \`rules/<name>.md\` when a rule applies to what you are about to do. DERIVED from
-each rule's \`brief:\` frontmatter; regenerate with \`bash ~/.claude/scripts/rules-index.sh\`.
-
-The **Load** column: \`always\` = autoloaded every session; \`scoped\` = NOT always-on (it
-has a \`paths:\` block, so it loads only when Claude touches a matching file, or you must
-\`Read\` it from this menu when it applies).
+One line per rule in \`rules/\`. Scan it, then Read \`rules/<name>.md\` when a rule applies.
+\`always\` = loaded every session; \`scoped\` = not loaded, Read it when it applies.
+DERIVED from each rule's \`brief:\`; regenerate with \`bash ~/.claude/scripts/rules-index.sh\`.
 
 Regenerated $stamp.
 
@@ -59,7 +55,10 @@ EOF
     # full brief loads with the rule itself, so repeating it here was paying for
     # every rule twice in every session (owner D1a, 2026-09-18).
     br=$(sed -n 's/^gist: *//p' "$f" | head -1)
-    [ -z "$br" ] && br=$(sed -n 's/^brief: *//p' "$f" | head -1 | awk '{ n=split($0,w," "); s=""; for(i=1;i<=n&&i<=20;i++){ s=s (i>1?" ":"") w[i]; if(w[i] ~ /[.;]$/) break } if(i<n) s=s " …"; print s }')
+    # Capped at 13 words, ending at the first sentence or clause break after at
+    # least 6 words, no trailing ellipsis: the row only has to say when the rule
+    # applies; the rule file itself has the rest.
+    [ -z "$br" ] && br=$(sed -n 's/^brief: *//p' "$f" | head -1 | awk '{ n=split($0,w," "); s=""; for(i=1;i<=n&&i<=13;i++){ s=s (i>1?" ":"") w[i]; if(i>=6 && w[i] ~ /[.;:]$/) break } sub(/[ ,;:.]+$/,"",s); while (s ~ / (a|an|the|of|on|in|to|as|or|and|its|by|if|is|that|for|with|an|it|not|pin|MUST|keep|their|your|you|are|at|from|every|any) *$/) { sub(/ [^ ]+ *$/,"",s) } print s }')
     # An em/en-dash never reaches the index: prose-lint budgets them at zero and
     # copying them out of a brief leaked them into the always-loaded menu.
     br=$(printf '%s' "$br" | perl -CSD -pe 's/\s[\x{2014}\x{2013}]\s/, /g; s/[\x{2014}\x{2013}]/-/g' | sed 's/|/\\|/g')

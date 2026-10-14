@@ -1,6 +1,6 @@
 ---
 name: deploy-parity-testing
-description: Runs a parity test cycle when a service moves work to a new execution path (runner, provider, flag): plan rows with a spend class each, a seat brief, a fresh seat's report (failing test names, never counts), mutation-tested fixes, then the same cycle on dev and preview. Use before any cutover claim.
+description: Before claiming a cutover when work moves to a new runner, provider or flag. Runs the parity cycle with a fresh seat, on dev and preview. Not for ordinary tests.
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit, Agent
 user-invocable: true
 disable-model-invocation: true

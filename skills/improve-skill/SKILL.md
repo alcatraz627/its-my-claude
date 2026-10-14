@@ -1,6 +1,6 @@
 ---
 name: improve-skill
-description: Audits skills against the house rules and their run history (runtime notes incl. archives, skill-log outcomes, their own Validation rubric), applies approved fixes, and reports efficacy per the skill's rubric, not a score. Use when a skill misfires, feels stale, or before relying on one.
+description: A skill misfires, feels stale, or needs checking before use. Audits it against house rules and run history, applies approved fixes. Not for writing a new skill.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 user-invocable: true
 argument-hint: "[skill-name | a,b,c | all] [--eval] [--focus \"...\"]"

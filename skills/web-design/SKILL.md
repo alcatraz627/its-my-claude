@@ -1,6 +1,6 @@
 ---
 name: web-design
-description: Reviews, generates, and systematizes web UI designs — screenshot-based critique with actionable CSS fixes, design token extraction, and page layout generation with experienced defaults.
+description: A web UI needs screenshot critique, design tokens or a page layout. Gives actionable CSS fixes. Not for planning a page build (use build-ui).
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch, mcp__plugin_chrome-devtools-mcp_chrome-devtools__*, mcp__plugin_playwright_playwright__*
 user-invocable: true
 argument-hint: "<review | system | page <type>> [options]"

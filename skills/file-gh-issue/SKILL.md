@@ -1,6 +1,6 @@
 ---
 name: file-gh-issue
-description: File a MINOR technical issue to the current repo's GitHub Issues, with a human gate. Dry-run by default. Use when an agent surfaces a small technical cleanup worth tracking, or when a PR review bot's finding is genuinely wrong and the defect belongs to the reviewer rather than the diff.
+description: A small technical cleanup is worth tracking, or a PR bot finding is wrong. Files a minor GitHub issue, dry-run first with a human gate. Not for major issues.
 ---
 
 ## Brief

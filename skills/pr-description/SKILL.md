@@ -1,14 +1,6 @@
 ---
 name: pr-description
-description: >
-  Write a PR description that briefs the reviewer in the author's voice:
-  content-model-first. Extracts the behavioral inventory from the ACTUAL diff
-  (never commit subjects), presents it for a pick, and only then drafts,
-  leading every section with what a user can now do or what stops going
-  wrong. Carries the deploy-visible effects no hunk shows, the one design
-  decision a reviewer must ratify, and an honest verification boundary.
-  Output is a file the human pastes; never runs gh pr create or gh pr edit.
-  Use for "write the PR description", "PR body", "describe this PR".
+description: Writing a PR description or body. Builds the behavioral inventory from the actual diff, then drafts a file to paste. Never runs gh pr create. Not for commit messages.
 user-invocable: true
 argument-hint: "[PR number | base..head | branch]"
 allowed-tools: Read, Glob, Grep, Bash, Write

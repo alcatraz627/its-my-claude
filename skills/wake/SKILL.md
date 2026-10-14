@@ -1,6 +1,6 @@
 ---
 name: wake
-description: Arm an opt-in wake monitor that revives THIS session if an outage leaves it alive-but-idle. A turn killed by a transient API error stops dead until a human types "keep going"; this pokes it instead. Session-only; disarms only when nothing agent-ready remains. Use before long unattended work.
+description: Before long unattended work. Arms a monitor that revives this session if an outage leaves it idle. Session-only. Not for scheduled jobs.
 argument-hint: "[interval] (default 15m)"
 user-invocable: true
 disable-model-invocation: true
