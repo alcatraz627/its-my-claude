@@ -1,0 +1,39 @@
+{
+  "about": "One place that says which JSONL ledgers may be rotated and how far back each keeps. First matching rule wins, so the protect rules come first. A ledger no rule names is never touched. Old lines go to ~/.claude/ledger-archive/<path>/<YYYY-MM>.jsonl.gz, never deleted. Run: python3 ~/.claude/scripts/ledger/ledger-prune.py plan",
+  "skip": [
+    "~/.claude/archive",
+    "~/.claude/assets",
+    "~/.claude/scripts",
+    "~/.claude/style/sweep",
+    "~/.claude/widgets",
+    "~/.claude/adapters/codex/state",
+    "~/.claude/atone/derived",
+    "~/.claude/atone/derived.bak",
+    "~/.claude/i-dream/reader",
+    "~/.claude/subconscious/dreams/traces",
+    "~/.claude/subconscious/introspection/chains",
+    "~/.claude/.claude",
+    "~/.claude/i-dream/.claude"
+  ],
+  "rules": [
+    {"path": "~/.claude/atone/*.jsonl", "protect": true, "why": "atone raw log and its siblings: kernel-sealed system of record"},
+    {"path": "~/.claude/affirm/*.jsonl", "protect": true, "why": "affirm ledger: system of record"},
+    {"path": "~/.claude/pinned/events.jsonl", "protect": true, "why": "pinned insights: system of record"},
+    {"path": "~/.claude/proposals.jsonl", "protect": true, "why": "proposals change status in place, an age cut would drop open ones"},
+    {"path": "~/.claude/scheduled/history.jsonl", "protect": true, "why": "scheduler history is documented as never pruned"},
+    {"path": "~/.claude/checkpoints/index.jsonl", "protect": true, "why": "checkpoint index: lookups by session id need every row"},
+    {"path": "~/.claude/history.jsonl", "protect": true, "why": "Claude Code's own prompt history, not a gcc ledger"},
+    {"path": "~/.claude/wal.jsonl", "protect": true, "why": "wal.sh already keeps the last two sessions"},
+    {"path": "~/.claude/hooks/warn-events.jsonl", "max_age_days": 120, "why": "hook fire and heed rows: efficacy compares weeks, so keep a long window"},
+    {"path": "~/.claude/i-dream/would-fire.jsonl", "max_age_days": 45, "why": "dry-run match log, efficacy reads the last 14 days"},
+    {"path": "~/.claude/i-dream/injections.jsonl", "max_age_days": 45, "why": "nudge shown log, efficacy reads the last 14 days"},
+    {"path": "~/.claude/subconscious/logs/events.jsonl", "max_age_days": 30, "max_mb": 20, "why": "daemon firehose, 45 MB today"},
+    {"path": "~/.claude/subconscious/logs/signals.jsonl", "max_age_days": 120, "why": "owner frustration signals, kept longer in case calibration reads them"},
+    {"path": "~/.claude/subconscious/metacog/activity.jsonl", "max_age_days": 30, "max_mb": 15, "why": "per-tool-call activity, meaningless one line at a time"},
+    {"path": "~/.claude/subconscious/metacog/samples.jsonl", "max_age_days": 30, "why": "sampled activity"},
+    {"path": "~/.claude/events.jsonl", "max_age_days": 60, "why": "event bus exhaust"},
+    {"path": "~/.claude/ledger/plug-events.jsonl", "max_age_days": 60, "why": "plug fire log"},
+    {"path": "~/.claude/logs/checkpoint-prose.jsonl", "max_mb": 1.5, "why": "rows carry only HH:MM, so size is the only cut"},
+    {"path": "~/.claude/logs/*.jsonl", "max_age_days": 60, "why": "operational hook logs: rolling window by nature"}
+  ]
+}

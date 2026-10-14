@@ -162,6 +162,20 @@ takes **Layer-1 primitives only** and keeps its bespoke CLI.
 
 ---
 
+## Retention
+
+How long a ledger keeps its lines is declared once, in
+`scripts/ledger/ledger-retention.json`, and carried out by
+`scripts/ledger/ledger-prune.py` (`ledger_prune` in `ledger-common.sh`). Old
+lines are appended to `~/.claude/ledger-archive/<path>/<YYYY-MM>.jsonl.gz` and the
+live file is rebuilt beside itself and swapped in by rename, so nothing is
+truncated in place or deleted. It reports only, until told to `apply`. A ledger no
+rule names is never touched. A rule marked `protect`, and any file with the
+`uappnd` or `uchg` flag, is never rewritten, which keeps the atone raw log, affirm,
+pinned, proposals and the scheduler history out of reach. Not on a schedule.
+
+---
+
 ## Schema evolution
 
 1. **Additive by default.** Add fields freely; readers default missing ones
