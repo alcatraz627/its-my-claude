@@ -341,6 +341,12 @@ print(len(sents), len(long))' 2>/dev/null)
   if [ "${_ns:-0}" -gt 6 ]; then
     _f "$_ns sentences: past six the goal is a queue. Keep the three to six states a person would recognise; the rest belong in the task list."
   fi
+  # Arc-sized goal. A goal is scoped to what one session can finish; past a
+  # hundred words it is a roadmap, and its tail clauses block every stop until
+  # the owner disarms it by hand.
+  if [ "$words" -gt 100 ]; then
+    _f "arc-sized ($words words): scope the goal to what one session can finish. Arm the first finished slice and keep the rest in the task list."
+  fi
   [ "$n" -gt 0 ] && printf 'goal.sh: %s register finding(s) above. The goal still stands; this is a read, not a gate.\n' "$n" >&2
   return 0
 }

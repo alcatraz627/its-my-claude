@@ -196,5 +196,21 @@ QUEUE="The suite is green. The check is mutation-proven. The key shows up. The C
 out=$(bash "$G" lint "$QUEUE" 2>&1)
 echo "$out" | rg -q "past six the goal is a queue" && ok "eight short sentences read as a queue" || ko "a queue of eight passed"
 
+echo "== size: a goal is what one session can finish =="
+BIG="The intake page loads in the browser. The upload step accepts a workbook and shows a preview of its rows. The run step starts from the preview and reports progress. The results page lists every outcome with a reason. The export step writes a file the user can open. The admin page lists the users and their roles. The audit page shows who ran what and when. The settings page keeps the choices a user made. The help page explains each step in plain words. The billing page shows the plan and the next invoice date. The onboarding flow walks a new user through all of it."
+out=$(bash "$G" lint "$BIG" 2>&1)
+echo "$out" | rg -q "arc-sized" && ok "a 100-plus-word roadmap goal is named arc-sized" || ko "an arc-sized goal passed the linter"
+out=$(bash "$G" lint "$JEGS" 2>&1)
+echo "$out" | rg -q "arc-sized" && ko "a one-session goal fires arc-sized" || ok "the JEGS goal does not fire arc-sized"
+MUTS="$HOME/.claude/scripts/goal/goal.mut2.sh"; cp "$G" "$MUTS"
+python3 - "$MUTS" <<'PY'
+import sys; p=sys.argv[1]; s=open(p).read()
+s2=s.replace('if [ "$words" -gt 100 ]; then', 'if false; then')
+assert s2!=s, "mutation anchor not found"; open(p,"w").write(s2)
+PY
+mo=$(bash "$MUTS" lint "$BIG" 2>&1)
+echo "$mo" | rg -q "arc-sized" && ko "FAILED GUARD: arc-sized fired with the check removed" || ok "size guard goes red under mutation"
+trash "$MUTS" 2>/dev/null || true
+
 export HOME="$HOME_REAL"; trash "$T" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

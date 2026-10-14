@@ -194,3 +194,13 @@ then reconcile the two, in his direction.
 
 You are three tool calls into something new and the owner has not been given a
 line to arm. Or you have written a goal clause whose subject is him.
+
+## Size clause and waived clauses (owner ruling D13, 2026-10-15)
+
+Rule text: a drafted goal is scoped to what one session can finish, and a clause the owner waived stops blocking.
+
+Cases behind it: prop-20260819-111506-72 (walmart-mvp, 2026-08-19). A goal read "fix all and get the PR ready and the review bot happy". The owner waived the bot clause and it was also unreachable (HTTP 429, reset three days out). The Stop hook still read the conjunction as false and blocked five turns in a row. An agent cannot clear a harness goal, so the only exit was the owner noticing. A goal sized to one session has fewer tail clauses to waive, and a waiver is treated as an amendment, so the agent drops the clause from its own proposal and does not re-raise it. Related: prop-20260823-221910-e8, prop-20260904-150943-4e.
+
+Mechanical half: `goal.sh lint` warns "arc-sized" past 100 words (test in `scripts/goal/goal.test.sh`, section "size"). It warns and never blocks, like every other register check. The harness-side evaluator cannot be changed from here, so a waived clause on an already armed goal still needs the owner's `/goal` re-arm; the rule only keeps the agent's next proposal clean.
+
+Could a mod do it? See the D13 answer in `assets/reports/20261015-queue/q-new.md`.

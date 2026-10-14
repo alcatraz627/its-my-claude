@@ -1,6 +1,6 @@
 ---
 name: ste-writing
-description: Rewrite prose into Simplified Technical English adapted to this account. Covers docs, READMEs, PR descriptions and their inventories, error messages, release notes, runbooks, and hook user-text. Never code, never chat replies. Strict mode for procedures, errors, and hook text. Flavored mode for READMEs, PR descriptions, and general docs. Use when asked to make writing plain, to de-slop a doc, or to write error text that reads human. Chat replies are out of scope and rules/audience-aware-writing.md routes them.
+description: Rewrites docs, READMEs, PR descriptions, error messages, release notes, runbooks and hook text into plain Simplified Technical English, strict for procedures and errors, flavored for docs. Use to make writing plain or de-slop a doc. Never code or chat replies.
 argument-hint: "[strict|flavored] [file or pasted text]"
 user-invocable: true
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
@@ -148,7 +148,7 @@ Flavored, where voice is kept:
 Note what the last one does. It drops the marketing adjectives and keeps a
 human voice, because flavored mode is not strict mode with fewer words.
 
-## Subjective deliverables: three moves before you draft
+## Subjective deliverables: moves before you draft
 
 A deliverable whose acceptance is a judgment, not a test, needs a different
 opening than one you can verify. PR descriptions, READMEs, release notes and
@@ -172,6 +172,29 @@ guesses again at the same odds. Ask what specifically is wrong. The failure this
 prevents is OSCILLATION: each redraft optimizing against the newest objection with
 no reference signal, swinging flowery to mechanical and back, never re-reading the
 founding request.
+
+**Calibrate the metric on accepted work before you trust it.** Run
+`prose-lint.py` on one of the accepted artifacts first. If accepted work scores
+badly, the linter is disqualified for this class of document, and its score
+guides nothing. In the same incident a rejected draft reached 0.20 while the
+repository's own merged PR scored 6.05. The nearest runnable instrument is not
+the oracle. The corpus is.
+
+**Each redraft starts from the founding request.** Before every new draft,
+re-read the original ask and the accepted examples. Do not start from the last
+objection. A draft written only against the latest objection swings to the
+opposite fault.
+
+**Name what the diff cannot show.** For a PR description, the inventory must
+carry four things a reader cannot see in the diff: data-dependent effects on
+deploy, the design tradeoff and the alternative not taken, where verification
+stopped, and which findings matter most. The bot that writes the unattended
+part of a PR body already covers the rest. `skills/pr-description/SKILL.md`
+owns the full procedure.
+
+**The ask-after-two rule covers prose, not only screens.** A repository that
+says "looks bad twice means stop and ask" for visual feedback applies the same
+rule when the reader says a paragraph is still wrong.
 
 Two traps that showed up in the same incident:
 
