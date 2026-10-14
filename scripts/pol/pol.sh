@@ -321,8 +321,8 @@ cmd_inject() {
   local changed codex
   changed=$(jq -r '[.policies[] | select(.value != .default) | "\(.key)=\(.value)\(if .source == "project" then " (this project)" else "" end)"] | join(", ")' <<<"$j")
   codex=$(jq -r '.policies[] | select(.key == "model.codex") | .value' <<<"$j")
-  local msg="[policy] The owner sets agent permissions in the menu bar policy panel; hooks enforce them live. An action the policy allows needs no approval request: do it (asking out of real caution is still fine). A blocked action is switched off by the owner: say so, never ask them to approve it. Read a value: bash ~/.claude/scripts/pol/pol.sh get <key> --cwd <dir>."
-  [ -n "$changed" ] && msg="$msg Set away from defaults: $changed."
+  local msg="[policy] Hooks enforce the owner's menu-bar policy. Allowed: just do it, no approval request. Blocked: say it is off, never ask to approve. Read: bash ~/.claude/scripts/pol/pol.sh get <key> --cwd <dir>."
+  [ -n "$changed" ] && msg="$msg Non-default: $changed."
   [ "$codex" = "encourage" ] && msg="$msg Codex is encouraged: prefer a Codex seat for implementation and review work it fits."
   jq -cn --arg c "$msg" '{additionalContext: $c}'
 }

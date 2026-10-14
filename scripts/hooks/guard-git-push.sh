@@ -219,8 +219,17 @@ fi
 # notify-only dialog that grants nothing — but it must never gate the exit.)
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block --heeded unknown >/dev/null 2>&1 || true
+# A refused call runs nothing, so a commit chained before the push never landed
+# either; agents kept assuming it had (prop-20260821-120243-1a).
+chained=""
+case "$cmd" in
+  *"&&"*|*";"*|*"||"*)
+    chained="
+This refused the WHOLE Bash call, not just the push: nothing in it ran. If it chained a commit or other work before the push, that did not happen either; run it on its own first, then ask for the push.
+" ;;
+esac
 blockjson "⛔ PUSH GATE: this push needs fresh user approval ($why).
-
+$chained
 Pushing to a shared branch is a per-push approval — one approval is never blanket,
 and a context compaction may have wiped an earlier one. Do NOT work around this
 (no --no-verify, no editing the protection config, no creating the sentinel yourself).

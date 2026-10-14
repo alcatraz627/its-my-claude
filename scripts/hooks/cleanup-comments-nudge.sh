@@ -7,8 +7,8 @@
 # detector over exactly the files touched this session; a large but clean
 # refactor produces zero findings and stays silent. This is deliberate: the
 # old volume-based Stop nudge nagged on big clean batches and was removed
-# (see review-gate-stop.sh). One nudge per fresh batch of findings, deduped by
-# count so it never re-nags every turn.
+# (see review-gate-stop.sh). One nudge when findings first cross the
+# floor, then again only if they double.
 #
 # Non-blocking: emits a systemMessage, never blocks the turn.
 # Mute: touch ~/.claude/.no-cleanup-comments-nudge
@@ -56,11 +56,12 @@ print(int(t.get("tier1_strip", 0)) + int(t.get("tier2_voice", 0)))
 case "$total" in '' | *[!0-9]*) exit 0 ;; esac
 [ "$total" -ge "$MIN" ] || exit 0
 
-# Dedup: nudge on the first crossing, then only on a fresh batch (growth >= MIN).
+# Dedup: nudge on the first crossing, then only when the count has doubled. A
+# fixed step re-nagged a long session every few edits (68, then 106: 220 fires).
 last=0
 [ -f "$MARK" ] && last=$(cat "$MARK" 2>/dev/null || echo 0)
 case "$last" in '' | *[!0-9]*) last=0 ;; esac
-if [ "$last" -ne 0 ] && [ "$((total - last))" -lt "$MIN" ]; then
+if [ "$last" -ne 0 ] && [ "$total" -lt "$((last * 2))" ]; then
   exit 0
 fi
 printf '%s' "$total" >"$MARK" 2>/dev/null || true
