@@ -784,7 +784,8 @@ _ESC=$'\033'
 rst="${_ESC}[0m"; dim="${_ESC}[2m"; bld="${_ESC}[1m"
 C_OK="${_ESC}[38;2;158;206;106m";   C_WARN="${_ESC}[38;2;224;175;104m"; C_BAD="${_ESC}[38;2;247;118;142m"
 C_INFO="${_ESC}[38;2;125;207;255m"; C_LBL="${_ESC}[38;2;86;95;137m";    C_FAINT="${_ESC}[38;2;59;66;97m"
-C_FG="${_ESC}[38;2;192;202;245m";   C_WHITE="${_ESC}[38;2;255;255;255m"
+# Values sit in a muted foreground; only a value that earns it (the sid) uses the bright one.
+C_FG="${_ESC}[38;2;154;165;206m";   C_STRONG="${_ESC}[38;2;192;202;245m"; C_WHITE="${_ESC}[38;2;255;255;255m"
 C_WHO="${_ESC}[38;2;122;162;247m";  C_SPEND="${_ESC}[38;2;224;175;104m"; C_CODE="${_ESC}[38;2;187;154;247m"
 C_WORK="${_ESC}[38;2;125;207;255m"; C_SYS="${_ESC}[38;2;115;122;162m"
 BG_CHIP="${_ESC}[48;2;36;40;59m"
@@ -929,7 +930,7 @@ if seg_on ipc 1 && [[ -n "${session_id:-}" ]]; then
   fi
 fi
 
-if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then _add "${C_LBL}sid ${C_FG}${sid_short}"; fi
+if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then _add "${C_LBL}sid ${C_STRONG}${sid_short}"; fi
 
 # Session age: white under 2 min, green under 1 h, yellow under 4 h, red after; a WTF chip past 2 days
 if (( show_up )) && seg_on uptime "$has_uptime" && (( has_uptime )); then
@@ -1091,7 +1092,7 @@ if seg_on cost "$has_cost" && (( has_cost )); then
   else _cc_col="$C_LBL"; fi
   _money "$_cc_total"
   _cstr="${C_LBL}${ic_cost}${_cc_col}${_M#\$}"
-  (( has_200k )) && _cstr+="${bld} ▲"
+  (( has_200k )) && _cstr+="${bld} ▲${_ESC}[22m"
   if (( turn_count > 0 )); then
     _pt=$(( _cc_total / turn_count ))
     if (( _pt >= 100 )); then _money "$_pt"; _pts="${_M}/turn"; else _pts="${_pt}¢/turn"; fi
