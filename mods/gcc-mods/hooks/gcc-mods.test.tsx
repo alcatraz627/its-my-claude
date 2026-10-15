@@ -58,6 +58,9 @@ type World = {
   mcp: string
   ledger: string
   plugins: Record<string, boolean>
+  hooks: Record<string, unknown>
+  usage: unknown
+  focuses: string[]
 }
 
 function world(on: On) {
@@ -68,7 +71,7 @@ function world(on: On) {
     resolve: () => miss,
     inbox: () => '{"messages":[]}',
     store: {}, storeSets: [], storeDeletes: [], dirs: {}, opens: [], listed: [], closes: [],
-    taskStore: null, mcp: '', ledger: '', plugins: {},
+    taskStore: null, mcp: '', ledger: '', plugins: {}, hooks: {}, usage: undefined, focuses: [],
   }
   const clock = mock.clock(on, { now: NOW })
   on('session.start', ($, e) => ({ cwd: e.cwd }))
@@ -132,7 +135,15 @@ function world(on: On) {
     w.closes.push(e.id)
     return { value: undefined }
   })
-  on('settings.read', () => ({ value: { enabledPlugins: w.plugins } }))
+  on('settings.read', () => ({ value: { enabledPlugins: w.plugins, hooks: w.hooks } }))
+  on('session.usage', () => {
+    if (w.usage === undefined) throw new Error('no usage')
+    return { value: w.usage as any }
+  })
+  on('ui.focus', ($, e) => {
+    w.focuses.push(String((e as { key?: string }).key ?? ''))
+    return {}
+  })
   on('fs.read', ($, e) => ({ value: w.files[String((e as { path?: string }).path ?? '')] ?? '' }))
   on('process.run', ($, e) => {
     w.runs.push([...e.argv])
@@ -321,19 +332,20 @@ describe('paths', () => {
     const w = world(on)
     await $.classic.SessionStart({ source: 'startup' })
     await $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'AssistantMessage', props: { text: 'Wrote ~/.claude/notes/x.md.' } as any })
-    expect(w.rendered.at(-1)).toBe('Wrote [~/.claude/notes/x.md](http://localhost:5106/doc?path=%2FUsers%2Falcatraz627%2F.claude%2Fnotes%2Fx.md).')
+    expect(w.rendered.at(-1)).toBe('Wrote [~/.claude/notes/x.md](file:///Users/alcatraz627/.claude/notes/x.md).')
   })
 
-  test('a markdown or text path opens in the doc viewer, any other file stays a file link', ON, async ($, on) => {
+  test('a markdown or text path opens natively as a file, like any other file', ON, async ($, on) => {
     const w = world(on)
     await $.classic.SessionStart({ source: 'startup' })
     const mount = (text: string) => $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'AssistantMessage', props: { text } as any })
     await mount('See `~/.claude/notes/plan.txt` and ~/.claude/out/data.json.')
     const out = w.rendered.at(-1)!
-    expect(out).toContain('(http://localhost:5106/doc?path=%2FUsers%2Falcatraz627%2F.claude%2Fnotes%2Fplan.txt)')
+    expect(out).toContain('(file:///Users/alcatraz627/.claude/notes/plan.txt)')
     expect(out).toContain('(file:///Users/alcatraz627/.claude/out/data.json)')
+    expect(out).not.toContain('localhost:5106/doc')
     await mount('Open ~/.claude/docs/GUIDE.markdown.')
-    expect(w.rendered.at(-1)).toContain('(http://localhost:5106/doc?path=%2FUsers%2Falcatraz627%2F.claude%2Fdocs%2FGUIDE.markdown).')
+    expect(w.rendered.at(-1)).toContain('(file:///Users/alcatraz627/.claude/docs/GUIDE.markdown).')
   })
 })
 
@@ -462,13 +474,13 @@ describe('the band rows', () => {
     expect(await band.find({ text: 'hide band' })).toBeUndefined()
   })
 
-  test('a link is a Link element that underlines on hover, and a markdown checkpoint opens in the doc viewer', ON, async ($, on) => {
+  test('a link is a Link element that underlines on hover, and a markdown checkpoint links natively as a file', ON, async ($, on) => {
     const w = world(on)
     withCheckpoint(w)
     await $.classic.SessionStart({ source: 'clear' })
     const band = await mountBand($)
     const link = await band.find({ type: 'Link' })
-    expect(link?.props.href).toBe('http://localhost:5106/doc?path=' + encodeURIComponent(CKPT))
+    expect(link?.props.href).toBe('file://' + CKPT)
     const label = link?.children[0] as { children: string[]; hover?: { underline?: boolean } }
     expect(label.children).toEqual(['view'])
     expect(label.hover?.underline).toBe(true)
@@ -548,7 +560,18 @@ describe('status line', () => {
 describe('the side pane', () => {
   const STORE = CWD + '/tasks/session-test'
   const task = (id: number, status: string, blockedBy: string[] = []) => JSON.stringify({ id: String(id), subject: 'task ' + id, status, blocks: [], blockedBy })
-  const mountSide = ($: any) => $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc-side', props: { title: 'gcc', isFocused: false, bodyColumns: 60, placement: 'dock', scroll: { offset: 0, bodyRows: 40 }, view: {} } as any })
+  let lastSide: any = null
+  const mountSide = async ($: any, cols = 60) => {
+    // One instance of a pane at a time: the earlier mount of this test goes first.
+    try {
+      await lastSide?.unmount()
+    } catch {
+      // Already gone, e.g. from an earlier test.
+    }
+    lastSide = await mountSideOnce($, cols)
+    return lastSide
+  }
+  const mountSideOnce = ($: any, cols: number) => $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc-side', props: { title: 'gcc', isFocused: false, bodyColumns: cols, placement: 'dock', scroll: { offset: 0, bodyRows: 40 }, view: {} } as any })
   const seed = (w: World) => {
     w.taskStore = STORE
     w.dirs[STORE] = [{ name: '1.json', kind: 'file' }, { name: '2.json', kind: 'file' }, { name: '3.json', kind: 'file' }, { name: '4.json', kind: 'file' }, { name: '.lock', kind: 'file' }]
@@ -556,12 +579,49 @@ describe('the side pane', () => {
     w.files[STORE + '/2.json'] = task(2, 'in_progress')
     w.files[STORE + '/3.json'] = task(3, 'pending', ['2'])
     w.files[STORE + '/4.json'] = task(4, 'pending')
-    w.mcp = 'Checking MCP server health…\n\nrender: https://mcp.render.com/mcp (HTTP) - ✔ Connected\npostgres: npx -y server-postgres postgresql://user:secret@localhost/db - ✔ Connected\nplugin:foo:bar: npx foo - ✗ Failed to connect\nlinear: https://x (HTTP) - ! Needs authentication\n'
+    w.mcp =
+      'Checking MCP server health…\n\n' +
+      'render: https://mcp.render.com/mcp?key=abc123query (HTTP) - ✔ Connected\n' +
+      'postgres: npx -y server-postgres postgresql://user:secret@localhost/db - ✔ Connected\n' +
+      'leaky: node srv.js --token sk-live-AAAABBBBCCCCDDDD1111 API_KEY=hunter2xyz - ✔ Connected\n' +
+      'plugin:foo:bar: npx foo - ✗ Failed to connect\n' +
+      'linear: https://x (HTTP) - ! Needs authentication\n'
+    // The config files carry an env token and a header; only the server names may be read from them.
+    w.files['/Users/alcatraz627/.claude.json'] = JSON.stringify({
+      mcpServers: { leaky: { command: 'node', env: { API_TOKEN: ['ghp', 'ENVTOKEN1234567890abcd'].join('_') }, headers: { Authorization: 'Bearer hdrtoken999' } } },
+      projects: { [CWD]: { mcpServers: { postgres: { command: 'npx' } } } },
+    })
+    w.files[CWD + '/.mcp.json'] = JSON.stringify({ mcpServers: { render: { type: 'http', url: 'https://mcp.render.com/mcp', headers: { Authorization: 'Bearer renderhdr777' } } } })
     w.plugins = { 'a@mkt': true, 'b@mkt': true, 'c@mkt': false }
-    const fire = (sid: string, plug: string, chars: number) => JSON.stringify({ ts: 'x', plug, session_id: sid, chars })
-    w.ledger = [fire('test-session-0001', 'sessionstart-lane', 700), fire('test-session-0001', 'ctx-pressure', 300), fire('test-session-0001', 'ctx-pressure', 300), fire('other-session', 'noise', 99999), JSON.stringify({ plug: 'trap', session_id: 'other-session', parent: 'test-session-0001', chars: 5000 })].join('\n')
+    w.files[CWD + '/plugins/installed_plugins.json'] = JSON.stringify({ version: 2, plugins: { 'a@mkt': [{ scope: 'user', installPath: CWD + '/plugins/cache/mkt/a/1.0.0', version: '1.0.0' }] } })
+    w.usage = {
+      startedAt: NOW,
+      rateLimits: [],
+      context: {
+        window: 1_000_000,
+        breakdown: {
+          mcpTools: [
+            { name: 'mcp__render__x', serverName: 'render', tokens: 1200, isLoaded: true },
+            { name: 'mcp__render__y', serverName: 'render', tokens: 300, isLoaded: false },
+            { name: 'mcp__plugin_foo_bar__z', serverName: 'plugin:foo:bar', tokens: 500, isLoaded: true },
+          ],
+          skills: { skillFrontmatter: [{ name: 's', source: 'plugin', pluginName: 'a', tokens: 80 }] },
+        },
+      },
+    }
+    w.hooks = {
+      SessionStart: [{ hooks: [{ command: '~/.claude/scripts/session-mgmt/sessionstart-inject.sh' }] }],
+      UserPromptSubmit: [{ hooks: [{ command: '~/.claude/scripts/hooks/ctx-pressure-nudge.sh --quiet' }] }],
+    }
+    const fire = (sid: string, plug: string, chars: number, ago = 60_000) => JSON.stringify({ ts: new Date(NOW - ago).toISOString(), plug, session_id: sid, chars, lifecycle: 'turn' })
+    w.ledger = [fire('test-session-0001', 'sessionstart-lane', 700, 3_600_000), fire('test-session-0001', 'ctx-pressure', 300, 600_000), fire('test-session-0001', 'ctx-pressure', 300, 300_000), fire('other-session', 'noise', 99999), JSON.stringify({ plug: 'trap', session_id: 'other-session', parent: 'test-session-0001', chars: 5000 })].join('\n')
   }
   const texts = async (pane: any) => ((await pane.findAll({ type: 'Text' })) as { text: string }[]).map(t => t.text).join('\n')
+  const start = async ($: any, w: W, tab = '') => {
+    await $.classic.SessionStart({ source: 'startup' })
+    await $.command.run({ command: 'hub', args: 'side' + (tab ? ' ' + tab : '') } as any)
+    await w.clock.advance(100)
+  }
 
   test('/hub side opens the pane without asking for focus', ON, async ($, on) => {
     const w = world(on)
@@ -576,44 +636,102 @@ describe('the side pane', () => {
     expect(w.closes).toEqual(['gcc-side'])
   })
 
-  test('the pane is display only: no Button, Input or autofocus anywhere in it', ON, async ($, on) => {
+  test('the pane is display only in every tab: no Button, Input, Select, and no focus is ever asked for', ON, async ($, on) => {
     const w = world(on)
     seed(w)
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    const pane = await mountSide($)
-    expect(await pane.findAll({ type: 'Button' })).toEqual([])
-    expect(await pane.findAll({ type: 'Input' })).toEqual([])
-    expect(await pane.findAll({ type: 'Select' })).toEqual([])
-    expect((await texts(pane)).length).toBeGreaterThan(50)
+    await start($, w)
+    for (const tab of ['overview', 'tasks', 'mcp', 'plugins', 'injections']) {
+      await $.command.run({ command: 'hub', args: 'side ' + tab } as any)
+      const pane = await mountSide($, 200)
+      expect(await pane.findAll({ type: 'Button' })).toEqual([])
+      expect(await pane.findAll({ type: 'Input' })).toEqual([])
+      expect(await pane.findAll({ type: 'Select' })).toEqual([])
+      expect((await texts(pane)).length).toBeGreaterThan(50)
+    }
+    // The API has no call that gives the keyboard back to the prompt, so a tab is never a Button:
+    // switching tabs raised no ui.focus and opened nothing with focus.
+    expect(w.focuses).toEqual([])
+    expect(w.opens.every(o => o.focus === undefined)).toBe(true)
   })
 
-  test('tasks: running first, blocked marked, finished folded into a count', ON, async ($, on) => {
+  test('tabs switch by /hub side <tab> in place; an unknown tab says which exist and changes nothing', ON, async ($, on) => {
     const w = world(on)
     seed(w)
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    const t = await texts(await mountSide($))
-    expect(t).toContain('Tasks')
-    expect(t).toContain('task 2')
-    expect(t).toContain('task 3')
-    expect(t).not.toContain('task 1')
-    expect(t).toContain('1 done')
-    expect(t.indexOf('task 2')).toBeLessThan(t.indexOf('task 3'))
-    expect(w.runs.filter(a => a.join(' ').includes('task.sh store')).length).toBe(1)
+    await start($, w)
+    const first = await texts(await mountSide($, 200))
+    expect(first).toContain('[overview]')
+    expect(first).toContain('/hub side <overview|tasks|mcp|plugins|injections>')
+    await $.command.run({ command: 'hub', args: 'side tasks' } as any)
+    const tasks = await texts(await mountSide($, 200))
+    expect(tasks).toContain('[tasks]')
+    expect(tasks).toContain('blocked-by')
+    expect(tasks).not.toContain('MCP servers')
+    expect(w.opens.length).toBe(1)
+    const bad = await $.command.run({ command: 'hub', args: 'side nonsense' } as any)
+    expect(JSON.stringify(bad)).toContain('side tabs: overview, tasks, mcp, plugins, injections')
+    expect(await texts(await mountSide($, 200))).toContain('[tasks]')
+    await $.command.run({ command: 'hub', args: 'side overview' } as any)
+    expect(await texts(await mountSide($, 200))).toContain('MCP servers')
   })
 
-  test('tasks: at most twelve rows, the rest as a count', ON, async ($, on) => {
+  test('/hub side <tab> from closed opens straight onto that tab', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await start($, w, 'injections')
+    expect(w.opens.length).toBe(1)
+    expect(await texts(await mountSide($, 200))).toContain('[injections]')
+  })
+
+  test('overview: no section is over six lines, one item per line, each ends pointing at its tab', ON, async ($, on) => {
     const w = world(on)
     seed(w)
     w.dirs[STORE] = Array.from({ length: 30 }, (_, i) => ({ name: i + 1 + '.json', kind: 'file' as const }))
     for (let i = 1; i <= 30; i++) w.files[STORE + '/' + i + '.json'] = task(i, 'pending')
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    const t = await texts(await mountSide($))
-    expect(t).toContain('task 12')
-    expect(t).not.toContain('task 13')
-    expect(t).toContain('+18 more')
+    w.plugins = Object.fromEntries(Array.from({ length: 12 }, (_, i) => ['p' + i + '@mkt', true]))
+    const fire = (plug: string) => JSON.stringify({ ts: new Date(NOW - 1000).toISOString(), plug, session_id: 'test-session-0001', chars: 100 })
+    w.ledger = Array.from({ length: 9 }, (_, i) => fire('hook-' + i)).join('\n')
+    await start($, w)
+    const pane = await mountSide($)
+    for (const name of ['tasks', 'mcp', 'plugins', 'injections']) {
+      const sec = (await pane.find({ key: 'ov-' + name })) as { children: unknown[] } | undefined
+      expect(sec).toBeDefined()
+      const lines = (sec!.children as unknown[]).flat()
+      expect(lines.length).toBeLessThanOrEqual(6)
+      expect(lines.length).toBeGreaterThan(2)
+      expect(JSON.stringify(lines.at(-1))).toContain('/hub side ' + name)
+    }
+    const t = await texts(pane)
+    expect(t).toContain('+27 more open')
+    expect(t).toContain('+9 more enabled')
+    expect(t).toContain('+6 more hooks')
+    expect(t).toContain('✓ 2 more connected')
+    expect(t).not.toContain(',')
+  })
+
+  test('tasks tab: every task, running first, blocked marked, finished last, with blocked-by', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await start($, w, 'tasks')
+    const t = await texts(await mountSide($, 200))
+    expect(t).toContain('1 open'.replace('1', '3'))
+    expect(t).toContain('1 done')
+    expect(t.indexOf('task 2')).toBeLessThan(t.indexOf('task 3'))
+    expect(t.indexOf('task 4')).toBeLessThan(t.indexOf('task 1'))
+    const row3 = t.split('\n').find(l => l.includes('task 3'))!
+    expect(row3).toMatch(/^3\s+blocked\s+2\s+task 3/)
+    expect(w.runs.filter(a => a.join(' ').includes('task.sh store')).length).toBe(1)
+  })
+
+  test('tasks: all thirty on the tab, none truncated with an ellipsis, rows cut at the pane width', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    w.dirs[STORE] = Array.from({ length: 30 }, (_, i) => ({ name: i + 1 + '.json', kind: 'file' as const }))
+    for (let i = 1; i <= 30; i++) w.files[STORE + '/' + i + '.json'] = JSON.stringify({ id: String(i), subject: 'task ' + i + ' ' + 'long '.repeat(30), status: 'pending', blockedBy: [] })
+    await start($, w, 'tasks')
+    const rows = (await texts(await mountSide($, 60))).split('\n')
+    expect(rows.some(l => l.startsWith('30 '))).toBe(true)
+    expect(rows.filter(l => l.includes('…'))).toEqual([])
+    expect(Math.max(...rows.map(l => l.length))).toBeLessThanOrEqual(58)
   })
 
   test('a Task tool call refreshes the task rows, and the store is resolved once', ON, async ($, on) => {
@@ -640,46 +758,92 @@ describe('the side pane', () => {
     expect(w.runs.filter(a => a.join(' ').includes('task.sh store')).length).toBe(2)
   })
 
-  test('MCP servers: healthy ones folded to a count, the others named, no command text', ON, async ($, on) => {
+  test('MCP overview: the ones needing attention first, healthy folded to a count', ON, async ($, on) => {
     const w = world(on)
     seed(w)
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    await w.clock.advance(100)
+    await start($, w)
     const t = await texts(await mountSide($))
     expect(t).toContain('MCP servers')
-    expect(t).toContain('2 connected')
-    expect(t).toContain('foo:bar')
-    expect(t).toContain('linear')
-    expect(t).not.toContain('secret')
-    expect(t).not.toContain('postgresql://')
+    expect(t).toContain('3 connected')
+    expect(t).toContain('✗ foo:bar failed')
+    expect(t).toContain('! linear needs sign-in')
+    expect(t).toContain('✓ 2 more connected')
   })
 
-  test('plugins: enabled ones as a count with their names', ON, async ($, on) => {
+  test('MCP tab: name, state, token cost, transport, command or url, config file, one row each', ON, async ($, on) => {
     const w = world(on)
     seed(w)
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    const t = await texts(await mountSide($))
-    expect(t).toContain('Plugins')
-    expect(t).toContain('2 enabled')
-    expect(t).toContain('1 off')
+    await start($, w, 'mcp')
+    const t = await texts(await mountSide($, 220))
+    const rowOf = (name: string) => t.split('\n').find(l => l.startsWith(name + ' '))!
+    for (const h of ['name', 'state', 'tok in ctx/all', 'transport', 'command or url', 'config file']) expect(t).toContain(h)
+    expect(rowOf('render')).toMatch(/connected\s+1\.2K\/1\.5K\s+http\s+https:\/\/mcp\.render\.com\/mcp\?<hidden>\s+~\/\.claude\/\.mcp\.json/)
+    expect(rowOf('postgres')).toContain('stdio')
+    expect(rowOf('postgres')).toContain('postgresql://localhost/db')
+    expect(rowOf('postgres')).toContain('~/.claude.json (this folder)')
+    expect(rowOf('leaky')).toContain('~/.claude.json (user)')
+    expect(rowOf('plugin:foo:bar')).toContain('failed')
+    expect(rowOf('plugin:foo:bar')).toContain('500/500')
+    expect(rowOf('linear')).toContain('0/0')
   })
 
-  test('injections: only this session, grouped by hook, biggest first, in human numbers', ON, async ($, on) => {
+  test('MCP tab never prints an env value, a header or a key-like argument', ON, async ($, on) => {
     const w = world(on)
     seed(w)
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.command.run({ command: 'hub', args: 'side' } as any)
-    const t = await texts(await mountSide($))
-    expect(t).toContain('Injections')
-    expect(t).toContain('3 fired')
-    expect(t).toContain('1.3K chars')
-    expect(t).toContain('sessionstart-lane')
-    expect(t).toContain('ctx-pressure')
+    await start($, w, 'mcp')
+    const all = await texts(await mountSide($, 220))
+    for (const secret of ['secret', 'sk-live', 'AAAABBBB', 'hunter2', 'ENVTOKEN', 'ghp_', 'hdrtoken', 'renderhdr', 'abc123query', 'Bearer']) expect(all).not.toContain(secret)
+    expect(all).toContain('<hidden>')
+    // The command is still readable around the hidden words.
+    expect(await texts(await mountSide($, 220))).toMatch(/node srv\.js --token <hidden> API_KEY=<hidden>/)
+  })
+
+  test('MCP token cost reads n/a, and says so, when the engine gives no breakdown', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    w.usage = undefined
+    await start($, w, 'mcp')
+    const t = await texts(await mountSide($, 220))
+    expect(t.split('\n').find(l => l.startsWith('render '))).toContain('n/a')
+    expect(t).toContain('tok n/a')
+  })
+
+  test('plugins tab: name, state, version, token cost, marketplace and install path', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await start($, w, 'plugins')
+    const t = await texts(await mountSide($, 220))
+    for (const h of ['name', 'state', 'version', '~tok', 'marketplace', 'install path']) expect(t).toContain(h)
+    const a = t.split('\n').find(l => l.startsWith('a '))!
+    expect(a).toMatch(/enabled\s+1\.0\.0\s+80\s+mkt\s+~\/\.claude\/plugins\/cache\/mkt\/a\/1\.0\.0/)
+    expect(t.split('\n').find(l => l.startsWith('c '))).toMatch(/off\s+n\/a/)
+    expect(t).toContain('2 enabled · 1 off')
+  })
+
+  test('injections tab: hook, event, script path, count, chars, ~tok and last fired, only this session', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await start($, w, 'injections')
+    const t = await texts(await mountSide($, 260))
+    for (const h of ['hook', 'event', 'count', 'chars', '~tok', 'last fired', 'script']) expect(t).toContain(h)
+    const lane = t.split('\n').find(l => l.startsWith('sessionstart-lane'))!
+    expect(lane).toMatch(/SessionStart\s+1\s+700\s+175\s+1h ago\s+~\/\.claude\/scripts\/session-mgmt\/sessionstart-inject\.sh \(guess\)/)
+    const ctx = t.split('\n').find(l => l.startsWith('ctx-pressure'))!
+    expect(ctx).toMatch(/UserPromptSubmit\s+2\s+600\s+150\s+5m ago\s+~\/\.claude\/scripts\/hooks\/ctx-pressure-nudge\.sh$/)
     expect(t).not.toContain('noise')
     expect(t).not.toContain('trap')
+  })
+
+  test('injections overview: this session only, biggest first, in human numbers', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await start($, w)
+    const t = await texts(await mountSide($))
+    expect(t).toContain('3 fired')
+    expect(t).toContain('1.3K chars')
     expect(t.indexOf('sessionstart-lane')).toBeLessThan(t.indexOf('ctx-pressure'))
+    expect(t).not.toContain('noise')
+    expect(t).not.toContain('trap')
   })
 
   test('the pane is not read while it is closed', ON, async ($, on) => {
@@ -704,7 +868,7 @@ describe('the image opener', () => {
     w.exists.add(DIR + '/3.png')
     w.box = { text: 'look at [Image #1] and [Image #3] please', cursor: 4 }
   }
-  const mountView = ($: any) => $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc-image', props: { title: 'images', isFocused: false, bodyColumns: 60, placement: 'inline', scroll: { offset: 0, bodyRows: 30 }, view: {} } as any })
+  const mountView = ($: any, cols = 60) => $.ui.mount({ plugin: 'gcc-mods', surface: 'terminal', component: 'Pane', requestId: 'gcc-image', props: { title: 'images', isFocused: false, bodyColumns: cols, placement: 'inline', scroll: { offset: 0, bodyRows: 30 }, view: {} } as any })
   const withImages = async ($: any, w: W) => {
     await $.session.start({ cwd: CWD, surface: 'terminal', isInteractive: true })
     await $.classic.SessionStart({ source: 'startup' })
@@ -721,7 +885,7 @@ describe('the image opener', () => {
     expect(row?.props.flexDirection).toBe('row')
     expect(row?.text).toContain('2 images')
     const keys = ((await band.findAll({ type: 'Button' })) as { key?: string }[]).map(b => b.key)
-    expect(keys).toEqual(['img-open-1', 'img-open-3', 'img-view', 'img-hide'])
+    expect(keys).toEqual(['img-open-1', 'img-open-3', 'img-view', 'img-copy', 'img-hide'])
     const variants = ((await band.findAll({ type: 'Button' })) as { props: Record<string, unknown> }[]).filter(b => b.props.variant === 'primary')
     expect(variants.length).toBe(1)
   })
@@ -737,11 +901,43 @@ describe('the image opener', () => {
     await band.press({ key: 'img-view' })
     expect(w.opens.at(-1)).toMatchObject({ id: 'gcc-image' })
     expect(w.opens.at(-1)!.focus).toBeUndefined()
-    const pane = await mountView($)
+    const pane = await mountView($, 140)
     const images = (await pane.findAll({ type: 'Image' })) as { props: { source: unknown } }[]
     expect(images.map(i => i.props.source)).toEqual([{ file: DIR + '/1.png', format: 'png' }, { file: DIR + '/3.png', format: 'png' }])
     expect(await pane.findAll({ type: 'Button' })).toEqual([])
     expect(await pane.findAll({ type: 'Input' })).toEqual([])
+    // The pane has no copy Button (a pressed Button would keep the keyboard), so the paths are plain text.
+    const shown = ((await pane.findAll({ type: 'Text' })) as { text: string }[]).map(t => t.text).join('\n')
+    expect(shown).toContain(DIR + '/1.png')
+    expect(shown).toContain(DIR + '/3.png')
+  })
+
+  test('copy path puts the image file paths on the clipboard with a toast, and has no hotkey', ON, async ($, on) => {
+    const w = world(on)
+    w.pathPy = () => ok(JSON.stringify({ goals: [] }))
+    seedImages(w)
+    await withImages($, w)
+    const band = await mountBand($)
+    const copy = (await band.find({ key: 'img-copy' })) as { props: Record<string, unknown> } | undefined
+    expect(copy?.props.label).toBe('copy paths')
+    expect(copy?.props.hotkey).toBeUndefined()
+    await band.press({ key: 'img-copy' })
+    expect(w.copies).toEqual([DIR + '/1.png\n' + DIR + '/3.png'])
+    expect(w.toasts.at(-1)).toBe('Copied 2 image paths')
+    expect(w.fills).toEqual([])
+  })
+
+  test('with one image the button reads copy path and copies that one path', ON, async ($, on) => {
+    const w = world(on)
+    w.pathPy = () => ok(JSON.stringify({ goals: [] }))
+    seedImages(w)
+    w.box = { text: 'only [Image #3]', cursor: 0 }
+    await withImages($, w)
+    const band = await mountBand($)
+    expect(((await band.find({ key: 'img-copy' })) as any)?.props.label).toBe('copy path')
+    await band.press({ key: 'img-copy' })
+    expect(w.copies).toEqual([DIR + '/3.png'])
+    expect(w.toasts.at(-1)).toBe('Copied ' + DIR + '/3.png')
   })
 
   test('the draft is read once a second at most, and only changes redraw', ON, async ($, on) => {
@@ -776,7 +972,7 @@ describe('the image opener', () => {
     await withImages($, w)
     const band = await mountBand($)
     const buttons = (await band.findAll({ type: 'Button' })) as { props: Record<string, unknown> }[]
-    expect(buttons.length).toBe(4)
+    expect(buttons.length).toBe(5)
     expect(buttons.filter(b => b.props.hotkey !== undefined)).toEqual([])
     await band.press({ key: 'img-view' })
     await band.press({ key: 'img-open-1' })

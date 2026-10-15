@@ -9,10 +9,10 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, Msg, Preset, Seat, Side, SideTask, TaskRow } from '../types'
+import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, McpRow, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
 import {
-  CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, MAX_ROWS, PATH_RE, SIDE_ID, TRAIL_RE, VIEWS,
-  abs, ago, agoPhrase, clip, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, firstLine, goalCounts, human, imageNumsOf, initialView, isNewMail, jsonOr, linkFor, parseMcpList, plural, shortName, sid8, summarizeFires, switchesOf, taskView, tilde,
+  CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, PATH_RE, SIDE_ID, SIDE_TABS, TRAIL_RE, VIEWS,
+  abs, ago, agoPhrase, alignRows, clip, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sid8, summarizeFires, switchesOf, taskView, tilde,
 } from './lib'
 import type { El, Switches } from './lib'
 
@@ -598,7 +598,18 @@ function imageSpec($: $T, im: Images): RowSpec | null {
     primary: i === 0,
     onPress: () => openImage($, im.files[String(n)]!),
   }))
-  if (found.length) actions.push({ key: 'img-view', label: 'view', onPress: () => $.ui.open({ id: IMAGE_ID, title: 'Pasted images' }).then(() => undefined) })
+  if (found.length) {
+    actions.push({ key: 'img-view', label: 'view', onPress: () => $.ui.open({ id: IMAGE_ID, title: 'Pasted images' }).then(() => undefined) })
+    actions.push({
+      key: 'img-copy',
+      label: found.length > 1 ? 'copy paths' : 'copy path',
+      onPress: async (press: UiPressArgument) => {
+        const paths = found.map(n => im.files[String(n)]!)
+        const r = await $.ui.copy({ text: paths.join('\n'), surface: press.surface })
+        $.ui.toast(r.isCopied ? 'Copied ' + (paths.length === 1 ? paths[0] : plural(paths.length, 'image path')) : 'Could not copy: ' + r.reason)
+      },
+    })
+  }
   return {
     kind: 'images',
     title: plural(im.nums.length, 'image'),
@@ -795,15 +806,15 @@ async function refreshPluginsPane($: $T) {
   const now = await $.clock.now()
   try {
     const enabledPlugins = ((await $.settings.read()) as { enabledPlugins?: Record<string, unknown> }).enabledPlugins ?? {}
-    const names = Object.keys(enabledPlugins)
-    const enabled = names.filter(n => enabledPlugins[n] !== false).map(shortName).sort()
-    await update($, sideAtom, x => ({ ...x, plugins: { enabled, disabled: names.length - enabled.length, at: now } }))
+    const installed = await readText($, GCC + '/plugins/installed_plugins.json')
+    await update($, sideAtom, x => ({ ...x, plugins: { rows: pluginRows(enabledPlugins, installed), at: now } }))
   } catch {
     await update($, sideAtom, x => ({ ...x, plugins: { ...x.plugins, at: now } }))
   }
 }
 
-// The last stretch of the plug-events ledger, filtered to this session.
+// The last stretch of the plug-events ledger, filtered to this session, with
+// each hook matched to the script settings.json runs.
 async function refreshFiresPane($: $T) {
   const now = await $.clock.now()
   const sid = await $.session.id().catch(() => '')
@@ -812,12 +823,51 @@ async function refreshFiresPane($: $T) {
     await update($, sideAtom, x => ({ ...x, fires: { ...x.fires, at: now, error: clip(r.err || 'no ledger', 60) } }))
     return
   }
-  await update($, sideAtom, x => ({ ...x, fires: { rows: summarizeFires(r.out, sid), at: now, error: null } }))
+  let scripts: { event: string; script: string }[] = []
+  try {
+    scripts = hookScripts(((await $.settings.read()) as { hooks?: unknown }).hooks)
+  } catch {
+    // Without settings the script column reads n/a.
+  }
+  await update($, sideAtom, x => ({ ...x, fires: { rows: summarizeFires(r.out, sid, scripts), at: now, error: null } }))
+}
+
+// Token estimates for MCP schemas and plugin skill listings. `summary` counts
+// locally and sends nothing.
+async function refreshCostPane($: $T) {
+  const now = await $.clock.now()
+  try {
+    const b = (await $.session.usage({ breakdown: 'summary' })).context.breakdown
+    if (!b) throw new Error('no breakdown')
+    const { servers, skills } = costFrom(b.mcpTools, b.skills?.skillFrontmatter ?? [])
+    await update($, sideAtom, x => ({ ...x, cost: { servers, skills, at: now, ok: true } }))
+  } catch {
+    await update($, sideAtom, x => ({ ...x, cost: { ...x.cost, at: now, ok: false } }))
+  }
 }
 
 // `claude mcp list` starts a health check of every server, so it runs on open and
 // at most every ten minutes, never on the one-minute tick.
 const MCP_EVERY_MS = 10 * 60_000
+
+// The config file that declares each server. Only server names are read out of
+// the files (see mcpFileMap), never an env value or a header.
+async function mcpConfigFiles($: $T, names: string[], plugins: Side['plugins']['rows']): Promise<Record<string, string>> {
+  const cwd = await cwdOf($)
+  const map = mcpFileMap(
+    [
+      { label: '~/.claude.json', text: await readText($, HOME + '/.claude.json'), kind: 'claudejson' },
+      { label: tilde(cwd + '/.mcp.json'), text: await readText($, cwd + '/.mcp.json'), kind: 'dotmcp' },
+    ],
+    cwd,
+  )
+  const out: Record<string, string> = {}
+  for (const n of names) {
+    const plugin = n.startsWith('plugin:') ? plugins.find(p => p.name === n.split(':')[1]) : undefined
+    out[n] = map[n] ?? (plugin && plugin.path !== 'n/a' ? tilde(plugin.path) + '/.mcp.json' : /^claude\.ai /i.test(n) ? 'claude.ai connector' : 'n/a')
+  }
+  return out
+}
 
 async function refreshMcpPane($: $T, force = false) {
   const now = await $.clock.now()
@@ -825,7 +875,9 @@ async function refreshMcpPane($: $T, force = false) {
   if (!force && side.mcp.at && now - side.mcp.at < MCP_EVERY_MS) return
   await update($, sideAtom, x => ({ ...x, mcp: { ...x.mcp, at: now } }))
   const r = await run($, [CLAUDE_BIN, 'mcp', 'list'], { timeoutMs: 90_000 })
-  const rows = r.ok ? parseMcpList(r.out) : []
+  const listed = r.ok ? parseMcpList(r.out) : []
+  const files = await mcpConfigFiles($, listed.map(l => l.name), (await read($, sideAtom)).plugins.rows)
+  const rows: McpRow[] = listed.map(l => ({ ...l, file: files[l.name] ?? 'n/a' }))
   await update($, sideAtom, x => ({ ...x, mcp: { rows, at: now, error: r.ok ? null : clip(r.err || 'claude mcp list failed', 60) } }))
 }
 
@@ -836,6 +888,7 @@ async function refreshSide($: $T) {
     await refreshTaskPane($)
     await refreshPluginsPane($)
     await refreshFiresPane($)
+    await refreshCostPane($)
     await refreshMcpPane($)
   } finally {
     sideBusy = false
@@ -845,10 +898,11 @@ async function refreshSide($: $T) {
 async function openSide($: $T) {
   await update($, sideAtom, x => ({ ...x, isOpen: true }))
   // Never `focus`: a pane opened with the keyboard is how a prompt gets eaten.
-  const placed = await $.ui.open({ id: SIDE_ID, title: 'gcc' })
+  const placed = await $.ui.open({ id: SIDE_ID, title: 'gcc', columns: 100 })
   await refreshTaskPane($)
   await refreshPluginsPane($)
   await refreshFiresPane($)
+  await refreshCostPane($)
   // The health check takes seconds; the pane fills in when it lands.
   $.clock.after(50, () => refreshMcpPane($))
   return placed
@@ -859,75 +913,155 @@ const OK = '#9ece6a'
 const WARN = '#e0af68'
 const BAD = '#f7768e'
 
-// Text and Box only: no Button, no Input, so the pane is inert even if focused.
+const MCP_STATE: Record<McpRow['state'], { glyph: string; word: string; color: string | undefined }> = {
+  ok: { glyph: '✓', word: 'connected', color: undefined },
+  auth: { glyph: '!', word: 'needs sign-in', color: WARN },
+  failed: { glyph: '✗', word: 'failed', color: BAD },
+}
+
+// Text and Box only: no Button, no Input. The API has no call that hands the
+// keyboard back to the prompt, and a pressed Button would keep it, so tabs
+// switch by `/hub side <tab>` and the strip below only names them.
 function sidePane(el: El, side: Side, now: number, cols: number) {
   const { Box, Text } = el
   const width = Math.max(30, cols - 2)
+  const tab = side.tab
   const head = (label: string, detail: string) => (
     <Box flexDirection="row" columnGap={1}>
       <Text bold color={HEAD}>{label}</Text>
-      <Text dimColor wrap="truncate-end">{detail}</Text>
+      <Text dimColor>{cut(detail, width - label.length - 1)}</Text>
+    </Box>
+  )
+  // One line of text, hard-cut at the pane width.
+  const line = (key: string, text: string, color?: string, dim = false) => (
+    <Text key={key} color={color} dimColor={dim}>{cut(text, width)}</Text>
+  )
+  // Header and rows of an aligned table, the row colors in step with the rows.
+  const table = (prefix: string, headCells: string[], rows: string[][], colors: (string | undefined)[] = []) =>
+    alignRows(headCells, rows, width).map((text, i) => line(prefix + i, text, i === 0 ? undefined : colors[i - 1], i === 0))
+
+  const strip = (
+    <Box key="tabs" flexDirection="column">
+      <Box flexDirection="row" columnGap={1}>
+        {SIDE_TABS.map(t => (
+          <Text key={'tab-' + t} bold={t === tab} color={t === tab ? HEAD : undefined} dimColor={t !== tab}>
+            {t === tab ? '[' + t + ']' : t}
+          </Text>
+        ))}
+      </Box>
+      <Text dimColor>{cut('switch with /hub side <' + SIDE_TABS.join('|') + '>', width)}</Text>
     </Box>
   )
 
   const tv = taskView(side.tasks.rows)
   const glyph = (t: { status: string; blocked: boolean }) => (t.status === 'in_progress' ? '◐' : t.blocked ? '⊘' : '○')
   const glyphColor = (t: { status: string; blocked: boolean }) => (t.status === 'in_progress' ? WARN : t.blocked ? BAD : undefined)
-  const tasks = (
-    <Box flexDirection="column">
-      {head('Tasks', side.tasks.error ?? tv.open + ' open · ' + tv.done + ' done')}
-      {tv.shown.map(t => (
-        <Text key={'t' + t.id} dimColor={t.status !== 'in_progress'} color={glyphColor(t)} wrap="truncate-end">
-          {glyph(t) + ' ' + clip(t.subject, width - 3)}
-        </Text>
-      ))}
-      {tv.more ? <Text dimColor>{'+' + tv.more + ' more'}</Text> : null}
-    </Box>
-  )
+  const tasksDetail = side.tasks.error ?? tv.open + ' open · ' + tv.done + ' done'
 
-  const ok = side.mcp.rows.filter(r => r.state === 'ok')
-  const bad = side.mcp.rows.filter(r => r.state !== 'ok')
-  const mcp = (
-    <Box flexDirection="column">
-      {head('MCP servers', side.mcp.error ?? (side.mcp.rows.length ? ok.length + ' connected' + (bad.length ? ' · ' + bad.length + ' need attention' : '') : 'checking…'))}
-      {bad.map(r => (
-        <Text key={'m' + r.name} color={r.state === 'auth' ? WARN : BAD} wrap="truncate-end">
-          {(r.state === 'auth' ? '! ' : '✗ ') + r.name.replace(/^plugin:/, '') + (r.state === 'auth' ? ' needs sign-in' : ' failed')}
-        </Text>
-      ))}
-      {ok.length ? <Text dimColor wrap="truncate-end">{ok.map(r => shortName(r.name)).join(' · ')}</Text> : null}
-      {side.mcp.rows.length ? <Text dimColor>{'checked ' + agoPhrase(now, side.mcp.at) + ' by claude mcp list'}</Text> : null}
-    </Box>
-  )
+  const mcpRows = side.mcp.rows
+  const mcpBad = mcpRows.filter(r => r.state !== 'ok')
+  const mcpDetail = side.mcp.error ?? (mcpRows.length ? mcpRows.length - mcpBad.length + ' connected' + (mcpBad.length ? ' · ' + mcpBad.length + ' need attention' : '') : 'checking…')
 
-  const plugins = (
-    <Box flexDirection="column">
-      {head('Plugins', side.plugins.enabled.length + ' enabled' + (side.plugins.disabled ? ' · ' + side.plugins.disabled + ' off' : ''))}
-      {side.plugins.enabled.length ? <Text dimColor wrap="truncate-end">{side.plugins.enabled.join(' · ')}</Text> : null}
-    </Box>
-  )
+  const plugEnabled = side.plugins.rows.filter(p => p.enabled)
+  const plugOff = side.plugins.rows.length - plugEnabled.length
+  const plugTok = (name: string) => pluginCost(side.cost, name)
+  const plugDetail = plugEnabled.length + ' enabled' + (plugOff ? ' · ' + plugOff + ' off' : '')
 
   const fired = side.fires.rows.reduce((n, r) => n + r.fired, 0)
   const chars = side.fires.rows.reduce((n, r) => n + r.chars, 0)
-  const shown = side.fires.rows.slice(0, MAX_ROWS)
-  const injections = (
-    <Box flexDirection="column">
-      {head('Injections', side.fires.error ?? (fired ? fired + ' fired · ' + human(chars) + ' chars' : 'nothing yet'))}
-      {shown.map(r => (
-        <Text key={'f' + r.plug} dimColor wrap="truncate-end">
-          {r.plug + '  ' + r.fired + '× · ' + human(r.chars)}
-        </Text>
-      ))}
-      {side.fires.rows.length > shown.length ? <Text dimColor>{'+' + (side.fires.rows.length - shown.length) + ' more'}</Text> : null}
+  const fireDetail = side.fires.error ?? (fired ? fired + ' fired · ' + human(chars) + ' chars' : 'nothing yet')
+
+  const pointer = (name: string) => <Text key={'to-' + name} dimColor>{'→ /hub side ' + name}</Text>
+  const section = (name: string, label: string, detail: string, lines: unknown[]) => (
+    <Box key={'ov-' + name} flexDirection="column">
+      {head(label, detail)}
+      {lines}
+      {pointer(name)}
     </Box>
   )
 
+  const overview = () => {
+    const t = overviewItems(tv.ordered, rest => '+' + rest.length + ' more open · ' + tv.done + ' done')
+    const taskLines = [
+      ...t.shown.map(x => line('t' + x.id, glyph(x) + ' ' + x.subject, glyphColor(x), x.status !== 'in_progress')),
+      ...(t.fold ? [line('t-fold', t.fold, undefined, true)] : []),
+    ]
+    const m = overviewItems([...mcpBad, ...mcpRows.filter(r => r.state === 'ok')], rest => {
+      const good = rest.filter(r => r.state === 'ok').length
+      const bad = rest.length - good
+      return '✓ ' + good + ' more connected' + (bad ? ' · ✗ ' + bad + ' more need attention' : '')
+    })
+    const mcpLines = [
+      ...m.shown.map(r => line('m' + r.name, MCP_STATE[r.state].glyph + ' ' + r.name.replace(/^plugin:/, '') + (r.state === 'ok' ? '' : ' ' + MCP_STATE[r.state].word), MCP_STATE[r.state].color, r.state === 'ok')),
+      ...(m.fold ? [line('m-fold', m.fold, undefined, true)] : []),
+    ]
+    const ranked = [...plugEnabled].sort((a, b) => (plugTok(b.name) ?? 0) - (plugTok(a.name) ?? 0) || a.name.localeCompare(b.name))
+    const p = overviewItems(ranked, rest => '+' + rest.length + ' more enabled')
+    const plugLines = [
+      ...p.shown.map(x => line('p' + x.id, x.name + (plugTok(x.name) !== null ? '  ~' + human(plugTok(x.name)!) + ' tok' : ''), undefined, true)),
+      ...(p.fold ? [line('p-fold', p.fold, undefined, true)] : []),
+    ]
+    const f = overviewItems(side.fires.rows, rest => '+' + rest.length + ' more hooks')
+    const fireLines = [
+      ...f.shown.map(r => line('f' + r.plug, r.plug + '  ' + r.fired + '× · ' + human(r.chars) + ' chars', undefined, true)),
+      ...(f.fold ? [line('f-fold', f.fold, undefined, true)] : []),
+    ]
+    return [section('tasks', 'Tasks', tasksDetail, taskLines), section('mcp', 'MCP servers', mcpDetail, mcpLines), section('plugins', 'Plugins', plugDetail, plugLines), section('injections', 'Injections', fireDetail, fireLines)]
+  }
+
+  const back = <Text key="back" dimColor>→ /hub side overview</Text>
+
+  const tabBody = () => {
+    if (tab === 'tasks') {
+      const all = [...tv.ordered, ...tv.finished]
+      return [
+        head('Tasks', tasksDetail),
+        all.length
+          ? table('tk', ['id', 'status', 'blocked-by', 'subject'], all.map(t => [t.id, t.blocked ? 'blocked' : t.status, t.blockedBy.length ? t.blockedBy.join(',') : '-', t.subject]), all.map(t => (t.status === 'completed' ? undefined : glyphColor(t))))
+          : line('tk-none', side.tasks.error ?? 'no tasks', undefined, true),
+      ]
+    }
+    if (tab === 'mcp') {
+      const cost = (name: string) => {
+        const c = serverCost(side.cost, name)
+        return c ? human(c.loaded) + '/' + human(c.total) : 'n/a'
+      }
+      return [
+        head('MCP servers', mcpDetail),
+        mcpRows.length
+          ? table('mc', ['name', 'state', 'tok in ctx/all', 'transport', 'command or url', 'config file'], mcpRows.map(r => [r.name, MCP_STATE[r.state].word, cost(r.name), r.transport, r.target, r.file]), mcpRows.map(r => MCP_STATE[r.state].color))
+          : line('mc-none', 'waiting for claude mcp list', undefined, true),
+        line('mc-note', mcpRows.length ? 'checked ' + agoPhrase(now, side.mcp.at) + ' by claude mcp list; env values, headers and key-like arguments are never shown' : '', undefined, true),
+        line('mc-tok', side.cost.ok ? 'tok = tool-schema tokens: in the window now / all schemas' : 'tok n/a: the engine gave no context breakdown', undefined, true),
+      ]
+    }
+    if (tab === 'plugins') {
+      const rows = side.plugins.rows
+      return [
+        head('Plugins', plugDetail),
+        rows.length
+          ? table('pl', ['name', 'state', 'version', '~tok', 'marketplace', 'install path'], rows.map(p => [p.name, p.enabled ? 'enabled' : 'off', p.version, plugTok(p.name) === null ? 'n/a' : human(plugTok(p.name)!), p.marketplace, tilde(p.path)]))
+          : line('pl-none', 'no plugins found', undefined, true),
+        line('pl-note', side.cost.ok ? '~tok = skill listings plus MCP tool schemas the plugin ships; its agents, commands and hooks are not itemized' : '~tok n/a: the engine gave no context breakdown', undefined, true),
+      ]
+    }
+    if (tab === 'injections') {
+      const rows = side.fires.rows
+      return [
+        head('Injections', fireDetail),
+        rows.length
+          ? table('in', ['hook', 'event', 'count', 'chars', '~tok', 'last fired', 'script'], rows.map(r => [r.plug, r.event, String(r.fired), human(r.chars), human(estTokens(r.chars)), r.last ? agoPhrase(now, r.last) : 'n/a', r.script]))
+          : line('in-none', side.fires.error ?? 'nothing yet', undefined, true),
+        line('in-note', '~tok = chars / 4; a script marked (guess) is matched from the hook name only', undefined, true),
+      ]
+    }
+    return []
+  }
+
   return (
     <Box flexDirection="column" rowGap={1}>
-      {tasks}
-      {mcp}
-      {plugins}
-      {injections}
+      {strip}
+      {tab === 'overview' ? overview() : <Box key="body" flexDirection="column">{tabBody()}{back}</Box>}
     </Box>
   )
 }
@@ -943,7 +1077,7 @@ function imagePane(el: El, im: Images, cols: number) {
     <Box flexDirection="column">
       {found.slice(0, 3).map(n => (
         <Box key={'view-' + n} flexDirection="column">
-          <Text dimColor>{'#' + n}</Text>
+          <Text dimColor>{cut('#' + n + '  ' + im.files[String(n)], Math.max(20, cols - 2))}</Text>
           <Image key={'img-' + n} source={{ file: im.files[String(n)]!, format: 'png' }} columns={width} rows={rows} alt={'pasted image ' + n} />
         </Box>
       ))}
@@ -972,8 +1106,8 @@ export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'hub',
-      description: 'gcc-mods switch for this session: on, off, band (show or hide the row above the prompt), side (open or close the display-only side pane), preset (band look S1, S2 or S3).',
-      argumentHint: '[on|off|band|side|side off|preset S1|S2|S3]',
+      description: 'gcc-mods switch for this session: on, off, band (show or hide the row above the prompt), side (open the display-only side pane, or switch its tab: overview, tasks, mcp, plugins, injections; side off closes it), preset (band look S1, S2 or S3).',
+      argumentHint: '[on|off|band|side [overview|tasks|mcp|plugins|injections|off]|preset S1|S2|S3]',
       immediate: true,
     })
     if (await isOn($)) await startUp($, sw)
@@ -1044,10 +1178,15 @@ export const register: Register = (on, options) => {
         await $.ui.close({ id: SIDE_ID })
         return { text: 'side pane closed.' }
       }
+      const want = arg.toLowerCase()
+      if (want && !isSideTab(want)) return { text: 'side tabs: ' + SIDE_TABS.join(', ') + '. /hub side <tab> switches, /hub side off closes.' }
+      const open = (await read($, sideAtom)).isOpen
+      if (want) await update($, sideAtom, x => ({ ...x, tab: want as SideTab }))
+      if (open && want) return { text: 'side pane tab: ' + want + '.' }
       const placed = await openSide($)
-      return { text: placed.isPlaced ? 'side pane open (display only, it never takes the keyboard). /hub side off closes it.' : 'side pane waits: ' + placed.reason }
+      return { text: placed.isPlaced ? 'side pane open on ' + (want || (await read($, sideAtom)).tab) + ' (display only, it never takes the keyboard). /hub side <tab> switches, /hub side off closes it.' : 'side pane waits: ' + placed.reason }
     }
-    return { text: 'gcc-mods is on for this session: paths, one band row for what waits, the gauge and the wakes. Side pane: /hub side. What waits on you: /tasks now.' }
+    return { text: 'gcc-mods is on for this session: paths, one band row for what waits, the gauge and the wakes. Side pane: /hub side [tab]. What waits on you: /tasks now.' }
   })
 
   // ── hygiene ──
