@@ -32,9 +32,13 @@ export type Seat = {
 }
 
 // One ipc message this session received or sent. A sent one is stored as read,
-// so it never counts as new.
-export type Msg = { id: string; from: string; kind: string; at: number; isRead: boolean }
-export type Mail = { messages: Msg[]; at: number; lastWakeAt: number; error: string | null }
+// so it never counts as new. `deliveryState` is the broker's own word for how far
+// the message got; null when an older broker does not say.
+export type DeliveryState = 'queued' | 'delivered' | 'surfaced'
+export type Msg = { id: string; from: string; kind: string; at: number; isRead: boolean; deliveryState: DeliveryState | null }
+// `enabledAt` is when the mod switched on in this session: without a delivery
+// state, a message older than that is never news.
+export type Mail = { messages: Msg[]; at: number; lastWakeAt: number; enabledAt: number; error: string | null }
 
 export type Idle = { since: number | null; openRows: number; continueOfferedAt: number | null }
 
@@ -43,7 +47,32 @@ export type Idle = { since: number | null; openRows: number; continueOfferedAt: 
 export type DecideSet = { slug: string; title: string; project: string; session: string; calls: number }
 export type Decide = { pending: DecideSet[]; answered: string[]; at: number }
 
-export type View = { isBandHidden: boolean }
+// The band's look: S1 one line (default), S2 accent bar, S3 rounded box.
+export type Preset = 'S1' | 'S2' | 'S3'
+export type View = { isBandHidden: boolean; preset: Preset }
+
+// What the display-only side pane shows. Each block keeps its own refresh time
+// so a slow source (the MCP health check) is not re-run on every tick.
+export type SideTask = { id: string; subject: string; status: string; blockedBy: string[] }
+export type McpRow = { name: string; state: 'ok' | 'auth' | 'failed' }
+export type PlugFire = { plug: string; fired: number; chars: number }
+export type Side = {
+  isOpen: boolean
+  tasks: { store: string | null; rows: SideTask[]; at: number; triedAt: number; error: string | null }
+  mcp: { rows: McpRow[]; at: number; error: string | null }
+  plugins: { enabled: string[]; disabled: number; at: number }
+  fires: { rows: PlugFire[]; at: number; error: string | null }
+}
+
+// Images named in the prompt draft ([Image #n]) and where their files live.
+export type Images = {
+  nums: number[]
+  sid: string
+  dir: string | null
+  files: Record<string, string>
+  // The draft's image set the owner dismissed the row for.
+  dismissed: string
+}
 
 declare module 'claude-code' {
   interface PluginState {
@@ -56,6 +85,8 @@ declare module 'claude-code' {
       mail: Mail
       idle: Idle
       decide: Decide
+      side: Side
+      images: Images
       // null until /hub on or /hub off decides it this session; the startOn switch fills in.
       enabled: boolean | null
     }

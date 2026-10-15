@@ -1,6 +1,6 @@
 # gcc-mods guide
 
-Everything the mod draws reads files the shell tools already write. It opens no pane and needs no key.
+Everything the mod draws reads files the shell tools already write. The one pane it can open, `/hub side`, only displays. Nothing needs a key.
 
 ## Where things appear
 
@@ -11,32 +11,57 @@ Everything the mod draws reads files the shell tools already write. It opens no 
 │   seat landings and peer mail as one line                             │
 │   dim line: a Stop hook sent the reply back                           │
 ├───────────────────────────────────────────────────────────────────────┤
-│ band (above the prompt): one row, or nothing                          │
+│ band (above the prompt): images row if any, then one offer or nothing │
 ├───────────────────────────────────────────────────────────────────────┤
-│ status line   ctx 42% · wk 61% · 2 gates · 1 ready · ✉ 1 · idle 12m   │
+│ status line   ctx 42% used · wk 61% · 2 gates · 1 ready · ✉ 1 · idle  │
 └───────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Commands
 
 - The mod starts off in every session and draws nothing. `/hub on` turns it on for this session; `/hub off` silences it again. `startOn` in `/config` makes it start on everywhere.
-- `/hub band` hides or shows the band. The band's own `hide band` button does the same.
+- `/hub on` carries over a `/clear`: the session that follows starts on, once, in the same terminal. A session you turned off, or one that ended any other way, is not carried.
+- `/hub band` hides or shows the band. The `✕` at the end of every band row does the same.
+- `/hub side` opens the side pane and `/hub side off` closes it.
+- `/hub preset S1|S2|S3` changes the band look (below).
 
 ## The band
 
-One row at a time, first match wins. When nothing matches, the band is empty.
+One offer at a time, first match wins, and an empty band when nothing matches. Every offer is one line in the same shape:
 
-| Row | When | Buttons |
-|---|---|---|
-| decision page | a page filed for this folder or this session waits | none; the row carries the page's link |
-| resume from a checkpoint | after clear, resume or compaction | `load (/catchup)` · `copy path` · `skip` |
-| continue | the agent stopped with agent-ready rows open | `continue` · `not now` |
-| context past 70% | the window is filling | `insert /core-dump at the cursor` |
-| reads owed | an acceptance row or a gated row waits on you | none; `/tasks now` lists them |
+```
+[kind chip] title · detail · link        [primary] [secondary] ✕
+```
+
+The chip carries the kind (decide, resume, continue, context, owed, images) in its own color. The link is a real link that underlines when the pointer is on it, never a bare URL. One button is the main action; the others are plain. `✕` hides the band and turns red under the pointer.
+
+| Row | When | Link | Buttons |
+|---|---|---|---|
+| decide | a page filed for this folder or this session waits | the page | none |
+| resume | after clear, resume or compaction | the checkpoint, in the doc viewer | `load (/catchup)` · `copy path` · `skip` |
+| continue | the agent stopped with agent-ready rows open | none | `continue` · `not now` |
+| context | the window is past 70 percent used | none | `insert /core-dump` |
+| owed | an acceptance row or a gated row waits on you | none | none; `/tasks now` lists them |
+| images | the prompt draft holds `[Image #n]` | none | `open` per image · `view` |
+
+The images row sits above whichever offer applies. `open` runs macOS `open` on that image file. `view` opens an unfocused pane with the images larger; the pane has no buttons. If the image file cannot be found, the row says so and offers no button. The draft is read once a second.
+
+The look is preset S1 by default. S2 puts an accent bar on the left with the link and buttons on a second line, and S3 draws a rounded box. They stay selectable with `/hub preset S2` and `/hub preset S3` for offers that need more room.
+
+## The side pane
+
+`/hub side` opens a pane that only shows things. It has no button and no input, so it does nothing even if you click into it, and it never takes the keyboard when it opens. It docks beside the transcript in fullscreen at 110 columns or more, and sits above the prompt otherwise. Four short sections, each a heading plus at most twelve rows, with healthy things folded into a count:
+
+- Tasks: this session's Task tool list, running first, then blocked, then waiting; finished ones as a count. It refreshes when the agent creates or updates a task and once a minute.
+- MCP servers: how many are connected, the ones that failed or need a sign-in by name, and the connected names in one dim line. This comes from `claude mcp list`, run on open and at most every ten minutes.
+- Plugins: how many are enabled, and their names.
+- Injections: what hooks put into this session's context, grouped by hook with a count and a size, biggest first.
+
+The pane is not read while it is closed.
 
 ## Keys and the prompt box
 
-No button has a single-letter hotkey. Press one with the mouse, or focus the band with `ctrl+x tab` and use Tab and Enter. This is deliberate: a letter typed while a pane or the band held the keyboard used to fire a button, and one of those wiped a long draft.
+No button has a hotkey. Press one with the mouse, or focus the band with `ctrl+x tab` and use Tab and Enter. This is deliberate: a letter typed while a pane or the band held the keyboard used to fire a button, and one of those wiped a long draft. For the same reason no pane the mod opens takes the keyboard on its own.
 
 The only thing the mod ever puts in the prompt box is `/core-dump`, and it goes in at the cursor, never over what you typed. A slash command runs only from the start of an empty prompt, so with a draft in the box a toast reminds you of that.
 
@@ -46,7 +71,7 @@ While the session is idle, the mod checks once a minute and submits one short pr
 
 - a decision page of this session or folder gets its answer (it names the read command);
 - a background seat's report landed more than two minutes ago and nothing has run since;
-- ipc mail arrived, only with `mailWake` on, at most once per ten minutes, never quoting the body.
+- ipc mail arrived, only with `mailWake` on, at most once per ten minutes, never quoting the body. Only mail the broker still lists as queued or delivered counts; mail it already put in front of the agent (surfaced) does not wake and does not add to the `✉` count. With an older broker that does not say, only mail that arrived after the mod switched on counts.
 
 ## Switches
 
@@ -54,5 +79,5 @@ While the session is idle, the mod checks once a minute and submits one short pr
 
 ## If something looks wrong
 
-- The status line says `gcc · nothing waiting` when every count is zero. Counts come from `python3 ~/.claude/scripts/goals/views/path.py --json` in the session's folder.
+- The status line shows context as used percent, the same way the statusline does. It says `gcc · nothing waiting` when every count is zero. Counts come from `python3 ~/.claude/scripts/goals/views/path.py --json` in the session's folder.
 - After a CLI update: `claude plugin validate`, `tsc`, `claude plugin test` on `~/.claude/mods/gcc-mods` (call the binary by path).

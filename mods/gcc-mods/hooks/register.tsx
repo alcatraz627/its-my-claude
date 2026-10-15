@@ -1,16 +1,18 @@
-// gcc-mods draws the gcc surfaces that need no opening: clickable paths, a
-// resume offer after a clear, the context gauge, and wakes for an idle session.
-// No Button carries a hotkey and nothing is put over the prompt draft; GUIDE.md
-// says why. Everything that touches `$` lives here because the validator
-// follows `$` only into this file; lib.ts holds the pure helpers.
+// gcc-mods draws the gcc surfaces that need little opening: clickable paths, one
+// band row for whatever waits (a resume offer, a decision page, pasted images),
+// the context gauge, a display-only side pane, and wakes for an idle session.
+// No Button carries a hotkey, nothing opens with focus, and nothing is put over
+// the prompt draft; GUIDE.md says why. Everything that touches `$` lives here
+// because the validator follows `$` only into this file; lib.ts holds the pure
+// helpers.
 
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Catchup, DecideSet, GoalView, GoalsSnap, Msg, Seat, TaskRow } from '../types'
+import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, Msg, Preset, Seat, Side, SideTask, TaskRow } from '../types'
 import {
-  DP_REG, DP_URL, GCC, HOME, PATH_RE, TRAIL_RE, VIEWS,
-  abs, ago, agoPhrase, clip, dur, emptyDecide, emptyIdle, emptyMail, emptyMeter, firstLine, goalCounts, initialView, jsonOr, plural, sid8, switchesOf, tilde,
+  CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, MAX_ROWS, PATH_RE, SIDE_ID, TRAIL_RE, VIEWS,
+  abs, ago, agoPhrase, clip, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, firstLine, goalCounts, human, imageNumsOf, initialView, isNewMail, jsonOr, linkFor, parseMcpList, plural, shortName, sid8, summarizeFires, switchesOf, taskView, tilde,
 } from './lib'
 import type { El, Switches } from './lib'
 
@@ -26,6 +28,8 @@ const seatsAtom = atom({ plugin: 'gcc-mods', key: 'seats' } as const, [] as Seat
 const mailAtom = atom({ plugin: 'gcc-mods', key: 'mail' } as const, emptyMail)
 const idleAtom = atom({ plugin: 'gcc-mods', key: 'idle' } as const, emptyIdle)
 const decideAtom = atom({ plugin: 'gcc-mods', key: 'decide' } as const, emptyDecide)
+const sideAtom = atom({ plugin: 'gcc-mods', key: 'side' } as const, emptySide)
+const imagesAtom = atom({ plugin: 'gcc-mods', key: 'images' } as const, emptyImages)
 // The per-session master switch. Off, every hook is a pass-through and the
 // session behaves as if the mod were not loaded; /hub on turns it on.
 const enabledAtom = atom({ plugin: 'gcc-mods', key: 'enabled' } as const, null as boolean | null)
@@ -86,6 +90,9 @@ async function insertAtCursor($: $T, text: string) {
 }
 
 async function startUp($: $T, sw: Switches, force = false) {
+  const now = await $.clock.now()
+  // Mail older than this moment is never news to a message with no delivery state.
+  await update($, mailAtom, m => (m.enabledAt ? m : { ...m, enabledAt: now }))
   if (sw.continuity) await offerCheckpoint($, force)
   await refreshAll($, sw)
 }
@@ -100,6 +107,47 @@ async function switchMod($: $T, on: boolean, sw: Switches) {
   }
   $.ui.status(undefined)
   $.ui.toast('gcc-mods is off for this session. Hooks behave as before; /hub on brings it back.', { timeoutMs: 7_000 })
+}
+
+// Carrying the on-switch across /clear. The switch lives with the session, and a
+// /clear starts a new session in the same process, so the ending session leaves a
+// marker keyed by the process and the next start in that process takes it once.
+
+const CARRY_MS = 5 * 60_000
+
+async function processKey($: $T): Promise<string | null> {
+  const r = await run($, ['sh', '-c', 'echo $PPID'], { timeoutMs: 4_000 })
+  const pid = r.out.trim()
+  return r.ok && /^\d+$/.test(pid) ? pid : null
+}
+
+async function leaveCarry($: $T) {
+  const key = await processKey($)
+  if (!key) return
+  try {
+    await $.store.set('carry:' + key, { at: await $.clock.now() })
+  } catch {
+    // No marker: the next session simply starts as the switch says.
+  }
+}
+
+async function takeCarry($: $T): Promise<boolean> {
+  try {
+    // No marker anywhere: nothing to look up, and a session that is off runs nothing.
+    if (!(await $.store.keys()).some(k => k.startsWith('carry:'))) return false
+  } catch {
+    return false
+  }
+  const key = await processKey($)
+  if (!key) return false
+  try {
+    const mark = (await $.store.get('carry:' + key)) as { at?: number } | undefined
+    if (!mark) return false
+    await $.store.delete('carry:' + key)
+    return typeof mark.at === 'number' && (await $.clock.now()) - mark.at < CARRY_MS
+  } catch {
+    return false
+  }
 }
 
 // Transcript hygiene: paths drawn absolute and clickable.
@@ -133,7 +181,7 @@ async function linkify($: $T, text: string, cwd: string): Promise<string> {
     const full = await resolvePath($, token, cwd)
     if (!full) continue
     out.push(text.slice(last, start))
-    out.push('[' + tilde(full) + '](file://' + encodeURI(full) + ')' + trail)
+    out.push('[' + tilde(full) + '](' + linkFor(full) + ')' + trail)
     last = start + raw.length
   }
   if (last === 0) return text
@@ -159,7 +207,7 @@ async function rewritePaths($: $T, text: string, cwd: string): Promise<string> {
         const bare = inner.replace(TRAIL_RE, '')
         if (/^(~|\.{0,2}\/|[\w-]+\/)/.test(bare) && !/\s/.test(bare) && bare.includes('/')) {
           const full = await resolvePath($, bare, cwd)
-          built.push(full ? '[' + tilde(full) + '](file://' + encodeURI(full) + ')' + inner.slice(bare.length) : span)
+          built.push(full ? '[' + tilde(full) + '](' + linkFor(full) + ')' + inner.slice(bare.length) : span)
         } else built.push(span)
         continue
       }
@@ -229,43 +277,6 @@ async function offerCheckpoint($: $T, force = false) {
   await update($, catchupAtom, () => found)
 }
 
-function catchupRow($: $T, el: El, c: Catchup, now: number) {
-  const { Box, Text, Button } = el
-  return (
-    <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={1}>
-      <Box flexDirection="row" columnGap={2}>
-        <Text bold>↺ resume from a checkpoint?</Text>
-        <Text dimColor>
-          {c.name} · written {agoPhrase(now, c.at)} · {c.source === 'disk' ? 'found in this folder' : 'from the checkpoint index'}
-        </Text>
-      </Box>
-      <Text dimColor wrap="truncate-end">{c.summary ? clip(c.summary, 110) : 'a previous session left this; load runs /catchup, which restores its goal, pending items and caveats'}</Text>
-      <Box flexDirection="row" columnGap={2}>
-        <Button
-          key="cu-load"
-          label="load (/catchup)"
-          variant="primary"
-          onPress={async () => {
-            await update($, catchupAtom, x => (x ? { ...x, state: 'loaded' as const } : x))
-            $.ui.toast('Running /catchup on ' + c.name + '.')
-            // The host refuses a submitted text that starts with a slash, so the skill runs as a command.
-            await $.command.run({ command: 'catchup', args: c.path })
-          }}
-        />
-        <Button
-          key="cu-copy"
-          label="copy path"
-          onPress={async (press: UiPressArgument) => {
-            const r = await $.ui.copy({ text: c.path, surface: press.surface })
-            $.ui.toast(r.isCopied ? 'Copied ' + tilde(c.path) : 'Could not copy: ' + r.reason)
-          }}
-        />
-        <Button key="cu-skip" label="skip" onPress={() => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x))} />
-      </Box>
-    </Box>
-  )
-}
-
 // Tasks: counts from the goal record, and the stopped-with-open-rows offer.
 
 type RawGoal = { id: string; outcome: string; accept?: { id: string; kind: string; status: string }[]; tasks?: Record<string, any>[] }
@@ -315,27 +326,6 @@ async function noteMainStop($: $T, busy: boolean, wasBlocked: boolean) {
   }
 }
 
-function continueRow($: $T, el: El, openRows: number) {
-  const { Box, Text, Button } = el
-  return (
-    <Box flexDirection="row" columnGap={2}>
-      <Text color="yellow" wrap="truncate-end">stopped with {plural(openRows, 'agent-ready row')} open</Text>
-      <Button
-        key="idle-continue"
-        label="continue"
-        variant="primary"
-        onPress={async () => {
-          await update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))
-          await $.prompt.submit({
-            text: 'Continue with the open agent-ready rows on the linked goal. Run python3 ~/.claude/scripts/goals/views/left.py first and take the first unblocked row; stop only when none is left or a gate needs me.',
-          })
-        }}
-      />
-      <Button key="idle-dismiss" label="not now" onPress={() => update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))} />
-    </Box>
-  )
-}
-
 // Seats: tracked only so a landing can toast and an unread report can wake.
 
 const runningSeats = (seats: Seat[]) => seats.filter(s => s.endedAt === null)
@@ -370,7 +360,7 @@ async function wakeForUnreadSeats($: $T) {
 
 // Wakes: the ipc inbox and decision pages.
 
-type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; ts?: number }
+type RawMsg = { id?: string; kind?: string; fromAlias?: string; from?: string; ts?: number; deliveryState?: string }
 
 // What waits for this session in ipc: the project mailbox plus this session's
 // own inboxes, peeked and never consumed. Bodies are never read into the mod.
@@ -392,19 +382,20 @@ async function refreshMail($: $T) {
     if (!m.id || byId.has(String(m.id))) continue
     const from = String(m.fromAlias ?? m.from ?? '?')
     const at = typeof m.ts === 'number' ? (m.ts > 1e12 ? m.ts : m.ts * 1000) : now
-    byId.set(String(m.id), { id: String(m.id), from, kind: String(m.kind ?? 'inform'), at, isRead: aliases.includes(from) })
+    byId.set(String(m.id), { id: String(m.id), from, kind: String(m.kind ?? 'inform'), at, isRead: aliases.includes(from), deliveryState: deliveryStateOf(m.deliveryState) })
   }
-  await update($, mailAtom, m => ({ ...m, messages: [...byId.values()], at: now, error: null }))
+  await update($, mailAtom, m => ({ ...m, messages: [...byId.values()], at: now, enabledAt: m.enabledAt || now, error: null }))
 }
 
 // Wake the session for mail it has not seen, at most once per ten minutes
-// and only while nothing runs. The body is never submitted.
+// and only while nothing runs. Mail the ipc hook already surfaced to the agent
+// is not news. The body is never submitted.
 async function wakeForMail($: $T) {
   const now = await $.clock.now()
   const idle = await read($, idleAtom)
   if (idle.since === null) return
   const mail = await read($, mailAtom)
-  const unread = mail.messages.filter(m => !m.isRead && m.at > (mail.lastWakeAt || 0))
+  const unread = mail.messages.filter(m => isNewMail(m, mail.enabledAt) && m.at > (mail.lastWakeAt || 0))
   if (!unread.length || now - mail.lastWakeAt < WAKE_GAP_MS) return
   await update($, mailAtom, m => ({ ...m, lastWakeAt: now }))
   const asks = unread.filter(m => /query|request|ask/.test(m.kind))
@@ -489,7 +480,8 @@ async function statusText($: $T): Promise<string> {
   const c = goalCounts(await read($, goalsAtom))
   const meter = await read($, meterAtom)
   const seats = runningSeats(await read($, seatsAtom)).length
-  const mail = (await read($, mailAtom)).messages.filter(m => !m.isRead).length
+  const mailState = await read($, mailAtom)
+  const mail = mailState.messages.filter(m => isNewMail(m, mailState.enabledAt)).length
   const d = await read($, decideAtom)
   const idle = await read($, idleAtom)
   const now = await $.clock.now()
@@ -497,7 +489,7 @@ async function statusText($: $T): Promise<string> {
   const aliases = await aliasesOf($)
   const decisions = d.pending.filter(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases)).length
   const parts: string[] = []
-  if (meter.ctx !== null) parts.push('ctx ' + meter.ctx + '%')
+  if (meter.ctx !== null) parts.push('ctx ' + meter.ctx + '% used')
   if (meter.week !== null) parts.push('wk ' + Math.round(meter.week) + '%')
   if (c.gates) parts.push(plural(c.gates, 'gate'))
   if (c.ready) parts.push(c.ready + ' ready')
@@ -512,10 +504,115 @@ async function refreshStatus($: $T) {
   $.ui.status(await statusText($))
 }
 
-// One action row at a time, first match wins, and nothing at all when no row
-// applies. Counts live in the status line, not here.
+// The band: every offer is one row in the same shape. Preset S1 is the default
+// (one line); S2 and S3 stay selectable with `/hub preset`. See
+// conventions/mods-handbook.md for the look and why.
+
+type Kind = 'decide' | 'resume' | 'continue' | 'context' | 'owed' | 'images'
+
+const KINDS: Record<Kind, { glyph: string; word: string; color: string }> = {
+  decide: { glyph: '⚖', word: 'decide', color: '#7dcfff' },
+  resume: { glyph: '↺', word: 'resume', color: '#9ece6a' },
+  continue: { glyph: '▶', word: 'continue', color: '#9ece6a' },
+  context: { glyph: '◔', word: 'context', color: '#e0af68' },
+  owed: { glyph: '✎', word: 'owed', color: '#7dcfff' },
+  images: { glyph: '🖼', word: 'images', color: '#bb9af7' },
+}
+
+const CHIP_BG = '#24283b'
+
+type Act = { key: string; label: string; onPress: (press: UiPressArgument) => unknown; primary?: boolean }
+type RowSpec = {
+  kind: Kind
+  title: string
+  detail?: string
+  link?: { label: string; href: string }
+  actions?: Act[]
+  hide: { key: string; onPress: () => unknown }
+}
+
+// One band row. It never sets a hotkey on a Button: a focused band must not turn
+// typed letters into presses.
+function bandRow(el: El, spec: RowSpec, preset: Preset = 'S1') {
+  const { Box, Text, Button, Link } = el
+  const k = KINDS[spec.kind]
+  const chip = (
+    <Text backgroundColor={CHIP_BG} color={k.color} bold>
+      {' ' + k.glyph + ' ' + k.word + ' '}
+    </Text>
+  )
+  const title = <Text wrap="truncate-end">{spec.title}</Text>
+  const detail = spec.detail ? <Text dimColor wrap="truncate-end">{'· ' + spec.detail}</Text> : null
+  const link = spec.link ? (
+    <Link href={spec.link.href}>
+      <Text color={k.color} hover={{ scope: 'link-' + spec.kind, underline: true }}>
+        {spec.link.label}
+      </Text>
+    </Link>
+  ) : null
+  const buttons = (spec.actions ?? []).map(a => (
+    <Button key={a.key} label={a.label} variant={a.primary ? 'primary' : 'secondary'} hover={{ scope: 'act-' + a.key, bold: true }} onPress={a.onPress} />
+  ))
+  const hide = <Button key={spec.hide.key} label="✕" plain dimColor hover={{ scope: 'act-' + spec.hide.key, color: '#f7768e' }} onPress={spec.hide.onPress} />
+  const key = 'row-' + spec.kind
+
+  if (preset === 'S3') {
+    return (
+      <Box key={key} flexDirection="column" borderStyle="round" borderColor={k.color} paddingX={1}>
+        <Box flexDirection="row" columnGap={1}>{chip}{title}{detail}</Box>
+        <Box flexDirection="row" columnGap={1}>{link}{buttons}{hide}</Box>
+      </Box>
+    )
+  }
+  if (preset === 'S2') {
+    return (
+      <Box key={key} flexDirection="row" columnGap={1}>
+        <Box flexDirection="column">
+          <Text color={k.color}>▎</Text>
+          <Text color={k.color}>▎</Text>
+        </Box>
+        <Box flexDirection="column" flexGrow={1}>
+          <Box flexDirection="row" columnGap={1}>{chip}{title}{detail}</Box>
+          <Box flexDirection="row" columnGap={1}>{link}{buttons}{hide}</Box>
+        </Box>
+      </Box>
+    )
+  }
+  return (
+    <Box key={key} flexDirection="row" columnGap={1}>
+      <Box flexDirection="row" columnGap={1} flexGrow={1} flexShrink={1}>{chip}{title}{detail}{link}</Box>
+      <Box flexDirection="row" columnGap={1} flexShrink={0}>{buttons}{hide}</Box>
+    </Box>
+  )
+}
+
+// The row for the images in the prompt draft; null when there are none or the
+// owner dismissed it for this set.
+function imageSpec($: $T, im: Images): RowSpec | null {
+  const setKey = im.nums.join(',')
+  if (!im.nums.length || im.dismissed === setKey) return null
+  const found = im.nums.filter(n => im.files[String(n)])
+  const actions: Act[] = found.slice(0, 4).map((n, i) => ({
+    key: 'img-open-' + n,
+    label: found.length === 1 ? 'open' : 'open #' + n,
+    primary: i === 0,
+    onPress: () => openImage($, im.files[String(n)]!),
+  }))
+  if (found.length) actions.push({ key: 'img-view', label: 'view', onPress: () => $.ui.open({ id: IMAGE_ID, title: 'Pasted images' }).then(() => undefined) })
+  return {
+    kind: 'images',
+    title: plural(im.nums.length, 'image'),
+    detail: found.length ? 'in your draft' : 'file not found yet',
+    actions,
+    hide: { key: 'img-hide', onPress: () => update($, imagesAtom, x => ({ ...x, dismissed: setKey })) },
+  }
+}
+
+// One offer at a time, first match wins, and nothing at all when none applies.
+// Counts live in the status line, not here. The images row sits above the offer.
 async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
-  const { Box, Text, Button } = el
+  const { Box } = el
+  const view = await read($, viewAtom)
   const catchup = await read($, catchupAtom)
   const idle = await read($, idleAtom)
   const meter = await read($, meterAtom)
@@ -523,38 +620,334 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   const c = goalCounts(await read($, goalsAtom))
   const aliases = await aliasesOf($)
   const mine = d.pending.find(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases))
+  const hide = { key: 'band-hide', onPress: () => update($, viewAtom, v => ({ ...v, isBandHidden: true })) }
 
-  let action = null
+  let offer: RowSpec | null = null
   if (sw.wake && mine) {
-    action = (
-      <Box flexDirection="row" columnGap={2}>
-        <Text color="cyan" wrap="truncate-end">
-          ⚖ {clip(mine.title, 50)} · {plural(mine.calls, 'call')} drafted for you · {DP_URL + mine.slug + '/'}
-        </Text>
-      </Box>
-    )
+    offer = {
+      kind: 'decide',
+      title: clip(mine.title, 50),
+      detail: plural(mine.calls, 'call') + ' drafted for you',
+      link: { label: 'open page', href: DP_URL + mine.slug + '/' },
+      hide,
+    }
   } else if (sw.continuity && catchup?.state === 'offered') {
-    action = catchupRow($, el, catchup, now)
+    offer = {
+      kind: 'resume',
+      title: catchup.name,
+      detail: 'written ' + agoPhrase(now, catchup.at) + (catchup.summary ? ' · ' + clip(catchup.summary, 60) : catchup.source === 'disk' ? ' · found in this folder' : ''),
+      link: { label: 'view', href: linkFor(catchup.path) },
+      actions: [
+        {
+          key: 'cu-load',
+          label: 'load (/catchup)',
+          primary: true,
+          onPress: async () => {
+            await update($, catchupAtom, x => (x ? { ...x, state: 'loaded' as const } : x))
+            $.ui.toast('Running /catchup on ' + catchup.name + '.')
+            // The host refuses a submitted text that starts with a slash, so the skill runs as a command.
+            await $.command.run({ command: 'catchup', args: catchup.path })
+          },
+        },
+        {
+          key: 'cu-copy',
+          label: 'copy path',
+          onPress: async (press: UiPressArgument) => {
+            const r = await $.ui.copy({ text: catchup.path, surface: press.surface })
+            $.ui.toast(r.isCopied ? 'Copied ' + tilde(catchup.path) : 'Could not copy: ' + r.reason)
+          },
+        },
+        { key: 'cu-skip', label: 'skip', onPress: () => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x)) },
+      ],
+      hide,
+    }
   } else if (sw.tasks && idle.continueOfferedAt !== null && idle.openRows > 0) {
-    action = continueRow($, el, idle.openRows)
+    offer = {
+      kind: 'continue',
+      title: 'stopped with ' + plural(idle.openRows, 'agent-ready row') + ' open',
+      actions: [
+        {
+          key: 'idle-continue',
+          label: 'continue',
+          primary: true,
+          onPress: async () => {
+            await update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))
+            await $.prompt.submit({
+              text: 'Continue with the open agent-ready rows on the linked goal. Run python3 ~/.claude/scripts/goals/views/left.py first and take the first unblocked row; stop only when none is left or a gate needs me.',
+            })
+          },
+        },
+        { key: 'idle-dismiss', label: 'not now', onPress: () => update($, idleAtom, i => ({ ...i, continueOfferedAt: null })) },
+      ],
+      hide,
+    }
   } else if (sw.continuity && (meter.ctx ?? 0) >= 70) {
-    action = (
-      <Box flexDirection="row" columnGap={2}>
-        <Text color="yellow">context at {meter.ctx}%</Text>
-        <Button key="dump" label="insert /core-dump at the cursor" onPress={() => insertAtCursor($, '/core-dump ')} />
-      </Box>
-    )
+    offer = {
+      kind: 'context',
+      title: 'context ' + meter.ctx + '% used',
+      detail: 'goes in at your cursor',
+      actions: [{ key: 'dump', label: 'insert /core-dump', primary: true, onPress: () => insertAtCursor($, '/core-dump ') }],
+      hide,
+    }
   } else if (sw.tasks && c.gates) {
-    action = <Text wrap="truncate-end">{plural(c.gates, 'read')} owed by you · /tasks now lists them</Text>
+    offer = { kind: 'owed', title: plural(c.gates, 'read') + ' owed by you', detail: '/tasks now lists them', hide }
   }
-  if (!action) return null
 
+  const images = sw.hygiene ? imageSpec($, await read($, imagesAtom)) : null
+  if (!offer && !images) return null
   return (
     <Box flexDirection="column">
-      {action}
-      <Box flexDirection="row">
-        <Button key="band-hide" label="hide band" plain dimColor onPress={() => update($, viewAtom, v => ({ ...v, isBandHidden: true }))} />
-      </Box>
+      {images ? bandRow(el, images, view.preset) : null}
+      {offer ? bandRow(el, offer, view.preset) : null}
+    </Box>
+  )
+}
+
+// Images pasted into the prompt draft: found by [Image #n], opened by file.
+
+let userId: string | null = null
+
+// Claude Code keeps a pasted image at <tmp>/claude-<uid>/<project>/<session>/images/<n>.png.
+// Only the PNG spelling has been seen on this machine; another one is simply not found.
+async function findImages($: $T, sid: string, nums: number[]): Promise<{ dir: string | null; files: Record<string, string> }> {
+  if (userId === null) userId = (await run($, ['id', '-u'], { timeoutMs: 4_000 })).out.trim()
+  if (!/^\d+$/.test(userId)) {
+    userId = null
+    return { dir: null, files: {} }
+  }
+  let dir: string | null = null
+  for (const root of ['/private/tmp/claude-' + userId, '/tmp/claude-' + userId]) {
+    for (const proj of await listDir($, root)) {
+      if (proj.kind !== 'dir') continue
+      const candidate = root + '/' + proj.name + '/' + sid + '/images'
+      if (await fileExists($, candidate)) {
+        dir = candidate
+        break
+      }
+    }
+    if (dir) break
+  }
+  const files: Record<string, string> = {}
+  if (dir) for (const n of nums) if (await fileExists($, dir + '/' + n + '.png')) files[String(n)] = dir + '/' + n + '.png'
+  return { dir, files }
+}
+
+// Read the draft for [Image #n]. Pasting raises no event, so this runs on a
+// one-second timer; it touches state only when the set of images changes.
+async function pollImages($: $T) {
+  const box = await $.prompt.read().catch(() => null)
+  const nums = imageNumsOf(box?.text ?? '')
+  const cur = await read($, imagesAtom)
+  const sid = await $.session.id().catch(() => '')
+  const allFound = nums.every(n => cur.files[String(n)])
+  if (cur.sid === sid && nums.join(',') === cur.nums.join(',') && (nums.length === 0 || allFound)) return
+  if (!nums.length) {
+    await update($, imagesAtom, x => ({ ...x, nums: [], sid }))
+    return
+  }
+  const { dir, files } = await findImages($, sid, nums)
+  await update($, imagesAtom, x => ({ ...x, nums, sid, dir, files }))
+}
+
+async function openImage($: $T, path: string) {
+  const r = await run($, ['open', path], { timeoutMs: 8_000 })
+  if (!r.ok) $.ui.toast('Could not open ' + tilde(path) + ': ' + clip(r.err || 'open failed', 80))
+}
+
+// The side pane: tasks, MCP servers, plugins and injections, read-only.
+
+let sideBusy = false
+
+async function refreshTaskPane($: $T) {
+  const now = await $.clock.now()
+  const side = await read($, sideAtom)
+  let store = side.tasks.store
+  if (!store) {
+    // Looked up once per session (a content match on the transcript); asked again
+    // only after a miss, at most every half minute.
+    if (side.tasks.triedAt && now - side.tasks.triedAt < 30_000) return
+    const r = await run($, ['bash', GCC + '/scripts/task-table/task.sh', 'store'], { timeoutMs: 10_000 })
+    const found = r.out.trim().split('\n').pop()?.trim() ?? ''
+    store = r.ok && found.startsWith(GCC + '/tasks/') ? found : null
+    await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, store, triedAt: now } }))
+  }
+  if (!store) {
+    await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, rows: [], at: now, error: 'no task list for this session yet' } }))
+    return
+  }
+  const rows: SideTask[] = []
+  for (const f of (await listDir($, store)).filter(f => f.kind === 'file' && /^\d+\.json$/.test(f.name)).slice(0, 200)) {
+    const j = jsonOr<Record<string, any>>(await readText($, store + '/' + f.name), {})
+    if (j.id === undefined) continue
+    rows.push({ id: String(j.id), subject: String(j.subject ?? ''), status: String(j.status ?? 'pending'), blockedBy: Array.isArray(j.blockedBy) ? j.blockedBy.map(String) : [] })
+  }
+  await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, rows, at: now, error: null } }))
+}
+
+async function followTasks($: $T, isCreate: boolean) {
+  if (!(await isOn($)) || !(await read($, sideAtom)).isOpen) return
+  // A first TaskCreate may be what makes the store findable.
+  if (isCreate) await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, triedAt: 0 } }))
+  await refreshTaskPane($)
+}
+
+async function refreshPluginsPane($: $T) {
+  const now = await $.clock.now()
+  try {
+    const enabledPlugins = ((await $.settings.read()) as { enabledPlugins?: Record<string, unknown> }).enabledPlugins ?? {}
+    const names = Object.keys(enabledPlugins)
+    const enabled = names.filter(n => enabledPlugins[n] !== false).map(shortName).sort()
+    await update($, sideAtom, x => ({ ...x, plugins: { enabled, disabled: names.length - enabled.length, at: now } }))
+  } catch {
+    await update($, sideAtom, x => ({ ...x, plugins: { ...x.plugins, at: now } }))
+  }
+}
+
+// The last stretch of the plug-events ledger, filtered to this session.
+async function refreshFiresPane($: $T) {
+  const now = await $.clock.now()
+  const sid = await $.session.id().catch(() => '')
+  const r = await run($, ['tail', '-n', '1500', GCC + '/ledger/plug-events.jsonl'], { timeoutMs: 6_000 })
+  if (!r.ok || !sid) {
+    await update($, sideAtom, x => ({ ...x, fires: { ...x.fires, at: now, error: clip(r.err || 'no ledger', 60) } }))
+    return
+  }
+  await update($, sideAtom, x => ({ ...x, fires: { rows: summarizeFires(r.out, sid), at: now, error: null } }))
+}
+
+// `claude mcp list` starts a health check of every server, so it runs on open and
+// at most every ten minutes, never on the one-minute tick.
+const MCP_EVERY_MS = 10 * 60_000
+
+async function refreshMcpPane($: $T, force = false) {
+  const now = await $.clock.now()
+  const side = await read($, sideAtom)
+  if (!force && side.mcp.at && now - side.mcp.at < MCP_EVERY_MS) return
+  await update($, sideAtom, x => ({ ...x, mcp: { ...x.mcp, at: now } }))
+  const r = await run($, [CLAUDE_BIN, 'mcp', 'list'], { timeoutMs: 90_000 })
+  const rows = r.ok ? parseMcpList(r.out) : []
+  await update($, sideAtom, x => ({ ...x, mcp: { rows, at: now, error: r.ok ? null : clip(r.err || 'claude mcp list failed', 60) } }))
+}
+
+async function refreshSide($: $T) {
+  if (sideBusy) return
+  sideBusy = true
+  try {
+    await refreshTaskPane($)
+    await refreshPluginsPane($)
+    await refreshFiresPane($)
+    await refreshMcpPane($)
+  } finally {
+    sideBusy = false
+  }
+}
+
+async function openSide($: $T) {
+  await update($, sideAtom, x => ({ ...x, isOpen: true }))
+  // Never `focus`: a pane opened with the keyboard is how a prompt gets eaten.
+  const placed = await $.ui.open({ id: SIDE_ID, title: 'gcc' })
+  await refreshTaskPane($)
+  await refreshPluginsPane($)
+  await refreshFiresPane($)
+  // The health check takes seconds; the pane fills in when it lands.
+  $.clock.after(50, () => refreshMcpPane($))
+  return placed
+}
+
+const HEAD = '#7aa2f7'
+const OK = '#9ece6a'
+const WARN = '#e0af68'
+const BAD = '#f7768e'
+
+// Text and Box only: no Button, no Input, so the pane is inert even if focused.
+function sidePane(el: El, side: Side, now: number, cols: number) {
+  const { Box, Text } = el
+  const width = Math.max(30, cols - 2)
+  const head = (label: string, detail: string) => (
+    <Box flexDirection="row" columnGap={1}>
+      <Text bold color={HEAD}>{label}</Text>
+      <Text dimColor wrap="truncate-end">{detail}</Text>
+    </Box>
+  )
+
+  const tv = taskView(side.tasks.rows)
+  const glyph = (t: { status: string; blocked: boolean }) => (t.status === 'in_progress' ? '◐' : t.blocked ? '⊘' : '○')
+  const glyphColor = (t: { status: string; blocked: boolean }) => (t.status === 'in_progress' ? WARN : t.blocked ? BAD : undefined)
+  const tasks = (
+    <Box flexDirection="column">
+      {head('Tasks', side.tasks.error ?? tv.open + ' open · ' + tv.done + ' done')}
+      {tv.shown.map(t => (
+        <Text key={'t' + t.id} dimColor={t.status !== 'in_progress'} color={glyphColor(t)} wrap="truncate-end">
+          {glyph(t) + ' ' + clip(t.subject, width - 3)}
+        </Text>
+      ))}
+      {tv.more ? <Text dimColor>{'+' + tv.more + ' more'}</Text> : null}
+    </Box>
+  )
+
+  const ok = side.mcp.rows.filter(r => r.state === 'ok')
+  const bad = side.mcp.rows.filter(r => r.state !== 'ok')
+  const mcp = (
+    <Box flexDirection="column">
+      {head('MCP servers', side.mcp.error ?? (side.mcp.rows.length ? ok.length + ' connected' + (bad.length ? ' · ' + bad.length + ' need attention' : '') : 'checking…'))}
+      {bad.map(r => (
+        <Text key={'m' + r.name} color={r.state === 'auth' ? WARN : BAD} wrap="truncate-end">
+          {(r.state === 'auth' ? '! ' : '✗ ') + r.name.replace(/^plugin:/, '') + (r.state === 'auth' ? ' needs sign-in' : ' failed')}
+        </Text>
+      ))}
+      {ok.length ? <Text dimColor wrap="truncate-end">{ok.map(r => shortName(r.name)).join(' · ')}</Text> : null}
+      {side.mcp.rows.length ? <Text dimColor>{'checked ' + agoPhrase(now, side.mcp.at) + ' by claude mcp list'}</Text> : null}
+    </Box>
+  )
+
+  const plugins = (
+    <Box flexDirection="column">
+      {head('Plugins', side.plugins.enabled.length + ' enabled' + (side.plugins.disabled ? ' · ' + side.plugins.disabled + ' off' : ''))}
+      {side.plugins.enabled.length ? <Text dimColor wrap="truncate-end">{side.plugins.enabled.join(' · ')}</Text> : null}
+    </Box>
+  )
+
+  const fired = side.fires.rows.reduce((n, r) => n + r.fired, 0)
+  const chars = side.fires.rows.reduce((n, r) => n + r.chars, 0)
+  const shown = side.fires.rows.slice(0, MAX_ROWS)
+  const injections = (
+    <Box flexDirection="column">
+      {head('Injections', side.fires.error ?? (fired ? fired + ' fired · ' + human(chars) + ' chars' : 'nothing yet'))}
+      {shown.map(r => (
+        <Text key={'f' + r.plug} dimColor wrap="truncate-end">
+          {r.plug + '  ' + r.fired + '× · ' + human(r.chars)}
+        </Text>
+      ))}
+      {side.fires.rows.length > shown.length ? <Text dimColor>{'+' + (side.fires.rows.length - shown.length) + ' more'}</Text> : null}
+    </Box>
+  )
+
+  return (
+    <Box flexDirection="column" rowGap={1}>
+      {tasks}
+      {mcp}
+      {plugins}
+      {injections}
+    </Box>
+  )
+}
+
+// The larger view of the pasted images. Display only, like the side pane.
+function imagePane(el: El, im: Images, cols: number) {
+  const { Box, Text, Image } = el
+  const found = im.nums.filter(n => im.files[String(n)])
+  if (!found.length) return <Text dimColor>no image files to show</Text>
+  const width = Math.max(20, Math.min(80, cols - 2))
+  const rows = Math.max(6, Math.round(width / 3))
+  return (
+    <Box flexDirection="column">
+      {found.slice(0, 3).map(n => (
+        <Box key={'view-' + n} flexDirection="column">
+          <Text dimColor>{'#' + n}</Text>
+          <Image key={'img-' + n} source={{ file: im.files[String(n)]!, format: 'png' }} columns={width} rows={rows} alt={'pasted image ' + n} />
+        </Box>
+      ))}
+      {found.length > 3 ? <Text dimColor>{'+' + (found.length - 3) + ' more'}</Text> : null}
     </Box>
   )
 }
@@ -579,8 +972,8 @@ export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'hub',
-      description: 'gcc-mods switch for this session: on, off, or band (show or hide the row above the prompt).',
-      argumentHint: '[on|off|band]',
+      description: 'gcc-mods switch for this session: on, off, band (show or hide the row above the prompt), side (open or close the display-only side pane), preset (band look S1, S2 or S3).',
+      argumentHint: '[on|off|band|side|side off|preset S1|S2|S3]',
       immediate: true,
     })
     if (await isOn($)) await startUp($, sw)
@@ -596,6 +989,11 @@ export const register: Register = (on, options) => {
       }
       if (sw.fleet) await wakeForUnreadSeats($)
       await refreshStatus($)
+      if ((await read($, sideAtom)).isOpen) await refreshSide($)
+    })
+    // Pasting an image raises no event, so the draft is read once a second.
+    $.clock.every(1_000, async () => {
+      if (sw.hygiene && (await isOn($))) await pollImages($)
     })
     $.clock.every(5 * 60_000, async () => {
       if (sw.tasks && (await isOn($))) await refreshGoals($)
@@ -606,23 +1004,50 @@ export const register: Register = (on, options) => {
   // /clear, /resume, /compact and /fork raise no session.start, and the
   // checkpoint offer is the whole point of this moment.
   on('classic.SessionStart', { source: ['clear', 'resume', 'compact', 'fork', 'startup'] }, async ($, e, next) => {
+    // A /clear in a session that was on starts the next one on, once.
+    if (e.source === 'clear' && (await read($, enabledAtom)) === null && (await takeCarry($))) await update($, enabledAtom, () => true)
+    // The task list belongs to a session: look the store up again after a clear or resume.
+    if (e.source === 'clear' || e.source === 'resume' || e.source === 'fork') {
+      await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, store: null, triedAt: 0, rows: [] } }))
+    }
     if (await isOn($)) await startUp($, sw, e.source !== 'startup')
+    return next(e)
+  })
+
+  on('session.end', async ($, e, next) => {
+    if (e.reason === 'clear' && (await read($, enabledAtom)) === true) await leaveCarry($)
     return next(e)
   })
 
   on('command.run', { command: 'hub' }, async ($, e) => {
     const want = e.args.trim()
-    if (want === 'off') {
+    const [verb = '', arg = ''] = want.split(/\s+/)
+    if (verb === 'off') {
       await switchMod($, false, sw)
       return { text: 'gcc-mods is off for this session.' }
     }
     if (!(await isOn($))) await switchMod($, true, sw)
-    if (want === 'band') {
+    if (verb === 'band') {
       const v = await read($, viewAtom)
       await update($, viewAtom, x => ({ ...x, isBandHidden: !v.isBandHidden }))
       return { text: v.isBandHidden ? 'band shown.' : 'band hidden. /hub band brings it back.' }
     }
-    return { text: 'gcc-mods is on for this session: paths, the resume offer, the gauge and the wakes. What waits on you: /tasks now.' }
+    if (verb === 'preset') {
+      const preset = arg.toUpperCase()
+      if (preset !== 'S1' && preset !== 'S2' && preset !== 'S3') return { text: 'preset is S1 (one line, default), S2 (accent bar) or S3 (rounded box).' }
+      await update($, viewAtom, x => ({ ...x, preset: preset as Preset }))
+      return { text: 'band look: ' + preset + '.' }
+    }
+    if (verb === 'side') {
+      if (arg === 'off') {
+        await update($, sideAtom, x => ({ ...x, isOpen: false }))
+        await $.ui.close({ id: SIDE_ID })
+        return { text: 'side pane closed.' }
+      }
+      const placed = await openSide($)
+      return { text: placed.isPlaced ? 'side pane open (display only, it never takes the keyboard). /hub side off closes it.' : 'side pane waits: ' + placed.reason }
+    }
+    return { text: 'gcc-mods is on for this session: paths, one band row for what waits, the gauge and the wakes. Side pane: /hub side. What waits on you: /tasks now.' }
   })
 
   // ── hygiene ──
@@ -729,6 +1154,24 @@ export const register: Register = (on, options) => {
     })
   }
 
+  // The side pane's task rows follow the Task tool.
+  on('tool.call', { tool: 'TaskCreate' }, async ($, e, next) => {
+    const ran = await next(e)
+    await followTasks($, true)
+    return ran
+  })
+  on('tool.call', { tool: 'TaskUpdate' }, async ($, e, next) => {
+    const ran = await next(e)
+    await followTasks($, false)
+    return ran
+  })
+
+  // The validator reads matcher values only when they are spelled out: 'gcc-side' is SIDE_ID.
+  on('ui.close', { id: 'gcc-side' }, async ($, e, next) => {
+    await update($, sideAtom, x => ({ ...x, isOpen: false }))
+    return next(e)
+  })
+
   // A typed prompt ends the idle stretch and retires the continue offer.
   on('prompt.submit', async ($, e, next) => {
     if (await isOn($)) await update($, idleAtom, i => ({ ...i, since: null, continueOfferedAt: null }))
@@ -742,6 +1185,7 @@ export const register: Register = (on, options) => {
       if (sw.fleet) await landSeat($, s => s.agentId === e.agentId)
     } else {
       await refreshStatus($)
+      if ((await read($, sideAtom)).isOpen) await refreshFiresPane($)
     }
     return r
   })
@@ -753,6 +1197,14 @@ export const register: Register = (on, options) => {
     if (sw.tasks) await noteMainStop($, (e.background_tasks?.length ?? 0) > 0, r.block !== undefined)
     await refreshStatus($)
     return r
+  })
+
+  on('ui.render', { component: 'Pane', requestId: 'gcc-side' }, async ($, e) => {
+    return sidePane($.ui.resolve(e) as El, await read($, sideAtom), await $.clock.now(), e.props.bodyColumns)
+  })
+
+  on('ui.render', { component: 'Pane', requestId: 'gcc-image' }, async ($, e) => {
+    return imagePane($.ui.resolve(e) as El, await read($, imagesAtom), e.props.bodyColumns)
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
