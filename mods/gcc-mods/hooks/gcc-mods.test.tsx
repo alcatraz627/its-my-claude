@@ -366,7 +366,7 @@ describe('mail', () => {
     w.inbox = () => JSON.stringify({ messages: [msg('surfaced', NOW + 5_000)] })
     await idleSession($, w)
     expect(mailWakes(w)).toEqual([])
-    expect(w.statuses.at(-1)).not.toContain('✉')
+    expect(w.statuses.at(-1) ?? '').not.toContain('✉')
   })
 
   test('a queued and a delivered message each wake once and are counted', MAIL, async ($, on) => {
@@ -383,7 +383,7 @@ describe('mail', () => {
     w.inbox = () => JSON.stringify({ messages: [msg(undefined, NOW - 3_600_000)] })
     await idleSession($, w)
     expect(mailWakes(w)).toEqual([])
-    expect(w.statuses.at(-1)).not.toContain('✉')
+    expect(w.statuses.at(-1) ?? '').not.toContain('✉')
   })
 
   test('with no delivery state, mail that arrives after the mod switched on still wakes', MAIL, async ($, on) => {
@@ -535,25 +535,16 @@ describe('the band rows', () => {
 })
 
 describe('status line', () => {
-  test('the gauge says used, like the statusline', ON, async ($, on) => {
+  test('it repeats nothing the statusline already shows, and clears when nothing is its own', ON, async ($, on) => {
     const w = world(on)
     w.pathPy = () => ok(JSON.stringify({ goals: [] }))
-    await $.classic.SessionStart({ source: 'startup' })
-    await $.session.measure({ context: { percent: 42 }, rateLimits: [], cost: {} } as any)
-    await $.classic.Stop({ last_assistant_message: 'done' } as any)
-    expect(w.statuses.at(-1)).toContain('ctx 42% used')
-  })
-
-  test('decisions are counted for this project only', ON, async ($, on) => {
-    const w = world(on)
-    w.pathPy = () => ok(JSON.stringify({ goals: [] }))
-    w.files[DP + '/.pending.txt'] = 'mine\nother\n'
+    w.files[DP + '/.pending.txt'] = 'mine\n'
     w.files[DP + '/mine/config.json'] = JSON.stringify({ title: 'A', origin: { project: CWD, session: 'x' }, decisions: [{}] })
-    w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'B', origin: { project: '/Users/alcatraz627/Code/elsewhere', session: 'y' }, decisions: [{}] })
     await $.classic.SessionStart({ source: 'startup' })
+    await $.session.measure({ context: { percent: 42 }, rateLimits: [{ kind: 'seven_day', percentUsed: 74 }], cost: {} } as any)
     await $.classic.Stop({ last_assistant_message: 'done' } as any)
-    expect(w.statuses.at(-1)).toContain('1 decision')
-    expect(w.statuses.at(-1)).not.toContain('2 decisions')
+    expect(w.statuses.at(-1)).toBeUndefined()
+    for (const s of w.statuses.slice(1)) for (const dup of ['ctx', 'wk', 'decision', 'idle', 'seat', 'nothing waiting']) expect(s ?? '').not.toContain(dup)
   })
 })
 

@@ -478,30 +478,19 @@ async function wakeForAnswers($: $T, cwd: string) {
 
 async function statusText($: $T): Promise<string> {
   const c = goalCounts(await read($, goalsAtom))
-  const meter = await read($, meterAtom)
-  const seats = runningSeats(await read($, seatsAtom)).length
   const mailState = await read($, mailAtom)
   const mail = mailState.messages.filter(m => isNewMail(m, mailState.enabledAt)).length
-  const d = await read($, decideAtom)
-  const idle = await read($, idleAtom)
-  const now = await $.clock.now()
-  const cwd = await cwdOf($)
-  const aliases = await aliasesOf($)
-  const decisions = d.pending.filter(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases)).length
+  // Context, week, decisions, agents and idle already sit in the statusline, so
+  // this line carries only what the statusline cannot know, and is empty otherwise.
   const parts: string[] = []
-  if (meter.ctx !== null) parts.push('ctx ' + meter.ctx + '% used')
-  if (meter.week !== null) parts.push('wk ' + Math.round(meter.week) + '%')
   if (c.gates) parts.push(plural(c.gates, 'gate'))
   if (c.ready) parts.push(c.ready + ' ready')
-  if (seats) parts.push(plural(seats, 'seat'))
   if (mail) parts.push('✉ ' + mail)
-  if (decisions) parts.push(plural(decisions, 'decision'))
-  if (idle.since !== null && now - idle.since > 5 * 60_000) parts.push('idle ' + ago(now, idle.since))
-  return parts.length ? parts.join(' · ') : 'gcc · nothing waiting'
+  return parts.join(' · ')
 }
 
 async function refreshStatus($: $T) {
-  $.ui.status(await statusText($))
+  $.ui.status((await statusText($)) || undefined)
 }
 
 // The band: every offer is one row in the same shape. Preset S1 is the default
@@ -925,7 +914,8 @@ const MCP_STATE: Record<McpRow['state'], { glyph: string; word: string; color: s
 function sidePane(el: El, side: Side, now: number, cols: number) {
   const { Box, Text } = el
   const width = Math.max(30, cols - 2)
-  const tab = side.tab
+  // State saved before tabs existed has no tab; it opens on the overview.
+  const tab: SideTab = isSideTab(side.tab) ? side.tab : 'overview'
   const head = (label: string, detail: string) => (
     <Box flexDirection="row" columnGap={1}>
       <Text bold color={HEAD}>{label}</Text>
@@ -1184,7 +1174,7 @@ export const register: Register = (on, options) => {
       if (want) await update($, sideAtom, x => ({ ...x, tab: want as SideTab }))
       if (open && want) return { text: 'side pane tab: ' + want + '.' }
       const placed = await openSide($)
-      return { text: placed.isPlaced ? 'side pane open on ' + (want || (await read($, sideAtom)).tab) + ' (display only, it never takes the keyboard). /hub side <tab> switches, /hub side off closes it.' : 'side pane waits: ' + placed.reason }
+      return { text: placed.isPlaced ? 'side pane open on ' + (want || ((t => (isSideTab(t) ? t : 'overview'))((await read($, sideAtom)).tab))) + ' (display only, it never takes the keyboard). /hub side <tab> switches, /hub side off closes it.' : 'side pane waits: ' + placed.reason }
     }
     return { text: 'gcc-mods is on for this session: paths, one band row for what waits, the gauge and the wakes. Side pane: /hub side [tab]. What waits on you: /tasks now.' }
   })
