@@ -199,6 +199,7 @@ eval "$(echo "$input" | jq -r '
   "transcript=" + (.transcript_path // "" | @sh),
   "thinking_effort=" + (.effort.level // .thinking_effort // "" | tostring | @sh),
   "model_id=" + (.model.id // "" | @sh),
+  "cc_version=" + (.version // "" | tostring | @sh),
   "used_pct=" + (.context_window.used_percentage // "" | tostring | @sh),
   "api_ms=" + (.cost.total_api_duration_ms // "" | tostring | @sh),
   "cur_in=" + (.context_window.current_usage.input_tokens // 0 | tostring | @sh),
@@ -864,12 +865,8 @@ _cents() { # "12.2231" -> _CC cents (integer)
 _money() { printf -v _M '$%d.%02d' "$(( $1 / 100 ))" "$(( $1 % 100 ))"; }
 _chip() { _CHIP="${BG_CHIP} $1 ${rst}"; }                      # soft background for live gauges
 _link() { _LNK="${_ESC}]8;;$1${_ESC}\\$2${_ESC}]8;;${_ESC}\\"; } # OSC 8 hyperlink
-_docurl() { # file path -> link target: markdown and text in the doc viewer, the rest file://
-  local p="${1// /%20}"
-  case "$1" in
-    *.md|*.txt) _URL="http://localhost:5106/doc?path=${p}" ;;
-    *)          _URL="file://${p}" ;;
-  esac
+_docurl() { # file path -> file:// link; the OS default app opens it (markdown goes to the browser)
+  _URL="file://${1// /%20}"
 }
 
 # Row builder: segments are appended left to right; a segment that no longer
@@ -1206,6 +1203,9 @@ if seg_on files_touched 1 && (( files_touched > _ft_thresh )); then
   if (( files_touched > 50 )); then _ftc="$C_WARN"; else _ftc="$C_FG"; fi
   _add "${C_LBL}files ${_ftc}${files_touched}"
 fi
+
+# Claude Code version, from stdin
+if [[ -n "${cc_version:-}" && "$cc_version" != "null" ]]; then _add "${C_LBL}cc ${C_FG}${cc_version}"; fi
 
 if seg_on branch_age "$has_branch_age" && (( has_branch_age )); then
   _ba="${branch_age_days}d"; [[ $branch_behind -gt 0 ]] && _ba+=" ↓${branch_behind}"

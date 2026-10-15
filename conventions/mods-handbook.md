@@ -73,7 +73,7 @@ Previews: `assets/decision-pages/statusline-1015b/band-s1.png`, `band-s2.png`, `
 - **Chips** (soft `#24283b` background) mark a value that is a live gauge or needs the owner. A healthy, static value stays plain.
 - **Glyph vocabulary** (from flightdeck): `●` warm or active, `○` cold or idle, `◐` running, `✓` passed, `✗` failed, `↻` time to reset, `▮▮▮▯` effort, a two-tone gauge with a `┊` tick at the auto-compact line.
 - **Numbers in words:** `31 changed`, `1h30m`, `380K/1M`, `11¢/turn`, `cold in 42m`.
-- **Links:** a path or page the owner may open is an OSC 8 link. Markdown and text files link to the doc viewer, `http://localhost:5106/doc?path=<absolute path>`, so they open in the browser; other files use `file://`.
+- **Links:** a path or page the owner may open is an OSC 8 link. Every file, markdown included, links as `file://<absolute path>` and opens in its native app; `.md` already opens in the browser by default. Never route a file through the kanban doc viewer (owner, 2026-10-15: "please let them open natively").
 - **Optional segments appear only when they apply**, as today. Mocks show a "busy" state with everything present; say so on any mock so it does not read as the everyday look.
 
 ## Borrowed ideas and where they go
