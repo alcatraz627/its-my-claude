@@ -265,7 +265,8 @@ describe('the band', () => {
     const band = await mountBand($)
     expect(await band.find({ text: /stopped with 2 agent-ready rows open/ })).toBeDefined()
     await band.press({ key: 'idle-continue' })
-    expect(w.submitted.at(-1)).toContain('left.py')
+    expect(w.submitted.at(-1)).toContain('queue-run.sh next')
+    expect(w.submitted.at(-1)).not.toContain('left.py')
   })
 
   test('hide band hides it until /hub band', ON, async ($, on) => {

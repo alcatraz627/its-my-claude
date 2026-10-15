@@ -217,6 +217,10 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     net_cache="/tmp/claude-net-shared"
     if [[ ! -f "$net_cache" ]] || (( _NOW - $(_stat_mtime "$net_cache") > 30 )); then
       latency=$(curl -so /dev/null -w '%{time_total}' --connect-timeout 2 --max-time 3 https://api.anthropic.com 2>/dev/null) || latency="offline"
+      # curl reports seconds ("0.312451"); the statusline compares milliseconds.
+      if [[ "$latency" =~ ^([0-9]+)\.([0-9]{0,3}) ]]; then
+        _frac="${BASH_REMATCH[2]}000"; latency=$(( 10#${BASH_REMATCH[1]} * 1000 + 10#${_frac:0:3} ))
+      fi
       echo "$latency" > "${net_cache}.$$" && mv -f "${net_cache}.$$" "$net_cache"
     fi
     net_val=$(cat "$net_cache" 2>/dev/null) || true

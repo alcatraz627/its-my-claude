@@ -673,7 +673,7 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
           onPress: async () => {
             await update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))
             await $.prompt.submit({
-              text: 'Continue with the open agent-ready rows on the linked goal. Run python3 ~/.claude/scripts/goals/views/left.py first and take the first unblocked row; stop only when none is left or a gate needs me.',
+              text: 'Continue with the open agent-ready rows on the linked goal. Run bash ~/.claude/scripts/goals/queue-run.sh next and take the row it prints; repeat until it exits 1 or a gate needs me.',
             })
           },
         },
