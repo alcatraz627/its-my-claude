@@ -102,6 +102,38 @@ def log(sid, ev, **kw):
         f.write(json.dumps(dict(ts=dt.datetime.now().isoformat(timespec="seconds"), sid=sid, ev=ev, **kw)) + "\n")
 
 
+def last_usage(transcript):
+    """The token usage of the transcript's most recent model reply, or None."""
+    try:
+        size = os.path.getsize(transcript)
+        with open(transcript, "rb") as f:
+            f.seek(max(0, size - 400000))
+            lines = f.read().decode("utf-8", "replace").splitlines()
+        for line in reversed(lines):
+            try:
+                o = json.loads(line)
+            except ValueError:
+                continue
+            msg = o.get("message")
+            u = msg.get("usage") if isinstance(msg, dict) else None
+            if u:
+                return u
+    except OSError:
+        pass
+    return None
+
+
+def judge_ping(usage):
+    """Did a keep-warm ping find the cache warm? Warm means the turn read from the
+    cache and rewrote under a tenth of what it read; a turn that rebuilt the prefix
+    paid full price, so the ping did not keep anything warm."""
+    if not usage:
+        return "unknown", None, None
+    read = usage.get("cache_read_input_tokens") or 0
+    create = usage.get("cache_creation_input_tokens") or 0
+    return ("warm" if read > 0 and create < 0.1 * read else "cold"), read, create
+
+
 def context_used_pct(transcript):
     """Context used, in percent. Prefers the statusline's own reading for this
     Claude process; falls back to the last turn's token count over the window."""
@@ -119,24 +151,11 @@ def context_used_pct(transcript):
             break
         if pid <= 1:
             break
-    try:
-        size = os.path.getsize(transcript)
-        with open(transcript, "rb") as f:
-            f.seek(max(0, size - 400000))
-            lines = f.read().decode("utf-8", "replace").splitlines()
-        for line in reversed(lines):
-            try:
-                o = json.loads(line)
-            except ValueError:
-                continue
-            msg = o.get("message")
-            u = msg.get("usage") if isinstance(msg, dict) else None
-            if u:
-                tok = (u.get("input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0) + \
-                      (u.get("cache_creation_input_tokens") or 0)
-                return 100.0 * tok / CTX_WINDOW
-    except OSError:
-        pass
+    u = last_usage(transcript)
+    if u:
+        tok = (u.get("input_tokens") or 0) + (u.get("cache_read_input_tokens") or 0) + \
+              (u.get("cache_creation_input_tokens") or 0)
+        return 100.0 * tok / CTX_WINDOW
     return 30.0   # unknown: treat as a worked session
 
 
@@ -267,6 +286,9 @@ def hook_stop(inp):
     st = load(sid)
     if st.pop("in_wake", False):
         save(sid, st)
+        # Record only: the verdict never delays or changes the owner's next message.
+        verdict, read, create = judge_ping(last_usage(inp.get("transcript_path") or ""))
+        log(sid, "ping-health", verdict=verdict, cache_read=read, cache_creation=create)
         return 0
     st["last_activity"] = now_s()
     save(sid, st)

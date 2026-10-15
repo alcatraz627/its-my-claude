@@ -1480,7 +1480,8 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/scripts/statusline/statusline.sh"
+    "command": "~/.claude/scripts/statusline/statusline.sh",
+    "refreshInterval": 30
   },
   "enabledPlugins": {
     "analyze-codebase@awesome-claude-code-plugins": false,

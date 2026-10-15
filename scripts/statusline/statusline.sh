@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
-# Claude Code statusline v4 — fixed 4-line semantic layout
+# Claude Code statusline v5: five category rows (who, spend, code, work, system)
 # Config: ~/.claude/statusline.conf  |  Detail hint: /tmp/claude-detail-$PPID
 # Daemon: ~/.claude/scripts/process-stats-daemon.sh (collects slow data every 4s)
+# Layout and visual rules: ~/.claude/conventions/mods-handbook.md
 #
-# Flow: JSON stdin → parse → daemon read → conditions → L1/L2/L3/L4 render → print
-# L1: identity/performance  L2: rate/session  L3: code/services  L4: metadata/IDs
-# Width tiers (cols): T0≥140  T1=120-139  T2=100-119  T3=80-99  T4<80
-# Segments skipped when empty; lines skipped when all their segments are empty.
+# Flow: JSON stdin → parse → daemon read → conditions → five rows → print
+# Each row starts with its category glyph. Optional segments appear only when
+# they apply. Width: segments are dropped from the right end of a row as the
+# terminal narrows, and low-value ones go first (see the show_* thresholds).
 
 set -uo pipefail
 # Note: set -e intentionally omitted — (( expr )) returns exit 1 when false,
 # which kills the script under set -e. A statusline should never abort early.
 shopt -s extglob  # enables *([0-9;]) patterns in ${var//} substitutions (used by _vlen)
+
+# Segment widths are counted in characters, so the locale must be UTF-8.
+case "${LC_ALL:-${LC_CTYPE:-${LANG:-}}}" in *[Uu][Tt][Ff]*) ;; *) export LC_CTYPE=en_US.UTF-8 ;; esac
 
 input=$(cat)
 
@@ -193,13 +197,28 @@ eval "$(echo "$input" | jq -r '
   "output_tokens=" + (.context_window.total_output_tokens // 0 | tostring | @sh),
   "ctx_size=" + (.context_window.context_window_size // 0 | tostring | @sh),
   "transcript=" + (.transcript_path // "" | @sh),
-  "thinking_effort=" + (.thinking_effort // "" | @sh),
-  "cache_read_tok=" + (.cost.cache_read_input_tokens // 0 | tostring | @sh),
-  "cache_create_tok=" + (.cost.cache_creation_input_tokens // 0 | tostring | @sh)
+  "thinking_effort=" + (.effort.level // .thinking_effort // "" | tostring | @sh),
+  "model_id=" + (.model.id // "" | @sh),
+  "used_pct=" + (.context_window.used_percentage // "" | tostring | @sh),
+  "api_ms=" + (.cost.total_api_duration_ms // "" | tostring | @sh),
+  "cur_in=" + (.context_window.current_usage.input_tokens // 0 | tostring | @sh),
+  "cache_read_tok=" + (.context_window.current_usage.cache_read_input_tokens // 0 | tostring | @sh),
+  "cache_create_tok=" + (.context_window.current_usage.cache_creation_input_tokens // 0 | tostring | @sh),
+  "pc_state=" + (.prompt_cache | if . == null then "" elif .caching_observed == false then "off" elif .warm == true then "warm" else "cold" end | @sh),
+  "pc_expires=" + (.prompt_cache.expires_at // "" | tostring | @sh),
+  "pc_hit=" + (.prompt_cache.hit_ratio | if . == null then "" else (. * 100 | floor | tostring) end | @sh),
+  "pc_recache=" + (.prompt_cache.recache_tokens_if_cold // "" | tostring | @sh),
+  "repo_host=" + (.workspace.repo.host // "" | @sh),
+  "repo_owner=" + (.workspace.repo.owner // "" | @sh),
+  "repo_name=" + (.workspace.repo.name // "" | @sh)
 ' 2>/dev/null)" || true
 
 cwd="${cwd:-$(pwd)}"
-shortdir=$(basename "$cwd")
+shortdir="${cwd##*/}"; [[ -z "$shortdir" ]] && shortdir="/"
+
+# Saves this render's raw stdin while ~/.claude/.statusline-capture exists, so
+# segment work can read the exact field names Claude Code sends. Builtin write, no fork.
+[[ -f "$HOME/.claude/.statusline-capture" ]] && printf '%s\n' "$input" > "/tmp/claude-statusline-stdin-${session_id:0:8}.json" 2>/dev/null
 
 # ── Rate-limit debug capture (env-gated) ────────────────────────────────────
 # Set STATUSLINE_RATELIMIT_DEBUG=1 in your shell to log every render's parsed
@@ -278,10 +297,12 @@ fi
 
 # ── IDE detection (VS Code lock file) ──
 ide_name=""
-ide_lock=$(ls "$HOME/.claude/ide/"*.lock 2>/dev/null | head -1)
-if [[ -n "$ide_lock" ]]; then
-  ide_name=$(jq -r '.ideName // empty' "$ide_lock" 2>/dev/null) || true
-fi
+for _il in "$HOME/.claude/ide/"*.lock; do
+  [[ -f "$_il" ]] || continue
+  _ilc=""; read -r -d '' _ilc < "$_il" 2>/dev/null || true
+  [[ "$_ilc" =~ \"ideName\"[[:space:]]*:[[:space:]]*\"([^\"]*)\" ]] && ide_name="${BASH_REMATCH[1]}"
+  break
+done
 
 # ── Start daemon if needed (single-daemon-per-PPID guard) ──
 # Prior bug: concurrent statusline renders (rapid turns, streaming updates)
@@ -292,6 +313,8 @@ fi
 # space in the pattern prevents PID-prefix matches (e.g. 80 vs 8000).
 STATS_FILE="/tmp/claude-statusline-${PPID}"
 DAEMON="$HOME/.claude/scripts/process-stats-daemon.sh"
+# Tell the daemon which session this is (it looks up the ipc alias from it).
+[[ -n "${session_id:-}" ]] && printf '%s' "$session_id" > "/tmp/claude-sidfwd-${PPID}" 2>/dev/null
 if [[ ! -f "$STATS_FILE" ]] && [[ -x "$DAEMON" ]]; then
   if ! pgrep -f "process-stats-daemon.sh ${PPID} " >/dev/null 2>&1; then
     nohup bash "$DAEMON" "$PPID" "$STATS_FILE" &>/dev/null &
@@ -308,56 +331,63 @@ sys_free_mb=0; sys_total_mb=0; disk_free_gb=0; git_stash=0; tok_speed=0
 branch_age_days=0; branch_behind=0; cost_vel_cpm=0; focus_file=""; focus_count=0
 test_status=""; test_total=0; test_failed=0
 net_rx_kbps=0; net_tx_kbps=0
+sudo_active=0; tmux_sessions=0; ipc_unseen=""; dec_count=0
 if [[ -f "$STATS_FILE" ]]; then
-  # Only eval lines matching safe key=value pattern (alphanumeric keys, no shell metacharacters in values)
-  eval "$(grep -E '^[a-z_]+=[A-Za-z0-9_.,:/ -]*$' "$STATS_FILE" 2>/dev/null)" 2>/dev/null || true
+  # Only accept lines matching a safe key=value pattern (alphanumeric keys, no
+  # shell metacharacters in values). Pure bash: no grep or eval fork.
+  _kvre='^([a-z_]+)=([A-Za-z0-9_.,:/ -]*)$'
+  while IFS= read -r _kvl || [[ -n "$_kvl" ]]; do
+    [[ "$_kvl" =~ $_kvre ]] && printf -v "${BASH_REMATCH[1]}" '%s' "${BASH_REMATCH[2]}"
+  done < "$STATS_FILE"
 fi
 
-# ── Read tool call counters ──
-tool_summary=""
+# ── Read tool call counters (pure bash: no grep/sort/awk forks) ──
+# The file holds KEY=count lines (B=61, R=40, _total=140). Names are widened and
+# coloured per tool; the busiest tool comes first.
+_lc() { # lower-case $1 into _LC without a fork
+  _LC="$1"
+  local _u
+  for _u in A:a B:b C:c D:d E:e F:f G:g H:h I:i J:j K:k L:l M:m N:n O:o P:p Q:q R:r S:s T:t U:u V:v W:w X:x Y:y Z:z; do
+    _LC="${_LC//${_u%:*}/${_u#*:}}"
+  done
+}
+tool_summary_wide=""; tool_total=""; files_touched=0
 TOOL_FILE="/tmp/claude-tools-${PPID}"
 if [[ -f "$TOOL_FILE" ]]; then
-  # Compact: colored "R:12 E:5 B:8" — read=dim-blue, edit=dim-yellow, bash=dim-green, others=dim
-  tool_summary=$(grep -v '^_total=' "$TOOL_FILE" 2>/dev/null | sort -t= -k2 -rn | head -3 | awk -F= '{
-    k=tolower($1)
-    if (k=="r"||k=="read")       col="\033[2;34m"
-    else if (k=="e"||k=="edit")  col="\033[2;33m"
-    else if (k=="b"||k=="bash")  col="\033[2;32m"
-    else                         col="\033[2m"
-    printf "%s%s:%s\033[0m ", col, $1, $2
-  }')
-  # Verbose: "read:12 edit:5 bash:8" — used at full width; maps all tool abbreviations to full names
-  # No head cap — line budget system handles overflow at render time
-  tool_summary_wide=$(grep -v '^_total=' "$TOOL_FILE" 2>/dev/null | sort -t= -k2 -rn | awk -F= '{
-    key=tolower($1)
-    if      (key=="r")   key="read"
-    else if (key=="e")   key="edit"
-    else if (key=="w")   key="write"
-    else if (key=="b")   key="bash"
-    else if (key=="g")   key="glob"
-    else if (key=="gr")  key="grep"
-    else if (key=="ag")  key="agent"
-    else if (key=="sk")  key="skill"
-    else if (key=="o")   key="other"
-    if      (key=="read")  col="\033[2;34m"
-    else if (key=="edit")  col="\033[2;33m"
-    else if (key=="write") col="\033[2;35m"
-    else if (key=="bash")  col="\033[2;32m"
-    else if (key=="grep")  col="\033[2;36m"
-    else if (key=="glob")  col="\033[2;36m"
-    else if (key=="agent") col="\033[2;33m"
-    else if (key=="skill") col="\033[2;37m"
-    else                   col="\033[2m"
-    printf "%s%s:%s\033[0m ", col, key, $2
-  }')
-  tool_total=$(grep '^_total=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2) || true
-  # File ops: sum of Read + Edit + Write counts (stored as R=, E=, W= or full names)
-  _tf_r=$(grep -iE '^(R|Read)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
-  _tf_e=$(grep -iE '^(E|Edit)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
-  _tf_w=$(grep -iE '^(W|Write)=' "$TOOL_FILE" 2>/dev/null | cut -d= -f2 | head -1) || true
-  files_touched=$(( ${_tf_r:-0} + ${_tf_e:-0} + ${_tf_w:-0} ))
+  _tk=(); _tn=(); _tfr=0; _tfe=0; _tfw=0
+  shopt -s nocasematch
+  while IFS='=' read -r _k _v || [[ -n "$_k" ]]; do
+    [[ -z "$_k" ]] && continue
+    if [[ "$_k" == "_total" ]]; then tool_total="$_v"; continue; fi
+    [[ "$_v" =~ ^[0-9]+$ ]] || continue
+    _tk+=("$_k"); _tn+=("$_v")
+    case "$_k" in r|read) _tfr=$_v;; e|edit) _tfe=$_v;; w|write) _tfw=$_v;; esac
+  done < "$TOOL_FILE"
+  files_touched=$(( _tfr + _tfe + _tfw ))
+  _nt=${#_tk[@]}; _picked=" "
+  for ((_a=0; _a<_nt; _a++)); do
+    _best=-1; _bv=-1
+    for ((_b=0; _b<_nt; _b++)); do
+      [[ "$_picked" == *" $_b "* ]] && continue
+      if (( _tn[_b] > _bv )); then _bv=${_tn[_b]}; _best=$_b; fi
+    done
+    (( _best < 0 )) && break
+    _picked+="$_best "
+    _tname="${_tk[_best]}"
+    case "$_tname" in
+      r) _tname=read;; e) _tname=edit;; w) _tname=write;; b) _tname=bash;; g) _tname=glob;;
+      gr) _tname=grep;; ag) _tname=agent;; sk) _tname=skill;; o) _tname=other;;
+    esac
+    _lc "$_tname"; _tname="$_LC"
+    case "$_tname" in
+      read) _tcol=$'\033[2;34m';; edit) _tcol=$'\033[2;33m';; write) _tcol=$'\033[2;35m';;
+      bash) _tcol=$'\033[2;32m';; grep|glob) _tcol=$'\033[2;36m';; agent) _tcol=$'\033[2;33m';;
+      skill) _tcol=$'\033[2;37m';; *) _tcol=$'\033[2m';;
+    esac
+    tool_summary_wide+="${_tcol}${_tname}:${_tn[_best]}"$'\033[0m '
+  done
+  shopt -u nocasematch
 fi
-files_touched=${files_touched:-0}
 
 # ── Read turn counter ──
 turn_count=0
@@ -365,9 +395,9 @@ sid_short="${session_id:0:8}"
 # Fallback: if session_id not in JSON, use parent PID as stable identifier
 [[ -z "${sid_short:-}" ]] && sid_short="${PPID}"
 TURN_FILE="/tmp/claude-turns-${sid_short}"
-[[ -f "$TURN_FILE" ]] && turn_count=$(cat "$TURN_FILE" 2>/dev/null | tr -d '[:space:]') || true
-turn_count=${turn_count:-0}
-# Epoch cached here — used by subagents, spinner, and countdown (3 forks → 1)
+[[ -f "$TURN_FILE" ]] && { read -r turn_count < "$TURN_FILE" 2>/dev/null || true; }
+[[ "$turn_count" =~ ^[0-9]+$ ]] || turn_count=0
+# Epoch cached here, shared by subagents, countdowns and the rate-limit parser
 _NOW=$(date +%s)
 
 # ── Read active subagents ──
@@ -383,43 +413,65 @@ if [[ -f "$AGENTS_FILE" ]]; then
   done < "$AGENTS_FILE"
 fi
 
+# ── Idle: how long since this session last did anything ──
+# A refresh render (refreshInterval) carries the same numbers as the one before
+# it, so "activity" is a change in API time, cost, tool count or output tokens.
+# The first render after a quiet spell stamps the new moment.
+_act_sig="${api_ms:-}:${cost_usd:-}:${tool_total:-}:${output_tokens:-}"
+_IDLE_FILE="/tmp/claude-idle-${PPID}"
+_idle_ts=$_NOW; _idle_sig=""
+[[ -f "$_IDLE_FILE" ]] && { read -r _idle_ts _idle_sig < "$_IDLE_FILE" 2>/dev/null || true; }
+[[ "$_idle_ts" =~ ^[0-9]+$ ]] || _idle_ts=$_NOW
+_act_changed=0
+if [[ "$_act_sig" != "$_idle_sig" ]]; then
+  _idle_ts=$_NOW; _act_changed=1
+  printf '%s %s\n' "$_NOW" "$_act_sig" > "$_IDLE_FILE" 2>/dev/null || true
+fi
+render_lat_s=$(( _NOW - _idle_ts ))
+
 # ── Activity bar: per-turn tool call delta ring buffer (10 turns → 10 chars) ──
-# At each render, compute how many tool calls happened since last render.
-# Append to a 10-entry ring buffer for display as the `act:` bar in L4.
+# Appends only when the session did something, so refresh renders do not fill
+# the ring with zeros.
 TL_TURN_FILE="/tmp/statusline-tl-turns-${PPID}"   # ring buffer (10 entries)
 TL_TURN_LAST="/tmp/statusline-tl-last-${PPID}"    # last seen total
 _tl_current_total="${tool_total:-0}"
 _tl_last_total=0
-[[ -f "$TL_TURN_LAST" ]] && _tl_last_total=$(cat "$TL_TURN_LAST" 2>/dev/null | tr -d '[:space:]') || true
-_tl_delta=$(( _tl_current_total - ${_tl_last_total:-0} ))
+[[ -f "$TL_TURN_LAST" ]] && { read -r _tl_last_total < "$TL_TURN_LAST" 2>/dev/null || true; }
+[[ "$_tl_last_total" =~ ^[0-9]+$ ]] || _tl_last_total=0
+[[ "$_tl_current_total" =~ ^[0-9]+$ ]] || _tl_current_total=0
+_tl_delta=$(( _tl_current_total - _tl_last_total ))
 (( _tl_delta < 0 )) && _tl_delta=0
-printf '%s\n' "$_tl_current_total" > "$TL_TURN_LAST" 2>/dev/null || true
-# Append delta to ring buffer (keep last 10 entries)
-if [[ -f "$TL_TURN_FILE" ]]; then
-  tail -9 "$TL_TURN_FILE" > "${TL_TURN_FILE}.tmp" 2>/dev/null
-  printf '%d\n' "$_tl_delta" >> "${TL_TURN_FILE}.tmp"
-  mv "${TL_TURN_FILE}.tmp" "$TL_TURN_FILE" 2>/dev/null || true
-else
-  printf '%d\n' "$_tl_delta" > "$TL_TURN_FILE"
+if (( _act_changed || _tl_delta > 0 )); then
+  printf '%s\n' "$_tl_current_total" > "$TL_TURN_LAST" 2>/dev/null || true
+  _tl_ring=()
+  if [[ -f "$TL_TURN_FILE" ]]; then
+    while IFS= read -r _tv || [[ -n "$_tv" ]]; do [[ "$_tv" =~ ^[0-9]+$ ]] && _tl_ring+=("$_tv"); done < "$TL_TURN_FILE"
+  fi
+  _tl_ring+=("$_tl_delta")
+  (( ${#_tl_ring[@]} > 10 )) && _tl_ring=("${_tl_ring[@]: -10}")
+  printf '%s\n' "${_tl_ring[@]}" > "$TL_TURN_FILE" 2>/dev/null || true
 fi
 
-# ── Git info (cached — refresh every 5 turns to avoid blocking on every render) ──
+# ── Git info (cached; refreshed every 10th turn, once per turn number) ──
 # Cache keyed by PPID (stable for the Claude Code session, unlike $$ which changes each invocation)
-git_branch=""; git_dirty="0"; git_conflicts=0
+git_branch=""; git_dirty="0"; git_conflicts=0; _git_cache_turn=-1
 GIT_CACHE="/tmp/statusline-git-${PPID}"
 _git_refresh=0
 if [[ ! -f "$GIT_CACHE" ]]; then
   _git_refresh=1
-elif (( (turn_count % 10) == 0 && turn_count > 0 )); then
-  _git_refresh=1  # Refresh every 10 turns to catch branch changes
+else
+  { read -r git_branch; read -r git_dirty; read -r git_conflicts; read -r _git_cache_turn; } < "$GIT_CACHE" 2>/dev/null || true
+  # Every 10th turn catches branch changes; the turn number is stored so the
+  # 30 s refresh renders on turn 10 do not re-run git each time.
+  if (( (turn_count % 10) == 0 && turn_count > 0 )) && [[ "$_git_cache_turn" != "$turn_count" ]]; then
+    _git_refresh=1
+  fi
 fi
 if (( _git_refresh )); then
   git_branch=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false branch --show-current 2>/dev/null) || true
   git_dirty=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false status --porcelain 2>/dev/null | wc -l | tr -d ' ') || true
   git_conflicts=$(cd "$cwd" 2>/dev/null && git -c core.useBuiltinFSMonitor=false diff --name-only --diff-filter=U 2>/dev/null | wc -l | tr -d ' ') || true
-  printf '%s\n%s\n%s\n' "${git_branch:-}" "${git_dirty:-0}" "${git_conflicts:-0}" > "$GIT_CACHE" 2>/dev/null || true
-else
-  { read -r git_branch; read -r git_dirty; read -r git_conflicts; } < "$GIT_CACHE" 2>/dev/null || true
+  printf '%s\n%s\n%s\n%s\n' "${git_branch:-}" "${git_dirty:-0}" "${git_conflicts:-0}" "$turn_count" > "$GIT_CACHE" 2>/dev/null || true
 fi
 git_conflicts=${git_conflicts:-0}
 
@@ -477,7 +529,7 @@ _rl_to_epoch() {
        || date -d "${v%%.*}" "+%s" 2>/dev/null \
        || echo 0); fi
   [[ "$e" =~ ^[0-9]+$ ]] || { echo 0; return; }
-  now=$(date +%s)
+  now="${_NOW:-$(date +%s)}"   # same render second as the rest of the script
   (( e > now + 1209600 )) && { echo 0; return; }
   echo "$e"
 }
@@ -501,11 +553,12 @@ _own_r7_ep=$(_rl_to_epoch "${rate_7d_resets:-}")
 _cached_r7_ep=$(_rl_to_epoch "$_cached_r7_resets")
 _own_r7_int=$(printf '%.0f' "${rate_7d:-0}" 2>/dev/null || echo 0)
 _cached_r7_int=$(printf '%.0f' "${_cached_r7:-0}" 2>/dev/null || echo 0)
+_r7_ep=$_own_r7_ep   # epoch of whichever 7d reset wins the merge (0 = unknown)
 if [[ -n "$_cached_r7" ]]; then
   if   (( _cached_r7_ep >  _own_r7_ep )); then
-    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep
   elif (( _cached_r7_ep == _own_r7_ep && _cached_r7_int > _own_r7_int )); then
-    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep
   fi
 fi
 # 5h merge: same shape. The 5h window is much shorter (5 hours) so
@@ -515,11 +568,12 @@ _own_r5_ep=$(_rl_to_epoch "${rate_5h_resets:-}")
 _cached_r5_ep=$(_rl_to_epoch "$_cached_r5_resets")
 _own_r5_int=$(printf '%.0f' "${rate_5h:-0}" 2>/dev/null || echo 0)
 _cached_r5_int=$(printf '%.0f' "${_cached_r5:-0}" 2>/dev/null || echo 0)
+_r5_ep=$_own_r5_ep
 if [[ -n "$_cached_r5" ]]; then
   if   (( _cached_r5_ep >  _own_r5_ep )); then
-    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep
   elif (( _cached_r5_ep == _own_r5_ep && _cached_r5_int > _own_r5_int )); then
-    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep
   fi
 fi
 
@@ -528,16 +582,11 @@ fi
 has_cost=0; [[ -n "${cost_usd:-}" && "$cost_usd" != "null" && "$cost_usd" != "0" ]] && has_cost=1
 has_lines=0; [[ -n "${lines_add:-}" && "${lines_add:-}" != "null" && ( "${lines_add:-0}" != "0" || "${lines_rm:-0}" != "0" ) ]] && has_lines=1
 # ── Decision pages awaiting the user's answer (decision-wizard pending ledger) ──
-# Pure-bash read of the ledger — no subprocess on the render hot path. Counts
-# non-blank slug lines; the file is maintained by decision-page.sh pending.
+# The daemon counts only unanswered pages whose config origin.project matches
+# this directory, the same rule the gcc-mods status line uses.
 has_decwait=0; decwait_n=0
-_decfile="$HOME/.claude/assets/decision-pages/.pending.txt"
-if [[ -f "$_decfile" ]]; then
-  while IFS= read -r _dl || [[ -n "$_dl" ]]; do
-    [[ -n "${_dl//[[:space:]]/}" ]] && decwait_n=$((decwait_n+1))
-  done < "$_decfile"
-  (( decwait_n > 0 )) && has_decwait=1 || true
-fi
+[[ "${dec_count:-0}" =~ ^[0-9]+$ ]] && decwait_n=$dec_count
+(( decwait_n > 0 )) && has_decwait=1
 r5=0; has_rate=0; [[ -n "${rate_5h:-}" && "$rate_5h" != "null" ]] && { r5=$(printf "%.0f" "$rate_5h" 2>/dev/null || echo 0); has_rate=1; }
 # Note: (( expr )) returns exit code 1 when false, which kills set -e.
 # Use [[ ]] for all conditions, or guard with || true.
@@ -572,7 +621,7 @@ case "${thinking_effort:-}" in
   low|Low|1)                       _te_pct=25 ;;
   medium|Medium|2)                 _te_pct=50 ;;
   high|High|3)                     _te_pct=75 ;;
-  extended|Extended|turbo|max|4|5) _te_pct=100 ;;
+  extended|Extended|xhigh|XHigh|turbo|max|Max|4|5) _te_pct=100 ;;
 esac
 if (( _te_pct > 0 )); then
   printf '%d %d\n' "$_te_pct" "$_NOW" > "$TE_PERSIST" 2>/dev/null || true
@@ -613,24 +662,26 @@ has_focus=0; [[ -n "$focus_file" && "$focus_file" != "0" && $focus_count -ge 2 ]
 has_test=0
 TEST_MARKER="/tmp/claude-test-${PPID}"
 if [[ -f "$TEST_MARKER" ]]; then
-  eval "$(grep -E '^(test_status|test_total|test_failed)=' "$TEST_MARKER" 2>/dev/null)" 2>/dev/null || true
+  while IFS= read -r _tml || [[ -n "$_tml" ]]; do
+    [[ "$_tml" =~ ^(test_status|test_total|test_failed)=([A-Za-z0-9_]*)$ ]] && printf -v "${BASH_REMATCH[1]}" '%s' "${BASH_REMATCH[2]}"
+  done < "$TEST_MARKER"
   [[ -n "${test_status:-}" ]] && has_test=1
 fi
 # Detect external edits to statusline.sh (daemon compares checksum to session baseline)
 has_script_changed=0; [[ "${script_changed:-0}" == "1" ]] && has_script_changed=1
 
-# ── Cache hit ratio (from JSON cache_read_tok / total input) ──
+# ── Cache hit ratio: Claude Code's own prompt_cache.hit_ratio ──
 has_cache=0; cache_hit_pct=0
-_cr=${cache_read_tok:-0}; _cc=${cache_create_tok:-0}
-if (( _cr > 0 && input_tokens > 0 )); then
-  cache_hit_pct=$(( _cr * 100 / input_tokens ))
-  (( cache_hit_pct > 0 )) && has_cache=1
+if [[ "${pc_hit:-}" =~ ^[0-9]+$ ]]; then
+  cache_hit_pct=$pc_hit; has_cache=1
 fi
 
-# ── Cache write amortization (tokens being written to cache / total input) ──
+# ── Cache write share of the last turn: cache_creation over all three input kinds ──
 has_cache_write=0; cache_write_pct=0
-if (( _cc > 0 && input_tokens > 0 )); then
-  cache_write_pct=$(( _cc * 100 / input_tokens ))
+_cr=${cache_read_tok:-0}; _cc=${cache_create_tok:-0}
+_cur_total=$(( ${cur_in:-0} + _cc + _cr ))
+if (( _cc > 0 && _cur_total > 0 )); then
+  cache_write_pct=$(( _cc * 100 / _cur_total ))
   (( cache_write_pct > 0 )) && has_cache_write=1
 fi
 
@@ -660,10 +711,8 @@ elif [[ -n "${AZURE_SUBSCRIPTION_ID:-}" ]]; then
 fi
 has_cloud=0; [[ -n "$cloud_provider" ]] && has_cloud=1
 
-# ── Sudo credential active (single no-TTY check; 0 forks if false, 1 fork otherwise) ──
-# -n = non-interactive (no password prompt); fails fast if creds are expired/absent
-has_sudo=0
-sudo -n true 2>/dev/null && has_sudo=1 || true
+# ── Sudo credential active: checked by the daemon (up to 4 s late), not per render ──
+has_sudo=0; [[ "${sudo_active:-0}" == "1" ]] && has_sudo=1
 
 # ── Runtime version detection (reads .nvmrc / .python-version from project root) ──
 # No subprocess forks — pure bash file reads. Checks cwd first, then walks up 2 levels.
@@ -678,9 +727,8 @@ has_python_ver=0; [[ -n "$python_ver" ]] && has_python_ver=1
 
 # ── Tmux session count (fast; only calls tmux if binary exists) ──
 has_tmux=0; tmux_count=0
-if command -v tmux &>/dev/null; then
-  _tc=$(tmux ls 2>/dev/null | wc -l | tr -d ' ')
-  [[ "$_tc" =~ ^[0-9]+$ && "$_tc" -gt 0 ]] && tmux_count="$_tc" && has_tmux=1 || true
+if [[ "${tmux_sessions:-0}" =~ ^[0-9]+$ && "${tmux_sessions:-0}" -gt 0 ]]; then
+  tmux_count="$tmux_sessions"; has_tmux=1
 fi
 
 # ── Docker running containers — daemon-guarded to avoid slow timeout ──
@@ -697,84 +745,19 @@ fi
 has_exit_code=0; last_exit_code=0
 _exit_file="/tmp/claude-last-exit-${PPID}"
 if [[ -f "$_exit_file" ]]; then
-  _ec=$(< "$_exit_file")
+  _ec=""; read -r _ec < "$_exit_file" 2>/dev/null || true
   [[ "$_ec" =~ ^[0-9]+$ ]] && last_exit_code="$_ec" && has_exit_code=1 || true
 fi
 
-# ── Inter-render latency (time between statusline renders = event gap) ──
-# No extra hooks needed: statusline reads/writes its own timestamp each render.
-has_latency=0; render_lat_s=0
-_last_ts_file="/tmp/claude-last-ts-${PPID}"
-if [[ -f "$_last_ts_file" ]]; then
-  _lts=$(< "$_last_ts_file")
-  [[ "$_lts" =~ ^[0-9]+$ ]] && render_lat_s=$(( _NOW - _lts )) && (( render_lat_s > 0 )) && has_latency=1 || true
-fi
-printf '%s' "$_NOW" > "$_last_ts_file" 2>/dev/null || true
+# Idle (time since the session last did anything) is computed above, with the
+# activity signature, so refresh renders do not reset it.
+has_latency=0; (( render_lat_s >= 60 )) && has_latency=1
 
 # ── Animation: event-tick spinner (advances on every hook invocation) ──
-# Uses tool_call_count from JSON if available, falls back to turn_count.
-# This guarantees a frame change on each render regardless of wall-clock timing.
 _SPIN=('⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏')
 _spin_ctr=$(( ${tool_call_count:-0} + turn_count ))
 _sf=$(( _spin_ctr % 10 ))
 _spin="${_SPIN[$_sf]}"
-
-# ══════════════════════════════════════════════════════════════════════
-# v4 RENDERING — Fixed semantic lines (lines skipped if empty)
-# L1: dir | ide | model | cost | lines | cpu || context_bar
-# L2: rate_bar | think_bar | countdown | agent | WAL | subagents | turns | tools | sparkline
-# L3: git_branch | uncommitted | mcp_down | network | PR | pm2 | scratchpad | test | tok | branch_age | stash
-# L4: sid | ports | uptime | edit_ratio | cost_vel | mem | disk | timeline
-#
-# Width conventions:
-#   L1 uses _l1_add(visible_len, content) — explicit length arg required (icons: $(( ${#ic_x} + ${#val} )) )
-#   L2/L3/L4 use _vlen(str) → _VLEN — auto-strips ANSI; prepend ${ic_x} to segment strings directly
-#   Separator _V4SEP = " │ " = 3 visible chars; counted explicitly in L1, via _vlen in L2-L4
-# ══════════════════════════════════════════════════════════════════════
-
-_V4SEP="${dim} │ ${rst}"   # 3 visible chars
-
-# Width tiers (v4 — wider thresholds)
-# Tier 0: ≥140 cols — everything, full labels
-# Tier 1: 120-139 — most segments, some abbreviation
-# Tier 2: 100-119 — core + actionable only
-# Tier 3:  80-99  — essential only
-# Tier 4:  <80   — minimal
-if   (( cols >= 140 )); then wtier=0
-elif (( cols >= 120 )); then wtier=1
-elif (( cols >= 100 )); then wtier=2
-elif (( cols >= 80  )); then wtier=3
-else                         wtier=4; fi
-
-# L1 accumulator — segments fill left-to-right until budget exhausted
-_l1_out=""; _l1_len=0; _l1_budget=0
-_l1_add() {
-  # $1=visible_len  $2=rendered_content
-  # Returns 0 if added, 1 if over budget
-  local _need=$(( _l1_len > 0 ? _l1_len + 3 + $1 : _l1_len + $1 ))
-  (( _need > _l1_budget )) && return 1
-  (( _l1_len > 0 )) && _l1_out+="${_V4SEP}" && _l1_len=$(( _l1_len + 3 ))
-  _l1_out+="$2"; _l1_len=$(( _l1_len + $1 ))
-  return 0
-}
-
-# ── LINE 1: Performance / Identity ─────────────────────────────────
-# Context bar is always last (reserved); everything else fills left-to-right.
-
-# Pre-build context bar so we can reserve its width from the L1 budget
-_ctx_str=""
-if seg_on context 1 && [[ -n "${remaining:-}" && "$remaining" != "null" ]]; then
-  _used=$(echo "$remaining" | awk '{printf "%d", 100 - $1}')
-  if (( _used > 75 )); then _cbc="${red}"; elif (( _used > 50 )); then _cbc="${ylw}"; else _cbc="${grn}"; fi
-  _ctxbar=$(_bar10 "$_used")
-  _ctx_extra=""
-  if (( wtier <= 1 )) && [[ "${input_tokens:-0}" != "0" ]]; then
-    _ctx_extra=" ↑$(( ${input_tokens:-0} / 1000 ))K"
-  fi
-  _ctx_pct="$(printf "%.0f" "$remaining")%"
-  (( _used >= 90 )) && _ctx_pct="\033[5m${_ctx_pct}\033[25m"
-  _ctx_str="${_cbc}${ic_ctx}[${_ctxbar}] ${_ctx_pct}${_ctx_extra}${rst}"
-fi
 
 # Daemon side-effect writes (cost/token forwarding for ring buffers)
 CTX_FILE="/tmp/claude-ctx-${PPID}"
@@ -786,603 +769,612 @@ COST_FWD="/tmp/claude-cost-${PPID}"
 TPATH_FWD="/tmp/claude-tpath-${PPID}"
 [[ -n "${transcript:-}" ]] && echo "$transcript" > "$TPATH_FWD" 2>/dev/null || true
 
-# L1 budget = cols minus context bar reservation
-_ctx_vl=0; if [[ -n "$_ctx_str" ]]; then _vlen "$_ctx_str"; _ctx_vl=$_VLEN; fi
-_l1_budget=$(( cols - ( _ctx_vl > 0 ? _ctx_vl + 3 : 0 ) ))
+# ══════════════════════════════════════════════════════════════════════
+# RENDERING: five rows, each led by its category glyph.
+#   who    dir, ide, model + effort, ipc, sid, up, idle
+#   spend  context, cache, 5h/wk limits, cost, ping + hit, out share
+#   code   branch, changed, lines, conflicts, stash, notes, tests, PR, runtimes
+#   work   agents, tools, focus, decisions, checkpoint drift, exit, eff, speed
+#   system cpu, mem, net, disk, ports, pm2, mcp, cloud, sudo, tmux, docker, act
+# Visual rules: conventions/mods-handbook.md (chips, colour, glyphs, links).
+# Escapes are real ESC bytes so _vlen can measure them.
+# ══════════════════════════════════════════════════════════════════════
 
-# P1: dir (blue-bold name; OSC 8 hyperlinks removed — caused ANSI bleeding in ghostty)
-if seg_on dir 1; then
-  _l1_add ${#shortdir} "\033[1;34m${shortdir}\033[0m"
+_ESC=$'\033'
+rst="${_ESC}[0m"; dim="${_ESC}[2m"; bld="${_ESC}[1m"
+C_OK="${_ESC}[38;2;158;206;106m";   C_WARN="${_ESC}[38;2;224;175;104m"; C_BAD="${_ESC}[38;2;247;118;142m"
+C_INFO="${_ESC}[38;2;125;207;255m"; C_LBL="${_ESC}[38;2;86;95;137m";    C_FAINT="${_ESC}[38;2;59;66;97m"
+C_FG="${_ESC}[38;2;192;202;245m";   C_WHITE="${_ESC}[38;2;255;255;255m"
+C_WHO="${_ESC}[38;2;122;162;247m";  C_SPEND="${_ESC}[38;2;224;175;104m"; C_CODE="${_ESC}[38;2;187;154;247m"
+C_WORK="${_ESC}[38;2;125;207;255m"; C_SYS="${_ESC}[38;2;115;122;162m"
+BG_CHIP="${_ESC}[48;2;36;40;59m"
+_SEP="${C_FAINT} │ ${rst}"
+
+# Category glyphs (Nerd Font when icons=1, plain otherwise)
+if (( use_icons )); then
+  G_WHO=$'\xef\x80\x87'; G_SPEND='$'; G_CODE=$'\xee\x82\xa0'; G_WORK=$'\xef\x82\xad'; G_SYS=$'\xef\x8b\x9b'
+  G_MAIL=$'\xef\x83\xa0'; G_CKPT=$'\xef\x83\x87'; G_DEC=$'\xef\x83\xa3'
+else
+  G_WHO='@'; G_SPEND='$'; G_CODE='⎇'; G_WORK='⚒'; G_SYS='▣'
+  G_MAIL='✉'; G_CKPT='↻'; G_DEC='◆'
 fi
 
-# P2: IDE indicator (show at all widths)
+# Width thresholds for optional segments. Dropped in this order as the
+# terminal narrows: act, net, notes, eff, hit, ping, idle, up.
+show_act=0;   (( cols >= 150 )) && show_act=1
+show_net=0;   (( cols >= 140 )) && show_net=1
+show_notes=0; (( cols >= 130 )) && show_notes=1
+show_eff=0;   (( cols >= 120 )) && show_eff=1
+show_hit=0;   (( cols >= 110 )) && show_hit=1
+show_ping=0;  (( cols >= 100 )) && show_ping=1
+show_idle=0;  (( cols >= 90  )) && show_idle=1
+show_up=0;    (( cols >= 80  )) && show_up=1
+
+# Visible length of a string, ignoring colour codes and OSC 8 link wrappers.
+_VLEN=0
+_e1="${_ESC}["; _e2="${_ESC}]8;;"; _e3="${_ESC}\\"
+# Plain loops, because extglob substitution is quadratic in bash 3.2.
+_vlen() {
+  local s="$1" pre
+  while [[ "$s" == *"$_e1"* ]]; do pre=${s%%"$_e1"*}; s=${s#*"$_e1"}; s="${pre}${s#*m}"; done
+  while [[ "$s" == *"$_e2"* ]]; do pre=${s%%"$_e2"*}; s=${s#*"$_e2"}; s="${pre}${s#*"$_e3"}"; done
+  _VLEN=${#s}
+}
+
+# 380K, 1M, 1.5M
+_hum() {
+  local n=$1 t
+  if (( n >= 1000000 )); then
+    t=$(( (n + 50000) / 100000 ))
+    if (( t % 10 == 0 )); then _H="$(( t / 10 ))M"; else _H="$(( t / 10 )).$(( t % 10 ))M"; fi
+  elif (( n >= 1000 )); then _H="$(( (n + 500) / 1000 ))K"
+  else _H="$n"; fi
+}
+# 45s, 21m, 1h30m, 3d2h
+_dur() {
+  local s=$1 m h
+  if (( s < 60 )); then _D="${s}s"
+  elif (( s < 3600 )); then _D="$(( s / 60 ))m"
+  elif (( s < 86400 )); then
+    h=$(( s / 3600 )); m=$(( (s % 3600) / 60 )); _D="${h}h"; if (( m > 0 )); then _D+="${m}m"; fi
+  else
+    h=$(( (s % 86400) / 3600 )); _D="$(( s / 86400 ))d"; if (( h > 0 )); then _D+="${h}h"; fi
+  fi
+}
+# Clock time of an epoch, cached per tag so `date` runs only when the epoch changes.
+_CLK=""
+_clock() { # $1=format $2=epoch $3=tag
+  local f="/tmp/claude-clk-${PPID}-$3" e="" t=""
+  _CLK=""
+  if [[ -f "$f" ]]; then read -r e t < "$f" 2>/dev/null || true; fi
+  if [[ "$e" == "$2" && -n "$t" ]]; then _CLK="$t"; return; fi
+  _CLK=$(date -r "$2" "+$1" 2>/dev/null || date -d "@$2" "+$1" 2>/dev/null || true)
+  printf '%s %s\n' "$2" "$_CLK" > "$f" 2>/dev/null || true
+}
+_cents() { # "12.2231" -> _CC cents (integer)
+  local c="$1"
+  if [[ "$c" =~ ^([0-9]+)(\.([0-9]*))?$ ]]; then
+    local f="${BASH_REMATCH[3]}00"
+    _CC=$(( 10#${BASH_REMATCH[1]} * 100 + 10#${f:0:2} ))
+  else
+    _CC=$(awk -v c="$c" 'BEGIN{printf "%d", c * 100}')
+  fi
+}
+_money() { printf -v _M '$%d.%02d' "$(( $1 / 100 ))" "$(( $1 % 100 ))"; }
+_chip() { _CHIP="${BG_CHIP} $1 ${rst}"; }                      # soft background for live gauges
+_link() { _LNK="${_ESC}]8;;$1${_ESC}\\$2${_ESC}]8;;${_ESC}\\"; } # OSC 8 hyperlink
+_docurl() { # file path -> link target: markdown and text in the doc viewer, the rest file://
+  local p="${1// /%20}"
+  case "$1" in
+    *.md|*.txt) _URL="http://localhost:5106/doc?path=${p}" ;;
+    *)          _URL="file://${p}" ;;
+  esac
+}
+
+# Row builder: segments are appended left to right; a segment that no longer
+# fits ends the row there, so a row is never wider than the terminal.
+_R_OUT=""; _R_LEN=0; _R_N=0; _R_FULL=0
+_row_start() { _R_OUT="$2$1${rst} "; _R_LEN=2; _R_N=0; _R_FULL=0; }
+_add() {
+  (( _R_FULL )) && return 1
+  [[ -z "$1" ]] && return 1
+  _vlen "$1"
+  local need=$(( _R_LEN + _VLEN + (_R_N > 0 ? 3 : 0) ))
+  if (( need > cols )); then _R_FULL=1; return 1; fi
+  if (( _R_N > 0 )); then _R_OUT+="$_SEP"; _R_LEN=$(( _R_LEN + 3 )); fi
+  _R_OUT+="$1${rst}"; _R_LEN=$(( _R_LEN + _VLEN )); _R_N=$(( _R_N + 1 ))
+  return 0
+}
+# %s, not %b: every escape here is a real byte, and %b would read the backslash
+# of an OSC 8 terminator as the start of an octal escape ("ESC\" + "6 decisions").
+_row_print() { if (( _R_N > 0 )); then printf '%s\n' "$_R_OUT"; fi; }
+
+# ── ROW 1: who ─────────────────────────────────────────────────────
+_row_start "$G_WHO" "$C_WHO"
+
+if seg_on dir 1; then _add "${C_WHO}${bld}${shortdir}"; fi
+
 if [[ -n "${ide_name:-}" ]]; then
   case "$ide_name" in *Visual*|*VS*Code*) _is="vsc";; *Cursor*) _is="cur";; *) _is="ide";; esac
-  _l1_add ${#_is} "${dim}${_is}${rst}"
+  _add "${C_LBL}${_is}"
 fi
 
-# P3: Model — full name at T0-T3; family abbrev only at T4
+# Model plus effort meter (▮▮▮▯ from effort.level)
 if seg_on model 1 && [[ -n "${model_name:-}" ]]; then
-  if (( wtier <= 3 )); then
-    _mn="$model_name"  # full name (e.g. "Claude Sonnet 4.6")
+  if (( cols >= 80 )); then _mn="$model_name"
   else
     case "$model_name" in *Opus*) _mn="Opus";; *Sonnet*) _mn="Snnt";; *Haiku*) _mn="Hiku";; *) _mn="${model_name:0:6}";; esac
     [[ "$model_name" == *"1M"* ]] && _mn+=" 1M"
   fi
-  _l1_add $(( ${#ic_model} + ${#_mn} )) "${cyn}${ic_model}${_mn}${rst}"
-fi
-
-# P2: Cost (+ 200K warning badge)
-if seg_on cost "$has_cost" && (( has_cost )); then
-  _cf="${ic_cost}$(printf "%.2f" "$cost_usd" 2>/dev/null || echo "$cost_usd")"
-  _cents=$(echo "$cost_usd" | awk '{printf "%d", $1 * 100}'); _ccost "$_cents"
-  if (( has_200k )); then
-    _l1_add $(( ${#_cf} + 2 )) "${red}${bld}${_cf} ⚠${rst}"
-  else
-    _l1_add ${#_cf} "${_c}${_cf}${rst}"
+  _mseg="${C_INFO}${ic_model}${_mn}"
+  if seg_on thinking_effort "$has_thinking" && (( has_thinking )); then
+    _pips=$(( _te_pct / 25 )); _pf=""; _pe=""
+    for ((i=0; i<4; i++)); do if (( i < _pips )); then _pf+="▮"; else _pe+="▯"; fi; done
+    if (( ${_te_faded:-0} )); then _mseg+=" ${C_LBL}${_pf}${_pe}"; else _mseg+=" ${C_FG}${_pf}${C_FAINT}${_pe}"; fi
   fi
-elif (( has_200k )); then
-  _l1_add 5 "${red}${bld}200K+${rst}"
+  _add "$_mseg"
 fi
 
-# P5: Session uptime (T0-T2, >30 min) — moved from L4
-if (( wtier <= 2 )) && seg_on uptime "$has_uptime" && (( has_uptime )); then
-  _up_sec=$(( ${duration_ms%.*} / 1000 ))
-  if (( _up_sec >= 1800 )); then
-    _up_m=$(( (_up_sec % 3600) / 60 ))
-    if (( _up_sec >= 86400 )); then
-      _up_d=$(( _up_sec / 86400 )); _up_h=$(( (_up_sec % 86400) / 3600 ))
-      _up_str="${_up_d}d"; (( _up_h > 0 )) && _up_str+="${_up_h}h"; (( _up_m > 0 )) && _up_str+="${_up_m}m"
-    elif (( _up_sec >= 3600 )); then
-      _up_h=$(( _up_sec / 3600 )); _up_str="${_up_h}h"; (( _up_m > 0 )) && _up_str+="${_up_m}m"
-    else _up_str="$(( _up_sec / 60 ))m"; fi
-    if (( _up_sec > 86400 )); then _up_c="${red}"; elif (( _up_sec > 7200 )); then _up_c="${ylw}"; else _up_c="${dim}"; fi
-    _l1_add $(( 3 + ${#_up_str} )) "${_up_c}up:${_up_str}${rst}"
-  fi
-fi
-
-# P6: Lines changed (tier 0-2)
-if (( wtier <= 2 )) && seg_on lines "$has_lines" && (( has_lines )); then
-  _lstr="+${lines_add:-0}-${lines_rm:-0}"
-  _l1_add ${#_lstr} "${grn}+${lines_add:-0}${rst}${red}-${lines_rm:-0}${rst}"
-fi
-
-# P3: CPU/mem + net rate (tier 0-2)
-if (( wtier <= 2 )) && seg_on cpu "$has_cpu" && (( has_cpu )); then
-  _cpct "$proc_cpu" 20 50; _cpu_c="$_c"
-  if (( proc_rss > 1000 )); then _mem_c="${red}"; elif (( proc_rss > 500 )); then _mem_c="${ylw}"; else _mem_c="${dim}"; fi
-  # Net rate suffix: show when >5 KB/s at T2 or wider (format as K or M)
-  _net_sfx=""; _net_sfx_vis=""
-  if (( wtier <= 2 && (net_rx_kbps > 5 || net_tx_kbps > 5) )); then
-    if (( net_rx_kbps >= 1024 )); then _rx_s="$(( net_rx_kbps / 1024 ))M"; else _rx_s="${net_rx_kbps}K"; fi
-    if (( net_tx_kbps >= 1024 )); then _tx_s="$(( net_tx_kbps / 1024 ))M"; else _tx_s="${net_tx_kbps}K"; fi
-    _net_sfx=" ${dim}↓${_rx_s}↑${_tx_s}${rst}"
-    _net_sfx_vis=" ↓${_rx_s}↑${_tx_s}"
-  fi
-  if (( proc_rss > 0 )); then
-    _cpustr="${ic_cpu}${proc_cpu}% ${proc_rss}MB${_net_sfx_vis}"
-    _l1_add ${#_cpustr} "${_cpu_c}${ic_cpu}${proc_cpu}%${rst} ${_mem_c}${proc_rss}MB${rst}${_net_sfx}"
-  else
-    _cpustr="${ic_cpu}${proc_cpu}%${_net_sfx_vis}"
-    _l1_add ${#_cpustr} "${_cpu_c}${ic_cpu}${proc_cpu}%${rst}${_net_sfx}"
-  fi
-fi
-
-# P4: (thinking effort moved to L2 visual bar)
-
-# Print L1 (context bar always appended last)
-if [[ -n "$_l1_out" || -n "$_ctx_str" ]]; then
-  if [[ -n "$_l1_out" && -n "$_ctx_str" ]]; then
-    printf '%b\n' "${_l1_out}${_V4SEP}${_ctx_str}${rst}"
-  elif [[ -n "$_l1_out" ]]; then
-    printf '%b\n' "${_l1_out}${rst}"
-  else
-    printf '%b\n' "${_ctx_str}${rst}"
-  fi
-fi
-
-# ── LINE 2: Rate Limits / Session Activity ──────────────────────────
-_l2_segs=()
-
-# P1: 5h rate bar + pct + optional 7d + countdown + reset time
-if seg_on rate "$has_rate" && (( has_rate )); then
-  _cpct "$r5" 50 80
-  _rl_bar=$(_bar10 "$r5")
-  _rl_pct="${r5}%"; (( r5 >= 90 )) && _rl_pct="\033[5m${_rl_pct}\033[25m"
-  _rl_str="${ic_rate}[${_rl_bar}] ${_rl_pct}"
-  # 7d (always show when available — user wants full picture of both windows).
-  # Cross-window staleness: if rate_7d_resets is in the past, the 7d value is
-  # from a window that has already expired and Claude Code's JSON is feeding
-  # stale data. Mark with dim+red and a `~` suffix so the user knows not to
-  # trust it. (Within-window lag — when Claude Code sends slow-updating values
-  # while still inside the current window — is not detectable from JSON alone;
-  # see STATUSLINE_RATELIMIT_DEBUG=1 for the time-series capture used to
-  # characterise it.)
-  if [[ -n "${rate_7d:-}" && "$rate_7d" != "null" ]]; then
-    _r7=$(printf "%.0f" "$rate_7d" 2>/dev/null || echo "0")
-    _r7_stale=0
-    if [[ -n "${rate_7d_resets:-}" && "$rate_7d_resets" != "null" ]]; then
-      if [[ "$rate_7d_resets" =~ ^[0-9]+$ ]]; then _r7_re="$rate_7d_resets"
-      else _r7_re=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${rate_7d_resets%%.*}" "+%s" 2>/dev/null \
-                || date -d "${rate_7d_resets%%.*}" "+%s" 2>/dev/null \
-                || echo "0"); fi
-      (( _r7_re > 0 && _r7_re < _NOW )) && _r7_stale=1
-    fi
-    if (( _r7_stale )); then
-      _rl_str+=" · ${dim}${red}7d:${_r7}%~${rst}"
-    else
-      _rl_str+=" · 7d:${_r7}%"
-    fi
-  fi
-  # Countdown + reset time (show when rate is visible and reset time is known)
-  if seg_on countdown "$has_countdown" && (( has_countdown )); then
-    if [[ "$rate_5h_resets" =~ ^[0-9]+$ ]]; then _re="$rate_5h_resets"
-    else _re=$(date -j -f "%Y-%m-%dT%H:%M:%S" "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
-           || date -d "${rate_5h_resets%%.*}" "+%s" 2>/dev/null \
-           || echo "0"); fi
-    _d=$(( _re - _NOW ))
-    # A real 5h/7d reset is at most days out. A value centuries away is a sentinel
-    # (Claude Code sends resets_at "9999999999" when the reset time is unknown) or
-    # a bad unit — showing it produced a 260-year "~2282168h56m". Skip it, and
-    # render anything genuinely over a day in days, not a huge hour count.
-    if (( _re > _NOW && _d <= 1209600 )); then
-      if   (( _d >= 86400 )); then _rf="$(( _d / 86400 ))d$(( (_d % 86400) / 3600 ))h"
-      elif (( _d >= 3600 ));  then _rf="$(( _d / 3600 ))h$(( (_d % 3600) / 60 ))m"
-      else                         _rf="$(( _d / 60 ))m"; fi
-      _rl_str+=" ~${_rf}"
-      if (( wtier <= 1 )); then
-        _rt=$(date -r "$_re" "+%-I:%M%p" 2>/dev/null || date -d "@$_re" "+%-I:%M%p" 2>/dev/null || true)
-        [[ -n "$_rt" ]] && _rl_str+=" (${_rt})"
-      fi
-    fi
-  fi
-  _l2_segs+=("${_c}${_rl_str}${rst}")
-fi
-
-# P1.5: Thinking effort visual bar — persists for 10 min after last seen effort
-if seg_on thinking_effort "$has_thinking" && (( has_thinking )); then
-  _tebar=$(_bar10 "$_te_pct")
-  if (( ${_te_faded:-0} )); then
-    _te_c="\033[38;5;240m"  # faded: >5 min since last real thinking_effort
-  elif (( _te_pct >= 75 )); then _te_c="${ylw}"
-  elif (( _te_pct >= 50 )); then _te_c="${dim}"
-  else _te_c="\033[38;5;240m"; fi
-  _l2_segs+=("${_te_c}${_spin}think:[${_tebar}]${rst}")
-fi
-
-# P2: Agent name
 if seg_on agent "$has_agent" && (( has_agent )); then
-  if (( use_icons )); then _l2_segs+=("${ylw}${ic_agent}${agent_name} ${_spin}${rst}")
-  else _l2_segs+=("${ylw}[${agent_name}] ${_spin}${rst}"); fi
+  _add "${C_WARN}[${agent_name}] ${_spin}"
 fi
 
-# P1: WAL checkpoint overdue (actionable)
-if seg_on wal "$has_wal" && (( wal_since_checkpoint > 8 )); then
-  if (( wal_since_checkpoint > 15 )); then _wc="${red}"; else _wc="${ylw}"; fi
-  _l2_segs+=("${_wc}${ic_wal:+$ic_wal}ckpt:${wal_since_checkpoint}${rst}")
-fi
-
-# P1: Decision page(s) awaiting the user's answer (actionable — /decision-wizard)
-if seg_on decwait "$has_decwait" && (( has_decwait )); then
-  _l2_segs+=("${ylw}decide:${decwait_n}${rst}")
-fi
-
-# P2: Active subagents
-if seg_on subagents "$has_subagents" && (( subagent_count > 0 )); then
-  _dn="$subagent_names"
-  if (( subagent_count > 3 )); then
-    _dn=$(echo "$subagent_names" | cut -d, -f1-3); _dn+=",+$(( subagent_count - 3 ))"
+# ipc alias in purple; the mail icon is blue with unseen mail (or unknown), grey with none
+if seg_on ipc 1 && [[ -n "${session_id:-}" ]]; then
+  _ipc_alias=""; _ipc_f="${CLAUDE_IPC_HOME:-$HOME/.claude-ipc}/alias-by-sid/${session_id}"
+  [[ -f "$_ipc_f" ]] && { read -r _ipc_alias < "$_ipc_f" 2>/dev/null || true; }
+  if [[ -n "${_ipc_alias:-}" ]]; then
+    _mc="$C_INFO"; [[ "${ipc_unseen:-}" == "0" ]] && _mc="$C_LBL"
+    _add "${_mc}${G_MAIL} ${C_CODE}${_ipc_alias}"
   fi
-  _l2_segs+=("${cyn}${_spin}sa:${subagent_count}(${_dn})${rst}")
 fi
 
-# P3: Turn counter (show when >10)
-if seg_on turns 1 && (( turn_count > 10 )); then
-  if (( turn_count > 30 )); then _tc="${ylw}"; else _tc="${dim}"; fi
-  if (( use_icons )); then
-    _turn_label="${ic_turn}${turn_count}"
+if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then _add "${C_LBL}sid ${C_FG}${sid_short}"; fi
+
+# Session age: white under 2 min, green under 1 h, yellow under 4 h, red after; a WTF chip past 2 days
+if (( show_up )) && seg_on uptime "$has_uptime" && (( has_uptime )); then
+  _up_sec=$(( ${duration_ms%.*} / 1000 ))
+  _dur "$_up_sec"
+  if (( _up_sec > 172800 )); then _chip "${C_BAD}${bld}up ${_D} WTF"; _add "$_CHIP"
   else
-    (( wtier <= 1 )) && _turn_label="turns:${turn_count}" || _turn_label="t:${turn_count}"
+    if   (( _up_sec < 120 ));   then _uc="$C_WHITE"
+    elif (( _up_sec < 3600 ));  then _uc="$C_OK"
+    elif (( _up_sec < 14400 )); then _uc="$C_WARN"
+    else                             _uc="$C_BAD"; fi
+    _add "${C_LBL}up ${_uc}${_D}"
   fi
-  _l2_segs+=("${_tc}${_turn_label}${rst}")
 fi
 
-# P3: Tool summary (tier 0-1) — colors baked in per tool type
-if (( wtier <= 1 )) && seg_on tools 1 && [[ -n "${tool_summary:-}" ]]; then
-  _ts="${tool_summary_wide:-$tool_summary}"; _ts="${_ts% }"
-  _l2_segs+=("${_ts}${rst}")
+# Idle: time since the session last did anything (not the gap between renders)
+if (( show_idle )) && seg_on latency "$has_latency" && (( has_latency )); then
+  _dur "$render_lat_s"
+  if (( render_lat_s >= 1800 )); then _ic="$C_WARN"; else _ic="$C_FG"; fi
+  _add "${C_LBL}idle ${_ic}${_D}"
 fi
+_row_print
 
-# P4: Sparkline + depletion estimate (tier 0-1)
-# Uses relative min/max scaling within the display window so even small changes
-# (e.g., 72%→70% remaining) produce visible step differences in bar height.
-SPARK_FILE="/tmp/claude-sparkline-${PPID}"
-if (( wtier <= 1 )) && seg_on sparkline 1 && [[ -f "$SPARK_FILE" ]]; then
-  _spark_data=()
-  while IFS= read -r _sv; do [[ -n "$_sv" ]] && _spark_data+=("$_sv"); done < "$SPARK_FILE"
-  if (( ${#_spark_data[@]} >= 3 )); then
-    _spark_str=""; _sblocks=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
-    # Cap display to last 12 points (≤12 visible chars)
-    _spark_disp=("${_spark_data[@]}")
-    (( ${#_spark_disp[@]} > 12 )) && _spark_disp=("${_spark_disp[@]: -12}")
-    # Convert remaining% → used% for each point
-    _spark_used=()
-    for _sv in "${_spark_disp[@]}"; do
-      _su=$(( 100 - _sv )); (( _su < 0 )) && _su=0; (( _su > 100 )) && _su=100
-      _spark_used+=("$_su")
-    done
-    # Relative scaling: find min/max within display window
-    _sp_min=${_spark_used[0]}; _sp_max=${_spark_used[0]}
-    for _su in "${_spark_used[@]}"; do
-      (( _su < _sp_min )) && _sp_min=$_su
-      (( _su > _sp_max )) && _sp_max=$_su
-    done
-    _sp_range=$(( _sp_max - _sp_min ))
-    for _su in "${_spark_used[@]}"; do
-      if (( _sp_range == 0 )); then
-        _spark_str+="${_sblocks[3]}"  # flat → mid-height bar (▄)
-      else
-        _sp_idx=$(( (_su - _sp_min) * 7 / _sp_range ))
-        _spark_str+="${_sblocks[$_sp_idx]}"
-      fi
-    done
-    _cu=$((100 - ${remaining:-100}))
-    if (( _cu > 75 )); then _sc="${red}"; elif (( _cu > 50 )); then _sc="${ylw}"; else _sc="${grn}"; fi
-    _l2_spark="${dim}cxh:${rst}${_sc}${_spark_str}${rst}"
-    if seg_on depletion 1 && (( ${#_spark_data[@]} >= 5 )); then
-      _su_old=$((100 - ${_spark_data[$(( ${#_spark_data[@]} - 5 ))]}))
-      _su_new=$((100 - ${_spark_data[$(( ${#_spark_data[@]} - 1 ))]}))
-      _rdelta=$(( _su_new - _su_old ))
-      if (( _rdelta > 2 )); then
-        _rpp=$(( _rdelta * 100 / 5 ))
-        if (( _rpp > 0 )); then
-          _rl=$(( (100 - _su_new) * 100 / _rpp ))
-          if (( _rl > 0 && _rl < 100 )); then
-            if (( _rl < 5 )); then _dc="${red}"; elif (( _rl < 15 )); then _dc="${ylw}"; else _dc="${dim}"; fi
-            _l2_spark+=" ${_dc}~${_rl}t${rst}"
+# ── ROW 2: spend ───────────────────────────────────────────────────
+_row_start "$G_SPEND" "$C_SPEND"
+
+# Context: used percent and tokens, two-tone gauge with a tick at the 70% auto-compact line
+_used=""
+if [[ "${used_pct:-}" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then _used=${used_pct%.*}
+elif [[ -n "${remaining:-}" && "$remaining" != "null" ]]; then _used=$(( 100 - ${remaining%.*} )); fi
+if seg_on context 1 && [[ -n "$_used" ]]; then
+  (( _used < 0 )) && _used=0; (( _used > 100 )) && _used=100
+  _ctok=$(( ${cur_in:-0} + ${cache_read_tok:-0} + ${cache_create_tok:-0} ))
+  (( _ctok == 0 )) && _ctok=${input_tokens:-0}
+  _hum "$_ctok"; _tk_s="$_H"; _hum "${ctx_size:-0}"; _win_s="$_H"
+  if   (( _used >= 70 )); then _sc="$C_BAD"; elif (( _used >= 55 )); then _sc="$C_WARN"; else _sc="$C_FG"; fi
+  _pct_s="${_used}%"; (( _used >= 90 )) && _pct_s="${_ESC}[5m${_pct_s}${_ESC}[25m"
+  _ctext="${C_LBL}${ic_ctx}${_sc}${_pct_s}"
+  (( ctx_size > 0 )) && _ctext+=" ${C_FG}${_tk_s}${C_LBL}/${_win_s}"
+  _chip "$_ctext"; _cseg="$_CHIP"
+  if   (( _used >= 70 )); then _gc="$C_BAD"; elif (( _used >= 55 )); then _gc="$C_WARN"; else _gc="$C_OK"; fi
+  _fill=$(( _used * 10 / 100 )); _gauge=" "
+  for ((i=0; i<10; i++)); do
+    (( i == 7 )) && _gauge+="${C_LBL}┊"
+    if (( i < _fill )); then _gauge+="${_gc}█"; else _gauge+="${C_FAINT}█"; fi
+  done
+  _cseg+="$_gauge"
+  if (( _used >= 70 )) && [[ ! -f "/tmp/claude-compact-through/${session_id}" ]]; then _cseg+=" ${C_BAD}gate"; fi
+  if (( _used >= 60 )); then _cseg+=" ${C_WARN}dump?"; fi
+  _add "$_cseg"
+
+  # Context history sparkline and turns-to-full estimate
+  SPARK_FILE="/tmp/claude-sparkline-${PPID}"
+  if (( cols >= 120 )) && seg_on sparkline 1 && [[ -f "$SPARK_FILE" ]]; then
+    _spark_data=()
+    while IFS= read -r _sv; do [[ -n "$_sv" ]] && _spark_data+=("$_sv"); done < "$SPARK_FILE"
+    if (( ${#_spark_data[@]} >= 3 )); then
+      _spark_str=""; _sblocks=("▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+      _spark_disp=("${_spark_data[@]}")
+      (( ${#_spark_disp[@]} > 12 )) && _spark_disp=("${_spark_disp[@]: -12}")
+      _spark_used=()
+      for _sv in "${_spark_disp[@]}"; do
+        _su=$(( 100 - _sv )); (( _su < 0 )) && _su=0; (( _su > 100 )) && _su=100
+        _spark_used+=("$_su")
+      done
+      _sp_min=${_spark_used[0]}; _sp_max=${_spark_used[0]}
+      for _su in "${_spark_used[@]}"; do
+        (( _su < _sp_min )) && _sp_min=$_su
+        (( _su > _sp_max )) && _sp_max=$_su
+      done
+      _sp_range=$(( _sp_max - _sp_min ))
+      for _su in "${_spark_used[@]}"; do
+        if (( _sp_range == 0 )); then _spark_str+="${_sblocks[3]}"
+        else _spark_str+="${_sblocks[$(( (_su - _sp_min) * 7 / _sp_range ))]}"; fi
+      done
+      _l2_spark="${C_LBL}cxh ${_gc}${_spark_str}"
+      if seg_on depletion 1 && (( ${#_spark_data[@]} >= 5 )); then
+        _su_old=$(( 100 - ${_spark_data[$(( ${#_spark_data[@]} - 5 ))]} ))
+        _su_new=$(( 100 - ${_spark_data[$(( ${#_spark_data[@]} - 1 ))]} ))
+        _rdelta=$(( _su_new - _su_old ))
+        if (( _rdelta > 2 )); then
+          _rpp=$(( _rdelta * 100 / 5 ))
+          if (( _rpp > 0 )); then
+            _rl=$(( (100 - _su_new) * 100 / _rpp ))
+            if (( _rl > 0 && _rl < 100 )); then
+              if (( _rl < 5 )); then _dc="$C_BAD"; elif (( _rl < 15 )); then _dc="$C_WARN"; else _dc="$C_LBL"; fi
+              _l2_spark+=" ${_dc}~${_rl}t"
+            fi
           fi
         fi
       fi
+      _add "$_l2_spark"
     fi
-    _l2_segs+=("$_l2_spark")
   fi
 fi
 
-# P5: Cache hit ratio (T0-T1) — % of input tokens served from context cache
-# High (>80%) = efficient reuse; low (<30%) = lots of unique context being processed
-if (( wtier <= 1 )) && seg_on cache_hit "$has_cache" && (( has_cache )); then
-  if (( cache_hit_pct >= 80 )); then _ch_c="${grn}"
-  elif (( cache_hit_pct >= 50 )); then _ch_c="${dim}"
-  else _ch_c="${ylw}"; fi
-  _l2_segs+=("${_ch_c}${ic_cache}cch:${cache_hit_pct}%${rst}")
+# Cache clock: warm until prompt_cache.expires_at, or cold with the price of the next turn
+if [[ "${pc_state:-}" == "warm" || "${pc_state:-}" == "cold" ]]; then
+  _pc_exp=0; [[ "${pc_expires:-}" =~ ^[0-9]+ ]] && _pc_exp=${pc_expires%%.*}
+  if [[ "$pc_state" == "warm" ]] && (( _pc_exp > _NOW )); then
+    _left=$(( _pc_exp - _NOW )); _dur "$_left"
+    if (( _left < 600 )); then _wc="$C_WARN"; else _wc="$C_FG"; fi
+    _chip "${C_OK}●${C_FG} warm${C_LBL} · ${_wc}cold in ${_D}"
+    _add "$_CHIP"
+  else
+    # Price: tokens x 2 (1 h cache write) x the model's input rate, from model-rates.tsv
+    _price=""
+    _rtok=${pc_recache:-0}; [[ "$_rtok" =~ ^[0-9]+$ && "$_rtok" -gt 0 ]] || _rtok=$(( ${cur_in:-0} + ${cache_read_tok:-0} + ${cache_create_tok:-0} ))
+    _rates="${BASH_SOURCE[0]%/*}/model-rates.tsv"
+    if [[ -n "${model_id:-}" && -f "$_rates" && "$_rtok" -gt 0 ]]; then
+      while IFS=$'\t' read -r _rm _ri _ro; do
+        [[ "$_rm" == "$model_id" ]] || continue
+        if [[ "$_ri" =~ ^([0-9]+)(\.([0-9]+))?$ ]]; then
+          _rf="${BASH_REMATCH[3]}00"; _rh=$(( 10#${BASH_REMATCH[1]} * 100 + 10#${_rf:0:2} ))
+          _pcents=$(( _rtok * 2 * _rh / 1000000 ))
+          if (( _pcents >= 1000 )); then _price="~\$$(( _pcents / 100 ))"; else _money "$_pcents"; _price="~${_M}"; fi
+        fi
+        break
+      done < "$_rates"
+    fi
+    if [[ -n "$_price" ]]; then _chip "${C_WARN}○ cold${C_LBL} · ${C_WARN}re-cache ${_price}"
+    else _chip "${C_WARN}○ cold"; fi
+    _add "$_CHIP"
+  fi
 fi
 
-# P5: Cache write amortization (T0-T1) — tokens queued into cache for future reads
-# High (>30%) = aggressively caching context; signals cost will drop in future turns
-if (( wtier <= 1 )) && seg_on cache_write "$has_cache_write" && (( has_cache_write )); then
-  if (( cache_write_pct >= 30 )); then _cw_c="${cyn}"
-  elif (( cache_write_pct >= 10 )); then _cw_c="${dim}"
-  else _cw_c="\033[38;5;240m"; fi
-  _l2_segs+=("${_cw_c}cw:${cache_write_pct}%${rst}")
+# 5h and weekly limits with reset countdowns
+if seg_on rate "$has_rate" && (( has_rate )); then
+  if   (( r5 > 80 )); then _rc="$C_BAD"; elif (( r5 > 50 )); then _rc="$C_WARN"; else _rc="$C_FG"; fi
+  _rp="${r5}%"; (( r5 >= 90 )) && _rp="${_ESC}[5m${_rp}${_ESC}[25m"
+  _rseg="${C_LBL}5h ${_rc}${_rp}"
+  if seg_on countdown "$has_countdown" && (( has_countdown )) && (( _r5_ep > _NOW )); then
+    _dur "$(( _r5_ep - _NOW ))"; _rseg+=" ${C_LBL}↻${_D}"
+    if (( cols >= 140 )); then
+      _clock '%-I:%M%p' "$_r5_ep" r5; [[ -n "$_CLK" ]] && _rseg+=" ${C_LBL}${_CLK}"
+    fi
+  fi
+  _chip "$_rseg"; _add "$_CHIP"
+  if [[ -n "${rate_7d:-}" && "$rate_7d" != "null" ]]; then
+    _r7=$(printf "%.0f" "$rate_7d" 2>/dev/null || echo 0)
+    if   (( _r7 > 80 )); then _rc="$C_BAD"; elif (( _r7 > 50 )); then _rc="$C_WARN"; else _rc="$C_FG"; fi
+    if (( _r7_ep > 0 && _r7_ep < _NOW )); then
+      # The weekly window already expired: the number is stale, so mark it
+      _wseg="${C_LBL}wk ${C_BAD}${_r7}%~"
+    else
+      _wseg="${C_LBL}wk ${_rc}${_r7}%"
+      if (( _r7_ep > _NOW )); then _dur "$(( _r7_ep - _NOW ))"; _wseg+=" ${C_LBL}↻${_D}"; fi
+    fi
+    _chip "$_wseg"; _add "$_CHIP"
+  fi
 fi
 
-# P6: Output token ratio (T0) — output as % of total tokens; high = model talking more
-# >25% = verbose output; <5% = mostly reading/tool use
-if (( wtier == 0 )) && seg_on out_ratio "$has_out_ratio" && (( has_out_ratio )); then
-  if (( out_ratio_pct >= 30 )); then _or_c="${ylw}"
-  elif (( out_ratio_pct >= 10 )); then _or_c="${dim}"
-  else _or_c="\033[38;5;240m"; fi
-  _l2_segs+=("${_or_c}out:${out_ratio_pct}%${rst}")
+# Cost: total and cents per turn; red with a ▲ when the context is past 200K
+if seg_on cost "$has_cost" && (( has_cost )); then
+  _cents "$cost_usd"; _cc_total=$_CC
+  if (( has_200k || _cc_total > 500 )); then _cc_col="$C_BAD"
+  elif (( _cc_total > 200 )); then _cc_col="$C_WARN"
+  elif (( _cc_total > 50 )); then _cc_col="$C_FG"
+  else _cc_col="$C_LBL"; fi
+  _money "$_cc_total"
+  _cstr="${C_LBL}${ic_cost}${_cc_col}${_M#\$}"
+  (( has_200k )) && _cstr+="${bld} ▲"
+  if (( turn_count > 0 )); then
+    _pt=$(( _cc_total / turn_count ))
+    if (( _pt >= 100 )); then _money "$_pt"; _pts="${_M}/turn"; else _pts="${_pt}¢/turn"; fi
+    _cstr+="${C_LBL} · ${C_FG}${_pts}"
+  fi
+  if (( cols >= 140 )) && seg_on cost_vel "$has_cost_vel" && (( cost_vel_cpm > 0 )); then
+    _cstr+="${C_LBL} · ${C_FG}$(printf '$%d.%02d/min' "$(( cost_vel_cpm / 100 ))" "$(( cost_vel_cpm % 100 ))")"
+  fi
+  _chip "$_cstr"; _add "$_CHIP"
+elif (( has_200k )); then
+  _chip "${C_BAD}${bld}200K+"; _add "$_CHIP"
 fi
 
-# Render L2 (indent "  ", stop at budget)
-_l2_budget=$(( cols - 2 ))
-_l2_out="  "; _l2_len=2; _l2_any=0
-for _seg in "${_l2_segs[@]-}"; do
-  [[ -z "$_seg" ]] && continue
-  _vlen "$_seg"; _sl=$_VLEN
-  _need=$(( _l2_any ? _l2_len + 3 + _sl : _l2_len + _sl ))
-  (( _need > _l2_budget )) && break
-  (( _l2_any )) && _l2_out+="${_V4SEP}" && _l2_len=$(( _l2_len + 3 ))
-  _l2_out+="${_seg}"; _l2_len=$(( _l2_len + _sl ))
-  _l2_any=1
-done
-printf '%b\n' "${_l2_out}${rst}"  # always print L2 (may be empty — consistent 4-line layout)
+# ping (next keep-warm wake) and cache hit ratio
+_ph=""
+if (( show_ping )) && [[ -f "$HOME/.claude/.keepwarm-on" && -n "${session_id:-}" ]]; then
+  _kw=""; _kwf="$HOME/.claude/keepwarm/${session_id}.json"
+  [[ -f "$_kwf" ]] && { read -r -d '' _kw < "$_kwf" 2>/dev/null || true; }
+  if [[ -n "$_kw" && ! "$_kw" =~ \"stopped\":\ *true && "$_kw" =~ \"armed_at\":\ *([0-9]+) ]]; then
+    _arm="${BASH_REMATCH[1]}"
+    if (( _arm > _NOW )); then
+      _clock '%H:%M' "$_arm" ping
+      [[ -n "$_CLK" ]] && _ph="${C_LBL}ping ${C_FG}${_CLK}"
+    fi
+  fi
+fi
+if (( show_hit )) && seg_on cache_hit "$has_cache" && (( has_cache )); then
+  if (( cache_hit_pct >= 80 )); then _hc="$C_OK"; elif (( cache_hit_pct >= 50 )); then _hc="$C_FG"; else _hc="$C_WARN"; fi
+  [[ -n "$_ph" ]] && _ph+="${C_LBL} · "
+  _ph+="${C_LBL}hit ${_hc}${cache_hit_pct}%"
+fi
+if (( show_hit )) && seg_on cache_write "$has_cache_write" && (( has_cache_write )); then
+  [[ -n "$_ph" ]] && _ph+="${C_LBL} · "
+  _ph+="${C_LBL}cw ${C_FG}${cache_write_pct}%"
+fi
+[[ -n "$_ph" ]] && _add "$_ph"
 
-# ── LINE 3: Code / Services ─────────────────────────────────────────
-_l3_segs=()
+# Output share of all tokens (end of the row)
+if (( cols >= 140 )) && seg_on out_ratio "$has_out_ratio" && (( has_out_ratio )); then
+  if (( out_ratio_pct >= 30 )); then _oc="$C_WARN"; else _oc="$C_FG"; fi
+  _add "${C_LBL}out ${_oc}${out_ratio_pct}%"
+fi
+_row_print
 
-# P1: git branch (first when in a repo)
+# ── ROW 3: code ────────────────────────────────────────────────────
+_row_start "$G_CODE" "$C_CODE"
+
 if seg_on git 1 && [[ -n "$git_branch" ]]; then
-  _gb="${git_branch}"; [[ "$git_dirty" != "0" ]] && _gb+="*"
-  (( git_ahead > 0 )) && _gb+="^${git_ahead}"
-  (( git_behind > 0 )) && _gb+="v${git_behind}"
-  _l3_segs+=("${mag}${ic_git}${_gb}${rst}")
+  _gb="${C_CODE}${git_branch}"; [[ "$git_dirty" != "0" ]] && _gb+="*"   # the row glyph already is the branch icon
+  (( git_ahead > 0 )) && _gb+=" ${C_OK}↑${git_ahead}"
+  (( git_behind > 0 )) && _gb+=" ${C_WARN}↓${git_behind}"
+  _add "$_gb"
 fi
 
-# P1: Uncommitted files (actionable)
 if seg_on uncommitted "$has_uncommitted" && (( git_uncommitted > 2 )); then
-  if (( git_uncommitted > 5 )); then _uc="${red}"; else _uc="${ylw}"; fi
-  _l3_segs+=("${_uc}uncommitted:${git_uncommitted}${rst}")
+  if (( git_uncommitted > 5 )); then _uc="$C_BAD"; else _uc="$C_WARN"; fi
+  if (( git_uncommitted > 20 )); then _chip "${_uc}${git_uncommitted} changed"; _add "$_CHIP"
+  else _add "${_uc}${git_uncommitted} changed"; fi
 fi
 
-# P2: Merge conflicts (critical — blocking; always visible when present)
+if seg_on lines "$has_lines" && (( has_lines )); then
+  _add "${C_OK}+${lines_add:-0}${C_BAD}-${lines_rm:-0}"
+fi
+
 if seg_on merge_conflicts "$has_conflicts" && (( has_conflicts )); then
-  if (( git_conflicts > 3 )); then _cf_c="${red}${bld}"; else _cf_c="${red}"; fi
-  _l3_segs+=("${_cf_c}conflicts:${git_conflicts}${rst}")
+  _chip "${C_BAD}${bld}${git_conflicts} conflicts"; _add "$_CHIP"
 fi
 
-# P3: Scratchpad (T0-T2) — promoted to P3 for visibility
-if (( wtier <= 2 )) && seg_on scratchpad "$has_scratchpad" && [[ "$detail" != "minimal" ]] && (( scratchpad_count > 0 )); then
-  if (( scratchpad_count >= 6 )); then _sp_c="${ylw}"; else _sp_c="${wht}"; fi
+if seg_on git_stash "$has_stash" && (( git_stash > 0 )); then
+  if (( git_stash > 5 )); then _stc="$C_WARN"; else _stc="$C_FG"; fi
+  _add "${C_LBL}stash ${_stc}${git_stash}"
+fi
+
+# notes: scratchpad entries as dots
+if (( show_notes )) && seg_on scratchpad "$has_scratchpad" && [[ "$detail" != "minimal" ]] && (( scratchpad_count > 0 )); then
+  if (( scratchpad_count >= 6 )); then _spc="$C_WARN"; else _spc="$C_FG"; fi
   if (( scratchpad_count <= 4 )); then
     _sp_dots=""; for ((i=0; i<scratchpad_count; i++)); do _sp_dots+="●"; done
-    _l3_segs+=("${_sp_c}sp:${_sp_dots}${rst}")
+    _add "${C_LBL}notes ${_spc}${_sp_dots}"
   else
-    _l3_segs+=("${_sp_c}sp:●●●●+$(( scratchpad_count - 4 ))${rst}")
+    _add "${C_LBL}notes ${_spc}●●●● +$(( scratchpad_count - 4 ))"
   fi
 fi
 
-# P4: MCP down (critical — always visible)
-if seg_on mcp 1 && [[ -n "$mcp_down" ]]; then
-  _mcp_dc=$(echo "$mcp_down" | tr ',' '\n' | grep -c . | tr -d ' ')
-  if (( _mcp_dc > 2 )); then _l3_segs+=("${red}mcp↓:${_mcp_dc}${rst}")
-  elif (( _mcp_dc == 2 )); then
-    _n1=$(echo "$mcp_down" | cut -d, -f1 | cut -c1-6); _n2=$(echo "$mcp_down" | cut -d, -f2 | cut -c1-6)
-    _l3_segs+=("${red}mcp↓:${_n1},${_n2}${rst}")
-  else
-    _l3_segs+=("${red}mcp↓:$(echo "$mcp_down" | cut -d, -f1 | cut -c1-10)${rst}")
-  fi
-elif seg_on mcp 1 && [[ -n "$mcp_healthy" ]] && [[ "$detail" == "full" ]]; then
-  _mcp_uc=$(echo "$mcp_healthy" | tr ',' '\n' | grep -c . | tr -d ' ')
-  _l3_segs+=("${dim}mcp:${_mcp_uc}ok${rst}")
+if seg_on test_status "$has_test" && (( has_test )); then
+  if [[ "$test_status" == "pass" ]]; then _add "${C_OK}✓ ${test_total} tests"
+  else _chip "${C_BAD}${bld}✗ ${test_failed}/${test_total} tests"; _add "$_CHIP"; fi
 fi
 
-# P5: Token speed (T0-T2)
-if (( wtier <= 2 )) && seg_on tok_speed "$has_tok_speed" && (( tok_speed > 50 )); then
-  if (( tok_speed > 500 )); then _ts_c="${grn}"; elif (( tok_speed > 200 )); then _ts_c="${dim}"; else _ts_c="${ylw}"; fi
-  _l3_segs+=("${_ts_c}spd:${tok_speed}t/s${rst}")
+if seg_on pr "$has_pr" && [[ -n "$git_pr" ]]; then
+  if [[ -n "${repo_host:-}" && -n "${repo_owner:-}" && -n "${repo_name:-}" ]]; then
+    _link "https://${repo_host}/${repo_owner}/${repo_name}/pull/${git_pr}" "PR #${git_pr}"
+    _prs="${C_INFO}${_LNK}"; _vlen "$_prs"
+  else _prs="${C_INFO}PR #${git_pr}"; fi
+  _add "$_prs"
 fi
 
-# P6: Test status (T0-T3 — promoted; red FAIL is critical)
-if (( wtier <= 3 )) && seg_on test_status "$has_test" && (( has_test )); then
-  if [[ "$test_status" == "pass" ]]; then _l3_segs+=("${grn}PASS ${test_total}${rst}")
-  else _l3_segs+=("${red}${bld}FAIL ${test_failed}/${test_total}${rst}"); fi
-fi
-
-# P7: Open PR (T0-T2)
-if (( wtier <= 2 )) && seg_on pr "$has_pr" && [[ -n "$git_pr" ]]; then
-  _l3_segs+=("${cyn}PR#${git_pr}${rst}")
-fi
-
-# P8: pm2 errors first, healthy count at T0-T2
-if seg_on pm2 "$has_pm2" && (( has_pm2 )); then
-  if (( pm2_errored > 0 )); then
-    _l3_segs+=("${red}${ic_pm2}${pm2_online}up/${pm2_errored}err${rst}")
-  elif (( wtier <= 2 )); then
-    _l3_segs+=("${dim}${ic_pm2}${pm2_online}up${rst}")
-  fi
-fi
-
-# P8.5: Runtime versions (T0-T2) — node/python from .nvmrc/.python-version in project tree
-if (( wtier <= 2 )) && seg_on runtime_ver 1 && (( has_node_ver || has_python_ver )); then
-  _rv_parts=()
-  if [[ -n "$node_ver" ]]; then
-    _nv="${node_ver:0:7}"; _nv="${_nv%.}"; _rv_parts+=("node:${_nv}")
-  fi
+if seg_on runtime_ver 1 && (( has_node_ver || has_python_ver )); then
+  _rv=""
+  if [[ -n "$node_ver" ]]; then _nv="${node_ver:0:7}"; _nv="${_nv%.}"; _rv+="${C_LBL}node ${C_FG}${_nv}"; fi
   if [[ -n "$python_ver" ]]; then
-    _pv="${python_ver:0:7}"; _pv="${_pv%.}"; _rv_parts+=("py:${_pv}")
+    _pv="${python_ver:0:7}"; _pv="${_pv%.}"
+    [[ -n "$_rv" ]] && _rv+="${C_LBL} · "
+    _rv+="${C_LBL}py ${C_FG}${_pv}"
   fi
-  _rv_str=$(IFS='/'; echo "${_rv_parts[*]}")
-  _l3_segs+=("${dim}${_rv_str}${rst}")
+  _add "$_rv"
 fi
 
-# P9: Focus file (T0-T2)
-if (( wtier <= 2 )) && seg_on focus_file "$has_focus" && (( has_focus )); then
-  _ff=$(basename "$focus_file"); [[ ${#_ff} -gt 20 ]] && _ff="${_ff:0:18}.."
-  if (( focus_count >= 11 )); then _fc="${red}"
-  elif (( focus_count >= 6 )); then _fc="${ylw}"
-  else _fc="${dim}"; fi
-  _l3_segs+=("${_fc}focus:${_ff}(${focus_count})${rst}")
+_ft_thresh=5; (( cols >= 140 )) && _ft_thresh=2
+if seg_on files_touched 1 && (( files_touched > _ft_thresh )); then
+  if (( files_touched > 50 )); then _ftc="$C_WARN"; else _ftc="$C_FG"; fi
+  _add "${C_LBL}files ${_ftc}${files_touched}"
 fi
 
-# P10: Branch age / staleness (T0-T1)
-if (( wtier <= 1 )) && seg_on branch_age "$has_branch_age" && (( has_branch_age )); then
+if seg_on branch_age "$has_branch_age" && (( has_branch_age )); then
   _ba="${branch_age_days}d"; [[ $branch_behind -gt 0 ]] && _ba+=" ↓${branch_behind}"
-  if (( branch_age_days > 7 || branch_behind > 20 )); then _ba_c="${red}"
-  elif (( branch_age_days > 3 || branch_behind > 10 )); then _ba_c="${ylw}"
-  else _ba_c="${dim}"; fi
-  _l3_segs+=("${_ba_c}br:${_ba}${rst}")
+  if (( branch_age_days > 7 || branch_behind > 20 )); then _bac="$C_BAD"
+  elif (( branch_age_days > 3 || branch_behind > 10 )); then _bac="$C_WARN"
+  else _bac="$C_FG"; fi
+  _add "${C_LBL}br ${_bac}${_ba}"
 fi
 
-# P11: Edit efficiency ratio (T0-T1, non-early sessions)
-if (( wtier <= 1 )) && seg_on edit_ratio "$has_edit_ratio" && (( has_edit_ratio )); then
-  _rx10=$(( total_lines_changed * 10000 / total_tok ))
-  _ri=$(( _rx10 / 10 )); _rd=$(( _rx10 % 10 ))
-  if (( _ri >= 5 )); then _er_c="${grn}"; elif (( _ri >= 1 )); then _er_c="${dim}"; else _er_c="${ylw}"; fi
-  _l3_segs+=("${_er_c}eff:${_ri}.${_rd}L/Kt${rst}")
-fi
+if seg_on ext_changes 1 && (( ${ext_changes:-0} > 5 )); then _add "${C_LBL}ext ${C_WARN}${ext_changes}"; fi
+_row_print
 
-# P12: Git stash (T0-T1)
-if (( wtier <= 1 )) && seg_on git_stash "$has_stash" && (( git_stash > 0 )); then
-  if (( git_stash > 5 )); then _st_c="${ylw}"; else _st_c="${dim}"; fi
-  if (( use_icons )); then
-    _l3_segs+=("${_st_c}${ic_stash}${git_stash}${rst}")
-  else
-    _l3_segs+=("${_st_c}stash:${git_stash}${rst}")
-  fi
-fi
+# ── ROW 4: work ────────────────────────────────────────────────────
+_row_start "$G_WORK" "$C_WORK"
 
-# P13: External changes (T0-T1)
-if (( wtier <= 1 )) && seg_on ext_changes 1 && (( ${ext_changes:-0} > 5 )); then
-  _l3_segs+=("${ylw}ext:${ext_changes}${rst}")
-fi
-
-# P13.5: Files touched this session (T0-T1; T0 shows from >2, T1 from >5)
-_ft_thresh=5; (( wtier == 0 )) && _ft_thresh=2
-if (( wtier <= 1 )) && seg_on files_touched 1 && (( files_touched > _ft_thresh )); then
-  if (( files_touched > 50 )); then _ft_c="${ylw}"; else _ft_c="${dim}"; fi
-  _l3_segs+=("${_ft_c}files:${files_touched}${rst}")
-fi
-
-# P14: Network — offline (critical) or high latency >200ms (warning at T0-T2)
-if seg_on network "$has_net"; then
-  if [[ "$net_latency" == "offline" ]]; then
-    _l3_segs+=("${red}${bld}${ic_net}OFFLINE${rst}")
-  elif [[ "$net_latency" =~ ^[0-9]+$ ]] && (( net_latency > 200 && wtier <= 2 )); then
-    if (( net_latency > 500 )); then _nl_c="${red}"; else _nl_c="${ylw}"; fi
-    _l3_segs+=("${_nl_c}${ic_net}net:${net_latency}ms${rst}")
-  fi
-fi
-
-# Render L3 (indent "  ", stop at budget)
-_l3_budget=$(( cols - 2 ))
-_l3_out="  "; _l3_len=2; _l3_any=0
-for _seg in "${_l3_segs[@]-}"; do
-  [[ -z "$_seg" ]] && continue
-  _vlen "$_seg"; _sl=$_VLEN
-  _need=$(( _l3_any ? _l3_len + 3 + _sl : _l3_len + _sl ))
-  (( _need > _l3_budget )) && break
-  (( _l3_any )) && _l3_out+="${_V4SEP}" && _l3_len=$(( _l3_len + 3 ))
-  _l3_out+="${_seg}"; _l3_len=$(( _l3_len + _sl ))
-  _l3_any=1
-done
-printf '%b\n' "${_l3_out}${rst}"  # always print L3
-
-# ── LINE 4: Metadata / IDs ──────────────────────────────────────────
-_l4_segs=()
-
-# P1: Session ID (first 8 chars to keep it compact)
-if seg_on session_id 1 && [[ -n "${sid_short:-}" ]]; then
-  _l4_segs+=("\033[2;36msid:${sid_short}${rst}")
-fi
-
-# P1b: claude-ipc alias — the name this session is ADDRESSABLE by right now, which
-# is not the raw sid: a session that ran `claude-ipc register <name>` (or renamed)
-# is reached by that name, and the sid alone won't find it. Read live from the
-# alias-by-sid side-file (the same source every ipc hook resolves through), so it
-# always reflects the latest registration. Dim magenta to read apart from the sid.
-if seg_on ipc 1 && [[ -n "${session_id:-}" ]]; then
-  _ipc_alias="$(tr -d '\r\n' < "${CLAUDE_IPC_HOME:-$HOME/.claude-ipc}/alias-by-sid/${session_id}" 2>/dev/null)"
-  if [[ -n "${_ipc_alias:-}" ]]; then
-    _l4_segs+=("\033[2;35mipc:${_ipc_alias}${rst}")
-  fi
-fi
-
-# P2: Active ports (dim green — running services)
-if seg_on ports 1 && [[ -n "${ports_up:-}" ]]; then
-  _l4_segs+=("\033[2;32mports:${ports_up}${rst}")
-fi
-
-# P3: Uptime — moved to L1 (shown there at T0-T2); L4 no longer renders it
-
-# P3: Active cloud profile (env var at launch time — AWS/GCP/Azure)
-if seg_on cloud "$has_cloud" && (( has_cloud )); then
-  # Truncate long profile names (e.g. long GCP project IDs)
-  _cp="${cloud_profile}"; [[ ${#_cp} -gt 16 ]] && _cp="${_cp:0:14}.."
-  if (( use_icons )); then
-    _l4_segs+=("${dim}${ic_cloud}${cloud_provider}:${_cp}${rst}")
-  else
-    _l4_segs+=("${dim}${cloud_provider}:${_cp}${rst}")
-  fi
-fi
-
-# P3.5: Sudo credential active (T0-T2) — brief flash to show elevated session state
-if (( wtier <= 2 )) && seg_on sudo "$has_sudo" && (( has_sudo )); then
-  _l4_segs+=("${ylw}sudo${rst}")
-fi
-
-# P4: Tmux session count — useful for multi-pane workflow awareness
-if seg_on tmux "$has_tmux" && (( has_tmux )); then
-  _l4_segs+=("${dim}tmux:${tmux_count}${rst}")
-fi
-
-# P4: Docker running containers — daemon-guarded; 0 if socket absent
-# Shows even when count=0 (daemon is up) so user knows docker is active
-if seg_on docker "$has_docker" && (( has_docker )); then
-  if (( docker_count > 0 )); then _dk_c="${grn}"; else _dk_c="${dim}"; fi
-  _l4_segs+=("${_dk_c}docker:${docker_count}${rst}")
-fi
-
-# P4.5: Last bash exit code — shown only when non-zero (signals a failed command)
-if (( wtier <= 2 )) && seg_on exit_code "$has_exit_code" && (( has_exit_code && last_exit_code != 0 )); then
-  _l4_segs+=("${red}exit:${last_exit_code}${rst}")
-fi
-
-# P5: Inter-render latency — time between statusline renders; dim when <5s, yellow when >30s
-if (( wtier <= 1 )) && seg_on latency "$has_latency" && (( has_latency )); then
-  if (( render_lat_s > 30 )); then _lat_c="${ylw}"; else _lat_c="${dim}"; fi
-  _l4_segs+=("${_lat_c}lat:${render_lat_s}s${rst}")
-fi
-
-# P5: Cost velocity (tier 0-1)
-if (( wtier <= 1 )) && seg_on cost_vel "$has_cost_vel" && (( cost_vel_cpm > 0 )); then
-  _cv_str=$(printf '$%d.%02d/min' "$(( cost_vel_cpm / 100 ))" "$(( cost_vel_cpm % 100 ))")
-  if (( cost_vel_cpm > 30 )); then _cvcolor="${red}"; elif (( cost_vel_cpm > 10 )); then _cvcolor="${ylw}"; else _cvcolor="${dim}"; fi
-  _l4_segs+=("${_cvcolor}${_cv_str}${rst}")
-fi
-
-# P4: System memory — show when below 8GB free (dim=4-8GB, yellow=2-4GB, red=<2GB)
-# Suppressed when healthy (≥8GB) to avoid noise on machines with ample RAM
-if seg_on mem "$has_mem" && (( has_mem )); then
-  if (( sys_free_mb < 2048 )); then _mc="${red}"; elif (( sys_free_mb < 4096 )); then _mc="${ylw}"; else _mc="${dim}"; fi
-  _fg=$(( sys_free_mb / 1024 )); _fr=$(( (sys_free_mb % 1024) * 10 / 1024 ))
-  if (( use_icons )); then
-    _l4_segs+=("${_mc}${ic_mem}${_fg}.${_fr}G${rst}")
-  else
-    _l4_segs+=("${_mc}mem:${_fg}.${_fr}G${rst}")
-  fi
-fi
-
-# P4: Disk free — show when below 20GB free (dim=10-20GB, yellow=5-10GB, red=<5GB)
-# Suppressed when disk is comfortable (≥20GB) to reduce noise
-if seg_on disk "$has_disk" && (( has_disk )); then
-  if (( disk_free_gb < 5 )); then _dk_c="${red}"; elif (( disk_free_gb < 10 )); then _dk_c="${ylw}"; else _dk_c="${dim}"; fi
-  if (( use_icons )); then
-    _l4_segs+=("${_dk_c}${ic_disk}${disk_free_gb}G${rst}")
-  else
-    _l4_segs+=("${_dk_c}dsk:${disk_free_gb}G${rst}")
-  fi
-fi
-
-# P5: Activity bar — 10-char wide, per-turn ring buffer (TL_TURN_FILE written above)
-# Each char = 1 turn; uses relative min/max scaling so activity changes are visible
-# even when absolute tool call counts are small. Always shows exactly 10 chars.
-if (( wtier <= 1 )) && seg_on timeline 0; then
-  _tl_data=()
-  [[ -f "$TL_TURN_FILE" ]] && while IFS= read -r _tv; do
-    [[ -n "$_tv" && "$_tv" =~ ^[0-9]+$ ]] && _tl_data+=("$_tv")
-  done < "$TL_TURN_FILE"
-  # Pad to 10 entries (left-pad with 0s for early session)
-  while (( ${#_tl_data[@]} < 10 )); do _tl_data=("0" "${_tl_data[@]}"); done
-  # Relative scaling: find max for this window
-  _tl_max=1
-  for _tv in "${_tl_data[@]}"; do (( _tv > _tl_max )) && _tl_max=$_tv; done
-  _tl_str=""
-  _sblocks_act=("░" "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")  # 9 levels (0=empty)
-  for _tv in "${_tl_data[@]}"; do
-    if (( _tv == 0 )); then _tl_str+="░"
-    else _tl_str+="${_sblocks_act[$(( _tv * 8 / _tl_max ))]}"; fi
+# Agents running: a state dot, a count, and what kind
+if seg_on subagents "$has_subagents" && (( subagent_count > 0 )); then
+  _ag_u=(); _ag_c=(); _rest="${subagent_names},"
+  while [[ -n "$_rest" ]]; do
+    _an="${_rest%%,*}"; _rest="${_rest#*,}"; _found=-1
+    for ((i=0; i<${#_ag_u[@]}; i++)); do [[ "${_ag_u[i]}" == "$_an" ]] && _found=$i; done
+    if (( _found >= 0 )); then _ag_c[_found]=$(( ${_ag_c[_found]} + 1 ))
+    else _ag_u+=("$_an"); _ag_c+=(1); fi
   done
-  _ltv=${_tl_data[9]}  # most recent turn's delta
-  if (( _ltv > _tl_max / 2 )); then _tl_c="${ylw}"; elif (( _ltv > 0 )); then _tl_c="${dim}"; else _tl_c="\033[38;5;240m"; fi
-  _l4_segs+=("${_tl_c}act:${_tl_str}${rst}")
+  _ag_txt=""
+  for ((i=0; i<${#_ag_u[@]} && i<3; i++)); do
+    [[ -n "$_ag_txt" ]] && _ag_txt+=", "
+    _ag_txt+="${_ag_u[i]} ×${_ag_c[i]}"
+  done
+  (( ${#_ag_u[@]} > 3 )) && _ag_txt+=", +$(( ${#_ag_u[@]} - 3 ))"
+  _agw="agents"; (( subagent_count == 1 )) && _agw="agent"
+  _chip "${C_INFO}◐${C_FG} ${subagent_count} ${_agw} ${C_LBL}(${_ag_txt})"; _add "$_CHIP"
 fi
 
-# Script modified since session start (daemon detected checksum mismatch)
-(( has_script_changed )) && _l4_segs+=("${ylw}${ic_warn}statusline edited${rst}")
+if seg_on turns 1 && (( turn_count > 10 )); then
+  if (( turn_count > 30 )); then _tc="$C_WARN"; else _tc="$C_FG"; fi
+  _add "${C_LBL}turns ${_tc}${turn_count}"
+fi
 
-# Render L4 (indent "  ", stop at budget)
-_l4_budget=$(( cols - 2 ))
-_l4_out="  "; _l4_len=2; _l4_any=0
-for _seg in "${_l4_segs[@]-}"; do
-  [[ -z "$_seg" ]] && continue
-  _vlen "$_seg"; _sl=$_VLEN
-  _need=$(( _l4_any ? _l4_len + 3 + _sl : _l4_len + _sl ))
-  (( _need > _l4_budget )) && break
-  (( _l4_any )) && _l4_out+="${_V4SEP}" && _l4_len=$(( _l4_len + 3 ))
-  _l4_out+="${_seg}"; _l4_len=$(( _l4_len + _sl ))
-  _l4_any=1
-done
-printf '%b\n' "${_l4_out}${rst}"  # always print L4
+# Tool counts keep their per-tool colours
+if (( cols >= 100 )) && seg_on tools 1 && [[ -n "${tool_summary_wide:-}" ]]; then
+  _add "${tool_summary_wide% }"
+fi
 
+# Focus file: opens in the doc viewer (md, txt) or as a file link
+if seg_on focus_file "$has_focus" && (( has_focus )); then
+  _ff="${focus_file##*/}"; (( ${#_ff} > 20 )) && _ff="${_ff:0:18}.."
+  if (( focus_count >= 11 )); then _fc="$C_BAD"; elif (( focus_count >= 6 )); then _fc="$C_WARN"; else _fc="$C_FG"; fi
+  _docurl "$focus_file"; _link "$_URL" "$_ff"
+  _add "${C_LBL}focus ${_fc}${_LNK}${_fc} (${focus_count})"
+fi
+
+# Decision pages waiting for the owner (this project only)
+if seg_on decwait "$has_decwait" && (( has_decwait )); then
+  _dw="decisions"; (( decwait_n == 1 )) && _dw="decision"
+  _link "http://localhost:5106/?view=decisions" "${decwait_n} ${_dw}"
+  _chip "${C_INFO}${G_DEC} ${_LNK}"; _add "$_CHIP"
+fi
+
+# Checkpoint drift: log entries since the last checkpoint
+if seg_on wal "$has_wal" && (( wal_since_checkpoint > 8 )); then
+  if (( wal_since_checkpoint > 15 )); then _wc="$C_BAD"; else _wc="$C_WARN"; fi
+  _chip "${_wc}${G_CKPT} ${wal_since_checkpoint} since checkpoint"; _add "$_CHIP"
+fi
+
+if seg_on exit_code "$has_exit_code" && (( has_exit_code && last_exit_code != 0 )); then
+  _chip "${C_BAD}✗ exit ${last_exit_code}"; _add "$_CHIP"
+fi
+
+if (( show_eff )) && seg_on edit_ratio "$has_edit_ratio" && (( has_edit_ratio )); then
+  _rx10=$(( total_lines_changed * 10000 / total_tok )); _ri=$(( _rx10 / 10 )); _rd=$(( _rx10 % 10 ))
+  if (( _ri >= 5 )); then _erc="$C_OK"; elif (( _ri >= 1 )); then _erc="$C_FG"; else _erc="$C_WARN"; fi
+  _add "${C_LBL}eff ${_erc}${_ri}.${_rd} lines/Kt"
+fi
+
+if seg_on tok_speed "$has_tok_speed" && (( tok_speed > 50 )); then
+  if (( tok_speed > 500 )); then _tsc="$C_OK"; elif (( tok_speed > 200 )); then _tsc="$C_FG"; else _tsc="$C_WARN"; fi
+  _add "${C_LBL}speed ${_tsc}${tok_speed} tok/s"
+fi
+_row_print
+
+# ── ROW 5: system ──────────────────────────────────────────────────
+_row_start "$G_SYS" "$C_SYS"
+
+if seg_on cpu "$has_cpu" && (( has_cpu )); then
+  if (( proc_cpu > 50 )); then _cpc="$C_BAD"; elif (( proc_cpu > 20 )); then _cpc="$C_WARN"; else _cpc="$C_FG"; fi
+  _add "${C_LBL}cpu ${_cpc}${proc_cpu}%"
+  if (( proc_rss > 0 )); then
+    if (( proc_rss > 1000 )); then _mc="$C_BAD"; elif (( proc_rss > 500 )); then _mc="$C_WARN"; else _mc="$C_FG"; fi
+    _add "${C_LBL}mem ${_mc}${proc_rss}MB"
+  fi
+fi
+
+# net: throughput, plus API latency when it is slow
+if (( show_net )) && seg_on network 1; then
+  _nseg=""
+  if (( net_rx_kbps > 5 || net_tx_kbps > 5 )); then
+    if (( net_rx_kbps >= 1024 )); then _rx_s="$(( net_rx_kbps / 1024 ))M"; else _rx_s="${net_rx_kbps}K"; fi
+    if (( net_tx_kbps >= 1024 )); then _tx_s="$(( net_tx_kbps / 1024 ))M"; else _tx_s="${net_tx_kbps}K"; fi
+    _nseg="${C_LBL}net ${C_FG}↓${_rx_s} ↑${_tx_s}"
+  fi
+  if [[ "$net_latency" =~ ^[0-9]+$ ]] && (( net_latency > 200 )); then
+    if (( net_latency > 500 )); then _nl_c="$C_BAD"; else _nl_c="$C_WARN"; fi
+    [[ -n "$_nseg" ]] && _nseg+="${C_LBL} · "
+    _nseg+="${C_LBL}api ${_nl_c}${net_latency}ms"
+  fi
+  [[ -n "$_nseg" ]] && _add "$_nseg"
+fi
+if seg_on network "$has_net" && [[ "$net_latency" == "offline" ]]; then
+  _chip "${C_BAD}${bld}${ic_net}OFFLINE"; _add "$_CHIP"
+fi
+
+if seg_on mem "$has_mem" && (( has_mem )); then
+  if (( sys_free_mb < 2048 )); then _fmc="$C_BAD"; elif (( sys_free_mb < 4096 )); then _fmc="$C_WARN"; else _fmc="$C_FG"; fi
+  _add "${C_LBL}free ${_fmc}$(( sys_free_mb / 1024 )).$(( (sys_free_mb % 1024) * 10 / 1024 ))G"
+fi
+
+if seg_on disk "$has_disk" && (( has_disk )); then
+  if (( disk_free_gb < 5 )); then _dkc="$C_BAD"; elif (( disk_free_gb < 10 )); then _dkc="$C_WARN"; else _dkc="$C_FG"; fi
+  _add "${C_LBL}disk ${_dkc}${disk_free_gb}G"
+fi
+
+if seg_on ports 1 && [[ -n "${ports_up:-}" ]]; then _add "${C_LBL}ports ${C_OK}${ports_up}"; fi
+
+if seg_on pm2 "$has_pm2" && (( has_pm2 )); then
+  if (( pm2_errored > 0 )); then _chip "${C_BAD}pm2 ${pm2_online}up/${pm2_errored}err"; _add "$_CHIP"
+  elif (( cols >= 100 )); then _add "${C_LBL}pm2 ${C_FG}${pm2_online} up"; fi
+fi
+
+if seg_on mcp 1 && [[ -n "$mcp_down" ]]; then
+  _mt="${mcp_down//[^,]/}"; _mcp_dc=$(( ${#_mt} + 1 ))
+  if (( _mcp_dc > 2 )); then _mcp_t="${_mcp_dc} down"
+  elif (( _mcp_dc == 2 )); then _m1="${mcp_down%%,*}"; _m2="${mcp_down#*,}"; _mcp_t="${_m1:0:6}, ${_m2:0:6}"
+  else _mcp_t="${mcp_down:0:10}"; fi
+  _chip "${C_BAD}mcp ↓ ${_mcp_t}"; _add "$_CHIP"
+elif seg_on mcp 1 && [[ -n "$mcp_healthy" ]] && [[ "$detail" == "full" ]]; then
+  _mt="${mcp_healthy//[^,]/}"; _add "${C_LBL}mcp ${C_FG}$(( ${#_mt} + 1 )) ok"
+fi
+
+if seg_on cloud "$has_cloud" && (( has_cloud )); then
+  _cp="${cloud_profile}"; [[ ${#_cp} -gt 16 ]] && _cp="${_cp:0:14}.."
+  _add "${C_LBL}${cloud_provider} ${C_FG}${_cp}"
+fi
+
+if (( cols >= 100 )) && seg_on sudo "$has_sudo" && (( has_sudo )); then _add "${C_WARN}sudo"; fi
+if seg_on tmux "$has_tmux" && (( has_tmux )); then _add "${C_LBL}tmux ${C_FG}${tmux_count}"; fi
+if seg_on docker "$has_docker" && (( has_docker )); then
+  if (( docker_count > 0 )); then _dk_c="$C_OK"; else _dk_c="$C_FG"; fi
+  _add "${C_LBL}docker ${_dk_c}${docker_count}"
+fi
+
+(( has_script_changed )) && _add "${C_WARN}${ic_warn}statusline edited"
+
+# act: tool calls per recent turn as a sparkline
+if (( show_act )) && seg_on timeline 0; then
+  _tl_data=()
+  if [[ -f "$TL_TURN_FILE" ]]; then
+    while IFS= read -r _tv || [[ -n "$_tv" ]]; do [[ "$_tv" =~ ^[0-9]+$ ]] && _tl_data+=("$_tv"); done < "$TL_TURN_FILE"
+  fi
+  while (( ${#_tl_data[@]} < 10 )); do _tl_data=("0" "${_tl_data[@]-}"); done
+  (( ${#_tl_data[@]} > 10 )) && _tl_data=("${_tl_data[@]: -10}")
+  _tl_max=1
+  for _tv in "${_tl_data[@]}"; do [[ "$_tv" =~ ^[0-9]+$ ]] && (( _tv > _tl_max )) && _tl_max=$_tv; done
+  _tl_str=""; _sblocks_act=("░" "▁" "▂" "▃" "▄" "▅" "▆" "▇" "█")
+  for _tv in "${_tl_data[@]}"; do
+    [[ "$_tv" =~ ^[0-9]+$ ]] || _tv=0
+    if (( _tv == 0 )); then _tl_str+="░"; else _tl_str+="${_sblocks_act[$(( _tv * 8 / _tl_max ))]}"; fi
+  done
+  _ltv=${_tl_data[9]}; [[ "$_ltv" =~ ^[0-9]+$ ]] || _ltv=0
+  if (( _ltv > _tl_max / 2 )); then _tlc="$C_WARN"; elif (( _ltv > 0 )); then _tlc="$C_FG"; else _tlc="$C_FAINT"; fi
+  _add "${C_LBL}act ${_tlc}${_tl_str}"
+fi
+_row_print

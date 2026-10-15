@@ -105,6 +105,45 @@ json.dump(st5, open(p5, "w"))
 nxt = hook("hook-prompt", session_id="s5", prompt="[keepwarm] idle check", transcript_path=transcript(300000))
 expect("so the next wake 56 min later is due, not a re-arm", "only keeps the cache warm" in ctx(nxt))
 
+# Health check: after a wake's turn, did the ping actually find the cache warm?
+EVENTS = os.path.join(T, "kw", "events.jsonl")
+
+
+def usage_transcript(name, read, create):
+    p = os.path.join(T, "u-%s.jsonl" % name)
+    with open(p, "w") as f:
+        f.write(json.dumps({"type": "assistant", "message": {"usage": {
+            "input_tokens": 1, "cache_read_input_tokens": read, "cache_creation_input_tokens": create}}}) + "\n")
+    return p
+
+
+def health(sid):
+    rows = [json.loads(line) for line in open(EVENTS)] if os.path.exists(EVENTS) else []
+    return [r for r in rows if r["sid"] == sid and r["ev"] == "ping-health"]
+
+
+def wake_then_stop(sid, tp):
+    hook("hook-prompt", session_id=sid, prompt="x")
+    wake(sid, 300000, 56)
+    hook("hook-stop", session_id=sid, transcript_path=tp)
+    return health(sid)
+
+
+h = wake_then_stop("h1", usage_transcript("warm", 300000, 5000))
+expect("health: a read-heavy wake turn is judged warm", len(h) == 1 and h[0]["verdict"] == "warm"
+       and h[0]["cache_read"] == 300000 and h[0]["cache_creation"] == 5000)
+h = wake_then_stop("h2", usage_transcript("cold", 0, 200000))
+expect("health: a cold rebuild (no read) is judged cold", len(h) == 1 and h[0]["verdict"] == "cold")
+h = wake_then_stop("h3", usage_transcript("rewrite", 100000, 10000))
+expect("health: a write at 10% of the read is cold (the bar is under 10%)", h[0]["verdict"] == "cold")
+h = wake_then_stop("h4", usage_transcript("edge", 100000, 9999))
+expect("health: a write just under 10% of the read is warm", h[0]["verdict"] == "warm")
+h = wake_then_stop("h5", os.path.join(T, "no-such-transcript.jsonl"))
+expect("health: no usage to read is logged unknown, never guessed", len(h) == 1 and h[0]["verdict"] == "unknown")
+hook("hook-prompt", session_id="h6", prompt="x")
+hook("hook-stop", session_id="h6", transcript_path=usage_transcript("warm", 300000, 5000))
+expect("health: an ordinary turn's Stop logs no verdict", health("h6") == [])
+
 # The Stop hook moves the clock: a turn that just ended makes the next wake early.
 hook("hook-prompt", session_id="s4", prompt="x")
 age("s4", 50)

@@ -20,22 +20,27 @@ from pathlib import Path
 
 DB = Path.home() / ".claude/assets/scan-sessions/index.db"
 
-# (input, output) $ per 1M tokens. Cache rates derive from input:
-# read = 0.1x · 5m write = 1.25x · 1h write = 2x.
-# Prefix-matched, longest prefix wins. Models not listed are reported
-# as "unpriced" rather than guessed.
+# (input, output) $ per 1M tokens, from https://platform.claude.com/docs/en/about-claude/pricing
+# (checked 2026-10-15). Cache rates derive from input: read = 0.1x · 5m write
+# = 1.25x · 1h write = 2x. The page lists lower read rates for Fable 5.1 ($0.25
+# per MTok) and Opus 5.5 / Sonnet 5.5 (0.05x), which turn_cost() does not model.
+# Prefix-matched, longest prefix wins. Models not listed are reported as
+# "unpriced" rather than guessed; Haiku 5.5 is tiered by prompt size, so it is left out.
 RATES = {
     "claude-fable-5":    (10.0, 50.0),
+    "claude-fable-5-1":  (10.0, 50.0),
+    "claude-opus-5":     (5.0, 25.0),
+    "claude-opus-5-5":   (4.0, 20.0),
     "claude-opus-4-8":   (5.0, 25.0),
     "claude-opus-4-7":   (5.0, 25.0),
     "claude-opus-4-6":   (5.0, 25.0),
-    "claude-sonnet-5":   (3.0, 15.0),   # intro $2/$10 through 2026-08-31, see rate_for()
+    "claude-sonnet-5":   (2.0, 10.0),   # the launch intro price is now the standard price
+    "claude-sonnet-5-5": (2.0, 10.0),
     "claude-sonnet-4-6": (3.0, 15.0),
     "claude-sonnet-4-5": (3.0, 15.0),
     "claude-haiku-4-5":  (1.0, 5.0),
     "<synthetic>":       (0.0, 0.0),
 }
-SONNET5_INTRO = (2.0, 10.0)
 SONNET5_INTRO_END = "2026-09-01"
 
 # Per-turn token columns, summed. Older records carry only the flat
@@ -56,8 +61,6 @@ BASE_WHERE = "turns.usage_json IS NOT NULL AND turns.usage_json != '' AND turns.
 
 def rate_for(model, post_intro):
     """(input_rate, output_rate) per MTok, or None when the model is unpriced."""
-    if model == "claude-sonnet-5" and not post_intro:
-        return SONNET5_INTRO
     for prefix in sorted(RATES, key=len, reverse=True):
         if model.startswith(prefix):
             return RATES[prefix]
@@ -253,6 +256,12 @@ def render_page(dbp):
     return PAGE.replace("%SUB%", sub).replace("%SECTIONS%", "\n".join(sections))
 
 
+def cmd_rates(args):
+    """Print RATES as model<TAB>input<TAB>output, the file the statusline reads."""
+    for model, (inp, out) in RATES.items():
+        print(f"{model}\t{inp:g}\t{out:g}")
+
+
 def cmd_serve(con, args):
     """Serve the dashboard over HTTP (bind localhost; expose via tailscale serve)."""
     from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -300,12 +309,17 @@ def main():
             sp.add_argument("--top", type=int, default=15)
         if name == "daily":
             sp.add_argument("--days", type=int, default=14)
+    rt = sub.add_parser("rates", help="print the price table")
+    rt.add_argument("--tsv", action="store_true", help="model_id<TAB>input<TAB>output per row")
     sv = sub.add_parser("serve", help="serve the stats as a web page (data-forge)")
     sv.add_argument("--port", type=int, default=5103)
     sv.add_argument("--bind", default="127.0.0.1")
     args = p.parse_args()
     if not args.cmd:
         p.print_help()
+        return 0
+    if args.cmd == "rates":
+        cmd_rates(args)
         return 0
     dbp = Path(args.db)
     if not dbp.exists():

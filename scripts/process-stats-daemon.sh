@@ -133,16 +133,70 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
       fi
     fi
 
-    # ── pm2 status ──
+    # ── pm2 status (polled every 30 s; the segment only matters when something errors) ──
     if command -v pm2 &>/dev/null; then
-      pm2_json=$(pm2 jlist 2>/dev/null) || true
-      if [[ -n "$pm2_json" && "$pm2_json" != "[]" ]]; then
-        online=$(echo "$pm2_json" | jq '[.[] | select(.pm2_env.status=="online")] | length' 2>/dev/null) || true
-        errored=$(echo "$pm2_json" | jq '[.[] | select(.pm2_env.status=="errored")] | length' 2>/dev/null) || true
-        printf 'pm2_online=%s\n' "${online:-0}"
-        printf 'pm2_errored=%s\n' "${errored:-0}"
+      pm2_cache="/tmp/claude-pm2-${TARGET_PID}"
+      if [[ ! -f "$pm2_cache" ]] || (( _NOW - $(_stat_mtime "$pm2_cache") > 30 )); then
+        pm2_json=$(pm2 jlist 2>/dev/null) || true
+        if [[ -n "$pm2_json" && "$pm2_json" != "[]" ]]; then
+          online=$(echo "$pm2_json" | jq '[.[] | select(.pm2_env.status=="online")] | length' 2>/dev/null) || true
+          errored=$(echo "$pm2_json" | jq '[.[] | select(.pm2_env.status=="errored")] | length' 2>/dev/null) || true
+          printf '%s %s\n' "${online:-0}" "${errored:-0}" > "$pm2_cache"
+        else
+          : > "$pm2_cache"
+        fi
       fi
+      read -r pm2_on pm2_err < "$pm2_cache" 2>/dev/null || true
+      if [[ -n "${pm2_on:-}" ]]; then
+        printf 'pm2_online=%s\n' "$pm2_on"
+        printf 'pm2_errored=%s\n' "${pm2_err:-0}"
+      fi
+      pm2_on=""; pm2_err=""
     fi
+
+    # ── Elevated sudo and tmux sessions (moved here from the render path) ──
+    if sudo -n true 2>/dev/null </dev/null; then printf 'sudo_active=1\n'; else printf 'sudo_active=0\n'; fi
+    if command -v tmux &>/dev/null; then
+      printf 'tmux_sessions=%s\n' "$(tmux ls 2>/dev/null | wc -l | tr -d ' ')"
+    fi
+
+    # ── ipc mail not yet seen by this session's alias (every 30 s) ──
+    # `claude-ipc count <alias> --unseen` may not exist yet; any failure leaves the value
+    # empty, which the statusline reads as "unknown".
+    ipc_cache="/tmp/claude-ipcun-${TARGET_PID}"
+    if [[ ! -f "$ipc_cache" ]] || (( _NOW - $(_stat_mtime "$ipc_cache") > 30 )); then
+      ipc_val=""
+      sid_fwd=""; [[ -f "/tmp/claude-sidfwd-${TARGET_PID}" ]] && { read -r sid_fwd < "/tmp/claude-sidfwd-${TARGET_PID}" 2>/dev/null || true; }
+      ipc_alias=""; ipc_af="${CLAUDE_IPC_HOME:-$HOME/.claude-ipc}/alias-by-sid/${sid_fwd}"
+      [[ -n "$sid_fwd" && -f "$ipc_af" ]] && { read -r ipc_alias < "$ipc_af" 2>/dev/null || true; }
+      if [[ -n "$ipc_alias" ]] && command -v claude-ipc &>/dev/null; then
+        ipc_val=$(timeout 3 claude-ipc count "$ipc_alias" --unseen 2>/dev/null </dev/null) || ipc_val=""
+        [[ "$ipc_val" =~ ^[0-9]+$ ]] || ipc_val=""
+      fi
+      printf '%s\n' "$ipc_val" > "$ipc_cache"
+    fi
+    ipc_unseen_val=""; read -r ipc_unseen_val < "$ipc_cache" 2>/dev/null || true
+    printf 'ipc_unseen=%s\n' "$ipc_unseen_val"
+
+    # ── Decision pages waiting on the owner for THIS project (every 30 s) ──
+    # Same rule as the gcc-mods status line: the page's origin.project must match the cwd.
+    dec_cache="/tmp/claude-decn-${TARGET_PID}"
+    if [[ ! -f "$dec_cache" ]] || (( _NOW - $(_stat_mtime "$dec_cache") > 30 )); then
+      dec_n=0
+      dp_reg="$HOME/.claude/assets/decision-pages"
+      if [[ -f "$dp_reg/.pending.txt" ]]; then
+        while IFS= read -r dslug || [[ -n "$dslug" ]]; do
+          dslug="${dslug//[[:space:]]/}"
+          [[ -z "$dslug" || -f "$dp_reg/$dslug/.answer.json" || ! -f "$dp_reg/$dslug/config.json" ]] && continue
+          dproj=$(jq -r '.origin.project // ""' "$dp_reg/$dslug/config.json" 2>/dev/null) || dproj=""
+          dproj="${dproj#\~}"
+          [[ -n "$dproj" && "$cwd" == *"$dproj" ]] && dec_n=$(( dec_n + 1 ))
+        done < "$dp_reg/.pending.txt"
+      fi
+      printf '%s\n' "$dec_n" > "$dec_cache"
+    fi
+    dec_val=0; read -r dec_val < "$dec_cache" 2>/dev/null || true
+    printf 'dec_count=%s\n' "${dec_val:-0}"
 
     # ── WAL stats ──
     for wal_path in "$cwd/.claude/wal.md" "$HOME/.claude/wal.md"; do
@@ -159,11 +213,11 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
       fi
     done
 
-    # ── Network probe (every 30s via sub-cache) ──
-    net_cache="/tmp/claude-net-${TARGET_PID}"
+    # ── Network probe (every 30s, one file shared by every session's daemon) ──
+    net_cache="/tmp/claude-net-shared"
     if [[ ! -f "$net_cache" ]] || (( _NOW - $(_stat_mtime "$net_cache") > 30 )); then
       latency=$(curl -so /dev/null -w '%{time_total}' --connect-timeout 2 --max-time 3 https://api.anthropic.com 2>/dev/null) || latency="offline"
-      echo "$latency" > "$net_cache"
+      echo "$latency" > "${net_cache}.$$" && mv -f "${net_cache}.$$" "$net_cache"
     fi
     net_val=$(cat "$net_cache" 2>/dev/null) || true
     printf 'net_latency=%s\n' "${net_val:-unknown}"
@@ -290,36 +344,6 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     fi
     printf 'mcp_healthy=%s\n' "$mcp_healthy"
     printf 'mcp_down=%s\n' "$mcp_down"
-
-    # ── Complexity delta (file count + line count vs session start) ──
-    # Gated to 30s cadence — two find+wc-l passes are the heaviest daemon operations
-    complexity_cache="/tmp/claude-complexity-${TARGET_PID}"
-    COMPLEXITY_TS_FILE="/tmp/claude-complexity-ts-${TARGET_PID}"
-    _complexity_stale=1
-    if [[ -f "$COMPLEXITY_TS_FILE" ]]; then
-      _last_complexity_ts=$(cat "$COMPLEXITY_TS_FILE" 2>/dev/null | tr -d '[:space:]')
-      (( _NOW - ${_last_complexity_ts:-0} < 30 )) && _complexity_stale=0
-    fi
-    if (( _complexity_stale )) && cd "$cwd" 2>/dev/null && [[ -d ".git" || -f "package.json" || -f "pyproject.toml" ]]; then
-      echo "$_NOW" > "$COMPLEXITY_TS_FILE" 2>/dev/null || true
-      # Count source files and lines (exclude build artifacts)
-      src_files=$(find . -maxdepth 4 -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.py' -o -name '*.go' -o -name '*.rs' \) -not -path '*/node_modules/*' -not -path '*/.next/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/.git/*' 2>/dev/null | wc -l | tr -d ' ')
-      src_lines=$(find . -maxdepth 4 -type f \( -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' -o -name '*.py' -o -name '*.go' -o -name '*.rs' \) -not -path '*/node_modules/*' -not -path '*/.next/*' -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/.git/*' -print0 2>/dev/null | xargs -0 wc -l 2>/dev/null | tail -1 | awk '{print $1}')
-      src_files=${src_files:-0}; src_lines=${src_lines:-0}
-
-      # Save snapshot on first run
-      if [[ ! -f "$complexity_cache" ]]; then
-        printf '%s %s' "$src_files" "$src_lines" > "$complexity_cache"
-      fi
-
-      # Read baseline and compute delta
-      read -r base_files base_lines < "$complexity_cache" 2>/dev/null || true
-      base_files=${base_files:-0}; base_lines=${base_lines:-0}
-      delta_files=$((src_files - base_files))
-      delta_lines=$((src_lines - base_lines))
-      printf 'complexity_df=%s\n' "$delta_files"
-      printf 'complexity_dl=%s\n' "$delta_lines"
-    fi
 
     # ── System memory ──
     printf 'sys_free_mb=%s\n' "$(_mem_free_mb)"
@@ -492,4 +516,4 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
 done
 
 # Cleanup on exit
-rm -f "$OUTPUT_FILE" "${OUTPUT_FILE}.tmp" "/tmp/claude-pr-${TARGET_PID}" "/tmp/claude-net-${TARGET_PID}" "/tmp/claude-net-bytes-${TARGET_PID}" "/tmp/claude-session-start-${TARGET_PID}" "/tmp/claude-complexity-${TARGET_PID}" "/tmp/claude-complexity-ts-${TARGET_PID}" "/tmp/claude-ext-enabled-${TARGET_PID}" "/tmp/claude-mcp-health-${TARGET_PID}" "/tmp/claude-ctx-${TARGET_PID}" "/tmp/claude-sparkline-${TARGET_PID}" "/tmp/claude-timeline-${TARGET_PID}" "/tmp/claude-timeline-last-${TARGET_PID}" "/tmp/claude-tokens-${TARGET_PID}" "/tmp/claude-tokspeed-${TARGET_PID}" "/tmp/claude-toklast-${TARGET_PID}" "/tmp/claude-cost-${TARGET_PID}" "/tmp/claude-costring-${TARGET_PID}" "/tmp/claude-tpath-${TARGET_PID}" "/tmp/claude-focus-cache-${TARGET_PID}" "/tmp/claude-statusline-orig-cksum-${TARGET_PID}" 2>/dev/null
+rm -f "$OUTPUT_FILE" "${OUTPUT_FILE}.tmp" "/tmp/claude-pr-${TARGET_PID}" "/tmp/claude-net-bytes-${TARGET_PID}" "/tmp/claude-session-start-${TARGET_PID}" "/tmp/claude-pm2-${TARGET_PID}" "/tmp/claude-ipcun-${TARGET_PID}" "/tmp/claude-decn-${TARGET_PID}" "/tmp/claude-sidfwd-${TARGET_PID}" "/tmp/claude-idle-${TARGET_PID}" "/tmp/claude-ext-enabled-${TARGET_PID}" "/tmp/claude-mcp-health-${TARGET_PID}" "/tmp/claude-ctx-${TARGET_PID}" "/tmp/claude-sparkline-${TARGET_PID}" "/tmp/claude-timeline-${TARGET_PID}" "/tmp/claude-timeline-last-${TARGET_PID}" "/tmp/claude-tokens-${TARGET_PID}" "/tmp/claude-tokspeed-${TARGET_PID}" "/tmp/claude-toklast-${TARGET_PID}" "/tmp/claude-cost-${TARGET_PID}" "/tmp/claude-costring-${TARGET_PID}" "/tmp/claude-tpath-${TARGET_PID}" "/tmp/claude-focus-cache-${TARGET_PID}" "/tmp/claude-statusline-orig-cksum-${TARGET_PID}" 2>/dev/null

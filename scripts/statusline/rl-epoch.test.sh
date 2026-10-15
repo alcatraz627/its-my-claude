@@ -76,9 +76,9 @@ printf '%s' "$payload" > "$T/payload.json"
 out=$(PJ="$T/payload.json" SL="$SL" HOME="$T" perl -e 'my $p=fork; if($p==0){setpgrp(0,0); open(STDIN,"<",$ENV{PJ}); exec("bash",$ENV{SL}) or exit 127}
                local $SIG{ALRM}=sub{kill "KILL",-$p; exit 9}; alarm 25; waitpid($p,0); exit($?>>8)' 2>/dev/null)
 clean=$(printf '%s' "$out" | sed 's/\x1b\[[0-9;]*m//g')
-if printf '%s' "$clean" | rg -q '7d:22%'; then
+if printf '%s' "$clean" | rg -q 'wk 22%'; then
   ok "merge took the cached 22% over the sentinel-stamped 88%"
-elif printf '%s' "$clean" | rg -q '7d:88%'; then
+elif printf '%s' "$clean" | rg -q 'wk 88%'; then
   bad "merge kept the stale 88% — the sentinel still wins"
 else
   bad "could not read a 7d pct from the render (got: $(printf '%s' "$clean" | tr '\n' ' ' | cut -c1-90))"
