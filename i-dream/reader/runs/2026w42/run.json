@@ -771,5 +771,55 @@
   "tokens": 66766,
   "held_by_gate": null,
   "skipped": null,
-  "landed": []
+  "landed": [
+    {
+      "cluster": "c-77235594",
+      "title": "Memory-sourced URLs and CI status cited as live facts",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-66",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-e21c31ba",
+      "title": "Truncated skill listing causes false absence claims",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-49",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-2d8458a5",
+      "title": "AI-smell prose persists past prose-smell gate",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-2c",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-11308a85",
+      "title": "Status-report turns concentrate word-salad events",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-0f",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-ab3c677c",
+      "title": "Dense-briefing hook warns but never blocks",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-f2",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-0d4db80b",
+      "title": "declared-ready gate misses softer readiness claims",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-d5",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    },
+    {
+      "cluster": "c-d72aa2b9",
+      "title": "No gate for shipping unwalked surfaces",
+      "outcome": "filed",
+      "detail": "prop-20261019-094437-b8",
+      "ts": "2026-10-19T09:44:35.938732Z"
+    }
+  ]
 }
