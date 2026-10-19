@@ -293,6 +293,118 @@ rc=$?
 [[ $rc -eq 0 ]] && ok "no-session focus exits 0 (non-blocking)" \
                  || bad "no-session focus exits 0" "rc=0" "rc=$rc"
 
+# ── 18. hands-off derivation: matchers, base, status, intent, focus ─────────
+HOOKS="$ROOT/hooks"
+run_hook() { # run_hook <script> <json>
+  echo "$2" | TAB_STATE_DIR="$SANDBOX" TAB_TASK_STORE="${TAB_TASK_STORE:-}" bash "$HOOKS/$1" >/dev/null 2>&1
+}
+getf() { CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" get "$1"; }
+SETTINGS="${SETTINGS_JSON:-$HOME/.claude/settings.json}"
+
+# 18a. both tab-title hooks listen to the file and task tools, still async
+for ev_script in "PreToolUse pre-tool.sh" "PostToolUse post-tool.sh"; do
+  set -- $ev_script
+  m=$(jq -r --arg e "$1" --arg s "$2" '.hooks[$e][] | select(any(.hooks[]; .command | endswith("tab-title/hooks/" + $s))) | .matcher' "$SETTINGS")
+  a=$(jq -r --arg e "$1" --arg s "$2" '.hooks[$e][] | select(any(.hooks[]; .command | endswith("tab-title/hooks/" + $s))) | .hooks[0].async' "$SETTINGS")
+  all=1; for t in Read Write Edit MultiEdit Glob Grep TaskCreate TaskUpdate; do [[ "$m" == *"$t"* ]] || all=0; done
+  [[ $all == 1 ]] && ok "$2 matcher covers file and task tools" || bad "$2 matcher covers file and task tools" "all of Read..TaskUpdate" "$m"
+  eq "$2 stays async" "true" "$a"
+done
+
+# 18b. the Stop hook keeps a stored base but recomputes its own
+trash "$SANDBOX"/claude-tab-auto-* 2>/dev/null
+seed "My stored title" ""
+echo '{"session_id":"sess-test","transcript_path":"","cwd":"/tmp"}' | TAB_STATE_DIR="$SANDBOX" bash ~/.claude/scripts/update-tab-title.sh >/dev/null 2>&1
+eq "stop keeps a stored base" "My stored title" "$(getf base)"
+seed "Am❓ stale" ""
+echo '{"session_id":"sess-test","transcript_path":"","cwd":"/tmp"}' | TAB_STATE_DIR="$SANDBOX" bash ~/.claude/scripts/update-tab-title.sh >/dev/null 2>&1
+eq "stop recomputes an auto base" "Am❓ tmp" "$(getf base)"
+echo '{"session_id":"sess-test","transcript_path":"","cwd":"/var"}' | TAB_STATE_DIR="$SANDBOX" bash ~/.claude/scripts/update-tab-title.sh >/dev/null 2>&1
+eq "stop keeps refreshing its own auto base" "Am❓ var" "$(getf base)"
+
+# 18c. status from a test/build exit code (PostToolUse), hand-set status untouched
+trash "$SANDBOX"/claude-tab-auto-* 2>/dev/null
+seed "Status test" ""
+run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"Bash","tool_input":{"command":"npm test"},"tool_response":{"exit_code":1}}'
+eq "failing test command sets status=error" "error" "$(getf status)"
+run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"Bash","tool_input":{"command":"npm test"},"tool_response":{"exit_code":0}}'
+eq "later passing test command sets status=ok" "ok" "$(getf status)"
+run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"Bash","tool_input":{"command":"ls nope"},"tool_response":{"exit_code":2}}'
+eq "a non-test failure leaves status alone" "ok" "$(getf status)"
+run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"Bash","tool_input":{"command":"pytest -q"},"error":"Exit code 1\nFAILED"}'
+eq "an 'Exit code N' error string counts" "error" "$(getf status)"
+CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" status blocked >/dev/null
+run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"Bash","tool_input":{"command":"npm test"},"tool_response":{"exit_code":0}}'
+eq "a status the agent set by hand is not overwritten" "blocked" "$(getf status)"
+
+# 18d. status at Stop, from the transcript of the turn
+mk_tx() { # mk_tx <file> <cmd> <is_error true|false> [extra tool name]
+  local f="$1" cmd="$2" err="$3" extra="${4:-}"
+  {
+    echo '{"type":"user","message":{"role":"user","content":"please do it"}}'
+    jq -nc --arg c "$cmd" '{type:"assistant",message:{role:"assistant",content:[{type:"tool_use",id:"t1",name:"Bash",input:{command:$c}}]}}'
+    jq -nc --argjson e "$err" '{type:"user",message:{role:"user",content:[{type:"tool_result",tool_use_id:"t1",is_error:$e,content:"out"}]}}'
+    [[ -n "$extra" ]] && jq -nc --arg n "$extra" '{type:"assistant",message:{role:"assistant",content:[{type:"tool_use",id:"t2",name:$n,input:{}}]}}'
+  } > "$f"
+}
+stop_status() { # stop_status <transcript> -> status after a Stop with an empty status
+  seed "Stop status" ""
+  trash "$SANDBOX"/claude-tab-auto-* 2>/dev/null
+  echo "{\"session_id\":\"sess-test\",\"transcript_path\":\"$1\",\"cwd\":\"/tmp\"}" | TAB_STATE_DIR="$SANDBOX" bash ~/.claude/scripts/update-tab-title.sh >/dev/null 2>&1
+  getf status
+}
+mk_tx "$SANDBOX/tx-ok.jsonl" "npm test" false;               eq "stop: passing test turn -> ok" "ok" "$(stop_status "$SANDBOX/tx-ok.jsonl")"
+mk_tx "$SANDBOX/tx-err.jsonl" "npm test" true;               eq "stop: failing test turn -> error" "error" "$(stop_status "$SANDBOX/tx-err.jsonl")"
+mk_tx "$SANDBOX/tx-warn.jsonl" "ls nope" true;               eq "stop: other failure -> warning" "warning" "$(stop_status "$SANDBOX/tx-warn.jsonl")"
+mk_tx "$SANDBOX/tx-blk.jsonl" "ls" false AskUserQuestion;    eq "stop: ended on a question -> blocked" "blocked" "$(stop_status "$SANDBOX/tx-blk.jsonl")"
+mk_tx "$SANDBOX/tx-quiet.jsonl" "ls" false;                  eq "stop: quiet turn -> no status" "" "$(stop_status "$SANDBOX/tx-quiet.jsonl")"
+
+# 18e. intent once per session from the first real prompt (BASE seeded so the q path stays off)
+intent_run() { # intent_run <prompt> [cwd]
+  echo "{\"session_id\":\"sess-test\",\"prompt\":$(jq -Rn --arg p "$1" '$p'),\"cwd\":\"${2:-/tmp}\"}" \
+    | TAB_STATE_DIR="$SANDBOX" bash "$HOOKS/auto-base.sh" >/dev/null 2>&1
+}
+reset_intent() { seed "Intent test" ""; trash "$SANDBOX/claude-tab-intent-done-sess-test" 2>/dev/null; }
+reset_intent; intent_run "please fix the login bug on the settings page"
+eq "intent: 'fix ... bug' -> bugfix" "bugfix" "$(getf intent)"
+intent_run "now refactor the whole thing into modules"
+eq "intent: set once, a later prompt does not change it" "bugfix" "$(getf intent)"
+CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" intent --clear >/dev/null
+intent_run "now refactor the whole thing into modules"
+eq "intent: derived only once per session, not re-derived when cleared" "" "$(getf intent)"
+reset_intent; intent_run "/catchup"
+eq "intent: a slash command is not a real prompt" "" "$(getf intent)"
+intent_run "write up the design notes for the new page"
+eq "intent: the next real prompt still counts (docs before design)" "docs" "$(getf intent)"
+reset_intent; intent_run "study how the scheduler decides things"
+eq "intent: study -> research" "research" "$(getf intent)"
+reset_intent
+GITD="$SANDBOX/repo"; mkdir -p "$GITD"; git -C "$GITD" init -q -b feat/new-thing 2>/dev/null
+intent_run "carry on with the next piece of work please" "$GITD"
+eq "intent: no keyword -> branch prefix feat/ -> feature" "feature" "$(getf intent)"
+reset_intent; CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" intent security >/dev/null; trash "$SANDBOX/claude-tab-intent-done-sess-test" 2>/dev/null
+intent_run "please fix the login bug on the settings page"
+eq "intent: an agent-set intent is never replaced" "security" "$(getf intent)"
+
+# 18f. focus from the Task list's in_progress row, cut to three words
+TS="$SANDBOX/taskstore"; mkdir -p "$TS"
+printf '{"id":"1","subject":"Wire the plan gate into settings now","status":"in_progress"}' > "$TS/1.json"
+printf '{"id":"2","subject":"Other pending work","status":"pending"}' > "$TS/2.json"
+seed "Focus test" ""; trash "$SANDBOX"/claude-tab-auto-* 2>/dev/null
+TAB_TASK_STORE="$TS" run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"TaskUpdate","tool_input":{}}'
+eq "focus: in_progress subject cut to three words" "Wire the plan" "$(getf focus)"
+printf '{"id":"1","subject":"Wire the plan gate into settings now","status":"completed"}' > "$TS/1.json"
+TAB_TASK_STORE="$TS" run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"TaskUpdate","tool_input":{}}'
+eq "focus: cleared when nothing is in progress" "" "$(getf focus)"
+CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" focus "my own focus" >/dev/null
+printf '{"id":"1","subject":"Wire the plan gate into settings now","status":"in_progress"}' > "$TS/1.json"
+TAB_TASK_STORE="$TS" run_hook post-tool.sh '{"session_id":"sess-test","tool_name":"TaskUpdate","tool_input":{}}'
+eq "focus: a hand-set focus is not overwritten" "my own focus" "$(getf focus)"
+# the file and task tools now reach pre-tool.sh's mode derivation
+seed "Mode test" ""
+run_hook pre-tool.sh '{"session_id":"sess-test","tool_name":"MultiEdit","tool_input":{}}'
+eq "pre-tool derives mode=edit from MultiEdit" "edit" "$(getf mode)"
+
 # ── Summary ──────────────────────────────────────────────────────────────────
 echo
 echo "── $((PASS+FAIL)) tests: $PASS passed, $FAIL failed ──"

@@ -206,7 +206,7 @@
         ]
       },
       {
-        "matcher": "Bash|Agent|Task",
+        "matcher": "Bash|Agent|Task|Read|Write|Edit|MultiEdit|Glob|Grep|TaskCreate|TaskUpdate",
         "hooks": [
           {
             "type": "command",
@@ -478,7 +478,7 @@
         ]
       },
       {
-        "matcher": "Bash|Agent|Task",
+        "matcher": "Bash|Agent|Task|Read|Write|Edit|MultiEdit|Glob|Grep|TaskCreate|TaskUpdate",
         "hooks": [
           {
             "type": "command",
@@ -551,6 +551,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/snapshot-pre-edit.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/plan-gate-pre.sh"
           }
         ]
       },
@@ -1401,6 +1405,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/ui-verified-hint.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/plan-gate-ups.sh"
           }
         ]
       },

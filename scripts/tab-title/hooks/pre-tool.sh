@@ -44,10 +44,10 @@ TRANSIENT_DEPTH=$(( ${TRANSIENT_DEPTH:-0} + 1 ))
 auto_mode=""
 case "$tool" in
   Read)               auto_mode="read" ;;
-  Write|Edit)         auto_mode="edit" ;;
+  Write|Edit|MultiEdit) auto_mode="edit" ;;
   Glob|Grep)          auto_mode="search" ;;
   Agent)              auto_mode="think" ;;
-  TodoWrite)          auto_mode="target" ;;
+  TodoWrite|TaskCreate|TaskUpdate) auto_mode="target" ;;
   Bash)
     cmd=$(echo "$input" | jq -r '.tool_input.command // empty')
     case "$cmd" in

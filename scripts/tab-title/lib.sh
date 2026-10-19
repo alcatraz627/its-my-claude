@@ -248,10 +248,10 @@ tab_intent_glyph() {
     docs|doc|documentation)        printf '📝' ;;
     chore|cleanup|maintenance)     printf '🧹' ;;
     research|explore-intent|study) printf '📚' ;;
-    design-intent|ui|ux)           printf '🎨' ;;
+    design|design-intent|ui|ux)    printf '🎨' ;;
     release|ship|publish)          printf '🚀' ;;
     discussion|chat-intent|talk)   printf '💬' ;;
-    test-intent|qa)                printf '🧪' ;;
+    test|test-intent|qa)           printf '🧪' ;;
     perf|optimize|optimization)    printf '⚡' ;;
     security|sec|audit)            printf '🔒' ;;
   esac
@@ -271,6 +271,77 @@ test       🧪   adding/improving tests
 perf       ⚡   performance optimization
 security   🔒   security audit / hardening
 EOF
+}
+
+# ── Derived slots (no agent action) ──────────────────────────────────────────
+# The hooks fill status, intent and focus from facts they can see, so the agent
+# never has to run tab-title.sh. Each helper prints a value or nothing.
+
+# Success or failure of a test/build command is the one signal worth a status.
+tab_is_testbuild_cmd() {
+  case "${1:-}" in
+    *"npm test"*|*"npm run test"*|*"pytest"*|*"go test"*|*"cargo test"*|*"vitest"*|*"jest"*|*"tests.sh"*|*".test."*|\
+    *"npm run build"*|*"make"*|*"cargo build"*|*"go build"*|*"tsc"*|*"webpack"*|*"vite build"*|*"bun test"*) return 0 ;;
+  esac
+  return 1
+}
+
+# Session-level kind of work from the first real prompt, else the branch prefix.
+# Usage: tab_derive_intent "<prompt>" "<branch>"
+tab_derive_intent() {
+  local p; p=$(printf '%s' "${1:-}" | LC_ALL=C tr '[:upper:]' '[:lower:]')
+  local branch="${2:-}"
+  case " $p " in
+    *[^a-z]fix*|*[^a-z]bug*|*broken*|*[^a-z]crash*|*regression*) printf 'bugfix'; return ;;
+    *refactor*|*[^a-z]rename[^a-z]*|*restructure*|*[^a-z]move[^a-z]*) printf 'refactor'; return ;;
+    *[^a-z]study[^a-z]*|*research*|*investigate*|*[^a-z]why[^a-z]*) printf 'research'; return ;;
+    *[^a-z]docs[^a-z]*|*readme*|*"write up"*|*[^a-z]doc[^a-z]*) printf 'docs'; return ;;
+    *[^a-z]design[^a-z]*|*[^a-z]mock*|*[^a-z]layout*) printf 'design'; return ;;
+    *[^a-z]test[^a-z]*|*[^a-z]tests[^a-z]*) printf 'test'; return ;;
+  esac
+  case "$branch" in
+    feat/*|feature/*) printf 'feature' ;;
+    fix/*|bugfix/*|hotfix/*) printf 'bugfix' ;;
+    refactor/*) printf 'refactor' ;;
+    docs/*) printf 'docs' ;;
+    chore/*) printf 'chore' ;;
+    test/*) printf 'test' ;;
+    perf/*) printf 'perf' ;;
+  esac
+}
+
+# The in_progress task's subject cut to three words. Reads the task store the
+# way task.sh finds it: a pin, then the store named for the session, then
+# resolve-store.sh. TAB_TASK_STORE points straight at a store (tests, overrides).
+# Usage: tab_focus_from_tasks <session id>   (prints nothing when none in progress)
+tab_focus_from_tasks() {
+  local sid="${1:-}" tasks="${HOME}/.claude/tasks" pins="${HOME}/.claude/tasks-pins"
+  local s8="${sid:0:8}" store="${TAB_TASK_STORE:-}" p
+  if [[ -z "$store" && -n "$s8" ]]; then
+    if [[ -f "$pins/$s8" ]]; then p=$(cat "$pins/$s8"); p="session-${p#session-}"; [[ -d "$tasks/$p" ]] && store="$tasks/$p"; fi
+    if [[ -z "$store" && -d "$tasks/session-$s8" && -n "$(ls "$tasks/session-$s8" 2>/dev/null)" ]]; then store="$tasks/session-$s8"; fi
+    if [[ -z "$store" && -x "${HOME}/.claude/scripts/task-table/resolve-store.sh" ]]; then
+      store=$(CLAUDE_CODE_SESSION_ID="$sid" "${HOME}/.claude/scripts/task-table/resolve-store.sh" 2>/dev/null) || store=""
+    fi
+  fi
+  [[ -n "$store" && -d "$store" ]] || return 0
+  local subj
+  subj=$(python3 -I - "$store" <<'PY' 2>/dev/null
+import json, pathlib, sys
+rows = []
+for f in pathlib.Path(sys.argv[1]).glob("*.json"):
+    try: d = json.load(open(f))
+    except Exception: continue
+    if d.get("status") == "in_progress" and d.get("subject"):
+        try: n = int(d.get("id"))
+        except Exception: n = 0
+        rows.append((n, d["subject"]))
+if rows:
+    rows.sort()
+    print(" ".join(rows[0][1].replace("[", "").replace("]", "").split()[:3]))
+PY
+  ) || return 0
+  printf '%s' "$subj"
 }
 
 # ── Decorator glyph slots (state-driven, claude-settable) ────────────────────

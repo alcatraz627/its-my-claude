@@ -76,12 +76,23 @@ branch=$(cd "${cwd:-.}" 2>/dev/null && git -c core.useBuiltinFSMonitor=false bra
 branch_suffix=""
 [[ -n "$branch" && "$branch" != "main" && "$branch" != "master" ]] && branch_suffix=" ($branch)"
 
-# Recomputed every turn from name + branch (both stable), so there is no prior
-# base to carry forward, churn, or accumulate a runaway prefix.
+# The auto base is recomputed from name + branch each turn, so a rename or a
+# branch switch shows up. A base somebody else stored (tab-title.sh set base=...,
+# or auto-base.sh's local title) is not ours to overwrite: we remember the last
+# value we wrote in a sidecar, and a stored base that differs from it is kept.
+# "Am❓ " bases predate the sidecar and are always ours.
 if [[ -n "$session_name" ]]; then
-  new_base="${session_name}${branch_suffix}"
+  auto_base="${session_name}${branch_suffix}"
 else
-  new_base="Am❓ ${dir}${branch_suffix}"
+  auto_base="Am❓ ${dir}${branch_suffix}"
+fi
+base_auto_file="${TAB_STATE_DIR}/claude-tab-auto-base-${session_id}"
+last_auto=$(cat "$base_auto_file" 2>/dev/null || true)
+if [[ -n "$prior_base" && "$prior_base" != "$last_auto" && "$prior_base" != "Am❓ "* ]]; then
+  new_base="$prior_base"
+else
+  new_base="$auto_base"
+  printf '%s' "$auto_base" > "$base_auto_file"
 fi
 
 # End-of-turn implies no tools in flight — auto-heal any drift in the
@@ -98,6 +109,18 @@ BASE="$TAB_NORMALISED_BASE"
 
 STAR="$TAB_STAR"
 FOCUS="$prior_focus"
+
+# Status for the turn that just ended, derived from its tool results. It only
+# replaces a status we derived ourselves (or an empty one), never one the agent set.
+status_auto_file="${TAB_STATE_DIR}/claude-tab-auto-status-${session_id}"
+if [[ -n "$transcript" && -f "$transcript" ]]; then
+  derived_status=$(python3 -I "${HOME}/.claude/scripts/tab-title/derive-status.py" "$transcript" 2>/dev/null || true)
+  prev_auto_status=$(cat "$status_auto_file" 2>/dev/null || true)
+  if [[ -z "${STATUS:-}" || "${STATUS:-}" == "$prev_auto_status" ]]; then
+    STATUS="$derived_status"
+    printf '%s' "$derived_status" > "$status_auto_file"
+  fi
+fi
 tab_run_decorators
 tab_save_state "$session_id"
 tab_emit "$(tab_compose)"

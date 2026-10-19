@@ -59,6 +59,14 @@ fr=$(cd src && printf '%s/%s' "$(pwd -P)" big.py); key=$(printf '%s' "$fr" | sha
 cp "$T/big.snap" "/tmp/claude-presnap-$S8/$key"; track $S8 "$T/proj/src/big.py"
 out=$(stop "$SID"); [ -z "$out" ] && ok "snapshot: 10 lines added to a 200-line file is not substantial" || bad "snapshot: 10 lines added to a 200-line file is not substantial: $out"
 
+# 6b. regression: with a snapshot present and 80 lines added, diff exits 1 and the count must
+# still be a single number. A doubled "80\n0" once broke the arithmetic and silenced every nudge.
+fresh $S8; lines src/grow.py 20; cp "src/grow.py" "$T/grow.snap"; lines src/grow.py 100
+mkdir -p "/tmp/claude-presnap-$S8"
+fr=$(cd src && printf '%s/%s' "$(pwd -P)" grow.py); key=$(printf '%s' "$fr" | shasum | awk '{print $1}')
+cp "$T/grow.snap" "/tmp/claude-presnap-$S8/$key"; track $S8 "$T/proj/src/grow.py"
+out=$(stop "$SID"); warns "$out" && ok "snapshot: 80 lines added to a 20-line file warns" || bad "snapshot: 80 lines added to a 20-line file warns: $out"
+
 # 7. the marker fix: write with the FULL uuid, the 8-char form, and nothing at all
 for form in "$SID" "$S8" ""; do
   fresh $S8; lines src/b.py 80; track $S8 "$T/proj/src/b.py"

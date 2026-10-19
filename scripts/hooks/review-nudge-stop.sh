@@ -73,7 +73,11 @@ added_in() {
   key=$(printf '%s' "$fr" | shasum 2>/dev/null | awk '{print $1}')
   snap="/tmp/claude-presnap-${sid8}/${key}"
   if [ -f "$snap" ]; then
-    diff "$snap" "$f" 2>/dev/null | rg -c '^> ' 2>/dev/null || echo 0
+    # diff exits 1 whenever the files differ, which under pipefail made the old
+    # "|| echo 0" append a second line ("17\n0") and the caller's arithmetic died,
+    # so the total stayed 0 and the nudge could never fire.
+    local n; n=$(diff "$snap" "$f" 2>/dev/null | rg -c '^> ' 2>/dev/null)
+    n="${n%%$'\n'*}"; echo "${n:-0}"
   else
     # No snapshot (a resumed session, or the snapshotter was not wired yet): count
     # the whole file, capped, rather than guess nothing was added.
