@@ -1,1 +1,0 @@
-rotation/rotate-wal.sh

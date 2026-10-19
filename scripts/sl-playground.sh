@@ -1,1 +1,0 @@
-statusline/sl-playground.sh

@@ -1,1 +1,0 @@
-session-mgmt/session-summary.sh

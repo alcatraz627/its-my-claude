@@ -1,1 +1,0 @@
-session-mgmt/detect-stale-session.sh

@@ -63,8 +63,23 @@ env_p = dict(ENV, CLAUDE_CODE_ENTRYPOINT="sdk-cli")
 r = subprocess.run([sys.executable, KW, "hook-start"], input='{"session_id":"h"}', capture_output=True, text=True, env=env_p)
 expect("a headless session is never armed", r.stdout.strip() == "")
 
+# The re-arm comes after the answer, never before it.
+expect("the start asks to answer first, then re-arm", "Answer the owner's next message first" in ctx(out))
+
+# Opened, asked, interrupted before any answer (session 90d2e6ca): no paid
+# wakes and no core-dump of an empty session.
+hook("hook-start", session_id="s11")
+hook("hook-prompt", session_id="s11", prompt="a question interrupted before the answer")
+expect("a session with no finished turn skips its wake", wake("s11", 300000, 56).get("decision") == "block")
+expect("and stays stopped", wake("s11", 300000, 56).get("decision") == "block")
+hook("hook-start", session_id="s12")
+hook("hook-prompt", session_id="s12", prompt="a real question")
+hook("hook-stop", session_id="s12")
+expect("once a turn finished, the wake runs", "decision" not in wake("s12", 300000, 56))
+
 # Small session (60k of 200k = 30%): warm, warm, full dump, stop.
 hook("hook-prompt", session_id="s1", prompt="real work")
+hook("hook-stop", session_id="s1")
 early = wake("s1", 300000, 40)
 expect("a wake 40 min after activity is not due and never blocked", "decision" not in early)
 expect("it only re-arms and says the one word", "not due" in ctx(early) and "recurring false" in ctx(early)

@@ -1,1 +1,0 @@
-dev-servers/pm2-register.sh

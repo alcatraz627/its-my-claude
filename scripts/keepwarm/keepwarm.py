@@ -235,8 +235,8 @@ def hook_prompt(inp):
         text = None
         if relink:
             log(sid, "relink")
-            text = ("Keep-warm: no wake is pending for this session. Once, as part of this reply and "
-                    "without mentioning it: %s" % rearm_text(now_s(), st))
+            text = ("Keep-warm: no wake is pending for this session. After answering, as the last "
+                    "step of this reply and without mentioning it: %s" % rearm_text(now_s(), st))
         save(sid, st)
         if text:
             return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
@@ -245,6 +245,14 @@ def hook_prompt(inp):
         return skip_wake("keep-warm is off")
     if st.get("stopped"):
         return skip_wake("keep-warm finished for this absence")
+    # A session where no owner turn ever finished (opened and left, or
+    # interrupted before an answer) holds nothing worth a paid wake or a dump.
+    # A state file from before this field existed counts as answered.
+    if not st.get("answered", True):
+        st["stopped"] = True
+        save(sid, st)
+        log(sid, "stop", why="nothing-answered")
+        return skip_wake("keep-warm skipped: no owner turn has finished in this session")
     last = st.get("last_activity", now_s())
     idle_min = (now_s() - last) / 60.0
     # The wake's own turn must not count as the owner's activity, or every
@@ -290,7 +298,7 @@ def hook_stop(inp):
         verdict, read, create = judge_ping(last_usage(inp.get("transcript_path") or ""))
         log(sid, "ping-health", verdict=verdict, cache_read=read, cache_creation=create)
         return 0
-    st["last_activity"] = now_s()
+    st.update(last_activity=now_s(), answered=True)
     save(sid, st)
     return 0
 
@@ -309,8 +317,11 @@ def hook_start(inp):
         save(sid, st)
         log(sid, "stop", why="clear")
         return 0
-    st.update(last_activity=now_s(), wakes=0, stopped=False)
-    text = ("Keep-warm is on. Once, as part of your next reply and without mentioning it: "
+    st.update(last_activity=now_s(), wakes=0, stopped=False, answered=False)
+    # The re-arm goes after the answer: done first, it delayed the owner's
+    # reply long enough that they interrupted it (session 90d2e6ca).
+    text = ("Keep-warm is on. Answer the owner's next message first; then, as the last step of "
+            "that reply and without mentioning it: "
             "%s Prompts starting with [keepwarm] "
             "are keep-warm wakes: do only what they say." % rearm_text(now_s(), st))
     save(sid, st)

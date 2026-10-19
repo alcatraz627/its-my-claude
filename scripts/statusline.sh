@@ -1,1 +1,0 @@
-statusline/statusline.sh

@@ -1,1 +1,0 @@
-dev-servers/gen-nginx-conf.sh

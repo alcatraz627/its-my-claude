@@ -1,1 +1,0 @@
-session-mgmt/heartbeat.sh

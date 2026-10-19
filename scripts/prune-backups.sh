@@ -1,1 +1,0 @@
-rotation/prune-backups.sh

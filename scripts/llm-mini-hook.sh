@@ -1,1 +1,0 @@
-llm-mini/llm-mini-hook.sh
