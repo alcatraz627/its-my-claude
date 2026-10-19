@@ -115,6 +115,9 @@ declare module 'claude-code' {
       decide: Decide
       side: Side
       images: Images
+      // Main turns finished this session, and band rows skipped for it.
+      turns: number
+      skipped: string[]
       // null until /hub on or /hub off decides it this session; the startOn switch fills in.
       enabled: boolean | null
     }

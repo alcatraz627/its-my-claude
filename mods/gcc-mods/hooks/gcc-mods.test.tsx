@@ -346,6 +346,54 @@ describe('the band', () => {
   })
 })
 
+describe('the resume offer is for the first turns only', () => {
+  test('it shows for three finished turns, then leaves the band', ON, async ($, on) => {
+    const w = world(on)
+    withCheckpoint(w)
+    await $.classic.SessionStart({ source: 'clear' })
+    for (let t = 0; t < 3; t++) {
+      expect(await (await mountBand($)).find({ key: 'cu-load' })).toBeDefined()
+      await $.classic.Stop({ last_assistant_message: 'turn ' + t } as any)
+    }
+    expect(await (await mountBand($)).find({ key: 'cu-load' })).toBeUndefined()
+  })
+
+  test("this session's own snapshot is never offered as a resume", ON, async ($, on) => {
+    const w = world(on)
+    // The world's session id is test-session-0001, so its short id is test-ses.
+    const own = CWD + '/_precompact-test-ses.claude.md'
+    w.resolve = () => ok(JSON.stringify({ name: 'precompact-test-ses', checkpoint_path: own, ts: new Date(NOW - 60_000).toISOString() }))
+    w.exists.add(own)
+    await $.classic.SessionStart({ source: 'clear' })
+    expect(await (await mountBand($)).find({ key: 'cu-load' })).toBeUndefined()
+  })
+})
+
+describe('skip on every band row', () => {
+  test('skipping a decision page hides it for this session only and keeps it pending', ON, async ($, on) => {
+    const w = world(on)
+    withPage(w)
+    await $.classic.SessionStart({ source: 'startup' })
+    const band = await mountBand($)
+    expect(((await band.find({ key: 'skip-decide' })) as any)?.props.label).toBe('⏭ skip')
+    await band.press({ key: 'skip-decide' })
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeUndefined()
+    expect(w.files[DP + '/.pending.txt']).toContain('pg')
+    expect(w.files[DP + '/.band-dismissed.txt'] ?? '').not.toContain('pg')
+    await $.classic.SessionStart({ source: 'clear' })
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeDefined()
+  })
+
+  test('every button the band draws leads with an emoji', ON, async ($, on) => {
+    const w = world(on)
+    withCheckpoint(w)
+    await $.classic.SessionStart({ source: 'clear' })
+    const labels = ((await (await mountBand($)).findAll({ type: 'Button' })) as any[]).filter(b => b.key !== 'band-hide').map(b => String(b.props.label))
+    expect(labels.length).toBeGreaterThan(2)
+    for (const l of labels) expect(l).toMatch(/^\p{Extended_Pictographic}/u)
+  })
+})
+
 describe('keys and the prompt box', () => {
   test('no Button the band draws carries a hotkey, in any of its states', ON, async ($, on) => {
     const w = world(on)
@@ -355,7 +403,7 @@ describe('keys and the prompt box', () => {
     const states: unknown[][] = []
     const band = await mountBand($)
     states.push(await band.findAll({ type: 'Button' }))
-    await band.press({ key: 'cu-skip' })
+    await band.press({ key: 'skip-resume' })
     await $.classic.Stop({ last_assistant_message: 'paused' } as any)
     const idle = await mountBand($)
     expect(await idle.find({ key: 'idle-continue' })).toBeDefined()
@@ -551,7 +599,7 @@ describe('the band rows', () => {
     expect(row?.text.endsWith('✕')).toBe(true)
     expect(JSON.stringify(row?.children)).toContain('"key":"band-hide"')
     const buttons = (await band.findAll({ type: 'Button' })) as { key?: string; props: Record<string, unknown> }[]
-    expect(buttons.map(b => b.key)).toEqual(['cu-load', 'cu-copy', 'cu-skip', 'band-hide'])
+    expect(buttons.map(b => b.key)).toEqual(['cu-load', 'cu-copy', 'skip-resume', 'band-hide'])
     expect(buttons.filter(b => b.props.variant === 'primary').map(b => b.key)).toEqual(['cu-load'])
     expect((await band.find({ key: 'band-hide' }))?.props.plain).toBe(true)
     // The separate "hide band" line is gone.
@@ -566,7 +614,7 @@ describe('the band rows', () => {
     const link = await band.find({ type: 'Link' })
     expect(link?.props.href).toBe('file://' + CKPT)
     const label = link?.children[0] as { children: string[]; hover?: { underline?: boolean } }
-    expect(label.children).toEqual(['view'])
+    expect(label.children).toEqual(['📄 view'])
     expect(label.hover?.underline).toBe(true)
   })
 
@@ -1102,7 +1150,7 @@ describe('the image opener', () => {
     expect(row?.props.flexDirection).toBe('row')
     expect(row?.text).toContain('2 images')
     const keys = ((await band.findAll({ type: 'Button' })) as { key?: string }[]).map(b => b.key)
-    expect(keys).toEqual(['img-open-1', 'img-open-3', 'img-view', 'img-copy', 'img-hide'])
+    expect(keys).toEqual(['img-open-1', 'img-open-3', 'img-view', 'img-copy', 'skip-images', 'img-hide'])
     const variants = ((await band.findAll({ type: 'Button' })) as { props: Record<string, unknown> }[]).filter(b => b.props.variant === 'primary')
     expect(variants.length).toBe(1)
   })
@@ -1136,7 +1184,7 @@ describe('the image opener', () => {
     await withImages($, w)
     const band = await mountBand($)
     const copy = (await band.find({ key: 'img-copy' })) as { props: Record<string, unknown> } | undefined
-    expect(copy?.props.label).toBe('copy paths')
+    expect(copy?.props.label).toBe('📋 copy paths')
     expect(copy?.props.hotkey).toBeUndefined()
     await band.press({ key: 'img-copy' })
     expect(w.copies).toEqual([DIR + '/1.png\n' + DIR + '/3.png'])
@@ -1151,7 +1199,7 @@ describe('the image opener', () => {
     w.box = { text: 'only [Image #3]', cursor: 0 }
     await withImages($, w)
     const band = await mountBand($)
-    expect(((await band.find({ key: 'img-copy' })) as any)?.props.label).toBe('copy path')
+    expect(((await band.find({ key: 'img-copy' })) as any)?.props.label).toBe('📋 copy path')
     await band.press({ key: 'img-copy' })
     expect(w.copies).toEqual([DIR + '/3.png'])
     expect(w.toasts.at(-1)).toBe('Copied ' + DIR + '/3.png')
@@ -1179,7 +1227,7 @@ describe('the image opener', () => {
     await withImages($, w)
     const band = await mountBand($)
     expect((await band.find({ key: 'row-images' }))?.text).toContain('not found')
-    expect((await band.findAll({ type: 'Button' })).map((b: any) => b.key)).toEqual(['img-hide'])
+    expect((await band.findAll({ type: 'Button' })).map((b: any) => b.key)).toEqual(['skip-images', 'img-hide'])
   })
 
   test('no image button carries a hotkey, and the row never touches the draft', ON, async ($, on) => {
@@ -1189,7 +1237,7 @@ describe('the image opener', () => {
     await withImages($, w)
     const band = await mountBand($)
     const buttons = (await band.findAll({ type: 'Button' })) as { props: Record<string, unknown> }[]
-    expect(buttons.length).toBe(5)
+    expect(buttons.length).toBe(6)
     expect(buttons.filter(b => b.props.hotkey !== undefined)).toEqual([])
     await band.press({ key: 'img-view' })
     await band.press({ key: 'img-open-1' })

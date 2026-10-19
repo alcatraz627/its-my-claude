@@ -30,6 +30,10 @@ const idleAtom = atom({ plugin: 'gcc-mods', key: 'idle' } as const, emptyIdle)
 const decideAtom = atom({ plugin: 'gcc-mods', key: 'decide' } as const, emptyDecide)
 const sideAtom = atom({ plugin: 'gcc-mods', key: 'side' } as const, emptySide)
 const imagesAtom = atom({ plugin: 'gcc-mods', key: 'images' } as const, emptyImages)
+// Main-agent turns finished in this session; the resume offer lives only in the first few.
+const turnsAtom = atom({ plugin: 'gcc-mods', key: 'turns' } as const, 0)
+// Band rows skipped for the rest of this session, as '<kind>:<what>' keys.
+const skipAtom = atom({ plugin: 'gcc-mods', key: 'skipped' } as const, [] as string[])
 // The per-session master switch. Off, every hook is a pass-through and the
 // session behaves as if the mod were not loaded; /hub on turns it on.
 const enabledAtom = atom({ plugin: 'gcc-mods', key: 'enabled' } as const, null as boolean | null)
@@ -274,7 +278,10 @@ async function offerCheckpoint($: $T, force = false) {
   const now = await $.clock.now()
   await update($, catchupAtom, () => null)
   const found = await findCheckpoint($, cwd, now)
-  await update($, catchupAtom, () => found)
+  // Only what an earlier session left: this session's own snapshot or dump is not a resume.
+  const mine = (await aliasesOf($)).filter(a => a.length >= 6)
+  const base = found ? (found.path.split('/').pop() ?? '') : ''
+  await update($, catchupAtom, () => (found && mine.some(a => base.includes(a)) ? null : found))
 }
 
 // Tasks: counts from the goal record, and the stopped-with-open-rows offer.
@@ -546,15 +553,24 @@ const KINDS: Record<Kind, { glyph: string; word: string; color: string }> = {
 
 const CHIP_BG = '#24283b'
 
-type Act = { key: string; label: string; onPress: (press: UiPressArgument) => unknown; primary?: boolean }
+// `icon` leads the label so every button reads at a glance (owner, 2026-10-19).
+type Act = { key: string; label: string; icon?: string; onPress: (press: UiPressArgument) => unknown; primary?: boolean }
 type RowSpec = {
   kind: Kind
   title: string
   detail?: string
-  link?: { label: string; href: string }
+  link?: { label: string; icon?: string; href: string }
   actions?: Act[]
+  // Every row offers skip: it leaves the band for the rest of this session.
+  skip?: () => unknown
   hide: { key: string; onPress: () => unknown }
 }
+
+// The resume offer shows only in a session's first turns (owner, 2026-10-19:
+// "only the first turn, if not then first 3 turns at max").
+const RESUME_TURNS = 3
+
+const withIcon = (icon: string | undefined, label: string) => (icon ? icon + ' ' + label : label)
 
 // One band row. It never sets a hotkey on a Button: a focused band must not turn
 // typed letters into presses.
@@ -571,12 +587,13 @@ function bandRow(el: El, spec: RowSpec, preset: Preset = 'S1') {
   const link = spec.link ? (
     <Link href={spec.link.href}>
       <Text color={k.color} hover={{ scope: 'link-' + spec.kind, underline: true }}>
-        {spec.link.label}
+        {withIcon(spec.link.icon, spec.link.label)}
       </Text>
     </Link>
   ) : null
-  const buttons = (spec.actions ?? []).map(a => (
-    <Button key={a.key} label={a.label} variant={a.primary ? 'primary' : 'secondary'} hover={{ scope: 'act-' + a.key, bold: true }} onPress={a.onPress} />
+  const acts: Act[] = [...(spec.actions ?? []), ...(spec.skip ? [{ key: 'skip-' + spec.kind, label: 'skip', icon: '⏭', onPress: spec.skip }] : [])]
+  const buttons = acts.map(a => (
+    <Button key={a.key} label={withIcon(a.icon, a.label)} variant={a.primary ? 'primary' : 'secondary'} hover={{ scope: 'act-' + a.key, bold: true }} onPress={a.onPress} />
   ))
   const hide = <Button key={spec.hide.key} label="✕" plain dimColor hover={{ scope: 'act-' + spec.hide.key, color: '#f7768e' }} onPress={spec.hide.onPress} />
   const key = 'row-' + spec.kind
@@ -620,14 +637,16 @@ function imageSpec($: $T, im: Images): RowSpec | null {
   const actions: Act[] = found.slice(0, 4).map((n, i) => ({
     key: 'img-open-' + n,
     label: found.length === 1 ? 'open' : 'open #' + n,
+    icon: '🖼',
     primary: i === 0,
     onPress: () => openImage($, im.files[String(n)]!),
   }))
   if (found.length) {
-    actions.push({ key: 'img-view', label: 'view', onPress: () => $.ui.open({ id: IMAGE_ID, title: 'Pasted images' }).then(() => undefined) })
+    actions.push({ key: 'img-view', label: 'view', icon: '👁', onPress: () => $.ui.open({ id: IMAGE_ID, title: 'Pasted images' }).then(() => undefined) })
     actions.push({
       key: 'img-copy',
       label: found.length > 1 ? 'copy paths' : 'copy path',
+      icon: '📋',
       onPress: async (press: UiPressArgument) => {
         const paths = found.map(n => im.files[String(n)]!)
         const r = await $.ui.copy({ text: paths.join('\n'), surface: press.surface })
@@ -640,6 +659,7 @@ function imageSpec($: $T, im: Images): RowSpec | null {
     title: plural(im.nums.length, 'image'),
     detail: found.length ? 'in your draft' : 'file not found yet',
     actions,
+    skip: () => update($, imagesAtom, x => ({ ...x, dismissed: setKey })),
     hide: { key: 'img-hide', onPress: () => update($, imagesAtom, x => ({ ...x, dismissed: setKey })) },
   }
 }
@@ -660,29 +680,37 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   // pages stay listed in the side pane's decisions tab.
   const dismissed = d.dismissed ?? []
   const open = openPages(d).filter(s => isCurrentPage(s, cwd, aliases) && !dismissed.includes(s.slug))
-  const mine = open[0]
+  const skipped = await read($, skipAtom)
+  const skipKey = (k: string) => () => update($, skipAtom, s => (s.includes(k) ? s : [...s, k]))
+  const pages = open.filter(s => !skipped.includes('decide:' + s.slug))
+  const mine = pages[0]
+  const turns = await read($, turnsAtom)
   const hide = { key: 'band-hide', onPress: () => update($, viewAtom, v => ({ ...v, isBandHidden: true })) }
+  const ctxTier = (meter.ctx ?? 0) >= 90 ? 90 : (meter.ctx ?? 0) >= 80 ? 80 : 70
 
   let offer: RowSpec | null = null
   if (sw.wake && mine) {
-    const more = open.length - 1
+    const more = pages.length - 1
     offer = {
       kind: 'decide',
       title: clip(mine.title, 50),
-      detail: plural(mine.calls, 'call') + ' drafted for you' + (more > 0 ? ' · ' + more + ' more waiting' : '') + ' · /hub dismiss hides it',
-      link: more > 0 ? { label: 'open all', href: DP_URL.replace(/dp\/$/, '') + '?view=decisions' } : { label: 'open page', href: DP_URL + mine.slug + '/' },
+      detail: plural(mine.calls, 'call') + ' drafted for you' + (more > 0 ? ' · ' + more + ' more waiting' : '') + ' · /hub dismiss hides it for good',
+      link: more > 0 ? { label: 'open all', icon: '🔗', href: DP_URL.replace(/dp\/$/, '') + '?view=decisions' } : { label: 'open page', icon: '🔗', href: DP_URL + mine.slug + '/' },
+      skip: skipKey('decide:' + mine.slug),
       hide,
     }
-  } else if (sw.continuity && catchup?.state === 'offered') {
+  } else if (sw.continuity && catchup?.state === 'offered' && turns < RESUME_TURNS) {
     offer = {
       kind: 'resume',
       title: catchup.name,
       detail: 'written ' + agoPhrase(now, catchup.at) + (catchup.summary ? ' · ' + clip(catchup.summary, 60) : catchup.source === 'disk' ? ' · found in this folder' : ''),
-      link: { label: 'view', href: linkFor(catchup.path) },
+      link: { label: 'view', icon: '📄', href: linkFor(catchup.path) },
+      skip: () => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x)),
       actions: [
         {
           key: 'cu-load',
           label: 'load (/catchup)',
+          icon: '📥',
           primary: true,
           onPress: async () => {
             await update($, catchupAtom, x => (x ? { ...x, state: 'loaded' as const } : x))
@@ -694,12 +722,12 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
         {
           key: 'cu-copy',
           label: 'copy path',
+          icon: '📋',
           onPress: async (press: UiPressArgument) => {
             const r = await $.ui.copy({ text: catchup.path, surface: press.surface })
             $.ui.toast(r.isCopied ? 'Copied ' + tilde(catchup.path) : 'Could not copy: ' + r.reason)
           },
         },
-        { key: 'cu-skip', label: 'skip', onPress: () => update($, catchupAtom, x => (x ? { ...x, state: 'skipped' as const } : x)) },
       ],
       hide,
     }
@@ -707,10 +735,12 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
     offer = {
       kind: 'continue',
       title: 'stopped with ' + plural(idle.openRows, 'agent-ready row') + ' open',
+      skip: () => update($, idleAtom, i => ({ ...i, continueOfferedAt: null })),
       actions: [
         {
           key: 'idle-continue',
           label: 'continue',
+          icon: '▶',
           primary: true,
           onPress: async () => {
             await update($, idleAtom, i => ({ ...i, continueOfferedAt: null }))
@@ -719,20 +749,22 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
             })
           },
         },
-        { key: 'idle-dismiss', label: 'not now', onPress: () => update($, idleAtom, i => ({ ...i, continueOfferedAt: null })) },
       ],
       hide,
     }
-  } else if (sw.continuity && (meter.ctx ?? 0) >= 70) {
+  } else if (sw.continuity && (meter.ctx ?? 0) >= 70 && !skipped.includes('context:' + ctxTier)) {
+    // A skip holds until the next tier (70, 80, 90), so a rising window still speaks up.
     offer = {
       kind: 'context',
       title: 'context ' + meter.ctx + '% used',
       detail: 'goes in at your cursor',
-      actions: [{ key: 'dump', label: 'insert /core-dump', primary: true, onPress: () => insertAtCursor($, '/core-dump ') }],
+      skip: skipKey('context:' + ctxTier),
+      actions: [{ key: 'dump', label: 'insert /core-dump', icon: '💾', primary: true, onPress: () => insertAtCursor($, '/core-dump ') }],
       hide,
     }
-  } else if (sw.tasks && c.gates) {
-    offer = { kind: 'owed', title: plural(c.gates, 'read') + ' owed by you', detail: '/tasks now lists them', hide }
+  } else if (sw.tasks && c.gates && !skipped.includes('owed:' + c.gates)) {
+    // A skip holds while the count is the same; a new read owed shows again.
+    offer = { kind: 'owed', title: plural(c.gates, 'read') + ' owed by you', detail: '/tasks now lists them', skip: skipKey('owed:' + c.gates), hide }
   }
 
   const images = sw.hygiene ? imageSpec($, await read($, imagesAtom)) : null
@@ -1229,6 +1261,9 @@ export const register: Register = (on, options) => {
     // The task list belongs to a session: look the store up again after a clear or resume.
     if (e.source === 'clear' || e.source === 'resume' || e.source === 'fork') {
       await update($, sideAtom, x => ({ ...x, tasks: { ...x.tasks, store: null, triedAt: 0, rows: [] } }))
+      // A new conversation: the resume offer gets its first turns again, and skips reset.
+      await update($, turnsAtom, () => 0)
+      await update($, skipAtom, () => [])
     }
     if (await isOn($)) await startUp($, sw, e.source !== 'startup')
     return next(e)
@@ -1431,6 +1466,8 @@ export const register: Register = (on, options) => {
   on('classic.Stop', async ($, e, next) => {
     const r = await next(e)
     if (e.agent_id || !(await isOn($))) return r
+    // A blocked stop is not a finished turn: the same turn carries on.
+    if (!r.block) await update($, turnsAtom, n => n + 1)
     if (sw.hygiene && r.block) logStopBlock($, r.block)
     if (sw.tasks) await noteMainStop($, (e.background_tasks?.length ?? 0) > 0, r.block !== undefined)
     await refreshStatus($)
