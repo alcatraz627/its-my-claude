@@ -32,6 +32,17 @@ transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty')
 # avoid churning a checkpoint for a session that did nothing.
 [[ "$reason" == "prompt_input_exit" ]] && exit 0
 
+# Headless SDK sessions (eval judges, bots calling claude_agent_sdk) are not owner
+# work. Each one used to leave a snapshot in its repo and a dream-queue entry: an
+# eval judge in slack-automation filed about 640 in three days. The CLI records how
+# a session was launched as "entrypoint" in its transcript.
+[[ "${CLAUDE_CODE_ENTRYPOINT:-}" == sdk-* ]] && exit 0
+entry=""
+if [[ -f "$transcript" ]]; then
+  entry=$(head -c 20000 "$transcript" 2>/dev/null | rg -m1 -o '"entrypoint":"[^"]*"' 2>/dev/null | head -1 | sed 's/.*:"//; s/"$//')
+fi
+[[ "$entry" == sdk-* ]] && exit 0
+
 jq -nc --arg cwd "$cwd" --arg sid "$session_id" \
     '{trigger:"session-end", cwd:$cwd, session_id:$sid}' \
   | PRECOMPACT_KIND_OVERRIDE="session-end" \

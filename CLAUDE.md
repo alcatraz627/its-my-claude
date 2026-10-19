@@ -27,53 +27,22 @@ At session start, generate `[keyword]-[keyword]-[2hex]` from the initial prompt 
 
 **claude-ipc addressability:** right after announcing the Session ID, register it so other sessions can reach this one by its friendly id, not just its UUID: `claude-ipc register <id>` (it silently does nothing if the broker is down). Other sessions can then run `claude-ipc send --to <id> …`. See `~/Code/Claude/claude-ipc`.
 
-### Terse in = terse out, scope = ceiling, state = ephemeral
-
-When the user sends a short continuation ("keep going", "yes", "next"), continue autonomously and do not ask clarifying questions. Match response length to the user's. Treat a request as a **ceiling** on scope, so never add "while I'm here" improvements. Re-read state before any side effect, since file contents, git status and processes may have changed between tool calls. Before git push, run `git status`, `git log --oneline -3` and `git diff --stat`. Full detail: `rules/communication.md`.
-
 ### The principal-agent frame
 
 Every session is a principal-agent relationship: the user knows the intent, you know the execution. Their steering vocabulary (intent, validate me, deliberate, sigh, stupid/idiot, annoying…) reports alignment state. Read it as signal, not mood: `GLOSSARY.md §The principal–agent frame`. Adhering to intent includes intelligent disobedience (contradict a false premise with evidence) and halting to confirm when asking beats guessing. The user's attention is the scarce resource, so spend it only where it buys alignment.
 
-### Test every non-trivial change
-
-Scale testing to task size: trivial (syntax check), small (call with 1-2 inputs), medium (smoke test with real data, curl it), large (dry-run on 2-3 items first). Verify each change independently, not as a batch. Start from a clean slate: no stale processes, no leftover temp files, no stray env vars. Human-commented values (`NOTE(by human)`, `HACK`) reflect a deliberate decision, so ask before changing them. Full detail: `rules/testing.md`.
-
-### Todos live in the Task tool
-
-The live todo list is the Task tool (`TaskCreate`/`TaskUpdate`). It is the source of truth and what the Claude Code TUI shows. "Update your todos" (even without naming "Claude Code todos") means the Task tool, and never a file. For multi-step work (3 or more steps), create tasks at the start and update status as you go. The `session-notes` Todos block and the memory pointer are auto-generated mirrors (sync-todos, one-way Task to notes to memory). Never hand-edit them, because the next Stop writeback overwrites them. Planning docs (`docs/plan.md`) are complementary and are not the status surface: a plan in a file with an empty Task list leaves the TUI blind. Full detail: `rules/todo-discipline.md`.
-
 ### One command per Bash call. Never chain. (MANDATORY, owner ruling 2026-09-04)
 
 No `&&`, no `;`, no `|`. Every segment of a compound must match an allow
-entry, so one unlisted segment prompts the human about the whole chain. That
-is why `cd` missing from the list poisoned every command starting with it, and
-why a chain is far likelier to prompt than the same commands sent separately.
-Measured 2026-09-03: 149 prompts in a day against 1 to 6 before, 93 percent of
-them carrying a chaining operator, and 84 of the 149 never ran at all.
+entry, so one unlisted segment prompts the human about the whole chain.
 
 Ask the tool for less output instead of piping: `rg -m 5`, `sed -n '1,40p'`,
-`pytest -q`, `git log -5`. The Bash working directory persists between calls, so
-`cd X && cmd` is never needed. No `VAR=value cmd` chains, no inline shell
-functions, and write a file rather than a multi-line `python3 -c "..."`. Every
-sub-agent dispatch prompt carries this clause too.
-
-**Settings are read at session start.** A tier fix landed mid-session does
-nothing for the session that is running, and no amount of editing will change
-that. Only a restart picks it up. Before concluding a list is wrong, check
-whether this session predates the edit. Full mechanism: `rules/shell.md`.
-
-### Shell safety
-
-Never Glob or Grep from `~/`; resolve to the project root first. Use `trash`, not `rm` (a hook blocks `rm`). Non-interactive flags are mandatory: `npm install -y`, `cp -f`, `mv -f`. Don't use `run_in_background: true` unless asked, because it leaves orphans on `/clear`. Inline commands run **zsh**, so never name a variable `path` (it silently overwrites `$PATH`; use `p` or `file`). Scripts you write with `#!/bin/bash` get bash 3.2, which has no associative arrays. Full detail: `rules/shell.md`.
+`pytest -q`, `git log -5`. Every sub-agent dispatch prompt carries this clause
+too. Full rule: `rules/shell.md`.
 
 ### File paths in output: never directly followed by a period
 
 When you print a file path or filename, never put a period immediately after it, whether in backticks (`` `foo.md`. ``) or bare (`foo.md.`). Ghostty auto-links file paths in the terminal, and a trailing period is swallowed into the link, so the path stops being clickable and the user has to ask for the full path again. Follow every path with a space, a word or a comma, or restructure so the path is not the last thing before a sentence period. The `filename-dot-stop.sh` Stop hook enforces this. To mute it, run `touch ~/.claude/.no-filename-dot-gate`; like every `.no-*` mute file, it applies machine-wide across ALL sessions until removed.
-
-### Git: frequent commits, public default, no main push
-
-Commit after each logical unit, before an area switch, before risky ops, and every 15-20 minutes of work. Push every 2-3 commits. This cadence says *when* to commit once commits are in scope. It is not standing authorization: don't commit or push speculatively when the user hasn't asked, and check for a repo-specific commit gate first (`scripts/hooks/guard-user-commit.sh` or `~/.claude/protected-repos.list`). **Never push to main without fresh approval.** One approval is not blanket. Create GitHub repos as **public by default** (`gh repo create --public`). Don't commit `.claude/wal.*`, `_*.claude.md` or `shared/locks/`. Full detail: `rules/git.md`. **Committing THIS repo (`~/.claude`, remote `its-my-claude`): follow `~/.claude/COMMIT.md`.** It requires a secret-scan BEFORE `git add`, and because the repo is multi-session, fetch and rebase if behind before push.
 
 ### Comments are for humans first
 
@@ -99,11 +68,7 @@ When you build or touch ANY terminal UI (an fzf or gum picker, a `read` prompt, 
 
 ### Sub-agent outputs MUST be persisted to disk
 
-When dispatching a sub-agent (`Agent` tool) that produces material content (research synthesis, analysis, audit, design proposal, anything cited later by section or heading), the dispatch prompt MUST specify an absolute output path AND the instruction "write before returning". Verify the file exists before using the findings. The return abstract is a pointer, NOT the artifact. Default path: `<project_root>/.claude/output/<YYYYMMDD>-<HHMM>-<slug>/<agent>.md`. Link the output into the relevant context doc (checkpoint, plan or runtime-notes) so it is not orphaned. Full rule and reasoning: `rules/sub-agent-outputs.md`.
-
-### Don't override `NOTE(by human)` preferences silently
-
-Code with `NOTE(by human)`, `HACK` or `IMPORTANT` marks a deliberate, tested choice. Never override it silently: ask first with reasoning, then verify. Full rule: `rules/human-note-preferences.md`.
+When a sub-agent (`Agent` tool) produces material content (research synthesis, analysis, audit, design proposal), the dispatch prompt MUST specify an absolute output path AND the instruction "write before returning". Default path: `<project_root>/.claude/output/<YYYYMMDD>-<HHMM>-<slug>/<agent>.md`. Link the output into the relevant context doc (checkpoint, plan or runtime-notes) so it is not orphaned. Full rule: `rules/sub-agent-outputs.md`.
 
 ### Don't invent "test-only / dev-convenience" exceptions to hard rules
 
@@ -115,7 +80,7 @@ When the user drops X and a kept feature depends on X, surface the coupling befo
 
 ### Model-tier routing: smallest adequate lane, chosen out loud
 
-Route work across the lanes: local `lm` suite (about $0), `lm gemini` (abundant, huge context), then haiku, sonnet, opus. **Fable is enabled by default** (owner 2026-09-18), so seats and delegation are allowed. An explicit, expiring opt-out row turns the blocks on: `hook-snooze.sh add fable-restrict --for 7d …`, owner-approved. A fable seat is a routing choice to declare in the Model Plan. Above 80 or 90 percent of the week, `policy.sh fable` adds one advisory line. For sub-agents, sonnet is the default (liberal effort, since it is cheap), opus at medium effort suits judgment seats, and effort stays at or below a high-effort main. **Every plan with sub-agents, large ingestion or modality tools carries a 4-line Model Plan** (stage → lane · model · effort · why). Never switch models without explicit user confirmation: deliberate and propose, and don't silently swap. Escalate one step on evidence, never on anticipation. Full rule: `rules/model-tier-routing.md`. Mechanics: `features/model-tier-harness.md`.
+**Fable is enabled by default** (owner 2026-09-18). An explicit, expiring opt-out row turns the blocks on: `hook-snooze.sh add fable-restrict --for 7d …`, owner-approved. Above 80 or 90 percent of the week, `policy.sh fable` adds one advisory line. Lanes, pins and the Model Plan: `rules/model-tier-routing.md`. Mechanics: `features/model-tier-harness.md`.
 
 ### Prefer structured plan+review over one-shotting
 
@@ -127,16 +92,12 @@ When writing a `.md`, `.html` or `.txt` file that humans will read or other agen
 
 ### Signal session state via tab title (optional, ergonomic)
 
-This gives the user glanceable state in the Ghostty tab title. Driver: `~/.claude/scripts/tab-title/tab-title.sh` (run it bare for full help). The visible refresh happens once per turn, at the end-of-turn Stop hook.
+Glanceable state in the Ghostty tab title. Driver: `~/.claude/scripts/tab-title/tab-title.sh` (run it bare for full help). A PreToolUse hook auto-derives `mode`.
 
-- **`status <ok|warning|error|idle|info|blocked>`** sets the result indicator (✅ ⚠️ ❌ 💤 ℹ️ 🛑). Set it after a tool result lands or when blocked on external action.
-- **`mode <verb>`** names the action happening now (24 named verbs: `think` `search` `read` `write` `edit` `build` `test` `debug` `save` `deploy` `network` `clean` …). A PreToolUse hook **auto-derives** it from tool inspection, so override it manually only when auto gets it wrong.
-- **`intent <noun>`** names the session-level kind of work (`feature` `bugfix` `refactor` `docs` `chore` `research` `design` `release` `discussion` `test` `perf` `security`). Set it once per session when the topic is clear.
-- **`focus "<1-3 word sub-task>"`** names the current sub-task within the session. Run `focus --clear` when the sub-task ends.
-- **`set base="<topic>"`** sets the session identifier, which stays stable across turns and doesn't churn with each user message.
-- **`glyph perm <name|emoji>`** and **`glyph ssh <name|emoji>`** configure the decorator emoji (claude-settable, persists per session).
+- **`status <ok|warning|error|idle|info|blocked>`** sets the result indicator. Set it after a tool result lands or when blocked on external action.
+- **`intent <noun>`** names the session-level kind of work, set once when the topic is clear. **`focus "<1-3 word sub-task>"`** names the current sub-task (`focus --clear` when it ends).
 
-Run `--list` (or `glyph perm --options`) on any slot to discover named values. Unknown names are stored but render no glyph, with a dim notice. Full guide: `features/tab-title.md`.
+Full guide: `features/tab-title.md`.
 
 ---
 
@@ -161,11 +122,9 @@ Every file under `features/` and `conventions/` carries frontmatter with `brief`
 
 ## MANDATORY quick-rules (never-miss bar)
 
-- **Never let a relative `.claude/…` path resolve into `~/.claude/.claude/`.** When CWD is `~/.claude`, `.claude/output/X` does NOT mean `~/.claude/output/X`. It lands one level deeper, where nothing reads it. Redirect `.claude/output/X` to `~/.claude/assets/reports/X`, `.claude/skills/X` to `~/.claude/skills/X`, and so on. A hook blocks the write, but reading, grepping or testing that path is fine. The directory itself is legitimate: it is this project's own project-scoped `.claude/` (it holds `settings.local.json` and `worktrees/`), so the accident is the relative resolution, never the path.
+- **Never let a relative `.claude/…` path resolve into `~/.claude/.claude/`.** When CWD is `~/.claude`, redirect `.claude/output/X` to `~/.claude/assets/reports/X` and `.claude/skills/X` to `~/.claude/skills/X`. A hook blocks the write. Redirect table: `conventions/asset-management.md`.
 - **Every HTML page is built on the shared kit and passes the page check.** The kit carries the dark and light switch and every colour, so neither is written by hand. Pick the surface first (markdown, local page, decision page, Artifact). See `conventions/pages.md`, or run `/page`.
 - **Desktop automation: confirm before focus-steal, and HARD STOP on any failure.** Run `mcp__inputs__confirm` before `click`/`type`/`key`/`space`/`focus` unless the user pre-approved the sequence. On any failure (empty screenshot, non-zero command, empty window bounds), stop and report, and never hallucinate state. See `features/desktop-automation.md`.
-- **Never `rm`; `trash` only.** A hook blocks `rm` unconditionally.
-- **Never push to main without fresh approval.** One approval is not blanket.
 - **Never commit files with secrets** (.env, credentials, tokens).
 
 ---
@@ -175,19 +134,3 @@ Every file under `features/` and `conventions/` carries frontmatter with `brief`
 Transparently confirm before: deletions (files, branches, DB tables), hard-to-reverse ops (force push, `reset --hard`, amending published commits, dependency downgrades), actions visible to others (pushing, PR or issue comments, sending messages), and uploading content to third-party web tools.
 
 When you hit an obstacle, fix the root cause rather than bypassing safety (`--no-verify`, dropping locks, deleting unfamiliar branches). If you find unexpected state, such as unfamiliar files, branches or configuration, investigate before deleting or overwriting.
-
----
-
-## Placement rule (see `PLACEMENT.md`)
-
-Two axes: **category** (`rules`/`features`/`conventions`/root) and **tier** (0 inline, 1 brief plus pointer, 2 pointer only, 3 LOOKUP only). Heuristics: if 80% of sessions would skip it, use Tier 2 or higher. If it fails silently, bump it up. Over 15 lines goes in a sub-file, and under 3 lines goes inline. Never duplicate content from `shared/*.md`.
-
-Every sub-file carries frontmatter with `brief`, prefixed `triggers:` (`tool:`, `topic:`, `phrase:`, `skill:`, `mcp:`), `related`, `tier`, `category`, `updated` and `stale_after_days`. Validate with `bash ~/.claude/scripts/validate-triggers.sh`.
-
----
-
-## References
-
-- **If the user asks for help:** `/help`. Feedback goes to https://github.com/anthropics/claude-code/issues
-- **Phase 1+2 upgrade report:** `~/.claude/assets/reports/20260417-0144-phase12-complete/index.html`
-- **CLAUDE.md restructure report:** `~/.claude/assets/reports/20260424-claude-md-restructure/`

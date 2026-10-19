@@ -52,6 +52,7 @@ PY
   mutate "keep only last 40 owner"      helper 'for ts, t in r["owner"][-OWNER_KEEP:]:' 'for ts, t in r["owner"]:'
   mutate "price table"                  helper '"sonnet": (2, 10, 0.20, 4)' '"sonnet": (0, 0, 0, 0)'
   mutate "skip ingest after core-dump"  wrapper '[[ -n "$dumped" ]]' '[[ -n "" ]]'
+  mutate "headless sdk bail"            wrapper '[[ "$entry" == sdk-* ]] && exit 0' ':'
   mutate "prompt_input_exit bail"       wrapper '[[ "$reason" == "prompt_input_exit" ]] && exit 0' ':'
   mutate "no double journal on rerun"   wrapper "awk '/^## Session Journal\$/{f=1} END{exit !f}' \"\$dump_file\" && return 0" ":"
   echo "mutations killed: $killed/$total"
@@ -220,6 +221,13 @@ printf '#!/usr/bin/env bash\nexit 3\n' > "$H4/.claude/scripts/session-mgmt/sessi
 fire "$H4" "$SID" other "$T/rich.jsonl" "$P4"; rc=$?
 check "a crashing helper still exits 0"      '[[ $rc -eq 0 ]]'
 printf '' > /dev/null
+
+echo "== wrapper: a headless SDK session leaves nothing =="
+H5="$T/home5"; mkhome "$H5"; P5="$T/proj5"; mkdir -p "$P5"
+{ printf '%s\n' '{"type":"user","entrypoint":"sdk-py","message":{"role":"user","content":"<thread>judge me</thread>"}}'; cat "$T/rich.jsonl"; } > "$T/sdk.jsonl"
+fire "$H5" "$SID" other "$T/sdk.jsonl" "$P5"; rc=$?
+sleep 1
+check "sdk session: exit 0, no snapshot, nothing queued" '[[ $rc -eq 0 && ! -e "$P5/_precompact-checkpoint.claude.md" && "$(queue_count "$H5")" -eq 0 ]]'
 
 echo "== speed =="
 python3 -I - "$T" <<'PY'
