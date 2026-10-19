@@ -5,7 +5,7 @@
 
 import type { PluginOptions } from 'claude-code'
 
-import type { Decide, DeliveryState, GoalView, GoalsSnap, Idle, Images, Mail, McpRow, Meter, Msg, PlugFire, PluginRow, Side, SideCost, SideTab, SideTask, TaskRow, View } from '../types'
+import type { CtxBreakdown, Decide, DeliveryState, GoalView, GoalsSnap, Idle, Images, Mail, McpRow, Meter, Msg, PlugFire, PluginRow, Side, SideCost, SideTab, SideTask, TaskRow, View } from '../types'
 
 export type El = Record<string, any>
 
@@ -19,7 +19,7 @@ export const SIDE_ID = 'gcc-side'
 export const IMAGE_ID = 'gcc-image'
 
 export const initialView: View = { isBandHidden: false, preset: 'S1' }
-export const emptyMeter: Meter = { ctx: null, week: null, at: 0 }
+export const emptyMeter: Meter = { ctx: null, week: null, tokens: null, window: null, at: 0 }
 export const emptyMail: Mail = { messages: [], at: 0, lastWakeAt: 0, enabledAt: 0, error: null }
 export const emptySide: Side = {
   isOpen: false,
@@ -29,6 +29,7 @@ export const emptySide: Side = {
   plugins: { rows: [], at: 0 },
   fires: { rows: [], at: 0, error: null },
   cost: { servers: {}, skills: {}, at: 0, ok: false },
+  context: { breakdown: null, at: 0 },
 }
 export const emptyImages: Images = { nums: [], sid: '', dir: null, files: {}, dismissed: '' }
 export const emptyIdle: Idle = { since: null, openRows: 0, continueOfferedAt: null }
@@ -149,7 +150,7 @@ export function human(n: number): string {
 
 // Side pane sources.
 
-export const SIDE_TABS: SideTab[] = ['overview', 'tasks', 'mcp', 'plugins', 'injections']
+export const SIDE_TABS: SideTab[] = ['overview', 'tasks', 'mcp', 'plugins', 'injections', 'context']
 export const isSideTab = (word: string): word is SideTab => (SIDE_TABS as string[]).includes(word)
 
 // Hard-cut a row at the pane width. No ellipsis: a row is one item, and it
@@ -369,7 +370,39 @@ export const estTokens = (chars: number) => Math.round(chars / 4)
 export function alignRows(head: string[], rows: string[][], width: number): string[] {
   const all = [head, ...rows]
   const widths = head.map((_, c) => Math.max(...all.map(r => (r[c] ?? '').length)))
-  return all.map(r => cut(r.map((cell, c) => (c === head.length - 1 ? cell : cell.padEnd(widths[c]!))).join('  '), width))
+  return all.map(r => cut(r.map((cell, c) => (c === head.length - 1 ? cell : cell.padEnd(widths[c]!))).join('  ').trimEnd(), width))
+}
+
+// The context tab. Every figure from the engine's breakdown is an estimate, so
+// each is drawn with a `~`; the real total comes from session.measure.
+
+export const BAR_COLS = 30
+const BAR_FULL = '█'
+
+// A block bar scaled so the whole window is BAR_COLS wide; a nonzero slice is
+// at least one block so it never vanishes.
+export function blockBar(tokens: number, window: number, cols = BAR_COLS): string {
+  if (tokens <= 0 || window <= 0) return ''
+  return BAR_FULL.repeat(Math.min(cols, Math.max(1, Math.round((tokens / window) * cols))))
+}
+
+export const sharePct = (tokens: number, window: number) => (window > 0 ? Math.round((tokens / window) * 100) + '%' : 'n/a')
+
+// One row per engine category, in the engine's order. Only `used` rows get a bar;
+// a `deferred` row is outside the window, so it has no share.
+export function contextCategoryRows(b: CtxBreakdown): string[][] {
+  const window = b.rawMaxTokens
+  return (b.categories ?? []).map(c => [
+    c.name + (c.kind === 'deferred' && !/deferred/i.test(c.name) ? ' (deferred)' : ''),
+    '~' + human(c.tokens),
+    c.kind === 'deferred' ? '-' : sharePct(c.tokens, window),
+    c.kind === 'used' ? blockBar(c.tokens, window) : '',
+  ])
+}
+
+// The memory files that weigh most, biggest first.
+export function topMemoryFiles(b: CtxBreakdown, n = 5): { path: string; type: string; tokens: number }[] {
+  return [...(b.memoryFiles ?? [])].sort((x, y) => y.tokens - x.tokens || x.path.localeCompare(y.path)).slice(0, n)
 }
 
 export const OVERVIEW_ITEMS = 4

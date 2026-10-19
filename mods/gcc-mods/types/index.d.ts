@@ -16,7 +16,8 @@ export type Catchup = {
   state: 'offered' | 'loaded' | 'skipped'
 }
 
-export type Meter = { ctx: number | null; week: number | null; at: number }
+// `tokens` and `window` are the last response's real input side and the model's window.
+export type Meter = { ctx: number | null; week: number | null; tokens: number | null; window: number | null; at: number }
 
 export type Seat = {
   id: string
@@ -55,7 +56,7 @@ export type View = { isBandHidden: boolean; preset: Preset }
 // so a slow source (the MCP health check) is not re-run on every tick. Nothing
 // here ever holds an env value, a header or a token: the MCP rows carry only a
 // name, a state, a transport and a command or URL already stripped of secrets.
-export type SideTab = 'overview' | 'tasks' | 'mcp' | 'plugins' | 'injections'
+export type SideTab = 'overview' | 'tasks' | 'mcp' | 'plugins' | 'injections' | 'context'
 export type SideTask = { id: string; subject: string; status: string; blockedBy: string[] }
 export type McpRow = { name: string; state: 'ok' | 'auth' | 'failed'; transport: string; target: string; file: string }
 export type PluginRow = { id: string; name: string; marketplace: string; enabled: boolean; version: string; path: string }
@@ -63,6 +64,17 @@ export type PlugFire = { plug: string; fired: number; chars: number; last: numbe
 // Token estimates from $.session.usage({ breakdown }): MCP tool schemas by server,
 // and skill listings by plugin. `ok` is false when the engine gave no breakdown.
 export type SideCost = { servers: Record<string, { total: number; loaded: number }>; skills: Record<string, number>; at: number; ok: boolean }
+// The fields of the engine's summary breakdown the context tab reads. The whole
+// breakdown is kept as it came (the contract cannot import the engine's type);
+// null when the engine gave none.
+export type CtxBreakdown = {
+  categories: { name: string; tokens: number; kind: 'used' | 'free' | 'buffer' | 'deferred' }[]
+  totalTokens: number
+  rawMaxTokens: number
+  autoCompactThreshold?: number
+  memoryFiles: { path: string; type: string; tokens: number }[]
+}
+export type SideContext = { breakdown: CtxBreakdown | null; at: number }
 export type Side = {
   isOpen: boolean
   tab: SideTab
@@ -71,6 +83,7 @@ export type Side = {
   plugins: { rows: PluginRow[]; at: number }
   fires: { rows: PlugFire[]; at: number; error: string | null }
   cost: SideCost
+  context: SideContext
 }
 
 // Images named in the prompt draft ([Image #n]) and where their files live.

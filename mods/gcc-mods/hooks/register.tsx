@@ -9,10 +9,10 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, McpRow, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
+import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, McpRow, Meter, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
 import {
   CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, PATH_RE, SIDE_ID, SIDE_TABS, TRAIL_RE, VIEWS,
-  abs, ago, agoPhrase, alignRows, clip, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sid8, summarizeFires, switchesOf, taskView, tilde,
+  BAR_COLS, abs, ago, agoPhrase, alignRows, blockBar, clip, contextCategoryRows, topMemoryFiles, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sharePct, sid8, summarizeFires, switchesOf, taskView, tilde,
 } from './lib'
 import type { El, Switches } from './lib'
 
@@ -461,8 +461,19 @@ async function wakeForAnswers($: $T, cwd: string) {
   const d = await read($, decideAtom)
   const idle = await read($, idleAtom)
   const aliases = await aliasesOf($)
+  // An answer an agent already read is gone from disk but logged in answers.jsonl;
+  // without this the page stays on the band for the rest of the session. A slug
+  // still in the ledger is a new round under an old name, so it keeps waiting.
+  const readAlready = new Set(
+    ((await readText($, DP_REG + '/answers.jsonl')) ?? '').split('\n').map(l => jsonOr<{ slug?: string }>(l, {}).slug ?? '').filter(Boolean),
+  )
+  const ledger = new Set(((await readText($, DP_REG + '/.pending.txt')) ?? '').split('\n').map(x => x.trim()).filter(Boolean))
   for (const s of d.pending) {
     if (d.answered.includes(s.slug) || !isCurrentPage(s, cwd, aliases)) continue
+    if (readAlready.has(s.slug) && !ledger.has(s.slug)) {
+      await update($, decideAtom, x => ({ ...x, answered: [...x.answered, s.slug] }))
+      continue
+    }
     if (!(await fileExists($, DP_REG + '/' + s.slug + '/.answer.json'))) continue
     await update($, decideAtom, x => ({ ...x, answered: [...x.answered, s.slug] }))
     $.ui.toast('Decision page ' + s.slug + ' was answered.', { timeoutMs: 6_000 })
@@ -821,17 +832,18 @@ async function refreshFiresPane($: $T) {
   await update($, sideAtom, x => ({ ...x, fires: { rows: summarizeFires(r.out, sid, scripts), at: now, error: null } }))
 }
 
-// Token estimates for MCP schemas and plugin skill listings. `summary` counts
-// locally and sends nothing.
+// Token estimates for MCP schemas and plugin skill listings, and the whole
+// breakdown for the context tab. `summary` counts locally and sends nothing;
+// `full` would call the token-count API, so it is never asked for here.
 async function refreshCostPane($: $T) {
   const now = await $.clock.now()
   try {
     const b = (await $.session.usage({ breakdown: 'summary' })).context.breakdown
     if (!b) throw new Error('no breakdown')
     const { servers, skills } = costFrom(b.mcpTools, b.skills?.skillFrontmatter ?? [])
-    await update($, sideAtom, x => ({ ...x, cost: { servers, skills, at: now, ok: true } }))
+    await update($, sideAtom, x => ({ ...x, cost: { servers, skills, at: now, ok: true }, context: { breakdown: b, at: now } }))
   } catch {
-    await update($, sideAtom, x => ({ ...x, cost: { ...x.cost, at: now, ok: false } }))
+    await update($, sideAtom, x => ({ ...x, cost: { ...x.cost, at: now, ok: false }, context: { breakdown: null, at: now } }))
   }
 }
 
@@ -911,7 +923,7 @@ const MCP_STATE: Record<McpRow['state'], { glyph: string; word: string; color: s
 // Text and Box only: no Button, no Input. The API has no call that hands the
 // keyboard back to the prompt, and a pressed Button would keep it, so tabs
 // switch by `/hub side <tab>` and the strip below only names them.
-function sidePane(el: El, side: Side, now: number, cols: number) {
+function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number) {
   const { Box, Text } = el
   const width = Math.max(30, cols - 2)
   // State saved before tabs existed has no tab; it opens on the overview.
@@ -961,6 +973,15 @@ function sidePane(el: El, side: Side, now: number, cols: number) {
   const chars = side.fires.rows.reduce((n, r) => n + r.chars, 0)
   const fireDetail = side.fires.error ?? (fired ? fired + ' fired · ' + human(chars) + ' chars' : 'nothing yet')
 
+  // A breakdown with no categories is as good as none.
+  const cb = side.context.breakdown && side.context.breakdown.categories?.length ? side.context.breakdown : null
+  const cbWindow = cb?.rawMaxTokens ?? 0
+  const realLine =
+    meter.tokens !== null && meter.window
+      ? 'real      ' + human(meter.tokens) + ' of ' + human(meter.window) + (meter.ctx !== null ? ' · ' + meter.ctx + '%' : '') + '  last response, session.measure'
+      : 'real      n/a (no response yet in this window)'
+  const ctxDetail = cb ? '~' + human(cb.totalTokens) + ' of ' + human(cbWindow) + ' · ' + sharePct(cb.totalTokens, cbWindow) + ' (engine estimate)' : 'n/a: the engine gave no context breakdown'
+
   const pointer = (name: string) => <Text key={'to-' + name} dimColor>{'→ /hub side ' + name}</Text>
   const section = (name: string, label: string, detail: string, lines: unknown[]) => (
     <Box key={'ov-' + name} flexDirection="column">
@@ -996,7 +1017,12 @@ function sidePane(el: El, side: Side, now: number, cols: number) {
       ...f.shown.map(r => line('f' + r.plug, r.plug + '  ' + r.fired + '× · ' + human(r.chars) + ' chars', undefined, true)),
       ...(f.fold ? [line('f-fold', f.fold, undefined, true)] : []),
     ]
-    return [section('tasks', 'Tasks', tasksDetail, taskLines), section('mcp', 'MCP servers', mcpDetail, mcpLines), section('plugins', 'Plugins', plugDetail, plugLines), section('injections', 'Injections', fireDetail, fireLines)]
+    const biggest = cb ? cb.categories.filter(c => c.kind === 'used').sort((a, b) => b.tokens - a.tokens).slice(0, 3) : []
+    const ctxLines = [
+      line('c-real', realLine, undefined, true),
+      ...biggest.map(c => line('c-' + c.name, c.name + '  ~' + human(c.tokens) + ' · ' + sharePct(c.tokens, cbWindow), undefined, true)),
+    ]
+    return [section('tasks', 'Tasks', tasksDetail, taskLines), section('mcp', 'MCP servers', mcpDetail, mcpLines), section('plugins', 'Plugins', plugDetail, plugLines), section('injections', 'Injections', fireDetail, fireLines), section('context', 'Context', ctxDetail, ctxLines)]
   }
 
   const back = <Text key="back" dimColor>→ /hub side overview</Text>
@@ -1044,6 +1070,24 @@ function sidePane(el: El, side: Side, now: number, cols: number) {
           : line('in-none', side.fires.error ?? 'nothing yet', undefined, true),
         line('in-note', '~tok = chars / 4; a script marked (guess) is matched from the hook name only', undefined, true),
       ]
+    }
+    if (tab === 'context') {
+      const out = [head('Context', ctxDetail), line('c-real', realLine)]
+      if (!cb) return [...out, line('c-none', 'what is in the window: n/a, the engine gave no context breakdown', undefined, true)]
+      const bar = blockBar(cb.totalTokens, cbWindow)
+      out.push(
+        line('c-est', 'estimate  ~' + human(cb.totalTokens) + ' of ' + human(cbWindow) + ' · ' + sharePct(cb.totalTokens, cbWindow) + '  engine breakdown' + (cb.autoCompactThreshold ? ' · autocompact at ~' + human(cb.autoCompactThreshold) : '')),
+        line('c-bar', '          ' + bar + '░'.repeat(Math.max(0, BAR_COLS - bar.length)), undefined, true),
+        <Text key="c-gap1"> </Text>,
+        ...table('cc', ['what is in it', 'tokens', 'share', 'bar'], contextCategoryRows(cb)),
+      )
+      const files = topMemoryFiles(cb)
+      const all = cb.memoryFiles?.length ?? 0
+      out.push(<Text key="c-gap2"> </Text>)
+      if (files.length) out.push(...table('cm', ['tokens', 'from', 'top memory files (' + files.length + ' of ' + all + ')'], files.map(f => ['~' + human(f.tokens), f.type, tilde(f.path)])))
+      else out.push(line('cm-none', 'memory files: none in the window', undefined, true))
+      out.push(line('c-note', '~ = engine estimate (local count); shares are of the compaction window; real may differ', undefined, true))
+      return out
     }
     return []
   }
@@ -1234,7 +1278,7 @@ export const register: Register = (on, options) => {
       if (!(await isOn($))) return next(e)
       const now = await $.clock.now()
       const week = e.rateLimits.find(r => r.kind === 'seven_day')?.percentUsed ?? null
-      await update($, meterAtom, m => ({ ctx: e.context.percent ?? m.ctx, week: week ?? m.week, at: now }))
+      await update($, meterAtom, m => ({ ctx: e.context.percent ?? m.ctx, week: week ?? m.week, tokens: e.context.tokens ?? m.tokens, window: e.context.window ?? m.window, at: now }))
       return next(e)
     })
   }
@@ -1329,7 +1373,7 @@ export const register: Register = (on, options) => {
   })
 
   on('ui.render', { component: 'Pane', requestId: 'gcc-side' }, async ($, e) => {
-    return sidePane($.ui.resolve(e) as El, await read($, sideAtom), await $.clock.now(), e.props.bodyColumns)
+    return sidePane($.ui.resolve(e) as El, await read($, sideAtom), await read($, meterAtom), await $.clock.now(), e.props.bodyColumns)
   })
 
   on('ui.render', { component: 'Pane', requestId: 'gcc-image' }, async ($, e) => {

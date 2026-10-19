@@ -60,6 +60,7 @@ type World = {
   plugins: Record<string, boolean>
   hooks: Record<string, unknown>
   usage: unknown
+  usageAsks: unknown[]
   focuses: string[]
 }
 
@@ -71,7 +72,7 @@ function world(on: On) {
     resolve: () => miss,
     inbox: () => '{"messages":[]}',
     store: {}, storeSets: [], storeDeletes: [], dirs: {}, opens: [], listed: [], closes: [],
-    taskStore: null, mcp: '', ledger: '', plugins: {}, hooks: {}, usage: undefined, focuses: [],
+    taskStore: null, mcp: '', ledger: '', plugins: {}, hooks: {}, usage: undefined, usageAsks: [], focuses: [],
   }
   const clock = mock.clock(on, { now: NOW })
   on('session.start', ($, e) => ({ cwd: e.cwd }))
@@ -136,7 +137,8 @@ function world(on: On) {
     return { value: undefined }
   })
   on('settings.read', () => ({ value: { enabledPlugins: w.plugins, hooks: w.hooks } }))
-  on('session.usage', () => {
+  on('session.usage', ($, e) => {
+    w.usageAsks.push((e as { breakdown?: unknown }).breakdown)
     if (w.usage === undefined) throw new Error('no usage')
     return { value: w.usage as any }
   })
@@ -325,6 +327,23 @@ describe('wakes', () => {
     await w.clock.advance(61_000)
     const wakes = w.submitted.filter(t => t.includes('decision-page.sh answer pg'))
     expect(wakes.length).toBe(1)
+  })
+
+  test('a page whose answer another agent already read leaves the band without a wake', ON, async ($, on) => {
+    const w = world(on)
+    withPage(w)
+    await $.session.start({ cwd: CWD, surface: 'terminal', isInteractive: true })
+    await $.classic.SessionStart({ source: 'startup' })
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeDefined()
+    await $.classic.Stop({ last_assistant_message: 'waiting on the page' } as any)
+    // Read with --consume elsewhere: the answer file is gone, the ledger is
+    // cleared, and only the answers log remembers it.
+    w.files[DP + '/.pending.txt'] = ''
+    w.files[DP + '/answers.jsonl'] = JSON.stringify({ slug: 'pg', project: CWD, ts: '2026-10-19T00:00:00Z' }) + '\n'
+    await w.clock.advance(61_000)
+    await w.clock.advance(61_000)
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeUndefined()
+    expect(w.submitted.filter(t => t.includes('decision-page.sh answer pg'))).toEqual([])
   })
 })
 
@@ -632,7 +651,7 @@ describe('the side pane', () => {
     const w = world(on)
     seed(w)
     await start($, w)
-    for (const tab of ['overview', 'tasks', 'mcp', 'plugins', 'injections']) {
+    for (const tab of ['overview', 'tasks', 'mcp', 'plugins', 'injections', 'context']) {
       await $.command.run({ command: 'hub', args: 'side ' + tab } as any)
       const pane = await mountSide($, 200)
       expect(await pane.findAll({ type: 'Button' })).toEqual([])
@@ -652,7 +671,7 @@ describe('the side pane', () => {
     await start($, w)
     const first = await texts(await mountSide($, 200))
     expect(first).toContain('[overview]')
-    expect(first).toContain('/hub side <overview|tasks|mcp|plugins|injections>')
+    expect(first).toContain('/hub side <overview|tasks|mcp|plugins|injections|context>')
     await $.command.run({ command: 'hub', args: 'side tasks' } as any)
     const tasks = await texts(await mountSide($, 200))
     expect(tasks).toContain('[tasks]')
@@ -660,7 +679,7 @@ describe('the side pane', () => {
     expect(tasks).not.toContain('MCP servers')
     expect(w.opens.length).toBe(1)
     const bad = await $.command.run({ command: 'hub', args: 'side nonsense' } as any)
-    expect(JSON.stringify(bad)).toContain('side tabs: overview, tasks, mcp, plugins, injections')
+    expect(JSON.stringify(bad)).toContain('side tabs: overview, tasks, mcp, plugins, injections, context')
     expect(await texts(await mountSide($, 200))).toContain('[tasks]')
     await $.command.run({ command: 'hub', args: 'side overview' } as any)
     expect(await texts(await mountSide($, 200))).toContain('MCP servers')
@@ -836,6 +855,130 @@ describe('the side pane', () => {
     expect(t.indexOf('sessionstart-lane')).toBeLessThan(t.indexOf('ctx-pressure'))
     expect(t).not.toContain('noise')
     expect(t).not.toContain('trap')
+  })
+
+  // The engine's summary breakdown as /context would give it, estimated, with six memory files.
+  const ctxFixture = () => ({
+    startedAt: NOW,
+    rateLimits: [],
+    context: {
+      window: 1_000_000,
+      breakdown: {
+        categories: [
+          { name: 'System prompt', tokens: 6_200, kind: 'used' },
+          { name: 'System tools', tokens: 14_800, kind: 'used' },
+          { name: 'MCP tools', tokens: 14_200, kind: 'used' },
+          { name: 'MCP tools (deferred)', tokens: 90_000, kind: 'deferred' },
+          { name: 'Memory files', tokens: 38_400, kind: 'used' },
+          { name: 'Skills', tokens: 11_900, kind: 'used' },
+          { name: 'Messages', tokens: 310_000, kind: 'used' },
+          { name: 'Free space', tokens: 360_000, kind: 'free' },
+          { name: 'Autocompact buffer', tokens: 40_000, kind: 'buffer' },
+        ],
+        totalTokens: 398_000,
+        maxTokens: 800_000,
+        rawMaxTokens: 800_000,
+        percentage: 50,
+        autoCompactThreshold: 760_000,
+        isAutoCompactEnabled: true,
+        memoryFiles: [
+          { path: CWD + '/rules/communication.md', type: 'User', tokens: 1_900 },
+          { path: CWD + '/CLAUDE.md', type: 'User', tokens: 9_400 },
+          { path: CWD + '/rules/git.md', type: 'User', tokens: 700 },
+          { path: CWD + '/rules/testing.md', type: 'User', tokens: 1_200 },
+          { path: CWD + '/MEMORY.md', type: 'AutoMem', tokens: 4_100 },
+          { path: CWD + '/rules/tiny.md', type: 'User', tokens: 90 },
+        ],
+        mcpTools: [],
+        agents: [],
+        apiUsage: null,
+      },
+    },
+  })
+  const startContext = async ($: any, w: W) => {
+    w.usage = ctxFixture()
+    // session.start arms the one-minute tick that refreshes an open pane.
+    await $.session.start({ cwd: CWD, surface: 'terminal', isInteractive: true })
+    await $.classic.SessionStart({ source: 'startup' })
+    await $.session.measure({ context: { percent: 41, tokens: 412_000, window: 1_000_000 }, rateLimits: [], cost: {} } as any)
+    await $.command.run({ command: 'hub', args: 'side context' } as any)
+    await w.clock.advance(100)
+  }
+
+  test('context tab: the real total and the estimate each labelled, one row per category with tokens, share and bar', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await startContext($, w)
+    const t = await texts(await mountSide($, 100))
+    expect(t).toContain('[context]')
+    expect(t).toContain('real      412K of 1M · 41%  last response, session.measure')
+    expect(t).toContain('estimate  ~398K of 800K · 50%  engine breakdown · autocompact at ~760K')
+    const rowOf = (name: string) => t.split('\n').find(l => l.startsWith(name + ' '))!
+    // Every engine category, with a ~ on its tokens, its share of the compaction window and a block bar.
+    expect(rowOf('System prompt')).toMatch(/~6\.2K\s+1%\s+█$/)
+    expect(rowOf('Messages')).toMatch(/~310K\s+39%\s+█{12}$/)
+    expect(rowOf('Memory files')).toMatch(/~38K\s+5%\s+█{1,2}$/)
+    expect(rowOf('Free space')).toMatch(/~360K\s+45%$/)
+    expect(rowOf('Autocompact buffer')).toMatch(/~40K\s+5%$/)
+    // A deferred row is outside the window: no share, no bar.
+    expect(rowOf('MCP tools (deferred)')).toMatch(/^MCP tools \(deferred\)\s+~90K\s+-$/)
+    expect(t).toContain('real may differ')
+    // One item per line, never wider than the pane.
+    expect(Math.max(...t.split('\n').map(l => l.length))).toBeLessThanOrEqual(98)
+  })
+
+  test('context tab: the five heaviest memory files, biggest first, and no sixth', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await startContext($, w)
+    const t = await texts(await mountSide($, 100))
+    expect(t).toContain('top memory files (5 of 6)')
+    const files = t.split('\n').filter(l => /\.md$/.test(l) && /~[\d.]+K?\s+(User|AutoMem)/.test(l))
+    expect(files.length).toBe(5)
+    expect(files[0]).toMatch(/~9\.4K\s+User\s+~\/\.claude\/CLAUDE\.md$/)
+    expect(files.map(l => l.match(/\S+\.md$/)![0])).toEqual(['~/.claude/CLAUDE.md', '~/.claude/MEMORY.md', '~/.claude/rules/communication.md', '~/.claude/rules/testing.md', '~/.claude/rules/git.md'])
+    expect(t).not.toContain('tiny.md')
+  })
+
+  test('context tab says n/a plainly when the engine gives no breakdown, and still shows the real total', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await startContext($, w)
+    w.usage = undefined
+    await w.clock.advance(61_000)
+    const t = await texts(await mountSide($, 100))
+    expect(t).toContain('n/a: the engine gave no context breakdown')
+    expect(t).toContain('real      412K of 1M · 41%')
+    expect(t).not.toContain('System prompt')
+    expect(t).not.toContain('top memory files')
+    expect(t).not.toContain('estimate  ~')
+  })
+
+  test('context: the overview points at the tab in at most six lines, with a real figure and the biggest categories', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await startContext($, w)
+    await $.command.run({ command: 'hub', args: 'side overview' } as any)
+    const pane = await mountSide($, 100)
+    const sec = (await pane.find({ key: 'ov-context' })) as { children: unknown[] } | undefined
+    expect(sec).toBeDefined()
+    const lines = (sec!.children as unknown[]).flat()
+    expect(lines.length).toBeLessThanOrEqual(6)
+    expect(JSON.stringify(lines.at(-1))).toContain('/hub side context')
+    const t = await texts(pane)
+    expect(t).toContain('Messages  ~310K · 39%')
+    expect(t).toContain('real      412K of 1M')
+  })
+
+  test('the context tab only ever asks the engine for a summary breakdown, never full', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    await startContext($, w)
+    await $.command.run({ command: 'hub', args: 'side context' } as any)
+    await $.command.run({ command: 'hub', args: 'side tasks' } as any)
+    await w.clock.advance(61_000)
+    expect(w.usageAsks.length).toBeGreaterThan(1)
+    expect(w.usageAsks.every(b => b === 'summary')).toBe(true)
   })
 
   test('the pane is not read while it is closed', ON, async ($, on) => {

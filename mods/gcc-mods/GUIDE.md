@@ -22,7 +22,7 @@ Everything the mod draws reads files the shell tools already write. The one pane
 - The mod starts off in every session and draws nothing. `/hub on` turns it on for this session; `/hub off` silences it again. `startOn` in `/config` makes it start on everywhere.
 - `/hub on` carries over a `/clear`: the session that follows starts on, once, in the same terminal. A session you turned off, or one that ended any other way, is not carried.
 - `/hub band` hides or shows the band. The `✕` at the end of every band row does the same.
-- `/hub side` opens the side pane, `/hub side <tab>` switches it (overview, tasks, mcp, plugins, injections), and `/hub side off` closes it.
+- `/hub side` opens the side pane, `/hub side <tab>` switches it (overview, tasks, mcp, plugins, injections, context), and `/hub side off` closes it.
 - `/hub preset S1|S2|S3` changes the band look (below).
 
 ## The band
@@ -50,19 +50,20 @@ The look is preset S1 by default. S2 puts an accent bar on the left with the lin
 
 ## The side pane
 
-`/hub side` opens a pane that only shows things. It has no button and no input, so it does nothing even if you click into it, and it never takes the keyboard when it opens. It docks beside the transcript in fullscreen at 110 columns or more, and sits above the prompt otherwise. A dim strip at the top names the five tabs and marks the current one; switch with `/hub side <tab>`.
+`/hub side` opens a pane that only shows things. It has no button and no input, so it does nothing even if you click into it, and it never takes the keyboard when it opens. It docks beside the transcript in fullscreen at 110 columns or more, and sits above the prompt otherwise. A dim strip at the top names the six tabs and marks the current one; switch with `/hub side <tab>`.
 
 The tab strip is not a row of buttons because the mods API has no way to give the keyboard back to the prompt after a press, and a pane that kept the keyboard is how a long prompt gets eaten. The command always works.
 
-- Overview (default): four sections, each at most six lines (heading, up to four items one per line, a pointer to its tab). Over four items, three show and one line folds the rest into a count; things needing attention come first.
+- Overview (default): five sections, each at most six lines (heading, up to four items one per line, a pointer to its tab). Over four items, three show and one line folds the rest into a count; things needing attention come first.
 - Tasks: id, status, blocked-by and subject for every task of this session, running first, finished last. It refreshes when the agent creates or updates a task and once a minute.
 - MCP: name, state, tool-schema tokens (in the window now / all), transport, command or URL, and the config file that declares the server. From `claude mcp list` (on open, at most every ten minutes) plus the server names in the config files. Env values, headers and key-like arguments are never shown; a hidden word reads `<hidden>`.
 - Plugins: name, enabled or off, version, an estimate of context tokens (skill listings plus MCP schemas the plugin ships; its agents, commands and hooks are not itemized), marketplace and install path.
 - Injections: for this session, per hook: event, count, characters, `~tok` (characters / 4), when it last fired, and the script file (marked `(guess)` when matched from the name only).
+- Context: what is taking up the window. A `real` line (the last response's input tokens against the model's window, from the status data) and an `estimate` line (the engine's own count against the compaction window, with where autocompact starts), then one row per category (system prompt, tools, MCP tools, memory files, skills, messages, free space, buffer) with tokens, share of the compaction window and a block bar, then the five memory files that weigh most. Every engine figure carries a `~` because it is an estimate and need not match the real total. It reads `n/a` when the engine gives no breakdown. Counting is local; the tab never asks for the full count.
 
 Rows are one item each and are cut at the pane width, never shortened with an ellipsis; a wider pane shows more columns. A token column reads `n/a` when the engine gives no context breakdown.
 
-The pane is not read while it is closed.
+The pane is not read while it is closed. The Context tab refreshes with the other tabs (on open and each minute while the pane is open), with no timer of its own.
 
 ## Keys and the prompt box
 
