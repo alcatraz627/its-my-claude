@@ -104,6 +104,21 @@ else:
     failed += 1
     print("FAIL heed row missing after a corrected edit")
 
+# Bash appends: the entry is read back from the file's tail.
+bsids = [f"hb{n:06d}" for n in range(1, 6)]
+clean_state(*bsids)
+p = make("ch1.md", LOG + "09:05 appended by printf\n")
+run("Bash >> drifted append warns", "warn", "Bash", {"command": f"printf '09:05 appended by printf\\n' >> {p}"}, bsids[0])
+p = make("ch2.md", LOG + "14:29 appended on time\n")
+run("Bash >> on-clock append is silent", "silent", "Bash", {"command": f"printf '14:29 appended on time\\n' >> {p}"}, bsids[1])
+p = make("ch3.md", LOG + "09:05 old drifted entry\n14:29 new entry\n")
+run("Bash >> never blames an older tail line", "silent", "Bash", {"command": f"printf '14:29 new entry\\n' >> {p}"}, bsids[2])
+p = make("ch4.md", LOG + "09:05 drifted\n")
+run("Bash without >> is silent", "silent", "Bash", {"command": f"cat {p}"}, bsids[3])
+p = make("ch5.md", LOG + "09:05 quoted path\n")
+run("Bash >> to a quoted path warns", "warn", "Bash", {"command": f"echo '09:05 quoted path' >> \"{p}\""}, bsids[4])
+clean_state(*bsids)
+
 clean_state(*sids)
 print(f"{passed} passed, {failed} failed")
 sys.exit(1 if failed else 0)

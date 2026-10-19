@@ -120,6 +120,43 @@ fi
 claim_text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$claim_text" ] || exit 0
 
+# ── Detection 1b: a pass claimed ON a named environment → that environment must
+# show up in this turn's tool activity. "green on laptop", "proven from the Pi
+# API", "passing on Mac" slipped past the success-word pipeline because they read
+# as reports, not as "done" (reader 2026w42, cluster c-0d4db80b). Credit: the
+# environment's name appears in any tool_use input or tool_result this turn.
+ENV_CLAIM_RE='\b(proven|confirmed|verified|green|passing|passes|passed|works|working|tested)\s+(on|from|in|against)\s+(the\s+)?(laptop|mac|macbook|pi|raspberry\s+pi|staging|prod|production|sandbox|device|phone|ios|android|ci|vm|server)\b'
+env_claims=$(printf '%s' "$claim_text" | rg -oiP "$ENV_CLAIM_RE" 2>/dev/null | sort -u || true)
+if [ -n "$env_claims" ] \
+   && ! printf '%s' "$claim_text" | rg -qiP '\bnot (yet )?(verified|checked|exercised|tested|run)\b|\bunconfirmed\b|\bas of (the )?(dump|checkpoint|last session)\b' 2>/dev/null; then
+  env_tool_text=$(printf '%s\n' "$turn_json" | jq -r '
+    (select(.type=="assistant") | .message.content[]? | select(.type=="tool_use") | (.input | tostring)),
+    (select(.type=="user") | .message.content[]? | select(.type=="tool_result")
+      | (.content // "") | if type=="array" then (map(.text? // "")|join("\n")) else . end)
+  ' 2>/dev/null)
+  unbacked=""
+  while IFS= read -r c; do
+    [ -z "$c" ] && continue
+    envw=$(printf '%s' "$c" | rg -oiP '(raspberry\s+pi|\w+)$' 2>/dev/null | tr 'A-Z' 'a-z')
+    case "$envw" in raspberry*) envw="pi" ;; macbook) envw="mac" ;; production) envw="prod" ;; esac
+    printf '%s' "$env_tool_text" | rg -qi "\b${envw}" 2>/dev/null || unbacked="${unbacked}\"${c}\" "
+  done <<EOF
+$env_claims
+EOF
+  if [ -n "$unbacked" ]; then
+    ENVMARK="/tmp/claude-declared-ready-env-${sid8}"
+    esig=$(printf '%s' "$unbacked" | shasum 2>/dev/null | awk '{print $1}')
+    eprev=""; [ -f "$ENVMARK" ] && eprev=$(cat "$ENVMARK" 2>/dev/null)
+    if [ -n "$esig" ] && [ "$esig" != "$eprev" ]; then
+      printf '%s' "$esig" > "$ENVMARK" 2>/dev/null || true
+      reason="⚠ PASS CLAIMED ON AN ENVIRONMENT THIS TURN NEVER TOUCHED: ${unbacked}but no tool call this turn names that environment, so the claim comes from memory, a plan or another session. Run the check there now (ssh, curl, the device log) and quote its output, or say where the result came from and when. Loop-safe: won't re-fire for these claims. Mute: touch ~/.claude/.no-declared-ready-gate"
+      jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
+      [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --action block --heeded unknown --detail "env-claim" >/dev/null 2>&1 || true
+      exit 0
+    fi
+  fi
+fi
+
 # ── Stage P: a verdict about REPO STATE, asserted without re-reading it ───────
 # The sibling failure to this hook's own. `declared-ready` asks whether you ran the
 # code you changed. This asks whether you looked before describing state you did not

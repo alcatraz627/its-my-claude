@@ -18,7 +18,7 @@ stale_after_days: 180
 ---
 # Route every piece of work to the smallest adequate lane, out loud
 
-Lanes: local `lm` (about $0: q/see/review/imagine/fleet/index), `lm gemini` (huge context, untrusted output), haiku (trivial), sonnet (DEFAULT sub-agent), opus (main driver, judgment seats), fable (vague, complex work; still declared).
+Lanes: local `lm` and `lm gemini` are complements for what Claude cannot do well, never a cheaper stand-in (owner, 2026-08-30): `lm see` and `lm imagine` for vision, `lm gemini` for a sweep of a corpus too big for context (untrusted output). Claude lanes: haiku (trivial), sonnet (DEFAULT sub-agent), opus (main driver, judgment seats), fable (vague, complex work; still declared).
 
 - **Every dispatch carries an explicit `model:` pin.** Sub-agent effort stays at or below a high main. Sonnet gets liberal effort, opus medium unless real judgment is needed, and xhigh needs the owner.
 - **A fable-tier main does involved work ITSELF** (owner 2026-09-01). It may delegate review, verification and cheap passes, never authoring (guard-model-tier.sh blocks it).

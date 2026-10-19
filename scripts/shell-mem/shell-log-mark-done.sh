@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Marks a background shell entry as done ([BG] -> [BG:DONE]).
 # Usage: shell-log-mark-done.sh <session_id> <command_fragment> [YYYY-MM-DD]
-# Always exits 0.
+# The fragment is matched literally, so a command with [ ] or * still matches.
+# Exits 0 when an entry was marked, 1 when none matched.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SESSION_ID="${1:-}"
@@ -21,8 +22,8 @@ try_mark() {
 
   # Check if any line matches session_id AND command_fragment AND has [BG] but not [BG:DONE]
   if grep -q "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null &&
-     grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep -q "$CMD_FRAGMENT" &&
-     grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep "$CMD_FRAGMENT" | grep -q '\[BG\]'; then
+     grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep -qF -- "$CMD_FRAGMENT" &&
+     grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep -F -- "$CMD_FRAGMENT" | grep -q '\[BG\]'; then
 
     # Lock around sed to prevent concurrent write races (mkdir is atomic)
     LOCKDIR="/tmp/diy-mem-$(date +%Y-%m-%d).lock"
@@ -31,10 +32,10 @@ try_mark() {
 
     # Use sed to replace [BG] with [BG:DONE] on matching lines
     # macOS sed requires -i '' for in-place editing
-    sed -i '' "/\[sid:$SESSION_ID\].*$(echo "$CMD_FRAGMENT" | sed 's/[[\.*^$()+?{|]/\\&/g').*\[BG\]/s/\[BG\]/[BG:DONE]/" "$log_file" 2>/dev/null
+    sed -i '' "/\[sid:$SESSION_ID\].*$(echo "$CMD_FRAGMENT" | sed 's/[[\.*^$()+?{|/]/\\&/g').*\[BG\]/s/\[BG\]/[BG:DONE]/" "$log_file" 2>/dev/null
 
     local matched
-    matched=$(grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep "$CMD_FRAGMENT" | grep '\[BG:DONE\]' | head -1)
+    matched=$(grep "\[sid:$SESSION_ID\]" "$log_file" 2>/dev/null | grep -F -- "$CMD_FRAGMENT" | grep '\[BG:DONE\]' | head -1)
     echo "marked done: $matched"
     return 0
   fi
@@ -42,22 +43,17 @@ try_mark() {
 }
 
 if [ -n "$DATE" ]; then
-  LOG_FILE="$("$SCRIPT_DIR/shell-log-file.sh" "$DATE")" || exit 0
-  try_mark "$LOG_FILE" || echo "not found"
+  LOG_FILE="$("$SCRIPT_DIR/shell-log-file.sh" "$DATE")" || exit 1
+  try_mark "$LOG_FILE" && exit 0
 else
   # Try today first, then yesterday
-  TODAY_FILE="$("$SCRIPT_DIR/shell-log-file.sh")" || exit 0
-  if ! try_mark "$TODAY_FILE"; then
-    YESTERDAY=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "-1 day" +%Y-%m-%d 2>/dev/null || echo "")
-    if [ -n "$YESTERDAY" ]; then
-      YESTERDAY_FILE="$("$SCRIPT_DIR/shell-log-file.sh" "$YESTERDAY")" || exit 0
-      if ! try_mark "$YESTERDAY_FILE"; then
-        echo "not found"
-      fi
-    else
-      echo "not found"
-    fi
+  TODAY_FILE="$("$SCRIPT_DIR/shell-log-file.sh")" || exit 1
+  try_mark "$TODAY_FILE" && exit 0
+  YESTERDAY=$(date -v-1d +%Y-%m-%d 2>/dev/null || date -d "-1 day" +%Y-%m-%d 2>/dev/null || echo "")
+  if [ -n "$YESTERDAY" ]; then
+    YESTERDAY_FILE="$("$SCRIPT_DIR/shell-log-file.sh" "$YESTERDAY")" || exit 1
+    try_mark "$YESTERDAY_FILE" && exit 0
   fi
 fi
-
-exit 0
+echo "not found"
+exit 1

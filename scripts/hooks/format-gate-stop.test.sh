@@ -76,8 +76,12 @@ silent "$out" && ok "path inside a fenced block passes" || bad "path inside a fe
 echo "== emdash =="
 out=$(run fgt00009 "The fix is small $D one line in the hook." "$EMPTY")
 blocks "$out" && ok "em-dash in prose blocks" || bad "em-dash in prose blocks"
+printf '%s' "$out" | rg -q 'disgrace' && ok "em-dash block carries the owner's wording" || bad "owner wording: $out"
+printf '%s' "$out" | rg -q 're-send as is' && ok "em-dash block says how to insist" || bad "insist escape: $out"
 out=$(run fgt00010 "The fix is small, one line in the hook." "$EMPTY")
 silent "$out" && ok "clean prose passes" || bad "clean prose passes: $out"
+out=$(run fgt00040 "Pages 3–5 cover backlog-triage-1019 and the pre-commit hook - see guard-absence-claim for the rest" "$EMPTY")
+silent "$out" && ok "hyphens, en-dashes and slugs pass" || bad "hyphens, en-dashes and slugs pass: $out"
 out=$(run fgt00011 "The regex is \`a${D}b\` and nothing else." "$EMPTY")
 silent "$out" && ok "em-dash inside inline code passes" || bad "em-dash inside inline code passes: $out"
 out=$(run fgt00012 "Quote:

@@ -107,7 +107,13 @@ PY
   [ "$ESTABLISHED" = "skip" ] && exit 0
 fi
 
-CONV="$root/.claude/conventions/env-access.md"
+# When the project root IS ~/.claude, its conventions live at the top level, not
+# in a nested .claude folder (which block-nested-claude.sh refuses).
+if [ "$root" = "$HOME/.claude" ]; then
+  CONV="$root/conventions/env-access.md"
+else
+  CONV="$root/.claude/conventions/env-access.md"
+fi
 
 if [ -f "$CONV" ]; then
   msg="[env-access] new env read in $(basename "$FP"). This project has an established env-access convention — route through it instead of adding a raw read: $CONV  (mute: touch ~/.claude/.env-access-off)"

@@ -50,7 +50,7 @@ old_ifs="$IFS"; IFS=','
 for c in $classes; do
   case "$c" in
     filename-dot) p="never put a period right after a file path" ;;
-    emdash) p="no em-dashes" ;;
+    emdash) p="no em-dashes (hyphens are fine)" ;;
     terse-reply) p="prose cap ${cap} chars" ;;
     relpath) p="give the full absolute path of any file you name, at least once" ;;
     *) continue ;;

@@ -28,11 +28,25 @@ try:
     inp = json.load(sys.stdin)
 except ValueError:
     sys.exit(0)
-if not isinstance(inp, dict) or inp.get("tool_name") not in ("Edit", "Write", "MultiEdit"):
+if not isinstance(inp, dict) or inp.get("tool_name") not in ("Edit", "Write", "MultiEdit", "Bash"):
     sys.exit(0)
 ti = inp.get("tool_input") or {}
 fp = ti.get("file_path") or ""
+cmd = ""
+if inp["tool_name"] == "Bash":
+    # A shell append (printf ... >> NIGHT-CHANNEL.md) is how most channel entries land.
+    # The append has already run, so the entry is the file's tail.
+    cmd = ti.get("command") or ""
+    m = re.search(r">>\s*(\"[^\"]+\"|'[^']+'|[^\s;&|<>]+)", cmd)
+    if not m:
+        sys.exit(0)
+    fp = os.path.expanduser(m.group(1).strip("\"'"))
+    if not os.path.isabs(fp):
+        fp = os.path.join(inp.get("cwd") or os.getcwd(), fp)
 if not fp:
+    sys.exit(0)
+# Test fixtures backdate on purpose.
+if re.search(r"(\.test\.|_test\.|\.spec\.|/tests?/|/fixtures?/)", fp):
     sys.exit(0)
 
 # A line that opens with a clock time: "14:32 did x", "- 14:32 did x", "[14:32] did x",
@@ -57,6 +71,20 @@ def stamp_minutes(line):
 
 
 def lines_added():
+    if inp["tool_name"] == "Bash":
+        # Only tail lines whose stamp text appears in the command, so an older
+        # entry already in the file is never blamed on this append.
+        try:
+            with open(fp, errors="replace") as fh:
+                tail = [l.rstrip("\n") for l in fh if l.strip()][-5:]
+        except OSError:
+            return []
+        out = []
+        for l in tail:
+            s = STAMP.match(l)
+            if s and ("%s:%s" % (s.group(1), s.group(2))) in cmd:
+                out.append(l)
+        return out
     if inp["tool_name"] == "Write":
         body = [l for l in (ti.get("content") or "").split("\n") if l.strip()]
         return body[-5:]

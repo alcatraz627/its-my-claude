@@ -40,6 +40,32 @@ printf '%s/fixed.py\n' "$T" > /tmp/claude-edited-files-lagdr003
 out=$(jq -nc --arg tp "$tp" '{session_id:"lagdr003", transcript_path:$tp}' | bash "$HOOK" 2>/dev/null)
 blocks "$out" && ok "no last_assistant_message: falls back to the transcript" || bad "fallback to transcript ($out)"
 
+# Detection 1b: a pass claimed on a named environment needs that environment in
+# this turn's tool activity.
+run_tool() { # run_tool <sid> <reply> <bash command run this turn>
+  local tp="$T/$1.jsonl"
+  { jq -nc '{type:"user", message:{role:"user", content:"is it working on the pi?"}}'
+    jq -nc --arg c "$3" '{type:"assistant", message:{content:[{type:"tool_use", id:"t1", name:"Bash", input:{command:$c}}]}}'
+    jq -nc '{type:"user", message:{content:[{type:"tool_result", tool_use_id:"t1", content:"ok"}]}}'; } > "$tp"
+  jq -nc --arg s "$1" --arg m "$2" --arg tp "$tp" \
+    '{session_id:$s, transcript_path:$tp, stop_hook_active:false, last_assistant_message:$m}' | bash "$HOOK" 2>/dev/null
+}
+ids="$ids envdr001 envdr002 envdr003 envdr004 envdr005"
+for s in envdr001 envdr002 envdr003 envdr004 envdr005; do rm -f /tmp/claude-declared-ready-env-$s; done
+out=$(run_tool envdr001 "The upload path is proven from the Pi API and green on laptop." "git status")
+blocks "$out" && ok "env claim with no tool touching it blocks" || bad "env claim unbacked ($out)"
+printf '%s' "$out" | jq -r '.reason' | rg -q 'proven from the Pi' && ok "the block quotes the claim" || bad "claim quoted ($out)"
+out=$(run_tool envdr002 "The upload path is proven from the Pi API." "ssh pi@raspberrypi.local curl -s localhost:8080/health")
+[ -z "$out" ] && ok "env claim backed by a tool call on that env passes" || bad "env claim backed ($out)"
+out=$(run_tool envdr003 "The upload path is not yet verified, but it was passing on staging in the last session." "git status")
+[ -z "$out" ] && ok "a hedged env claim passes" || bad "hedged env claim ($out)"
+out=$(run_tool envdr004 "Reading the staging config next." "git status")
+[ -z "$out" ] && ok "naming an env without a pass claim passes" || bad "env mention ($out)"
+out=$(run_tool envdr005 "It is green on laptop." "git status")
+out2=$(run_tool envdr005 "It is green on laptop." "git status")
+{ blocks "$out" && ! blocks "$out2"; } && ok "the same env claim blocks once, then steps aside" || bad "env loop safety ($out2)"
+for s in envdr001 envdr002 envdr003 envdr004 envdr005; do rm -f /tmp/claude-declared-ready-env-$s; done
+
 cleanup
 echo "---- pass=$pass fail=$fail"
 trash "$T" 2>/dev/null || true

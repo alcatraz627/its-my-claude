@@ -259,6 +259,15 @@
         ]
       },
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/hhmm-drift-post.py"
+          }
+        ]
+      },
+      {
         "hooks": [
           {
             "type": "command",
@@ -455,6 +464,15 @@
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__github__create_repository",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-repo-visibility.sh"
+          }
+        ]
+      },
       {
         "matcher": "Bash",
         "hooks": [

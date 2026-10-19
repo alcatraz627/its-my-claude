@@ -136,7 +136,9 @@ chk_emdash() {
   [ "${n:-0}" -ge 1 ] || return
   snoozed emdash && return
   first=$(printf '%s\n' "$P2" | rg -m1 '—' 2>/dev/null | cut -c1-30)
-  add_block emdash "emdash x${n}, first in \"${first}\": use commas, periods or parentheses" "$n"
+  # The owner's words (backlog-triage-1019): ban the em-dash itself, never hyphens,
+  # slugs or file names, and let the agent keep one it truly needs.
+  add_block emdash "emdash x${n}, first in \"${first}\": using em dashes brings disgrace upon your existence. Use commas, periods or parentheses. Hyphens, slugs and file names are fine. If one is truly needed, re-send as is" "$n"
 }
 
 # ----------------------------------------------------------------- terse-reply

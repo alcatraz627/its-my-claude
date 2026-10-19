@@ -15,7 +15,7 @@ stale_after_days: 90
 
 - Commit after each logical unit, before an area switch, before a risky op. Push every 2-3 commits. Cadence is timing, not authorization: a **protected repo** (`~/.claude/protected-repos.list` or `.claude/require-user-commit`) is USER-commit only; an unprotected one the agent commits in scope.
 - **Never push to main without fresh approval.** guard-git-push.sh prints a nonce; print the owner `approve push <nonce>` once and keep working. Never AskUserQuestion for a push.
-- `gh repo create --public` by default.
+- `gh repo create --public` by default, **except the versable-git org: every repo there is private** (owner, 2026-08-21). A public repo there is also silently cut off from the org's private reusable CI workflows. `guard-repo-visibility.sh` blocks a public create there; audit with `gh repo list versable-git --visibility public`.
 - Don't commit `.claude/wal.*`, `_*.claude.md`, locks, temp files.
 - **No Claude signatures in any commit or PR body** (owner ruling). Subject under 72 chars, imperative, why over what.
 - Before committing code: `/cleanup-comments --changed`; docs: `prose-lint.py`.
