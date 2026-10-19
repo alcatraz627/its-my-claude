@@ -143,6 +143,24 @@ subconscious/dreams/processed.json
 subconscious/dreams/digest-meta.json
 subconscious/metacog/processed.json
 subconscious/state.json
+# Untracked 2026-10-19 (owner ruling review-maint-1019 D10), the same test: the
+# files that changed on every cycle and filled every git status. A pid, three
+# cursors, raw telemetry ledgers, derived metrics, and the log archive. The
+# journal (verify --history replays it), patterns, associations, schemas,
+# interventions and calibration stay tracked.
+subconscious/daemon.pid
+i-dream/residue-review.state
+i-dream/reader/state.json
+subconscious/valence/processed.json
+subconscious/introspection/processed.json
+i-dream/would-fire.jsonl
+i-dream/injections.jsonl
+i-dream/audits/_autonomous.jsonl
+subconscious/metacog/activity.jsonl
+subconscious/dreams/lane-health.jsonl
+subconscious/dreams/dream-metrics.json
+subconscious/dreams/domain-cadence.json
+subconscious/logs-archive/
 
 # Frozen copies of the two real task stores and the first-screen renders back the
 # golden suites and alignment checks 2 and 5. They are Versable project text and
