@@ -399,7 +399,7 @@
     "occurrence_history": [
       "2026-07-21T17:48:48.066578+00:00"
     ],
-    "strength": 1.9018849344369058e-10,
+    "strength": 1.9018849344369055e-10,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -2090,7 +2090,7 @@
     "occurrence_history": [
       "2026-08-28T01:20:39.675763+00:00"
     ],
-    "strength": 3.83220266262107e-9,
+    "strength": 3.8322026626210706e-9,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2556,7 +2556,7 @@
     "occurrence_history": [
       "2026-08-30T11:32:32.918369+00:00"
     ],
-    "strength": 4.908367297243754e-9,
+    "strength": 4.9083672972437544e-9,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3687,7 +3687,7 @@
     "occurrence_history": [
       "2026-08-30T20:46:03.831732+00:00"
     ],
-    "strength": 6.36340960994047e-9,
+    "strength": 6.3634096099404705e-9,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3829,7 +3829,7 @@
     "occurrence_history": [
       "2026-08-30T23:19:51.922253+00:00"
     ],
-    "strength": 6.361778384713614e-9,
+    "strength": 6.3617783847136144e-9,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4701,7 +4701,7 @@
     "occurrence_history": [
       "2026-08-31T03:29:04.396013+00:00"
     ],
-    "strength": 6.4613946287616175e-9,
+    "strength": 6.461394628761617e-9,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5760,7 +5760,7 @@
     "occurrence_history": [
       "2026-09-03T04:47:45.804790+00:00"
     ],
-    "strength": 1.209907522223026e-8,
+    "strength": 1.2099075222230261e-8,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5906,7 +5906,7 @@
     "occurrence_history": [
       "2026-09-03T06:54:14.932477+00:00"
     ],
-    "strength": 1.211421799472368e-8,
+    "strength": 1.2114217994723681e-8,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6191,7 +6191,7 @@
     "occurrence_history": [
       "2026-09-03T08:57:55.410276+00:00"
     ],
-    "strength": 1.3209652600629541e-8,
+    "strength": 1.320965260062954e-8,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13144,7 +13144,7 @@
     "occurrence_history": [
       "2026-09-14T23:40:43.418620+00:00"
     ],
-    "strength": 2.3099268157188958e-7,
+    "strength": 2.309926815718896e-7,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -28461,6 +28461,147 @@
       "2026-10-19T08:04:29.197660+00:00"
     ],
     "strength": 0.68,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "ada74b85-f05f-488d-b178-c0635cc6805f",
+    "pattern": "After proposing a goal or plan, the agent must immediately make a tool call toward that goal rather than ending the turn on the proposal text alone.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "cbae77ee-3168-4ec1-9360-e25d1764aaed",
+      "a545340b-c4ba-404e-be23-cef80aad0b1e",
+      "fcc859da-252c-4f21-918b-e5abe11e8e0f",
+      "842e701b-c03e-4749-ac5d-de30cc16cb73",
+      "872653c4-15ee-42be-8bb1-1c36288811ef",
+      "4a31d70c-bd98-41dc-8307-eb68bcfd4970",
+      "ba602623-dd28-42d7-a244-8ca4bf62ca42",
+      "0ede9853-8b36-4bb9-9ea7-9f21af9ecad2",
+      "9841c1c8-1731-44db-a187-c9309b152f55",
+      "eaacd6ed-26f0-4eeb-a3dd-89ed4573681e",
+      "d8448db7-7cda-48a1-b90b-5e9fd0518ebb",
+      "a27ed0cf-8ba0-4316-8ca4-22c5bb2ddb0f",
+      "def138de-582a-4bf7-9763-c4ab178fe209",
+      "fca53e0c-d7e1-4284-b5da-4a89f08ebf0a",
+      "c2d1c4ee-8005-4fb2-9f1f-4222e7c8624e",
+      "6485c254-f5fb-441e-a5ef-9a12b1530bb2",
+      "c8e57a8d-c750-4a43-b9e8-3c93706b5790",
+      "17ca299a-a499-4e95-bcc1-ab2dc7528079",
+      "7c969a57-9038-4eec-89a8-2c083cc63af0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude",
+      "slack-automation",
+      "enhancement-product",
+      ".claude",
+      "audio-doctor",
+      "sor",
+      "landing-app"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-10-19T08:50:33.186194+00:00",
+    "last_seen": "2026-10-19T08:50:33.186194+00:00",
+    "occurrence_history": [
+      "2026-10-19T08:50:33.186194+00:00"
+    ],
+    "strength": 0.9,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "61c22c80-44db-438f-9865-e951d30ad3d4",
+    "pattern": "Prose responses must stay under a hard character cap; when over the limit, lead with the single most actionable point and move detail to a file.",
+    "valence": "negative",
+    "confidence": 0.88,
+    "category": "user-preference",
+    "source_sessions": [
+      "cbae77ee-3168-4ec1-9360-e25d1764aaed",
+      "a545340b-c4ba-404e-be23-cef80aad0b1e",
+      "fcc859da-252c-4f21-918b-e5abe11e8e0f",
+      "842e701b-c03e-4749-ac5d-de30cc16cb73",
+      "872653c4-15ee-42be-8bb1-1c36288811ef",
+      "4a31d70c-bd98-41dc-8307-eb68bcfd4970",
+      "ba602623-dd28-42d7-a244-8ca4bf62ca42",
+      "0ede9853-8b36-4bb9-9ea7-9f21af9ecad2",
+      "9841c1c8-1731-44db-a187-c9309b152f55",
+      "eaacd6ed-26f0-4eeb-a3dd-89ed4573681e",
+      "d8448db7-7cda-48a1-b90b-5e9fd0518ebb",
+      "a27ed0cf-8ba0-4316-8ca4-22c5bb2ddb0f",
+      "def138de-582a-4bf7-9763-c4ab178fe209",
+      "fca53e0c-d7e1-4284-b5da-4a89f08ebf0a",
+      "c2d1c4ee-8005-4fb2-9f1f-4222e7c8624e",
+      "6485c254-f5fb-441e-a5ef-9a12b1530bb2",
+      "c8e57a8d-c750-4a43-b9e8-3c93706b5790",
+      "17ca299a-a499-4e95-bcc1-ab2dc7528079",
+      "7c969a57-9038-4eec-89a8-2c083cc63af0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude",
+      "slack-automation",
+      "enhancement-product",
+      ".claude",
+      "audio-doctor",
+      "sor",
+      "landing-app"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-10-19T08:50:33.186194+00:00",
+    "last_seen": "2026-10-19T08:50:33.186194+00:00",
+    "occurrence_history": [
+      "2026-10-19T08:50:33.186194+00:00"
+    ],
+    "strength": 0.88,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "c32f90a4-b2ad-4776-8dd1-98e88edc11b1",
+    "pattern": "Before advertising a localhost URL to the user, the agent must navigate to it and exercise its primary action in the same turn to confirm it is live.",
+    "valence": "negative",
+    "confidence": 0.92,
+    "category": "approach",
+    "source_sessions": [
+      "cbae77ee-3168-4ec1-9360-e25d1764aaed",
+      "a545340b-c4ba-404e-be23-cef80aad0b1e",
+      "fcc859da-252c-4f21-918b-e5abe11e8e0f",
+      "842e701b-c03e-4749-ac5d-de30cc16cb73",
+      "872653c4-15ee-42be-8bb1-1c36288811ef",
+      "4a31d70c-bd98-41dc-8307-eb68bcfd4970",
+      "ba602623-dd28-42d7-a244-8ca4bf62ca42",
+      "0ede9853-8b36-4bb9-9ea7-9f21af9ecad2",
+      "9841c1c8-1731-44db-a187-c9309b152f55",
+      "eaacd6ed-26f0-4eeb-a3dd-89ed4573681e",
+      "d8448db7-7cda-48a1-b90b-5e9fd0518ebb",
+      "a27ed0cf-8ba0-4316-8ca4-22c5bb2ddb0f",
+      "def138de-582a-4bf7-9763-c4ab178fe209",
+      "fca53e0c-d7e1-4284-b5da-4a89f08ebf0a",
+      "c2d1c4ee-8005-4fb2-9f1f-4222e7c8624e",
+      "6485c254-f5fb-441e-a5ef-9a12b1530bb2",
+      "c8e57a8d-c750-4a43-b9e8-3c93706b5790",
+      "17ca299a-a499-4e95-bcc1-ab2dc7528079",
+      "7c969a57-9038-4eec-89a8-2c083cc63af0"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "-Users-alcatraz627--claude",
+      "slack-automation",
+      "enhancement-product",
+      ".claude",
+      "audio-doctor",
+      "sor",
+      "landing-app"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-10-19T08:50:33.186194+00:00",
+    "last_seen": "2026-10-19T08:50:33.186194+00:00",
+    "occurrence_history": [
+      "2026-10-19T08:50:33.186194+00:00"
+    ],
+    "strength": 0.92,
     "ease": 2.5,
     "reactivations": 0
   }

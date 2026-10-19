@@ -7343,22 +7343,24 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 5,
-    "member_count": 5,
+    "occurrences": 6,
+    "member_count": 6,
     "rep_pattern_id": "6fd4c584-f5c7-4201-b12c-5c42ceb2e5ef",
     "member_ids": [
       "6fd4c584-f5c7-4201-b12c-5c42ceb2e5ef",
       "4513ad9e-8ebb-4df5-88f6-f770333a77cf",
       "bf174ace-faa4-4446-8334-53e7d832dd11",
       "866f1830-db0f-4945-aff6-8d762696040c",
-      "956ddef2-ce00-417c-ae17-96c549e673f8"
+      "956ddef2-ce00-417c-ae17-96c549e673f8",
+      "ada74b85-f05f-488d-b178-c0635cc6805f"
     ],
     "member_texts": [
       "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop condition — continue working toward it unless the next step is genuinely blocked on the owner.",
       "After printing a /goal proposal line, the agent must continue working toward that goal in the same turn rather than halting and waiting for the user to arm it.",
       "Printing a /goal line and ending the turn without a tool call is a stop violation; a proposed goal must be immediately followed by at least one tool call working toward it.",
       "Printing a /goal line and ending the turn is a rule violation; the agent should propose the goal and immediately continue toward it without waiting for the owner to act.",
-      "When the agent prints a /goal paste line, it must continue working toward that goal in the same turn rather than ending the turn — the goal line is a proposal to the user, not a stop signal."
+      "When the agent prints a /goal paste line, it must continue working toward that goal in the same turn rather than ending the turn — the goal line is a proposal to the user, not a stop signal.",
+      "After proposing a goal or plan, the agent must immediately make a tool call toward that goal rather than ending the turn on the proposal text alone."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-sor",
@@ -7375,10 +7377,15 @@
       "sor",
       "slack-automation",
       "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Documents-Codex-2026-10-04-mac"
+      "-Users-alcatraz627-Documents-Codex-2026-10-04-mac",
+      "-Users-alcatraz627-Code-Versable-enhancement-product",
+      "enhancement-product",
+      ".claude",
+      "audio-doctor",
+      "landing-app"
     ],
     "first_seen": "2026-09-29T08:11:54.339604+00:00",
-    "last_seen": "2026-10-04T19:07:43.072360+00:00"
+    "last_seen": "2026-10-19T08:50:33.186194+00:00"
   },
   {
     "id": "9fd801389ec2b091",
@@ -8290,23 +8297,25 @@
     "last_seen": "2026-10-02T03:27:14.168224+00:00"
   },
   {
-    "id": "a4fa3453710f0ea9",
-    "text": "Advertising a localhost URL to the user without first navigating to it and exercising its primary action causes broken first-click failures; always verify a local endpoint is live before surfacing its URL.",
+    "id": "29fce6bde02cb040",
+    "text": "Before advertising a localhost URL to the user, the agent must navigate to it and exercise its primary action in the same turn to confirm it is live.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.92,
-    "occurrences": 3,
-    "member_count": 3,
-    "rep_pattern_id": "ef2af03b-eb2b-4a9f-b0b6-fc466b1feaa9",
+    "occurrences": 4,
+    "member_count": 4,
+    "rep_pattern_id": "c32f90a4-b2ad-4776-8dd1-98e88edc11b1",
     "member_ids": [
       "0ae59335-0ae8-451e-a436-35b79298b806",
       "52066a99-bc1a-4787-befc-1f3e13333a34",
-      "ef2af03b-eb2b-4a9f-b0b6-fc466b1feaa9"
+      "ef2af03b-eb2b-4a9f-b0b6-fc466b1feaa9",
+      "c32f90a4-b2ad-4776-8dd1-98e88edc11b1"
     ],
     "member_texts": [
       "The agent advertises localhost URLs in a reply without first navigating to the URL and exercising its primary action in the same turn, leading to links that fail on the user's first click.",
       "Advertising a localhost URL to the user without first navigating to it and confirming it responds is a recurring trust failure; the agent must exercise the URL before mentioning it.",
-      "Advertising a localhost URL to the user without first navigating to it and exercising its primary action causes broken first-click failures; always verify a local endpoint is live before surfacing its URL."
+      "Advertising a localhost URL to the user without first navigating to it and exercising its primary action causes broken first-click failures; always verify a local endpoint is live before surfacing its URL.",
+      "Before advertising a localhost URL to the user, the agent must navigate to it and exercise its primary action in the same turn to confirm it is live."
     ],
     "source_projects": [
       "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws",
@@ -8333,10 +8342,13 @@
       ".claude",
       "slack-automation",
       "i-dream",
-      "sor"
+      "sor",
+      "enhancement-product",
+      "audio-doctor",
+      "landing-app"
     ],
     "first_seen": "2026-10-03T01:35:23.171572+00:00",
-    "last_seen": "2026-10-07T23:00:40.186147+00:00"
+    "last_seen": "2026-10-19T08:50:33.186194+00:00"
   },
   {
     "id": "87ee550c7ea1d0cb",
@@ -10830,18 +10842,20 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.9,
-    "occurrences": 3,
-    "member_count": 3,
+    "occurrences": 4,
+    "member_count": 4,
     "rep_pattern_id": "5a09a72d-8b03-4839-92d2-0b75cfb927cf",
     "member_ids": [
       "03a33fac-2337-4cf7-b967-d4c5b74ae225",
       "8371cb5b-0982-4a6f-b005-a40c80e6a707",
-      "5a09a72d-8b03-4839-92d2-0b75cfb927cf"
+      "5a09a72d-8b03-4839-92d2-0b75cfb927cf",
+      "61c22c80-44db-438f-9865-e951d30ad3d4"
     ],
     "member_texts": [
       "Reply length violations (terse-reply hook) recur even after prior warnings; replies must stay under the configured character limit, offloading detail to a linked file rather than inline prose.",
       "Replies that exceed the terse-reply character limit recurred across multiple sessions; detail belongs in a linked file, not inline prose.",
-      "Replies that exceed ~1500 chars of prose should lead with the single most important point and defer detail to a linked file; long inline summaries are a recurring hook violation."
+      "Replies that exceed ~1500 chars of prose should lead with the single most important point and defer detail to a linked file; long inline summaries are a recurring hook violation.",
+      "Prose responses must stay under a hard character cap; when over the limit, lead with the single most actionable point and move detail to a file."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -10851,10 +10865,13 @@
       "enhancement-product",
       "slack-automation",
       ".claude",
-      "i-dream"
+      "i-dream",
+      "audio-doctor",
+      "sor",
+      "landing-app"
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-17T23:00:39.001437+00:00"
+    "last_seen": "2026-10-19T08:50:33.186194+00:00"
   },
   {
     "id": "441d33c304402540",

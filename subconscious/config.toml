@@ -9,7 +9,7 @@ check_interval_minutes = 15
 activity_signal = "~/.claude/subconscious/.last-activity"
 
 [budget]
-max_tokens_per_cycle = 50000
+max_tokens_per_cycle = 70000
 max_runtime_minutes = 10
 model = "claude-sonnet-4-6"
 model_heavy = "claude-opus-4-6"
