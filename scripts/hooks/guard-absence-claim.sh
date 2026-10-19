@@ -223,6 +223,50 @@ EOF
 # UNGROUNDED claim — a grounded earlier claim (a file this turn Read) must not
 # shadow an ungrounded later one, and a subject-less line (plain word / non-file
 # thing) is skipped, not fired.
+# ── Path C — a named SKILL or slash command claimed absent. The session's skill
+# listing is truncated by the roster budget, so "it is not in my list" proves
+# nothing (atone mist-20261009-190830-23: /adversarial-review was called "not
+# installed" while ~/.claude/skills/adversarial-review existed). This path does not
+# ask for a probe: it looks on disk itself. A name that exists as a user, project
+# or installed-plugin skill or command means the claim is false, so it blocks at
+# every stakes level; a name found nowhere is a true claim and stays silent.
+SKILL_NEG_RX="not (installed|available|a (real |known )?(skill|command))|isn'?t (installed|available|a (real |known )?(skill|command))|does(n'?t| not) exist|no such (skill|command|slash command)|there(?:'?s| is) no (\`?/?[a-z][a-z0-9-]*\`? )?(skill|command|slash command)|no (skill|command|slash command) (called|named)|(missing|absent) from (my|the) (skill )?(listing|list|roster)|(not|n'?t) in (my|the) (skill )?(listing|list|roster)|don'?t have (a|an|the) \`?/?[a-z][a-z0-9-]*\`? (skill|command)"
+_skill_path() { # _skill_path NAME → the first on-disk skill/command of that name, else empty
+  local n="$1" f
+  for f in "$HOME/.claude/skills/$n/SKILL.md" "$cwd/.claude/skills/$n/SKILL.md" \
+           "$HOME/.claude/commands/$n.md" "$cwd/.claude/commands/$n.md" \
+           "$HOME"/.claude/plugins/cache/*/*/*/skills/"$n"/SKILL.md \
+           "$HOME"/.claude/plugins/cache/*/*/*/commands/"$n".md; do
+    [ -f "$f" ] && { printf '%s' "$f"; return 0; }
+  done
+  return 1
+}
+if ! printf '%s' "$text" | rg -qiP "$META_RX" 2>/dev/null; then
+  skill_cand=$(printf '%s\n' "$text" | rg -iP '\b(skill|slash command|command)s?\b|(^|[[:space:](`])/[a-z][a-z0-9-]{2,}' 2>/dev/null | rg -iP "$SKILL_NEG_RX" 2>/dev/null)
+  if [ -n "$skill_cand" ]; then
+    # Candidate names: /slash tokens, backticked lowercase names, "the X skill".
+    names=$( { printf '%s\n' "$skill_cand" | rg -oP '(?<![A-Za-z0-9_.~/-])/[a-z][a-z0-9-]{2,}\b' 2>/dev/null | tr -d '/'
+               printf '%s\n' "$skill_cand" | rg -oP '`/?[a-z][a-z0-9-]{2,}`' 2>/dev/null | tr -d '`/'
+               printf '%s\n' "$skill_cand" | rg -oiP '\b[a-z][a-z0-9-]{2,}(?= (skill|command)\b)' 2>/dev/null; } | sort -u)
+    while IFS= read -r n; do
+      [ -z "$n" ] && continue
+      case "$n" in the|a|an|no|such|this|that|any|my|your|real|known|slash|named|called) continue ;; esac
+      found=$(_skill_path "$n") || continue
+      body="your message says the skill or command '${n}' is not installed or does not exist, but it is on disk at ${found}. The session's skill listing is truncated, so absence from it proves nothing. Read that SKILL.md and run it. Mute: touch ~/.claude/.no-absence-claim-gate"
+      MARK="/tmp/claude-absence-claim-${sid8}"
+      if hook_loop_check "$MARK" "skill:$n:$skill_cand"; then
+        jq -cn --arg r "⛔ absence-claim (skill) — $body" '{decision:"block", reason:$r}' 2>/dev/null || true
+        [ -x "$WARN" ] && bash "$WARN" --hook absence-claim --action block --heeded unknown >/dev/null 2>&1 || true
+      else
+        jq -cn --arg m "⚠ absence-claim (skill) — $body" '{systemMessage:$m}' 2>/dev/null || true
+      fi
+      exit 0
+    done <<EOF
+$names
+EOF
+  fi
+fi
+
 PREFILTER_RX="does(n'?t| not)( even| yet)? exist|did not exist|doesn'?t (yet )?exist|never existed|no longer exists?|never (fired|been) |no such |no existing |there(?:'?s| is) no |\\bno (file|module|function|helper|script|hook|route|endpoint|migration|implementation) "
 cand=$(printf '%s\n' "$text" | rg -iP "$PREFILTER_RX" 2>/dev/null)
 [ -n "$cand" ] || exit 0
