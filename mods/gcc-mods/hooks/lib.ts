@@ -33,7 +33,7 @@ export const emptySide: Side = {
 }
 export const emptyImages: Images = { nums: [], sid: '', dir: null, files: {}, dismissed: '' }
 export const emptyIdle: Idle = { since: null, openRows: 0, continueOfferedAt: null }
-export const emptyDecide: Decide = { pending: [], answered: [], at: 0 }
+export const emptyDecide: Decide = { pending: [], answered: [], dismissed: [], at: 0 }
 
 // The switches from plugin.json's userConfig, read once at register time.
 export type Switches = {
@@ -150,7 +150,7 @@ export function human(n: number): string {
 
 // Side pane sources.
 
-export const SIDE_TABS: SideTab[] = ['overview', 'tasks', 'mcp', 'plugins', 'injections', 'context']
+export const SIDE_TABS: SideTab[] = ['overview', 'tasks', 'decisions', 'mcp', 'plugins', 'injections', 'context']
 export const isSideTab = (word: string): word is SideTab => (SIDE_TABS as string[]).includes(word)
 
 // Hard-cut a row at the pane width. No ellipsis: a row is one item, and it

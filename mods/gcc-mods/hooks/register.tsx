@@ -9,7 +9,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 
-import type { Catchup, DecideSet, GoalView, GoalsSnap, Images, McpRow, Meter, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
+import type { Catchup, Decide, DecideSet, SidePage, GoalView, GoalsSnap, Images, McpRow, Meter, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
 import {
   CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, PATH_RE, SIDE_ID, SIDE_TABS, TRAIL_RE, VIEWS,
   BAR_COLS, abs, ago, agoPhrase, alignRows, blockBar, clip, contextCategoryRows, topMemoryFiles, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sharePct, sid8, summarizeFires, switchesOf, taskView, tilde,
@@ -432,8 +432,12 @@ async function refreshDecide($: $T) {
     if (sets.some(s => s.slug === p.slug)) continue
     if (await fileExists($, DP_REG + '/' + p.slug + '/.answer.json')) sets.push({ ...p, waiting: false })
   }
-  await update($, decideAtom, d => ({ ...d, pending: sets, at: now }))
+  const dismissed = ((await readText($, DP_REG + '/.band-dismissed.txt')) ?? '').split('\n').map(s => s.trim()).filter(Boolean)
+  await update($, decideAtom, d => ({ ...d, pending: sets, dismissed, at: now }))
 }
+
+// Pages still waiting on the owner (answered and retired ones left out).
+const openPages = (d: Decide) => d.pending.filter(s => s.waiting !== false && !d.answered.includes(s.slug))
 
 const projectMatches = (cwd: string, project: string) => project !== '' && cwd.endsWith(project.replace(/^~/, ''))
 
@@ -459,6 +463,23 @@ function isCurrentPage(s: DecideSet, cwd: string, aliases: string[]) {
   if (projectMatches(cwd, s.project)) return true
   const origin = (s.session ?? '').trim()
   return origin !== '' && aliases.some(a => a === origin || origin.startsWith(a))
+}
+
+// Every open page, for the side pane: whose folder it is and whether the bar hides it.
+async function sidePages($: $T): Promise<SidePage[]> {
+  const d = await read($, decideAtom)
+  const cwd = await cwdOf($)
+  const aliases = await aliasesOf($)
+  const dismissed = d.dismissed ?? []
+  return openPages(d).map(s => ({ slug: s.slug, title: s.title, project: s.project, calls: s.calls, isHere: isCurrentPage(s, cwd, aliases), isDismissed: dismissed.includes(s.slug) }))
+}
+
+// Dismiss or restore a page on the bar through decision-page.sh, which owns the
+// list; the mod itself writes no gcc file.
+async function bandPage($: $T, verb: 'dismiss' | 'restore', slug: string): Promise<string> {
+  const r = await run($, ['bash', GCC + '/scripts/decision-page/decision-page.sh', 'band', verb, slug], { timeoutMs: 6_000 })
+  await refreshDecide($)
+  return (r.out || r.err || '').trim().split('\n')[0] || (r.ok ? verb + 'ed ' + slug : 'could not ' + verb + ' ' + slug)
 }
 
 async function wakeForAnswers($: $T, cwd: string) {
@@ -634,20 +655,21 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   const d = await read($, decideAtom)
   const c = goalCounts(await read($, goalsAtom))
   const aliases = await aliasesOf($)
-  // Every page still waiting on the owner, this folder's first. Another project's
-  // page shows too, labelled with its project, so nothing waits out of sight.
-  const open = d.pending.filter(s => s.waiting !== false && !d.answered.includes(s.slug))
-  const mine = open.find(s => isCurrentPage(s, cwd, aliases)) ?? open[0]
+  // The band shows this folder's (or this session's) pages, scoped like the
+  // checkpoint offer, minus the ones dismissed from the bar. Every project's
+  // pages stay listed in the side pane's decisions tab.
+  const dismissed = d.dismissed ?? []
+  const open = openPages(d).filter(s => isCurrentPage(s, cwd, aliases) && !dismissed.includes(s.slug))
+  const mine = open[0]
   const hide = { key: 'band-hide', onPress: () => update($, viewAtom, v => ({ ...v, isBandHidden: true })) }
 
   let offer: RowSpec | null = null
   if (sw.wake && mine) {
-    const here = isCurrentPage(mine, cwd, aliases)
     const more = open.length - 1
     offer = {
       kind: 'decide',
       title: clip(mine.title, 50),
-      detail: plural(mine.calls, 'call') + ' drafted for you' + (here || !mine.project ? '' : ' · ' + tilde(mine.project)) + (more > 0 ? ' · ' + more + ' more waiting' : ''),
+      detail: plural(mine.calls, 'call') + ' drafted for you' + (more > 0 ? ' · ' + more + ' more waiting' : '') + ' · /hub dismiss hides it',
       link: more > 0 ? { label: 'open all', href: DP_URL.replace(/dp\/$/, '') + '?view=decisions' } : { label: 'open page', href: DP_URL + mine.slug + '/' },
       hide,
     }
@@ -932,7 +954,7 @@ const MCP_STATE: Record<McpRow['state'], { glyph: string; word: string; color: s
 // Text and Box only: no Button, no Input. The API has no call that hands the
 // keyboard back to the prompt, and a pressed Button would keep it, so tabs
 // switch by `/hub side <tab>` and the strip below only names them.
-function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number) {
+function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number, pages: SidePage[] = []) {
   const { Box, Text } = el
   const width = Math.max(30, cols - 2)
   // State saved before tabs existed has no tab; it opens on the overview.
@@ -991,6 +1013,13 @@ function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number) {
       : 'real      n/a (no response yet in this window)'
   const ctxDetail = cb ? '~' + human(cb.totalTokens) + ' of ' + human(cbWindow) + ' · ' + sharePct(cb.totalTokens, cbWindow) + ' (engine estimate)' : 'n/a: the engine gave no context breakdown'
 
+  // This folder's pages first, then other projects'; a dismissed one is dimmed
+  // and marked, never hidden.
+  const pagesSorted = [...pages].sort((a, b) => Number(b.isHere) - Number(a.isHere))
+  const pagesHere = pages.filter(p => p.isHere).length
+  const pagesDetail = pages.length ? pagesHere + ' here · ' + (pages.length - pagesHere) + ' elsewhere' : 'none waiting on you'
+  const pageWhere = (p: SidePage) => (p.isHere ? 'here' : p.project ? tilde(p.project) : 'unknown project') + (p.isDismissed ? ' · dismissed' : '')
+
   const pointer = (name: string) => <Text key={'to-' + name} dimColor>{'→ /hub side ' + name}</Text>
   const section = (name: string, label: string, detail: string, lines: unknown[]) => (
     <Box key={'ov-' + name} flexDirection="column">
@@ -1031,7 +1060,12 @@ function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number) {
       line('c-real', realLine, undefined, true),
       ...biggest.map(c => line('c-' + c.name, c.name + '  ~' + human(c.tokens) + ' · ' + sharePct(c.tokens, cbWindow), undefined, true)),
     ]
-    return [section('tasks', 'Tasks', tasksDetail, taskLines), section('mcp', 'MCP servers', mcpDetail, mcpLines), section('plugins', 'Plugins', plugDetail, plugLines), section('injections', 'Injections', fireDetail, fireLines), section('context', 'Context', ctxDetail, ctxLines)]
+    const dp = overviewItems(pagesSorted, rest => '+' + rest.length + ' more waiting')
+    const pageLines = [
+      ...dp.shown.map(p => line('d' + p.slug, '⚖ ' + p.title + '  ' + pageWhere(p), p.isHere && !p.isDismissed ? HEAD : undefined, !p.isHere || p.isDismissed)),
+      ...(dp.fold ? [line('d-fold', dp.fold, undefined, true)] : []),
+    ]
+    return [section('tasks', 'Tasks', tasksDetail, taskLines), section('decisions', 'Decision pages', pagesDetail, pageLines), section('mcp', 'MCP servers', mcpDetail, mcpLines), section('plugins', 'Plugins', plugDetail, plugLines), section('injections', 'Injections', fireDetail, fireLines), section('context', 'Context', ctxDetail, ctxLines)]
   }
 
   const back = <Text key="back" dimColor>→ /hub side overview</Text>
@@ -1044,6 +1078,15 @@ function sidePane(el: El, side: Side, meter: Meter, now: number, cols: number) {
         all.length
           ? table('tk', ['id', 'status', 'blocked-by', 'subject'], all.map(t => [t.id, t.blocked ? 'blocked' : t.status, t.blockedBy.length ? t.blockedBy.join(',') : '-', t.subject]), all.map(t => (t.status === 'completed' ? undefined : glyphColor(t))))
           : line('tk-none', side.tasks.error ?? 'no tasks', undefined, true),
+      ]
+    }
+    if (tab === 'decisions') {
+      return [
+        head('Decision pages', pagesDetail),
+        pagesSorted.length
+          ? table('dp', ['slug', 'calls', 'where', 'title'], pagesSorted.map(p => [p.slug, String(p.calls), pageWhere(p), p.title]), pagesSorted.map(p => (p.isHere && !p.isDismissed ? HEAD : undefined)))
+          : line('dp-none', 'no decision page is waiting on you', undefined, true),
+        line('dp-note', 'the bar shows only pages for this folder or session · /hub dismiss [slug] hides one there · /hub restore <slug> brings it back', undefined, true),
       ]
     }
     if (tab === 'mcp') {
@@ -1149,8 +1192,8 @@ export const register: Register = (on, options) => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'hub',
-      description: 'gcc-mods switch for this session: on, off, band (show or hide the row above the prompt), side (open the display-only side pane, or switch its tab: overview, tasks, mcp, plugins, injections; side off closes it), preset (band look S1, S2 or S3).',
-      argumentHint: '[on|off|band|side [overview|tasks|mcp|plugins|injections|off]|preset S1|S2|S3]',
+      description: 'gcc-mods switch for this session: on, off, band (show or hide the row above the prompt), side (open the display-only side pane, or switch its tab: overview, tasks, decisions, mcp, plugins, injections, context; side off closes it), dismiss [slug] (take a decision page off the bar, the side pane keeps it), restore <slug>, preset (band look S1, S2 or S3).',
+      argumentHint: '[on|off|band|side [overview|tasks|decisions|mcp|plugins|injections|context|off]|dismiss [slug]|restore <slug>|preset S1|S2|S3]',
       immediate: true,
     })
     if (await isOn($)) await startUp($, sw)
@@ -1208,6 +1251,19 @@ export const register: Register = (on, options) => {
       const v = await read($, viewAtom)
       await update($, viewAtom, x => ({ ...x, isBandHidden: !v.isBandHidden }))
       return { text: v.isBandHidden ? 'band shown.' : 'band hidden. /hub band brings it back.' }
+    }
+    if (verb === 'dismiss' || verb === 'restore') {
+      let slug = arg
+      if (!slug && verb === 'dismiss') {
+        // No slug: the page the bar is showing right now.
+        const d = await read($, decideAtom)
+        const cwd = await cwdOf($)
+        const aliases = await aliasesOf($)
+        slug = openPages(d).find(s => isCurrentPage(s, cwd, aliases) && !(d.dismissed ?? []).includes(s.slug))?.slug ?? ''
+        if (!slug) return { text: 'no decision page is on the bar. /hub side decisions lists every page.' }
+      }
+      if (!slug) return { text: '/hub restore <slug> puts a dismissed page back on the bar. /hub side decisions lists them.' }
+      return { text: await bandPage($, verb, slug) }
     }
     if (verb === 'preset') {
       const preset = arg.toUpperCase()
@@ -1382,7 +1438,7 @@ export const register: Register = (on, options) => {
   })
 
   on('ui.render', { component: 'Pane', requestId: 'gcc-side' }, async ($, e) => {
-    return sidePane($.ui.resolve(e) as El, await read($, sideAtom), await read($, meterAtom), await $.clock.now(), e.props.bodyColumns)
+    return sidePane($.ui.resolve(e) as El, await read($, sideAtom), await read($, meterAtom), await $.clock.now(), e.props.bodyColumns, await sidePages($))
   })
 
   on('ui.render', { component: 'Pane', requestId: 'gcc-image' }, async ($, e) => {

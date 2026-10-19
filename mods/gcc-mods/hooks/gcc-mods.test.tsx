@@ -154,6 +154,14 @@ function world(on: On) {
     if (argv.includes('resolve.sh')) return w.resolve()
     if (argv.includes('claude-ipc peers')) return ok('{"peers":[]}')
     if (argv.includes('claude-ipc inbox')) return ok(w.inbox())
+    if (argv.includes('decision-page.sh band')) {
+      // Behaves like the script: one slug per line in the band's dismiss list.
+      const [verb, slug] = e.argv.slice(-2)
+      const f = DP + '/.band-dismissed.txt'
+      const have = (w.files[f] ?? '').split('\n').filter(Boolean)
+      w.files[f] = (verb === 'dismiss' ? [...new Set([...have, slug])] : have.filter(s => s !== slug)).join('\n') + '\n'
+      return ok((verb === 'dismiss' ? 'dismissed from the bar: ' : 'back on the bar: ') + slug + '\n')
+    }
     if (argv.includes('echo $PPID')) return ok('4242\n')
     if (argv.startsWith('id -u')) return ok('501\n')
     if (argv.includes('task.sh store')) return w.taskStore ? ok(w.taskStore + '\n') : miss
@@ -254,26 +262,48 @@ describe('the band', () => {
     expect(await (await mountBand($)).find({ text: /My page/ })).toBeUndefined()
   })
 
-  test("another project's page shows, labelled with its project, when none is for this folder", ON, async ($, on) => {
+  test("another project's page stays off the band, scoped like the checkpoint", ON, async ($, on) => {
     const w = world(on)
     w.files[DP + '/.pending.txt'] = 'other\n'
     w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'Their page', origin: { project: '~/Code/elsewhere', session: 'them' }, decisions: [{ id: 'D1' }] })
     await $.classic.SessionStart({ source: 'startup' })
-    const band = await mountBand($)
-    expect(await band.find({ text: /Their page/ })).toBeDefined()
-    expect(await band.find({ text: /~\/Code\/elsewhere/ })).toBeDefined()
+    expect(await (await mountBand($)).find({ text: /Their page/ })).toBeUndefined()
   })
 
-  test("this folder's page comes first and says how many more wait, linking to them all", ON, async ($, on) => {
+  test("two pages for this folder: the first shows, says how many more wait, and links to them all", ON, async ($, on) => {
     const w = world(on)
     withPage(w)
-    w.files[DP + '/.pending.txt'] = 'other\npg\n'
+    w.files[DP + '/.pending.txt'] = 'pg\npg2\nother\n'
+    w.files[DP + '/pg2/config.json'] = JSON.stringify({ title: 'My second page', origin: { project: CWD, session: 'me' }, decisions: [{ id: 'D1' }] })
     w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'Their page', origin: { project: '~/Code/elsewhere', session: 'them' }, decisions: [{ id: 'D1' }] })
     await $.classic.SessionStart({ source: 'startup' })
     const band = await mountBand($)
     expect(await band.find({ text: /My page/ })).toBeDefined()
     expect(await band.find({ text: /1 more waiting/ })).toBeDefined()
     expect((await band.find({ type: 'Link' }))?.props.href).toBe('http://localhost:5106/?view=decisions')
+  })
+
+  test('/hub dismiss takes the shown page off the band for good; /hub restore brings it back', ON, async ($, on) => {
+    const w = world(on)
+    withPage(w)
+    await $.classic.SessionStart({ source: 'startup' })
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeDefined()
+    const said = await $.command.run({ command: 'hub', args: 'dismiss' } as any)
+    expect(JSON.stringify(said)).toContain('dismissed from the bar: pg')
+    expect(w.runs.some(a => a.join(' ').includes('decision-page.sh band dismiss pg'))).toBe(true)
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeUndefined()
+    // The ledger still holds it: dismissing is not answering.
+    expect(w.files[DP + '/.pending.txt']).toContain('pg')
+    await $.command.run({ command: 'hub', args: 'restore pg' } as any)
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeDefined()
+  })
+
+  test('/hub dismiss with nothing on the band says so and runs nothing', ON, async ($, on) => {
+    const w = world(on)
+    await $.classic.SessionStart({ source: 'startup' })
+    const said = await $.command.run({ command: 'hub', args: 'dismiss' } as any)
+    expect(JSON.stringify(said)).toContain('no decision page is on the bar')
+    expect(w.runs.some(a => a.join(' ').includes('decision-page.sh band'))).toBe(false)
   })
 
   test('owed reads point at /tasks now when nothing else applies', ON, async ($, on) => {
@@ -705,7 +735,7 @@ describe('the side pane', () => {
     await start($, w)
     const first = await texts(await mountSide($, 200))
     expect(first).toContain('[overview]')
-    expect(first).toContain('/hub side <overview|tasks|mcp|plugins|injections|context>')
+    expect(first).toContain('/hub side <overview|tasks|decisions|mcp|plugins|injections|context>')
     await $.command.run({ command: 'hub', args: 'side tasks' } as any)
     const tasks = await texts(await mountSide($, 200))
     expect(tasks).toContain('[tasks]')
@@ -713,10 +743,28 @@ describe('the side pane', () => {
     expect(tasks).not.toContain('MCP servers')
     expect(w.opens.length).toBe(1)
     const bad = await $.command.run({ command: 'hub', args: 'side nonsense' } as any)
-    expect(JSON.stringify(bad)).toContain('side tabs: overview, tasks, mcp, plugins, injections, context')
+    expect(JSON.stringify(bad)).toContain('side tabs: overview, tasks, decisions, mcp, plugins, injections, context')
     expect(await texts(await mountSide($, 200))).toContain('[tasks]')
     await $.command.run({ command: 'hub', args: 'side overview' } as any)
     expect(await texts(await mountSide($, 200))).toContain('MCP servers')
+  })
+
+  test('decisions tab: every project\'s waiting page, this folder first, a dismissed one marked not hidden', ON, async ($, on) => {
+    const w = world(on)
+    seed(w)
+    withPage(w)
+    w.files[DP + '/.pending.txt'] = 'other\npg\n'
+    w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'Their page', origin: { project: '~/Code/elsewhere', session: 'them' }, decisions: [{ id: 'D1' }] })
+    w.files[DP + '/.band-dismissed.txt'] = 'pg\n'
+    await start($, w)
+    await $.command.run({ command: 'hub', args: 'side decisions' } as any)
+    const t = await texts(await mountSide($, 200))
+    expect(t).toContain('[decisions]')
+    expect(t).toContain('1 here · 1 elsewhere')
+    expect(t.indexOf('My page')).toBeGreaterThan(-1)
+    expect(t.indexOf('My page')).toBeLessThan(t.indexOf('Their page'))
+    expect(t).toMatch(/here · dismissed/)
+    expect(t).toContain('~/Code/elsewhere')
   })
 
   test('/hub side <tab> from closed opens straight onto that tab', ON, async ($, on) => {

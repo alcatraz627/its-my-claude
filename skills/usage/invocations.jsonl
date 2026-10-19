@@ -533,3 +533,8 @@
 {"ts":"2026-10-19T08:47:40Z","skill":"catchup","session_id":"cbae77ee-3168-4ec1-9360-e25d1764aaed","src":"dispatch"}
 {"ts":"2026-10-19T09:47:03Z","skill":"core-dump","session_id":"fcc859da-252c-4f21-918b-e5abe11e8e0f","src":"dispatch"}
 {"ts":"2026-10-19T09:49:13Z","skill":"backlog-triage","session_id":"fcc859da-252c-4f21-918b-e5abe11e8e0f","src":"dispatch"}
+{"ts":"2026-10-19T10:28:30Z","skill":"pick-skill","session_id":"f5b696b9-f21c-4dba-b5e4-c1488513e4a0","src":"dispatch"}
+{"ts":"2026-10-19T10:28:43Z","skill":"plan","session_id":"f5b696b9-f21c-4dba-b5e4-c1488513e4a0","src":"dispatch"}
+{"ts":"2026-10-19T10:29:32Z","skill":"atone","session_id":"fcc859da-252c-4f21-918b-e5abe11e8e0f","src":"dispatch"}
+{"ts":"2026-10-19T10:30:12Z","skill":"pin-for-dream","session_id":"cbae77ee-3168-4ec1-9360-e25d1764aaed","src":"dispatch"}
+{"ts":"2026-10-19T10:30:24Z","skill":"build-change","session_id":"f5b696b9-f21c-4dba-b5e4-c1488513e4a0","src":"dispatch"}

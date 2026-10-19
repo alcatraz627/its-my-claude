@@ -383,6 +383,27 @@ cmd_pending() {
   esac
 }
 
+# ── band (what the gcc-mods bar and statusline chip leave out) ───────────────
+# A page dismissed here stops showing on the bar above the prompt and in the
+# statusline decide count, in every session. It stays pending in the ledger and
+# stays listed in the gcc-mods side pane and the hub, so nothing is lost.
+cmd_band() {
+  local sub="${1:-list}"; shift 2>/dev/null || true
+  local dis="$REG/.band-dismissed.txt"
+  mkdir -p "$REG"; touch "$dis"
+  case "$sub" in
+    dismiss) local slug="${1:?usage: decision-page.sh band dismiss <slug>}"
+             [ -f "$REG/$slug/config.json" ] || die "no decision page named $slug" "decision-page.sh pending list"
+             grep -qxF "$slug" "$dis" || printf '%s\n' "$slug" >> "$dis"
+             printf 'dismissed from the bar: %s (still in the side pane and the hub; undo: decision-page.sh band restore %s)\n' "$slug" "$slug" ;;
+    restore) local slug="${1:?usage: decision-page.sh band restore <slug>}"
+             grep -vxF "$slug" "$dis" > "$dis.$$.tmp" 2>/dev/null; mv -f "$dis.$$.tmp" "$dis"
+             printf 'back on the bar: %s\n' "$slug" ;;
+    list)    grep -v '^[[:space:]]*$' "$dis" 2>/dev/null || printf 'nothing dismissed from the bar\n' ;;
+    *)       die "unknown band subcommand: $sub" "decision-page.sh band dismiss|restore|list [slug]" ;;
+  esac
+}
+
 # ── answer (submit-to-wake) ──────────────────────────────────────────────────
 # The server writes <slug>/.answer.json when the human clicks Submit. After
 # handoff the agent watches for that file (Monitor tool or a poll of this command)
@@ -459,6 +480,7 @@ ${Y}commands${R}
   ${B}status${R}                     server + page count + pages awaiting an answer
   ${B}serve${R}                      ensure the registry server (pm2, :$PORT)
   ${B}pending${R} <add|clear|list|count> [slug]   mark/unmark "handed off, awaiting the human"
+  ${B}band${R} <dismiss|restore|list> [slug]   hide a pending page from the gcc-mods bar and statusline chip (side pane keeps it)
   ${B}answer${R} <slug> [--consume] [--notify]  print the answer the human Submitted (exits 1 until they do); --notify pops a macOS banner
   ${B}rm${R} <slug>                  trash a page
   ${B}prune${R} --older-than <days>  trash old pages (confirms on a TTY)
@@ -480,6 +502,7 @@ case "${1:-help}" in
   open)   ensure_server >/dev/null; regen_manifest >/dev/null
           if [ -n "${2:-}" ]; then open "$BASE/$2/"; else open "$HUB"; fi ;;
   pending) shift; cmd_pending "$@" ;;
+  band)   shift; cmd_band "$@" ;;
   answer) shift; cmd_answer "$@" ;;
   rm)     slug="${2:?usage: decision-page.sh rm <slug>}"
           trash "$REG/$slug" 2>/dev/null && echo "trashed: $slug" || echo "not found: $REG/$slug"

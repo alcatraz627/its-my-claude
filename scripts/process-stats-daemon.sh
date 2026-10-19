@@ -178,18 +178,28 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     ipc_unseen_val=""; read -r ipc_unseen_val < "$ipc_cache" 2>/dev/null || true
     printf 'ipc_unseen=%s\n' "$ipc_unseen_val"
 
-    # ── Decision pages waiting on the owner, every project (every 30 s) ──
-    # Owner, 2026-10-19: pages filed from another folder were invisible here, so
-    # every page in the ledger counts, whichever project filed it.
+    # ── Decision pages waiting on the owner in this folder (every 30 s) ──
+    # Scoped like the checkpoint offer (owner, 2026-10-19): a page counts when it
+    # was filed for this folder or by this session, and is not dismissed from the
+    # bar. The gcc-mods side pane still lists every project's pages.
     dec_cache="/tmp/claude-decn-${TARGET_PID}"
     if [[ ! -f "$dec_cache" ]] || (( _NOW - $(_stat_mtime "$dec_cache") > 30 )); then
       dec_n=0
+      sid_fwd=""; [[ -f "/tmp/claude-sidfwd-${TARGET_PID}" ]] && { read -r sid_fwd < "/tmp/claude-sidfwd-${TARGET_PID}" 2>/dev/null || true; }
+      dec_alias=""; dec_af="${CLAUDE_IPC_HOME:-$HOME/.claude-ipc}/alias-by-sid/${sid_fwd}"
+      [[ -n "$sid_fwd" && -f "$dec_af" ]] && { read -r dec_alias < "$dec_af" 2>/dev/null || true; }
       dp_reg="$HOME/.claude/assets/decision-pages"
       if [[ -f "$dp_reg/.pending.txt" ]]; then
         while IFS= read -r dslug || [[ -n "$dslug" ]]; do
           dslug="${dslug//[[:space:]]/}"
           [[ -z "$dslug" || -f "$dp_reg/$dslug/.answer.json" || ! -f "$dp_reg/$dslug/config.json" ]] && continue
-          dec_n=$(( dec_n + 1 ))
+          [[ -f "$dp_reg/.band-dismissed.txt" ]] && grep -qxF "$dslug" "$dp_reg/.band-dismissed.txt" 2>/dev/null && continue
+          dproj=$(jq -r '.origin.project // ""' "$dp_reg/$dslug/config.json" 2>/dev/null)
+          dsess=$(jq -r '.origin.session // ""' "$dp_reg/$dslug/config.json" 2>/dev/null)
+          dproj="${dproj#\~}"
+          if [[ -n "$dproj" && "$cwd" == *"$dproj" ]] || [[ -n "$dec_alias" && -n "$dsess" && "$dsess" == "$dec_alias"* ]]; then
+            dec_n=$(( dec_n + 1 ))
+          fi
         done < "$dp_reg/.pending.txt"
       fi
       printf '%s\n' "$dec_n" > "$dec_cache"

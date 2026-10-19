@@ -48,7 +48,9 @@ export type Idle = { since: number | null; openRows: number; continueOfferedAt: 
 // `waiting` is false once the ledger dropped the page but its answer file is still
 // unread: kept only so the wake fires, never shown as waiting on the owner.
 export type DecideSet = { slug: string; title: string; project: string; session: string; calls: number; waiting?: boolean }
-export type Decide = { pending: DecideSet[]; answered: string[]; at: number }
+// `dismissed` mirrors decision-page.sh's band list: pages kept off the band but
+// still listed in the side pane.
+export type Decide = { pending: DecideSet[]; answered: string[]; dismissed: string[]; at: number }
 
 // The band's look: S1 one line (default), S2 accent bar, S3 rounded box.
 export type Preset = 'S1' | 'S2' | 'S3'
@@ -58,7 +60,9 @@ export type View = { isBandHidden: boolean; preset: Preset }
 // so a slow source (the MCP health check) is not re-run on every tick. Nothing
 // here ever holds an env value, a header or a token: the MCP rows carry only a
 // name, a state, a transport and a command or URL already stripped of secrets.
-export type SideTab = 'overview' | 'tasks' | 'mcp' | 'plugins' | 'injections' | 'context'
+export type SideTab = 'overview' | 'tasks' | 'decisions' | 'mcp' | 'plugins' | 'injections' | 'context'
+// One decision page as the side pane lists it: every project's, marked here or not.
+export type SidePage = { slug: string; title: string; project: string; calls: number; isHere: boolean; isDismissed: boolean }
 export type SideTask = { id: string; subject: string; status: string; blockedBy: string[] }
 export type McpRow = { name: string; state: 'ok' | 'auth' | 'failed'; transport: string; target: string; file: string }
 export type PluginRow = { id: string; name: string; marketplace: string; enabled: boolean; version: string; path: string }
