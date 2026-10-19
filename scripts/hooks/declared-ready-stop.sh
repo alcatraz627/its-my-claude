@@ -77,23 +77,6 @@ soft_note() {  # $1 = message text
 # which handles the one completion claim that arrives WITHOUT an edit: a verdict about
 # repo state. Everything between here and Stage P is inspection only, and Stage P
 # exits before Det1a, so a no-edit turn can never reach the blocking pipeline.
-EDITED="/tmp/claude-edited-files-${sid8}"
-src_edited=0
-if [ -s "$EDITED" ] && rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|css|scss|sass|less|vue|svelte)$' "$EDITED" 2>/dev/null; then
-  src_edited=1
-fi
-
-# A style-only turn (css/scss/vue/svelte and nothing else) used to exit above, which
-# made the dark-AND-light reminder further down unreachable for exactly the surfaces
-# it names. Those turns are admitted now, but they get a soft screenshot nudge rather
-# than a block: this file class has no fire-rate history yet, and a colour-variable
-# tweak does not deserve the same consequence as an unexercised code path.
-style_only=0
-if [ "$src_edited" = 1 ] \
-   && ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
-  style_only=1
-fi
-
 # ── Turn boundary: slice the tail at the LAST REAL USER MESSAGE, not a blind tail ──
 # A real user message (type=="user" with a string body or a body carrying a text
 # item) starts the current turn; a pure tool_result array is a mid-turn return. This
@@ -111,6 +94,28 @@ else
   turn_json="$window"   # no user boundary in window (very long turn) → use whole tail
 fi
 [ -n "$turn_json" ] || exit 0
+
+# Files edited in THIS turn. The session-wide list track-edits-session.sh keeps
+# (/tmp/claude-edited-files-<sid8>) is right for the review gate but wrong here:
+# read as "edited now", it made every success claim after the first edit of a
+# session look unexercised, including turns that only read or answered.
+EDITED="/tmp/claude-declared-ready-turn-edits-${sid8}"
+printf '%s\n' "$turn_json" | jq -r 'select(.type=="assistant") | .message.content[]?
+    | select(.type=="tool_use" and (.name=="Edit" or .name=="MultiEdit" or .name=="Write"))
+    | .input.file_path // empty' 2>/dev/null | sort -u > "$EDITED" 2>/dev/null || : > "$EDITED"
+src_edited=0
+if [ -s "$EDITED" ] && rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|css|scss|sass|less|vue|svelte)$' "$EDITED" 2>/dev/null; then
+  src_edited=1
+fi
+
+# A style-only turn (css/scss/vue/svelte and nothing else) gets a soft screenshot
+# nudge rather than a block: a colour-variable tweak does not deserve the same
+# consequence as an unexercised code path.
+style_only=0
+if [ "$src_edited" = 1 ] \
+   && ! rg -qi '\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh)$' "$EDITED" 2>/dev/null; then
+  style_only=1
+fi
 
 # ── Detection 1: does the FINAL assistant message claim success? ──────────────
 #

@@ -16,8 +16,8 @@ CLEAN_REPLY="Reading the file now."
 run() { # run <sid> <reply> <transcript-tail-reply>
   local tp="$T/$1.jsonl"
   { jq -nc '{type:"user", message:{role:"user", content:"please fix the thing"}}'
+    jq -nc --arg f "$T/fixed.py" '{type:"assistant", message:{content:[{type:"tool_use", id:"e1", name:"Edit", input:{file_path:$f, old_string:"a", new_string:"b"}}]}}'
     jq -nc --arg t "$3" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}'; } > "$tp"
-  printf '%s/fixed.py\n' "$T" > "/tmp/claude-edited-files-${1:0:8}"
   jq -nc --arg s "$1" --arg m "$2" --arg tp "$tp" \
     '{session_id:$s, transcript_path:$tp, stop_hook_active:false, last_assistant_message:$m}' | bash "$HOOK" 2>/dev/null
 }
@@ -35,10 +35,20 @@ out=$(run lagdr002 "$CLEAN_REPLY" "$BAD_REPLY")
 # Baseline: the same bad reply with no input field falls back to the transcript.
 tp="$T/lagdr003.jsonl"
 { jq -nc '{type:"user", message:{role:"user", content:"fix it"}}'
+  jq -nc --arg f "$T/fixed.py" '{type:"assistant", message:{content:[{type:"tool_use", id:"e1", name:"Edit", input:{file_path:$f, old_string:"a", new_string:"b"}}]}}'
   jq -nc --arg t "$BAD_REPLY" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}'; } > "$tp"
-printf '%s/fixed.py\n' "$T" > /tmp/claude-edited-files-lagdr003
 out=$(jq -nc --arg tp "$tp" '{session_id:"lagdr003", transcript_path:$tp}' | bash "$HOOK" 2>/dev/null)
 blocks "$out" && ok "no last_assistant_message: falls back to the transcript" || bad "fallback to transcript ($out)"
+
+# Regression (sid f5b696b9): source edited EARLIER in the session, none this turn.
+# The session-wide edit list must not make a read-only turn's "passed" a violation.
+tp="$T/lagdr004.jsonl"
+{ jq -nc '{type:"user", message:{role:"user", content:"check the audit quotes"}}'
+  jq -nc '{type:"assistant", message:{content:[{type:"tool_use", id:"r1", name:"Bash", input:{command:"rg -n quote audit.md"}}]}}'; } > "$tp"
+printf '%s/fixed.py\n' "$T" > /tmp/claude-edited-files-lagdr004
+out=$(jq -nc --arg tp "$tp" '{session_id:"lagdr004", transcript_path:$tp, stop_hook_active:false, last_assistant_message:"Done. The fix works and the tests passed last turn."}' | bash "$HOOK" 2>/dev/null)
+blocks "$out" && bad "earlier-session edit, read-only turn: must not block ($out)" || ok "earlier-session edit, read-only turn: no block"
+rm -f /tmp/claude-edited-files-lagdr004
 
 # Detection 1b: a pass claimed on a named environment needs that environment in
 # this turn's tool activity.
