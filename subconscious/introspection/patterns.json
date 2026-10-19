@@ -1,26 +1,26 @@
 {
-  "last_updated": "2026-10-02T05:32:17.754199Z",
-  "average_depth": 6.2,
-  "average_breadth": 1.1,
-  "fixation_rate": 0.18,
-  "assumption_rate": 0.71,
-  "overconfidence_rate": 0.46,
+  "last_updated": "2026-10-19T08:06:59.405971Z",
+  "average_depth": 41.2,
+  "average_breadth": 1.5,
+  "fixation_rate": 0.2,
+  "assumption_rate": 0.65,
+  "overconfidence_rate": 0.3,
   "common_assumptions": [
-    "stdin content is complete and parseable without additional tool calls",
-    "ledger rules are unambiguous and cover all encountered patterns",
-    "juror verdict can be reached from provided context alone without file lookups",
-    "single-pass processing is sufficient for style enforcement",
-    "file contents have not changed between sequential reads in multi-step chains"
+    "file paths exist at expected locations without prior verification",
+    "CLI tools and build systems are installed and functional",
+    "network services and remote hosts are reachable",
+    "prior session state reflects current disk/repo state",
+    "test environments start clean with no residual state"
   ],
   "strength_patterns": [
-    "systematic file read-before-edit discipline in complex multi-step sessions",
-    "appropriate task decomposition with tool sequencing in high-step chains",
-    "consistent single-turn pattern for well-scoped atomic tasks (style enforcement, juror verdicts)"
+    "systematic before/after verification via test runs and output checks",
+    "progressive refinement through iterative tool calls rather than single large edits",
+    "multi-source information gathering before modifying production paths"
   ],
   "weakness_patterns": [
-    "~74% of chains skip verification entirely, firing a single response with no confirmatory tool call",
-    "repeated reads of the same file within a chain (lint.mjs, server.mjs, index.html) indicate looping without clear resolution criteria",
-    "zero alternatives explored across all sampled chains — breadth never exceeds 1 in any single chain"
+    "high rate of zero-step or single-step chains indicating missed context or premature termination",
+    "repetitive near-identical tool calls without strategy change when blocked",
+    "thinking steps are rare relative to chain length, suggesting reactive rather than deliberate planning"
   ],
   "trend": {
     "calibration_improving": false,

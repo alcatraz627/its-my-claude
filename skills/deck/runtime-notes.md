@@ -1,3 +1,15 @@
+## session: Clanky Slack blocks build deck [clanky-blocks-90] · 2026-10-17
+
+**Purpose:** an eleven-slide end-of-build deck in-project at slack-automation/docs/deck, from the spec, the code and the commit log of one build night.
+
+**Insights:**
+- Full Slack window screenshots read as noise on a slide; cropping each to the card or modal it is about (PIL, from the Playwright captures) made them legible. check.sh measured no overflow either way, so only looking at the PNGs caught it.
+- lint went 3 to 1 to 0: two rule-of-three lists and two numbers with no source word, cured by moving names and sources into the notes.
+- The opus reviewer returned 87 rows, 60 supported, 5 contradicted: a headline that described the spec's design instead of the shipped code, a "before" claim that the old code disproved (the old notice came at 30 s and already grew per step), a screenshot attributed to the wrong live run, and "on the right" for an image stacked above. All five were the author's own summarising words; none was a quoted number.
+- Commit messages that record what each live run found are a source the room can open; naming them as the record on slide 1 turned several unsourced validation rows into sourced ones.
+
+---
+
 ## session: v6 system of records proposal deck [sor-plan-7f] · 2026-09-28
 
 **Purpose:** a thirteen-slide alignment deck for the CEO, PM, and engineers, built from a nine-doc planning suite and a working mock, in-project at sor/deck.

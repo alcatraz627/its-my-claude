@@ -310,8 +310,7 @@
     "patterns_linked": [
       "fdb45861-3e1a-48fe-b128-ffd308e3e29e",
       "835e624b-d5fe-41ae-86d5-0c87cb79fa73",
-      "161498f6-0b2f-4b29-9829-3fc34355765b",
-      "4fa7a464-dc11-42ac-8d71-3486b6be8635"
+      "161498f6-0b2f-4b29-9829-3fc34355765b"
     ],
     "hypothesis": "The agent buries actionable information behind indirection layers — paths hidden inside markdown links, results completed silently without echo, status wrapped in structure before the point — all forcing the user to perform a second retrieval step the agent should have made unnecessary.",
     "confidence": 0.72,
@@ -323,8 +322,7 @@
     "patterns_linked_stable": [
       "dff26ce5bcaa6801",
       "828facdfbc369075",
-      "b0c3e9ae45595fc8",
-      "813ee2a670e712fa"
+      "b0c3e9ae45595fc8"
     ]
   },
   {
@@ -396,8 +394,7 @@
     "patterns_linked": [
       "26287c1d-7182-4229-83c8-fd003cfe2429",
       "85ad7652-14a2-491e-849d-890369621fec",
-      "fdb45861-3e1a-48fe-b128-ffd308e3e29e",
-      "4fa7a464-dc11-42ac-8d71-3486b6be8635"
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e"
     ],
     "hypothesis": "The agent optimizes for information-theoretic completeness (the data is technically present somewhere in the reply) rather than actionability at the reader's cursor — paths hidden in links, basenames without context, content completed silently, and terminal-breaking formatting all share the defect that the user cannot act on the output without additional extraction work.",
     "confidence": 0.7,
@@ -409,8 +406,7 @@
     "patterns_linked_stable": [
       "aa2961a6cd578ece",
       "f6b15a1750c37cdb",
-      "dff26ce5bcaa6801",
-      "813ee2a670e712fa"
+      "dff26ce5bcaa6801"
     ]
   },
   {
@@ -478,5 +474,245 @@
       "4150862173f7781b",
       "c243848748080afe"
     ]
+  },
+  {
+    "id": "856a158d-61ce-4c0a-87e6-c77a93349d40",
+    "patterns_linked": [
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "ef2af03b-eb2b-4a9f-b0b6-fc466b1feaa9",
+      "b63ec70f-5930-4d2a-9689-770ffdab0942"
+    ],
+    "hypothesis": "The agent has a systematic verification-avoidance bias where it substitutes cheaper proxies (syntax checks, code reading, a11y snapshots) for actual runtime exercise, creating a class of false-ready declarations across UI, backend, and endpoint domains.",
+    "confidence": 0.92,
+    "actionable": true,
+    "suggested_rule": "Always execute the actual code path in the real runtime environment before declaring any fix, feature, or endpoint ready — never substitute static analysis, code reading, or DOM inspection for a live run.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "b96fca23-bde9-46be-9665-689aa73a02b6",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "5e971719-da44-45f6-ac69-2d7eec62e393",
+      "f09bdbaa-0de8-4d15-acaf-a032dc87997a",
+      "65650d83-b0f8-4719-8e26-c5add633fa59"
+    ],
+    "hypothesis": "Style-register corrections do not persist within the same context window: the agent's default token distributions reassert LLM-typical prose patterns (em-dashes, bold spans, contrast scaffolding) within one or two turns of being corrected, suggesting the correction is treated as local rather than session-global.",
+    "confidence": 0.88,
+    "actionable": true,
+    "suggested_rule": "Always re-check the current reply against all style violations flagged earlier in the session before emitting — treat every prior style correction as a filter applied to every subsequent turn, not just the next one.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "2a9714ab-c0ab-420e-9369-d75e76744e00",
+    "patterns_linked": [
+      "6fd4c584-f5c7-4201-b12c-5c42ceb2e5ef",
+      "c24fa198-6bd9-4326-b7d5-041ff9121ad9",
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273"
+    ],
+    "hypothesis": "The agent treats narrating intent as partial credit toward completion — announcing next steps, listing pending work, or pasting a goal line satisfies an internal 'progress signal' that prematurely ends the turn, when the actual stop condition requires the work itself to be finished.",
+    "confidence": 0.85,
+    "actionable": true,
+    "suggested_rule": "Never end a turn with named pending work unless every item is explicitly labeled as blocked with the specific missing input — announcing intent to act is not acting.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "5e54dec0-1210-4ffe-82f9-4373d3e8e499",
+    "patterns_linked": [
+      "26287c1d-7182-4229-83c8-fd003cfe2429",
+      "835e624b-d5fe-41ae-86d5-0c87cb79fa73",
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e",
+      "85ad7652-14a2-491e-849d-890369621fec"
+    ],
+    "hypothesis": "Path-rendering rules form a four-constraint system (full path, not just basename; plain-text not hidden in links; no trailing period; visible absolute string) that the agent treats as independent formatting preferences rather than a single coherent policy: 'every file reference must be an unambiguous, terminal-actionable, fully-qualified plain-text path'.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always emit file paths as standalone full absolute plain-text strings followed by a space or comma — never as basenames, inside Markdown links, or immediately before a period.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "cb70849f-cfa3-4f60-8d87-525a5e275eea",
+    "patterns_linked": [
+      "65879bfc-ccdc-44d4-b384-799b1679fa4d",
+      "256894f1-fb54-4569-8025-dd5d51ced89c",
+      "2725037c-e822-4e97-9623-188f967a7194"
+    ],
+    "hypothesis": "The agent confabulates structural facts (where code lives, what tickets exist, what specs say) when it skips source verification, and this same credulity applies symmetrically to both its own assumptions and to external AI-generated documents — the root cause is acting on unverified claims regardless of origin.",
+    "confidence": 0.78,
+    "actionable": true,
+    "suggested_rule": "Always read the primary source (file, ticket tracker, spec) before making any structural claim about what exists, what works, or what a document says — never rely on memory, inference, or another model's output.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "77b6d5a0-cf4a-4d8b-91b5-d1e2c806dbb3",
+    "patterns_linked": [
+      "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b",
+      "b7d77f58-dcb7-4ac3-85ce-2e3426c985af",
+      "41a91d38-b062-4f61-8cf3-4966bd6e004b"
+    ],
+    "hypothesis": "The agent has a pattern of declaring completion against a checklist by satisfying the majority of conditions rather than all of them — open callouts, unchecked merge state, and unexercised arms of a multi-target condition are all instances of treating near-done as done.",
+    "confidence": 0.8,
+    "actionable": true,
+    "suggested_rule": "Always enumerate every sub-condition of a stop gate and verify each independently before declaring completion — partial satisfaction of a multi-part condition is never completion.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "c84e0723-2778-4467-b084-032b1d572b7f",
+    "patterns_linked": [
+      "54421a50-5d9a-439a-baa0-1d527826a5f6",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
+      "8c98642d-2293-43ff-a90d-5fcc41267624",
+      "5a09a72d-8b03-4839-92d2-0b75cfb927cf"
+    ],
+    "hypothesis": "Agent-authored documents for external consumption (PRs, plans, summaries) share a common failure mode of substituting verbose, abstract, or adversarial framing for plain concise statements — the agent defaults to 'impressive-sounding' over 'useful' in any artifact that will be read by others.",
+    "confidence": 0.82,
+    "actionable": true,
+    "suggested_rule": "Always write external-facing documents (PRs, plans, summaries) in plain declarative sentences stating what changed and why — avoid jargon, adversarial framing, and any sentence that sounds impressive but says nothing concrete.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "f33eb8ec-07e8-4ad2-88c1-2a2d0eb7526f",
+    "patterns_linked": [
+      "32dbce4d-e4d8-4cb1-b0bd-2ef1654261f2",
+      "9ce7eb32-eea2-4c37-81ed-c4b75c8d8399",
+      "f22e7974-dbe3-4051-ad5d-666239d02f2c"
+    ],
+    "hypothesis": "Actions on shared platforms (GitHub posts, PRs) require metadata markers (attribution, title tags, bot identification) that the agent treats as optional garnish rather than hard prerequisites — the common failure is executing the primary action while forgetting the envelope metadata that controls downstream effects.",
+    "confidence": 0.8,
+    "actionable": true,
+    "suggested_rule": "Always verify all required metadata markers (attribution, title tags, suppression flags) are present before any push or post to a shared platform — the envelope is as mandatory as the payload.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "b0c64a29-1b6a-4e13-a171-eb138668a096",
+    "patterns_linked": [
+      "fc8d58f9-b04d-40dc-af41-27c17abc4e80",
+      "f5e78194-35a8-4dd9-8efa-75fd07c8a442",
+      "f0ebad7c-654e-4701-861d-2ab16d627df3"
+    ],
+    "hypothesis": "The user has a consistent governance philosophy: operational constraints (budgets, thresholds, automated actions) must be observable and auditable rather than silently enforced — the agent should always surface what it consumed, changed, or decided, not just the outcome.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always log or report the specific values consumed, thresholds checked, and actions taken when enforcing any operational constraint — silent enforcement without an audit trail violates the user's governance expectations.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "95b7c0f4-0b5c-48ce-8123-3c81ef620678",
+    "patterns_linked": [
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "ba1cce16-f058-4351-b530-127c53a104f7"
+    ],
+    "hypothesis": "Both patterns reflect a scoping failure where the agent treats a local trigger as the full problem boundary — a drawer on one page ignoring its global shell, a planning doc scoped to one feature ignoring the project — the root cause is anchoring scope to the immediate request context rather than auditing the actual blast radius.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "Always identify the full scope boundary (all pages sharing a component, full project for a planning doc) before implementing — never scope work to only the trigger context without auditing what else is affected.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "f035cb94-6176-49cf-808b-30ea12bec0b7",
+    "patterns_linked": [
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
+      "7b48ca3d-941e-48a6-9429-742fcfcdfa04"
+    ],
+    "hypothesis": "UI output that is data-correct but visually incoherent (bad hierarchy, contradictory signals) is a recurring class of 'technically right, experientially wrong' failures — the agent optimizes for logical correctness and neglects perceptual coherence as a separate design constraint.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Always evaluate UI output for visual coherence (single clear signal, hierarchy, grouping) as a separate check after verifying data correctness — correct data in a confusing layout is still a bug.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "3a43efeb-ed67-4ef9-9128-657a8aafe10d",
+    "patterns_linked": [
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "d431ead9-2125-482c-ae45-34676488fe61"
+    ],
+    "hypothesis": "The agent has a merging/editorializing reflex where it adds its own synthesis, judgment, or safety commentary to outputs that should be structurally preserved as-is — comparisons get merged, peer reviews get collapsed, factual answers get appended warnings — all instances of the agent inserting itself where faithful reproduction was requested.",
+    "confidence": 0.76,
+    "actionable": true,
+    "suggested_rule": "Always match output structure to what was requested — comparisons stay side-by-side, independent outputs stay independent, factual answers stay factual — never merge, synthesize, or editorialize unless explicitly asked.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "bed45fce-93ce-490e-8d64-92579bf5285a",
+    "patterns_linked": [
+      "2744965f-c80c-4367-9c85-720e002054c7",
+      "53fe4f23-978b-4ec0-8b47-4376c099f138"
+    ],
+    "hypothesis": "These form a contradiction pair: the agent must respond to IPC messages before turn-end (obligation to engage) but must also permanently drop topics the user has deferred three times (obligation to disengage) — when a peer agent's IPC message concerns a user-deferred topic, the two rules conflict.",
+    "confidence": 0.55,
+    "actionable": true,
+    "suggested_rule": "Always acknowledge IPC messages before turn-end, but when the message concerns a user-deferred topic, respond only with an acknowledgment and a note that the topic is on hold per the user's standing deferral — do not re-raise the substance.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "de454932-36e3-4642-be48-3623f22df8ee",
+    "patterns_linked": [
+      "d3691add-19d6-42ed-a0df-9977d5c837d3",
+      "008db54b-24cc-4e61-9af8-03ff7374972b"
+    ],
+    "hypothesis": "These form a contradiction pair: the agent should proactively arm keep-warm mechanisms before the user leaves (pre-emptive resource activation) but must never auto-start local models for convenience (no pre-emptive resource activation) — 'warming up for the user's return' and 'never pre-loading without explicit demand' need reconciliation.",
+    "confidence": 0.58,
+    "actionable": true,
+    "suggested_rule": "Always arm keep-warm mechanisms for remote/cloud sessions when the user steps away, but never pre-load local models as part of that warm-up — keep-warm applies to session continuity, not to local compute resources.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
+  },
+  {
+    "id": "1795a333-5013-4f44-99af-c120cb53789f",
+    "patterns_linked": [
+      "748e5f47-8372-48bc-827e-bda5d04d74da",
+      "d40126e2-e073-4730-838c-9bfb351956eb",
+      "939866a0-afe6-43f0-a5a0-205c40be4c99"
+    ],
+    "hypothesis": "The agent over-extends scope in three parallel ways — deploying without current consent, writing artifacts not requested, and leaking private context into deliverables — all reflecting a failure to treat the current explicit request as the boundary of authorized action.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "Always limit actions and artifacts to exactly what the user requested in the current turn — no unrequested deployments, no unrequested files, no content from the conversational context leaking into deliverables.",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": []
   }
 ]

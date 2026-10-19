@@ -1,5 +1,5 @@
+📌 Recurring defect: when models update or rewrite a doc, they write it as a histor
 📌 Owner-collaboration nuance for long multi-session pushes: a reductionist checkpo
 📌 Goal statements written as abstract proclamations get rejected by the owner as a
 📌 Clanky behaviour-correctness plan (fable seat, 2026-10-08), the design of record
 📌 A skill missing from the session's injected available-skills list was taken as n
-📌 gcc-mods session (d0467d09): a TUI mod is only verified by driving a real second

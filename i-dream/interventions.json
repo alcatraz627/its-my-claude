@@ -7,8 +7,7 @@
     "state": "live",
     "trigger": {
       "tool": "Write",
-      "input_pattern": "/(rules|docs|features|conventions)/",
-      "content_pattern": "(no existing|does not exist|doesn't exist|does not yet exist|there is no |there are no |nothing (exists|implements)|not implemented|no such |no module|no helper|never built)"
+      "input_pattern": "/(rules|docs|features|conventions)/"
     },
     "body": "If this file asserts something doesn't exist, grep the implementing directory across the full tree first. Existence claims need existence-disproving evidence.",
     "created": "2026-07-24T14:54:37.875879Z",
@@ -52,14 +51,13 @@
     "slug": "literal-request-over-intent",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "live",
+    "state": "candidate",
     "trigger": {
       "prompt_pattern": "^\\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\\b[\\s.!]*$"
     },
     "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
     "created": "2026-07-24T14:54:37.875879Z",
-    "promoted": "2026-08-07T03:41:35.632523Z",
-    "promoted_by": "evidence-auto",
+    "promoted_by": "owner-demoted",
     "strength": 1.0
   },
   {
@@ -67,7 +65,7 @@
     "slug": "file-referenced-without-full-path",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Write",
       "input_pattern": "^(?!/private/tmp/|/tmp/|/private/var/folders/|/var/folders/).*\\.(md|html)$"
@@ -115,7 +113,7 @@
     "slug": "source-comment-hygiene",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
@@ -335,8 +333,8 @@
     "form": "nudge",
     "state": "live",
     "trigger": {
-      "tool": "Bash",
       "project": "gcp",
+      "tool": "Bash",
       "input_pattern": "\\bgcloud\\s+(secrets|run|iam|projects add-iam)"
     },
     "body": "Cloud-state change from the brains seat: tell gcp-watcher and wait for their answer first. Dispatching a seat does not change who originated the mutation.",
@@ -724,7 +722,7 @@
     "slug": "pr-title-missing-required-flag",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "(?s)\\bgh\\s+pr\\s+create\\b(?!.*\\[noslack\\])"
@@ -738,7 +736,7 @@
     "slug": "fabricated-link-handed-to-owner",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "prompt_pattern": "\\b(give|send|share|paste|drop|post)\\s+(me\\s+)?(the\\s+|a\\s+)?(link|url)s?\\b|\\b(what|where)('?s| is)\\s+the\\s+(link|url)\\b"
     },
@@ -799,6 +797,34 @@
     },
     "body": "Before creating a new note here, rg -l the topic in frontend/.claude/notes/; if a living tracker exists (e.g. extractor-and-e2e-directions.md), edit it and link any side doc from it.",
     "created": "2026-10-13T11:12:36.699180Z",
+    "strength": 0.3
+  },
+  {
+    "id": "8b674622cadcf676",
+    "slug": "chased-last-correction-and-dropped-the-original-spec",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(rewrite|redo|revise|new version of|v2 of|derive[d]? from|based on)\\b.{0,40}\\b(doc|spec|plan|design doc|proposal)\\b"
+    },
+    "body": "New doc must stand alone: before saving, rg draft for 'changes from', 'unchanged', 'see the', links to the source doc; carry that content in. Change list goes in the reply, not the doc.",
+    "created": "2026-10-15T23:00:52.815039Z",
+    "strength": 0.3
+  },
+  {
+    "id": "bb91078a96285f82",
+    "slug": "violated-a-constraint-i-authored-this-session",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "project": "slack-automation",
+      "tool": "Bash",
+      "input_pattern": "\\b(live_eval|grade)\\.py\\b"
+    },
+    "body": "Stop: live_eval.py/grade.py spend the owner's local claude login. Use launch.py on Clanky's account (prod probe) or run no model.",
+    "created": "2026-10-15T23:00:52.815039Z",
     "strength": 0.3
   }
 ]
