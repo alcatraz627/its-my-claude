@@ -2,12 +2,10 @@
 # i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
 # not feed the daemon (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
-# i-dream: UserPromptSubmit hook — sentiment signals + compiled-intervention
-# hints (felt-metabolism Phase 2).
+# i-dream: UserPromptSubmit hook — sentiment signals only.
 # NOTE: this script emits NOTHING to stdout; it runs async, so any output
-#       would never reach the session anyway.
-# No daemon-up guard here on purpose: the sentiment send needs the socket,
-# but the intervention interpreter is file-only and must run regardless.
+#       would never reach the session. Hints are delivered by the separate
+#       synchronous user-prompt-hint.sh.
 SOCKET="/Users/alcatraz627/.claude/subconscious/daemon.sock"
 
 # Save stdin before it is consumed; pass prompt and socket path to Python via env vars
@@ -88,64 +86,6 @@ try:
     s.connect(sock_path)
     s.sendall(payload + b"\n")
     s.close()
-except Exception:
-    pass
-
-# ── Compiled-intervention interpreter (felt-metabolism B1, prompt surface) ──
-# Every match — shadow, candidate, AND live — is appended to the would-fire
-# ledger; nothing is printed (see the note at the end). Patterns are re-validated
-# here with re.search inside try/except: a broken compiler-drafted pattern
-# skips silently rather than firing wrong (the point-of-use check).
-try:
-    import os.path as _p
-    import signal as _sig
-    ipath = _p.expanduser("~/.claude/i-dream/interventions.json")
-    if _p.exists(ipath):
-        items = json.load(open(ipath))
-        cwd = data.get("cwd", "") or ""
-        proj = _p.basename(cwd.rstrip("/")) if cwd else ""
-        sid = data.get("session_id", "") or ""
-        live_hits, shadow_hits = [], []
-        # ReDoS guard (validation MAJOR-1): compiler-authored patterns get a
-        # hard 2s budget for the WHOLE match loop and a capped subject — a
-        # catastrophic pattern aborts to the silent-skip path (exit 0, no
-        # stdout) instead of stalling this blocking hook.
-        def _rex_abort(_s, _f):
-            raise TimeoutError()
-        _sig.signal(_sig.SIGALRM, _rex_abort)
-        _sig.alarm(2)
-        subject = prompt[:4000]
-        for it in items:
-            if it.get("form") != "hint":
-                continue
-            trg = it.get("trigger") or {}
-            tp = trg.get("project")
-            if tp and tp != proj:
-                continue
-            pat = trg.get("prompt_pattern")
-            if not pat:
-                continue
-            try:
-                if not re.search(pat, subject, re.IGNORECASE):
-                    continue
-            except TimeoutError:
-                raise
-            except Exception:
-                continue
-            (live_hits if it.get("state") == "live" else shadow_hits).append(it)
-        _sig.alarm(0)
-        if live_hits or shadow_hits:
-            try:
-                with open(_p.expanduser("~/.claude/i-dream/would-fire.jsonl"), "a") as f:
-                    for it in shadow_hits + live_hits:
-                        f.write(json.dumps({"id": it.get("id", ""), "sid": sid,
-                            "state": it.get("state", ""), "surface": "prompt",
-                            "ts": int(time.time())}) + "\n")
-            except Exception:
-                pass
-        # No stdout payload: this hook runs async on UserPromptSubmit and the
-        # harness never delivers its output (owner canary 2026-09-05, zero
-        # deliveries). The sync PreToolUse sibling delivers hints at tool time.
 except Exception:
     pass
 PYEOF

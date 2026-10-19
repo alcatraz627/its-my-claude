@@ -2,7 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 365,
   "skillListingBudgetFraction": 0.02,
-  "claudeMdExcludes": ["/Users/alcatraz627/.claude/rules/README.md"],
+  "claudeMdExcludes": [
+    "/Users/alcatraz627/.claude/rules/README.md"
+  ],
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
@@ -195,6 +197,15 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/doc-voice-gate.py"
+          }
+        ]
+      },
+      {
         "matcher": "Bash|Agent|Task",
         "hooks": [
           {
@@ -359,15 +370,6 @@
             "type": "command",
             "command": "~/.claude/scripts/hooks/track-edits-session.sh",
             "async": true
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/kanban-nudge.sh"
           }
         ]
       },
@@ -558,6 +560,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-lazy-question.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/decision-surface-nudge.sh"
           }
         ]
       },
@@ -1063,7 +1069,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/filename-dot-stop.sh"
+            "command": "~/.claude/scripts/hooks/format-gate-stop.sh"
           }
         ]
       },
@@ -1088,14 +1094,6 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/queue-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/relpath-stop.sh"
           }
         ]
       },
@@ -1168,22 +1166,6 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/counter-gate-stop.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/dense-briefing-shapes-stop.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/prose-smell-stop.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/emdash-stop.sh"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/terse-reply-stop.sh"
           },
           {
             "type": "command",
@@ -1398,6 +1380,14 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/format-reminder-ups.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/api-recovery-nudge.sh"
           }
         ]
@@ -1470,6 +1460,14 @@
             "type": "command",
             "command": "~/.claude/scripts/hooks/wake-breaker.sh",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/alcatraz627/.claude/subconscious/hooks/user-prompt-hint.sh"
           }
         ]
       }

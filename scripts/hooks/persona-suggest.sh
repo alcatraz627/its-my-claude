@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 # lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
 # instrument: heed-writeback persona-adopted
-# review-by: 2026-10-16
-# retire-if: heed-rate < 5% over 200 fires
+# review-by: 2026-11-19
+# retire-if: heed-rate < 5% over 200 fires (counted from 2026-10-19; owner keeps it, tune before retiring)
 # Suggests adopting a matching persona when the prompt clearly calls for one.
 #
 # Working-mode personas (~/.claude/personas/) are picked up only when the agent
 # reads the file — there is no proactive trigger. This UserPromptSubmit hook is
 # that trigger: it matches the prompt against a curated set of strong cues and,
 # on a clear hit, injects one advisory line pointing at the relevant persona.
-# Conservative by design — it fires only on unambiguous cues, at most once per
-# persona per session, so it primes rather than nags.
+# Conservative by design: it fires only on unambiguous cues in a prompt of at
+# least eight words that names no skill, and at most once per session.
 #
 # Runtime contract: UserPromptSubmit hook. Reads {session_id, prompt, ...} on
 # stdin; prints one {additionalContext} JSON object on a match, nothing
@@ -29,9 +29,16 @@ sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 prompt=$(printf '%s' "$input" | jq -r '.prompt // empty' | tr '[:upper:]' '[:lower:]')
 [[ -z "$sid" || -z "$prompt" ]] && exit 0
 
+# Stay quiet where a suggestion cannot help: a background claude call, a
+# prompt that already names a skill, or a short continuation ("yes", "next").
+[[ -n "${I_DREAM_CHILD:-}" ]] && exit 0
+[[ "$prompt" == *"/"[a-z]* ]] && printf '%s' "$prompt" | grep -Eq '(^|[[:space:]])/[a-z][a-z:-]+' && exit 0
+(( $(printf '%s' "$prompt" | wc -w) < 8 )) && exit 0
+
 SENT="/tmp/claude-personasuggest-${sid:0:8}"
-already() { [[ -f "$SENT" ]] && grep -qx "$1" "$SENT"; }
-mark()    { echo "$1" >> "$SENT"; }
+# One suggestion per session in total, whichever persona it names.
+[[ -s "$SENT" ]] && exit 0
+mark() { echo "$1" >> "$SENT"; }
 
 # Curated strong cues → (persona, advisory). First match wins; one suggestion per
 # prompt. Order = priority. grep -Eq, case-insensitive (prompt already lowercased).
@@ -59,7 +66,6 @@ elif m 'make an? image|generate (art|an image|a picture)|art[- ]direct|design (a
 fi
 
 [[ -z "$persona" ]] && exit 0
-already "$persona" && exit 0
 mark "$persona"
 jq -nc --arg m "[persona] ${msg} (Advisory; once per session. Mute: touch ~/.claude/personas/usage/.suggest-off)" \
   '{hookSpecificOutput:{hookEventName:"UserPromptSubmit",additionalContext:$m}}'

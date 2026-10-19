@@ -6,7 +6,7 @@
 # stdout carries at most one hookSpecificOutput/additionalContext JSON.
 HOOK_INPUT=$(cat)
 IDREAM_INPUT="$HOOK_INPUT" python3 << 'PYEOF' 2>/dev/null || true
-import sys, re, json, time, os, hashlib
+import sys, re, json, time, os
 import os.path as _p
 
 raw = os.environ.get("IDREAM_INPUT", "")
@@ -68,18 +68,6 @@ try:
                 raise
             except Exception:
                 continue
-        # Optional second gate on what is being written, for nudges that only
-        # matter when the new text says something (an absence claim, say).
-        cpat = trg.get("content_pattern")
-        if cpat:
-            body_text = ti.get("content") or ti.get("new_string") or ""
-            try:
-                if not re.search(cpat, str(body_text)[:20000], re.IGNORECASE):
-                    continue
-            except TimeoutError:
-                raise
-            except Exception:
-                continue
         (live if it.get("state") == "live" else shadow).append(it)
 except TimeoutError:
     sys.exit(0)
@@ -96,27 +84,6 @@ try:
                 "tool": tool, "ts": int(time.time())}) + "\n")
 except Exception:
     pass
-# Show a nudge once per file per session. The ledger above already holds every
-# match, so what i-dream learns from is unchanged; only the repeat text is dropped.
-def _first_time(it):
-    sid8 = sid[:8]
-    if not sid8:
-        return True
-    file_tool = isinstance(ti.get("file_path"), str) and ti.get("file_path")
-    key = "%s|%s" % (it.get("id", ""), target if file_tool else "")
-    d = _p.expanduser("~/.claude/.inject-once/idream-nudge/s-" + sid8)
-    marker = _p.join(d, hashlib.sha1(key.encode("utf-8", "replace")).hexdigest()[:16])
-    if _p.exists(marker):
-        return False
-    try:
-        os.makedirs(d, exist_ok=True)
-        open(marker, "w").close()
-    except Exception:
-        pass
-    return True
-
-if live:
-    live = [it for it in live if _first_time(it)]
 if live:
     lines = ["[i-dream:%s] %s" % (str(it.get("id", ""))[:8], it.get("body", ""))
              for it in live[:2]]
