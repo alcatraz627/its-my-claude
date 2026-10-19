@@ -79,11 +79,11 @@ docs-only edits, renames, pure conversation). Mute:
 silences the gate for every concurrent and future session until removed. Design:
 [`features/declared-ready-stop-hook.md`](../features/declared-ready-stop-hook.md).
 
-**The gate may be muted right now.** The mute file was present on 2026-09-04 and the
-owner chose to keep it (gcc-map v4, gate 1a). While `~/.claude/.no-declared-ready-gate`
-exists, the enforcement above does not run and this rule binds as text alone. The
-SessionStart briefing lists present sentinels under "Muted gates"; check it before
-relying on the hook to catch a premature done-claim.
+**The gate is armed.** The mute file was present on 2026-09-04 (gcc-map v4, gate 1a)
+and was later removed; on 2026-10-19 the owner ruled to keep the gate armed (decision
+page review-maint-1019, D8). If `~/.claude/.no-declared-ready-gate` ever exists again,
+the enforcement above does not run and this rule binds as text alone. The SessionStart
+briefing lists present sentinels under "Muted gates".
 
 ## What this rule does NOT mean
 

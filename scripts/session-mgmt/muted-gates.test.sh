@@ -34,5 +34,15 @@ touch "$T/.no-orphan"
 ctx=$(run | jq -r '.additionalContext // empty' 2>/dev/null)
 case "$ctx" in *".no-orphan (today, mutes ?)"*) ok "a sentinel no script names shows ? as owner" ;; *) bad "orphan row wrong: $ctx" ;; esac
 
+# Mutes kept in a feature's own folder, and the bare name.off shape.
+mkdir -p "$T/atone" "$T/personas/usage" "$T/projects/x"
+printf '#!/usr/bin/env bash\n[ -f "$HOME/.claude/cli-gating.off" ] && exit 0\n' > "$T/scripts/hooks/gate-cli.sh"
+touch "$T/atone/.nudge-off" "$T/personas/usage/.suggest-off" "$T/cli-gating.off" "$T/projects/x/.no-transcript-noise"
+ctx=$(run | jq -r '.additionalContext // empty' 2>/dev/null)
+case "$ctx" in *"atone/.nudge-off ("*) ok "finds a mute one folder down" ;; *) bad "atone/.nudge-off missing: $ctx" ;; esac
+case "$ctx" in *"personas/usage/.suggest-off ("*) ok "finds a mute two folders down" ;; *) bad "suggest-off missing: $ctx" ;; esac
+case "$ctx" in *"cli-gating.off (today, mutes gate-cli.sh)"*) ok "finds a bare name.off mute with its owner" ;; *) bad "cli-gating.off row wrong: $ctx" ;; esac
+case "$ctx" in *"no-transcript-noise"*) bad "looked inside a pruned data folder" ;; *) ok "skips the data folders" ;; esac
+
 echo "---- pass=$pass fail=$fail ----"
 [ $fail -eq 0 ]

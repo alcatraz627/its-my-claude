@@ -38,15 +38,22 @@ age_of() {
   if [ "$d" -eq 0 ]; then echo "today"; elif [ "$d" -eq 1 ]; then echo "1d"; else echo "${d}d"; fi
 }
 
+# Sentinels live at the root (.no-x, .x-off) and in a feature's own folder
+# (atone/.nudge-off, personas/usage/.suggest-off, cli-gating.off). A root-only
+# glob missed the folder ones for months, one of them the CLI write gate. The
+# data folders are pruned: they hold transcripts and caches, never a mute.
 names=""
-for f in "$ROOT"/.no-* "$ROOT"/.*-off; do
-  [ -e "$f" ] || continue
-  name=$(basename "$f")
+while IFS= read -r f; do
+  [ -n "$f" ] || continue
+  name="${f#"$ROOT"/}"
   # The lane's own mute can never be seen from inside the lane; skip the noise.
   [ "$name" = ".no-sessionstart-inject" ] && continue
   names="${names} ${name}"
   rows="${rows}${rows:+ · }${name} ($(age_of "$f"), mutes $(owner_of "$name"))"
-done
+done <<EOF
+$(find "$ROOT" -maxdepth 3 \( -name projects -o -name plugins -o -name assets -o -name node_modules -o -name .git -o -name worktrees -o -name shell-logs -o -name backups -o -name atone-snapshots \) -prune \
+    -o -type f \( -name '.no-*' -o -name '*-off' -o -name '*.off' \) -print 2>/dev/null | sort)
+EOF
 
 # Snoozes (owner D3a 2026-09-18): scoped, expiring, reasoned. Listed with who and until.
 snz=$(bash "$ROOT/scripts/hooks/hook-snooze.sh" list 2>/dev/null | rg -v 'no live snoozes' | sed 's/^  //' | paste -sd';' - | sed 's/;/ · /g')

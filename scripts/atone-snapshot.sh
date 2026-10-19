@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # atone-snapshot.sh — daily backup of ~/.claude/atone/.
 #
-# Uses rsync --link-dest to hardlink unchanged files against yesterday's
-# snapshot, so storage cost ≈ delta size, not full-copy. With atone's
-# append-only data, a year of dailies ≈ a few MB total instead of GBs.
+# Each day starts as an APFS clone of the newest snapshot (copy-on-write, so
+# unchanged files share their blocks and storage cost ≈ the day's changes), then
+# rsync brings it up to date and every file is sealed again. Hardlinks were used
+# before, but macOS refuses to hardlink a file carrying uappnd, so once a
+# snapshot was sealed every later one silently became a full copy.
 #
 # Retention tiers (Grandfather-Father-Son):
 #   - Daily: 30 days
@@ -11,9 +13,8 @@
 #   - Monthly (1st):   FOREVER → _monthly/
 #   - Anything rotating out of daily/weekly goes to _archive/ (never auto-deleted)
 #
-# Snapshot files get chflags uappnd. macOS file flags are per-inode and so
-# propagate across hardlinks automatically — every snapshot stays protected
-# without re-flagging.
+# Snapshot files get chflags uappnd. A clone is a new inode, so unsealing it to
+# refresh it leaves the snapshot it came from sealed.
 #
 # Invoked by: the gcc scheduler job "atone-snapshot" (gcc-schedule show atone-snapshot)
 # Manual run: bash ~/.claude/scripts/atone-snapshot.sh
@@ -45,12 +46,13 @@ if [ -d "$DST" ]; then
   exit 0
 fi
 
-# Daily snapshot
+# Daily snapshot. The folder's own .git is left out (and dropped from a clone that
+# still has it): it is already a history, and at 326 MB it was nearly all of each copy.
 if [ -n "$PREV" ] && [ -d "$DST_ROOT/$PREV" ]; then
-  rsync -a --delete --link-dest="$DST_ROOT/$PREV" "$SRC/" "$DST/"
-else
-  rsync -a --delete "$SRC/" "$DST/"
+  cp -cR "$DST_ROOT/$PREV" "$DST" 2>/dev/null || true
 fi
+[ -d "$DST" ] && chflags -R nouappnd "$DST" 2>/dev/null
+rsync -a --delete --delete-excluded --exclude=.git "$SRC/" "$DST/"
 
 # Apply append-only flag (no-op on already-flagged inodes from hardlinks)
 find "$DST" -type f -exec chflags uappnd {} \; 2>/dev/null || true
@@ -58,14 +60,14 @@ find "$DST" -type f -exec chflags uappnd {} \; 2>/dev/null || true
 # Promote to weekly tier (Sundays — date +%u == 7)
 if [ "$(date +%u)" = "7" ]; then
   if [ ! -e "$DST_ROOT/_weekly/$TODAY" ]; then
-    cp -al "$DST" "$DST_ROOT/_weekly/$TODAY" 2>/dev/null || rsync -a --link-dest="$DST" "$DST/" "$DST_ROOT/_weekly/$TODAY/"
+    cp -cR "$DST" "$DST_ROOT/_weekly/$TODAY" 2>/dev/null || rsync -a "$DST/" "$DST_ROOT/_weekly/$TODAY/"
   fi
 fi
 
 # Promote to monthly tier (1st of month)
 if [ "$(date +%d)" = "01" ]; then
   if [ ! -e "$DST_ROOT/_monthly/$TODAY" ]; then
-    cp -al "$DST" "$DST_ROOT/_monthly/$TODAY" 2>/dev/null || rsync -a --link-dest="$DST" "$DST/" "$DST_ROOT/_monthly/$TODAY/"
+    cp -cR "$DST" "$DST_ROOT/_monthly/$TODAY" 2>/dev/null || rsync -a "$DST/" "$DST_ROOT/_monthly/$TODAY/"
   fi
 fi
 
