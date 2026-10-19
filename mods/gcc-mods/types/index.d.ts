@@ -45,7 +45,9 @@ export type Idle = { since: number | null; openRows: number; continueOfferedAt: 
 
 // A pending decision page, as much as the band and the wake need: whose it is
 // and how many calls it carries. The page itself is answered in the browser.
-export type DecideSet = { slug: string; title: string; project: string; session: string; calls: number }
+// `waiting` is false once the ledger dropped the page but its answer file is still
+// unread: kept only so the wake fires, never shown as waiting on the owner.
+export type DecideSet = { slug: string; title: string; project: string; session: string; calls: number; waiting?: boolean }
 export type Decide = { pending: DecideSet[]; answered: string[]; at: number }
 
 // The band's look: S1 one line (default), S2 accent bar, S3 rounded box.

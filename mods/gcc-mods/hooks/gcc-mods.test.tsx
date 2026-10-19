@@ -242,6 +242,40 @@ describe('the band', () => {
     expect(await band.find({ key: 'cu-load' })).toBeUndefined()
   })
 
+  test('a page cleared from the ledger without an answer file leaves the band', ON, async ($, on) => {
+    const w = world(on)
+    withPage(w)
+    await $.session.start({ cwd: CWD, surface: 'terminal', isInteractive: true })
+    await $.classic.SessionStart({ source: 'startup' })
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeDefined()
+    // Answered by paste and cleared with `pending clear`: no answer file, no log row.
+    w.files[DP + '/.pending.txt'] = ''
+    await w.clock.advance(61_000)
+    expect(await (await mountBand($)).find({ text: /My page/ })).toBeUndefined()
+  })
+
+  test("another project's page shows, labelled with its project, when none is for this folder", ON, async ($, on) => {
+    const w = world(on)
+    w.files[DP + '/.pending.txt'] = 'other\n'
+    w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'Their page', origin: { project: '~/Code/elsewhere', session: 'them' }, decisions: [{ id: 'D1' }] })
+    await $.classic.SessionStart({ source: 'startup' })
+    const band = await mountBand($)
+    expect(await band.find({ text: /Their page/ })).toBeDefined()
+    expect(await band.find({ text: /~\/Code\/elsewhere/ })).toBeDefined()
+  })
+
+  test("this folder's page comes first and says how many more wait, linking to them all", ON, async ($, on) => {
+    const w = world(on)
+    withPage(w)
+    w.files[DP + '/.pending.txt'] = 'other\npg\n'
+    w.files[DP + '/other/config.json'] = JSON.stringify({ title: 'Their page', origin: { project: '~/Code/elsewhere', session: 'them' }, decisions: [{ id: 'D1' }] })
+    await $.classic.SessionStart({ source: 'startup' })
+    const band = await mountBand($)
+    expect(await band.find({ text: /My page/ })).toBeDefined()
+    expect(await band.find({ text: /1 more waiting/ })).toBeDefined()
+    expect((await band.find({ type: 'Link' }))?.props.href).toBe('http://localhost:5106/?view=decisions')
+  })
+
   test('owed reads point at /tasks now when nothing else applies', ON, async ($, on) => {
     world(on)
     await $.classic.SessionStart({ source: 'clear' })

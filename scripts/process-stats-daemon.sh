@@ -178,8 +178,9 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     ipc_unseen_val=""; read -r ipc_unseen_val < "$ipc_cache" 2>/dev/null || true
     printf 'ipc_unseen=%s\n' "$ipc_unseen_val"
 
-    # ── Decision pages waiting on the owner for THIS project (every 30 s) ──
-    # Same rule as the gcc-mods status line: the page's origin.project must match the cwd.
+    # ── Decision pages waiting on the owner, every project (every 30 s) ──
+    # Owner, 2026-10-19: pages filed from another folder were invisible here, so
+    # every page in the ledger counts, whichever project filed it.
     dec_cache="/tmp/claude-decn-${TARGET_PID}"
     if [[ ! -f "$dec_cache" ]] || (( _NOW - $(_stat_mtime "$dec_cache") > 30 )); then
       dec_n=0
@@ -188,9 +189,7 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
         while IFS= read -r dslug || [[ -n "$dslug" ]]; do
           dslug="${dslug//[[:space:]]/}"
           [[ -z "$dslug" || -f "$dp_reg/$dslug/.answer.json" || ! -f "$dp_reg/$dslug/config.json" ]] && continue
-          dproj=$(jq -r '.origin.project // ""' "$dp_reg/$dslug/config.json" 2>/dev/null) || dproj=""
-          dproj="${dproj#\~}"
-          [[ -n "$dproj" && "$cwd" == *"$dproj" ]] && dec_n=$(( dec_n + 1 ))
+          dec_n=$(( dec_n + 1 ))
         done < "$dp_reg/.pending.txt"
       fi
       printf '%s\n' "$dec_n" > "$dec_cache"

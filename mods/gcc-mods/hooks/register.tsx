@@ -419,15 +419,19 @@ async function refreshDecide($: $T) {
   for (const slug of slugs) {
     const have = known.get(slug)
     if (have) {
-      sets.push(have)
+      sets.push({ ...have, waiting: true })
       continue
     }
     const cfg = jsonOr<Cfg>(await readText($, DP_REG + '/' + slug + '/config.json'), {})
-    sets.push({ slug, title: cfg.title ?? slug, project: cfg.origin?.project ?? '', session: cfg.origin?.session ?? '', calls: (cfg.decisions ?? []).length + (cfg.sections ?? []).length })
+    sets.push({ slug, title: cfg.title ?? slug, project: cfg.origin?.project ?? '', session: cfg.origin?.session ?? '', calls: (cfg.decisions ?? []).length + (cfg.sections ?? []).length, waiting: true })
   }
-  // Sets seen pending earlier stay, even once the file drops them: those are
-  // the ones whose answer we watch for.
-  for (const p of prev.pending) if (!sets.some(s => s.slug === p.slug)) sets.push(p)
+  // A page the ledger dropped is retired, unless its answer file is still unread:
+  // that one stays (not waiting) only so the wake can fire. Keeping every page
+  // ever seen left answered ones on the band for the rest of the session.
+  for (const p of prev.pending) {
+    if (sets.some(s => s.slug === p.slug)) continue
+    if (await fileExists($, DP_REG + '/' + p.slug + '/.answer.json')) sets.push({ ...p, waiting: false })
+  }
   await update($, decideAtom, d => ({ ...d, pending: sets, at: now }))
 }
 
@@ -630,16 +634,21 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   const d = await read($, decideAtom)
   const c = goalCounts(await read($, goalsAtom))
   const aliases = await aliasesOf($)
-  const mine = d.pending.find(s => !d.answered.includes(s.slug) && isCurrentPage(s, cwd, aliases))
+  // Every page still waiting on the owner, this folder's first. Another project's
+  // page shows too, labelled with its project, so nothing waits out of sight.
+  const open = d.pending.filter(s => s.waiting !== false && !d.answered.includes(s.slug))
+  const mine = open.find(s => isCurrentPage(s, cwd, aliases)) ?? open[0]
   const hide = { key: 'band-hide', onPress: () => update($, viewAtom, v => ({ ...v, isBandHidden: true })) }
 
   let offer: RowSpec | null = null
   if (sw.wake && mine) {
+    const here = isCurrentPage(mine, cwd, aliases)
+    const more = open.length - 1
     offer = {
       kind: 'decide',
       title: clip(mine.title, 50),
-      detail: plural(mine.calls, 'call') + ' drafted for you',
-      link: { label: 'open page', href: DP_URL + mine.slug + '/' },
+      detail: plural(mine.calls, 'call') + ' drafted for you' + (here || !mine.project ? '' : ' · ' + tilde(mine.project)) + (more > 0 ? ' · ' + more + ' more waiting' : ''),
+      link: more > 0 ? { label: 'open all', href: DP_URL.replace(/dp\/$/, '') + '?view=decisions' } : { label: 'open page', href: DP_URL + mine.slug + '/' },
       hide,
     }
   } else if (sw.continuity && catchup?.state === 'offered') {
