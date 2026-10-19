@@ -198,6 +198,20 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     dec_val=0; read -r dec_val < "$dec_cache" 2>/dev/null || true
     printf 'dec_count=%s\n' "${dec_val:-0}"
 
+    # ── The checkpoint the last session left, until this one's first turn (every 30 s) ──
+    # Looked up only while the turn counter is still zero, so a working session pays nothing.
+    cu_cache="/tmp/claude-catchup-${TARGET_PID}"
+    cu_sid=""; [[ -f "/tmp/claude-sidfwd-${TARGET_PID}" ]] && { read -r cu_sid < "/tmp/claude-sidfwd-${TARGET_PID}" 2>/dev/null || true; }
+    cu_turns=0; [[ -n "$cu_sid" && -f "/tmp/claude-turns-${cu_sid:0:8}" ]] && { read -r cu_turns < "/tmp/claude-turns-${cu_sid:0:8}" 2>/dev/null || true; }
+    [[ "$cu_turns" =~ ^[0-9]+$ ]] || cu_turns=0
+    if (( cu_turns > 0 )); then
+      printf '' > "$cu_cache"
+    elif [[ ! -f "$cu_cache" ]] || (( _NOW - $(_stat_mtime "$cu_cache") > 30 )); then
+      timeout 5 bash "$HOME/.claude/scripts/checkpoint/offer.sh" --cwd "$cwd" > "$cu_cache" 2>/dev/null </dev/null || printf '' > "$cu_cache"
+    fi
+    cu_val=""; read -r cu_val < "$cu_cache" 2>/dev/null || true
+    printf 'catchup_path=%s\n' "$cu_val"
+
     # ── WAL stats ──
     for wal_path in "$cwd/.claude/wal.md" "$HOME/.claude/wal.md"; do
       if [[ -f "$wal_path" ]]; then

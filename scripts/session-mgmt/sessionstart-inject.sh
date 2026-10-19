@@ -51,13 +51,14 @@ INJECTORS=(
   # decision. They now file onto the one backlog and surface via backlog-surface.sh
   # (last in this list) with every other proposal.
   "$HOME/.claude/scripts/dream/dream-metrics-context.sh"
+  # i-dream outcome rows that fail right now, once per change (review-maint-1019 D3).
+  "$HOME/.claude/scripts/dream/idream-verify-inject.sh"
   "$HOME/.claude/scripts/session-mgmt/detect-stale-session.sh"
   "$HOME/.claude/scripts/health-check.sh"
   # Which mechanical gates are muted right now (gcc-map v4 gate 1a, 2026-09-05).
   "$HOME/.claude/scripts/session-mgmt/muted-gates.sh"
   "$HOME/.claude/scripts/validate-settings-hooks.sh"
   "$HOME/.claude/scripts/hooks/backlog-surface.sh"
-  "$HOME/.claude/scripts/kanban/session-start-line.sh"
   # What the owner's policy allows and blocks, and that allowed means no approval ask.
   "$HOME/.claude/scripts/pol/policy-inject.sh"
 )

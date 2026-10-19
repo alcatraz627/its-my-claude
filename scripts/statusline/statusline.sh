@@ -332,7 +332,7 @@ sys_free_mb=0; sys_total_mb=0; disk_free_gb=0; git_stash=0; tok_speed=0
 branch_age_days=0; branch_behind=0; cost_vel_cpm=0; focus_file=""; focus_count=0
 test_status=""; test_total=0; test_failed=0
 net_rx_kbps=0; net_tx_kbps=0
-sudo_active=0; tmux_sessions=0; ipc_unseen=""; dec_count=0
+sudo_active=0; tmux_sessions=0; ipc_unseen=""; dec_count=0; catchup_path=""
 if [[ -f "$STATS_FILE" ]]; then
   # Only accept lines matching a safe key=value pattern (alphanumeric keys, no
   # shell metacharacters in values). Pure bash: no grep or eval fork.
@@ -1263,6 +1263,14 @@ if seg_on decwait "$has_decwait" && (( has_decwait )); then
   _dw="decisions"; (( decwait_n == 1 )) && _dw="decision"
   _link "http://localhost:5106/?view=decisions" "${decwait_n} ${_dw}"
   _chip "${C_INFO}${G_DEC} ${_LNK}"; _add "$_CHIP"
+fi
+
+# The checkpoint the last session here left, until this session's first turn.
+# The daemon looks it up (checkpoint/offer.sh) only while no turn has happened.
+if seg_on catchup 1 && (( turn_count == 0 )) && [[ -n "${catchup_path:-}" && -f "$catchup_path" ]]; then
+  _cu="${catchup_path##*/}"; _cu="${_cu#_}"; _cu="${_cu%.claude.md}"; (( ${#_cu} > 28 )) && _cu="${_cu:0:26}.."
+  _docurl "$catchup_path"; _link "$_URL" "$_cu"
+  _chip "${C_INFO}↻ catchup ${_LNK}"; _add "$_CHIP"
 fi
 
 # Checkpoint drift: log entries since the last checkpoint

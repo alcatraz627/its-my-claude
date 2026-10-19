@@ -442,6 +442,9 @@ print(ans)
 if consume:
     os.remove(f)   # read-once so a later Submit is detectable as a new file
 PY
+  # A page whose answer was read is no longer waiting on the owner, whoever
+  # forgot to clear it. Left in the ledger it shows as pending in every session.
+  cmd_pending clear "$slug" >/dev/null
 }
 
 usage() {
