@@ -18,7 +18,7 @@ One line per rule in `rules/`. Scan it, then Read `rules/<name>.md` when a rule 
 `always` = loaded every session; `scoped` = not loaded, Read it when it applies.
 DERIVED from each rule's `brief:`; regenerate with `bash ~/.claude/scripts/rules-index.sh`.
 
-Regenerated 2026-10-15 01:36.
+Regenerated 2026-10-15 19:36.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -33,7 +33,7 @@ Regenerated 2026-10-15 01:36.
 | `cache-externally-mutated-state` | scoped | Never cache or TTL a status, availability or liveness value that an external |
 | `comments` | scoped | Comments are for humans first, AI agents second, machines never |
 | `communication` | always | Terse protocol, scope control and state verification |
-| `contain-subagent-token-sprawl` | always | Orchestration (sub-agents, fan-out workflows) has real cumulative token cost, so right-size |
+| `contain-subagent-token-sprawl` | always | Orchestration (sub-agents, workflows, eval runs) has real cumulative token cost, so right-size |
 | `corrections` | scoped | After user corrections: state mistake, identify pattern, update mistake-patterns.md, check for hook, fix |
 | `dense-briefing-direct-answer` | always | A reply is the answer, not a briefing about the answer |
 | `env-var-config-pattern` | scoped | Before adding a raw env var read, grep how existing vars are read |

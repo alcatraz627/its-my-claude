@@ -55,6 +55,24 @@ subagent-output nudge. Cost-of-false-fire says rule text here, not a second nudg
 
 This rule fired and was over-applied on 2026-08-26: "a budget rule became a reason not to work" (gcc-kanban, verbatim). A guard that can cause the failure next to the one it prevents is a distinct defect. So this rule, and every guard proposed under it, names the inaction it could license: here, a lane declining to dispatch work that was in scope because dispatch costs tokens. When that is what is happening, the cheaper failure is the dispatch.
 
+## Say the price first: the 2026-10-15 case and the unit prices
+
+The owner, verbatim: "write down in gcc to warn me about expensive subagent calls with an estimate, because my weekly usage jumped a heck lot because of this. Yeah the judge is needed, but shouldn't have been so expensive, or we could have deferred this item for later."
+
+What happened that day (zusage, API-equivalent, IST day): $768 in total. Eval runs in slack-automation were $244 (32%), and $180 of that was the Opus judge grading every reply in full. A gcc session's overnight keep-going queue fanned out to about 14 Opus teammate seats and cost $184 (24%). Neither was priced up front. The judge spend was avoidable in shape: deterministic checks first, Opus only on undecided lines, and the full grade kept for a gate run.
+
+Unit prices measured that day, to make the estimate:
+
+| call | about |
+|---|---|
+| Opus judge or grader call, one transcript in | $0.30 |
+| Clanky eval run on Sonnet (about 5 requests) | $0.07 |
+| Clanky eval run routed to Opus | $0.23 |
+| Opus seat in an unattended fan-out, overnight | $13 |
+| Sonnet research sub-agent, about 250k tokens | $1 to $3 |
+
+An eval through the local Claude login draws on the owner's subscription and counts against the weekly limit, so its cost is real though there is no bill. Re-measure with `zusage --days 1` (it reads the transcripts; the page has project and session filters).
+
 ## What this does NOT mean
 
 Not "avoid workflows." Fan-out earns its cost on large/parallel/verification work — that is exactly what it's for. The rule is against **reflexive orchestration of small tasks**, where a workflow's setup + agent overhead dwarfs the actual work.

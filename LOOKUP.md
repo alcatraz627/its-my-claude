@@ -195,6 +195,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `scripts/statusline/statusline.sh` | statusLine | Renders the status bar content | Modifying status line display |
 | `statusline.conf` | Config | Segment profiles (default/minimal/full/debug) | Toggling statusline segments on/off/auto |
 | `scripts/process-stats-daemon.sh` | Background | Writes Claude CPU/MEM to tmp file every 3s | Debugging process stats display |
+| `assets/static/easing-lab/` | Tool | Easing lab: tune an idle rise along a curved path (and optional hover) on a real image, shape cubic-bezier or multi-point linear() curves, copy the CSS. Open `index.html`; README covers controls, CSS model, rebuild | Tuning a CSS animation's easing or path, an idle float, a hover that jumps, or a motion that reads as a loop |
 | `assets/static/statusline-features.md` | Reference | 30 statusline features with implementation status | Adding statusline widgets or evaluating external tools |
 | `scripts/update-tab-title.sh` | Stop | Updates terminal tab title after session | Debugging tab title behavior |
 | `scripts/session-mgmt/session-summary.sh` | Stop | Generates session summary on exit | Debugging session-end behavior |

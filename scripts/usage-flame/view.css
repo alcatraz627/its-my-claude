@@ -1,0 +1,97 @@
+/* Series colours: the validated categorical order, dark and light steps (dataviz palette). */
+:root {
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+}
+:root[data-theme="light"] {
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+}
+.c1 { --c: var(--s1); } .c2 { --c: var(--s2); } .c3 { --c: var(--s3); } .c4 { --c: var(--s4); }
+.c5 { --c: var(--s5); } .c6 { --c: var(--s6); } .c7 { --c: var(--s7); } .c8 { --c: var(--s8); }
+.c0 { --c: var(--text-3); }
+
+#app { display: grid; gap: 22px; }
+.uf-loading { color: var(--text-3); }
+
+.uf-controls { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; }
+.uf-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.uf-lbl { font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: .04em; }
+.uf-seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.uf-seg button { background: var(--surface); color: var(--text-2); border: 0; padding: 6px 11px; font: inherit; font-size: 13px; cursor: pointer; border-right: 1px solid var(--border); }
+.uf-seg button:last-child { border-right: 0; }
+.uf-seg button.on { background: var(--surface-2); color: var(--text); font-weight: 600; }
+.uf-seg button:focus-visible, .uf-chip:focus-visible, .uf-btn:focus-visible, .uf-select:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+.uf-select { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 6px 8px; font: inherit; font-size: 13px; }
+
+.uf-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.uf-tile { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px; }
+.uf-tile { display: flex; flex-direction: column; gap: 2px; }
+.uf-tile span { font-size: 12px; color: var(--text-3); }
+.uf-tile b { font-size: 24px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+
+.uf-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; }
+
+.uf-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 8px 0; font-size: 13px; }
+.uf-key { display: inline-flex; align-items: center; gap: 6px; color: var(--text-2); }
+.uf-key i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); display: inline-block; }
+.uf-key em { font-style: normal; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+.uf-plot { position: relative; }
+.uf-plot svg { display: block; width: 100%; height: auto; overflow: visible; }
+.uf-grid { stroke: var(--border); stroke-width: 1; }
+.uf-axis { fill: var(--text-3); font-size: 11px; font-variant-numeric: tabular-nums; }
+.uf-seg-r { fill: var(--c); stroke: var(--surface); stroke-width: 1; }
+.uf-hover { fill: var(--text); opacity: .08; }
+.uf-brush { fill: var(--brand); opacity: .22; stroke: var(--brand); stroke-width: 1; }
+#uf-cap { cursor: crosshair; touch-action: none; }
+.uf-zoom { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 8px 0 2px; }
+.uf-hint { font-size: 12px; color: var(--text-3); }
+
+/* Navbar brand: icon, title, and the build time as a small line under the title. */
+.uf-brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; }
+.uf-brand-ico { display: inline-flex; color: var(--brand); }
+.uf-brand-ico svg { width: 26px; height: 26px; }
+.uf-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.uf-brand-text .kit-title { margin: 0; }
+.uf-sub { font-size: 11px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+/* Theme switch shows a sun or moon (the mode it switches to) instead of the kit's text. */
+.kit-theme { font-size: 0 !important; width: 36px; height: 32px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+.kit-theme::before { content: ""; width: 18px; height: 18px; background: currentColor; -webkit-mask: var(--uf-ico) center / contain no-repeat; mask: var(--uf-ico) center / contain no-repeat; }
+:root[data-theme="dark"] .kit-theme { --uf-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E"); }
+:root[data-theme="light"] .kit-theme { --uf-ico: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'/%3E%3C/svg%3E"); }
+
+/* One header for every card: icon, title, muted description. */
+.uf-ch { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+.uf-ch-ico { display: inline-flex; flex: none; width: 34px; height: 34px; align-items: center; justify-content: center; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-2); }
+.uf-ch-ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.uf-ch h2 { margin: 0; font-size: 16px; line-height: 1.3; }
+.uf-ch p { margin: 1px 0 0; font-size: 12px; color: var(--text-3); max-width: none; }
+
+.uf-toolbar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 14px; }
+.uf-tip { position: absolute; pointer-events: none; z-index: 4; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 8px 10px; font-size: 12px; line-height: 1.5; min-width: 150px; max-width: 280px; box-shadow: 0 4px 16px rgba(0, 0, 0, .25); }
+.uf-tip b { display: block; margin-bottom: 4px; }
+.uf-tip div { display: flex; gap: 8px; justify-content: space-between; }
+.uf-tip div span:first-child { display: inline-flex; align-items: center; gap: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.uf-tip i { width: 8px; height: 8px; border-radius: 2px; background: var(--c); display: inline-block; flex: none; }
+.uf-tip .tot { border-top: 1px solid var(--border); margin-top: 4px; padding-top: 4px; font-weight: 600; }
+
+.uf-crumbs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin: 8px 0; font-size: 13px; color: var(--text-3); }
+.uf-btn { background: none; border: 0; color: var(--brand); font: inherit; cursor: pointer; padding: 0 2px; text-decoration: underline; }
+.uf-flame { position: relative; margin-top: 6px; }
+.uf-n { position: absolute; height: 22px; box-sizing: border-box; padding: 0 6px; font-size: 12px; line-height: 20px; color: var(--bg); background: var(--c); border: 1px solid var(--surface); border-radius: 3px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; cursor: pointer; }
+.uf-n[data-l="1"] { opacity: .88; } .uf-n[data-l="2"] { opacity: .76; } .uf-n[data-l="3"] { opacity: .64; }
+.uf-n:hover { outline: 2px solid var(--text); outline-offset: -2px; }
+.uf-n.c0, :root[data-theme="light"] .uf-n { color: var(--text); }
+
+.uf-filter { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; padding: 8px 0; border-top: 1px solid var(--border); }
+.uf-filter:first-of-type { border-top: 0; }
+.uf-filter > span { font-size: 13px; color: var(--text-2); }
+.uf-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.uf-chip { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+.uf-chip em { font-style: normal; color: var(--text-3); margin-left: 4px; }
+.uf-chip.off { background: none; color: var(--text-3); text-decoration: line-through; }
+@media (max-width: 640px) { .uf-filter { grid-template-columns: 1fr; } }
+
+details.uf-table summary { cursor: pointer; color: var(--text-2); }
