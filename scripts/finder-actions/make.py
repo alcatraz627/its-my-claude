@@ -59,6 +59,11 @@ ACTIONS = [
     {"name": "Reset Folder View", "icon": "NSTouchBarRefreshTemplate", "cmd": ACT % "reset-view"},
     {"name": "Send with Taildrop", "icon": "NSTouchBarShareTemplate", "cmd": ACT % "taildrop"},
     {"name": "Send with csync", "icon": "NSTouchBarSkipAheadTemplate", "cmd": ACT % "csync"},
+    {"name": "Resize Image", "icon": "NSTouchBarEnterFullScreenTemplate", "cmd": ACT % "resize"},
+    {"name": "Copy Image", "icon": "NSTouchBarSlideshowTemplate", "cmd": ACT % "copy-image"},
+    {"name": "Merge PDFs", "icon": "NSTouchBarAddTemplate", "cmd": ACT % "pdf merge"},
+    {"name": "Shrink PDF", "icon": "NSTouchBarRemoveTemplate", "cmd": ACT % "pdf shrink"},
+    {"name": "PDF to Images", "icon": "NSTouchBarQuickLookTemplate", "cmd": ACT % "pdf images"},
     {"name": "Open in Zed", "icon": "NSTouchBarTextListTemplate", "cmd": 'open -a Zed "$@"'},
     {
         "name": "Open in VS Code",

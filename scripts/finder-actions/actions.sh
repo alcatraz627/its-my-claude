@@ -3,6 +3,7 @@
 # files selected in Finder as arguments and reports back with a notification.
 # Usage: actions.sh <verb> <files...>
 #   contents | repo-path | github | sha | exec | reset-view | taildrop | csync
+#   resize | copy-image | pdf <merge|shrink|images>
 export PATH="/opt/homebrew/bin:$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 CSYNC="$HOME/Code/Claude/csync/bin/csync"
 verb="$1"
@@ -113,6 +114,46 @@ case "$verb" in
     [ -z "$host" ] && exit 0
     # A person clicked this, but Finder gives it no terminal, which csync reads as an agent.
     if err=$(CSYNC_ACTOR=human "$CSYNC" push "$host" "$@" 2>&1); then notify "Sent to $host"; else notify "csync failed: ${err//\"/}"; exit 1; fi
+    ;;
+
+  resize)
+    # Asks once for a width ("1200") or a scale ("50%"), keeps the aspect ratio,
+    # and writes "name (resized).ext" beside each image.
+    # RESIZE_TO skips the dialog, for running it from a terminal.
+    answer="${RESIZE_TO:-$(osascript -e 'text returned of (display dialog "New width in pixels, or a percentage:" default answer "50%" with title "Resize Image")' 2>/dev/null)}"
+    [ -z "$answer" ] && exit 0
+    done_n=0
+    for f in "$@"; do
+      w=$(sips -g pixelWidth "$f" 2>/dev/null | awk '/pixelWidth/ {print $2}')
+      [ -z "$w" ] && continue
+      case "$answer" in
+        *%) target=$(( w * ${answer%\%} / 100 )) ;;
+        *) target="$answer" ;;
+      esac
+      stem="${f%.*}"
+      ext="${f##*.}"
+      out="$stem (resized).$ext"
+      n=2
+      while [ -e "$out" ]; do out="$stem (resized $n).$ext"; n=$((n + 1)); done
+      sips --resampleWidth "$target" "$f" --out "$out" >/dev/null && done_n=$((done_n + 1))
+    done
+    notify "Resized $done_n image(s)"
+    ;;
+
+  copy-image)
+    # Puts the picture itself on the clipboard, so it pastes into chats and docs as an image.
+    osascript -l JavaScript -e 'ObjC.import("AppKit"); function run(a){ const img = $.NSImage.alloc.initWithContentsOfFile(a[0]); if (img.isNil()) return "no"; const pb = $.NSPasteboard.generalPasteboard; pb.clearContents; pb.writeObjects($([img])); return "ok"; }' "$1" | grep -q ok && notify "Image copied" || notify "Not an image"
+    ;;
+
+  pdf)
+    job="$1"
+    shift
+    if out=$(osascript -l JavaScript "$(dirname "$0")/pdf.js" "$job" "$@" 2>&1); then
+      open -R "$(printf "%s" "$out" | head -1)"
+    else
+      notify "PDF: ${out//\"/}"
+      exit 1
+    fi
     ;;
 
   *)
