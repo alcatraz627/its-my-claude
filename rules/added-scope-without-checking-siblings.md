@@ -12,14 +12,14 @@ related:
   - rules/audit-file-character-before-applying-global-rule.md
 tier: 2
 category: rules
-updated: 2026-09-18
+updated: 2026-10-20
 stale_after_days: 180
 ---
 # Read the siblings before you add to a file
 
 Before adding a component, control, list, derivation, hook or table: open the two or three files that already answer the same shape, and follow them, or say in one sentence why this case differs. Deviating is allowed; deviating silently is the defect, because it compiles, the tests pass, and only the owner notices after it ships.
 
-A sibling is the nearest answer to the same question, not the nearest path: other list pages for a list, the file's other derivations for a derivation, the hooks on the same event for a hook, every other table in the product for a table. Grep the concept, not the filename.
+A sibling is the nearest answer to the same question, not the nearest path: other list pages for a list, the file's other derivations for a derivation, the hooks on the same event for a hook, every other table in the product for a table. For a prompt, skill or rule line, the siblings are every other instruction about the same decision in the assembled prompt. Grep the concept, not the filename.
 
 Not a ban on new patterns and not the same as `rules/grep-scope-before-claiming-absence.md` (that fires on absence claims; this fires when adding something that exists).
 

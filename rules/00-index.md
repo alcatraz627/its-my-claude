@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-10-15
+updated: 2026-10-20
 stale_after_days: 365
 ---
 
@@ -18,7 +18,7 @@ One line per rule in `rules/`. Scan it, then Read `rules/<name>.md` when a rule 
 `always` = loaded every session; `scoped` = not loaded, Read it when it applies.
 DERIVED from each rule's `brief:`; regenerate with `bash ~/.claude/scripts/rules-index.sh`.
 
-Regenerated 2026-10-15 19:36.
+Regenerated 2026-10-20 23:18.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -66,7 +66,7 @@ Regenerated 2026-10-15 19:36.
 | `pushback-and-self-criticism` | always | One doctrine for disagreement. Run the checks a self-critical reply names before sending |
 | `read-the-comments-on-a-pr-you-raised` | scoped | A PR you opened is not done when it is pushed |
 | `refusal-is-not-a-fix` | scoped | When a tool cannot determine something, refusing and making the human supply |
-| `rename-without-grepping-readers` | scoped | A rename or a corrected claim is not done until every reader |
+| `rename-without-grepping-readers` | scoped | A rename, a corrected claim or a changed owner ruling is not done |
 | `right-sized-code` | scoped | Right-size code to the task, don't blindly minimize |
 | `scheduling-discipline` | scoped | Scheduling contract, read BEFORE creating or retiring ANY scheduled job |
 | `shell-reference` | scoped | The shell reference catalog: macOS silent-failure gotchas (zsh path trap, find /tmp, timeout) |

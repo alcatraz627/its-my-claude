@@ -1,5 +1,5 @@
 ---
-brief: A rename or a corrected claim is not done until every reader of the old version is found. That includes the string-keyed readers no compiler can see, and the surfaces outside the tree that no grep can reach (PR body, PR and issue comments, pushed commit messages, Slack). Documenting a rename in a review is not reviewing it.
+brief: A rename, a corrected claim or a changed owner ruling is not done until every reader of the old version is found. That includes string-keyed readers, prompts, tests that pin the old behaviour, other repos, and off-tree surfaces (PR body, comments, Slack). Documenting a rename in a review is not reviewing it.
 triggers:
   - topic:rename
   - phrase:"renamed"
@@ -8,6 +8,7 @@ triggers:
   - phrase:"stale caller"
   - phrase:"fixed everywhere"
   - phrase:"none left"
+  - phrase:"ruling changed"
 related:
   - rules/grep-scope-before-claiming-absence.md
   - rules/structural-claim-without-reading-code.md
@@ -20,7 +21,7 @@ paths:
   - "zz-on-demand--never-autoloads"
 tier: 1
 category: rules
-updated: 2026-09-01
+updated: 2026-10-20
 stale_after_days: 180
 ---
 
@@ -88,6 +89,8 @@ fourth was found by grepping the claim rather than the citations, and the tree t
 grepped clean three times. The same wrong mechanism was still sitting in the PR
 description, word for word, and in two GitHub comments. Nobody had looked, because
 the sweep had been scoped to the artifact being edited.
+
+**A changed ruling is the same case.** The owner reverses a ruling. Every place that states the old one is now a reader of the old version. That means prompt text, tool descriptions, help copy, playbooks, docs a bot can load, the same rule in another repo, and tests. Grep the old ruling's words and its effect. Retire each copy in the change that applies the new ruling. A test that pins the old behaviour is the worst copy: it fails the fix. (Provenance: slack-automation, 2026-10, nine ledger rows; atone mist-20261019-103024-59.)
 
 ## The check
 
