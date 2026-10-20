@@ -24,6 +24,7 @@ PREFIX = "Finder "
 TARGET_DIR = 'if [ -d "$1" ]; then d="$1"; else d=$(dirname "$1"); fi'
 NOTIFY = "osascript -e 'display notification \"%s\" with title \"Finder\"'"
 GRID = f'{TARGET_DIR}; osascript "{HERE}/grid.applescript" "$d" %s'
+ACT = f'/bin/bash "{HERE}/actions.sh" %s "$@"'
 
 # Icons are AppKit's built-in template images, the same set Automator's own
 # image picker offers, so Finder can always draw them.
@@ -50,6 +51,14 @@ ACTIONS = [
         'while [ -e "$f" ]; do f="$d/untitled $n.txt"; n=$((n+1)); done; '
         ': > "$f"; open -R "$f"',
     },
+    {"name": "Copy Contents", "icon": "NSTouchBarTextBoxTemplate", "cmd": ACT % "contents"},
+    {"name": "Copy Repo Path", "icon": "NSTouchBarBookmarksTemplate", "cmd": ACT % "repo-path"},
+    {"name": "Open on GitHub", "icon": "NSTouchBarOpenInBrowserTemplate", "cmd": ACT % "github"},
+    {"name": "Copy SHA-256", "icon": "NSTouchBarGetInfoTemplate", "cmd": ACT % "sha"},
+    {"name": "Make Executable", "icon": "NSTouchBarGoForwardTemplate", "cmd": ACT % "exec"},
+    {"name": "Reset Folder View", "icon": "NSTouchBarRefreshTemplate", "cmd": ACT % "reset-view"},
+    {"name": "Send with Taildrop", "icon": "NSTouchBarShareTemplate", "cmd": ACT % "taildrop"},
+    {"name": "Send with csync", "icon": "NSTouchBarSkipAheadTemplate", "cmd": ACT % "csync"},
     {"name": "Open in Zed", "icon": "NSTouchBarTextListTemplate", "cmd": 'open -a Zed "$@"'},
     {
         "name": "Open in VS Code",
