@@ -42,7 +42,7 @@ too. Full rule: `rules/shell.md`.
 
 ### File paths in output: never directly followed by a period
 
-When you print a file path or filename, never put a period immediately after it, whether in backticks (`` `foo.md`. ``) or bare (`foo.md.`). Ghostty auto-links file paths in the terminal, and a trailing period is swallowed into the link, so the path stops being clickable and the user has to ask for the full path again. Follow every path with a space, a word or a comma, or restructure so the path is not the last thing before a sentence period. The `filename-dot-stop.sh` Stop hook enforces this. To mute it, run `touch ~/.claude/.no-filename-dot-gate`; like every `.no-*` mute file, it applies machine-wide across ALL sessions until removed.
+When you print a file path or filename, never put a period immediately after it, whether in backticks (`` `foo.md`. ``) or bare (`foo.md.`). Ghostty auto-links file paths in the terminal, and a trailing period is swallowed into the link, so the path stops being clickable and the user has to ask for the full path again. Follow every path with a space, a word or a comma, or restructure so the path is not the last thing before a sentence period. The `format-gate-stop.sh` Stop hook enforces this. To mute it, run `touch ~/.claude/.no-filename-dot-gate`; like every `.no-*` mute file, it applies machine-wide across ALL sessions until removed.
 
 ### Comments are for humans first
 

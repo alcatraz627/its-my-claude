@@ -243,8 +243,8 @@ OSASCRIPT
   space)
     n="${2:-1}"
     # Key codes: Space 1=18, 2=19, 3=20, 4=21
-    declare -A keycodes=([1]=18 [2]=19 [3]=20 [4]=21)
-    kc="${keycodes[$n]:-}"
+    # A case, not an associative array: macOS ships bash 3.2, which has none.
+    case "$n" in 1) kc=18 ;; 2) kc=19 ;; 3) kc=20 ;; 4) kc=21 ;; *) kc="" ;; esac
     if [[ -z "$kc" ]]; then
       echo "ERROR: Space must be 1-4" >&2
       exit 1
