@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-10-20
+updated: 2026-10-21
 stale_after_days: 365
 ---
 
@@ -18,7 +18,7 @@ One line per rule in `rules/`. Scan it, then Read `rules/<name>.md` when a rule 
 `always` = loaded every session; `scoped` = not loaded, Read it when it applies.
 DERIVED from each rule's `brief:`; regenerate with `bash ~/.claude/scripts/rules-index.sh`.
 
-Regenerated 2026-10-20 23:18.
+Regenerated 2026-10-21 00:47.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -61,7 +61,7 @@ Regenerated 2026-10-20 23:18.
 | `no-unasked-artifact-publish` | always | Never publish an Artifact (a hosted claude.ai page) unless the owner asked |
 | `owner-decisions-go-through-a-wizard` | always | Any batch of owner decisions (authorizations, rulings, review of an agent-written doc) |
 | `owner-gate-means-actionable-today` | always | A blocked_on USER: prefix means the owner can act on it today |
-| `pr-nobot-noslack-codex-review` | scoped | Every PR the agent raises carries [nobot] [noslack] in its title to silence |
+| `pr-nobot-noslack-codex-review` | scoped | The [nobot] [noslack] PR title tags are a per-repo call (a repo's own |
 | `proposed-fix-breaks-design-invariant` | scoped | Before writing any "mode A trades X for Y" design framing (lean/enriched, cached/live |
 | `pushback-and-self-criticism` | always | One doctrine for disagreement. Run the checks a self-critical reply names before sending |
 | `read-the-comments-on-a-pr-you-raised` | scoped | A PR you opened is not done when it is pushed |

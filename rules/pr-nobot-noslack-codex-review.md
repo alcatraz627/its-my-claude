@@ -1,5 +1,5 @@
 ---
-brief: Every PR the agent raises carries [nobot] [noslack] in its title to silence the pr-claude bot and the Slack mirror; review the branch locally with a cheap codex seat before opening it, and paste that verdict as the PR's agent comment
+brief: The [nobot] [noslack] PR title tags are a per-repo call (a repo's own rule wins; otherwise [noslack] on working PRs, [nobot] when a bot review would not help); review the branch locally with a cheap codex seat before opening it, and paste that verdict as the PR's agent comment
 triggers:
   - phrase:"open a PR"
   - phrase:"pull request"
@@ -17,7 +17,7 @@ paths:
   - "zz-on-demand--never-autoloads"
 tier: 2
 category: rules
-updated: 2026-09-01
+updated: 2026-10-21
 stale_after_days: 180
 ---
 
@@ -30,9 +30,13 @@ review locally for near nothing.
 
 ## The rule
 
-1. **Every `gh pr create` the agent runs puts `[nobot] [noslack]` in the
-   title.** No exceptions for "important" PRs; the owner strips the tags
-   themselves when they want the machinery.
+1. **The tags are a per-repo call** (owner, 2026-10-21). A repo whose own
+   rules name the tags follows them: slack-automation's PRs carry both, because
+   its volume would crowd out the PRs elsewhere that need the rich review. In
+   a repo with no stated rule, `[noslack]` goes on an agent's working PR, and
+   `[nobot]` goes on when the PR would not gain from a bot review (a mechanical
+   change, a docs tidy, a chain of small PRs). A PR that would gain from one
+   goes without `[nobot]`. The owner strips or adds tags when they disagree.
 2. **Before opening the PR, run a cheap local review** with a codex seat (the
    `codex:codex-rescue` agent type, or the local `codex` CLI over the branch
    diff). The seat reads the full diff against the base and returns findings
@@ -47,5 +51,5 @@ review locally for near nothing.
 
 ## Diagnostic signal
 
-You are typing `gh pr create` and the title has no `[nobot]`, or no local
-review ran on the branch. Stop; review, tag, then open.
+You are typing `gh pr create` without having checked the repo's own tag rule,
+or no local review ran on the branch. Stop; review, decide the tags, then open.
