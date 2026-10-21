@@ -242,7 +242,9 @@ if dream_enabled:
 # precheck and what its hook actually did (blocks versus warnings), so the agent
 # knows which ones nothing stops. Owner restored this on 2026-10-13 after D12
 # retired the longer TL;DR; the receipt carries sid so its effect can be measured.
-if part_mode != 'ranked' and os.environ.get('NO_ATONE_SUMMARY') != '1':
+# Headless runs (claude -p linters, jurors) got 92% of these and act on none.
+_interactive = os.environ.get('CLAUDE_CODE_ENTRYPOINT', '') in ('', 'cli', 'claude-vscode')
+if part_mode != 'ranked' and os.environ.get('NO_ATONE_SUMMARY') != '1' and _interactive:
     try:
         import datetime as _dt
         from collections import Counter
