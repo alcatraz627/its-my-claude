@@ -141,6 +141,16 @@ lane). The dispatch prompt is the full text of
 > The Coverage line is machine-mined for telemetry, so keep its key=value shape exactly.
 > Observations is the free-text slot; write "none" rather than omitting it.
 
+### 3b. Optional second prosecutor: Gemini 4 Argon (owner, 2026-10-21)
+
+Run it when the owner asks for a non-Claude seat, or a cross-check on a high-stakes scope. Argon is a second opinion, never the verdict. On PR #110 it found two real issues the Codex seat missed, and it also asserts confident false ones: PR #110 had 2 of 5 false, i-dream 2 false and 5 stale of 15. The track record is in `~/Code/local-models/docs/model-notes.md`, where you append each run's held, partial and false counts.
+
+1. **Build one pack file.** It holds the persona text, the claims ledger, the scope's current source with line numbers, and the diff. It does not hold old audits or reports, because Argon leans on stale documents over newer code.
+2. **Run it over the direct API, never through gemini-cli.** gemini-cli hung on a 1.9 MB pack for 16 minutes without sending the request. Use:
+   `python3 ~/Code/local-models/lib/gemini-direct.py gemini-4-argon <pack.md> <out>/argon-indictment.md`
+   It streams to `<out>.live.md`. Expect about 1 to 2 minutes, and $2 to $4 for a 500K-token pack. The output cap is 32K tokens, so ask for findings, not rewrites.
+3. **Verify every Argon finding** against the cited file:line before presenting it. Present Argon's findings in their own table, marked held, plausible or false. Never merge them into the Claude prosecutor's table.
+
 ### 4. Present: verbatim, then dispositions
 
 Verify the report file exists (the return abstract is a pointer, not the artifact) and that it ends with the `Coverage:` and `Observations:` lines.
