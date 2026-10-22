@@ -1105,6 +1105,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/declared-ready-stop.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/doc-voice-gate.py stop"
           }
         ]
       },
