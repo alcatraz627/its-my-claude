@@ -252,7 +252,8 @@ def lint(path, text=None):
     issues = issue_states(root) if needs_gh else {}
     out = []
     if needs_gh and issues is None:
-        out.append(warn("no-tracker", "Could not read the issue tracker, so GH# rows were not checked."))
+        out.append(warn("no-tracker", "Could not reach the issue tracker, so rows that point at GitHub issues were "
+                        "not checked. Run the lint again once `gh` works here."))
 
     rows = row_entries(doc)
     for r in rows:
@@ -261,11 +262,12 @@ def lint(path, text=None):
         states = [source_state(i, gs_rows, issues) for i in ids]
         owned = [s for s in states if s is not None]
         if owned and len(owned) == len(ids):
+            src = "goal record" if any(i in gs_rows for i in ids) else "issue tracker"
             if all(s == "done" for s in owned) and not done:
-                out.append(error("open-but-done", "%s: its source shows it done, but the row is not ✅. Run "
-                                 "`directions.py sync` or mark it ✅." % label, ids))
+                out.append(error("open-but-done", "%s: the %s says this is done, but the row is not marked ✅. Run "
+                                 "`directions.py sync`, or mark it ✅ yourself." % (label, src), ids))
             if done and any(s == "open" for s in owned):
-                src = "the goal record" if any(i in gs_rows for i in ids) else "the issue tracker"
+                src = "the " + src
                 out.append(error("done-but-open", "%s: the row says ✅ but %s says it is still open. If it is "
                                  "done, close it there with its proof; if not, reopen the row." % (label, src), ids))
         elif done and INFERRED not in r["raw"]:
@@ -274,15 +276,17 @@ def lint(path, text=None):
                 out.append(error("done-unproven", "%s: marked ✅ with nothing in Sources behind it. Add the commit, "
                                  "file or run that shows it, or mark it 💭 (agent inferred)." % label, ids))
             elif p == "broken":
-                out.append(error("proof-broken", "%s: its Sources line names a commit or file that does not exist "
-                                 "in this repo." % label, ids))
+                out.append(error("proof-broken", "%s: the commit or file named in its Sources line does not exist "
+                                 "in this repo. Correct the reference, or remove it and mark the row 💭 (agent "
+                                 "inferred)." % label, ids))
         task = TICK.sub(lambda m: m.group(1), r["task"])
         if len(task) > LONG_TASK:
-            out.append(error("row-long", "%s: the task is %d characters. One short line; detail goes to Sources."
-                             % (label, len(task)), ids))
+            out.append(error("row-long", "%s: the task is %d characters, over the %d limit. Shorten it to one line "
+                             "and move the detail to Sources." % (label, len(task), LONG_TASK), ids))
         if ROW_PROOF.search(r["task"]):
-            out.append(error("proof-in-row", "%s: the task carries a commit, file:line or run id. Move it to "
-                             "Sources and keep the row to what is true." % label, ids))
+            out.append(error("proof-in-row", "%s: the task text contains a commit hash, a file path with a line "
+                             "number, or a run id. Move that to Sources and leave the row saying only what is "
+                             "true now." % label, ids))
 
     states_by_id = {}
     for r in rows:
@@ -293,24 +297,27 @@ def lint(path, text=None):
             continue
         ci, cd = col(t["head"], "id"), col(t["head"], "if you say nothing", "default", "if")
         if len(t["rows"]) > MAX_WAITING:
-            out.append(warn("too-many-asks", "Waiting on you has %d entries. Keep what you can act on today; the "
-                            "rest belongs under its direction." % len(t["rows"])))
+            out.append(warn("too-many-asks", "The Waiting on you section has %d entries, over the %d limit. Keep only "
+                            "what the owner can act on today and move the rest under its direction."
+                            % (len(t["rows"]), MAX_WAITING)))
         for _, c in t["rows"]:
             ids = expand_ids(c[ci]) if ci is not None and ci < len(c) else []
             label = ", ".join(ids) or "an ask"
             ca = col(t["head"], "ask", "what")
             ask = TICK.sub(lambda m: m.group(1), c[ca]) if ca is not None and ca < len(c) else ""
             if len(ask) > LONG_TASK:
-                out.append(error("ask-long", "%s: the ask is %d characters. Say the one thing the owner does; "
-                                 "the why goes under its direction." % (label, len(ask)), ids))
+                out.append(error("ask-long", "%s: the request is %d characters, over the %d limit. Cut it to the one "
+                                 "thing the owner does and move the reasoning under its direction."
+                                 % (label, len(ask), LONG_TASK), ids))
             default = c[cd] if cd is not None and cd < len(c) else ""
             if default.strip().lower() in NO_DEFAULT:
-                out.append(error("ask-no-default", "%s: no default. Say what happens if the owner says nothing."
-                                 % label, ids))
+                out.append(error("ask-no-default", "%s: it does not say what happens if the owner says nothing. "
+                                 "Fill in the \"if you say nothing\" column." % label, ids))
             srcs = [source_state(i, gs_rows, issues) for i in ids]
             if ids and all(s == "done" for s in srcs):
-                out.append(error("ask-stale", "%s: already done at its source, so it is not waiting on the owner."
-                                 % label, ids))
+                where = "goal record" if any(i in gs_rows for i in ids) else "issue tracker"
+                out.append(error("ask-stale", "%s: it is already done in the %s, so it is no longer waiting on the "
+                                 "owner. Remove it from Waiting on you." % (label, where), ids))
             blockers = [b for i in ids if i in gs_rows for b in gs_rows[i].get("blocked_by") or []
                         if source_state("#%s" % b, gs_rows, issues) == "open"]
             if blockers:
@@ -320,8 +327,8 @@ def lint(path, text=None):
             for i in ids:
                 st = states_by_id.get(i)
                 if st is not None and NEEDS_YOU not in st and DONE not in st:
-                    out.append(warn("ask-row-state", "%s: asked of the owner, but its row is %s, not 🔴." % (i, st),
-                                    [i]))
+                    out.append(warn("ask-row-state", "%s: it is listed under Waiting on you, but its row is marked %s. "
+                                    "Mark the row 🔴, or take it out of Waiting on you." % (i, st), [i]))
 
     for t in doc["tables"]:
         if kind(t) == "rows" and len(t["rows"]) > MAX_ROWS_PER_TABLE:
@@ -330,10 +337,11 @@ def lint(path, text=None):
         if kind(t) == "rows" and t["rows"] and t["h3"]:
             cs = col(t["head"], "state")
             if all(DONE in c[cs] for _, c in t["rows"] if cs < len(c)) and DONE not in t["h3"]:
-                out.append(warn("goal-done-unmarked", "%s: every row is ✅; mark the goal ✅ and fold its rows."
-                                % t["h3"]))
+                out.append(warn("goal-done-unmarked", "%s: every row under this goal is ✅. Mark the goal ✅ and fold "
+                                "its rows into one line." % t["h3"]))
     if len(doc["directions"]) > MAX_DIRECTIONS:
-        out.append(warn("too-many-directions", "%d directions; a reader holds about seven." % len(doc["directions"])))
+        out.append(warn("too-many-directions", "The file has %d directions, more than a reader can hold (about "
+                        "seven). Merge or retire some." % len(doc["directions"])))
     if doc["standing"] > MAX_STANDING:
         out.append(warn("standing-long", "Where things stand has %d lines; keep it to five." % doc["standing"]))
     cited = set(GOAL_ID.findall(text))
@@ -345,8 +353,9 @@ def lint(path, text=None):
         except (OSError, ValueError):
             continue
         if g.get("status") == "live" and repo in (g.get("projects") or []) and g.get("id") not in cited:
-            out.append(warn("goal-uncited", "Goal %s (%s) is live for this repo and sits under no direction."
-                            % (g.get("id"), (g.get("outcome") or "")[:60])))
+            out.append(warn("goal-uncited", "Goal %s (%s) is live for this repo but is not listed under any "
+                            "direction. Add it under the direction it serves, or close the goal if it is no longer "
+                            "live." % (g.get("id"), (g.get("outcome") or "")[:60])))
     return out
 
 
@@ -437,8 +446,8 @@ def hook_post(data):
         if path and any(g in cmd for g in GOAL_ID.findall(open(path, encoding="utf-8", errors="replace").read())):
             done = sync(path)
             if done:
-                msg = ("DIRECTIONS.md followed the goal record: %s now ✅. Commit it with your change."
-                       % "; ".join(done))
+                msg = ("DIRECTIONS.md was updated to match the goal record: %s now show ✅. Commit it with your "
+                       "change." % "; ".join(done))
                 print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": msg}}))
     return 0
 
@@ -461,11 +470,12 @@ def hook_stop(data):
     if st["blocks"] < MAX_STOP_BLOCKS:
         st["blocks"] += 1
         save_state(sid, st)
-        print(json.dumps({"decision": "block", "reason": "DIRECTIONS.md has problems this turn added: " + detail +
-                          " Fix them, or say in one sentence which one stays and why."}))
+        print(json.dumps({"decision": "block", "reason": "This turn's edits left problems in DIRECTIONS.md. " +
+                          detail + " Fix them, or say in one sentence which one should stay and why."}))
         return 0
     os.remove(state_path(sid))
-    print(json.dumps({"systemMessage": "directions check: DIRECTIONS.md still has problems this turn added. " + detail}))
+    print(json.dumps({"systemMessage": "DIRECTIONS.md still has problems from this turn's edits, and the agent did "
+                      "not fix them. " + detail + " Ask the agent to fix them, or tell it which ones can stay."}))
     return 0
 
 

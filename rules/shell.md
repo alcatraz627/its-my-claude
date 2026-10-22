@@ -17,6 +17,7 @@ stale_after_days: 90
 
 - **One command per Bash call. No `&&`, `;` or `|`.** Every segment of a compound must match an allow entry, so one unlisted segment prompts the owner about the whole chain and halts the session. Ask the tool for less output (`rg -m 5`, `sed -n '1,40p'`, `git log -5`); redirect to a file and read it next call. No `VAR=x cmd`, no inline functions; multi-line python goes in a file. Settings are read at session start; a list fix lands only after a restart.
 - Every sub-agent dispatch prompt carries the one-command clause.
+- **API tokens are not in agent shells.** Linear, Render, Slack and GitHub tokens live in the Keychain; your shell strips them. When a command needs one, run `with-token LINEAR_API_KEY -- <command>` (several names allowed before `--`). It needs no approval. Never print a token; `secret-leak-scan.py` reports any that reaches a transcript.
 - **Never dump the environment** (`env`, `printenv`, `set` bare): live API tokens are exported on purpose, and a dump copies them into the transcript. Read one var: `printenv NAME`. Hook: guard-env-dump.sh.
 - **`trash`, never `rm`.** `safe-delete.sh` blocks `rm`, `\rm`, `/bin/rm`, `command`/`env`/`sudo rm`, `xargs rm`, `find -exec rm`, `find -delete`, `unlink` and `bash -c "rm ..."`; it cannot see `rmdir`, a variable or alias (`$RM`), or a runtime call (`python3 -c "os.remove(...)"`).
 - Never Glob/Grep from `~/`; resolve to a project root first.

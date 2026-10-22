@@ -45,8 +45,7 @@ def api_key():
         pass
     key = os.environ.get("LINEAR_API_KEY", "").strip()
     if not key:
-        raise LinearError("no API key. Put LINEAR_API_KEY in ~/.zshenv, or run: "
-                          "security add-generic-password -s linear-api -a \"$USER\" -w '<key>'")
+        raise LinearError("no API key in the Keychain service linear-api. The owner stores it with: token-set LINEAR_API_KEY")
     return key
 
 
