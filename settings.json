@@ -203,6 +203,15 @@
         ]
       },
       {
+        "matcher": "Edit|Write|MultiEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/directions/directions.py hook-post"
+          }
+        ]
+      },
+      {
         "matcher": "Bash|Agent|Task|Read|Write|Edit|MultiEdit|Glob|Grep|TaskCreate|TaskUpdate",
         "hooks": [
           {
@@ -1109,6 +1118,10 @@
           {
             "type": "command",
             "command": "python3 ~/.claude/scripts/hooks/doc-voice-gate.py stop"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/directions/directions.py hook-stop"
           }
         ]
       },

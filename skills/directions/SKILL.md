@@ -129,15 +129,21 @@ previous file". Then commit (see Committing) with a subject naming the rebuild.
 
 `/directions tick <id> [proof]` changes one row: its state, its task text, or both.
 
-1. Find the row by id. If the id appears in more than one row, list them and stop.
-2. Get the proof: what the owner passed, or the commit, run id, or file that shows
-   the change. Without proof, a row cannot move to done; say what proof would do it.
+1. A goal-record row (`#n`) is closed in the goal record, not in this file:
+   `gs close <goal> <n> --by "<proof>"`. The hook then marks the row ✅ (or run
+   `python3 ~/.claude/scripts/directions/directions.py sync <file>`). Go to step 4.
+2. Any other row: find it by id. If the id appears in more than one row, list them
+   and stop. Get the proof (what the owner passed, or the commit, run or file that
+   shows the change). Without proof a row cannot move to done; say what proof would
+   do it, or mark it 💭 if the owner wants it recorded as the agent's inference.
 3. Edit the row, its line in Sources, and anything it settles: the shape table's
    state for its direction, a Waiting on you entry it answers, "Where things stand"
    if it was the biggest gap. A goal whose rows are all done gets the done mark in its
    heading.
-4. Update `_Last updated_` and commit (see Committing) as `Directions: <id> done`
-   or `Directions: <id> <short change>`.
+4. Run `python3 ~/.claude/scripts/directions/directions.py lint <file>`. Fix any
+   error this edit added; the Stop gate holds the turn on them anyway. Then update
+   `_Last updated_` and commit (see Committing) as `Directions: <id> done` or
+   `Directions: <id> <short change>`.
 
 ## Committing
 
@@ -151,24 +157,21 @@ Push only if the repo's rules already allow it.
 
 ## Check
 
-Read-only. Each Sources pointer has a form, and each form has its test: a commit
-hash, `git -C <root> cat-file -t <hash>`; an issue, `gh issue view <n> --json
-state`; a file, whether it exists at HEAD; a goal-record row, its state in `gs`.
-Report, one line each, ranked by how much each would mislead the owner:
+Read-only. Run `python3 ~/.claude/scripts/directions/directions.py lint <file>`;
+it checks every row against git, the issue tracker and the goal record, and every
+Waiting on you entry for a default and a reason the owner can act today. Errors
+are states it can prove wrong; warnings are shape (caps, unmarked done goals, goals
+under no direction). Then two checks the script does not make:
 
-- **Stale open**: a row not marked done whose pointer shows it done.
-- **Stale done**: a done row whose cited file or issue no longer holds.
-- **Not actionable**: a Waiting on you entry that waits on other work or another
-  person, or that has no default.
-- **Missing proof**: a row with no Sources line.
-- **Orphans**: open issues (`gh issue list --state open --json number`) and open
-  goal-record rows that no row's id cites.
-- **Lost rows**: ids present in the file's previous commit
-  (`git -C <root> show HEAD~1:<path>`) that are gone now without a done mark.
+- **Lost rows**: ids in the file's previous commit (`git -C <root> show
+  HEAD~1:<path>`) that are gone now without a done mark.
 - **Duplicate file**: more than one DIRECTIONS.md in the repo.
 
-End with the count, the skipped checks (no `gh`, no goal record), and an offer of
-`tick` for each stale row. Never edit in `check`.
+Report the errors first, one line each, in the script's words, then the warnings as
+a count. Offer `sync` when an error is `open-but-done`, and `tick` for the rest. A
+`done-but-open` error is a question for whoever closed it, never flipped back
+silently: either the goal record or issue lags (close it there with the proof) or
+the row is wrong (reopen it). Never edit in `check`.
 
 ## Reporting back
 
@@ -191,13 +194,14 @@ entry if it changed.
 Efficacy dimension: the owner can choose what comes next from this file alone, and
 every state in it is true today.
 
-1. **States hold.** Take up to five open and five done rows, the most recently
-   changed first (`git log -p -- <file>`), and run each one's Sources test from
-   Check. Pass: every one agrees.
-2. **Waiting on you is actionable.** Read each entry. Pass: every entry has a
-   default, and none waits on other work or another person.
-3. **Rows stay short.** Read the row tables. Pass: no task cell runs past one line
-   or carries a commit hash, path or run id; proof sits only in Sources.
+1. **States hold.** `directions.py lint <file>` reports no error this run added.
+   Pass: zero new errors against the committed version.
+2. **The lint itself stays honest.** When the owner corrects a row the lint passed,
+   or overrides a finding, that is a miss: name it in the runtime note with the row,
+   so the check can be tightened or cut. Pass: no repeated miss of one kind.
+3. **The owner reads it without asking.** After a `build`, the owner's next message
+   acts on the file (picks, rules, ticks) rather than asking what a row means. Pass:
+   no "what is X" about a row in the file.
 
 ## Runtime notes and ledger
 

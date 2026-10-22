@@ -22,7 +22,7 @@ triggers:
 related: [features/llm-mini.md, features/model-tier-harness.md]
 tier: 2
 category: features
-updated: 2026-07-13
+updated: 2026-10-22
 stale_after_days: 90
 ---
 
@@ -31,8 +31,16 @@ stale_after_days: 90
 A toolkit at `~/Code/local-models` with local inference on this Mac (M5 Pro, 64 GB)
 and a separate connected Gemini lane alongside Claude. Two hard rules apply: **no idle penalty** (nothing resident unless pinned or leased)
 and **trust = a passing gate, never model confidence**. Everything is a bare command on PATH.
-**Read `~/Code/local-models/docs/STATE.md` first** for current state. `docs/CAPABILITIES.md` is
-the full menu with examples.
+**Before using any of it, run `lm --capabilities --json`.** It answers in about 50 ms with no model
+call and lists every job: command template, inputs, output shape, exit codes, cost, whether it
+leaves the Mac, and side effects. `lm --capabilities <job>` narrows it to one job. When you know
+what you want but not the command, `lm how "<request>" --json` returns `{command, job, why,
+alternatives}` and runs nothing. With `--json`, every error carries `remedy` (one sentence) and
+`next` (a safe runnable command, or null). History views default to the calling terminal, so an
+agent with no tty passes `--all` or sets `LM_ALL=1`.
+
+For current state read `~/Code/local-models/docs/STATE.md`. `docs/CAPABILITIES.md` is the full
+menu with examples.
 
 ## Commands (all on PATH, all have `-h`)
 
