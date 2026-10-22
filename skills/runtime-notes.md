@@ -16,6 +16,20 @@
 
 ---
 
+## create-skill: /directions from the slack-automation DIRECTIONS.md usage study (2026-10-22 16:05)
+
+**Purpose:** Turn the owner's /directions ask into a skill that keeps one repo board true: build from recon, tick a row, check drift.
+
+**Insights:**
+
+1. The intent seat's sharpest catch was runnability, not verbatim: "run the check each Sources line implies" is not a command. Naming one test per pointer form (commit, issue, file, goal row) made Check and Validation executable.
+2. `seat compose` takes a brief FILE from `seat template`, not a string; a draft that passes it inline would be refused. Read the tool's help before writing its invocation into a skill.
+3. A skill that commits can still stay model-invocable when its real usage is agents closing rows mid-work; the guard is scope (one file, protected repos stage only), not disabling invocation.
+
+---
+
+---
+
 ## session: ingest service v1 build, review and docs [gcp-ingst-4e] · 2026-10-22 05:00
 **Purpose:** Finish versable-ingest v1 unattended: dashboard, tests, adversarial review and fixes, docs, staging deploy, Walmart PR follow-up.
 

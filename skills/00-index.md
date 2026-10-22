@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-10-15
+updated: 2026-10-22
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-10-15 03:07.
+Regenerated 2026-10-22 15:36.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -54,6 +54,7 @@ Regenerated 2026-10-15 03:07.
 | `deep-research` | yes | Answers a question that needs evidence from outside this machine, by splitting it into claims, researching each in parallel, verifying the load-bearing ones against … |
 | `deploy-parity-testing` | user-only | Before claiming a cutover when work moves to a new runner, provider or flag. Runs the parity cycle with a fresh seat, on dev and preview. Not for ordinary tests. |
 | `designer-reviewer` | user-only | Reviewing a developer-tool UI screenshot against the owner's dark, dense terminal-dashboard style. Gives a scored critique with CSS fixes. Not for confusion audits (use … |
+| `directions` | yes | Maintains one DIRECTIONS.md per repo, the file the owner reads to pick what comes next. Builds it from recon, closes a row with proof, reports drift. Use for … |
 | `doctor` | yes | User asks what is wrong or reports flaky hooks or MCP. Checks worktrees, pm2, disk, WAL, git and hook logs. Not for debugging application code. |
 | `feature-doc-set` | yes | A feature PR is raised or reviewed. Writes the owner brief, engineering guide, team brief, PR text and a review contract. Not for a lone PR body (use pr-description). |
 | `file-gh-issue` | yes | A small technical cleanup is worth tracking, or a PR bot finding is wrong. Files a minor GitHub issue, dry-run first with a human gate. Not for major issues. |
