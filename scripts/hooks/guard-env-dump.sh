@@ -33,7 +33,7 @@ DUMP='(^|[;&|(]|\n)[[:space:]]*(/usr/bin/)?(env|printenv|set|export([[:space:]]+
 PROC='(^|[;&|(]|\n)[[:space:]]*(pm2[[:space:]]+(jlist|prettylist|env|show|describe)|ps[[:space:]]+(-[a-zA-Z]*[eE][a-zA-Z]*|[a-z]*e[a-z]*)([[:space:]]|$)|docker[[:space:]]+(container[[:space:]]+)?inspect)'
 printf '%s' "$cmd" | grep -qE "$DUMP|$PROC" || exit 0
 
-reason="[env-dump] Refused: this prints the whole environment, which holds live API tokens the owner keeps exported so tools work (Render, Linear, GitHub, Slack). A dump copies them into the transcript. Read one variable instead: printenv NAME, or check it exists without printing it: [ -n \"\$NAME\" ] && echo set. Owner ruling 2026-10-14. If this blocks real work, tell the owner rather than working around it."
+reason="[env-dump] Refused: this prints the whole environment, which can still hold live secrets (the Claude process inherits the owner's terminal). A dump copies them into the transcript. Read one variable instead: printenv NAME, or check it exists without printing it: [ -n \"\$NAME\" ] && echo set. Agent shells carry no Linear, Render, Slack or GitHub token by design; when a command needs one, run it as: with-token NAME -- <command> (see ~/.claude/features/api-tokens.md). Owner ruling 2026-10-14. If this blocks real work, tell the owner rather than working around it."
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-env-dump --action block --heeded unknown >/dev/null 2>&1 || true
 jq -nc --arg r "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$r}}'
 exit 0

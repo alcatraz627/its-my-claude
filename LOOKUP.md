@@ -74,6 +74,7 @@
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
 | `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence | `tool:pm2`, `topic:dev-servers` |
 | `features/usage-speedbumps.md` | 5h usage window speed bumps for every agent and subagent (amber 80, red 90, brake 96), hibernation in place (warm pings, own wake after the reset), the gate on Claude Code's own reset resume, and `/catchup --from <alias\|sid>` manual takeover | `tool:usage5h.py`, `tool:resume-from.py`, `topic:usage-window`, `topic:hibernate` |
+| `features/api-tokens.md` | API tokens live in the Keychain; agent shells strip them, `with-token NAME -- cmd` grants one per command, `token-set` stores a rotated one, and the leak scanner reports any token that reaches a transcript | `tool:with-token`, `topic:api-token`, `topic:secrets` |
 | `features/zrecover.md` | Desktop-session safeguard: memory/CPU reaper with rules and grants, `zrecover run claude` screen capture, `zrecover restore` after a crash | `tool:zrecover`, `topic:memory-pressure`, `topic:crash-recovery` |
 | `features/claudew.md` | Plugin-based claude CLI wrapper | `tool:claudew`, `topic:rate-limit-recovery` |
 | `features/shell-memory.md` | shell-mem shell history + BG processes (renamed from diy-mem in mig 0014) | `tool:shell-mem`, `topic:shell-history` |

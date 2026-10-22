@@ -198,7 +198,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/secret-leak-scan.py"
+            "command": "~/.claude/scripts/hooks/secret-leak-scan.py",
+            "timeout": 10
           }
         ]
       },
