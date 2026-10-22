@@ -45,7 +45,10 @@ since_nudge=$(( now - last_nudge ))
 reason=""
 if [[ -n "$last_cwd" && "$cwd" != "$last_cwd" ]]; then
   reason="working directory changed (${last_cwd##*/} → ${cwd##*/})"
-elif (( idle > 1800 )); then
+# The prompt cache here lives an hour (transcripts show ephemeral_1h writes, and a
+# wake 51 minutes after the last turn read 475k tokens warm), so 30 minutes of idle
+# called a warm cache cold and invited a needless /clear.
+elif (( idle > 3600 )); then
   reason="resumed after $(( idle / 60 ))-min idle (prompt cache is cold — a /clear costs nothing now)"
 fi
 

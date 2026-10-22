@@ -2,9 +2,6 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 365,
   "skillListingBudgetFraction": 0.02,
-  "claudeMdExcludes": [
-    "/Users/alcatraz627/.claude/rules/README.md"
-  ],
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
     "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1",
@@ -101,7 +98,7 @@
     ],
     "defaultMode": "bypassPermissions"
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "enableAllProjectMcpServers": false,
   "disableClaudeAiConnectors": true,
   "hooks": {
@@ -360,6 +357,11 @@
           {
             "type": "command",
             "command": "/bin/bash ~/.claude/scripts/session-mgmt/heartbeat.sh"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ~/.claude/scripts/usage/usage5h.py hook-post",
+            "timeout": 10
           }
         ]
       },
@@ -700,6 +702,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/block-nested-claude.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-extension-root.sh"
           }
         ]
       },
@@ -957,11 +963,26 @@
         ]
       },
       {
+        "matcher": "Workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ~/.claude/scripts/usage/usage5h.py hook-pre-agent",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Agent",
         "hooks": [
           {
             "type": "command",
             "command": "/usr/bin/python3 ~/.claude/scripts/seats/seat-hook.py",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ~/.claude/scripts/usage/usage5h.py hook-pre-agent",
             "timeout": 10
           }
         ]
@@ -1477,6 +1498,11 @@
             "type": "command",
             "command": "/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-prompt",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 ~/.claude/scripts/usage/usage5h.py hook-prompt",
+            "timeout": 10
           }
         ]
       },
@@ -1584,12 +1610,14 @@
   "timeFormat": "24-hour",
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": false,
+  "claudeMdExcludes": [
+    "/Users/alcatraz627/.claude/rules/README.md"
+  ],
   "theme": "dark",
   "editorMode": "normal",
   "verbose": false,
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": true,
-  "idleCompaction": false,
   "switchModelsOnFlag": false,
   "terminalProgressBarEnabled": true,
   "teammateMode": "auto",
@@ -1633,5 +1661,7 @@
       "Routine under `/Users/alcatraz627/Code/Versable/` prefix: gcloud read-only operations (list, describe, get-iam-policy, logging read, versions list, ls, du, builds log) run freely per this repo's declared allow tier"
     ]
   },
-  "voiceEnabled": false
+  "voiceEnabled": false,
+  "idleCompaction": false,
+  "enableWorkflows": false
 }

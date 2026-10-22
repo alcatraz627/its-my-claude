@@ -50,6 +50,14 @@ WAKE_PROMPT = "[keepwarm] idle check"
 # little early would find the session not yet due, so pad by one minute.
 ARM_PAD_S = 60
 USAGE_GATE = os.path.join(HOME, ".claude", "scripts", "cron", "usage-gate.sh")
+USAGE5H = os.path.join(HOME, ".claude", "scripts", "usage", "usage5h.py")
+# Prompts that reach the session without the owner typing them. They are not the
+# owner coming back: Claude Code's own resume after a usage-limit reset once got
+# a re-arm and a one-word "warm" reply on a cache it had just rebuilt cold
+# (clanky-opus, 2026-10-21).
+NOT_OWNER = ("<task-notification>", "Another Claude session sent", "Stop hook feedback:", "[usage-carry]",
+             "[usage-resume]", "[fleet-watch]")
+LIMIT_RESET = re.compile(r"usage limit has reset", re.I)
 
 # The upkeep for wake 1, 2, ..., by context USED; the last wake writes a full
 # core-dump and keep-warm stops. With wakes 55 min apart a small session stays
@@ -170,6 +178,35 @@ def usage_gated():
         return False
 
 
+def usage5h():
+    """The 5h-window module, or None when it cannot be loaded."""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("usage5h", USAGE5H)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    except Exception:
+        return None
+
+
+def window_spent():
+    """True when the 5h window is used up, so a wake would only be refused."""
+    mod = usage5h()
+    r = mod.reading() if mod else None
+    return bool(r and r["pct"] >= mod.SPENT_PCT)
+
+
+def hibernating(sid):
+    """True while this session waits out the 5h window; its own pings keep it warm."""
+    mod = usage5h()
+    return bool(mod and mod.hibernating(sid))
+
+
+def not_owner(prompt):
+    return prompt.startswith(NOT_OWNER) or LIMIT_RESET.search(prompt[:200]) is not None
+
+
 def note_path(cwd, sid):
     base = cwd or HOME
     if base.rstrip("/").endswith("/.claude"):
@@ -216,6 +253,9 @@ def hook_prompt(inp):
     sid = inp.get("session_id") or "unknown"
     prompt = (inp.get("prompt") or "").lstrip()
     st = load(sid)
+    if not prompt.startswith(PREFIX) and not_owner(prompt):
+        log(sid, "not-owner", head=prompt[:40])
+        return 0
     if not prompt.startswith(PREFIX):
         # The owner is back: reset the count and the clock.
         if st.get("stopped") or st.get("wakes"):
@@ -253,6 +293,16 @@ def hook_prompt(inp):
         save(sid, st)
         log(sid, "stop", why="nothing-answered")
         return skip_wake("keep-warm skipped: no owner turn has finished in this session")
+    if window_spent():
+        # Claude Code refuses the turn anyway; skipping it keeps the refusal off
+        # the owner's screen. The cache cannot be carried through a spent window.
+        log(sid, "skip", why="window-spent")
+        return skip_wake("keep-warm skipped: the 5h window is spent")
+    if hibernating(sid):
+        # The hibernation's own pings already keep this cache warm; a second
+        # chain would pay twice. Its wake brings the session back.
+        log(sid, "skip", why="hibernating")
+        return skip_wake("keep-warm skipped: the session is hibernating for the 5h window")
     last = st.get("last_activity", now_s())
     idle_min = (now_s() - last) / 60.0
     # The wake's own turn must not count as the owner's activity, or every

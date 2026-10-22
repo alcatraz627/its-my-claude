@@ -505,15 +505,25 @@ session_phase="early"
 # picks it up on its next render. Architecture unchanged — same file,
 # same daemon, same display segments. Only adds one file read per render.
 _limits_file="$HOME/.claude/widgets/.limits.json"
-_cached_r5=""; _cached_r5_resets=""; _cached_r7=""; _cached_r7_resets=""
+_cached_r5=""; _cached_r5_resets=""; _cached_r7=""; _cached_r7_resets=""; _cached_r5_src=0; _cached_r7_src=0
 if [[ -f "$_limits_file" ]]; then
   eval "$(jq -r '
     "_cached_r5=" + ((."5h".pct // "" | tostring) | @sh),
     "_cached_r5_resets=" + ((.resets_at // "") | @sh),
+    "_cached_r5_src=" + ((."5h".src_at // 0 | tostring) | @sh),
     "_cached_r7=" + ((.week.pct // "" | tostring) | @sh),
-    "_cached_r7_resets=" + ((.resets_at_weekly // "") | @sh)
+    "_cached_r7_resets=" + ((.resets_at_weekly // "") | @sh),
+    "_cached_r7_src=" + ((.week.src_at // 0 | tostring) | @sh)
   ' "$_limits_file" 2>/dev/null)"
 fi
+[[ "$_cached_r5_src" =~ ^[0-9]+$ ]] || _cached_r5_src=0
+[[ "$_cached_r7_src" =~ ^[0-9]+$ ]] || _cached_r7_src=0
+_rl_now="${_NOW:-$(date +%s)}"
+# How long a cached higher value may outrank a session's own lower reading
+# without any session confirming it. Usage can drop inside one window (the
+# weekly counter restarted under an unchanged resets_at on 2026-10-21, and a
+# pure "higher wins" held 81% for 14 hours while every session read 16%).
+_RL_CONFIRM_S=1200
 # Parse a resets timestamp (empty, epoch int, or ISO datetime) to epoch.
 #
 # Returns 0 for "unknown", and a reset date more than ~14 days out counts as
@@ -541,8 +551,10 @@ _rl_to_epoch() {
 #      the old window's 80%). Without this, max-value would stick on 80%.
 #   2. Within the same window (equal resets_at), higher percentage wins →
 #      handles the common "halted session is 60% while running session is
-#      61%" case. Usage in a rolling window essentially only goes up, so
-#      a higher value is a fresher fetch.
+#      61%" case. Usage in a rolling window usually only goes up, so a
+#      higher value is usually a fresher fetch, but only while some
+#      session's own reading confirmed it within _RL_CONFIRM_S. src_at in
+#      the cache records when a session last read that value itself.
 #   3. Otherwise own value wins (status quo).
 #
 # Why not resets_at as the sole signal: empirically Claude Code seems to
@@ -555,11 +567,12 @@ _cached_r7_ep=$(_rl_to_epoch "$_cached_r7_resets")
 _own_r7_int=$(printf '%.0f' "${rate_7d:-0}" 2>/dev/null || echo 0)
 _cached_r7_int=$(printf '%.0f' "${_cached_r7:-0}" 2>/dev/null || echo 0)
 _r7_ep=$_own_r7_ep   # epoch of whichever 7d reset wins the merge (0 = unknown)
+_r7_src=$_rl_now     # when the winning value was last read by a session itself
 if [[ -n "$_cached_r7" ]]; then
   if   (( _cached_r7_ep >  _own_r7_ep )); then
-    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep
-  elif (( _cached_r7_ep == _own_r7_ep && _cached_r7_int > _own_r7_int )); then
-    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep; _r7_src=$_cached_r7_src
+  elif (( _cached_r7_ep == _own_r7_ep && _cached_r7_int > _own_r7_int && _rl_now - _cached_r7_src <= _RL_CONFIRM_S )); then
+    rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep; _r7_src=$_cached_r7_src
   fi
 fi
 # 5h merge: same shape. The 5h window is much shorter (5 hours) so
@@ -570,11 +583,12 @@ _cached_r5_ep=$(_rl_to_epoch "$_cached_r5_resets")
 _own_r5_int=$(printf '%.0f' "${rate_5h:-0}" 2>/dev/null || echo 0)
 _cached_r5_int=$(printf '%.0f' "${_cached_r5:-0}" 2>/dev/null || echo 0)
 _r5_ep=$_own_r5_ep
+_r5_src=$_rl_now
 if [[ -n "$_cached_r5" ]]; then
   if   (( _cached_r5_ep >  _own_r5_ep )); then
-    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep
-  elif (( _cached_r5_ep == _own_r5_ep && _cached_r5_int > _own_r5_int )); then
-    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep; _r5_src=$_cached_r5_src
+  elif (( _cached_r5_ep == _own_r5_ep && _cached_r5_int > _own_r5_int && _rl_now - _cached_r5_src <= _RL_CONFIRM_S )); then
+    rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep; _r5_src=$_cached_r5_src
   fi
 fi
 
@@ -595,8 +609,8 @@ has_countdown=0; [[ $r5 -gt 0 && -n "${rate_5h_resets:-}" && "$rate_5h_resets" !
 # Side-effect: write rate limits to widgets cache for claude-instances-bar
 if (( has_rate )); then
   _r7_int=$(printf "%.0f" "${rate_7d:-0}" 2>/dev/null || echo 0)
-  _limits_json="{\"5h\":{\"pct\":${r5},\"used\":0,\"cap\":0}"
-  [[ $_r7_int -gt 0 ]] && _limits_json+=",\"week\":{\"pct\":${_r7_int},\"used\":0,\"cap\":0}"
+  _limits_json="{\"5h\":{\"pct\":${r5},\"used\":0,\"cap\":0,\"src_at\":${_r5_src:-0}}"
+  [[ $_r7_int -gt 0 ]] && _limits_json+=",\"week\":{\"pct\":${_r7_int},\"used\":0,\"cap\":0,\"src_at\":${_r7_src:-0}}"
   # Persist resets_at timestamps if available (ISO string or epoch).
   # `resets_at` is the 5h-window reset (existing); `resets_at_weekly` is the
   # 7d-window reset (new — read by claude-instances-bar's 7d countdown).

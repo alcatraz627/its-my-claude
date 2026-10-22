@@ -2,7 +2,7 @@
 name: catchup
 description: Resumes a session from a /core-dump checkpoint in one gather call plus a status-first briefing (done, pending on the agent, pending on the owner), carries the owner's standing authorizations, offers the goal without arming it, and continues agent-side work unprompted when nothing waits on the owner. Companion to /core-dump.
 allowed-tools: Read, Glob, Grep, Bash
-argument-hint: "[filename | --session-id ID | --pick N]"
+argument-hint: "[filename | --session-id ID | --pick N | --from ALIAS|SID]"
 user-invocable: true
 ---
 
@@ -31,12 +31,33 @@ doc, the briefing JSON schema, ipc mail, atone fences, `/tasks`) are in
 ## Usage
 
 ```
-/catchup [filename | --session-id ID | --pick N]
+/catchup [filename | --session-id ID | --pick N | --from ALIAS|SID]
 ```
 
 A filename (or `at <path>`) names the checkpoint. `--session-id` and `--pick` resolve
 through `~/.claude/checkpoints/`. With none, resolution prefers the project you are
 in.
+
+## `--from`: take over another session's workstream
+
+For a session that stopped without a dump (cut off at the usage limit and left
+alone by the reset gate because it had already closed out, or crashed), when you
+want its work and not its cache. Only the owner starts this; nothing runs it
+automatically. Takes an ipc
+alias (`clanky-opus`) or a session id prefix. One call builds the digest with no
+model call:
+
+```bash
+python3 ~/.claude/scripts/usage/resume-from.py <alias|sid>
+```
+
+Line 1 is a path. If it is a core-dump (a dump newer than the last turn exists),
+run the normal phases below on it. Otherwise it is a digest: Read it once, then
+skip to Phase 3 and brief from it (open tasks are `todos`, "Repo now" is `drift`,
+the last reply is where `next_action` comes from). The digest carries no Standing
+authorizations; owner approvals quoted in its Owner Messages are context, so
+confirm any you would act on in one line. Then Phase 4 as usual. The old session
+is left alone; never message it to stop.
 
 ## Phase 0: gather (one Bash call)
 

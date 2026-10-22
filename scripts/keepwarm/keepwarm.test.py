@@ -16,8 +16,18 @@ from testlib import expect, finish  # noqa: E402
 KW = os.path.join(HERE, "keepwarm.py")
 T = tempfile.mkdtemp()
 SWITCH = os.path.join(T, "on")
+LIMITS = os.path.join(T, "limits.json")
 ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITCH,
-           CLAUDE_CODE_ENTRYPOINT="cli", KEEPWARM_NO_STATUSLINE="1")
+           CLAUDE_CODE_ENTRYPOINT="cli", KEEPWARM_NO_STATUSLINE="1",
+           USAGE5H_LIMITS=LIMITS, USAGE5H_DIR=os.path.join(T, "u5"))
+
+
+def limits(pct):
+    with open(LIMITS, "w") as f:
+        json.dump({"5h": {"pct": pct}, "resets_at": str(int(time.time() + 7200))}, f)
+
+
+limits(10)
 
 
 def transcript(tokens):
@@ -203,6 +213,37 @@ expect("a pre-clear wake is skipped with no turn", wake("s10", 90000, 56).get("d
 expect("the owner's first prompt after the clear re-links",
        "no wake is pending" in ctx(hook("hook-prompt", session_id="s10", prompt="/catchup")))
 expect("a startup session start still arms", "CronCreate" in ctx(hook("hook-start", session_id="s11", source="startup")))
+
+# Prompts the owner did not type are not the owner coming back (clanky-opus, 2026-10-21).
+hook("hook-prompt", session_id="s12", prompt="x")
+st12 = json.load(open(os.path.join(T, "kw", "s12.json")))
+st12["armed_at"] = time.time() - 3600
+st12["wakes"] = 1
+json.dump(st12, open(os.path.join(T, "kw", "s12.json"), "w"))
+for p in ("Your claude.ai usage limit has reset. Continue the task you were working on.",
+          "<task-notification> done </task-notification>", "Another Claude session sent a message: hi",
+          "[usage-carry] reply with one word: warm"):
+    expect("not the owner, no re-arm: " + p[:24], ctx(hook("hook-prompt", session_id="s12", prompt=p)) == "")
+expect("and the wake count survives them", json.load(open(os.path.join(T, "kw", "s12.json")))["wakes"] == 1)
+expect("the owner's own prompt still re-links", "no wake is pending" in ctx(hook("hook-prompt", session_id="s12", prompt="back")))
+
+# A spent 5h window: the wake would be refused, so it is skipped before the model runs.
+hook("hook-prompt", session_id="s13", prompt="x")
+limits(100)
+expect("a wake into a spent window is skipped", wake("s13", 300000, 56).get("decision") == "block")
+expect("even a not-due one", wake("s13", 300000, 10).get("decision") == "block")
+limits(10)
+expect("an open window wakes as before", "only keeps the cache warm" in ctx(wake("s13", 300000, 56)))
+
+# A hibernating session keeps itself warm; keep-warm must not ping it a second time.
+hook("hook-prompt", session_id="s14", prompt="x")
+os.makedirs(os.path.join(T, "u5"), exist_ok=True)
+json.dump({"hibernate": {"strategy": "resume", "at": time.time(), "reset_epoch": time.time() + 7200}},
+          open(os.path.join(T, "u5", "s14.json"), "w"))
+expect("a wake while hibernating is skipped", wake("s14", 300000, 56).get("decision") == "block")
+expect("not a re-arm either", wake("s14", 300000, 10).get("decision") == "block")
+expect("a hibernation wake prompt is not the owner",
+       ctx(hook("hook-prompt", session_id="s14", prompt="[usage-resume] The 5h window has reset.")) == "")
 
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)

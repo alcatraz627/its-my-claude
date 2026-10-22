@@ -28,7 +28,9 @@ if ! rg -qxF "$h" "$dir/crons" 2>/dev/null; then
   printf '%s' "$now" > "$dir/other"   # any other message is news
   exit 0
 fi
-case "$prompt" in "[keepwarm]"*) exit 0 ;; esac
+# Keep-warm, usage hibernation pings and the fleet check repeat by design: what they
+# watch lives outside this repo, so an unchanged tree says nothing about them.
+case "$prompt" in "[keepwarm]"*|"[usage-carry]"*|"[usage-resume]"*|"[fleet-watch]"*) exit 0 ;; esac
 
 head=$(git -C "$cwd" rev-parse HEAD 2>/dev/null) || exit 0
 tree=$(git -C "$cwd" status --porcelain 2>/dev/null | shasum | cut -c1-16)

@@ -58,6 +58,7 @@
 | `features/memory.md` | Per-project + global memory, cascade rules | `topic:memory`, `phrase:"remember that"` |
 | `features/context-retention.md` | Session ID, core-dump/catchup, scratchpad, archive cadence | `skill:core-dump`, `skill:catchup`, `topic:session-id` |
 | `features/proposals.md` | Improvement backlog + self-feedback → canon lifecycle | `tool:propose.sh`, `topic:improvements` |
+| `features/whatsapp-render.md` | WhatsApp export to a WhatsApp-style HTML reader (date rail, media, search, saved position), served to the phone over the tailnet. Script: `scripts/whatsapp-render/build_chat.py` | `topic:whatsapp`, `phrase:"_chat.txt"` |
 | `features/mcp-catalog.md` | MCP server catalog + add-mcp + version pinning | `tool:add-mcp`, `topic:mcp-setup` |
 | `features/kanban.md` | The kanban board: a project's communication surface between the human and its agents across sessions and days. Independent of the Task tool, never a mirror of it; earned by project shape, not todo count | `topic:kanban`, `topic:board`, `skill:kanban` |
 | `features/warden.md` | The warden: session-liveness plus event-driven revive for working agents. The 45m standing-judgment beat is retired (2026-09-02); on-demand judgment survives; event-driven revive not yet wired pending an owner decision. Institution dir `~/.claude/warden/` | `topic:warden`, `topic:revive`, `tool:warden-beat.sh` |
@@ -72,6 +73,7 @@
 | `features/macos-menubar-widget.md` | AppKit menu-bar widget patterns: settings window, live-propagation, composited badge, hover popover | `topic:macos-menubar`, `topic:appkit`, `tool:claude-instances` |
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
 | `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence | `tool:pm2`, `topic:dev-servers` |
+| `features/usage-speedbumps.md` | 5h usage window speed bumps for every agent and subagent (amber 80, red 90, brake 96), hibernation in place (warm pings, own wake after the reset), the gate on Claude Code's own reset resume, and `/catchup --from <alias\|sid>` manual takeover | `tool:usage5h.py`, `tool:resume-from.py`, `topic:usage-window`, `topic:hibernate` |
 | `features/zrecover.md` | Desktop-session safeguard: memory/CPU reaper with rules and grants, `zrecover run claude` screen capture, `zrecover restore` after a crash | `tool:zrecover`, `topic:memory-pressure`, `topic:crash-recovery` |
 | `features/claudew.md` | Plugin-based claude CLI wrapper | `tool:claudew`, `topic:rate-limit-recovery` |
 | `features/shell-memory.md` | shell-mem shell history + BG processes (renamed from diy-mem in mig 0014) | `tool:shell-mem`, `topic:shell-history` |

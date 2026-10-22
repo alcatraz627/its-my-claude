@@ -90,6 +90,32 @@ else
 fi
 rm -rf "$T"
 
+echo "== a higher cached value must not ratchet forever =="
+# 2026-10-21: the weekly counter restarted under an unchanged resets_at. "Higher
+# wins" then held 81% in the cache for 14 hours while every session read 16%.
+# A higher cached value now wins only while a session confirmed it recently.
+render_week() { # cached_pct cached_src_age_s own_pct -> the week pct written back to the cache
+  local T R
+  T=$(mktemp -d); mkdir -p "$T/.claude/widgets"; R=$((NOW + 86400))
+  printf '{"5h":{"pct":10,"src_at":%s},"week":{"pct":%s,"src_at":%s},"resets_at":"%s","resets_at_weekly":"%s"}' \
+    "$NOW" "$1" "$((NOW - $2))" "$((NOW + 3600))" "$R" > "$T/.claude/widgets/.limits.json"
+  jq -nc --arg cwd "$T" --argjson own "$3" --arg r5 "$((NOW + 3600))" --arg r7 "$R" '{
+    session_id:"aaaabbbb-1111-2222-3333-444455556666", model:{display_name:"Test"},
+    workspace:{current_dir:$cwd}, transcript_path:"/dev/null",
+    rate_limits:{ five_hour:{used_percentage:10, resets_at:$r5}, seven_day:{used_percentage:$own, resets_at:$r7} }}' \
+    > "$T/payload.json"
+  PJ="$T/payload.json" SL="$SL" HOME="$T" perl -e 'my $p=fork; if($p==0){setpgrp(0,0); open(STDIN,"<",$ENV{PJ}); exec("bash",$ENV{SL}) or exit 127}
+               local $SIG{ALRM}=sub{kill "KILL",-$p; exit 9}; alarm 25; waitpid($p,0); exit($?>>8)' >/dev/null 2>&1
+  jq -r '.week.pct' "$T/.claude/widgets/.limits.json"
+  rm -rf "$T"
+}
+got=$(render_week 81 3600 16)
+[ "$got" = "16" ] && ok "an unconfirmed 81% gives way to a session reading 16% (-> $got)" \
+                  || bad "an unconfirmed 81% gives way to a session reading 16%: got '$got'"
+got=$(render_week 81 60 79)
+[ "$got" = "81" ] && ok "a recently confirmed 81% still beats a stale session's 79% (-> $got)" \
+                  || bad "a recently confirmed 81% still beats a stale session's 79%: got '$got'"
+
 echo
 printf 'passed %d, failed %d\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

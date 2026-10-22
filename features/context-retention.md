@@ -33,7 +33,7 @@ At the start of every session, generate a short session ID from the initial user
 
 ## Session rules for context retention
 
-- **`/core-dump` runs only when the owner asks** (a typed `/core-dump`, also inline in a longer message) **or on keep-warm's last wake.** An agent never runs it on its own. A task notification, ipc mail, goal check-in or context nudge is not the owner. Owner ruling 2026-10-13: "I want to cut down on core-dump usage, but make it valuable when it happens." The transcript is the crash fallback (`/retro-dump`, `/revive`).
+- **`/core-dump` runs only when the owner asks** (a typed `/core-dump`, also inline in a longer message) **or on keep-warm's last wake, or when a large session finishes its work at the 5h usage limit** (`usage5h.py plan` says so; owner 2026-10-21: "finish and core-dump (even through compaction) if the total work isn't enough to justify re-awakening"; see `features/usage-speedbumps.md`). An agent never runs it on its own otherwise. The transcript-only fallback for a session that stopped without one is `/catchup --from <alias|sid>`. A task notification, ipc mail, goal check-in or context nudge is not the owner. Owner ruling 2026-10-13: "I want to cut down on core-dump usage, but make it valuable when it happens." The transcript is the crash fallback (`/retro-dump`, `/revive`).
 - **Suggest once, in one line:** at a task boundary with 60% or more context used and work queued, say that `/core-dump` then `/clear` would pay for itself after about 50 calls. Then keep working.
 - **Auto-checkpoint at tool #30:** write a WAL checkpoint (cheap, no model synthesis).
 - **After compaction:** re-verify state before acting (`rules/testing-patterns.md` `[post-compact]`).
