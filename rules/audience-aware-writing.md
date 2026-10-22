@@ -54,6 +54,11 @@ specific reader. Two overcorrections fail the same way: a warm narrative essay
 (it reads as feelings, not engineering) and telegraphic Label:fragment prose. Aim
 for plain writing at the reader's altitude.
 
+Owner ruling, 2026-10-22: proper sentences by default; terse fragments, bullets
+or tables where a section shows a lot and the reader skims, but "if the fragments
+themselves are overflowing word slops that defeats the purpose". Added words earn
+their place too (`personas/doc-writer.md`).
+
 ## Put it into action (the human-reader checklist)
 
 Scan a draft for a human and cut these tells before sending:

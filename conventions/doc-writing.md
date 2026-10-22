@@ -510,6 +510,11 @@ did not write the prose. A reviewer with no authorship investment sees the tells
 the author cannot. Do not trust your own self-review for voice. Trust it for
 facts, and route it for style.
 
+A voice pass can make a text longer while making it cleaner, and nothing in the
+catalog above notices that. So the review reports its measured size change
+(`scripts/style/size-delta.py`), and any growth names what it adds. Growth is
+allowed when the reader lacked something. It is never a block.
+
 This is the doc-writing instance of the general rule that fresh-context
 adversarial review beats in-context self-review (cf. `/skeptical-review`).
 
