@@ -155,6 +155,11 @@ out = e.run(["plan", "--work", "none", "--sid", "cccc2222"])
 check("no work left plans finish, with a dump for a large context", "strategy: finish" in out and "/core-dump" in out, out)
 e.transcript("dddd3333-0000-0000-0000-000000000000", 1, 40000)
 check("a small finished session skips the dump", "/core-dump" not in e.run(["plan", "--work", "none", "--sid", "dddd3333"]))
+e.set(91, reset_in_min=150)
+out = e.run(["plan", "--work", "some", "--sid", "dddd3333"])
+check("a small context hibernates with a wake but no pings", "[usage-resume]" in out and "[usage-carry]" not in out, out)
+out = e.run(["record", "--strategy", "resume", "--sid", "dddd3333"])
+check("and its record arms no first ping", "[usage-carry]" not in out, out)
 
 # hibernation, pings, wake
 S = "cccc2222-0000-0000-0000-000000000000"

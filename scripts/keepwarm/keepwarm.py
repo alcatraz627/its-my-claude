@@ -51,6 +51,7 @@ WAKE_PROMPT = "[keepwarm] idle check"
 ARM_PAD_S = 60
 USAGE_GATE = os.path.join(HOME, ".claude", "scripts", "cron", "usage-gate.sh")
 USAGE5H = os.path.join(HOME, ".claude", "scripts", "usage", "usage5h.py")
+RESOLVE_STORE = os.path.join(HOME, ".claude", "scripts", "task-table", "resolve-store.sh")
 # Prompts that reach the session without the owner typing them. They are not the
 # owner coming back: Claude Code's own resume after a usage-limit reset once got
 # a re-arm and a one-word "warm" reply on a cache it had just rebuilt cold
@@ -203,6 +204,30 @@ def hibernating(sid):
     return bool(mod and mod.hibernating(sid))
 
 
+def work_left(sid):
+    """Does this session still have its own work to do? True or False from its
+    task list (pending or in-progress tasks), None when there is no list to read.
+    A session whose tasks are all done is only waiting on the owner, and warming
+    it bought nothing in the 2026-10-22 measurement (9% of the 5h window)."""
+    store = os.environ.get("KEEPWARM_TASK_STORE")
+    if not store:
+        try:
+            store = subprocess.run(["bash", RESOLVE_STORE, "--as-session", sid], capture_output=True,
+                                   text=True, timeout=20).stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            return None
+    statuses = []
+    for p in glob.glob(os.path.join(store, "*.json")) if store else []:
+        try:
+            with open(p) as f:
+                statuses.append(json.load(f).get("status"))
+        except (OSError, ValueError, AttributeError):
+            continue
+    if not statuses:
+        return None
+    return any(s in ("pending", "in_progress") for s in statuses)
+
+
 def account():
     """The signed-in organization, or None; the prompt cache belongs to it."""
     mod = usage5h()
@@ -343,6 +368,10 @@ def hook_prompt(inp):
     plan = PLAN[k]
     action = plan[min(n, len(plan)) - 1]
     st["stopped"] = n >= len(plan)
+    if n == 1 and work_left(sid) is False:
+        # Everything left is the owner's: checkpoint while warm and stop, rather
+        # than pay for warm-only wakes that end in the same dump anyway.
+        action, st["stopped"] = "dump", True
     st.update(wakes=n, last_activity=now_s())
     text = UPKEEP[action].format(n=n, note=note_path(inp.get("cwd"), sid),
                                  now=dt.datetime.now().strftime("%H:%M"))

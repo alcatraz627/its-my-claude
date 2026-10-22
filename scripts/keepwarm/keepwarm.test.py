@@ -20,7 +20,16 @@ LIMITS = os.path.join(T, "limits.json")
 ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITCH,
            CLAUDE_CODE_ENTRYPOINT="cli", KEEPWARM_NO_STATUSLINE="1",
            USAGE5H_LIMITS=LIMITS, USAGE5H_DIR=os.path.join(T, "u5"),
-           USAGE5H_CLAUDE_JSON=os.path.join(T, "claude.json"))
+           USAGE5H_CLAUDE_JSON=os.path.join(T, "claude.json"), KEEPWARM_TASK_STORE=os.path.join(T, "tasks"))
+os.makedirs(ENV["KEEPWARM_TASK_STORE"])
+
+
+def tasks(*statuses):
+    for p in os.listdir(ENV["KEEPWARM_TASK_STORE"]):
+        os.remove(os.path.join(ENV["KEEPWARM_TASK_STORE"], p))
+    for i, s in enumerate(statuses):
+        with open(os.path.join(ENV["KEEPWARM_TASK_STORE"], "%d.json" % i), "w") as f:
+            json.dump({"id": str(i), "status": s}, f)
 
 
 def signed_in(org):
@@ -269,6 +278,19 @@ hook("hook-prompt", session_id="s16", prompt="back on the new account")
 hook("hook-stop", session_id="s16")
 expect("an owner turn on the new account re-baselines it", "decision" not in wake("s16", 300000, 56))
 signed_in("org-a")
+
+# A session whose tasks are all done only waits on the owner: its first wake
+# writes the dump and the chain stops. Open work keeps the usual plan.
+for sid, sts, want in (("s17", ("completed", "completed"), "dump"), ("s18", ("completed", "in_progress"), "warm"),
+                       ("s19", ("pending",), "warm"), ("s20", (), "warm")):
+    tasks(*sts)
+    hook("hook-prompt", session_id=sid, prompt="a real question")
+    hook("hook-stop", session_id=sid)
+    c = ctx(wake(sid, 60000, 56))
+    got = "dump" if "/core-dump" in c else "warm"
+    expect("tasks %s: first wake is %s" % (",".join(sts) or "none", want), got == want)
+expect("and the done session's chain stops", wake("s17", 60000, 56).get("decision") == "block")
+tasks()
 
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)

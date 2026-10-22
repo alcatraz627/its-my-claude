@@ -50,6 +50,7 @@ SPENT_PCT = 98            # past this a ping would only be refused
 WAKE_PAD_S = 180          # wake a little after the reset, never before it
 DUP_RESUME_S = 1800       # a second resume this soon after the first is a duplicate
 DUMP_CTX_TOKENS = 120000  # a finished session this big is worth a core-dump
+PING_CTX_TOKENS = 150000  # below this a cold rebuild costs less than an hour of pings
 
 POL_CACHE_S = 300         # policy changes are rare; do not spawn pol.sh on every tool call
 KEEPWARM_SWITCH = os.environ.get("KEEPWARM_SWITCH", os.path.join(HOME, ".claude", ".keepwarm-on"))
@@ -501,14 +502,20 @@ def resolve_sid(arg):
     return sid
 
 
-def resume_steps(sid, reset_epoch, armed):
+def context_tokens(sid):
+    t = transcript_for_prefix(sid) if sid else None
+    return last_turn(t)[1] if t else None
+
+
+def resume_steps(sid, reset_epoch, armed, ctx=None):
     steps = []
     if reset_epoch and not armed:
         steps.append("Arm the wake: %s." % wake_line(reset_epoch))
     elif not reset_epoch:
         steps.append("The reset time is unknown, so no wake can be armed; Claude Code's own resume, if the limit "
                      "is hit, or the owner brings this session back.")
-    if reset_epoch and reset_epoch - now() > 60 * 60:
+    small = ctx is not None and ctx < PING_CTX_TOKENS
+    if reset_epoch and reset_epoch - now() > 60 * 60 and not small:
         steps.append("Keep the cache warm until then: %s. Each ping tells you whether to arm the next." % ping_line())
     steps.append("End the turn with one line for the owner: hibernating until %s, and what resumes then."
                  % clock(reset_epoch + WAKE_PAD_S if reset_epoch else None))
@@ -519,8 +526,7 @@ def cmd_plan(args):
     sid = resolve_sid(args.get("--sid"))
     work = args.get("--work", "some")
     p = reading() or {}
-    t = transcript_for_prefix(sid) if sid else None
-    _, ctx = last_turn(t) if t else (None, None)
+    ctx = context_tokens(sid)
     print("5h window: %s%% used, resets in %s" % (p.get("pct", "?"), fmt_min(p.get("reset_min"))))
     print("context: %s" % ("%dk tokens" % (ctx // 1000) if ctx else "unknown"))
     if work == "none":
@@ -536,7 +542,7 @@ def cmd_plan(args):
     print("  2. python3 %s record --strategy resume --sid %s --note '<what resumes: next steps, deferred subagent work>'"
           % (SELF, (sid or "SID")[:8]))
     st = load(sid) if sid else {}
-    for i, s in enumerate(resume_steps(sid, p.get("reset_epoch"), st.get("armed") == window_key(p)), 3):
+    for i, s in enumerate(resume_steps(sid, p.get("reset_epoch"), st.get("armed") == window_key(p), ctx), 3):
         print("  %d. %s" % (i, s))
     return 0
 
@@ -556,7 +562,7 @@ def cmd_record(args):
     log(sid, "hibernate", strategy=strat, pct=p.get("pct"))
     print("recorded %s for %s" % (strat, sid[:8]))
     if strat == "resume":
-        for s in resume_steps(sid, p.get("reset_epoch"), st.get("armed") == window_key(p)):
+        for s in resume_steps(sid, p.get("reset_epoch"), st.get("armed") == window_key(p), context_tokens(sid)):
             print("next: " + s)
     return 0
 

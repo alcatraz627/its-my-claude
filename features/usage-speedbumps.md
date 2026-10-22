@@ -47,7 +47,9 @@ reason; re-issuing it goes through. Thresholds: policy keys
 - **resume** (work is left): record a note of what resumes, including deferred
   subagent work; arm the wake (`[usage-resume]`, a one-shot cron 3 minutes after
   the reset); arm a `[usage-carry]` ping every 54 minutes until the reset is
-  within the hour; end the turn with one line.
+  within the hour; end the turn with one line. A context under 150k tokens gets
+  the wake but no pings, since rebuilding it cold costs less than an hour of
+  pings (about 0.75 of a point each, measured 2026-10-22).
 - **finish** (nothing is left): close out. A large context gets a full
   `/core-dump` first (owner grant 2026-10-21).
 
@@ -69,7 +71,7 @@ that gets cut off without hibernating still comes back.
 |---|---|
 | `[usage-resume]` (own wake) | the session is hibernating, or it was cut off at the limit with no record |
 | Claude Code's "usage limit has reset" | the session hibernated, or was cut off mid-turn (its last answer stopped on a tool call). Not when it had closed out on its own (its last answer ended the turn, as clanky-opus did on 2026-10-21), finished, was cancelled by the owner, or a wake already ran in the last 30 minutes |
-| `[usage-carry]` ping | the session is hibernating and the window is not spent |
+| `[usage-carry]` ping | the session is hibernating, the window is not spent, and the signed-in organization is the one it hibernated under |
 
 Whichever resume arrives first runs; the other is skipped. A resume also re-arms
 keep-warm when it is on, so the burst that follows ends warm. While a session
@@ -84,6 +86,17 @@ never.
 Keep-warm skips its wakes while a session hibernates (the pings do that job),
 skips wakes into a spent window, and does not mistake any of these prompts for
 the owner. `wake-breaker.sh` lets the identical pings through.
+
+The prompt cache belongs to the claude.ai organization. After an account
+switch, keep-warm wakes and hibernation pings are skipped before they reach the
+model, because a ping would only pay the new account to rebuild a cache nobody
+uses (2026-10-22: one ping rebuilt 632k cold). A switched hibernation is
+cancelled, and the owner's next prompt resumes keep-warm on the new account.
+
+Keep-warm also stops early for a session whose task list has no pending or
+in-progress task: its first idle wake writes the full `/core-dump` and the chain
+ends, rather than paying for warm-only wakes while it only waits on the owner.
+A session with no task list keeps the usual plan.
 
 ## Taking over by hand
 
