@@ -19,7 +19,16 @@ SWITCH = os.path.join(T, "on")
 LIMITS = os.path.join(T, "limits.json")
 ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITCH,
            CLAUDE_CODE_ENTRYPOINT="cli", KEEPWARM_NO_STATUSLINE="1",
-           USAGE5H_LIMITS=LIMITS, USAGE5H_DIR=os.path.join(T, "u5"))
+           USAGE5H_LIMITS=LIMITS, USAGE5H_DIR=os.path.join(T, "u5"),
+           USAGE5H_CLAUDE_JSON=os.path.join(T, "claude.json"))
+
+
+def signed_in(org):
+    with open(ENV["USAGE5H_CLAUDE_JSON"], "w") as f:
+        json.dump({"oauthAccount": {"organizationUuid": org}}, f)
+
+
+signed_in("org-a")
 
 
 def limits(pct):
@@ -244,6 +253,22 @@ expect("a wake while hibernating is skipped", wake("s14", 300000, 56).get("decis
 expect("not a re-arm either", wake("s14", 300000, 10).get("decision") == "block")
 expect("a hibernation wake prompt is not the owner",
        ctx(hook("hook-prompt", session_id="s14", prompt="[usage-resume] The 5h window has reset.")) == "")
+
+# The owner switched accounts while away: the cache went with the old one, so a
+# wake would only pay the new account to rebuild it (2026-10-22).
+hook("hook-start", session_id="s15")
+hook("hook-prompt", session_id="s15", prompt="a real question")
+hook("hook-stop", session_id="s15")
+expect("same account: the wake runs", "decision" not in wake("s15", 300000, 56))
+hook("hook-prompt", session_id="s16", prompt="a real question")
+hook("hook-stop", session_id="s16")
+signed_in("org-b")
+expect("switched account: the wake is skipped", wake("s16", 300000, 56).get("decision") == "block")
+expect("and the chain stays stopped", wake("s16", 300000, 56).get("decision") == "block")
+hook("hook-prompt", session_id="s16", prompt="back on the new account")
+hook("hook-stop", session_id="s16")
+expect("an owner turn on the new account re-baselines it", "decision" not in wake("s16", 300000, 56))
+signed_in("org-a")
 
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)

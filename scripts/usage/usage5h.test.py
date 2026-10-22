@@ -28,9 +28,15 @@ class Env:
         self.projects = os.path.join(self.root, "projects")
         self.wakes = os.path.join(self.root, "wakes")
         self.kw_switch = os.path.join(self.root, "kw-on")
+        self.claude_json = os.path.join(self.root, "claude.json")
+        self.signed_in("org-a")
         os.makedirs(self.turn)
         os.makedirs(os.path.join(self.projects, "-p"))
         os.makedirs(self.wakes)
+
+    def signed_in(self, org):
+        with open(self.claude_json, "w") as f:
+            json.dump({"oauthAccount": {"organizationUuid": org}}, f)
 
     def scheduled(self, sid, prompt):
         d = os.path.join(self.wakes, "claude-wakes-" + sid[:8])
@@ -73,7 +79,7 @@ class Env:
     def run(self, args, stdin=None):
         env = dict(os.environ, USAGE5H_LIMITS=self.limits, USAGE5H_TURN_STATE=self.turn,
                    USAGE5H_DIR=self.dir, USAGE5H_PROJECTS=self.projects, USAGE5H_WAKES=self.wakes,
-                   KEEPWARM_SWITCH=self.kw_switch)
+                   KEEPWARM_SWITCH=self.kw_switch, USAGE5H_CLAUDE_JSON=self.claude_json)
         r = subprocess.run([sys.executable, SCRIPT] + args, input=json.dumps(stdin) if stdin is not None else None,
                            capture_output=True, text=True, env=env, timeout=30)
         return r.stdout.strip()
@@ -166,6 +172,19 @@ c = ctx(e.prompt(S, RESUME))
 check("the session's own wake resumes it with its note", "Carry on" in c and "ship step 9" in c, c)
 check("then the native resume is a duplicate", blocked(e.prompt(S, NATIVE)))
 check("and a stray ping after waking is skipped", blocked(e.prompt(S, PING)))
+
+# An account switch mid-hibernation: the cache is gone and the new account has
+# its own window, so the ping is skipped and the hibernation ends (2026-10-22).
+AS = "abab7777-0000-0000-0000-000000000000"
+e.set(92, reset_in_min=150)
+e.transcript(AS, 1, 40000)
+e.run(["record", "--strategy", "resume", "--sid", "abab7777"])
+S2 = AS
+check("same account: the ping goes through", "warm" in ctx(e.prompt(S2, PING)))
+e.signed_in("org-b")
+check("switched account: the ping is skipped", blocked(e.prompt(S2, PING)))
+check("and the parked wake is skipped too", blocked(e.prompt(S2, RESUME)))
+e.signed_in("org-a")
 
 # the owner coming back cancels
 S2 = "eeee4444-0000-0000-0000-000000000000"

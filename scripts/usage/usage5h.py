@@ -54,6 +54,7 @@ DUMP_CTX_TOKENS = 120000  # a finished session this big is worth a core-dump
 POL_CACHE_S = 300         # policy changes are rare; do not spawn pol.sh on every tool call
 KEEPWARM_SWITCH = os.environ.get("KEEPWARM_SWITCH", os.path.join(HOME, ".claude", ".keepwarm-on"))
 WAKES_DIR = os.environ.get("USAGE5H_WAKES", "/tmp")   # guard-cron-prompt.sh records scheduled prompts here
+CLAUDE_JSON = os.environ.get("USAGE5H_CLAUDE_JSON", os.path.join(HOME, ".claude.json"))
 
 RESET_PROMPT = re.compile(r"usage limit has reset", re.I)
 RESUME_PROMPT = "[usage-resume]"
@@ -200,6 +201,23 @@ def wake_line(reset_epoch):
 
 def ping_line():
     return "CronCreate with recurring false, cron '%s', prompt '%s'" % (cron_at(now() + PING_MIN * 60), CARRY_TEXT)
+
+
+def account():
+    """The claude.ai organization this machine is signed in to, or None.
+    The prompt cache belongs to the organization, so after a switch there is
+    nothing left to keep warm and a ping only pays to rebuild it."""
+    try:
+        with open(CLAUDE_JSON) as f:
+            return (json.load(f).get("oauthAccount") or {}).get("organizationUuid") or None
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
+def account_changed(recorded):
+    """True only when both readings exist and differ; an unknown side never counts."""
+    cur = account()
+    return bool(recorded and cur and cur != recorded)
 
 
 def state_path(sid):
@@ -533,7 +551,7 @@ def cmd_record(args):
     with locked(sid):
         st = load(sid)
         st["hibernate"] = {"strategy": strat, "at": now(), "reset_epoch": p.get("reset_epoch"),
-                           "note": args.get("--note", "")}
+                           "note": args.get("--note", ""), "account": account()}
         save(sid, st)
     log(sid, "hibernate", strategy=strat, pct=p.get("pct"))
     print("recorded %s for %s" % (strat, sid[:8]))
@@ -564,6 +582,14 @@ def _hook_prompt(inp, prompt, sid):
         r = reading()
         if not h:
             return skip("usage ping skipped: not hibernating")
+        if account_changed(h.get("account")):
+            # The cache went with the old account and the new one has its own
+            # window, so the hibernation has nothing left to wait for or carry.
+            h["strategy"] = "account-switch"
+            st["hibernate"] = h
+            save(sid, st)
+            log(sid, "cancelled", by="account-switch")
+            return skip("usage ping skipped: the signed-in account changed")
         if r and r["pct"] >= SPENT_PCT:
             log(sid, "ping", verdict="spent", pct=r["pct"])
             return skip("usage ping skipped: the window is spent")
@@ -585,7 +611,7 @@ def _hook_prompt(inp, prompt, sid):
             verdict = "skip-duplicate"
         elif h or mode == "always":
             verdict = "resume"
-        elif strat in ("finish", "cancelled"):
+        elif strat in ("finish", "cancelled", "account-switch"):
             verdict = "skip-" + strat
         elif not (native or limit_was_hit(transcript)):
             verdict = "skip-not-parked"  # the session is still working, or never hit the limit

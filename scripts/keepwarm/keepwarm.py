@@ -203,6 +203,12 @@ def hibernating(sid):
     return bool(mod and mod.hibernating(sid))
 
 
+def account():
+    """The signed-in organization, or None; the prompt cache belongs to it."""
+    mod = usage5h()
+    return mod.account() if mod else None
+
+
 def not_owner(prompt):
     return prompt.startswith(NOT_OWNER) or LIMIT_RESET.search(prompt[:200]) is not None
 
@@ -303,6 +309,14 @@ def hook_prompt(inp):
         # chain would pay twice. Its wake brings the session back.
         log(sid, "skip", why="hibernating")
         return skip_wake("keep-warm skipped: the session is hibernating for the 5h window")
+    cur = account()
+    if st.get("account") and cur and cur != st["account"]:
+        # The owner switched accounts, so the cache this chain kept is gone and
+        # a wake would pay the new account to rebuild it for nobody.
+        st["stopped"] = True
+        save(sid, st)
+        log(sid, "stop", why="account-switch")
+        return skip_wake("keep-warm stopped: the signed-in account changed")
     last = st.get("last_activity", now_s())
     idle_min = (now_s() - last) / 60.0
     # The wake's own turn must not count as the owner's activity, or every
@@ -348,7 +362,7 @@ def hook_stop(inp):
         verdict, read, create = judge_ping(last_usage(inp.get("transcript_path") or ""))
         log(sid, "ping-health", verdict=verdict, cache_read=read, cache_creation=create)
         return 0
-    st.update(last_activity=now_s(), answered=True)
+    st.update(last_activity=now_s(), answered=True, account=account())
     save(sid, st)
     return 0
 
