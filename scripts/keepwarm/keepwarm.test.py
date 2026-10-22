@@ -292,6 +292,21 @@ for sid, sts, want in (("s17", ("completed", "completed"), "dump"), ("s18", ("co
 expect("and the done session's chain stops", wake("s17", 60000, 56).get("decision") == "block")
 tasks()
 
+# Claude Code clears a list once every task is done, so an empty store in a session
+# that made tasks means finished, not "no list" (seen live 2026-10-22).
+made = os.path.join(T, "t-made.jsonl")
+with open(made, "w") as f:
+    f.write(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "TaskCreate"}],
+                        "usage": {"input_tokens": 0, "cache_read_input_tokens": 60000}}}, separators=(",", ":")) + "\n")
+hook("hook-prompt", session_id="s21", prompt="a real question")
+hook("hook-stop", session_id="s21", transcript_path=made)
+age("s21", 56)
+c = ctx(hook("hook-prompt", session_id="s21", prompt="[keepwarm] idle check", transcript_path=made, cwd="/tmp/proj"))
+expect("a session whose finished list was cleared dumps on its first wake", "/core-dump" in c)
+hook("hook-prompt", session_id="s22", prompt="a real question")
+hook("hook-stop", session_id="s22", transcript_path=transcript(60000))
+expect("a session that never made tasks keeps the usual plan", "/core-dump" not in ctx(wake("s22", 60000, 56)))
+
 # A broken input never blocks the owner.
 r = subprocess.run([sys.executable, KW, "hook-prompt"], input="not json", capture_output=True, text=True, env=ENV)
 expect("bad hook input never blocks", r.returncode == 0 and "block" not in r.stdout)

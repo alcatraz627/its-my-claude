@@ -228,6 +228,18 @@ def work_left(sid):
     return any(s in ("pending", "in_progress") for s in statuses)
 
 
+def created_tasks(transcript):
+    """Has this session made a task list? Read from the transcript's recent tail,
+    which is cheap enough for every turn's end, unlike resolving the store."""
+    try:
+        size = os.path.getsize(transcript)
+        with open(transcript, "rb") as f:
+            f.seek(max(0, size - 400000))
+            return b'"name":"TaskCreate"' in f.read()
+    except OSError:
+        return False
+
+
 def account():
     """The signed-in organization, or None; the prompt cache belongs to it."""
     mod = usage5h()
@@ -368,7 +380,10 @@ def hook_prompt(inp):
     plan = PLAN[k]
     action = plan[min(n, len(plan)) - 1]
     st["stopped"] = n >= len(plan)
-    if n == 1 and work_left(sid) is False:
+    left = work_left(sid)
+    if left is None and st.get("had_tasks"):
+        left = False   # Claude Code clears a list once every task is done, so empty means finished
+    if n == 1 and left is False:
         # Everything left is the owner's: checkpoint while warm and stop, rather
         # than pay for warm-only wakes that end in the same dump anyway.
         action, st["stopped"] = "dump", True
@@ -392,6 +407,8 @@ def hook_stop(inp):
         log(sid, "ping-health", verdict=verdict, cache_read=read, cache_creation=create)
         return 0
     st.update(last_activity=now_s(), answered=True, account=account())
+    if not st.get("had_tasks") and created_tasks(inp.get("transcript_path") or ""):
+        st["had_tasks"] = True
     save(sid, st)
     return 0
 

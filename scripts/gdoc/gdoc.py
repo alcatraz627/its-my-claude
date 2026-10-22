@@ -865,6 +865,14 @@ def main():
     ap.add_argument("--archive", metavar="DOC_ID", help="with --confirm: prefix a Doc's title with [Archive] and move it to Drive's trash")
     a = ap.parse_args()
     cfg_path = pathlib.Path(a.config).resolve(); cfg = json.loads(cfg_path.read_text()); base = cfg_path.parent
+    # A doc may ask for its own faces (title, heading, body); the body face also sets the table text.
+    if cfg.get("fonts"):
+        G["fonts"].update(cfg["fonts"])
+        if cfg["fonts"].get("body"):
+            for key in ("table", "table_light"):
+                if key in G:
+                    G[key].update({"header_font": cfg["fonts"]["body"], "body_font": cfg["fonts"]["body"]})
+        print(f"fonts    {G['fonts']}")
     acct = sh("gcloud", "auth", "list", "--filter=status:ACTIVE", "--format=value(account)")
     print(f"account  {acct}  (expected {cfg['account']})")
     print(f"folder   https://drive.google.com/drive/folders/{cfg['folder']}")
