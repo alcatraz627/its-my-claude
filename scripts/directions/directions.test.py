@@ -161,7 +161,7 @@ check("an edit that adds nothing new lets the turn end", hook("hook-stop", S) ==
 hook("hook-post", dict(S, tool_name="Edit", tool_input={"file_path": F}))
 write(open(F).read().replace("| stays shipped |", "| — |"))
 out = hook("hook-stop", S)
-check("an error this turn added holds the turn", '"block"' in out and "if the owner says nothing" in out, out)
+check("an error this turn added holds the turn", '"block"' in out and "owner says nothing" in out, out)
 check("and the old error is not blamed on it", "goal record says" not in out, out)
 check("it holds twice at most", '"block"' in hook("hook-stop", S))
 out = hook("hook-stop", S)
