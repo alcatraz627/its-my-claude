@@ -1,0 +1,120 @@
+```json
+{"summary": "Three structural gaps dominate this week: PR descriptions and docs keep reaching the owner as mechanism dumps despite hundreds of advisory fires with only a handful of blocks; internal process artifacts (ids, shas, timestamps) keep appearing in reader-facing documents with no blocking gate; and process-inspection commands continue leaking secrets through paths the env-dump guard does not cover. Two smaller repeats — a ruling left half-applied across repos, and a new doc written as a comparison against its sibling — have no gates that cover the specific failure mode. Nine low-score session clusters matched on corrections plus pending items but carry no named mistake and are noise.",
+ "items": [
+  {"cluster": "c-2d8458a5",
+   "merged": ["c-f4548156"],
+   "kind": "repeat",
+   "title": "PR descriptions and documents delivered as mechanism summaries with no voice or reader pass",
+   "happened": [
+    {"evidence_id": "atone:mist-20261020-163710-c0", "what": "Wrote the PR #60 body for the landing app as a paragraph-by-paragraph account of internal implementation details — memoization, cache keys, CSS min/max — with no rewriting for a reader who just wants to know what the page looks like now."},
+    {"evidence_id": "atone:mist-20261005-094856-da", "what": "Wrote an external RCA for the enhancement product using vague euphemism and anonymized facts, without naming the known customers or the actual events."},
+    {"evidence_id": "atone:mist-20260930-222509-5b", "what": "Sent owner-facing replies in the slack automation test window with em-dashes despite the zero em-dash rule."}
+   ],
+   "why_repeats": "The voice and prose checks fire as advisories hundreds of times but block on only a handful of turns; the PR description path in particular has no blocking gate that requires a reader-facing rewrite before the body is submitted.",
+   "fix": "Add a blocking check on PR description writes that exits non-zero when the body contains no second-person framing or visible-outcome language, so a mechanism-first draft cannot be submitted.",
+   "guard": {"hook_id": "doc-voice-gate", "plain": "Checks that written text matches your voice style", "verdict": "partly", "gap": "PR description bodies and external-facing documents pass through as advisories far more often than they are blocked, so a bad draft rarely stops"},
+   "why": "Evidence atone:mist-20261020-163710-c0 and atone:mist-20260930-222509-5b show the same mechanism-first writing across two projects this week, and proposals:prop-20261020-170018-1e and proposals:prop-20260923-205914-d3 both call for a gate that has not been added.",
+   "evidence_ids": ["atone:mist-20261020-163710-c0", "atone:mist-20261005-094856-da", "atone:mist-20260930-222509-5b", "proposals:prop-20260923-205914-d3", "proposals:prop-20261020-170018-1e"],
+   "proposal": {"target": "doc-voice-gate.py", "change": "Add a PR-body code path that blocks (exit 1) when the text contains no second-person phrasing or visible-outcome language, requiring a rewrite before the description can be posted."}},
+
+  {"cluster": "c-e62697ed",
+   "merged": ["c-902d3975"],
+   "kind": "structural-need",
+   "title": "Internal identifiers, file paths, and edit timestamps written into documents you share externally",
+   "happened": [
+    {"evidence_id": "atone:mist-20261020-165604-12", "what": "Added 'Updated ~20:15' lines and timestamped cells to your PR status page while the actual status colours stayed stale, so the doc showed update noise without updated information."},
+    {"evidence_id": "atone:mist-20261019-004432-39", "what": "Wrote the CPRD capability-mapping doc for the CEO as a ledger of commit shas, file paths, and internal identifiers rather than as a plain narrative the CEO could read."}
+   ],
+   "why_repeats": "No blocking gate exists for internal-process artifacts in reader-facing documents; the only relevant check flags bare ids as an advisory and does not cover shas, file-path references, or dated-update lines in docs.",
+   "fix": "Register a blocking hook that exits non-zero when a file written to a docs or notes path contains raw shas, file-path-with-line references, or 'Updated HH:MM' timestamp lines.",
+   "guard": {"hook_id": "bare-id-cluster", "plain": "Flags when bare internal identifiers appear together", "verdict": "no", "gap": "Fires only as an advisory and targets identifier clusters, not the specific patterns that keep appearing in shared documents"},
+   "why": "Evidence atone:mist-20261020-165604-12 and atone:mist-20261019-004432-39 show the same leak pattern two days apart across two projects; proposals:prop-20261020-165630-be and proposals:prop-20261019-004456-14 both propose a block that does not yet exist.",
+   "evidence_ids": ["atone:mist-20261020-165604-12", "atone:mist-20261019-004432-39", "proposals:prop-20261020-165630-be", "proposals:prop-20261019-004456-14"],
+   "proposal": {"target": "guard-prose-quality.sh", "change": "Add a pattern check for writes to docs/ and notes/ paths that blocks on lines matching sha-like hex strings, file:line notation, or 'Updated HH:MM' timestamps, exiting 1 with a message naming the offending pattern."}},
+
+  {"cluster": "c-72f6b097",
+   "merged": ["c-a301d58d"],
+   "kind": "structural-need",
+   "title": "Process-inspection commands printed live secrets into the conversation",
+   "happened": [
+    {"evidence_id": "atone:mist-20261014-204739-3c", "what": "Ran a process-manager list command to find a server; the tool prints the full launch environment for every process, which included a live Slack token in the transcript."},
+    {"evidence_id": "atone:mist-20261010-102728-94", "what": "Ran a full-argument process listing on the extractor VM over SSH; the tunnel process carries its token as a command-line argument and it appeared in the transcript."},
+    {"evidence_id": "atone:mist-20260929-013224-df", "what": "Ran a process inspection command with full environment output to check a variable, printing five live tokens into the transcript."}
+   ],
+   "why_repeats": "The env-dump guard blocks direct environment-printing commands but does not cover process managers or ps flags that include full arguments or environment variables, so secrets reach the transcript through a different inspection command each time.",
+   "fix": "Extend the env-dump guard to block pm2 jlist, pm2 env, ps -e, ps -Eww, and any ps invocation with a format that includes args or env fields.",
+   "guard": {"hook_id": "guard-env-dump", "plain": "Blocks commands that directly print environment variables", "verdict": "partly", "gap": "Process manager list commands and ps flags that include full arguments are not blocked, so secrets reach the transcript through process inspection rather than direct env printing"},
+   "why": "Three independent atone entries (atone:mist-20261014-204739-3c, atone:mist-20261010-102728-94, atone:mist-20260929-013224-df) show the same secret-leak pattern via different process-inspection commands that the current block does not reach.",
+   "evidence_ids": ["atone:mist-20261014-204739-3c", "atone:mist-20261010-102728-94", "atone:mist-20260929-013224-df"],
+   "proposal": {"target": "guard-env-dump.sh", "change": "Add pattern matches for 'pm2 jlist', 'pm2 env', 'ps -E', 'ps.*--format.*args', and 'ps.*-o.*args' that exit 1 before the command runs."}},
+
+  {"cluster": "c-b8727f09",
+   "merged": [],
+   "kind": "structural-need",
+   "title": "Visual UI reviews judged by reading code rather than looking at the rendered page",
+   "happened": [
+    {"evidence_id": "atone:mist-20261020-120344-a4", "what": "Reviewed the landing app at each breakpoint width by reading component code and CSS values instead of using the vision model to inspect screenshots, and dispatched sub-reviewers without directing them to use vision either."}
+   ],
+   "why_repeats": "No gate requires that a visual review include a vision-model call before a verdict is recorded; the existing UI verification check catches false done-claims but does not verify that the review path included vision.",
+   "fix": "Add a stop check that blocks any visual-review completion message unless the session log shows a vision-model image read in the same turn sequence.",
+   "guard": {"hook_id": "ui-verified", "plain": "Checks that UI changes are verified before being called done", "verdict": "partly", "gap": "Does not check whether the verification method included the vision model, so code-reading passes as a valid review"},
+   "why": "Evidence atone:mist-20261020-120344-a4 and proposals:prop-20261020-120408-26 both show the same shortcut this week with no hook that requires vision-model use before a verdict.",
+   "evidence_ids": ["atone:mist-20261020-120344-a4", "proposals:prop-20261020-120408-26"],
+   "proposal": {"target": "ui-verified-stop.py", "change": "Before passing a UI-verified claim, check that the session's tool log contains at least one vision-model image read in the current turn sequence; if not, exit 1 with a prompt to re-run the review with the vision model."}},
+
+  {"cluster": "c-a78d2e0c",
+   "merged": [],
+   "kind": "repeat",
+   "title": "Owner ruling applied to one codebase while a sibling codebase was left with the opposite behaviour",
+   "happened": [
+    {"evidence_id": "atone:mist-20261019-103024-59", "what": "Shipped the no-fallback-after-submit ruling on one side of the product but left the other side with the old behaviour and contradicting documentation, without telling you."}
+   ],
+   "why_repeats": "When a ruling affects code in more than one repository, there is no gate that requires enumerating all affected locations before the work is marked done; the done-claim check fires on completeness but does not verify cross-repository scope.",
+   "fix": "When a session applies a ruling that the ruling's documentation names across more than one repository, require the session's edited-file list to include paths in each named repository before the done-claim can pass.",
+   "guard": {"hook_id": "declared-ready", "plain": "Blocks done-claims that have not been verified", "verdict": "partly", "gap": "Checks that the immediate task is verified but does not ask whether the same change was needed in sibling repositories"},
+   "why": "Evidence atone:mist-20261019-103024-59 shows a ruling left half-applied across two repos; proposals:prop-20261019-105338-b1 calls for a structural fix that has not been implemented.",
+   "evidence_ids": ["atone:mist-20261019-103024-59", "proposals:prop-20261019-105338-b1"],
+   "proposal": {"target": "declared-ready-stop.sh", "change": "When the ruling context names more than one repository, add a check that the session's edited-files list includes paths in each named repository before passing the done-claim."}},
+
+  {"cluster": "c-e291f233",
+   "merged": [],
+   "kind": "structural-need",
+   "title": "Presented a reply list as complete without sweeping all open threads",
+   "happened": [
+    {"evidence_id": "atone:mist-20261020-122528-43", "what": "Rebuilt the 'Replies still to post' list from a single cached document rather than sweeping all open PR threads, and told you it was complete when threads you had not seen were still unanswered."}
+   ],
+   "why_repeats": "No gate requires a live thread sweep before a completeness claim on a reply list; the structural-claim check fires on broad done-claims but does not know that a reply-list claim specifically requires verified coverage of all open threads.",
+   "fix": "Before a reply list is declared complete, require an explicit sweep of all open PR threads in the project, and block the done-claim if no such sweep appears in the session's tool log.",
+   "guard": {"hook_id": "structural-claim", "plain": "Blocks broad completeness claims that are not backed by evidence", "verdict": "partly", "gap": "Does not know that a reply-complete claim requires a live sweep of all PR threads, so it passes claims built from a single cached document"},
+   "why": "Evidence atone:mist-20261020-122528-43 shows a false-complete reply list delivered without verifying coverage; no hook targets PR-thread sweep completeness specifically.",
+   "evidence_ids": ["atone:mist-20261020-122528-43"],
+   "proposal": {"target": "declared-ready-stop.sh", "change": "Add a pattern that detects 'replies' or 'PR threads' completeness claims and exits 1 unless the session log shows a GitHub API call to list review comments in the same turn."}},
+
+  {"cluster": "c-aca399ad",
+   "merged": [],
+   "kind": "repeat",
+   "title": "New document written as a comparison against an existing sibling instead of standing on its own",
+   "happened": [
+    {"evidence_id": "atone:mist-20261015-154206-93", "what": "Asked to write a new proposal for a separate ask, produced a document structured as a list of differences from the sibling proposal rather than as a self-contained case — and repeated the same structure after you corrected it once in the same session."}
+   ],
+   "why_repeats": "No gate checks whether a new document frames its opening as a contrast against a sibling rather than presenting its own case; the voice and prose checks do not cover document structure.",
+   "fix": "Add a check to the voice gate that blocks new documents whose opening section uses contrastive language pointing at a sibling document in the same directory.",
+   "guard": {"hook_id": "doc-voice-gate", "plain": "Checks that written text matches your voice style", "verdict": "no", "gap": "Does not check document structure or whether the opening frames the document as a diff against a sibling rather than as a standalone piece"},
+   "why": "Evidence atone:mist-20261015-154206-93 shows the structure repeated after a same-session correction, which means a text reminder is not enough and a structural check on the opening section is needed.",
+   "evidence_ids": ["atone:mist-20261015-154206-93"],
+   "proposal": {"target": "doc-voice-gate.py", "change": "In the preamble check, block (exit 1) when the first two paragraphs of a new document contain contrastive phrases referencing another named document in the same directory."}},
+
+  {"cluster": "c-cb2aacd9",
+   "merged": ["c-82ef26c6", "c-f64d2dbf", "c-45471a29", "c-0c96e6ed", "c-53380ddf", "c-c8c3ac6f", "c-db40affb", "c-10dcb20e", "c-5c06da3f"],
+   "kind": "noise",
+   "title": "Sessions with corrections and pending items but no shared mistake pattern",
+   "happened": [],
+   "why_repeats": "The join matched on co-occurrence of owner corrections and pending items in the same session, but the excerpts carry no named mistake type in common across these sessions.",
+   "fix": "No action needed.",
+   "guard": {"hook_id": null, "plain": "No check targets this pattern", "verdict": "no", "gap": "Nothing to block; no pattern identified"},
+   "why": "These clusters share only the session-cluster join structure (correction signal plus pending items) but none carry an atone entry with a named mistake slug, making them incidental matches rather than actionable patterns.",
+   "evidence_ids": [],
+   "proposal": null}
+ ],
+ "process_note": "Nine session-cluster entries this week (c-cb2aacd9 and the eight merged into it) carry no atone row with a named mistake slug — only correction signals and pending items. The reader would be more useful next week if session-cluster joins required at least one atone row with a non-null mistake type to qualify for inclusion; without it the reader cannot tell whether the correction was a real mistake or a preference change, and the cluster adds noise to the output."}
+```

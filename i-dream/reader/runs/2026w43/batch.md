@@ -1,0 +1,139 @@
+## c-2d8458a5 (found by repeat, score 30.2)
+'ai-smell-prose-against-stored-voice' came up 8 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-170018-1e | proposals | agent | 2026-10-20 | - | Attach visual proof to PR descriptions for visible changes
+- atone:mist-20261020-163710-c0 | atone | human | 2026-10-20 | landing-app | PR #60 body written as a dense mechanism dump, no skill or fresh voice pass: The PR #60 body on vista-website packed each finding into a paragraph of mechanism (memoization, cache keys, a CSS min/max …
+- proposals:prop-20261009-220054-ee | proposals | agent | 2026-10-09 | - | Gate em dashes in user-facing string literals that agents write into code
+- atone:mist-20261005-094856-da | atone | human | 2026-10-05 | enhancement-product | External RCA written as vague euphemism with invented actors and anonymized facts: The extractor blank-jobs RCA (frontend/.claude/notes/20261005-extractor-blank-jobs-rca.md) anonymized known customers…
+- proposals:prop-20260930-222530-a3 | proposals | agent | 2026-09-30 | - | Make a single em-dash in an owner-facing reply a blocking Stop-hook tell
+- atone:mist-20260930-222509-5b | atone | human | 2026-09-30 | slack-automation | Em-dashes in owner-facing replies despite the zero em-dash rule: Owner-facing replies in the slack-automation Cloud Run test window carried em-dashes (owner quotes 'works now — Clanky', 'successfully …
+- proposals:prop-20260924-043211-1c | proposals | echo | 2026-09-24 | - | Flesh out gcc friction from session c4aca888 (auto-stub: ai-smell-prose-against-stored-voice)
+- proposals:prop-20260923-205914-d3 | proposals | human | 2026-09-23 | gcc | Enforce the accepted PR body shape and route every PR body through ste-writing
+- (+1 more)
+
+## c-f4548156 (found by session cluster, score 25.9)
+Session 165c6e34 in landing-app: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (PR #60 body written as a dense mechanism dump, no skill or fresh voice pass)
+- checkpoints:ckpt-2514a881184ed0de | checkpoints | human | 2026-10-20 | landing-app | pending: - Owner: review and merge PR #60 into main; later release PRs use "Create a merge commit". - Agent: respond to review comments on #60 if any. - Optional, not asked: "Push live now" (`src/app/…
+- proposals:prop-20261020-170018-1e | proposals | agent | 2026-10-20 | - | Attach visual proof to PR descriptions for visible changes
+- atone:mist-20261020-163710-c0 | atone | human | 2026-10-20 | landing-app | PR #60 body written as a dense mechanism dump, no skill or fresh voice pass: The PR #60 body on vista-website packed each finding into a paragraph of mechanism (memoization, cache keys, a CSS min/max …
+- signals:165c6e34-ce19-47f5-899b-82af68c0724c-1792512950 | signals | human | 2026-10-20 | - | the owner corrected the agent
+
+## c-902d3975 (found by session cluster, score 21.3)
+Session 97a8cbfb in slack-automation: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Neutral CPRD spec written as an internal ledger of ids, shas and file)
+- checkpoints:ckpt-8da7c6eb5a918423 | checkpoints | human | 2026-10-19 | slack-automation | pending: - Owner decisions: commit the three docs (and push, which spends no Actions since docs/** is not a deploy path; unchecked), the done-when thresholds, Flow A if Crusty falls short, platform se…
+- proposals:prop-20261019-004456-14 | proposals | agent | 2026-10-19 | - | Gate reader-facing docs against internal ids, shas and file:line in the body
+- atone:mist-20261019-004432-39 | atone | human | 2026-10-19 | slack-automation | Neutral CPRD spec written as an internal ledger of ids, shas and file:line: Asked for a neutral doc mapping the CEO's CPRD to each ask's capabilities, behaviours and work plan, I wrote docs/plan/2026-…
+- signals:97a8cbfb-262c-4460-aad5-ec1e49dfd300-1792370598 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-a301d58d (found by session cluster, score 19.9)
+Session 0ede9853 in .claude: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (pm2 jlist printed exported tokens into the transcript)
+- checkpoints:ckpt-e3bae5437b4de43e | checkpoints | human | 2026-10-14 | .claude | pending: - Waiting on the i-dream session for read windows on five held ledgers (ipc msg-1e5b6a2ec9244b4e). On reply: set them in scripts/ledger/ledger-retention.json, run ledger-prune.py plan then ap…
+- checkpoints:ckpt-f62985fd4b869fa8 | checkpoints | human | 2026-10-14 | .claude | pending: - Waiting on the i-dream session for read windows on five held ledgers (ipc msg-1e5b6a2ec9244b4e). On reply: set them in scripts/ledger/ledger-retention.json, run ledger-prune.py plan then ap…
+- atone:mist-20261014-204739-3c | atone | human | 2026-10-14 | .claude | pm2 jlist printed exported tokens into the transcript: Ran pm2 jlist --silent to find the kanban server before restarting it. pm2 keeps each process's launch environment and jlist prints it, so the Sl…
+- proposals:prop-20261014-171419-76 | proposals | agent | 2026-10-14 | - | Fold the :5106 hub's live surfaces into bfb and retire the rest
+- signals:0ede9853-8b36-4bb9-9ea7-9f21af9ecad2-1791981805 | signals | human | 2026-10-14 | - | the owner corrected the agent
+- signals:0ede9853-8b36-4bb9-9ea7-9f21af9ecad2-1791976215 | signals | human | 2026-10-14 | - | the owner corrected the agent
+- signals:0ede9853-8b36-4bb9-9ea7-9f21af9ecad2-1791972626 | signals | human | 2026-10-14 | - | the owner corrected the agent
+
+## c-e62697ed (found by repeat, score 19.4)
+'internal-process-leaked-into-reader-facing-doc' came up 4 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-165630-be | proposals | agent | 2026-10-20 | - | Block dated-update lines and history sections in living status docs
+- atone:mist-20261020-165604-12 | atone | human | 2026-10-20 | enhancement-product | Status doc grew dated update lines while its status colours stayed stale: In review.md (the owner's PR status surface) I added 'Updated ~20:15' and 'Status at ~22:10' lines and 'updated 20:15' cells i…
+- proposals:prop-20261019-004456-14 | proposals | agent | 2026-10-19 | - | Gate reader-facing docs against internal ids, shas and file:line in the body
+- atone:mist-20261019-004432-39 | atone | human | 2026-10-19 | slack-automation | Neutral CPRD spec written as an internal ledger of ids, shas and file:line: Asked for a neutral doc mapping the CEO's CPRD to each ask's capabilities, behaviours and work plan, I wrote docs/plan/2026-…
+
+## c-b8727f09 (found by repeat, score 14.7)
+'visual-review-without-local-vision-model' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-120408-26 | proposals | agent | 2026-10-20 | - | Nudge visual UI reviews and dispatches to use the local vision model
+- atone:mist-20261020-120344-a4 | atone | human | 2026-10-20 | landing-app | Visual UI review run without the local vision model, on me and on dispatched reviewers: During the landing-app width review (sweep 360-1600, owner-graded review page) I judged sections by reading doze…
+
+## c-a78d2e0c (found by session cluster, score 12.4)
+Session fcc859da in .claude: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Owner ruling applied in walmart only; foundry code and docs kept the opposite, owner not told)
+- proposals:prop-20261019-105338-b1 | proposals | echo | 2026-10-19 | - | Flesh out gcc friction from session fcc859da (auto-stub: ruling-half-applied-and-docs-left-contradicting)
+- checkpoints:ckpt-2cef1e496c027ca1 | checkpoints | human | 2026-10-19 | .claude | pending: - Owner: commit the foundry worktree (`fix/no-fallback-after-submit`), then remove it with `git worktree remove` once merged. - Owner: answer or prune the three August decision pages (studio-…
+- atone:mist-20261019-103024-59 | atone | human | 2026-10-19 | versable-foundry | Owner ruling applied in walmart only; foundry code and docs kept the opposite, owner not told: The 2026-09-24 no-flip-flop fallback ruling shipped on walmart (PR 101). The foundry client half (plan it…
+- checkpoints:ckpt-3f1a2e02f7b4870c | checkpoints | human | 2026-10-19 | .claude | pending: - Owner: commit the foundry worktree (`fix/no-fallback-after-submit`), then remove it with `git worktree remove` once merged. - Owner: answer or prune the three August decision pages (studio-…
+- signals:fcc859da-252c-4f21-918b-e5abe11e8e0f-1792395990 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-e291f233 (found by session cluster, score 9.6)
+Session 13cd89cd in enhancement-product: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Reply list presented as complete; never swept all PR threads for unanswered ones)
+- checkpoints:ckpt-761c9ccf0e21d41e | checkpoints | human | 2026-10-20 | enhancement-product | pending: - Agent, when a review lands: update #343, #347, #354, #358, ex #29 against their bases (method in Next action); ws #31 now carries ws #38. - Agent, housekeeping: delete branch `e2e-severity-…
+- checkpoints:ckpt-79f3e0187600fb99 | checkpoints | human | 2026-10-20 | enhancement-product | pending: - Agent, when a review lands: update #343, #347, #354, #358, ex #29 against their bases (method in Next action); ws #31 now carries ws #38. - Agent, housekeeping: delete branch `e2e-severity-…
+- signals:13cd89cd-8060-4566-b343-2ea6d21278e1-1792499389 | signals | human | 2026-10-20 | - | the owner corrected the agent
+- atone:mist-20261020-122528-43 | atone | human | 2026-10-20 | enhancement-product | Reply list presented as complete; never swept all PR threads for unanswered ones: The PR review doc's 'Replies still to post' list (frontend/.claude/output/20261019-pr-replies/review.md) was rebuilt f…
+
+## c-cb2aacd9 (found by session cluster, score 5.8)
+Session 77b0daaa in slack-automation: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-1dd86ebef52d7fea | checkpoints | human | 2026-10-20 | slack-automation | pending: - goal 4777c74c0083: m23 rows #180 to #187 open, plus #174 to #179 (m22) and #167; run `/tasks left 4777c74c0083`. - Framework steps in order (framework.md "Where to start"): 1 rule registry …
+- signals:77b0daaa-b63d-4de1-b4a4-f9aa366d4ab1-1792523642 | signals | human | 2026-10-20 | - | the owner corrected the agent
+- signals:77b0daaa-b63d-4de1-b4a4-f9aa366d4ab1-1792498369 | signals | human | 2026-10-20 | - | the owner corrected the agent
+
+## c-82ef26c6 (found by session cluster, score 5.6)
+Session f5b696b9 in affinity: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-3ba42c2d53deb92d | checkpoints | human | 2026-10-19 | affinity | pending: AGENT: 1. Run the guard through all 12 cases (build each with `node build.mjs`, act as Claude would). Record per case whether the outcome matches `expected_guard` and what each preview shows.…
+- signals:f5b696b9-f21c-4dba-b5e4-c1488513e4a0-1792404976 | signals | human | 2026-10-19 | - | the owner corrected the agent
+- signals:f5b696b9-f21c-4dba-b5e4-c1488513e4a0-1792404961 | signals | human | 2026-10-19 | - | the owner corrected the agent
+- signals:f5b696b9-f21c-4dba-b5e4-c1488513e4a0-1792403758 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-72f6b097 (found by repeat, score 5.5)
+'printed-secret-values-into-transcript' came up 3 times from 1 independent source(s) across atone
+- atone:mist-20261014-204739-3c | atone | human | 2026-10-14 | .claude | pm2 jlist printed exported tokens into the transcript: Ran pm2 jlist --silent to find the kanban server before restarting it. pm2 keeps each process's launch environment and jlist prints it, so the Sl…
+- proposals:prop-20261010-133204-5a | proposals | echo | 2026-10-10 | - | Flesh out gcc friction from session 8a775608 (auto-stub: printed-secret-values-into-transcript)
+- atone:mist-20261010-102728-94 | atone | human | 2026-10-10 | enhancement-product | Full-args ps on the extractor VM printed the cloudflared tunnel token: During the D8 port-8000 investigation I ran ssh extractor-vm 'sudo ps -eo pid,user,lstart,args'; the cloudflared process carries …
+- atone:mist-20260929-013224-df | atone | human | 2026-09-29 | switchboard-mac | Printed a process environment with five live tokens into the transcript: To check whether CLAUDECODE reached Switchboard's build copy, ran ps -Eww -o command= -p <pid>, which printed every variable wi…
+
+## c-aca399ad (found by session cluster, score 5.2)
+Session c2d1c4ee in sor: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (New proposal doc written as a diff against its sibling, repeating a same-session correction)
+- checkpoints:ckpt-74d9bfb3ada9db1e | checkpoints | human | 2026-10-15 | sor | pending: - Owner: review `notes/20261015-rithum-conduit.md` and say whether section 16 should go into the hub doc. - Agent, on a yes: adapt section 16 into `notes/20261015-rithum-integration-hub.md`. …
+- atone:mist-20261015-154206-93 | atone | human | 2026-10-15 | sor | New proposal doc written as a diff against its sibling, repeating a same-session correction: Asked for a new doc for the Rithum-as-conduit ask, I wrote notes/20261015-rithum-conduit.md as a diff again…
+- signals:c2d1c4ee-8005-4fb2-9f1f-4222e7c8624e-1792078604 | signals | human | 2026-10-15 | - | the owner corrected the agent
+
+## c-10dcb20e (found by session cluster, score 5.2)
+Session 1b6b449a in i-dream: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-63e1e72bfa9fc53a | checkpoints | human | 2026-10-19 | i-dream | pending: - Agent: PROCESS.md edit (implement-report.md:111-127). - Agent: add `i-dream reader rename <week>` writing runs/<week>/rename.json and publishing preview slug idream-reader-2026w42-v2 withou…
+- signals:1b6b449a-282b-410d-b867-96e754cc2c47-1792428891 | signals | human | 2026-10-19 | - | the owner corrected the agent
+- signals:1b6b449a-282b-410d-b867-96e754cc2c47-1792428747 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-f64d2dbf (found by session cluster, score 5.2)
+Session 7ac3f6f1 in affinity: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-9e2a0d51fbd0ef25 | checkpoints | human | 2026-10-20 | affinity | pending: AGENT: 1. After her first day, read the Air (read-only) for gripes, task logs and failures, and report. 2. #25: design and build "match this reference picture": the card takes a dropped image…
+- signals:7ac3f6f1-5d8d-4fc6-970c-319bde46b750-1792529191 | signals | human | 2026-10-20 | - | the owner corrected the agent
+
+## c-5c06da3f (found by session cluster, score 5.2)
+Session 20db15be in better-file-browser: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-0b2fa9d2c3a5c3a7 | checkpoints | human | 2026-10-19 | better-file-browser | pending: - Re-run smoke, owner-batch and edit-walk e2e with the display awake. - Firefox F1-F6 (plan section 3). - Notes N1 (source colouring overlay), N6 (one front-matter module + shared fixture), N…
+- signals:20db15be-9345-4c70-806f-a0dc6d9d6eae-1792429301 | signals | human | 2026-10-19 | - | the owner corrected the agent
+- signals:20db15be-9345-4c70-806f-a0dc6d9d6eae-1792429009 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-45471a29 (found by session cluster, score 5.1)
+Session 63c64036 in affinity: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-c4de4d2d03ec1013 | checkpoints | human | 2026-10-19 | affinity | pending: AGENT: 1. Run the guard through all 12 cases (build each with `node build.mjs`, act as Claude would). Record per case whether the outcome matches `expected_guard` and what each preview shows.…
+- checkpoints:ckpt-8b80182dfb7cd1da | checkpoints | human | 2026-10-19 | affinity | pending: AGENT: 1. Run the guard through all 12 cases (build each with `node build.mjs`, act as Claude would). Record per case whether the outcome matches `expected_guard` and what each preview shows.…
+- signals:63c64036-8f65-43ea-8acd-4d995d3fc3e3-1792429312 | signals | human | 2026-10-19 | - | the owner corrected the agent
+
+## c-0c96e6ed (found by session cluster, score 5.0)
+Session 90da8e73 in slack-automation: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-0a8affd6a64febc6 | checkpoints | human | 2026-10-17 | slack-automation | pending: - goal ce37e0c30535: agent-side work for "finish all for slack blocks, and validate" is served; run /tasks to see its rows. - Open question: why the `/turns=2` ask did not raise (req a5669df9…
+- checkpoints:ckpt-5762ed84f76f3fea | checkpoints | human | 2026-10-17 | slack-automation | pending: - goal ce37e0c30535: agent-side work for "finish all for slack blocks, and validate" is served; run /tasks to see its rows. - Open question: why the `/turns=2` ask did not raise (req a5669df9…
+- checkpoints:ckpt-b7dfbf04ea348c8b | checkpoints | human | 2026-10-17 | slack-automation | pending: - goal ce37e0c30535: agent-side work for "finish all for slack blocks, and validate" is served; run /tasks to see its rows. - Open question: why the `/turns=2` ask did not raise (req a5669df9…
+- checkpoints:ckpt-2a9c1c84be4420b4 | checkpoints | human | 2026-10-16 | slack-automation | pending: - goal ce37e0c30535: agent-side work for "finish all for slack blocks, and validate" is served; run /tasks to see its rows. - Open question: why the `/turns=2` ask did not raise (req a5669df9…
+- signals:90da8e73-9234-4e6a-9b86-7600938c5a07-1792175147 | signals | human | 2026-10-16 | - | the owner corrected the agent
+
+## c-53380ddf (found by session cluster, score 4.9)
+Session 50ff3a96 in slack-automation: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-d1ce0adf0f584892 | checkpoints | human | 2026-10-20 | slack-automation | pending: - goal 4777c74c0083: open rows #167 (digest split), #174 to #179 (m22), plus older #138, #155, #156, #157, #159, #164, #165, #166; run /tasks left 4777c74c0083. - Sub-agent reports, read befo…
+- signals:50ff3a96-26d2-4e8e-bff1-3f84f127b7fd-1792494639 | signals | human | 2026-10-20 | - | the owner corrected the agent
+
+## c-c8c3ac6f (found by session cluster, score 4.4)
+Session 842e701b in slack-automation: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-94332db9057dcd0c | checkpoints | human | 2026-10-14 | slack-automation | pending: Goal 4777c74c0083 holds the work: open rows #46, #56, #104, #138, #146, #151, #152, #153, #154, #155; acceptance a1 and a5 unproven. Run `/tasks left 4777c74c0083`. Not on the goal: - Live-ch…
+- checkpoints:ckpt-012dd9f856fd76f0 | checkpoints | human | 2026-10-14 | slack-automation | pending: Goal 4777c74c0083 holds the work: open rows #46, #56, #104, #138, #146, #151, #152, #153, #154, #155; acceptance a1 and a5 unproven. Run `/tasks left 4777c74c0083`. Not on the goal: - Live-ch…
+- checkpoints:ckpt-b8e484534c38e19c | checkpoints | human | 2026-10-14 | slack-automation | pending: Goal 4777c74c0083 holds the work: open rows #46, #56, #104, #138, #146, #151, #152, #153, #154, #155; acceptance a1 and a5 unproven. Run `/tasks left 4777c74c0083`. Not on the goal: - Live-ch…
+- signals:842e701b-c03e-4749-ac5d-de30cc16cb73-1791939019 | signals | human | 2026-10-14 | - | the owner corrected the agent
+- checkpoints:ckpt-3284c1681b75089a | checkpoints | human | 2026-10-14 | slack-automation | pending: Goal 4777c74c0083 holds the work: open rows #46, #56, #104, #138, #146, #151, #152, #153, #154, #155; acceptance a1 and a5 unproven. Run `/tasks left 4777c74c0083`. Not on the goal: - Live-ch…
+- checkpoints:ckpt-bf72b69af425ffd8 | checkpoints | human | 2026-10-14 | slack-automation | pending: Goal 4777c74c0083 holds the work: open rows #46, #56, #104, #138, #146, #151, #152, #153, #154, #155; acceptance a1 and a5 unproven. Run `/tasks left 4777c74c0083`. Not on the goal: - Live-ch…
+
+## c-db40affb (found by session cluster, score 3.7)
+Session d52a521f in slack-automation: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-b35dcfeccfebcac3 | checkpoints | human | 2026-10-17 | slack-automation | pending: - Push the five commits, verify /health shows 6124cde, and run one live approval click test in C0BPJMYPSG4 (non-asker refused privately, asker approves). Do not delete anything there. - Send …
+- signals:d52a521f-afe5-4a7b-8105-c074ce1714c2-1792245864 | signals | human | 2026-10-17 | - | the owner corrected the agent
+

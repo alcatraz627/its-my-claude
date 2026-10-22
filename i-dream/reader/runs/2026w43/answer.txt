@@ -1,0 +1,3 @@
+idream reader 2026w43:
+1: agree — True, needs a checklist of block and allow: Refer slack-automation in the rules it has for PR desc; system behavior > mechanical changes, NO relative / local / contextual noise, use terse prose, use structure, PREFER screenshots and example links wherever helpful
+3: agree — Also nudge towards using lm see / claude-see, and optionally how to find the right recipe/guidance; also the see is just one tool it is about the other skills in /ui that help use it properly alongwith other non-vision checks; it is a local model so $0 so no reason not to use it (just don't ddos my CPU/RAM)

@@ -2,6 +2,9 @@
 # i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
 # not feed the surface (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
+# Hints are for a person at a terminal or editor; headless runs (claude -p
+# linters, jurors) only pay for them. Mirrors events::is_interactive_entrypoint.
+case "${CLAUDE_CODE_ENTRYPOINT:-}" in ""|cli|claude-vscode) ;; *) exit 0 ;; esac
 # i-dream: UserPromptSubmit hint hook, registered SYNCHRONOUS (no "async").
 # stdout carries at most one hookSpecificOutput/additionalContext JSON.
 # Mute: touch ~/.claude/.no-idream-hints
@@ -22,6 +25,10 @@ except Exception:
 prompt = data.get("prompt", "") or ""
 ipath = _p.expanduser("~/.claude/i-dream/interventions.json")
 if not isinstance(prompt, str) or not prompt or not _p.exists(ipath):
+    sys.exit(0)
+# Machine-written prompts (task notifications, seat briefs) are not the owner
+# talking, whatever the entrypoint says.
+if prompt.lstrip().startswith(("<task-notification>", "You are", "You enforce")):
     sys.exit(0)
 try:
     items = json.load(open(ipath))

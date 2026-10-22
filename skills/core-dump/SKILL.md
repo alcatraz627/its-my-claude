@@ -118,6 +118,10 @@ If both a filename and instructions are present, the filename is detected first
 4. Scan for a filename token (ends in `.md` or starts with `_`). If found, use it;
    else default to `_YYYYMMDD-<session-id>.claude.md`. After writing, create/update
    the `_checkpoint.claude.md` symlink → the written file so `/catchup` finds the latest.
+   **Browser extension roots:** if the project root holds a `manifest.json` with
+   `manifest_version`, write the checkpoint and its symlink into `<root>/.claude/`,
+   never the root. Chrome will not load an unpacked extension whose root holds a
+   `_` file (2026-10-20, better-file-browser). `guard-extension-root.sh` blocks it.
 5. Treat remaining text as style instructions for Phase 2 (ignored in mini mode).
 6. Print the resolved mode, filename, name (if any), and instructions.
 7. If `mode = mini`, go to **Phase 2-mini**. Skip Phase 2 (full).

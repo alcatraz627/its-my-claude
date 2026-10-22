@@ -16,6 +16,18 @@
 
 ---
 
+## session: ingest service v1 build, review and docs [gcp-ingst-4e] · 2026-10-22 05:00
+**Purpose:** Finish versable-ingest v1 unattended: dashboard, tests, adversarial review and fixes, docs, staging deploy, Walmart PR follow-up.
+
+**Insights:**
+1. The adversarial prosecutor (Opus, own clone, failing test per finding) found 13 real defects after 151 green tests; the highest-cost ones (ODS repeat bomb, CSV stray quote, cross-app bucket reads) were invisible to happy-path tests.
+2. A test that wraps the code under attack in `suppress(Exception)` can pass for the wrong reason: adv10 went green while the pinned download raised TypeError. Suppress only the expected exception, then mutation-check the guard.
+3. A fresh docs reader checking claims against code found 11 wrong facts in docs I had just written, mostly defaults vs ceilings and order-of-operations. Route doc accuracy to a seat that did not write them.
+4. A PR you raised can carry unanswered bot findings for a day; read PR comments before calling an integration done.
+5. `x or default` silently turns a configured 0 into the default; use `is None`.
+
+---
+
 ## session: resume, goal-clear parser, keep-warm stops, commit [gcc-everything] 2026-10-13
 
 Purpose: resumed the core-dump/catchup rebuild, fixed the stale-goal read and two keep-warm leaks, committed and pushed.

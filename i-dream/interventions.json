@@ -58,7 +58,7 @@
     "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted_by": "owner-demoted",
-    "strength": 1.0
+    "strength": 0.8
   },
   {
     "id": "3c40a861cd0842a7",
@@ -84,7 +84,7 @@
     "state": "live",
     "trigger": {
       "tool": "Write",
-      "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs)$"
+      "input_pattern": "^(?!/private/tmp/|/tmp/|/private/var/folders/|/var/folders/).*\\.(ts|tsx|js|jsx|py|go|rs)$"
     },
     "body": "Name the current caller for every new exported function/type here. No caller, or an existing primitive already fits? Don't create it.",
     "created": "2026-07-24T14:54:37.875879Z",
@@ -302,7 +302,7 @@
     "form": "hint",
     "state": "live",
     "trigger": {
-      "prompt_pattern": "\\b(keep going|carry on|continue|go ahead|proceed|just do it|finish it|do it all|next)\\b"
+      "prompt_pattern": "^\\s*(keep going|carry on|continue|go ahead|proceed|just do it|finish it|do it all|next)\\b"
     },
     "body": "Don't end this turn with a question. If both options are yours to run and cheap to reverse, pick one, say which and why, and execute.",
     "created": "2026-08-19T22:30:14.502499Z",
@@ -544,7 +544,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.6000000000000001
+    "strength": 0.7000000000000001
   },
   {
     "id": "53f74d55587f358b",
@@ -572,7 +572,7 @@
     },
     "body": "A plan doc's claim that something is missing or done is a sentence, not a probe. Run the read-only list/describe check before asking the owner to create, grant, or delete anything.",
     "created": "2026-09-08T22:23:12.115567Z",
-    "strength": 0.8
+    "strength": 0.7000000000000001
   },
   {
     "id": "b12ac46b19ef4c8d",
@@ -587,7 +587,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.7000000000000001
+    "strength": 0.6000000000000001
   },
   {
     "id": "dc466ca4f5535f1b",
@@ -615,7 +615,7 @@
     },
     "body": "Before proposing UI: grep 2-3 human-built siblings solving the same shape and follow their grouping idiom. If this surface was agent-built, treat it as the thing to fix, not the canon.",
     "created": "2026-09-11T02:00:52.014374Z",
-    "strength": 0.6000000000000001
+    "strength": 0.7000000000000001
   },
   {
     "id": "7baa706b87d6bc39",
@@ -688,7 +688,7 @@
     },
     "body": "This hub.sh start/stop/restart has no CLAUDE_HUB_PORT, so it targets the owner's :5400 hub. Add CLAUDE_HUB_PORT=<scratch port> or don't run it.",
     "created": "2026-10-01T05:29:00.582345Z",
-    "strength": 0.5
+    "strength": 0.014285714285714301
   },
   {
     "id": "5de28956ccaf6009",
@@ -701,7 +701,7 @@
     },
     "body": "A refresh is not a review. Before you ship the refreshed payload, resolve every path in it (ls/rg) and fix any that no longer exist. Do not carry the old paths forward unchecked.",
     "created": "2026-10-04T19:09:32.332430Z",
-    "strength": 0.1
+    "strength": 0.057142857142857134
   },
   {
     "id": "73f81f3d9d2f2e18",
@@ -728,7 +728,7 @@
     },
     "body": "Only give a URL that a tool output this turn contains, vendor URLs included. If no tool output has it, describe where to go in words instead.",
     "created": "2026-10-09T23:00:59.234443Z",
-    "strength": 0.9
+    "strength": 1.0
   },
   {
     "id": "80a2767aee0eb187",
@@ -755,7 +755,7 @@
     },
     "body": "This prints process args or unit contents on extractor-vm, which leaks secrets into the transcript. Use ss -tlnp or ps -o pid,stat,etime,comm instead.",
     "created": "2026-10-10T23:00:58.096034Z",
-    "strength": 0.18571428571428572
+    "strength": 0.14285714285714285
   },
   {
     "id": "950aabdafcab9812",
@@ -769,7 +769,7 @@
     },
     "body": "Did the owner ask for a checkpoint? If their last message named a deliverable and it is already written, stop here. Don't add a checkpoint, summary or report as an extra artifact.",
     "created": "2026-10-12T23:01:22.849139Z",
-    "strength": 0.21428571428571427
+    "strength": 0.1714285714285714
   },
   {
     "id": "1b06a73dd595df26",
@@ -783,7 +783,7 @@
     },
     "body": "Before creating a new note here, rg -l the topic in frontend/.claude/notes/; if a living tracker exists (e.g. extractor-and-e2e-directions.md), edit it and link any side doc from it.",
     "created": "2026-10-13T11:12:36.699180Z",
-    "strength": 0.6000000000000001
+    "strength": 0.7000000000000001
   },
   {
     "id": "8b674622cadcf676",
@@ -796,7 +796,7 @@
     },
     "body": "New doc must stand alone: before saving, rg draft for 'changes from', 'unchanged', 'see the', links to the source doc; carry that content in. Change list goes in the reply, not the doc.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 0.2571428571428572
+    "strength": 0.21428571428571427
   },
   {
     "id": "bb91078a96285f82",
@@ -812,5 +812,32 @@
     "body": "Stop: live_eval.py/grade.py spend the owner's local claude login. Use launch.py on Clanky's account (prod probe) or run no model.",
     "created": "2026-10-15T23:00:52.815039Z",
     "strength": 0.5
+  },
+  {
+    "id": "b3affb0ca94ccf83",
+    "slug": "internal-process-leaked-into-reader-facing-doc",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "(?:^|/)[^/]*(?:status|review)[^/]*\\.md\\b"
+    },
+    "body": "Re-derive every status cell from live state (gh pr view, reply sweep) and replace in place. No 'Updated at'/'as of' lines or past-action logs.",
+    "created": "2026-10-20T23:02:07.473144Z",
+    "strength": 0.6000000000000001
+  },
+  {
+    "id": "7139ee0236dd4643",
+    "slug": "claimed-exhaustive-after-a-partial-sweep",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(?:replies to post|unanswered (?:review )?(?:threads?|comments?)|(?:reply|todo) list)\\b"
+    },
+    "body": "Before presenting a reply/todo list, run the sweep (gh api pulls/N/comments per PR, human comments without in_reply_to_id) and diff it against the list. Never list from memory.",
+    "created": "2026-10-20T23:02:07.473144Z",
+    "strength": 0.2857142857142857
   }
 ]

@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Chat Reader</title>
+<style>
+:root {
+  --bg: #0b141a; --panel: #202c33; --bar: #202c33; --bar-ink: #e9edef;
+  --in: #202c33; --out: #005c4b; --ink: #e9edef; --muted: #8696a0;
+  --pill: #182229ee; --hl: #7a5c00; --line: #2a3942; --link: #53bdeb;
+  --call: #00a884; --missed: #ea0038;
+}
+:root[data-theme="light"] {
+  --bg: #efeae2; --panel: #f0f2f5; --bar: #008069; --bar-ink: #fff;
+  --in: #ffffff; --out: #d9fdd3; --ink: #111b21; --muted: #667781;
+  --pill: #ffffffee; --hl: #ffe08a; --line: #d1d7db; --link: #027eb5;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 14.2px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  display: flex; flex-direction: column;
+}
+header {
+  background: var(--bar); color: var(--bar-ink); padding: 8px 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; z-index: 3;
+}
+.avatar { width: 38px; height: 38px; border-radius: 50%; background: #dfe5e7; color: #54656f;
+  display: grid; place-items: center; font-weight: 600; flex: none; }
+.who { flex: 1 1 160px; min-width: 0; }
+.who b { display: block; font-size: 16px; }
+.who small { opacity: .8; }
+.tools { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.tools input, .tools button {
+  font: inherit; border: 0; border-radius: 8px; padding: 6px 10px;
+  background: #ffffff22; color: var(--bar-ink);
+}
+.tools input::placeholder { color: var(--bar-ink); opacity: .7; }
+.tools button { cursor: pointer; }
+.tools button:hover { background: #ffffff38; }
+.tools input[type=search] { width: 180px; }
+.tools input[type=date] { color-scheme: dark; }
+main { flex: 1; display: flex; min-height: 0; position: relative; }
+#pane { flex: 1; display: flex; min-width: 0; position: relative; }
+#rail { width: 210px; flex: none; overflow-y: auto; position: relative; background: var(--panel);
+  border-right: 1px solid var(--line); font-size: 13px; overscroll-behavior: contain; }
+.rm { position: sticky; top: 0; z-index: 1; background: var(--panel); padding: 10px 14px 6px;
+  font-weight: 600; display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.rm small { color: var(--muted); font-weight: 400; }
+.rd { display: grid; grid-template-columns: 50px 1fr 36px; align-items: center; gap: 8px;
+  padding: 4px 14px; cursor: pointer; color: var(--muted); }
+.rd:hover { background: #8881; }
+.rd.on { background: var(--out); color: var(--ink); }
+.rd i { display: block; height: 6px; border-radius: 3px; background: var(--call); opacity: .6; }
+.rd span:last-child { text-align: right; font-size: 11px; }
+#railbtn { display: none; font: inherit; font-size: 18px; border: 0; border-radius: 8px; padding: 4px 10px;
+  background: #ffffff22; color: var(--bar-ink); cursor: pointer; }
+#scroll { flex: 1; overflow-y: auto; overflow-anchor: none; padding: 8px 0 24px; }
+#chat { max-width: 920px; margin: 0 auto; padding: 0 16px; }
+#floatdate { position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  background: var(--pill); color: var(--muted); padding: 4px 12px; border-radius: 8px;
+  font-size: 12.5px; box-shadow: 0 1px .5px #0002; pointer-events: none; z-index: 2;
+  transition: opacity .3s; }
+.day { text-align: center; margin: 14px 0 8px; }
+.day span { background: var(--pill); color: var(--muted); padding: 5px 12px; border-radius: 8px;
+  font-size: 12.5px; box-shadow: 0 1px .5px #0002; }
+.row { display: flex; margin-top: 2px; }
+.row.first { margin-top: 10px; }
+.row.me { justify-content: flex-end; }
+.b {
+  position: relative; max-width: min(65%, 560px); padding: 6px 8px 8px 9px;
+  background: var(--in); border-radius: 8px; box-shadow: 0 1px .5px #0002;
+  word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap;
+}
+.me .b { background: var(--out); }
+.first:not(.me) .b { border-top-left-radius: 0; }
+.first.me .b { border-top-right-radius: 0; }
+.first:not(.me) .b::before, .first.me .b::before {
+  content: ""; position: absolute; top: 0; width: 8px; height: 13px; background: inherit;
+}
+.first:not(.me) .b::before { left: -8px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.first.me .b::before { right: -8px; clip-path: polygon(0 0, 100% 0, 0 100%); }
+.name { display: block; font-size: 12.8px; font-weight: 600; color: #06cf9c; margin-bottom: 1px; }
+.me .name { display: none; }
+.meta { float: right; margin: 6px 0 -6px 10px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.big { font-size: 34px; line-height: 1.2; }
+.b a { color: var(--link); }
+.b img, .b video { display: block; max-width: 100%; max-height: 360px; border-radius: 6px; margin: -2px -3px 4px; cursor: zoom-in; }
+.sticker .b { background: transparent; box-shadow: none; padding: 0; }
+.sticker .b::before { display: none; }
+.sticker img { max-width: 150px; cursor: default; }
+.b audio { display: block; width: 260px; max-width: 100%; margin-bottom: 4px; }
+.chip { display: flex; width: fit-content; gap: 6px; align-items: center; padding: 6px 10px; border-radius: 6px;
+  background: #0000000d; color: var(--muted); font-style: italic; margin-bottom: 2px; }
+.file { font-style: normal; color: var(--link); text-decoration: none; }
+.call .chip { font-style: normal; color: var(--ink); }
+.call .chip i { font-style: normal; color: var(--call); }
+.call.missed .chip i { color: var(--missed); }
+.del { color: var(--muted); font-style: italic; }
+.hit .b { outline: 3px solid var(--hl); outline-offset: 1px; }
+mark { background: var(--hl); color: inherit; border-radius: 2px; }
+.edge { text-align: center; color: var(--muted); padding: 16px; font-size: 12.5px; }
+#results { width: 340px; flex: none; background: var(--panel); border-left: 1px solid var(--line);
+  overflow-y: auto; display: none; }
+#results.open { display: block; }
+#results h3 { margin: 0; padding: 12px 16px; font-size: 14px; position: sticky; top: 0;
+  background: var(--panel); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+#results h3 button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+.res { padding: 10px 16px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.res:hover { background: #0000000a; }
+.res small { color: var(--muted); display: block; }
+#lightbox { position: fixed; inset: 0; background: #000d; display: none; place-items: center; z-index: 9; cursor: zoom-out; }
+#lightbox.open { display: grid; }
+#lightbox img { max-width: 95vw; max-height: 95vh; }
+@media (max-width: 760px) {
+  #railbtn { display: block; }
+  #rail { position: absolute; inset: 0 auto 0 0; width: 78vw; max-width: 300px; z-index: 5;
+    transform: translateX(-100%); transition: transform .2s; }
+  #rail.open { transform: none; box-shadow: 4px 0 16px #0006; }
+  header { padding: 8px 12px; gap: 8px; }
+  .tools { flex: 1 1 100%; flex-wrap: nowrap; gap: 4px; }
+  .tools input[type=search] { flex: 1; min-width: 0; width: auto; }
+  .tools input[type=date] { width: 128px; padding: 6px; }
+  .tools button { padding: 6px 9px; }
+  #top, #bottom { display: none; }
+  .b { max-width: 85%; }
+  #results { position: absolute; inset: 0; width: auto; z-index: 4; }
+}
+</style>
+</head>
+<body>
+<header>
+  <button id="railbtn" aria-label="Dates">☰</button>
+  <div class="avatar" id="av"></div>
+  <div class="who"><b id="peer"></b><small id="stats"></small></div>
+  <div class="tools">
+    <input type="search" id="q" placeholder="Search messages" aria-label="Search messages">
+    <input type="date" id="jump" aria-label="Jump to date">
+    <button id="top" title="First message">⤒</button>
+    <button id="bottom" title="Latest message">⤓</button>
+    <button id="theme" title="Toggle theme">◐</button>
+  </div>
+</header>
+<main>
+  <nav id="rail" aria-label="Dates"></nav>
+  <section id="pane">
+    <div id="floatdate"></div>
+    <div id="scroll"><div id="chat"></div></div>
+  </section>
+  <aside id="results"></aside>
+</main>
+<div id="lightbox"><img alt=""></div>
+<script id="data" type="application/json">/*__DATA__*/</script>
+<script>
+// Another app once installed a service worker on this host; drop any that remain.
+navigator.serviceWorker?.getRegistrations().then(rs => rs.forEach(r => r.unregister())).catch(() => {});
+const D = JSON.parse(document.getElementById('data').textContent);
+const M = D.msgs, N = M.length, ME = D.me;
+const peer = D.names.find((_, i) => i !== ME) || D.names[0];
+const CHUNK = 300, MAX_CHUNKS = 30, GAP_MIN = 5;
+const $ = s => document.querySelector(s);
+const scroller = $('#scroll'), chat = $('#chat');
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+};
+const KEY = 'wa-reader:' + D.title;
+
+$('#peer').textContent = peer;
+$('#av').textContent = [...peer][0].toUpperCase();
+document.title = peer + ' · WhatsApp';
+$('#stats').textContent = `${N.toLocaleString()} messages · ${fmtShort(D.days[0])} – ${fmtShort(D.days.at(-1))}`;
+$('#jump').min = D.days[0]; $('#jump').max = D.days.at(-1);
+
+function fmtDay(iso) {
+  return new Date(iso + 'T00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+function fmtShort(iso) {
+  return new Date(iso + 'T00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function esc(s) { return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+function linkify(s) {
+  return s.replace(/https?:\/\/[^\s<]+[^\s<.,:;!?)"'\]]/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+}
+function minutes(t) {
+  const [, h, m, ap] = t.match(/(\d+):(\d+) (AM|PM)/);
+  return (h % 12 + (ap === 'PM' ? 12 : 0)) * 60 + +m;
+}
+const emojiOnly = /^(?:\p{Extended_Pictographic}|\p{Emoji_Component}|‍|️|\s){1,12}$/u;
+let query = '';
+
+function media(m) {
+  const f = m[5], src = encodeURIComponent(f), ext = f.split('.').pop().toLowerCase();
+  if (/^(jpe?g|png|webp|gif|heic)$/.test(ext)) {
+    // fixed box from the known size, so a photo loading above you can't shove the chat down
+    const wh = D.dims[f], cap = /STICKER/.test(f) ? 150 : 330;
+    if (!wh) return `<img loading="lazy" src="${src}" alt="">`;
+    const s = Math.min(1, cap / wh[0], (cap === 150 ? 150 : 360) / wh[1]);
+    return `<img loading="lazy" src="${src}" alt="" style="width:${Math.round(wh[0] * s)}px;aspect-ratio:${wh[0]}/${wh[1]};height:auto">`;
+  }
+  if (/^(mp4|mov|m4v)$/.test(ext)) return `<video controls preload="none" src="${src}"></video>`;
+  if (/^(opus|aac|m4a|mp3|ogg)$/.test(ext)) return `<audio controls preload="none" src="${src}"></audio>`;
+  const label = f.replace(/^-?\d+-/, '');
+  return `<a class="chip file" href="${src}" target="_blank">📄 ${esc(label)}</a>`;
+}
+const OMIT_ICON = { image: '📷', video: '🎬', audio: '🎤', sticker: '🏷️', GIF: '🎞️', document: '📄', 'video note': '📹', 'Contact card': '👤' };
+
+function renderMsg(i) {
+  const m = M[i], p = M[i - 1];
+  const [day, time, who, text, kind] = m;
+  let out = '';
+  const newDay = !p || p[0] !== day;
+  if (newDay) out += `<div class="day" data-day="${day}"><span>${fmtDay(D.days[day])}</span></div>`;
+  const first = newDay || p[2] !== who || minutes(time) - minutes(p[1]) > GAP_MIN;
+  const cls = ['row'];
+  if (first) cls.push('first');
+  if (who === ME) cls.push('me');
+  const sticker = kind === 1 && /STICKER/.test(m[5]);
+  if (sticker) cls.push('sticker');
+  let inner = '';
+  if (kind === 1) inner += media(m);
+  else if (kind === 2) inner += `<span class="chip">${OMIT_ICON[m[5]] || '📎'} ${m[5]} not included in export</span>`;
+  else if (kind === 3) { cls.push('call'); if (/^Missed/.test(text)) cls.push('missed'); }
+  if (kind === 3) inner += `<span class="chip"><i>${/video/.test(text) ? '🎥' : '📞'}</i>${esc(text)}</span>`;
+  else if (kind === 4) inner += `<span class="del">🚫 ${esc(text)}</span>`;
+  else if (text) {
+    let h = linkify(esc(text));
+    if (query) h = highlight(h);
+    inner += emojiOnly.test(text) && kind === 0 ? `<span class="big">${h}</span>` : h;
+  }
+  const meta = `<span class="meta">${m[6] ? 'edited · ' : ''}${time}</span>`;
+  const name = first ? `<span class="name">${esc(D.names[who])}</span>` : '';
+  out += `<div class="${cls.join(' ')}" data-i="${i}"><div class="b">${name}${inner}${meta}</div></div>`;
+  return out;
+}
+function highlight(h) {
+  const q = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return h.replace(/(<[^>]+>)|([^<]+)/g, (all, tag, txt) => tag || txt.replace(new RegExp(q, 'gi'), x => `<mark>${x}</mark>`));
+}
+
+// The DOM holds a sliding window of chunks; scrolling near either edge loads the next one.
+let lo = 0, hi = 0;
+function chunkEl(a, b) {
+  const div = document.createElement('div');
+  div.className = 'chunk'; div.dataset.lo = a; div.dataset.hi = b;
+  let h = '';
+  for (let i = a; i < b; i++) h += renderMsg(i);
+  div.innerHTML = h;
+  return div;
+}
+function edgeNote() {
+  $('#edge-top')?.remove(); $('#edge-bottom')?.remove();
+  if (lo === 0) chat.insertAdjacentHTML('afterbegin', '<div class="edge" id="edge-top">Start of chat</div>');
+  if (hi === N) chat.insertAdjacentHTML('beforeend', '<div class="edge" id="edge-bottom">End of chat</div>');
+}
+function appendNext() {
+  if (hi >= N) return;
+  const b = Math.min(N, hi + CHUNK);
+  chat.appendChild(chunkEl(hi, b)); hi = b;
+  const chunks = chat.querySelectorAll('.chunk');
+  if (chunks.length > MAX_CHUNKS) {
+    const h = chunks[0].offsetHeight;
+    lo = +chunks[1].dataset.lo; chunks[0].remove();
+    scroller.scrollTop -= h;
+  }
+  edgeNote();
+}
+function prependPrev() {
+  if (lo <= 0) return;
+  const a = Math.max(0, lo - CHUNK);
+  const before = scroller.scrollHeight;
+  // the first message of the old window may need its day header or tail recomputed
+  const oldFirst = chat.querySelector('.chunk');
+  chat.insertBefore(chunkEl(a, lo), oldFirst); lo = a;
+  if (oldFirst) {
+    const s = +oldFirst.dataset.lo, fresh = document.createElement('div');
+    fresh.innerHTML = renderMsg(s);
+    oldFirst.querySelectorAll(`[data-i="${s}"], .day:first-child`).forEach(e => e.remove());
+    oldFirst.prepend(...fresh.childNodes);
+  }
+  scroller.scrollTop += scroller.scrollHeight - before;
+  const chunks = chat.querySelectorAll('.chunk');
+  if (chunks.length > MAX_CHUNKS) { const last = chunks[chunks.length - 1]; hi = +last.dataset.lo; last.remove(); }
+  edgeNote();
+}
+function jumpTo(i, flash, offset) {
+  i = Math.max(0, Math.min(N - 1, i));
+  chat.innerHTML = '';
+  lo = hi = Math.floor(i / CHUNK) * CHUNK;
+  appendNext();
+  if (i - lo < 40) prependPrev();
+  if (hi - i < 40) appendNext();
+  const el = chat.querySelector(`[data-i="${i}"]`);
+  if (el) {
+    el.scrollIntoView({ block: flash ? 'center' : 'start' });
+    if (offset != null) scroller.scrollTop += el.getBoundingClientRect().top - scroller.getBoundingClientRect().top - offset;
+    else if (!flash) scroller.scrollTop -= 40;
+    if (flash) { el.classList.add('hit'); setTimeout(() => el.classList.remove('hit'), 2500); }
+  }
+  onScroll();
+}
+
+let busy = false, saveT;
+function topVisibleEl() {
+  // step down past date pills and gaps until we land on a message row
+  const r = scroller.getBoundingClientRect();
+  for (let y = r.top + 30; y < r.top + 300; y += 15) {
+    const el = document.elementFromPoint(r.left + r.width / 2, y)?.closest('[data-i]');
+    if (el) return el;
+  }
+  return null;
+}
+function topVisible() { const el = topVisibleEl(); return el ? +el.dataset.i : null; }
+// Reading position is the top message plus how far it sits from the top edge, so a reload lands on the same pixel.
+function savePosition() {
+  const el = topVisibleEl();
+  if (el) store.set(KEY, `${el.dataset.i}:${Math.round(el.getBoundingClientRect().top - scroller.getBoundingClientRect().top)}`);
+}
+// iOS can kill a background tab without warning, so save the moment the page is hidden too
+addEventListener('pagehide', savePosition);
+document.addEventListener('visibilitychange', () => { if (document.hidden) savePosition(); });
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+function onScroll() {
+  if (busy) return;
+  busy = true;
+  requestAnimationFrame(() => {
+    if (scroller.scrollTop < 1500) prependPrev();
+    if (scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight < 1500) appendNext();
+    const i = topVisible();
+    if (i !== null) {
+      $('#floatdate').textContent = fmtDay(D.days[M[i][0]]);
+      markDay(M[i][0]);
+      clearTimeout(saveT); saveT = setTimeout(savePosition, 300);
+    }
+    busy = false;
+  });
+}
+scroller.addEventListener('scroll', onScroll, { passive: true });
+
+$('#top').onclick = () => jumpTo(0);
+$('#bottom').onclick = () => { jumpTo(N - 1); scroller.scrollTop = scroller.scrollHeight; };
+function jumpToDate(v) {
+  let d = D.days.findIndex(x => x >= v); if (d < 0) d = D.days.length - 1;
+  jumpTo(M.findIndex(m => m[0] >= d));
+}
+$('#jump').onchange = e => { if (e.target.value) jumpToDate(e.target.value); };
+addEventListener('hashchange', () => { const h = location.hash.slice(1); if (/^\d{4}-\d\d-\d\d$/.test(h)) jumpToDate(h); });
+$('#theme').onclick = () => {
+  const root = document.documentElement;
+  root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+  store.set(KEY + ':theme', root.dataset.theme);
+};
+const savedTheme = store.get(KEY + ':theme');
+if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+// Search lists every hit in a side panel; clicking one jumps there.
+const results = $('#results');
+$('#q').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  query = e.target.value.trim();
+  if (!query) { results.classList.remove('open'); return; }
+  const ql = query.toLowerCase(), hits = [];
+  for (let i = 0; i < N; i++) if (M[i][3] && M[i][3].toLowerCase().includes(ql)) hits.push(i);
+  const shown = hits.slice(-1000).reverse();
+  results.innerHTML = `<h3><span>${hits.length.toLocaleString()} result${hits.length === 1 ? '' : 's'}${hits.length > 1000 ? ' (latest 1000)' : ''}</span><button aria-label="Close">✕</button></h3>` +
+    shown.map(i => {
+      const m = M[i], t = m[3], k = t.toLowerCase().indexOf(ql);
+      const snip = (k > 40 ? '…' : '') + t.slice(Math.max(0, k - 40), k + ql.length + 60);
+      return `<div class="res" data-i="${i}"><small>${esc(D.names[m[2]])} · ${fmtShort(D.days[m[0]])} ${m[1]}</small>${highlight(esc(snip))}</div>`;
+    }).join('');
+  results.classList.add('open');
+  results.querySelector('h3 button').onclick = () => { results.classList.remove('open'); query = ''; jumpTo(topVisible() ?? 0); };
+});
+results.addEventListener('click', e => { const r = e.target.closest('.res'); if (r) jumpTo(+r.dataset.i, true); });
+
+// Date rail: one row per day with a bar for how busy it was; it follows the day you're reading.
+const rail = $('#rail'), dayFirst = [], dayCount = D.days.map(() => 0);
+for (let i = 0; i < N; i++) { const d = M[i][0]; if (dayCount[d]++ === 0) dayFirst[d] = i; }
+const maxCount = Math.max(...dayCount), monthCount = {};
+D.days.forEach((iso, d) => { const k = iso.slice(0, 7); monthCount[k] = (monthCount[k] || 0) + dayCount[d]; });
+let railHtml = '', month = '';
+D.days.forEach((iso, d) => {
+  const dt = new Date(iso + 'T00:00');
+  if (iso.slice(0, 7) !== month) {
+    month = iso.slice(0, 7);
+    railHtml += `<div class="rm">${dt.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}<small>${monthCount[month].toLocaleString()}</small></div>`;
+  }
+  const pct = Math.round(6 + 94 * Math.sqrt(dayCount[d] / maxCount));
+  railHtml += `<div class="rd" data-d="${d}"><span>${dt.toLocaleDateString(undefined, { weekday: 'short' })} ${dt.getDate()}</span><i style="width:${pct}%"></i><span>${dayCount[d]}</span></div>`;
+});
+rail.innerHTML = railHtml;
+let activeDay = -1, railTouched = 0;
+function markDay(d) {
+  if (d === activeDay) return;
+  rail.querySelector('.rd.on')?.classList.remove('on');
+  const el = rail.querySelector(`[data-d="${d}"]`);
+  activeDay = d;
+  if (!el) return;
+  el.classList.add('on');
+  // leave the rail alone for a moment after you've scrolled it yourself
+  if (Date.now() - railTouched < 1500) return;
+  const top = el.offsetTop, pad = 44;
+  if (top < rail.scrollTop + pad || top + el.offsetHeight > rail.scrollTop + rail.clientHeight) rail.scrollTop = top - rail.clientHeight / 3;
+}
+['wheel', 'touchmove'].forEach(ev => rail.addEventListener(ev, () => { railTouched = Date.now(); }, { passive: true }));
+rail.addEventListener('click', e => {
+  const r = e.target.closest('.rd'); if (!r) return;
+  railTouched = Date.now();
+  jumpTo(dayFirst[+r.dataset.d]);
+  rail.classList.remove('open');
+});
+$('#railbtn').onclick = () => {
+  rail.classList.toggle('open');
+  if (rail.classList.contains('open')) { railTouched = 0; const d = activeDay; activeDay = -1; markDay(d); }
+};
+$('#pane').addEventListener('click', () => rail.classList.remove('open'));
+
+const lb = $('#lightbox');
+chat.addEventListener('click', e => {
+  if (e.target.tagName === 'IMG' && !e.target.closest('.sticker')) { lb.querySelector('img').src = e.target.src; lb.classList.add('open'); }
+});
+lb.onclick = () => lb.classList.remove('open');
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+// A #date link is a one-off jump: drop it from the address so later reloads return to where you were.
+const [savedI, savedOff] = (store.get(KEY) || '').split(':').map(Number);
+if (/^#\d{4}-\d\d-\d\d$/.test(location.hash)) {
+  jumpToDate(location.hash.slice(1));
+  history.replaceState(null, '', location.pathname + location.search);
+} else if (Number.isFinite(savedI) && savedI > 0) jumpTo(savedI, false, Number.isFinite(savedOff) ? savedOff : 0);
+else jumpTo(0);
+</script>
+</body>
+</html>
