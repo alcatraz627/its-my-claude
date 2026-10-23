@@ -240,6 +240,20 @@ def proof_for(ids, doc, root, goal_ids):
 
 # The checks
 
+def owner_ask_is_bare(ask):
+    """True when an ask is only ids or a file ("Rule on R1 to R3"), by the same test
+    the owner-ask Stop gate applies to replies, so the two never disagree."""
+    try:
+        import importlib.util
+        p = os.path.expanduser("~/.claude/scripts/hooks/owner-ask-content-stop.py")
+        spec = importlib.util.spec_from_file_location("owner_ask_gate", p)
+        gate = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(gate)
+        return bool(gate.bare_asks(ask))
+    except Exception:
+        return False
+
+
 def lint(path, text=None):
     if text is None:
         with open(path, encoding="utf-8", errors="replace") as f:
@@ -298,6 +312,9 @@ def lint(path, text=None):
             if len(ask) > LONG_TASK:
                 out.append(error("ask-long", "%s: ask is %d characters (limit %d). Name the one thing the owner does."
                                  % (label, len(ask), LONG_TASK), ids))
+            if ask and owner_ask_is_bare(ask):
+                out.append(error("ask-bare", "%s: the ask names only ids or a file (\"%s\"). Write the question itself, "
+                                 "with its options, so the owner can answer from this table." % (label, ask[:80]), ids))
             default = c[cd] if cd is not None and cd < len(c) else ""
             if default.strip().lower() in NO_DEFAULT:
                 out.append(error("ask-no-default", "%s: say what happens if the owner says nothing." % label, ids))

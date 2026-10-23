@@ -122,6 +122,9 @@ variant("| `#4` | Look at the new reply |", "| `#1` | Look at the new reply |", 
 variant("| `#4` | Look at the new reply |", "| `#3` | Look at the new reply |", "ask-blocked",
         "an ask waiting on open work is caught")
 variant("| Look at the new reply |", "| %s |" % ("word " * 25), "ask-long", "a long ask is caught")
+variant("| Look at the new reply |", "| Rule on R1 to R3 |", "ask-bare", "an ask that names only ids is caught")
+found, _ = lint(GOOD)
+check("an ask written out in words is not bare", "ask-bare" not in codes(found), str(codes(found)))
 
 found, _ = lint(GOOD.replace("| `A2` | ✅ | 💭", "| `A2` | ✅ |"))
 check("✅ with no proof passes only while marked 💭", "done-unproven" in codes(found, "error"), str(codes(found)))

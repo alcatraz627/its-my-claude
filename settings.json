@@ -1145,6 +1145,10 @@
           },
           {
             "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/owner-ask-content-stop.py"
+          },
+          {
+            "type": "command",
             "command": "python3 ~/.claude/scripts/directions/directions.py hook-stop"
           }
         ]
