@@ -436,6 +436,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/push-approve-ask.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/policy-approve-ask.sh"
           }
         ]
       },

@@ -19,6 +19,9 @@
 #
 #   pol.sh get <key> [--cwd <dir>]            resolved value; exit 3 unknown key
 #   pol.sh set <key> <value> [--global | --project <dir>]
+#   pol.sh request <key> <value> [--global | --project <dir>]
+#                                             an agent asks; the owner's AskUserQuestion
+#                                             pick applies it (policy-approve-ask.sh)
 #   pol.sh snooze <key> (--for 30m|4h|2d | --until today|<epoch>) --then <value> [--global | --project <dir>]
 #   pol.sh unsnooze <key> [--global | --project <dir>]
 #   pol.sh clear <key> (--global | --project <dir>)
@@ -211,6 +214,30 @@ cmd_set() {
   printf '%s = %s (%s)\n' "$key" "$(jq -r 'tostring' <<<"$v")" "$SCOPE"
 }
 
+# request: an agent asks the owner to change a policy. Nothing changes here; this
+# records the pending change under a one-use code and prints the AskUserQuestion
+# option to offer. When the owner picks that option, policy-approve-ask.sh applies
+# it. The agent never writes the store: it only asks, and the owner's pick decides.
+cmd_request() {
+  parse_scope "$@"; set -- ${ARGS[@]+"${ARGS[@]}"}
+  local key="${1:-}" val="${2:-}"
+  [ -n "$key" ] && [ -n "$val" ] || die "usage: pol.sh request <key> <value> [--global | --project <dir>]"
+  local r; r=$(reg_entry "$key") || exit $?
+  scope_allowed "$r" "$SCOPE"
+  typed_value "$r" "$val" >/dev/null || die "invalid value for $key: $val"
+  local sid="${POL_SESSION:-${CLAUDE_CODE_SESSION_ID:-}}"
+  [ -n "$sid" ] || die "request needs the session id (CLAUDE_CODE_SESSION_ID); the owner's pick is matched per session" 64
+  local nonce; nonce=$(od -An -N3 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')
+  local label; label=$(jq -r '.label' <<<"$r")
+  local where="global"; [ "$SCOPE" != "global" ] && where="project $(basename "$SCOPE")"
+  local file="${POL_REQUEST_DIR:-$HOME/.claude}/.policy-request-$(printf '%s' "$sid" | tr -c 'A-Za-z0-9._-' '_')"
+  jq -cn --arg n "$nonce" --arg k "$key" --arg v "$val" --arg s "$SCOPE" --argjson ts "$(date +%s)" \
+    '{nonce:$n, key:$k, value:$v, scope:$s, ts:$ts}' > "$file" || die "could not record the request"
+  printf 'Ask the owner with AskUserQuestion, one option labelled exactly:\n  Approve policy %s: %s = %s (%s)\n' \
+    "$nonce" "$label" "$val" "$where"
+  printf 'and a second option to decline. Their pick applies it; nothing changes until then.\n'
+}
+
 cmd_snooze() {
   parse_scope "$@"; set -- ${ARGS[@]+"${ARGS[@]}"}
   local key="${1:-}"; shift || true
@@ -334,6 +361,7 @@ sub="${1:-}"; shift || true
 case "$sub" in
   get) cmd_get "$@";;
   set) cmd_set "$@";;
+  request) cmd_request "$@";;
   snooze) cmd_snooze "$@";;
   unsnooze) cmd_unsnooze "$@";;
   clear) cmd_clear "$@";;
