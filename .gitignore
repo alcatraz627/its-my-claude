@@ -67,6 +67,8 @@
 
 # accumulated LEARNED state — real value, version it (all tiny unless noted)
 !/memory/
+# Holds test-account passwords in plain text; this repo is pushed to GitHub.
+/memory/global/reference_test-logins.md
 !/i-dream/
 !/pinned/
 !/sessions-domain/

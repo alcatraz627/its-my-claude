@@ -1,12 +1,13 @@
 # Global Memory Index
 
-<!-- Cross-project memories loaded via CLAUDE.md instruction. See README.md for format. -->
+<!-- Cross-project memories. scripts/hooks/memory-reach.py injects this index at every session start. See README.md for format. -->
 
 ## User Profile
 - [User Profile](user_profile.md) — Terminal-first macOS developer; vim-style nav; prefers CLI tools and dark mode
 
 ## Reference
 - [Repo census 2026-09-30](reference_repo_census.md): every versable-git and alcatraz627 repo classified with evidence. Reuse it before surveying repos.
+- [Test logins](reference_test-logins.md): Speedway FLIP and F3 accounts, Walmart test account. Read before any browser test or login ask.
 
 ## Feedback — Communication & Autonomy
 - [Challenge user requests](feedback_challenge_user_asks.md) — Push back on suboptimal asks; be opinionated, not a yes-machine

@@ -1059,6 +1059,10 @@
           },
           {
             "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/memory-reach.py session-start"
+          },
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hook-orchestrator/run.sh SessionStart",
             "async": true
           }
@@ -1381,6 +1385,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/speculative-atone-hint.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/memory-reach.py prompt"
           },
           {
             "type": "command",
