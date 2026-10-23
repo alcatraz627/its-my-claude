@@ -47,7 +47,7 @@ For each decision, mutate the canonical store. Never edit `proposals.jsonl` by h
 bash ~/.claude/scripts/propose.sh reject <id> "<why dropped>"
 
 # Promoted AND implemented this session: close it.
-bash ~/.claude/scripts/propose.sh done <id>
+bash ~/.claude/scripts/propose.sh done <id> "<what shipped, in one line>"   # a close with no reason is refused
 ```
 
 For a promoted item that is **small** and in scope, implement it now (follow the normal plan → change → verify discipline), then mark it `done`. For a **larger** item, do NOT implement inline: leave it `open` in the store, where the next triage run resurfaces it, and name it in the Phase 4 summary. Do not park it in TaskCreate: the owner reads the goal record, not the session task list (`rules/todo-discipline.md`). If the owner wants it driven, offer `gs new` (it files a goal and prints the `/goal` line for them to paste; it never arms it). Promotion is a decision to act, not a license to sprawl (scope-as-ceiling).

@@ -19,13 +19,17 @@
 #   (work-size). project scopes a proposal so a successor agent can focus on it.
 #
 # Subcommands:
-#   add      — file a new proposal (--tier --project --links --effort --category --tags)
+#   add      — file a new proposal (--tier --project --links --effort --category --tags);
+#              a repeat of an open need adds evidence to that row instead, auto-stubs
+#              wait for a third sighting, --allow-duplicate forces a new row
+#              (key logic: scripts/propose_intake.py)
 #   list     — query table; filter --status --tier --project --category --since --tag --link
 #   search   — full-text search over title/body/tags
 #   show     — print full detail (incl. updates trail) for one id
 #   update   — append a timestamped note/point to a proposal
 #   tier     — set/change a proposal's tier
 #   retire   — close with a terminal status (--as done|rejected|superseded|deferred|obsolete)
+#              and a reason; every close (retire, done, reject) refuses an empty one
 #   done     — mark completed (alias for retire --as done)
 #   reject   — mark rejected (alias for retire --as rejected)
 #   help     — show usage
@@ -64,7 +68,7 @@ usage() {
 # -----------------------------------------------------------------------------
 cmd_add() {
   local title="" body="" body_file="" category="other" effort="medium"
-  local tags_str="" session_id="" tier="" project="" links_str=""
+  local tags_str="" session_id="" tier="" project="" links_str="" allow_dup=0
 
   while [ $# -gt 0 ]; do
     case "$1" in
@@ -78,6 +82,7 @@ cmd_add() {
       --links)       links_str="$2"; shift 2 ;;
       --tags)        tags_str="$2"; shift 2 ;;
       --session)     session_id="$2"; shift 2 ;;
+      --allow-duplicate) allow_dup=1; shift ;;
       *)             echo "propose add: unknown flag: $1" >&2; exit 2 ;;
     esac
   done
@@ -108,6 +113,41 @@ cmd_add() {
     echo "propose add: invalid --tier '$tier' (want: $VALID_TIERS)" >&2; exit 2
   fi
 
+  # One open row per need. A filing that matches an open proposal's key adds
+  # evidence to it instead of a new row; an auto-stub waits for its third sighting.
+  # --allow-duplicate is for a person who means a second row.
+  # Whenever the intake check itself fails (helper missing, store or evidence file
+  # unreadable), the filing goes through as before: a lost need is worse than a duplicate.
+  local key="" match="-" hold="file" held_key="" kline
+  local intake; intake="$(dirname "${BASH_SOURCE[0]}")/propose_intake.py"
+  local evidence="${PROPOSE_EVIDENCE:-${STORE%.jsonl}-evidence.jsonl}"
+  if [ "$allow_dup" = 0 ] && [ -f "$intake" ] && kline=$(python3 "$intake" key "$STORE" "$title" "$tags_str" 2>/dev/null); then
+    IFS=$'\t' read -r key match hold <<<"$kline"
+    if [ -n "$match" ] && [ "$match" != "-" ]; then
+      if mutate_record "$match" '
+          if .id == $id then .evidence = ((.evidence // 1) + 1)
+            | .updates = ((.updates // []) + [{ts: $ts, note: ("evidence +1: " + $t)}]) else . end
+        ' --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" --arg t "$title${session_id:+ (session ${session_id:0:8})}" 2>/dev/null; then
+        echo "✓ evidence +1 on $match (an open proposal already covers this; nothing new filed)"
+        return 0
+      fi
+      echo "propose add: could not add evidence to $match; filing a new row instead" >&2
+    elif [ "$hold" = "hold" ]; then
+      local held count
+      if held=$(python3 "$intake" hold "$evidence" "$key" "$title" "$session_id" 2>/dev/null) \
+          && count=${held%%$'\t'*} && [[ "$count" =~ ^[0-9]+$ ]]; then
+        if [ "$count" -lt 3 ]; then
+          echo "✓ held as evidence $count/3 for $key (a proposal is filed at the third sighting)"
+          return 0
+        fi
+        body="$body"$'\n\n'"Sightings ($count):"$'\n'"${held#*$'\t'}"
+        held_key="$key"
+      else
+        echo "propose add: could not record this sighting in $evidence; filing it instead" >&2
+      fi
+    fi
+  fi
+
   local ts id
   ts=$(ledger_ts)
   id=$(ledger_id prop)
@@ -126,8 +166,10 @@ cmd_add() {
     --arg project "$project" \
     --arg links_str "$links_str" \
     --arg tags_str "$tags_str" \
+    --arg key "$key" \
     '{
        id: $id,
+       key: $key,
        ts: $ts,
        session_id: $session_id,
        title: $title,
@@ -143,6 +185,7 @@ cmd_add() {
 
   ledger_append_checked "$STORE" "$LOCK" "$line" \
     || { echo "propose add: could not write $STORE, so $id was NOT filed" >&2; exit 1; }
+  [ -n "$held_key" ] && { python3 "$intake" mark "$evidence" "$held_key" "$id" 2>/dev/null || true; }
 
   echo "✓ filed $id"
   echo "  title:    $title"
@@ -257,6 +300,7 @@ cmd_show() {
     (if .project then "Project:  \(.project)" else empty end),
     (if (.links // []) | length > 0 then "Links:    \(.links | join(", "))" else empty end),
     (if (.tags // []) | length > 0 then "Tags:     \(.tags | join(", "))" else empty end),
+    (if (.evidence // 1) > 1 then "Evidence: seen \(.evidence) times (each repeat is in the updates trail)" else empty end),
     "Title:    \(.title)",
     "",
     "\(.body)",
@@ -314,6 +358,13 @@ mutate_status() {
   case "$reason" in
     --*) echo "propose $new_status: reason looks like a flag ('$reason') — pass it positionally: propose.sh retire <id> --as $new_status \"<reason>\"" >&2; exit 2 ;;
   esac
+  # A close with no reason left 111 'done' rows that prove nothing about whether the
+  # need was met; every close now says why, in its own words.
+  local bare="${reason//[[:space:]]/}"
+  if [ "${#bare}" -lt 3 ]; then
+    echo "propose $new_status: a close needs a reason (what shipped, or why it is dropped): propose.sh retire $id --as $new_status \"<reason>\"" >&2
+    exit 2
+  fi
   local dts; dts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   mutate_record "$id" '
     if .id == $id then
@@ -343,7 +394,9 @@ cmd_retire() {
   mutate_status "$as" "$id" "$reason" "$by"
 }
 
-cmd_done() { mutate_status "done" "$@"; }
+# Words after the id are the reason, quoted or not (an unquoted "fixed in svc.py"
+# used to land as reason "fixed" and superseded_by "in").
+cmd_done() { local id="${1:-}"; shift || true; mutate_status "done" "$id" "$*"; }
 
 cmd_reject() {
   local id="${1:-}"; shift || true
