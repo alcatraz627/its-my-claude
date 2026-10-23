@@ -122,7 +122,7 @@ def ledger_path():
 
 def fetch(ref):
     """The PR as the gate needs it: state, head, title and Clanky's latest review."""
-    out = gh("pr", "view", url(ref), "--json", "state,isDraft,title,headRefOid,comments")
+    out = gh("pr", "view", url(ref), "--json", "state,isDraft,title,headRefOid,mergeable,comments")
     if not out:
         return None
     pr = json.loads(out)
@@ -273,6 +273,10 @@ def check_pr(k, info, st):
     if pr.get("isDraft") or NOBOT.search(pr.get("title") or ""):
         return None, None, None
     head7 = (pr.get("headRefOid") or "")[:7]
+    if pr.get("mergeable") == "CONFLICTING":
+        # The bot skips a conflicted PR, so no review is coming until this is fixed.
+        return (f"{k}: head {head7} has merge conflicts, so Clanky will not review it and it cannot merge. "
+                f"Rebase onto the base branch and push, then the review gate takes over."), "conflict", head7
     if review_current(pr):
         done = dispositions(ref, pr["review_sha"])
         missing = [(n, t) for n, t in pr["findings"] if n not in done or done[n][2] not in (None, t)]

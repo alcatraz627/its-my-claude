@@ -156,6 +156,10 @@ Then stop. This skill does not fix what the checks find, and it does not say
 the change is done. It reports what ran, what each returned, and what was
 skipped. The person who asked owns the verdict.
 
+A clean pass still states its coverage: one `Coverage:` line naming what each
+instrument actually exercised (files, paths, input classes) and what it did not.
+Silence after a pass reads the same as a check that never looked.
+
 ## Phase 7: Record the routing
 
 ```bash

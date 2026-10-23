@@ -107,8 +107,9 @@ How each part binds:
   action once so a fresh code appears, and put it in the briefing.
 - **Live commitments:** the goal is OFFERED as a paste line, never armed. Do not run
   `goal.sh set` or `gs link` (linking arms the standing-goal hinter); offer both. A `wake` or `deadline` marked live: ask before re-arming. `crons`:
-  run `CronList` first and re-arm only what is missing (CronCreate jobs survive
-  `/clear`).
+  run `CronList` first and re-arm only what is missing. Whether CronCreate jobs
+  survive `/clear` has been seen both ways (kept 2026-08-21, dropped 2026-09-05),
+  so `CronList` is the instrument and a `cron-duty.sh` LIVE verdict is a claim.
 - **Atone this session:** each id becomes a fence row (how: REFERENCE §3.3).
 - **Completion claims** (done, verified, pushed): gather re-checked what it could
   read-only (git, PR state, `check:` lines). Everything else is "as of dump" with
@@ -157,8 +158,10 @@ Then the task table, below the briefing, as the tool prints it (owner, 2026-08-1
 python3 ~/.claude/scripts/goals/views/path.py --goal <goal id from the contract>
 ```
 
-The render and the table are the whole report. Nothing after them except the Phase 4
-line. No Insight or star blocks, no restated summary, no "the briefing above shows"
+The render and the table are the whole report. The TUI collapses long tool output
+to a couple of lines, so the owner may never see the render itself: copy its
+lines into the reply as plain text, unchanged and without restating them in
+prose. Nothing after them except the Phase 4 line. No Insight or star blocks, no restated summary, no "the briefing above shows"
 prose.
 
 ## Phase 4: continue or ask

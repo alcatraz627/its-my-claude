@@ -1,8 +1,10 @@
 #!/bin/bash
 # cron-duty.sh — a name and a liveness verdict for session-scoped cron duties.
 #
-# CronCreate jobs live in the harness process's memory: they survive /clear and
-# /compact, and die only with the process (5h cap, crash, closed terminal). A
+# CronCreate jobs live in the harness process's memory and die with the process
+# (5h cap, crash, closed terminal). Whether they survive /clear has been seen both
+# ways (kept 2026-08-21, dropped 2026-09-05 in the same pid), so LIVE here means
+# "the arming process is alive", not "the job exists": confirm with CronList. A
 # checkpoint can therefore only say what was armed at dump time, and a job id
 # says nothing across sessions. This ledger gives each recurring DUTY a stable
 # slug, records which harness process armed it, and answers the one question a

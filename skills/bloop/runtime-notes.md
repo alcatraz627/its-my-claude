@@ -1,3 +1,15 @@
+## bloop: /quiz skill plus the Clanky PR review gate [gcc-all b3c49297] 2026-10-24
+
+**Purpose:** build /quiz from a fable-seat plan and gate it together with a same-day Stop hook in one sonnet validator.
+
+**Insights:**
+
+1. Folding a second, already-shipped piece into the same gate was cheap and paid most: the hook that blocks every session's Stop had a timeout risk and a same-sha re-review hole that its own 13 green tests never touched.
+2. A green first run of a fresh suite plus two self-mutations still left four majors. The validator's fuzz (72 malformed quiz.json shapes) found what hand-picked fixtures cannot; ask for a fuzz pass on any file-format checker.
+3. When a sibling session has uncommitted edits in the same JSON (settings.json), stage only your hunks by rebuilding the index copy from HEAD (`git hash-object -w` plus `update-index --cacheinfo`); `add -p` is unavailable here.
+
+---
+
 ## bloop: speedway PR 81 pause/metering fixes [speedway 767522fd] 2026-09-24
 
 **Purpose:** build eight owner-ruled fixes from an adversarial PR review and gate them with one opus validator.

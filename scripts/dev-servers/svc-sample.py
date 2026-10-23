@@ -236,7 +236,9 @@ def main():
         # new connection, which is the only reliable evidence of real use.
         touched = bool(endpoints - prior_endpoints)
 
-        if online and (touched or not lastseen):
+        # A fresh start (online now, not started before) counts as use: otherwise a
+        # service reaped once keeps its old lastseen and is reaped again every pass.
+        if online and (touched or not lastseen or not started):
             lastseen = now
         if online and not started:
             started = now

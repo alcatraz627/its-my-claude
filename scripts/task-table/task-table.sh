@@ -37,6 +37,8 @@ export PATH="/opt/homebrew/bin:$PATH"
 export LC_ALL="${LC_ALL:-en_US.UTF-8}"   # ${#var} counts characters, not bytes
 
 MODE=human; SID=""; PIN=""; GROUP=""; SETGROUP=""; DETAIL=0; PROJECT=""
+# A value flag given last (`--pin` with nothing after it) used to die on an unbound $2.
+need_value() { [ $# -ge 2 ] && [ -n "$2" ] || { echo "task-table.sh: $1 needs a value" >&2; exit 2; }; }
 while [ $# -gt 0 ]; do
   case "$1" in
     --json) MODE=json; shift ;;
@@ -44,12 +46,12 @@ while [ $# -gt 0 ]; do
     --compact) MODE=compact; shift ;;
     --refs) MODE=refs; shift ;;
     --unfiled) MODE=unfiled; shift ;;
-    --session) SID="$2"; shift 2 ;;
-    --pin) PIN="$2"; shift 2 ;;
+    --session) need_value "$@"; SID="$2"; shift 2 ;;
+    --pin) need_value "$@"; PIN="$2"; shift 2 ;;
     --candidates) MODE=candidates; shift ;;
-    --project) PROJECT="$2"; shift 2 ;;          # filter to rows whose project is this (path or name); identity contract I3
-    --group) GROUP="$2"; shift 2 ;;              # one-off: batch|domain|class|actor|auto
-    --set-group) SETGROUP="$2"; shift 2 ;;       # persist for this project; the owner says it once
+    --project) need_value "$@"; PROJECT="$2"; shift 2 ;;         # filter to rows whose project is this (path or name); identity contract I3
+    --group) need_value "$@"; GROUP="$2"; shift 2 ;;             # one-off: batch|domain|class|actor|auto
+    --set-group) need_value "$@"; SETGROUP="$2"; shift 2 ;;      # persist for this project; the owner says it once
     # The range ends at the blank comment line after Usage, computed rather than
     # hardcoded: it was pinned at 26 while the block ran to 31, so --group,
     # --detail, --set-group and --session were invisible to --help.

@@ -277,6 +277,17 @@ resume can inherit, and the SessionStart atone lane shows only the machine-wide
 top patterns, never what THIS session just did. Skip silently when the session
 recorded nothing.
 
+**For work that spans days, add "What a summary of this work will not tell you"**
+as the last part of this section (a sub-heading inside Session Insights, so the
+checkpoint's parse contract is unchanged). A list of tasks, files and PRs drops
+the things the owner would otherwise have to re-explain: their current
+priorities and why, the evidence bar they hold work to, how their rulings refined
+the options they were offered, which authority they granted versus which they
+were only asked about, and which state is proven by code versus proven at
+runtime. Write each as one or two plain sentences. Skip it for a single-day
+session. Worked example: the section of that name in
+`~/Code/Versable/enhancement-product/_20261010-enh-wknd-r2.claude.md`.
+
 Broadly-applicable insights also get a dated entry in
 `~/.claude/improvement-ideas.md`.
 

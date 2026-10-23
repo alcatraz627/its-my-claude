@@ -36,7 +36,8 @@ if extra == "quoted":
     comments.append({"body": "> <!-- pr-claude:review -->\n> quoting the bot"})
 print(json.dumps({"url": "https://github.com/versable-git/demo/pull/7",
                   "state": "CLOSED" if extra == "closed" else "OPEN",
-                  "isDraft": extra == "draft", "title": title, "headRefOid": head, "comments": comments}))
+                  "isDraft": extra == "draft", "title": title, "headRefOid": head, "comments": comments,
+                  "mergeable": "CONFLICTING" if extra == "conflict" else "MERGEABLE"}))
 EOF
 }
 mcp_track() {  # $1 sid, $2 tool name, $3 response text
@@ -147,6 +148,10 @@ check "a new head needs fresh dispositions" "$(stop s11)" "2 finding(s) with no 
 track s12 "git push" "https://github.com/versable-git/demo/pull/7"
 fixture "t" "abc1234def" "abc1234" quoted
 check "a quoted marker is not taken as the review" "$(stop s12)" ""
+
+track s13 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" "" conflict
+check "a conflicted PR blocks with a rebase instruction" "$(stop s13)" "has merge conflicts"
 
 fixture "t" "abc1234def" "abc1234"
 check "a blank reason is refused" "$(python3 "$GATE" dispose demo#7 "1=fixed:   " 2>&1)" "a real one-line reason"

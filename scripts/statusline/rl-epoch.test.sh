@@ -116,6 +116,30 @@ got=$(render_week 81 60 79)
 [ "$got" = "81" ] && ok "a recently confirmed 81% still beats a stale session's 79% (-> $got)" \
                   || bad "a recently confirmed 81% still beats a stale session's 79%: got '$got'"
 
+echo "== a later cached reset must not beat a live reading when it is old =="
+# 2026-10-23: a 27-hour-old 2% with a later resets_at beat every session's live 47%.
+render_week_later() { # cached_pct cached_src_age_s own_pct -> week pct written back
+  local T R
+  T=$(mktemp -d); mkdir -p "$T/.claude/widgets"; R=$((NOW + 86400))
+  printf '{"5h":{"pct":10,"src_at":%s},"week":{"pct":%s,"src_at":%s},"resets_at":"%s","resets_at_weekly":"%s"}' \
+    "$NOW" "$1" "$((NOW - $2))" "$((NOW + 3600))" "$((R + 2*86400))" > "$T/.claude/widgets/.limits.json"
+  jq -nc --arg cwd "$T" --argjson own "$3" --arg r5 "$((NOW + 3600))" --arg r7 "$R" '{
+    session_id:"aaaabbbb-1111-2222-3333-444455556666", model:{display_name:"Test"},
+    workspace:{current_dir:$cwd}, transcript_path:"/dev/null",
+    rate_limits:{ five_hour:{used_percentage:10, resets_at:$r5}, seven_day:{used_percentage:$own, resets_at:$r7} }}' \
+    > "$T/payload.json"
+  PJ="$T/payload.json" SL="$SL" HOME="$T" perl -e 'my $p=fork; if($p==0){setpgrp(0,0); open(STDIN,"<",$ENV{PJ}); exec("bash",$ENV{SL}) or exit 127}
+               local $SIG{ALRM}=sub{kill "KILL",-$p; exit 9}; alarm 25; waitpid($p,0); exit($?>>8)' >/dev/null 2>&1
+  jq -r '.week.pct' "$T/.claude/widgets/.limits.json"
+  rm -rf "$T"
+}
+got=$(render_week_later 2 97200 47)
+[ "$got" = "47" ] && ok "a day-old 2% with a later reset gives way to a live 47% (-> $got)" \
+                  || bad "a day-old 2% with a later reset gives way to a live 47%: got '$got'"
+got=$(render_week_later 3 60 90)
+[ "$got" = "3" ] && ok "a freshly confirmed reading from a newer window still wins (-> $got)" \
+                 || bad "a freshly confirmed reading from a newer window still wins: got '$got'"
+
 echo
 printf 'passed %d, failed %d\n' "$PASS" "$FAIL"
 [ "$FAIL" -eq 0 ]

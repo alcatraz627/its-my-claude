@@ -569,7 +569,9 @@ _cached_r7_int=$(printf '%.0f' "${_cached_r7:-0}" 2>/dev/null || echo 0)
 _r7_ep=$_own_r7_ep   # epoch of whichever 7d reset wins the merge (0 = unknown)
 _r7_src=$_rl_now     # when the winning value was last read by a session itself
 if [[ -n "$_cached_r7" ]]; then
-  if   (( _cached_r7_ep >  _own_r7_ep )); then
+  # A later reset wins only when this session has no reset of its own or the cached
+  # value was confirmed recently: a day-old 2% once beat a live 47% this way.
+  if   (( _cached_r7_ep >  _own_r7_ep && ( _own_r7_ep == 0 || _rl_now - _cached_r7_src <= _RL_CONFIRM_S ) )); then
     rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep; _r7_src=$_cached_r7_src
   elif (( _cached_r7_ep == _own_r7_ep && _cached_r7_int > _own_r7_int && _rl_now - _cached_r7_src <= _RL_CONFIRM_S )); then
     rate_7d="$_cached_r7"; rate_7d_resets="$_cached_r7_resets"; _r7_ep=$_cached_r7_ep; _r7_src=$_cached_r7_src
@@ -585,7 +587,7 @@ _cached_r5_int=$(printf '%.0f' "${_cached_r5:-0}" 2>/dev/null || echo 0)
 _r5_ep=$_own_r5_ep
 _r5_src=$_rl_now
 if [[ -n "$_cached_r5" ]]; then
-  if   (( _cached_r5_ep >  _own_r5_ep )); then
+  if   (( _cached_r5_ep >  _own_r5_ep && ( _own_r5_ep == 0 || _rl_now - _cached_r5_src <= _RL_CONFIRM_S ) )); then
     rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep; _r5_src=$_cached_r5_src
   elif (( _cached_r5_ep == _own_r5_ep && _cached_r5_int > _own_r5_int && _rl_now - _cached_r5_src <= _RL_CONFIRM_S )); then
     rate_5h="$_cached_r5"; rate_5h_resets="$_cached_r5_resets"; _r5_ep=$_cached_r5_ep; _r5_src=$_cached_r5_src
