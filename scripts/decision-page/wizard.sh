@@ -6,11 +6,10 @@
 # stays inside the terminal, which matters for a session running fullscreen
 # where opening a browser is a context switch.
 #
-# It is deliberately NOT a second source of truth. It reads the page the
-# authoring agent already wrote and verified, and it submits through the kanban
-# server's /api/dp-submit/<slug> so the server still writes .answer.json,
-# clears the pending marker, and fires the origin notification. A page answered here and a page
-# answered in the browser are indistinguishable downstream.
+# It is deliberately NOT a second source of truth. It collects the picks, then
+# `decision-page.sh compose` writes the answer string and `decision-page.sh
+# submit` sends it, the same composer and submit path every surface uses. A page
+# answered here and a page answered in the browser are indistinguishable.
 #
 # usage: wizard.sh <slug> [--dry-run]
 #          --dry-run   compose and print the answer string, submit nothing
@@ -34,7 +33,11 @@ done
 # characters instead, silently eating every "e" in a label.
 US=$'\x1f'   # between fields of one option
 RS=$'\x1e'   # between options
+# Between the fields of a row. Not a tab: tab is whitespace to `read`, which
+# collapses empty fields, so a page with no group shifted every field left.
+FS=$'\x1d'
 REG="$HOME/.claude/assets/decision-pages"
+DP="$(dirname "$0")/decision-page.sh"
 PAGE="$REG/$SLUG"
 CFG="$PAGE/config.json"
 [ -f "$CFG" ] || { echo "wizard: no page '$SLUG' (looked for $CFG)" >&2; exit 2; }
@@ -50,7 +53,7 @@ for d in cfg.get("decisions") or []:
     opts = []
     for o in d.get("options") or []:
         opts.append("\x1f".join([o.get("code",""), o.get("label",""), "1" if o.get("rec") else "0"]))
-    print("\t".join([
+    print("\x1d".join([
         d.get("id",""),
         d.get("group",""),
         (groups.get(d.get("group",""), {}) or {}).get("context",""),
@@ -63,7 +66,6 @@ PY
 
 [ -n "$rows" ] || { echo "wizard: page '$SLUG' has no decisions" >&2; exit 2; }
 total=$(printf '%s\n' "$rows" | wc -l | tr -d ' ')
-header=$(python3 -c 'import json,sys;print((json.load(open(sys.argv[1])).get("copyHeader") or sys.argv[2]))' "$CFG" "$SLUG")
 title=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("title") or "")' "$CFG")
 
 W=$(( ${COLUMNS:-100} > 100 ? 96 : ${COLUMNS:-100} - 4 ))
@@ -85,7 +87,7 @@ if [ "$PREVIEW" = 1 ]; then
   printf '\n%s\n' "$title"
   printf 'Enter takes the recommendation. Esc on any row keeps it too.\n'
   n=0; lastg=""
-  while IFS=$'\t' read -r id group gctx question qctx optblob; do
+  while IFS="$FS" read -r id group gctx question qctx optblob; do
     n=$((n+1))
     if [ "$group" != "$lastg" ] && [ -n "$group" ]; then
       printf '\n── %s ──\n' "$group"
@@ -105,9 +107,7 @@ if [ "$PREVIEW" = 1 ]; then
   done <<< "$rows"
   printf '\n      add a note on <id>? [y/N]      (asked once per row, opt-in)\n'
   printf '      anything the form could not hold? [y/N]\n'
-  printf '\n── the answer ──\n%s:\n' "$header"
-  printf '%s\n' "$(printf '%s\n' "$rows" | awk -F'\t' -v U="$US" -v R="$RS" '{
-    n=split($6,o,R); for(i=1;i<=n;i++){split(o[i],f,U); if(f[3]=="1") printf "%s%s ", $1, f[1]} }' | sed 's/ $//')"
+  printf '\n── the answer ──\n%s\n' "$(bash "$DP" compose "$SLUG" </dev/null)"
   printf '\n      send this to the session? [y/N]\n'
   exit 0
 fi
@@ -116,18 +116,15 @@ if ! tui_have_tty; then
   # Headless is not a failure, it is the all-recommended answer. Print it rather
   # than hanging on a picker nobody can see.
   echo "wizard: no tty; composing the all-recommended answer without prompting" >&2
-  picks=$(printf '%s\n' "$rows" | awk -F'\t' -v RS_UNIT="$US" -v RS_REC="$RS" '{
-    n=split($6, o, RS_REC); for (i=1;i<=n;i++) { split(o[i], f, RS_UNIT);
-      if (f[3]=="1") printf "%s%s ", $1, f[1] } }')
-  printf '%s:\n%s\n' "$header" "${picks% }"
-  exit 0
+  bash "$DP" compose "$SLUG" </dev/null
+  exit $?
 fi
 
 printf '\n%s%s%s\n' "${TUI_BOLD:-}" "$title" "${TUI_RESET:-}"
 printf '%sEnter takes my recommendation. Esc on any row keeps it too.%s\n' "${TUI_DIM:-}" "${TUI_RESET:-}"
 
-answers=""; notes=""; i=0; lastgroup=""
-while IFS=$'\t' read -r id group gctx question qctx optblob; do
+picks_tsv=""; notes_tsv=""; i=0; lastgroup=""
+while IFS="$FS" read -r id group gctx question qctx optblob; do
   i=$((i+1))
   if [ "$group" != "$lastgroup" ] && [ -n "$group" ]; then
     printf '\n%s── %s ──%s\n' "${TUI_CYAN:-}" "$group" "${TUI_RESET:-}"
@@ -146,13 +143,14 @@ while IFS=$'\t' read -r id group gctx question qctx optblob; do
     pick=$(printf '%s' "$optblob" | tr "$RS" '\n' | awk -F"$US" '$3=="1"{print $1; exit}')
     printf '      %skept the recommendation: %s%s\n' "${TUI_DIM:-}" "$pick" "${TUI_RESET:-}"
   fi
-  answers="$answers $id$pick"
+  picks_tsv="$picks_tsv$id	$pick
+"
 
   # a note is opt-in per row, never a required field
   if tui_confirm "      add a note on $id?" 2>/dev/null; then
     n=''; tui_read_tty -p "      $id note: " n || n=''
-    [ -n "$n" ] && notes="$notes
-$id note: $n"
+    [ -n "$n" ] && notes_tsv="$notes_tsv$id	$n
+"
   fi
 done <<< "$rows"
 
@@ -161,12 +159,11 @@ if tui_confirm $'\nanything the form could not hold?' 2>/dev/null; then
   tui_read_tty -p "notes: " end || end=''
 fi
 
-answer="$header:
-${answers# }"
-[ -n "$notes" ] && answer="$answer$notes"
-[ -n "$end" ] && answer="$answer
-notes:
-$end"
+answer=$(python3 -c '
+import json, sys
+pairs = lambda s: dict(l.split("\t", 1) for l in s.splitlines() if "\t" in l)
+print(json.dumps({"d": pairs(sys.argv[1]), "dnotes": pairs(sys.argv[2]), "endnotes": sys.argv[3]}))
+' "$picks_tsv" "$notes_tsv" "$end" | bash "$DP" compose "$SLUG") || { echo "wizard: could not compose the answer" >&2; exit 1; }
 
 printf '\n%s── the answer ──%s\n%s\n\n' "${TUI_CYAN:-}" "${TUI_RESET:-}" "$answer"
 
@@ -175,18 +172,15 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 if ! tui_confirm "send this to the session?"; then
-  echo "not sent. Re-run when ready, or answer in the browser: http://localhost:5197/$SLUG/"
+  echo "not sent. Re-run when ready, or answer in the browser: http://localhost:5106/dp/$SLUG/"
   exit 1
 fi
 
-code=$(curl -s -o /dev/null -w '%{http_code}' -X POST \
-  -H 'Content-Type: application/json' \
-  --data "$(python3 -c 'import json,sys;print(json.dumps({"answer":sys.stdin.read()}))' <<< "$answer")" \
-  "http://localhost:5106/api/dp-submit/$SLUG" 2>/dev/null)
-if [ "$code" = "200" ]; then
-  printf '%ssent.%s The session picks it up the same way it would a browser Submit.\n' "${TUI_GREEN:-}" "${TUI_RESET:-}"
-else
-  printf '%scould not reach the page server (HTTP %s).%s Paste this into the chat instead:\n\n%s\n' \
-    "${TUI_YELLOW:-}" "${code:-000}" "${TUI_RESET:-}" "$answer"
-  exit 1
-fi
+printf '%s' "$answer" | bash "$DP" submit "$SLUG" >/dev/null
+case $? in
+  0) printf '%ssent.%s The session picks it up the same way it would a browser Submit.\n' "${TUI_GREEN:-}" "${TUI_RESET:-}" ;;
+  3) printf '%sthis page is already answered.%s Answer it in the browser to replace the ruling: http://localhost:5106/dp/%s/\n' \
+       "${TUI_YELLOW:-}" "${TUI_RESET:-}" "$SLUG"; exit 1 ;;
+  *) printf '%scould not send it.%s Nothing was written. Paste this into the chat instead:\n\n%s\n' \
+       "${TUI_YELLOW:-}" "${TUI_RESET:-}" "$answer"; exit 1 ;;
+esac

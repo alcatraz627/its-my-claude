@@ -11,57 +11,13 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { parse as parseAnswer, type State } from "../dp-core.ts";
 
 const HOME = os.homedir();
 const DP_ROOT = path.join(HOME, ".claude/assets/decision-pages");
 const HERE = path.dirname(new URL(import.meta.url).pathname);
 const BASE = "http://127.0.0.1:5106";
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-
-type Cfg = { title?: string; copyHeader?: string; decisions?: any[]; sections?: any[]; notes?: boolean; storageKey?: string };
-type State = { d: Record<string, string>; dnotes: Record<string, string>;
-  screens: Record<string, { agree: boolean; note: string }>; endnotes: string };
-
-// The inverse of the page's answerString(): turn a stored answer back into the
-// picks and notes that produce it. Multi-line notes continue until the next
-// line that starts a known item.
-export function parseAnswer(answer: string, cfg: Cfg): State {
-  const decisions = cfg.decisions || [], sections = cfg.sections || [];
-  const st: State = { d: {}, dnotes: {}, screens: {}, endnotes: "" };
-  for (const d of decisions) st.dnotes[d.id] = "";
-  for (const s of sections) st.screens[s.id] = { agree: true, note: "" };
-  const lines = answer.split("\n");
-  let i = 1;
-  if (decisions.length) {
-    const toks = (lines[1] || "").split(" ");
-    decisions.forEach((d, k) => { const t = toks[k] || ""; if (t.startsWith(d.id)) st.d[d.id] = t.slice(d.id.length); });
-    i = 2;
-  }
-  const secIds = sections.map((s) => s.id).sort((a, b) => b.length - a.length);
-  let cur: ((more: string) => void) | null = null;
-  for (; i < lines.length; i++) {
-    const ln = lines[i];
-    if (ln === "notes:") { st.endnotes = lines.slice(i + 1).join("\n"); break; }
-    if (ln === "all items: agree as drafted") { cur = null; continue; }
-    const dn = decisions.find((d) => ln.startsWith(`${d.id} note — `));
-    if (dn) {
-      st.dnotes[dn.id] = ln.slice(`${dn.id} note — `.length);
-      cur = (m) => { st.dnotes[dn.id] += "\n" + m; };
-      continue;
-    }
-    const sid = secIds.find((id) => ln.startsWith(`${id}: agree`) || ln.startsWith(`${id}: DISAGREE`));
-    if (sid) {
-      const rest = ln.slice(sid.length + 2);
-      const agree = rest.startsWith("agree");
-      const after = rest.slice(agree ? 5 : 8);
-      st.screens[sid] = { agree, note: after.startsWith(" — ") ? after.slice(3) : "" };
-      cur = (m) => { st.screens[sid].note += "\n" + m; };
-      continue;
-    }
-    if (cur) cur(ln);
-  }
-  return st;
-}
 
 // A minimal Chrome DevTools Protocol client: one page, request and reply by id.
 async function chrome() {

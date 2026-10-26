@@ -19,6 +19,8 @@ import {
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 import { wakeOrigin } from "./dp-wake.ts";
+import { IPC_DB, seenAgoByAlias, reachOf } from "./ipc-reach.ts";
+import { compose as dpCompose, parse as dpParse, configOf as dpConfigOf } from "../decision-page/dp-core.ts";
 
 const portArg = process.argv.indexOf("--port");
 const PORT = portArg >= 0 ? Number(process.argv[portArg + 1]) : NaN;
@@ -71,71 +73,6 @@ function dpPending(): Set<string> {
       .split("\n").map((x) => x.trim()).filter(Boolean));
   } catch { return new Set(); }
 }
-// How long ago a named session was last seen, or null. The registry's `status`
-// column is not the liveness test (it read "live" for 21-hour-dead sessions,
-// measured 2026-08-22); last_seen is. Asked per alias rather than per cwd,
-// because the question here is "can this answer still reach the session that
-// raised it", not "who works on this board".
-// Returns the readings AND whether the lookup itself worked, because those are
-// different facts and the caller needs both. It used to return only the map, so
-// four unrelated situations produced an identical empty result: no broker
-// installed, the sqlite file missing, the open or query throwing, and the alias
-// genuinely not being there. Only the last one means "this session is not
-// around"; the other three mean "I could not find out". SYSTEM.md law 1 — an
-// unloadable list is not an empty one.
-function seenAgoByAlias(): Map<string, number> & { ok?: boolean } {
-  const out: Map<string, number> & { ok?: boolean } = new Map<string, number>();
-  out.ok = false;
-  if (ipcMissing) return out;
-  let db: any = null;
-  try {
-    if (!fs.existsSync(IPC_DB)) { ipcMissing = true; return out; }
-    // lazy: a machine with no ipc broker never pays for the sqlite driver
-    const { Database } = require("bun:sqlite");
-    // opened per call, not kept: a held handle pins a WAL snapshot, so last_seen
-    // freezes while the clock moves and every session ages out to cold
-    db = new Database(IPC_DB, { readonly: true });
-    const now = Date.now() / 1000;
-    for (const r of db.query("select alias, max(last_seen) as seen from registry_snapshot group by alias")
-      .all() as { alias: string; seen: number }[]) {
-      if (r.alias && r.seen) out.set(r.alias, Math.max(0, Math.round(now - r.seen)));
-    }
-    // Set only after the query returns: reaching here means the registry was
-    // read, so an alias missing from the map is genuinely absent rather than
-    // unlooked-up.
-    out.ok = true;
-  } catch { /* no broker is not an error, but it IS not an answer either */ }
-  finally { try { db?.close(); } catch { /* nothing to do */ } }
-  return out;
-}
-
-// An answer's value decays with the asking session's context: answering a live
-// session costs it nothing, answering after its /clear costs a re-brief. So a
-// pending decision carries whether it can still reach the session that raised
-// it, and the sort puts hot above old-and-cold. Never asserts "live": it
-// reports when the session was last seen and lets the reader judge.
-const HOT_S = 1800;
-function reachOf(session: string | null | undefined, seen: Map<string, number>): any {
-  if (!session) return { state: "unknown", seenAgo: null };
-  const ago = seen.get(session);
-  // "cold" is a claim about the session ("it has gone away, so an answer can
-  // wait"). Making that claim on the strength of a lookup that failed is the
-  // same overclaim as saying "live", pointed the other way, and this surface was
-  // guarded against only one direction. When the registry could not be read, the
-  // honest answer is the unknown state that already exists.
-  if (ago == null) return (seen as any).ok
-    // The registry was read and this alias is not in it. That is not "gone
-    // cold": cold is a claim that a session was once reachable and has since
-    // drifted out, and it carries "answering costs it a re-brief". An alias
-    // that never registered was never warm, and there may be no session behind
-    // it at all. Different fact, different word.
-    ? { state: "absent", seenAgo: null }
-    // The registry could not be read at all — no broker, missing sqlite file,
-    // or a throwing open/query. Claiming anything about the session here is the
-    // same overclaim as asserting "live", pointed the other way.
-    : { state: "unknown", seenAgo: null };
-  return { state: ago <= HOT_S ? "hot" : "cold", seenAgo: ago };
-}
 
 function boardDecisions(slug: string, plan: any): any[] {
   const out: any[] = [];
@@ -186,7 +123,12 @@ function dpNotifyOrigin(slug: string, dir: string): void {
   let session = "";
   try { session = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"))?.origin?.session ?? ""; } catch {}
   const reachState = session ? reachOf(session, seenAgoByAlias()).state : undefined;
-  wakeOrigin({ slug, dir, reachState }).catch((e) => console.error(`dp-wake ${slug}:`, e));
+  // The page leaves the pending ledger only once the asker has been told. If
+  // nobody could be told, it stays pending until an agent reads the answer with
+  // `decision-page.sh answer`, so a ruling nobody heard keeps showing somewhere.
+  wakeOrigin({ slug, dir, reachState })
+    .then((r) => { if (r.state === "requested" || r.state === "queued") dpClearPending(slug); })
+    .catch((e) => console.error(`dp-wake ${slug}:`, e));
 }
 
 // Reading a decision PAGE's answer back onto the board decisions it covers. Owner, 2026-08-26: "The older decision page worked fine WHY THE FUCK
@@ -283,7 +225,6 @@ import { renderMd } from "./render-md.ts";
 
 // Which agent sessions are working in a board's project right now, from the
 // claude-ipc registry. A stale "live" is worse than no badge, so nothing caches.
-const IPC_DB = path.join(os.homedir(), ".claude-ipc", "data", "ipc.sqlite");
 let ipcMissing = false;
 
 // The same file and the same 300s staleness window the statusline reads
@@ -1542,6 +1483,19 @@ const server = Bun.serve({
     // A decision page's Submit, byte-compatible with the retired :5197 server:
     // same .answer.json shape, same pending clear, same origin ipc notify.
     // An agent watching .answer.json cannot tell which server took it.
+    // The page in a browser composes its answer and reseeds an answered page
+    // through these, so there is one composer wherever the page is opened.
+    if (req.method === "POST" && (p.startsWith("/api/dp-compose/") || p.startsWith("/api/dp-parse/"))) {
+      const isCompose = p.startsWith("/api/dp-compose/");
+      const slug = decodeURIComponent(p.slice((isCompose ? "/api/dp-compose/" : "/api/dp-parse/").length)).replace(/\/+$/, "");
+      const cfg = dpConfigOf(slug);
+      if (!cfg) return json({ error: "unknown slug" }, 404);
+      const body = (await req.json().catch(() => null)) as { state?: any; answer?: string } | null;
+      if (isCompose) return json({ answer: dpCompose(cfg, body?.state ?? null) });
+      if (typeof body?.answer !== "string") return json({ error: "send {answer: string}" }, 400);
+      return json({ state: dpParse(body.answer, cfg) });
+    }
+
     if (req.method === "POST" && p.startsWith("/api/dp-submit/")) {
       const slug = decodeURIComponent(p.slice("/api/dp-submit/".length)).replace(/\/+$/, "");
       const dir = dpDirOf(slug);
@@ -1574,7 +1528,6 @@ const server = Bun.serve({
       const tmp = path.join(dir, ".answer.json.tmp");
       fs.writeFileSync(tmp, JSON.stringify(rec, null, 1), "utf8");
       fs.renameSync(tmp, path.join(dir, ".answer.json"));
-      dpClearPending(slug);
       dpNotifyOrigin(slug, dir);
       // A page built over a board's recorded decisions has to write its rulings
       // ONTO those decisions. Without this the owner answers six questions, the

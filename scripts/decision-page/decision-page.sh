@@ -18,6 +18,10 @@
 # Config schema + answer-string shape: ~/.claude/features/decision-pages.md
 
 set -uo pipefail
+# bfb's native host spawns this with an almost empty environment; with HOME
+# unset, bash still resolves ~ from the account record.
+[ -n "${HOME:-}" ] || HOME=$(cd ~ 2>/dev/null && pwd)
+export HOME
 HERE="$(cd "$(dirname "$0")" && pwd)"
 REG="$HOME/.claude/assets/decision-pages"
 PEND="$REG/.pending.txt"          # one slug per line = "handed off, awaiting the human"
@@ -504,6 +508,15 @@ case "${1:-help}" in
   pending) shift; cmd_pending "$@" ;;
   band)   shift; cmd_band "$@" ;;
   answer) shift; cmd_answer "$@" ;;
+  compose|parse|reach|submit|seen)
+          # bfb's native host spawns this with an almost empty environment, so
+          # bun is looked up by its install path when PATH does not have it.
+          bun_bin=$(command -v bun 2>/dev/null || true)
+          for c in /opt/homebrew/bin/bun /usr/local/bin/bun "$HOME/.bun/bin/bun"; do
+            [ -n "$bun_bin" ] && break; [ -x "$c" ] && bun_bin="$c"
+          done
+          [ -n "$bun_bin" ] || die "bun is not installed" "brew install oven-sh/bun/bun"
+          exec "$bun_bin" "$(dirname "$0")/dp.ts" "$@" ;;
   rm)     slug="${2:?usage: decision-page.sh rm <slug>}"
           trash "$REG/$slug" 2>/dev/null && echo "trashed: $slug" || echo "not found: $REG/$slug"
           [ -f "$PEND" ] && { grep -vxF "$slug" "$PEND" > "$PEND.$$.tmp" 2>/dev/null; mv -f "$PEND.$$.tmp" "$PEND"; }
