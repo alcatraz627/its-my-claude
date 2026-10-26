@@ -78,7 +78,7 @@ GOOD = """# Directions
 ## Sources
 
 - Goal record `%s`.
-- `A1`: %s, `src/real.py`.
+- `A1`: %s, [`src/real.py`](../../src/real.py).
 """ % (GID, SHA)
 
 
@@ -111,19 +111,37 @@ variant("| `#2` | 🟢 |", "| `#2` | ✅ |", "done-but-open", "✅ on a goal row
 variant("| `#1` | ✅ |", "| `#1` | 🟢 |", "open-but-done", "open on a goal row already done is caught")
 variant("| `GH#11` | 🟢 |", "| `GH#11` | ✅ |", "done-but-open", "✅ on an open issue is caught")
 variant("| `GH#10` | ✅ |", "| `GH#10` | 🟢 |", "open-but-done", "open on a closed issue is caught")
-variant("- `A1`: %s, `src/real.py`." % SHA, "", "done-unproven", "✅ with nothing in Sources is caught")
-variant("- `A1`: %s, `src/real.py`." % SHA, "- `A1`: deadbee, `src/gone.py`.", "proof-broken",
+variant("- `A1`: %s, [`src/real.py`](../../src/real.py)." % SHA, "", "done-unproven", "✅ with nothing in Sources is caught")
+variant("- `A1`: %s, [`src/real.py`](../../src/real.py)." % SHA, "- `A1`: deadbee, `src/gone.py`.", "proof-broken",
         "✅ whose proof does not exist is caught")
 variant("| A doc-only row with proof |", "| A row with %s in it |" % SHA, "proof-in-row", "a commit in a row is caught")
 variant("| Ship the second change |", "| %s |" % ("word " * 25), "row-long", "a paragraph in a row is caught")
 variant("| stays shipped |", "| — |", "ask-no-default", "an ask with no default is caught")
 found, rc = lint(GOOD.replace("| Read the reply on PR 12 and say keep or revert |", "| — |"))
-check("an ask with an empty need is a warning, not an error",
-      "ask-no-need" in codes(found, "warn") and "ask-no-need" not in codes(found, "error") and rc == 0, str(found))
+check("an ask with an empty need is an error", "ask-no-need" in codes(found, "error") and rc == 1, str(codes(found)))
 found, rc = lint(GOOD.replace("| id | ask | what I need from you | if you say nothing |\n| --- | --- | --- | --- |\n"
                               "| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |",
                               "| id | ask | if you say nothing |\n| --- | --- | --- |\n| `#4` | Look at the new reply | stays shipped |"))
-check("a Waiting on you table without the need column is a warning", "ask-no-need" in codes(found, "warn") and rc == 0, str(found))
+check("a Waiting on you table without the need column is an error", "ask-no-need" in codes(found, "error") and rc == 1, str(codes(found)))
+found, rc = lint(GOOD.replace("| `#4` | Look at the new reply |", "| `#4`, `A1`, `A2`, `#2` | Look at the new reply |"))
+check("an entry bundling more than three ids is a warning", "ask-bundled" in codes(found, "warn"), str(codes(found)))
+found, rc = lint(GOOD.replace("| `#2` | 🟢 | Ship the second change |", "| `#2` | 🔴 | Ship the second change |"))
+check("a 🔴 row with no Waiting on you entry is an error", "needs-you-unlisted" in codes(found, "error"), str(codes(found)))
+LK = "[`src/real.py`](../../src/real.py)"
+found, rc = lint(GOOD.replace(LK, "`src/real.py`"))
+check("a repo path left as plain code is a warning", "unlinked-ref" in codes(found, "warn") and rc == 0, str(codes(found)))
+write(GOOD.replace(LK, "`src/real.py`") + "\nSee `GH#7` and pr-claude-testbed#35.\n")
+out = subprocess.run([sys.executable, SCRIPT, "link", F], capture_output=True, text=True, env=ENV).stdout
+text = open(F).read()
+check("link turns a repo path into a relative link", LK in text, out)
+check("link turns a cross-repo PR into a GitHub link",
+      "[`pr-claude-testbed#35`](https://github.com/versable-git/pr-claude-testbed/issues/35)" in text, out)
+check("link leaves GH#n alone when the repo has no GitHub origin", "`GH#7`" in text and "issues/7" not in text, out)
+before = text
+subprocess.run([sys.executable, SCRIPT, "link", F], capture_output=True, text=True, env=ENV)
+check("link run twice changes nothing more", open(F).read() == before)
+found, rc = lint(GOOD.replace("| Ship the second change |", "| Ship [`GH#9`](https://github.com/o/r/issues/9) and more words |"))
+check("a link's URL does not count toward a row's length", "row-long" not in codes(found), str(codes(found)))
 variant("| `#4` | Look at the new reply |", "| `#1` | Look at the new reply |", "ask-stale",
         "an ask already done at its source is caught")
 variant("| `#4` | Look at the new reply |", "| `#3` | Look at the new reply |", "ask-blocked",

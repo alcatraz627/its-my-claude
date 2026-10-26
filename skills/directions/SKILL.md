@@ -54,26 +54,50 @@ already carries its own legend keeps that legend; this is the default for a new 
 
 1. Title, one line naming the reader ("the owner choosing what comes next"), and
    `_Last updated: <date>_`.
-2. **How to read this**: the marks (direction, goal, accepted-when, gap) and the
-   three value sets: when (now, next, later), state (needs you, waiting, parked,
-   ready, done), origin (owner asked, measured, agent inferred). Id prefixes: `#n`
-   goal-record row, `GH#n` GitHub issue, letters for recon rows.
-3. **Where things stand today**: three to five lines; the biggest gap first.
+2. **How to read this**: the marks and the three value sets, always written as
+   these emoji plus their word, in every table cell that holds a state or a when
+   (never free text such as "Waiting on the owner" or "Next, after B1"; the lint
+   reads 🔴, ✅ and 💭 literally):
+   - marks: 🧭 direction · 🎯 goal · ✅ accepted when · 🕳 gap
+   - when: ⏩ now · ⏭ next · ⏸ later
+   - state: 🔴 needs you · 🟠 waiting · 💤 parked · 🟢 ready · ✅ done
+   - origin: 🗣 owner asked · 📏 measured · 💭 agent inferred
+
+   A short reason may follow the mark ("🟠 waiting on B1"). Id prefixes: `#n`
+   goal-record row, `GH#n` GitHub issue, letters for recon rows. A repo whose
+   tracker is not named DIRECTIONS.md (an owner-named status file) uses the same
+   marks.
+3. **Where things stand today**: three to five lines, each under 140 characters,
+   saying what the owner cares about: how many entries wait on them, what is
+   broken or unseen for the people using the product, and what shipped and was
+   seen working. Infrastructure detail (deploy triggers, runners, hashes) goes to
+   Sources, never here.
 4. **The shape**: the overview table, one row per direction, with when and state.
 5. **Waiting on you**: `id | ask | what I need from you | if you say nothing`. The
    third column says exactly what the owner must do or provide to clear the ask (a
-   setting to tick, a token with its scope and where it is saved), so they can act
-   without asking back. Then one line naming what waits on other people.
+   setting to tick, a token with its scope and where it is saved, the link to open
+   and the yes or no wanted), so they can act without asking back. One entry is one
+   thing to do: split an entry that carries more than three ids. Every 🔴 row in the
+   file has its entry here; a 🔴 row with none is an error. Then one line naming
+   what waits on other people.
 6. One section per direction. Each opens with when and one sentence of what it is
    for, then one sub-section per goal with its accepted-when line and a
    `id | state | task` table. A gap nobody owns gets a gap line under its goal;
    parked rows go on one closing line.
-7. **Sources**: the one section written for the agent acting on a row. One bullet
-   per row or group, naming the commit, issue, file, run id or report that proves
-   its state.
+7. **Done lately** (optional): at most six bullets, one outcome each, under 160
+   characters, with the row ids. History older than two weeks leaves the file.
+8. **Sources**: the one section written for the agent acting on a row. One bullet
+   per row or group, under 300 characters, naming the commit, issue, file, run id or
+   report that proves its state.
 
 Rows are one short line. Proof never sits in a row; it goes in Sources. Commit
 hashes, ids and paths stay in Sources even when a prose-style hook flags them.
+
+**Everything that can be a link is one**, because the owner reads the file rendered
+(in bfb) and clicks through: a PR or issue (`GH#n`, `repo#n`) links to GitHub, a
+file or doc in the repo links by its path relative to this file, a commit links to
+its GitHub page. Write them plain and run `directions.py link <file>`, which
+rewrites them and leaves existing links alone; `lint` warns on any it missed.
 
 ## Show (bare)
 
@@ -150,8 +174,8 @@ previous file". Then commit (see Committing) with a subject naming the rebuild.
 
 ## Committing
 
-Commit only DIRECTIONS.md. First run `npx prettier --write <file>` when prettier is
-available, and `python3 ~/.claude/scripts/style/prose-lint.py <file>`; fix prose
+Commit only DIRECTIONS.md. First run `python3 ~/.claude/scripts/directions/directions.py link <file>`,
+then `npx prettier --write <file>` when prettier is available, and `python3 ~/.claude/scripts/style/prose-lint.py <file>`; fix prose
 findings in rows and headings, and leave Sources' ids and paths. If the repo is
 protected (`~/.claude/protected-repos.list`, or `<root>/.claude/require-user-commit`
 exists), stage the file and say it waits on the owner's commit. Otherwise commit with
@@ -162,9 +186,11 @@ Push only if the repo's rules already allow it.
 
 Read-only. Run `python3 ~/.claude/scripts/directions/directions.py lint <file>`;
 it checks every row against git, the issue tracker and the goal record, and every
-Waiting on you entry for a default and a reason the owner can act today. Errors
-are states it can prove wrong; warnings are shape (caps, unmarked done goals, goals
-under no direction). Then two checks the script does not make:
+Waiting on you entry for a default, an exact "what I need from you" and a reason
+the owner can act today, and every 🔴 row for an entry. Errors are states it can
+prove wrong and owner asks with nothing to act on; warnings are shape (caps,
+bundled asks, long done, standing or Sources lines, unlinked references, unmarked
+done goals, goals under no direction). Then two checks the script does not make:
 
 - **Lost rows**: ids in the file's previous commit (`git -C <root> show
   HEAD~1:<path>`) that are gone now without a done mark.

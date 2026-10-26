@@ -13,6 +13,7 @@ becomes a second authority.
 Usage:
   directions.py lint <file> [--json]   findings; exit 1 when any is an error
   directions.py sync <file> [--dry-run] mark rows done that their source shows done
+  directions.py link <file> [--dry-run] turn GH#n, repo#n, repo paths and commits into links
   directions.py hook-post              PostToolUse: Edit/Write baseline, gs auto-sync
   directions.py hook-stop              Stop: hold the turn on errors this turn added
 
@@ -40,6 +41,15 @@ MAX_ROWS_PER_TABLE, MAX_DIRECTIONS, MAX_STANDING, MAX_WAITING = 8, 7, 5, 12
 LONG_TASK = 100
 
 TICK = re.compile(r"`([^`]+)`")
+MD_LINK = re.compile(r"\[([^\]]*)\]\(([^)]*)\)")
+# Lines in sections other than the tables: long ones are where the file turns into prose.
+LONG_DONE, MAX_DONE, LONG_SOURCE, LONG_STANDING, LONG_NEED = 160, 6, 300, 140, 240
+MAX_ASK_IDS = 3
+
+
+def plain(text):
+    """Cell text as the owner reads it: link targets and backticks dropped."""
+    return TICK.sub(lambda m: m.group(1), MD_LINK.sub(lambda m: m.group(1), text))
 SHA = re.compile(r"\b(?=[0-9a-f]*\d)(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\b")
 GOAL_ID = re.compile(r"\b[0-9a-f]{12}\b")
 PATHISH = re.compile(r"^~?[\w.-]+(/[\w.@-]+)+/?$|^[\w.-]+\.(py|md|ts|tsx|js|cjs|mjs|sh|json|yml|yaml|toml|sql)$")
@@ -97,9 +107,10 @@ def expand_ids(text):
 def parse(text):
     """The file as sections, tables and Sources bullets, keyed by what the
     owner's headers name, so a three- or six-column table both read."""
-    doc = {"tables": [], "sources": [], "directions": [], "standing": 0, "lines": text.split("\n")}
+    doc = {"tables": [], "sources": [], "directions": [], "standing": 0, "standing_lines": [], "done": [],
+           "lines": text.split("\n")}
     h2 = h3 = ""
-    in_sources = in_standing = False
+    in_sources = in_standing = in_done = False
     lines = doc["lines"]
     i = 0
     while i < len(lines):
@@ -108,6 +119,7 @@ def parse(text):
             h2, h3 = ln[3:].strip(), ""
             in_sources = h2.lower().startswith("sources")
             in_standing = h2.lower().startswith("where things stand")
+            in_done = h2.lower().startswith("done")
             if "🧭" in h2:
                 doc["directions"].append(h2)
         elif ln.startswith("### "):
@@ -116,6 +128,9 @@ def parse(text):
             doc["sources"].append(ln)
         elif in_standing and re.match(r"\s*[-*]\s", ln):
             doc["standing"] += 1
+            doc["standing_lines"].append(ln)
+        elif in_done and re.match(r"\s*[-*]\s", ln):
+            doc["done"].append(ln)
         if ln.lstrip().startswith("|") and i + 1 < len(lines) and re.match(r"^\s*\|[\s:|-]+\|\s*$", lines[i + 1]):
             head = [header_key(c) for c in cells(ln)]
             rows, j = [], i + 2
@@ -287,12 +302,13 @@ def lint(path, text=None):
                 out.append(error("done-unproven", "%s: ✅ with no proof in Sources. Add the commit or file, or mark it 💭." % label, ids))
             elif p == "broken":
                 out.append(error("proof-broken", "%s: its Sources commit or file does not exist. Fix it, or mark the row 💭." % label, ids))
-        task = TICK.sub(lambda m: m.group(1), r["task"])
+        task = plain(r["task"])
         if len(task) > LONG_TASK:
             out.append(error("row-long", "%s: task is %d characters (limit %d). Move detail to Sources." % (label, len(task), LONG_TASK), ids))
-        if ROW_PROOF.search(r["task"]):
+        if ROW_PROOF.search(MD_LINK.sub(lambda m: m.group(1), r["task"])):
             out.append(error("proof-in-row", "%s: move the commit, file:line or run id to Sources." % label, ids))
 
+    waiting_ids = set()
     states_by_id = {}
     for r in rows:
         for i in r["ids"]:
@@ -305,8 +321,8 @@ def lint(path, text=None):
         # goes), so an ask can be cleared without a question back. Recommended, so warn only.
         cn = col(t["head"], "what i need from you", "what you need to do", "needs", "need")
         if cn is None and t["rows"]:
-            out.append(warn("ask-no-need", "Waiting on you has no \"what I need from you\" column. Add it between ask "
-                            "and default, saying what the owner must do or provide for each entry."))
+            out.append(error("ask-no-need", "Waiting on you has no \"what I need from you\" column. Add it between ask "
+                             "and default, saying what the owner must do or provide for each entry."))
         if len(t["rows"]) > MAX_WAITING:
             out.append(warn("too-many-asks", "Waiting on you has %d entries (limit %d). Move the rest under their directions."
                             % (len(t["rows"]), MAX_WAITING)))
@@ -314,7 +330,11 @@ def lint(path, text=None):
             ids = expand_ids(c[ci]) if ci is not None and ci < len(c) else []
             label = ", ".join(ids) or "an ask"
             ca = col(t["head"], "ask", "what")
-            ask = TICK.sub(lambda m: m.group(1), c[ca]) if ca is not None and ca < len(c) else ""
+            ask = plain(c[ca]) if ca is not None and ca < len(c) else ""
+            waiting_ids.update(ids)
+            if len(ids) > MAX_ASK_IDS:
+                out.append(warn("ask-bundled", "%s: one entry carries %d ids. Split it so each entry is one thing to do."
+                                % (label, len(ids)), ids))
             if len(ask) > LONG_TASK:
                 out.append(error("ask-long", "%s: ask is %d characters (limit %d). Name the one thing the owner does."
                                  % (label, len(ask), LONG_TASK), ids))
@@ -326,7 +346,10 @@ def lint(path, text=None):
                 out.append(error("ask-no-default", "%s: say what happens if the owner says nothing." % label, ids))
             need = c[cn] if cn is not None and cn < len(c) else None
             if need is not None and need.strip().lower() in NO_DEFAULT:
-                out.append(warn("ask-no-need", "%s: say what exactly the owner must do or provide to clear it." % label, ids))
+                out.append(error("ask-no-need", "%s: say what exactly the owner must do or provide to clear it." % label, ids))
+            elif need is not None and len(plain(need)) > LONG_NEED:
+                out.append(warn("need-long", "%s: what you need is %d characters. Keep the one action; link the doc that "
+                                "holds the steps." % (label, len(plain(need))), ids))
             srcs = [source_state(i, gs_rows, issues) for i in ids]
             if ids and all(s == "done" for s in srcs):
                 where = "goal record" if any(i in gs_rows for i in ids) else "issue tracker"
@@ -352,6 +375,35 @@ def lint(path, text=None):
                 out.append(warn("goal-done-unmarked", "%s: every row is ✅. Mark the goal ✅ and fold its rows." % t["h3"]))
     if len(doc["directions"]) > MAX_DIRECTIONS:
         out.append(warn("too-many-directions", "%d directions; merge down to seven." % len(doc["directions"])))
+    has_waiting = any(kind(t) == "waiting" for t in doc["tables"])
+    for r in rows:
+        if NEEDS_YOU in r["state"] and has_waiting:
+            missing = [i for i in r["ids"] if i not in waiting_ids]
+            if missing:
+                out.append(error("needs-you-unlisted", "%s: marked 🔴 but not in Waiting on you, so nothing says what the "
+                                 "owner must do. Add an entry with the exact action, or change the mark." % ", ".join(missing), missing))
+    if len(doc["done"]) > MAX_DONE:
+        out.append(warn("done-long", "The done section has %d bullets; keep %d one-line bullets and drop the rest."
+                        % (len(doc["done"]), MAX_DONE)))
+    for ln in doc["done"]:
+        if len(plain(ln)) > LONG_DONE:
+            out.append(warn("done-long", "A done bullet runs %d characters (limit %d): \"%s…\". One outcome per line."
+                            % (len(plain(ln)), LONG_DONE, plain(ln).strip("-* ")[:60])))
+    for ln in doc["standing_lines"]:
+        if len(plain(ln)) > LONG_STANDING:
+            out.append(warn("standing-long", "A Where things stand line runs %d characters (limit %d): \"%s…\"."
+                            % (len(plain(ln)), LONG_STANDING, plain(ln).strip("-* ")[:60])))
+    for ln in doc["sources"]:
+        if len(plain(ln)) > LONG_SOURCE:
+            out.append(warn("source-long", "A Sources bullet runs %d characters (limit %d): \"%s…\". Split it per row."
+                            % (len(plain(ln)), LONG_SOURCE, plain(ln).strip("-* ")[:60])))
+    try:
+        changed = link_text(text, path)[1]
+    except Exception:  # noqa: BLE001  link checking must never break the lint
+        changed = []
+    if changed:
+        out.append(warn("unlinked-ref", "%d PR, issue, doc or commit reference(s) are not links (%s). Run "
+                        "`directions.py link <file>`." % (len(changed), ", ".join(changed[:5]))))
     if doc["standing"] > MAX_STANDING:
         out.append(warn("standing-long", "Where things stand has %d lines; keep it to five." % doc["standing"]))
     cited = set(GOAL_ID.findall(text))
@@ -369,6 +421,109 @@ def lint(path, text=None):
 
 
 # Copying states in
+
+GH_REF = re.compile(r"(?<![\w/\[])(?:`)?((?:GH|(?:[\w.-]+/)?[A-Za-z][\w.-]*[A-Za-z0-9]))#(\d+)(?:`)?(?![\w\]])")
+
+
+def github_slug(root):
+    """owner/repo of the repo's origin on GitHub, or None."""
+    try:
+        u = subprocess.run(["git", "-C", root, "remote", "get-url", "origin"], capture_output=True, text=True, timeout=5).stdout.strip()
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    m = re.search(r"github\.com[:/]([\w.-]+)/([\w.-]+?)(?:\.git)?$", u)
+    return (m.group(1), m.group(2)) if m else None
+
+
+def is_commit(root, sha):
+    try:
+        return subprocess.run(["git", "-C", root, "cat-file", "-e", sha + "^{commit}"], capture_output=True, timeout=5).returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+
+
+def link_text(text, path):
+    """(text with references turned into links, list of what changed).
+
+    GH#n links to this repo's issue (GitHub forwards an issue number to its PR),
+    repo#n and owner/repo#n to that repo in the same owner, a backticked path that
+    exists in the repo to the file relative to this one, and a commit this repo
+    knows to its GitHub page. Fenced code and existing links are left alone.
+    """
+    # Both sides through realpath, or /var vs /private/var turns a link into a climb to /.
+    root = os.path.realpath(repo_root(path) or os.path.dirname(os.path.abspath(path)))
+    slug = github_slug(root)
+    here = os.path.dirname(os.path.realpath(path))
+    changed, out, fenced = [], [], False
+    for line in text.split("\n"):
+        if line.lstrip().startswith("```"):
+            fenced = not fenced
+            out.append(line)
+            continue
+        if fenced:
+            out.append(line)
+            continue
+        keep = {}
+
+        def hold(m):
+            keep[len(keep)] = m.group(0)
+            return "\0%d\0" % (len(keep) - 1)
+        work = MD_LINK.sub(hold, line)
+
+        def gh(m):
+            name, n = m.group(1), m.group(2)
+            if name == "GH":
+                if not slug:
+                    return m.group(0)
+                url = "https://github.com/%s/%s/issues/%s" % (slug[0], slug[1], n)
+            else:
+                owner, repo = (name.split("/", 1) if "/" in name else ((slug or ("versable-git",))[0], name))
+                if repo.lower() in ("pr", "issue", "pull") or not re.search(r"[a-z]", repo):
+                    return m.group(0)
+                url = "https://github.com/%s/%s/issues/%s" % (owner, repo, n)
+            label = "%s#%s" % (name, n)
+            changed.append(label)
+            return hold(re.match(r"(.*)", "[`%s`](%s)" % (label, url)))
+        work = GH_REF.sub(gh, work)
+
+        def tick(m):
+            body = m.group(1)
+            if SHA.fullmatch(body) and slug and is_commit(root, body):
+                changed.append(body)
+                return hold(re.match(r"(.*)", "[`%s`](https://github.com/%s/%s/commit/%s)" % (body, slug[0], slug[1], body)))
+            cand = body.split(":")[0].rstrip("/")
+            if PATHISH.match(cand) and not cand.startswith("~"):
+                full = os.path.join(root, cand)
+                if os.path.exists(full):
+                    changed.append(cand)
+                    rel = os.path.relpath(full, here)
+                    return hold(re.match(r"(.*)", "[`%s`](%s)" % (body, rel)))
+            return m.group(0)
+        work = TICK.sub(tick, work)
+
+        def bare_sha(m):
+            sha = m.group(0)
+            if slug and is_commit(root, sha):
+                changed.append(sha)
+                return "[%s](https://github.com/%s/%s/commit/%s)" % (sha, slug[0], slug[1], sha)
+            return sha
+        # Bare commits are linked only in Sources-style prose lines, never inside a table.
+        if not line.lstrip().startswith("|"):
+            work = SHA.sub(bare_sha, work)
+        while re.search(r"\0(\d+)\0", work):
+            work = re.sub(r"\0(\d+)\0", lambda m: keep[int(m.group(1))], work)
+        out.append(work)
+    return "\n".join(out), changed
+
+
+def link_file(path, dry=False):
+    text = open(path, encoding="utf-8").read()
+    new, changed = link_text(text, path)
+    if changed and not dry:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(new)
+    return changed
+
 
 def sync(path, dry=False):
     """Mark ✅ every row whose source shows it done. Only forward: a ✅ the
@@ -510,6 +665,10 @@ def main(argv):
             print("%d errors, %d warnings" % (sum(f["level"] == "error" for f in found),
                                                sum(f["level"] == "warn" for f in found)))
         return 1 if any(f["level"] == "error" for f in found) else 0
+    if cmd == "link" and len(argv) > 1:
+        changed = link_file(argv[1], dry="--dry-run" in argv)
+        print(("would link: " if "--dry-run" in argv else "linked: ") + (", ".join(changed) or "nothing"))
+        return 0
     if cmd == "sync" and len(argv) > 1:
         changed = sync(argv[1], dry="--dry-run" in argv)
         print(("would mark ✅: " if "--dry-run" in argv else "marked ✅: ") + ("; ".join(changed) or "nothing"))
