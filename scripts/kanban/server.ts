@@ -1501,7 +1501,7 @@ const server = Bun.serve({
       const slug = decodeURIComponent(p.slice("/api/dp-submit/".length)).replace(/\/+$/, "");
       const dir = dpDirOf(slug);
       if (!dir) return json({ error: "unknown slug" }, 404);
-      const body = (await req.json().catch(() => null)) as { answer?: string; replace?: boolean } | null;
+      const body = (await req.json().catch(() => null)) as { answer?: string; replace?: boolean; via?: string } | null;
       // An answered page used to accept a second submit unconditionally. Reloading
       // one reset every radio to the agent's RECOMMENDATION and left the primary
       // button enabled, so a single press replaced the owner's real rulings with
@@ -1525,7 +1525,10 @@ const server = Bun.serve({
         return json({ error: "this page is already answered; send replace:true to overwrite it",
                       answered: true, existing: had }, 409);
       }
-      const rec = { answer: body?.answer ?? "", submitted_at: Math.floor(Date.now() / 1000) };
+      // via says how the answer arrived: the page's Submit by default, or an
+      // agent recording what the owner said in chat, so a reader can tell them apart.
+      const via = typeof body?.via === "string" && /^[a-z][a-z0-9-]{0,31}$/.test(body.via) ? body.via : "page";
+      const rec = { answer: body?.answer ?? "", submitted_at: Math.floor(Date.now() / 1000), via };
       const tmp = path.join(dir, ".answer.json.tmp");
       fs.writeFileSync(tmp, JSON.stringify(rec, null, 1), "utf8");
       fs.renameSync(tmp, path.join(dir, ".answer.json"));

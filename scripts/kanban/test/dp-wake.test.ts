@@ -84,8 +84,9 @@ describe("an answered page tells its origin", () => {
       wakeOrigin({ slug: "pb", dir: d2, reachState: "hot", send: b.send }),
     ]);
     expect([r1.state, r2.state]).toEqual(["requested", "requested"]);
-    const ops = b.calls.map((c) => c[c.indexOf("--operation-id") + 1]).sort();
-    expect(ops).toEqual(["dp-answered-pa", "dp-answered-pb"]);
+    const bodies = b.calls.map((c) => c[c.length - 1]).sort();
+    expect(bodies[0]).toContain("decision page pa answered");
+    expect(bodies[1]).toContain("decision page pb answered");
     expect(notify(d1).via).toEqual(["alias:gcc-a"]);
     expect(notify(d2).via).toEqual(["alias:gcc-b"]);
   });
@@ -110,3 +111,23 @@ describe("the kind sent is one the ipc watcher wakes for", () => {
     expect(src).not.toMatch(/\("[a-z", ]*inform[a-z", ]*\)/);
   });
 });
+
+// The fake bus above accepts any flag, which is how an --operation-id the real
+// CLI never had failed every wake for eleven days with every test green. This
+// reads the installed claude-ipc's own help and checks each flag the wake sends.
+describe("the wake speaks the installed claude-ipc", () => {
+  test("every send flag the wake uses is one the real CLI accepts", async () => {
+    let help = "";
+    try { help = Bun.spawnSync(["claude-ipc", "help"]).stdout.toString(); } catch {}
+    if (!help) return; // no claude-ipc on this machine: nothing to speak to
+    const sendLine = help.split("\n").filter((l, i, a) => l.trim().startsWith("send") ||
+      (a[i - 1] ?? "").trim().startsWith("send")).join(" ");
+    const dir = page("pf", { session: "gcc-a", project: "/proj" });
+    const b = bus({ aliases: ["gcc-a"], projects: ["/proj"] });
+    await wakeOrigin({ slug: "pf", dir, reachState: "cold", send: b.send });
+    const flags = new Set(b.calls.flat().filter((a) => a.startsWith("--")));
+    expect(flags.size).toBeGreaterThan(0);
+    for (const f of flags) expect(sendLine).toContain(f);
+  });
+});
+

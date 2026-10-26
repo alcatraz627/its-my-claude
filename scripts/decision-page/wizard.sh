@@ -176,7 +176,7 @@ if ! tui_confirm "send this to the session?"; then
   exit 1
 fi
 
-printf '%s' "$answer" | bash "$DP" submit "$SLUG" >/dev/null
+printf '%s' "$answer" | bash "$DP" submit "$SLUG" --via wizard >/dev/null
 case $? in
   0) printf '%ssent.%s The session picks it up the same way it would a browser Submit.\n' "${TUI_GREEN:-}" "${TUI_RESET:-}" ;;
   3) printf '%sthis page is already answered.%s Answer it in the browser to replace the ruling: http://localhost:5106/dp/%s/\n' \

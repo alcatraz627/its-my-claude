@@ -57,11 +57,13 @@ out=$(printf '%s' "$FLIPPED" | bash "$DP" submit "$SLUG"); rc=$?
 eq "submit: exit 0" "$rc" "0"
 has "submit: reports the failed wake" "$out" '"state":"no-origin"'
 eq "submit: wrote the answer" "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["answer"])' "$PAGE/.answer.json")" "$FLIPPED"
+eq "submit: records how it arrived (cli by default)" "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["via"])' "$PAGE/.answer.json")" "cli"
 has "submit: a failed wake leaves the page pending" "$(bash "$DP" pending list)" "$SLUG"
 printf '%s' "$FRESH" | bash "$DP" submit "$SLUG" >/dev/null; rc=$?
 eq "submit again without --replace: exit 3, nothing replaced" "$rc" "3"
-printf '%s' "$FRESH" | bash "$DP" submit "$SLUG" --replace >/dev/null; rc=$?
+printf '%s' "$FRESH" | bash "$DP" submit "$SLUG" --replace --via chat >/dev/null; rc=$?
 eq "submit --replace: exit 0" "$rc" "0"
+eq "submit --via chat is recorded" "$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["via"])' "$PAGE/.answer.json")" "chat"
 
 before=$(wc -l < "$REG/answers.jsonl" 2>/dev/null || echo 0)
 bash "$DP" answer "$SLUG" >/dev/null
@@ -81,6 +83,18 @@ for bad in ../x.png /abs.png "~/y.png" sub/../../z.png; do
   eq "check: '$bad' is refused" "$rc" "1"
   has "check: '$bad' gets a fix line" "$out" "fix: copy the file into"
 done
+printf 'png' > "$PAGE/shot.png"
+setimg() { python3 -c 'import json,sys;c=json.load(open(sys.argv[1]));c["sections"][0]["images"]=[json.loads(sys.argv[2])];json.dump(c,open(sys.argv[1],"w"))' "$PAGE/config.json" "$1"; }
+setimg '{"src":"shot.png","marks":[{"x":0.1,"y":0.2,"w":0.3,"h":0.4,"label":"look here"}]}'
+bash "$DP" check "$SLUG" >/dev/null 2>&1; eq "check: an image with marks passes" "$?" "0"
+setimg '{"src":"shot.png","marks":[{"x":0.9,"y":0.2,"w":0.3,"h":0.4}]}'
+has "check: a mark that runs off the picture is refused" "$(bash "$DP" check "$SLUG" 2>&1)" "runs off the picture"
+setimg '{"src":"shot.png","marks":[{"x":12,"y":0,"w":0.1,"h":0.1}]}'
+has "check: a mark in pixels, not fractions, is refused" "$(bash "$DP" check "$SLUG" 2>&1)" "fractions 0 to 1"
+setimg '{"src":"../x.png","marks":[]}'
+has "check: an object's src obeys the folder rule" "$(bash "$DP" check "$SLUG" 2>&1)" "outside the page folder"
+setimg '{"marks":[]}'
+has "check: an object with no src is refused" "$(bash "$DP" check "$SLUG" 2>&1)" "needs a 'src'"
 cp "$PAGE/config.keep" "$PAGE/config.json"
 
 printf '%s' "x" | bash "$DP" submit zz-no-such-page >/dev/null 2>&1; rc=$?

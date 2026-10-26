@@ -263,6 +263,9 @@ elif isinstance(c.get("groups"), dict):
                 + f". Reachable here: {sorted(reach) or ['(none)']}.")
 ids = set()
 missing = []
+# an images entry is a filename or {src, marks}; the file checks need the filename
+src_of = lambda im: im.get("src") if isinstance(im, dict) else im
+here = lambda im: isinstance(src_of(im), str) and os.path.exists(os.path.join(os.path.dirname(p), src_of(im)))
 for d in c.get("decisions") or []:
     if not d.get("id"): probs.append("a decision has no 'id'"); continue
     if d["id"] in ids: probs.append(f"duplicate id '{d['id']}'")
@@ -277,22 +280,45 @@ for d in c.get("decisions") or []:
         if "images" in o and not isinstance(o["images"], list):
             probs.append(f"{d['id']}/{o.get('code','?')}: option 'images' must be a list of filenames")
         for im in o.get("images") or []:
-            if not os.path.exists(os.path.join(os.path.dirname(p), im)):
-                missing.append(f"{d['id']}/{o.get('code','?')}: {im}")
+            if not here(im):
+                missing.append(f"{d['id']}/{o.get('code','?')}: {src_of(im)}")
     if "images" in d and not isinstance(d["images"], list):
         probs.append(f"{d['id']}: 'images' must be a list of filenames")
     for im in d.get("images") or []:
-        if not os.path.exists(os.path.join(os.path.dirname(p), im)):
-            missing.append(f"{d['id']}: {im}")
+        if not here(im):
+            missing.append(f"{d['id']}: {src_of(im)}")
     if "none" in d and not isinstance(d["none"], bool):
         probs.append(f"{d['id']}: 'none' must be true/false (it adds a built-in \"None of these\" option)")
     if d.get("noneCode") and d["noneCode"] in {o.get("code") for o in d.get("options") or []}:
         probs.append(f"{d['id']}: noneCode '{d['noneCode']}' collides with an authored option code")
+# An image entry is a filename, or {src, marks:[{x,y,w,h,label}]} where the marks
+# are boxes drawn over the picture to show what to look at, x/y/w/h as fractions
+# 0 to 1 of the picture. Returns the src so the path rules below apply to it.
+def mark_entry(owner, im):
+    src = im.get("src")
+    if not isinstance(src, str) or not src:
+        probs.append(f"{owner}: an image object needs a 'src' filename")
+        return None
+    for k, m in enumerate(im.get("marks") or []):
+        bad = [f for f in ("x", "y", "w", "h") if not isinstance(m.get(f) if isinstance(m, dict) else None, (int, float))
+               or not 0 <= m[f] <= 1]
+        if bad:
+            probs.append(f"{owner}: {src} mark {k + 1} needs x, y, w, h as fractions 0 to 1 (bad: {', '.join(bad)})")
+        elif m["x"] + m["w"] > 1.0001 or m["y"] + m["h"] > 1.0001:
+            probs.append(f"{owner}: {src} mark {k + 1} runs off the picture (x+w and y+h must be 1 or less)")
+        if isinstance(m, dict) and "label" in m and not isinstance(m["label"], str):
+            probs.append(f"{owner}: {src} mark {k + 1} label must be text")
+    if "marks" in im and not isinstance(im["marks"], list):
+        probs.append(f"{owner}: {src} 'marks' must be a list")
+    return src
+
 # An image must live inside the page's own folder: the page refuses anything
 # else, because a file:// page that could reach ../ could read the whole disk.
 # An .html entry is fine there and renders as a live preview tile.
 def outside(owner, entries):
     for im in entries or []:
+        if isinstance(im, dict):
+            im = mark_entry(owner, im)
         if not isinstance(im, str): continue
         parts = im.replace("\\", "/").split("/")
         if im.startswith(("/", "~")) or ".." in parts:
@@ -311,7 +337,7 @@ for s in c.get("sections") or []:
     ids.add(s["id"])
     if "note" in s and not isinstance(s["note"], str): probs.append(f"{s['id']}: 'note' must be a string")
     for im in s.get("images") or []:
-        if not os.path.exists(os.path.join(os.path.dirname(p), im)): missing.append(f"{s['id']}: {im}")
+        if not here(im): missing.append(f"{s['id']}: {src_of(im)}")
 for m in probs: print(f"FAIL schema: {m}")
 for f in sorted(fixes): print(f"  fix: {f}")
 if missing:

@@ -5,7 +5,8 @@
 //   compose <slug>            state JSON on stdin (empty = the page as drawn) -> answer string
 //   parse <slug>              answer on stdin -> state JSON
 //   reach                     {slug: hot|cold|absent|unknown} for every pending page
-//   submit <slug> [--replace] answer on stdin -> the server writes it and wakes the asker
+//   submit <slug> [--replace] [--via chat]  answer on stdin -> the server writes it and
+//                             wakes the asker; --via records how it arrived (default cli)
 //   seen <slug>               first open of the page
 //
 // Exit codes: 0 ok, 1 bad input or unknown page, 3 already answered (submit
@@ -58,7 +59,9 @@ switch (verb) {
     const answer = (await stdin()).replace(/\n$/, "");
     if (!answer.trim()) fail(1, "no answer on stdin");
     const t0 = Date.now() - 1000;
-    const r = await post(`/api/dp-submit/${encodeURIComponent(slug)}`, { answer, replace: rest.includes("--replace") });
+    const vi = rest.indexOf("--via");
+    const via = vi >= 0 ? rest[vi + 1] : "cli";
+    const r = await post(`/api/dp-submit/${encodeURIComponent(slug)}`, { answer, replace: rest.includes("--replace"), via });
     const body: any = await r.json().catch(() => ({}));
     if (r.status === 409) { console.log(JSON.stringify(body)); process.exit(3); }
     if (!r.ok) fail(1, `the server refused it (HTTP ${r.status}): ${body.error ?? ""}`);

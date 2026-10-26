@@ -49,8 +49,7 @@ export async function wakeOrigin(opts: {
   } catch { /* an unreadable config reads as no origin, and is recorded below */ }
 
   const body = `decision page ${opts.slug} answered. Read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer ${opts.slug}`;
-  const common = ["--from", "dp-server", "--kind", "request", "--no-reply-expected",
-    "--operation-id", `dp-answered-${opts.slug}`];
+  const common = ["--from", "dp-server", "--kind", "request", "--no-reply-expected"];
   const via: string[] = [];
   const reasons: string[] = [];
 
