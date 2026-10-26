@@ -37,6 +37,15 @@ const html = (name: string) => new Response(fs.readFileSync(path.join(HERE, name
 const asset = (name: string, type: string) =>
   new Response(fs.readFileSync(path.join(HERE, name)), { headers: { "content-type": `${type}; charset=utf-8`, "cache-control": "no-store" } });
 const json = (obj: unknown, status = 200) => Response.json(obj, { status });
+// bfb's render of a decision page (its B8 bundle). It is served beside
+// decision.html, opt-in with ?view=bfb, until the parity walk (G6) passes and
+// the cutover (G7) makes it the default. bfb owns these files; we only serve them.
+const BFB_DP_WEB = path.join(os.homedir(), "Code/better-file-browser/assets/dp-web");
+const bfbAsset = (name: string, type: string) => {
+  const f = path.join(BFB_DP_WEB, name);
+  if (!fs.existsSync(f)) return Response.json({ error: `bfb's ${name} is not built at ${BFB_DP_WEB}` }, { status: 404 });
+  return new Response(fs.readFileSync(f), { headers: { "content-type": `${type}; charset=utf-8`, "cache-control": "no-store" } });
+};
 
 // The only writer of notes.json is this chain — POSTs serialize through it so
 // load-mutate-save never interleaves (dashboard-tools non-negotiable #1).
@@ -543,6 +552,7 @@ const server = Bun.serve({
           `<rect x="8.6" y="3.6" width="3.4" height="5.4" rx="1.1" stroke="#111318" stroke-width="1.3"/></svg>`,
           { headers: { "content-type": "image/svg+xml", "cache-control": "max-age=86400" } });
       }
+      if (p === "/dp-assets/dp-web.js") return bfbAsset("dp-web.js", "text/javascript");
       if (p === "/shared.css") return asset("shared.css", "text/css");
       if (p === "/shared.js") return asset("shared.js", "text/javascript");
       if (p === "/match.js") return asset("match.js", "text/javascript");
@@ -584,6 +594,7 @@ const server = Bun.serve({
           if (!p.endsWith("/"))
             return new Response(null, { status: 301,
               headers: { location: `/dp/${encodeURIComponent(slug)}/${url.search}` } });
+          if (url.searchParams.get("view") === "bfb") return bfbAsset("index.html", "text/html");
           return html("decision.html");
         }
         // an asset inside the page dir (config.json, images) — no traversal
