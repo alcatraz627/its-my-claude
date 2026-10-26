@@ -288,6 +288,23 @@ for d in c.get("decisions") or []:
         probs.append(f"{d['id']}: 'none' must be true/false (it adds a built-in \"None of these\" option)")
     if d.get("noneCode") and d["noneCode"] in {o.get("code") for o in d.get("options") or []}:
         probs.append(f"{d['id']}: noneCode '{d['noneCode']}' collides with an authored option code")
+# An image must live inside the page's own folder: the page refuses anything
+# else, because a file:// page that could reach ../ could read the whole disk.
+# An .html entry is fine there and renders as a live preview tile.
+def outside(owner, entries):
+    for im in entries or []:
+        if not isinstance(im, str): continue
+        parts = im.replace("\\", "/").split("/")
+        if im.startswith(("/", "~")) or ".." in parts:
+            probs.append(f"{owner}: image '{im}' is outside the page folder")
+            fixes.add(f"copy the file into {os.path.dirname(p)}/ and list it by its bare name")
+fixes = set()
+for d in c.get("decisions") or []:
+    outside(d.get("id", "?"), d.get("images"))
+    for o in d.get("options") or []:
+        outside(f"{d.get('id','?')}/{o.get('code','?')}", o.get("images"))
+for s in c.get("sections") or []:
+    outside(s.get("id", "?"), s.get("images"))
 for s in c.get("sections") or []:
     if not s.get("id"): probs.append("a section has no 'id'"); continue
     if s["id"] in ids: probs.append(f"duplicate id '{s['id']}'")
@@ -296,6 +313,7 @@ for s in c.get("sections") or []:
     for im in s.get("images") or []:
         if not os.path.exists(os.path.join(os.path.dirname(p), im)): missing.append(f"{s['id']}: {im}")
 for m in probs: print(f"FAIL schema: {m}")
+for f in sorted(fixes): print(f"  fix: {f}")
 if missing:
     print("FAIL missing images: " + ", ".join(missing))
     print(f"  fix: drop the files into {os.path.dirname(p)}/ or remove them from 'images'")

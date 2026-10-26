@@ -71,6 +71,18 @@ eq "answer: appends one line to answers.jsonl" "$(( $(wc -l < "$REG/answers.json
 has "seen: first open is recorded" "$(bash "$DP" seen "$SLUG")" '"already":false'
 has "seen: a second open keeps the first time" "$(bash "$DP" seen "$SLUG")" '"already":true'
 
+printf '<p>tile</p>' > "$PAGE/tile.html"
+cp "$PAGE/config.json" "$PAGE/config.keep"
+python3 -c 'import json,sys;c=json.load(open(sys.argv[1]));c["sections"][0]["images"]=["tile.html"];json.dump(c,open(sys.argv[1],"w"))' "$PAGE/config.json"
+bash "$DP" check "$SLUG" >/dev/null 2>&1; eq "check: an .html entry inside the folder passes" "$?" "0"
+for bad in ../x.png /abs.png "~/y.png" sub/../../z.png; do
+  python3 -c 'import json,sys;c=json.load(open(sys.argv[1]));c["sections"][0]["images"]=[sys.argv[2]];json.dump(c,open(sys.argv[1],"w"))' "$PAGE/config.json" "$bad"
+  out=$(bash "$DP" check "$SLUG" 2>&1); rc=$?
+  eq "check: '$bad' is refused" "$rc" "1"
+  has "check: '$bad' gets a fix line" "$out" "fix: copy the file into"
+done
+cp "$PAGE/config.keep" "$PAGE/config.json"
+
 printf '%s' "x" | bash "$DP" submit zz-no-such-page >/dev/null 2>&1; rc=$?
 eq "submit to an unknown page: exit 1" "$rc" "1"
 
