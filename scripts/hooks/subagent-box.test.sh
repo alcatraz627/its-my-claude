@@ -36,5 +36,28 @@ c=$(wc -l < "/tmp/claude-agentbox-$S8/unmatched.log" | tr -d ' ')
 u=$(printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' "$SID" | ev)
 [ -z "$u" ] && ok "second drain with nothing new is silent" || ko "second drain spoke: $u"
 
+# A seated prompt: the header line is metadata, the goal is the prose after it,
+# cut at a word, and the landing names the goal and whether the file was written.
+OUTF="$T/seat-out.md"
+long="Review the decision page composer against the golden fixture and report every string that differs, with the config, the state, the expected string and the composed string, plus a guess at the cause for each one you find"
+jq -cn --arg sid "$SID" --arg p "[seat s-20261026-101010-abcd] role=reviewer model=sonnet output=$OUTF
+$long" '{hook_event_name:"PreToolUse",session_id:$sid,tool_name:"Agent",tool_input:{subagent_type:"general-purpose",model:"sonnet",description:"golden review",prompt:$p}}' > "$T/pre.json"
+d=$(ev < "$T/pre.json")
+printf '%s' "$d" | rg -q "s-20261026-101010-abcd" && ok "dispatch names the seat id" || ko "seat id missing: $d"
+printf '%s' "$d" | rg -q "goal: golden review — Review the decision" && ok "the goal skips the header line" || ko "header leaked into goal: $d"
+printf '%s' "$d" | rg -q "for each one you find" && ko "a long goal was not cut" || ok "a long goal is cut"
+printf '%s' "$d" | rg -q " …" && ok "the cut is marked" || ko "no cut mark: $d"
+printf '%s' "$d" | rg -q "[a-z]{2,} …" && ok "the cut lands after a whole word" || ko "cut mid-word: $d"
+printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
+l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | ev)
+printf '%s' "$l" | rg -q "goal: golden review" && ok "landing names the goal" || ko "landing lost the goal: $l"
+printf '%s' "$l" | rg -q "NOT written: " && ok "landing says the file is missing" || ko "missing file not flagged: $l"
+printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' "$SID" | bash "$BX" >/dev/null
+d=$(ev < "$T/pre.json"); echo "done" > "$OUTF"
+printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
+l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | ev)
+printf '%s' "$l" | rg -q "· written: \S*seat-out.md" && ok "landing says the file was written" || ko "written file not shown: $l"
+n=$(body_lines "$l"); [ "$n" -le 2 ] && ok "the richer landing is still 2 lines" || ko "landing grew to $n lines"
+
 export HOME="$REAL"; trash "$T" "/tmp/claude-agentbox-$S8" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

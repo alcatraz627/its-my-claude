@@ -38,9 +38,22 @@ case "$event" in
     # `// empty` would swallow a boolean false, so bg is read with an explicit null check.
     bg=$(printf '%s' "$input" | jq -r '.tool_input.run_in_background | if . == null then "default" else tostring end' 2>/dev/null)
     desc=$(ti description)
-    goal=$(ti prompt | tr '\n' ' ' | cut -c1-150)
-    body=$(printf 'seat: %s · bg: %s\ngoal: %s%s' \
-      "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" \
+    # The goal line is a summary a person reads at a glance: the seat header
+    # line (if any) is metadata, not goal, and the cut lands on a word boundary.
+    read -r seat out goal < <(ti prompt | python3 -c '
+import re, sys
+p = sys.stdin.read()
+m = re.match(r"\s*\[seat (s-[0-9a-f-]+)\][^\n]*", p)
+seat = m.group(1) if m else "-"
+o = re.search(r"\boutput=(\S+)", m.group(0)) if m else None
+body = " ".join((p[m.end():] if m else p).split())
+if len(body) > 170:
+    body = body[:170].rsplit(" ", 1)[0].rstrip(",;:") + " …"
+print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
+    [ "$seat" = "-" ] && seat=""; [ "$out" = "-" ] && out=""
+    printf '%s|%s|%s\n' "${desc//|/ }" "$out" "$seat" >> "$STASH_DIR/dispatch-queue" 2>/dev/null || true
+    body=$(printf 'seat: %s · bg: %s%s\ngoal: %s%s' \
+      "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" "${seat:+ · $seat}" \
       "${desc:+$desc — }" "$goal")
     box=$(printf '%s\n' "$body" | hook_box_kind dispatch "${typ:-general-purpose}" "${model:-inherit}")
     # The whole box is owner text: a gcc-mods session draws it as a transcript
@@ -52,7 +65,13 @@ case "$event" in
     typ=$(printf '%s' "$input" | jq -r '.agent_type // empty' 2>/dev/null)
     [ -n "$aid" ] || exit 0
     mkdir -p "$STASH_DIR" 2>/dev/null || true
-    printf '%s|%s\n' "${typ:-?}" "$(date +%s)" > "$STASH_DIR/$aid" 2>/dev/null || true
+    # Starts arrive in dispatch order, so the oldest queued dispatch is this
+    # agent's: carry its description and output path to the landing box.
+    q="$STASH_DIR/dispatch-queue" first=""
+    if [ -s "$q" ]; then
+      first=$(head -n 1 "$q"); tail -n +2 "$q" > "$q.tmp" 2>/dev/null && mv "$q.tmp" "$q"
+    fi
+    printf '%s|%s|%s\n' "${typ:-?}" "$(date +%s)" "$first" > "$STASH_DIR/$aid" 2>/dev/null || true
     ;;
   SubagentStop)
     aid=$(printf '%s' "$input" | jq -r '.agent_id // empty' 2>/dev/null)
@@ -73,14 +92,26 @@ case "$event" in
       echo "$(date +%s)|SubagentStop-unmatched|$aid|rc0" >> "$STASH_DIR/fires.log" 2>/dev/null || true
       exit 0
     fi
-    dur="unknown"
+    dur="unknown" ldesc="" lout=""
     if [ -n "$aid" ] && [ -f "$STASH_DIR/$aid" ]; then
       started=$(cut -d'|' -f2 "$STASH_DIR/$aid" 2>/dev/null)
+      ldesc=$(cut -d'|' -f3 "$STASH_DIR/$aid" 2>/dev/null)
+      lout=$(cut -d'|' -f4 "$STASH_DIR/$aid" 2>/dev/null)
       [ -n "$started" ] && dur="$(( ($(date +%s) - started) / 60 ))m"
       rm -f "$STASH_DIR/$aid" 2>/dev/null || true
     fi
-    body=$(printf 'seat: %s · id: %s' \
-      "${typ:-?}" "${aid:-?}")
+    # Whether the seat wrote its file is the first thing the reader checks.
+    ostate=""
+    if [ -n "$lout" ]; then
+      # A full path wraps the box; the last two parts name the file well enough.
+      short="${lout/#$HOME/~}"
+      [ "${#short}" -gt 40 ] && short="…/$(basename "$(dirname "$lout")")/$(basename "$lout")"
+      if [ -s "$lout" ]; then ostate="written: $short"; else ostate="NOT written: $short"; fi
+    fi
+    body=$(printf 'seat: %s · id: %s' "${typ:-?}" "${aid:-?}")
+    if [ -n "$ldesc$ostate" ]; then
+      body=$(printf '%s\n%s%s%s' "$body" "${ldesc:+goal: $ldesc}" "${ldesc:+${ostate:+ · }}" "$ostate")
+    fi
     box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
     # SubagentStop context delivery is unrouted in this harness (verified
     # 2026-08-14: the box was emitted and never arrived). Park it for the
