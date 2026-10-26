@@ -3,7 +3,7 @@
 # phases, dispositions clearing the gate, the block cap, and the skips.
 set -uo pipefail
 
-GATE="$HOME/.claude/scripts/hooks/pr-review-gate.py"
+GATE="${GATE_UNDER_TEST:-$HOME/.claude/scripts/hooks/pr-review-gate.py}"
 T=$(mktemp -d)
 export PR_REVIEW_GATE_STATE="$T/state"
 export PR_FIXTURE="$T/pr.json"
@@ -32,6 +32,10 @@ if rsha:
         f"### ⚠️ 1. [`a.py:3`](https://x) · `exists`\n\n{first}\n\n- detail\n"
         "### ℹ️ 2. [`b.md:9`](https://x) · `docs`\n"
         f"<!-- pr-claude:review:sha={rsha} -->"})
+if extra == "two":
+    comments.insert(1, {"body": "<!-- pr-claude:review -->\n## Clanky's Review\n"
+        "### ⚠️ 1. [`old.py:1`](https://x) · `gone`\n\nAn earlier concern.\n"
+        "<!-- pr-claude:review:sha=1111111 -->"})
 if extra == "quoted":
     comments.append({"body": "> <!-- pr-claude:review -->\n> quoting the bot"})
 print(json.dumps({"url": "https://github.com/versable-git/demo/pull/7",
@@ -155,6 +159,47 @@ check "a conflicted PR blocks with a rebase instruction" "$(stop s13)" "has merg
 
 fixture "t" "abc1234def" "abc1234"
 check "a blank reason is refused" "$(python3 "$GATE" dispose demo#7 "1=fixed:   " 2>&1)" "a real one-line reason"
+
+# A wait already polling for this PR's head (run in the background) satisfies Stop.
+track s14 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" ""
+python3 "$GATE" wait demo#7 60 >/dev/null 2>&1 &
+wpid=$!
+for _ in 1 2 3 4 5 6 7 8 9 10; do [ -f "$PR_REVIEW_GATE_STATE/waits/versable-git-demo-7@abc1234.json" ] && break; sleep 0.3; done
+check "a live background wait for the head clears Stop" "$(stop s14)" ""
+kill "$wpid" 2>/dev/null; wait "$wpid" 2>/dev/null
+check "a dead wait's leftover marker does not" "$(stop s14)" "has not reviewed head"
+python3 - "$PR_REVIEW_GATE_STATE/waits/versable-git-demo-7@9999999.json" <<'EOF'
+import json, os, sys, time
+json.dump({"pid": os.getppid(), "head": "9999999", "started": time.time(), "deadline": time.time() + 600}, open(sys.argv[1], "w"))
+EOF
+check "a live wait for another head does not" "$(stop s14)" "has not reviewed head"
+
+# Past the settle window, only a wait started after the retrigger instruction counts.
+track s15 "git push" "https://github.com/versable-git/demo/pull/7"
+python3 - "$PR_REVIEW_GATE_STATE/sessions/s15.json" "$PR_REVIEW_GATE_STATE/waits/versable-git-demo-7@abc1234.json" <<'EOF'
+import json, os, sys, time
+p = sys.argv[1]; st = json.load(open(p))
+for v in st["prs"].values(): v["pushed_at"] -= 400
+json.dump(st, open(p, "w"))
+json.dump({"pid": os.getppid(), "head": "abc1234def", "started": time.time() - 390, "deadline": time.time() + 600}, open(sys.argv[2], "w"))
+EOF
+check "a wait from before the retrigger point still gets the retrigger" "$(stop s15)" "/claude-bot review"
+python3 - "$PR_REVIEW_GATE_STATE/waits/versable-git-demo-7@abc1234.json" <<'EOF'
+import json, os, sys, time
+json.dump({"pid": os.getppid(), "head": "abc1234def", "started": time.time(), "deadline": time.time() + 600}, open(sys.argv[1], "w"))
+EOF
+check "a wait started after it clears Stop" "$(stop s15)" ""
+trash "$PR_REVIEW_GATE_STATE"/waits/*.json >/dev/null 2>&1
+
+# Findings from an earlier head's review can be answered with --sha.
+fixture "t" "abc1234def" "abc1234" two
+out=$(python3 "$GATE" dispose demo#7 --sha 1111111 "1=fixed:removed in the same push" 2>&1)
+check "dispose --sha records against the earlier review" "$out" "Clanky on 1111111"
+check "and the summary for that review shows it" "$(python3 "$GATE" summary demo#7 --sha 1111111)" "fixed: removed in the same push"
+check "an unknown --sha is refused with the known ones" "$(python3 "$GATE" dispose demo#7 --sha 2222222 "1=fixed:x y" 2>&1)" "reviews on: 1111111, abc1234"
+fixture "t" "9999999aaa" "abc1234" two
+check "without --sha a moved head still points at --sha" "$(python3 "$GATE" dispose demo#7 "1=fixed:x y" 2>&1)" "--sha <reviewed head>"
 
 trash "$T" >/dev/null 2>&1
 echo "pass=$pass fail=$fail"

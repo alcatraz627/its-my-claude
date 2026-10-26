@@ -14,9 +14,15 @@ Runtime contract:
                                  every finding is dispositioned
   pr-review-gate.py wait <pr>    poll until the review for the head lands
                                  (default 6 min), then print its findings
-  pr-review-gate.py dispose <pr> "1=fixed:reason" "2=optional:reason" ...
-  pr-review-gate.py summary <pr> one line per finding for the owner
+  pr-review-gate.py dispose <pr> [--sha S] "1=fixed:reason" "2=optional:reason" ...
+  pr-review-gate.py summary <pr> [--sha S]  one line per finding for the owner
+--sha names an earlier head's review, so findings fixed in the same push that
+moved the head can still be answered against the review that raised them.
 <pr> is a PR URL, owner/repo#N or repo#N (org defaults to versable-git).
+
+A running `wait` for the PR's current head counts as waiting: it leaves a
+marker while it polls, and Stop does not block on a PR that a live wait (run
+in the background, as the owner asks) is already watching.
 
 No review for the head five minutes after the push means the bot's own
 refresh is held (its half-hour spam guard) or never coming, so the gate asks
@@ -120,35 +126,63 @@ def ledger_path():
     return os.path.join(STATE, "ledger.jsonl")
 
 
+def parse_review(review):
+    """(reviewed sha, [(n, "file:line · concern")]) from one Clanky review comment."""
+    m = REVIEW_SHA.search(review)
+    findings = []
+    heads = list(FINDING.finditer(review))
+    for i, h in enumerate(heads):
+        # The heading is only file:line · symbol; the concern is the first
+        # paragraph under it, which is what the owner needs to read.
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(review)
+        body = [l.strip() for l in review[h.end():end].splitlines()]
+        concern = next((l for l in body if l and not l.startswith(("#", "<!--", "-", ">"))), "")
+        if len(concern) > CONCERN_MAX:
+            concern = concern[:CONCERN_MAX - 1].rstrip() + "…"
+        where = MD_LINK.sub(r"\1", h.group(2)).strip()
+        findings.append((int(h.group(1)), f"{where} · {concern}" if concern else where))
+    return (m.group(1) if m else None), findings
+
+
 def fetch(ref):
-    """The PR as the gate needs it: state, head, title and Clanky's latest review."""
+    """The PR as the gate needs it: state, head, title, Clanky's latest review and every earlier one."""
     out = gh("pr", "view", url(ref), "--json", "state,isDraft,title,headRefOid,mergeable,comments")
     if not out:
         return None
     pr = json.loads(out)
-    review = None
+    pr["reviews"] = {}
+    pr["review_sha"], pr["findings"] = None, []
     for c in pr.get("comments") or []:
         body = c.get("body") or ""
         if REVIEW_MARK.search(body):
-            review = body
-    pr["review_sha"] = None
-    pr["findings"] = []
-    if review:
-        m = REVIEW_SHA.search(review)
-        pr["review_sha"] = m.group(1) if m else None
-        heads = list(FINDING.finditer(review))
-        for i, m in enumerate(heads):
-            # The heading is only file:line · symbol; the concern is the first
-            # paragraph under it, which is what the owner needs to read.
-            end = heads[i + 1].start() if i + 1 < len(heads) else len(review)
-            body = [l.strip() for l in review[m.end():end].splitlines()]
-            concern = next((l for l in body if l and not l.startswith(("#", "<!--", "-", ">"))), "")
-            if len(concern) > CONCERN_MAX:
-                concern = concern[:CONCERN_MAX - 1].rstrip() + "…"
-            where = MD_LINK.sub(r"\1", m.group(2)).strip()
-            pr["findings"].append((int(m.group(1)), f"{where} · {concern}" if concern else where))
+            sha, findings = parse_review(body)
+            pr["review_sha"], pr["findings"] = sha, findings
+            if sha:
+                pr["reviews"][sha] = findings
     pr.pop("comments", None)
     return pr
+
+
+def review_for(pr, sha):
+    """(full reviewed sha, findings) for an earlier review named by a prefix, or None."""
+    hits = [k for k in pr.get("reviews", {}) if k.startswith(sha) or sha.startswith(k)]
+    return (hits[-1], pr["reviews"][hits[-1]]) if len(hits) == 1 else None
+
+
+def wait_path(ref, head):
+    return os.path.join(STATE, "waits", f"{ref[0]}-{ref[1]}-{ref[2]}@{head[:7]}.json")
+
+
+def live_wait(ref, head):
+    """The marker of a wait still polling for this PR and head, or None."""
+    w = load(wait_path(ref, head), None)
+    if not isinstance(w, dict) or time.time() > w.get("deadline", 0):
+        return None
+    try:
+        os.kill(int(w.get("pid", 0)), 0)
+    except (OSError, ValueError):
+        return None
+    return w
 
 
 def review_current(pr):
@@ -287,6 +321,11 @@ def check_pr(k, info, st):
                 f"Read each one, act, then record it: {SELF} dispose {k} \"N=<{'|'.join(DISPOSITIONS)}>:<one-line reason>\" ...\n"
                 f"Then give the owner {SELF} summary {k} (one line per finding)."), "dispose", head7
     age = time.time() - info.get("pushed_at", 0)
+    w = live_wait(ref, pr.get("headRefOid") or "")
+    # A wait started before the settle window ends would sit out the bot's spam
+    # guard; past it, only a wait started after the retrigger instruction counts.
+    if w and (age < SETTLE_S or w.get("started", 0) >= info.get("pushed_at", 0) + SETTLE_S):
+        return None, None, None
     if age < SETTLE_S:
         return (f"{k}: Clanky has not reviewed head {head7} yet. Run {SELF} wait {k} "
                 f"(polls up to {WAIT_MAX_S // 60} min), then disposition what it raises."), "wait", head7
@@ -308,51 +347,91 @@ def cmd_wait(args):
         sys.exit(f"wait limit must be whole seconds, got {args[1]!r}")
     limit = int(args[1]) if len(args) > 1 else WAIT_MAX_S
     deadline = time.time() + limit
-    while True:
-        pr = fetch(ref)
-        if pr and review_current(pr):
-            print(f"{key(ref)}: Clanky reviewed {pr['review_sha']} with {len(pr['findings'])} finding(s).")
-            for n, t in pr["findings"]:
-                print(f"  {n}. {t}")
-            return 0
-        if time.time() >= deadline:
-            head = (pr or {}).get("headRefOid", "")[:7]
-            print(f"{key(ref)}: no review for head {head} after {limit // 60} min.")
-            return 1
-        time.sleep(POLL_S)
+    marker = None
+    try:
+        while True:
+            pr = fetch(ref)
+            if pr and review_current(pr):
+                print(f"{key(ref)}: Clanky reviewed {pr['review_sha']} with {len(pr['findings'])} finding(s).")
+                for n, t in pr["findings"]:
+                    print(f"  {n}. {t}")
+                return 0
+            if time.time() >= deadline:
+                head = (pr or {}).get("headRefOid", "")[:7]
+                print(f"{key(ref)}: no review for head {head} after {limit // 60} min.")
+                return 1
+            head = (pr or {}).get("headRefOid") or ""
+            if head and (marker is None or not marker.endswith(f"@{head[:7]}.json")):
+                if marker:
+                    _drop(marker)
+                marker = wait_path(ref, head)
+                save(marker, {"pid": os.getpid(), "head": head, "started": time.time(), "deadline": deadline})
+            time.sleep(POLL_S)
+    finally:
+        if marker:
+            _drop(marker)
+
+
+def _drop(path):
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+
+
+def pick_review(ref, args):
+    """(pr, reviewed sha, findings, remaining args): the current head's review, or the one --sha names."""
+    rest, sha = [], None
+    it = iter(args)
+    for a in it:
+        if a == "--sha":
+            sha = next(it, "")
+        elif a.startswith("--sha="):
+            sha = a.split("=", 1)[1]
+        else:
+            rest.append(a)
+    pr = fetch(ref)
+    if not pr:
+        sys.exit(f"{key(ref)}: could not read the PR from GitHub")
+    if sha is not None:
+        hit = review_for(pr, sha) if sha else None
+        if not hit:
+            known = ", ".join(k[:7] for k in pr.get("reviews", {})) or "none"
+            sys.exit(f"{key(ref)}: no single Clanky review matches --sha {sha!r} (reviews on: {known})")
+        return pr, hit[0], hit[1], rest
+    if not review_current(pr):
+        sys.exit(f"{key(ref)}: no Clanky review for the current head yet; run wait first, "
+                 f"or answer an earlier head's review with --sha <reviewed head>")
+    return pr, pr["review_sha"], pr["findings"], rest
 
 
 def cmd_dispose(args):
     ref = resolve_or_die(args[0])
-    pr = fetch(ref)
-    if not pr or not review_current(pr):
-        sys.exit(f"{key(ref)}: no Clanky review for the current head yet; run wait first")
-    titles = dict(pr["findings"])
+    pr, sha, findings, items = pick_review(ref, args[1:])
+    titles = dict(findings)
     rows = []
-    for item in args[1:]:
+    for item in items:
         m = re.match(r"^(\d+)=([\w-]+):\s*(.+)$", item, re.DOTALL)
         if not m or m.group(2) not in DISPOSITIONS or len(m.group(3).strip()) < 3:
             sys.exit(f"bad item {item!r}: want N=<{'|'.join(DISPOSITIONS)}>:<a real one-line reason>")
         n = int(m.group(1))
         if n not in titles:
             sys.exit(f"{key(ref)}: the review has no finding {n}")
-        rows.append({"ts": time.time(), "pr": key(ref), "sha": pr["review_sha"], "n": n,
+        rows.append({"ts": time.time(), "pr": key(ref), "sha": sha, "n": n,
                      "finding": titles[n], "disposition": m.group(2), "reason": m.group(3).strip()})
     os.makedirs(STATE, exist_ok=True)
     with open(ledger_path(), "a") as f:
         for row in rows:
             f.write(json.dumps(row) + "\n")
-    return cmd_summary(args[:1])
+    return cmd_summary(args[:1] + ([f"--sha={sha}"] if sha != pr.get("review_sha") else []))
 
 
 def cmd_summary(args):
     ref = resolve_or_die(args[0])
-    pr = fetch(ref)
-    if not pr or not review_current(pr):
-        sys.exit(f"{key(ref)}: no Clanky review for the current head yet")
-    done = dispositions(ref, pr["review_sha"])
-    print(f"{key(ref)} · Clanky on {pr['review_sha']} · {len(pr['findings'])} finding(s)")
-    for n, t in pr["findings"]:
+    pr, sha, findings, _ = pick_review(ref, args[1:])
+    done = dispositions(ref, sha)
+    print(f"{key(ref)} · Clanky on {sha} · {len(findings)} finding(s)")
+    for n, t in findings:
         d = done.get(n)
         print(f"  {n}. {t} · " + (f"{d[0]}: {d[1]}" if d else "OPEN"))
     return 0
