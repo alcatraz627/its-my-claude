@@ -18,12 +18,17 @@ function tailnetIp(): { ip: string | null; why: string } {
   for (const bin of ["/opt/homebrew/bin/tailscale", "/usr/local/bin/tailscale",
                      "/Applications/Tailscale.app/Contents/MacOS/Tailscale", "tailscale"]) {
     try {
-      const out = execFileSync(bin, ["ip", "-4"], { encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"] }).trim();
-      const ip = out.split("\n")[0]?.trim();
-      if (ip && /^100\.\d+\.\d+\.\d+$/.test(ip)) return { ip, why: "" };
+      // `ip -4` keeps printing the last address after Tailscale stops, so the
+      // backend state decides whether that address is actually on this Mac.
+      const st = JSON.parse(execFileSync(bin, ["status", "--json", "--peers=false"],
+        { encoding: "utf8", timeout: 3000, stdio: ["ignore", "pipe", "ignore"] }));
+      if (st.BackendState !== "Running") return { ip: null, why: `Tailscale is ${String(st.BackendState ?? "not running").toLowerCase()}` };
+      const ip = (st.TailscaleIPs ?? st.Self?.TailscaleIPs ?? []).find((a: string) => /^100\.\d+\.\d+\.\d+$/.test(a));
+      if (ip) return { ip, why: "" };
+      return { ip: null, why: "Tailscale is running but has no IPv4 tailnet address" };
     } catch { /* try the next install location */ }
   }
-  return { ip: null, why: "Tailscale is not running or has no tailnet address" };
+  return { ip: null, why: "Tailscale is not installed or not answering" };
 }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
@@ -56,12 +61,27 @@ ${rows || "<li>No decision pages.</li>"}
 </ul>`, { headers: { "content-type": "text/html; charset=utf-8" } });
 }
 
+const RETRY_MS = 60_000;
+
+// Tries now, then once a minute until it binds, so starting Tailscale later
+// needs no server restart. It logs only when the reason changes.
 export function startTailnetListener(main: { fetch(req: Request): Response | Promise<Response> }, port: number, dpRoot: string): void {
+  let last = "";
+  const attempt = (): boolean => {
+    const why = bindTailnet(main, port, dpRoot);
+    if (why === null) return true;
+    if (why !== last) console.log(`[kanban] tailnet listener not up: ${why}. Retrying every minute.`);
+    last = why;
+    return false;
+  };
+  if (attempt()) return;
+  const t = setInterval(() => { if (attempt()) clearInterval(t); }, RETRY_MS);
+}
+
+// Binds the listener; null on success, else why it could not.
+function bindTailnet(main: { fetch(req: Request): Response | Promise<Response> }, port: number, dpRoot: string): string | null {
   const { ip, why } = tailnetIp();
-  if (!ip) {
-    console.log(`[kanban] tailnet listener skipped: ${why}. Restart the server once Tailscale is up to bind it.`);
-    return;
-  }
+  if (!ip) return why;
   const origin = `http://${ip}:${port}`;
   const host = `${ip}:${port}`;
   try {
@@ -83,7 +103,8 @@ export function startTailnetListener(main: { fetch(req: Request): Response | Pro
       },
     });
     console.log(`[kanban] decision pages on the tailnet at ${origin}/dp/`);
+    return null;
   } catch (e: any) {
-    console.log(`[kanban] tailnet listener skipped: could not bind ${host} (${e?.message ?? e}). Restart the server to retry.`);
+    return `could not bind ${host} (${e?.message ?? e})`;
   }
 }

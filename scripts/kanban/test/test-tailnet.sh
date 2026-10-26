@@ -5,6 +5,9 @@
 #   bash ~/.claude/scripts/kanban/test/test-tailnet.sh
 set -uo pipefail
 
+# `tailscale ip -4` keeps printing the last address after Tailscale stops, so the backend state decides.
+STATE=$(tailscale status --json --peers=false 2>/dev/null | jq -r '.BackendState // empty')
+[ "$STATE" = "Running" ] || { echo "SKIP: Tailscale is ${STATE:-not running}, so there is no tailnet listener to test (UNCONFIRMED)"; exit 0; }
 IP=$(tailscale ip -4 2>/dev/null | head -n 1)
 [ -n "$IP" ] || { echo "SKIP: Tailscale has no address here, so there is no tailnet listener to test"; exit 0; }
 T="http://$IP:5106"; L="http://127.0.0.1:5106"
