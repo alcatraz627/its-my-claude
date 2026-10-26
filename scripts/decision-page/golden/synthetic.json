@@ -1,0 +1,73 @@
+{
+  "configs": {
+    "zz-golden-synth": {
+      "title": "Golden synthetic",
+      "copyHeader": "synthetic rulings",
+      "decisions": [
+        { "id": "D1", "title": "Plain choice", "options": [
+          { "code": "a", "label": "Option a", "rec": true },
+          { "code": "b", "label": "Option b" } ] },
+        { "id": "D2", "title": "None with a custom code and a seeded note", "none": true, "noneCode": "x",
+          "note": "seeded d2 note", "options": [
+          { "code": "a", "label": "Option a" },
+          { "code": "b", "label": "Option b", "rec": true } ] },
+        { "id": "D3", "title": "None with the default code", "none": true, "options": [
+          { "code": "a", "label": "Option a", "rec": true },
+          { "code": "c", "label": "Option c" } ] }
+      ],
+      "sections": [
+        { "id": "S1", "title": "Seeded note", "group": "First", "note": "seeded s1 note" },
+        { "id": "S2", "title": "Plain", "group": "First" },
+        { "id": "S3", "title": "Other group", "group": "Second" }
+      ]
+    },
+    "zz-golden-nonotes": {
+      "title": "Golden no notes",
+      "notes": false,
+      "decisions": [
+        { "id": "D1", "title": "Plain choice", "options": [
+          { "code": "a", "label": "Option a", "rec": true },
+          { "code": "b", "label": "Option b" } ] },
+        { "id": "D2", "title": "None", "none": true, "noneCode": "n", "options": [
+          { "code": "a", "label": "Option a", "rec": true } ] }
+      ],
+      "sections": [
+        { "id": "S1", "title": "One" },
+        { "id": "S2", "title": "Two" }
+      ]
+    },
+    "zz-golden-sections": {
+      "title": "Golden sections only",
+      "sections": [
+        { "id": "card-1", "title": "First card" },
+        { "id": "card-2", "title": "Second card", "note": "seeded card note" }
+      ]
+    }
+  },
+  "cases": [
+    { "name": "fresh page keeps seeded notes", "slug": "zz-golden-synth", "state": null },
+    { "name": "every flag at once", "slug": "zz-golden-synth", "state": {
+        "d": { "D1": "b", "D2": "x", "D3": "a" },
+        "dnotes": { "D2": "", "D3": "first line\nsecond line" },
+        "screens": { "S1": { "agree": true, "note": "" }, "S2": { "agree": false, "note": "wrong layout" },
+                     "S3": { "agree": true, "note": "agree, with a caveat" } },
+        "endnotes": "end notes here\nand a second line" } },
+    { "name": "seeds cleared, all as drafted", "slug": "zz-golden-synth", "state": {
+        "d": { "D1": "a", "D2": "b", "D3": "a" }, "dnotes": { "D2": "" },
+        "screens": { "S1": { "agree": true, "note": "" }, "S2": { "agree": true, "note": "" },
+                     "S3": { "agree": true, "note": "" } }, "endnotes": "" } },
+    { "name": "default none code picked, rest drafted", "slug": "zz-golden-synth", "state": {
+        "d": { "D1": "a", "D2": "b", "D3": "z" }, "dnotes": { "D2": "seeded d2 note" },
+        "screens": { "S1": { "agree": true, "note": "seeded s1 note" }, "S2": { "agree": true, "note": "" },
+                     "S3": { "agree": true, "note": "" } }, "endnotes": "" } },
+    { "name": "notes off, fresh", "slug": "zz-golden-nonotes", "state": null },
+    { "name": "notes off, flips", "slug": "zz-golden-nonotes", "state": {
+        "d": { "D1": "b", "D2": "n" }, "dnotes": {},
+        "screens": { "S1": { "agree": false, "note": "" }, "S2": { "agree": true, "note": "" } }, "endnotes": "" } },
+    { "name": "sections only, fresh", "slug": "zz-golden-sections", "state": null },
+    { "name": "sections only, disagree and end note", "slug": "zz-golden-sections", "state": {
+        "d": {}, "dnotes": {},
+        "screens": { "card-1": { "agree": false, "note": "" }, "card-2": { "agree": true, "note": "" } },
+        "endnotes": "one end note" } }
+  ]
+}

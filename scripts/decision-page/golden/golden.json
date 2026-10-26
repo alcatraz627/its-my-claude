@@ -1,0 +1,566 @@
+{
+ "captured_at": "2026-10-26T08:22:23.986Z",
+ "source": "scripts/kanban/decision.html",
+ "synthetic": [
+  {
+   "name": "fresh page keeps seeded notes",
+   "slug": "zz-golden-synth",
+   "config": {
+    "title": "Golden synthetic",
+    "copyHeader": "synthetic rulings",
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None with a custom code and a seeded note",
+      "none": true,
+      "noneCode": "x",
+      "note": "seeded d2 note",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a"
+       },
+       {
+        "code": "b",
+        "label": "Option b",
+        "rec": true
+       }
+      ]
+     },
+     {
+      "id": "D3",
+      "title": "None with the default code",
+      "none": true,
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "c",
+        "label": "Option c"
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "Seeded note",
+      "group": "First",
+      "note": "seeded s1 note"
+     },
+     {
+      "id": "S2",
+      "title": "Plain",
+      "group": "First"
+     },
+     {
+      "id": "S3",
+      "title": "Other group",
+      "group": "Second"
+     }
+    ]
+   },
+   "state": null,
+   "expected": "synthetic rulings:\nD1a D2b D3a\nD2 note — seeded d2 note\nS1: agree — seeded s1 note"
+  },
+  {
+   "name": "every flag at once",
+   "slug": "zz-golden-synth",
+   "config": {
+    "title": "Golden synthetic",
+    "copyHeader": "synthetic rulings",
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None with a custom code and a seeded note",
+      "none": true,
+      "noneCode": "x",
+      "note": "seeded d2 note",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a"
+       },
+       {
+        "code": "b",
+        "label": "Option b",
+        "rec": true
+       }
+      ]
+     },
+     {
+      "id": "D3",
+      "title": "None with the default code",
+      "none": true,
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "c",
+        "label": "Option c"
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "Seeded note",
+      "group": "First",
+      "note": "seeded s1 note"
+     },
+     {
+      "id": "S2",
+      "title": "Plain",
+      "group": "First"
+     },
+     {
+      "id": "S3",
+      "title": "Other group",
+      "group": "Second"
+     }
+    ]
+   },
+   "state": {
+    "d": {
+     "D1": "b",
+     "D2": "x",
+     "D3": "a"
+    },
+    "dnotes": {
+     "D2": "",
+     "D3": "first line\nsecond line"
+    },
+    "screens": {
+     "S1": {
+      "agree": true,
+      "note": ""
+     },
+     "S2": {
+      "agree": false,
+      "note": "wrong layout"
+     },
+     "S3": {
+      "agree": true,
+      "note": "agree, with a caveat"
+     }
+    },
+    "endnotes": "end notes here\nand a second line"
+   },
+   "expected": "synthetic rulings:\nD1b D2x D3a\nD3 note — first line\nsecond line\nS2: DISAGREE — wrong layout\nS3: agree — agree, with a caveat\nnotes:\nend notes here\nand a second line"
+  },
+  {
+   "name": "seeds cleared, all as drafted",
+   "slug": "zz-golden-synth",
+   "config": {
+    "title": "Golden synthetic",
+    "copyHeader": "synthetic rulings",
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None with a custom code and a seeded note",
+      "none": true,
+      "noneCode": "x",
+      "note": "seeded d2 note",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a"
+       },
+       {
+        "code": "b",
+        "label": "Option b",
+        "rec": true
+       }
+      ]
+     },
+     {
+      "id": "D3",
+      "title": "None with the default code",
+      "none": true,
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "c",
+        "label": "Option c"
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "Seeded note",
+      "group": "First",
+      "note": "seeded s1 note"
+     },
+     {
+      "id": "S2",
+      "title": "Plain",
+      "group": "First"
+     },
+     {
+      "id": "S3",
+      "title": "Other group",
+      "group": "Second"
+     }
+    ]
+   },
+   "state": {
+    "d": {
+     "D1": "a",
+     "D2": "b",
+     "D3": "a"
+    },
+    "dnotes": {
+     "D2": ""
+    },
+    "screens": {
+     "S1": {
+      "agree": true,
+      "note": ""
+     },
+     "S2": {
+      "agree": true,
+      "note": ""
+     },
+     "S3": {
+      "agree": true,
+      "note": ""
+     }
+    },
+    "endnotes": ""
+   },
+   "expected": "synthetic rulings:\nD1a D2b D3a\nall items: agree as drafted"
+  },
+  {
+   "name": "default none code picked, rest drafted",
+   "slug": "zz-golden-synth",
+   "config": {
+    "title": "Golden synthetic",
+    "copyHeader": "synthetic rulings",
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None with a custom code and a seeded note",
+      "none": true,
+      "noneCode": "x",
+      "note": "seeded d2 note",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a"
+       },
+       {
+        "code": "b",
+        "label": "Option b",
+        "rec": true
+       }
+      ]
+     },
+     {
+      "id": "D3",
+      "title": "None with the default code",
+      "none": true,
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "c",
+        "label": "Option c"
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "Seeded note",
+      "group": "First",
+      "note": "seeded s1 note"
+     },
+     {
+      "id": "S2",
+      "title": "Plain",
+      "group": "First"
+     },
+     {
+      "id": "S3",
+      "title": "Other group",
+      "group": "Second"
+     }
+    ]
+   },
+   "state": {
+    "d": {
+     "D1": "a",
+     "D2": "b",
+     "D3": "z"
+    },
+    "dnotes": {
+     "D2": "seeded d2 note"
+    },
+    "screens": {
+     "S1": {
+      "agree": true,
+      "note": "seeded s1 note"
+     },
+     "S2": {
+      "agree": true,
+      "note": ""
+     },
+     "S3": {
+      "agree": true,
+      "note": ""
+     }
+    },
+    "endnotes": ""
+   },
+   "expected": "synthetic rulings:\nD1a D2b D3z\nD2 note — seeded d2 note\nS1: agree — seeded s1 note"
+  },
+  {
+   "name": "notes off, fresh",
+   "slug": "zz-golden-nonotes",
+   "config": {
+    "title": "Golden no notes",
+    "notes": false,
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None",
+      "none": true,
+      "noneCode": "n",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "One"
+     },
+     {
+      "id": "S2",
+      "title": "Two"
+     }
+    ]
+   },
+   "state": null,
+   "expected": "Golden no notes:\nD1a D2a\nall items: agree as drafted"
+  },
+  {
+   "name": "notes off, flips",
+   "slug": "zz-golden-nonotes",
+   "config": {
+    "title": "Golden no notes",
+    "notes": false,
+    "decisions": [
+     {
+      "id": "D1",
+      "title": "Plain choice",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       },
+       {
+        "code": "b",
+        "label": "Option b"
+       }
+      ]
+     },
+     {
+      "id": "D2",
+      "title": "None",
+      "none": true,
+      "noneCode": "n",
+      "options": [
+       {
+        "code": "a",
+        "label": "Option a",
+        "rec": true
+       }
+      ]
+     }
+    ],
+    "sections": [
+     {
+      "id": "S1",
+      "title": "One"
+     },
+     {
+      "id": "S2",
+      "title": "Two"
+     }
+    ]
+   },
+   "state": {
+    "d": {
+     "D1": "b",
+     "D2": "n"
+    },
+    "dnotes": {},
+    "screens": {
+     "S1": {
+      "agree": false,
+      "note": ""
+     },
+     "S2": {
+      "agree": true,
+      "note": ""
+     }
+    },
+    "endnotes": ""
+   },
+   "expected": "Golden no notes:\nD1b D2n\nS1: DISAGREE"
+  },
+  {
+   "name": "sections only, fresh",
+   "slug": "zz-golden-sections",
+   "config": {
+    "title": "Golden sections only",
+    "sections": [
+     {
+      "id": "card-1",
+      "title": "First card"
+     },
+     {
+      "id": "card-2",
+      "title": "Second card",
+      "note": "seeded card note"
+     }
+    ]
+   },
+   "state": null,
+   "expected": "Golden sections only:\ncard-2: agree — seeded card note"
+  },
+  {
+   "name": "sections only, disagree and end note",
+   "slug": "zz-golden-sections",
+   "config": {
+    "title": "Golden sections only",
+    "sections": [
+     {
+      "id": "card-1",
+      "title": "First card"
+     },
+     {
+      "id": "card-2",
+      "title": "Second card",
+      "note": "seeded card note"
+     }
+    ]
+   },
+   "state": {
+    "d": {},
+    "dnotes": {},
+    "screens": {
+     "card-1": {
+      "agree": false,
+      "note": ""
+     },
+     "card-2": {
+      "agree": true,
+      "note": ""
+     }
+    },
+    "endnotes": "one end note"
+   },
+   "expected": "Golden sections only:\ncard-1: DISAGREE\nnotes:\none end note"
+  }
+ ]
+}
