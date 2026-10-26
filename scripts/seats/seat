@@ -14,6 +14,9 @@ Usage:
   seat compose BRIEF.md --role R --model M [--persona P] [--effort E]
                [--provider claude|codex] [--scope read-only|PATHS] [--no-cold-read]
                                            check the brief, write the record, print the prompt
+  seat header --role R --model M --output PATH --goal TEXT [--effort E] [--persona P]
+                                           record a seat for a hand-written prompt; prints its header line
+  seat sweep [--stale-hours N]             land finished background seats
   seat land ID --outcome ok|partial|failed [--note TEXT]
   seat feedback ID --prompt ok|thin|wrong --persona fit|misfit|none [--note TEXT]
   seat list [--days N] [--json]  ·  seat show ID [--json]  ·  seat weekly [--days N] [--json]
@@ -315,6 +318,73 @@ def cmd_compose(a):
     return 0
 
 
+def cmd_header(a):
+    """Records a seat for a prompt the parent writes by hand and prints the one
+    header line to put on its first line, so a dispatch is seated in one call.
+    The five clauses are still the parent's job; the hook reports which are missing."""
+    if a.role not in ROLES:
+        die("role must be one of " + ", ".join(ROLES))
+    if not os.path.isabs(a.output):
+        die("--output must be an absolute path the seat writes before returning")
+    sid = "s-%s-%s" % (dt.datetime.now().strftime("%Y%m%d-%H%M%S"), secrets.token_hex(2))
+    header = "[seat %s] role=%s persona=%s provider=claude model=%s effort=%s output=%s" % (
+        sid, a.role, a.persona or "none", a.model, a.effort, a.output)
+    rec = {"id": sid, "role": a.role, "persona": a.persona, "provider": "claude", "model": a.model,
+           "effort": a.effort, "scope": "", "output": a.output, "brief": None, "prompt": None, "goal": a.goal,
+           "parent": os.environ.get("CLAUDE_CODE_SESSION_ID", ""), "cwd": os.getcwd(),
+           "started": dt.datetime.now().isoformat(timespec="seconds"), "state": "composed",
+           "source": "header", "cold_read": None, "feedback": []}
+    save(rec)
+    domain_event("dispatch", rec)
+    print(header)
+    return 0
+
+
+def cmd_sweep(a):
+    """Lands dispatched background seats, which the PostToolUse hook cannot: their
+    tool call returns at launch, long before the work is done. A seat whose output
+    file exists lands ok; one still without output after --stale-hours lands partial."""
+    now = dt.datetime.now()
+    landed = 0
+    for p in glob.glob(os.path.join(SEATS, "s-*.json")):
+        try:
+            with open(p) as f:
+                rec = json.load(f)
+        except (OSError, ValueError):
+            continue
+        try:
+            age_h = (now - dt.datetime.fromisoformat(rec.get("dispatched") or rec["started"])).total_seconds() / 3600
+        except (KeyError, ValueError):
+            age_h = 0
+        # Composed but never dispatched with its header: the parent wrote the
+        # brief and then sent a different prompt, or never sent one. Say so,
+        # rather than leaving it "open" forever.
+        if rec.get("state") == "composed" and age_h >= 24:
+            rec.update(state="abandoned", outcome="never dispatched", ended=now.isoformat(timespec="seconds"))
+            save(rec)
+            landed += 1
+            if not a.quiet:
+                print("abandoned %s: composed %.0fh ago, never dispatched with its header" % (rec["id"], age_h))
+            continue
+        if rec.get("state") != "dispatched" or not rec.get("background"):
+            continue
+        has_out = bool(rec.get("output")) and os.path.exists(rec["output"])
+        if not has_out and age_h < a.stale_hours:
+            continue
+        outcome, note = ("ok", "landed by sweep: output exists") if has_out else \
+            ("partial", "landed by sweep: no output after %.0fh" % age_h)
+        rec.update(state="landed", outcome=outcome, ended=now.isoformat(timespec="seconds"),
+                   output_exists=has_out, land_note=note)
+        save(rec)
+        domain_event("land", rec, outcome=outcome, output_exists=has_out)
+        landed += 1
+        if not a.quiet:
+            print("landed %s: %s (%s)" % (rec["id"], outcome, note))
+    if not a.quiet and not landed:
+        print("no background seats to land")
+    return 0
+
+
 def cmd_land(a):
     rec = load(a.id)
     exists = bool(rec.get("output")) and os.path.exists(rec["output"])
@@ -363,7 +433,32 @@ def cmd_list(a):
     return 0
 
 
+def dispatch_stats(days):
+    """Seated share and clause presence across every Agent dispatch the hook saw.
+    This is the number the owner reads to decide whether the header warning is
+    enough or should become a block."""
+    cut = (dt.datetime.now() - dt.timedelta(days=days)).isoformat()
+    rows = []
+    dp = os.path.join(SEATS, "dispatch.jsonl")
+    if os.path.exists(dp):
+        for line in open(dp):
+            try:
+                o = json.loads(line)
+            except ValueError:
+                continue
+            if o.get("ts", "") >= cut:
+                rows.append(o)
+    n = len(rows)
+    clauses = {}
+    for r in rows:
+        for k, v in (r.get("clauses") or {}).items():
+            clauses[k] = clauses.get(k, 0) + int(bool(v))
+    return {"dispatches": n, "seated": sum(1 for r in rows if r.get("seated")),
+            "clauses": {k: "%d/%d" % (v, n) for k, v in clauses.items()}}
+
+
 def cmd_weekly(a):
+    cmd_sweep(argparse.Namespace(stale_hours=6, quiet=True))
     rs = records(a.days)
     agg = {"seats": len(rs), "by_role": {}, "by_model": {}, "outcomes": {}, "prompt_quality": {},
            "persona_fit": {}, "notes": [], "refusals": []}
@@ -386,9 +481,15 @@ def cmd_weekly(a):
                 continue
             if o.get("ts", "") >= cut:
                 agg["refusals"].extend(o.get("reasons", []))
+    agg["dispatch"] = dispatch_stats(a.days)
     if a.json:
         print(json.dumps(agg, indent=2))
         return 0
+    ds = agg["dispatch"]
+    print("Agent dispatches, last %d days: %d, seated %d (%s)" % (
+        a.days, ds["dispatches"], ds["seated"],
+        "%.0f%%" % (100.0 * ds["seated"] / ds["dispatches"]) if ds["dispatches"] else "no data yet"))
+    print("  clauses present  " + (", ".join("%s %s" % kv for kv in ds["clauses"].items()) or "none"))
     print("Seats, last %d days: %d" % (a.days, agg["seats"]))
     for k in ("by_role", "by_model", "outcomes", "prompt_quality", "persona_fit"):
         print("  %-15s %s" % (k.replace("_", " "), ", ".join("%s %d" % kv for kv in agg[k].items()) or "none"))
@@ -412,6 +513,12 @@ def main(argv):
     c.add_argument("--persona"); c.add_argument("--effort", default="medium")
     c.add_argument("--provider", choices=["claude", "codex"], default="claude")
     c.add_argument("--scope"); c.add_argument("--no-cold-read", action="store_true")
+    hd = sub.add_parser("header")
+    hd.add_argument("--role", required=True); hd.add_argument("--model", required=True)
+    hd.add_argument("--output", required=True); hd.add_argument("--goal", required=True)
+    hd.add_argument("--effort", default="medium"); hd.add_argument("--persona")
+    sw = sub.add_parser("sweep"); sw.add_argument("--stale-hours", type=float, default=6)
+    sw.add_argument("--quiet", action="store_true")
     l = sub.add_parser("land"); l.add_argument("id"); l.add_argument("--outcome", required=True,
                                                                     choices=["ok", "partial", "failed"])
     l.add_argument("--note")
@@ -426,6 +533,10 @@ def main(argv):
         return cmd_template(a.role)
     if a.cmd == "compose":
         return cmd_compose(a)
+    if a.cmd == "header":
+        return cmd_header(a)
+    if a.cmd == "sweep":
+        return cmd_sweep(a)
     if a.cmd == "land":
         return cmd_land(a)
     if a.cmd == "feedback":
