@@ -52,9 +52,10 @@ if len(body) > 170:
 print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
     [ "$seat" = "-" ] && seat=""; [ "$out" = "-" ] && out=""
     printf '%s|%s|%s\n' "${desc//|/ }" "$out" "$seat" >> "$STASH_DIR/dispatch-queue" 2>/dev/null || true
-    body=$(printf 'seat: %s · bg: %s%s\ngoal: %s%s' \
-      "${typ:-general-purpose}${name:+ as $name}" "${bg:-default}" "${seat:+ · $seat}" \
-      "${desc:+$desc — }" "$goal")
+    bgnote=""; [ "$bg" = "true" ] && bgnote=" · background"
+    body=$(printf 'seat: %s%s%s\ngoal: %s%s' \
+      "${typ:-general-purpose}${name:+ as $name}" "$bgnote" "${seat:+ · $seat}" \
+      "${desc:+$desc: }" "$goal")
     box=$(printf '%s\n' "$body" | hook_box_kind dispatch "${typ:-general-purpose}" "${model:-inherit}")
     # The whole box is owner text: a gcc-mods session draws it as a transcript
     # line and the model never reads it; any other session pastes it as before.
@@ -97,22 +98,24 @@ print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
       started=$(cut -d'|' -f2 "$STASH_DIR/$aid" 2>/dev/null)
       ldesc=$(cut -d'|' -f3 "$STASH_DIR/$aid" 2>/dev/null)
       lout=$(cut -d'|' -f4 "$STASH_DIR/$aid" 2>/dev/null)
-      [ -n "$started" ] && dur="$(( ($(date +%s) - started) / 60 ))m"
+      if [ -n "$started" ]; then
+        el=$(( $(date +%s) - started ))
+        if [ "$el" -lt 60 ]; then dur="${el}s"; else dur="$(( el / 60 ))m"; fi
+      fi
       rm -f "$STASH_DIR/$aid" 2>/dev/null || true
     fi
-    # Whether the seat wrote its file is the first thing the reader checks.
-    ostate=""
-    if [ -n "$lout" ]; then
-      # A full path wraps the box; the last two parts name the file well enough.
-      short="${lout/#$HOME/~}"
-      [ "${#short}" -gt 40 ] && short="…/$(basename "$(dirname "$lout")")/$(basename "$lout")"
-      if [ -s "$lout" ]; then ostate="written: $short"; else ostate="NOT written: $short"; fi
+    # Whether the seat wrote its file is the first thing the reader checks; the
+    # path goes on its own unwrapped ▸ line, absolute, so the terminal links it.
+    body="${ldesc:+goal: $ldesc}"
+    [ -n "$body" ] || body=$(printf 'seat: %s · id: %s' "${typ:-?}" "${aid:-?}")
+    box=""
+    if [ -n "$lout" ] && [ -x "$HOME/.claude/scripts/box/box.sh" ]; then
+      if [ -s "$lout" ]; then act="output written; read it before using what the seat said"
+      else act="output NOT written: check the seat before relying on it"; fi
+      box=$(printf '%s\n→ %s\n' "$body" "$act" | "$HOME/.claude/scripts/box/box.sh" landing "${typ:-unknown}" \
+        --attr "ran $dur" --ref "$lout" 2>/dev/null) || box=""
     fi
-    body=$(printf 'seat: %s · id: %s' "${typ:-?}" "${aid:-?}")
-    if [ -n "$ldesc$ostate" ]; then
-      body=$(printf '%s\n%s%s%s' "$body" "${ldesc:+goal: $ldesc}" "${ldesc:+${ostate:+ · }}" "$ostate")
-    fi
-    box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
+    [ -n "$box" ] || box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
     # SubagentStop context delivery is unrouted in this harness (verified
     # 2026-08-14: the box was emitted and never arrived). Park it for the
     # UserPromptSubmit drain below; the direct emit stays as cheap insurance.

@@ -152,11 +152,13 @@ def main():
         pass
     log({"ts": time.time(), "session": sid, "action": "block", "missing": miss})
     kinds = sorted({k for k, _ in miss})
+    # box.sh has atone and affirm kinds; a proposal or pin is reported as done.
+    kind = "atone" if "atone" in kinds else "affirm" if kinds == ["affirm"] else "done"
     print(json.dumps({"decision": "block", "reason": (
         f"This turn recorded {names}, but the reply does not show it. The owner never sees tool output. "
         "Re-send the reply with each one in the standard box, naming its id and the details "
         "(for an atone: slug, severity and the precheck; for a proposal: title and why). "
-        f"Render it with: bash ~/.claude/scripts/box/box.sh {'atone' if 'atone' in kinds else 'done'} \"<title>\" "
+        f"Render it with: bash ~/.claude/scripts/box/box.sh {kind} \"<title>\" "
         "--body \"<id and details>\" --action \"<what the owner should know>\", and paste the output into the reply.")},
         ensure_ascii=False))
 
