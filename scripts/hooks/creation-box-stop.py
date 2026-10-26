@@ -10,7 +10,7 @@ Stop hook. A turn whose Bash calls created one of these (the command ran
 atone.sh/affirm.sh/propose.sh add or i-dream pin add, and its output carries the
 new id) must end on a reply that shows a box (a ┌ line) and names each new id.
 Blocks once per distinct reply, then becomes a note so a session never wedges.
-Telemetry: /tmp/creation-box-gate.jsonl. Mute: touch ~/.claude/.no-creation-box-gate
+Telemetry: ~/.claude/logs/creation-box-gate.jsonl. Mute: touch ~/.claude/.no-creation-box-gate
 Replay over real transcripts: creation-box-stop.py --replay <dir> [--days N]
 """
 import glob
@@ -23,7 +23,9 @@ import time
 
 MUTE = os.path.expanduser("~/.claude/.no-creation-box-gate")
 STATE = os.environ.get("CREATION_BOX_STATE", "/tmp")
-LOG = os.path.join(STATE, "creation-box-gate.jsonl")
+# The log feeds two weekly reviews, so it lives where a reboot does not clear it.
+LOG = os.path.join(os.environ.get("CREATION_BOX_STATE") or os.path.expanduser("~/.claude/logs"),
+                   "creation-box-gate.jsonl")
 
 # command shape -> the id its output carries, and the box kind to show it in
 CREATORS = [
