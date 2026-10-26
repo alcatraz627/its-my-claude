@@ -37,6 +37,12 @@ esac
 
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
 printf '%s' "$cmd" | rg -q '\bgh\s+repo\s+(create|edit)\b' 2>/dev/null || exit 0
+# Judge only the gh commands the shell would run (shellparse.py), so a
+# `gh repo create ... --public` named in an echo or a heredoc is a mention.
+# A command the parser cannot read is judged on the raw string, as before.
+if norm=$(printf '%s' "$cmd" | python3 "$HOME/.claude/scripts/hooks/shellparse.py" lines 2>/dev/null); then
+  cmd=$(printf '%s\n' "$norm" | rg '^gh ' 2>/dev/null)
+fi
 printf '%s' "$cmd" | rg -q "\b${ORG}/" 2>/dev/null || exit 0
 if printf '%s' "$cmd" | rg -q '\bgh\s+repo\s+create\b' 2>/dev/null \
    && printf '%s' "$cmd" | rg -q -- '--public\b' 2>/dev/null; then

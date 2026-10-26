@@ -24,6 +24,10 @@ out=$(jq -nc '{tool_name:"mcp__github__create_repository", tool_input:{name:"x",
 denied "$out" && ok "MCP public create in versable-git is denied" || bad "mcp public ($out)"
 out=$(jq -nc '{tool_name:"mcp__github__create_repository", tool_input:{name:"x", organization:"versable-git", private:true}}' | bash "$H")
 [ -z "$out" ] && ok "MCP private create in versable-git passes" || bad "mcp private ($out)"
+out=$(bash_in 'echo "gh repo create versable-git/x --public is banned"' | bash "$H")
+[ -z "$out" ] && ok "a mention in echo passes" || bad "echo mention ($out)"
+out=$(bash_in 'bash -c "gh repo create versable-git/x --public"' | bash "$H")
+denied "$out" && ok "a bash -c wrapper is still denied" || bad "bash -c wrapper ($out)"
 
 echo "---- pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

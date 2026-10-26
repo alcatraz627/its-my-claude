@@ -24,6 +24,13 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 
 # Need: curl + mutating method (POST/PUT/PATCH/DELETE) + Authorization header
 echo "$CMD" | rg -q '\bcurl\b' 2>/dev/null || exit 0
+# Judge only the curl commands the shell would run (shellparse.py), so a curl
+# line quoted in an echo or a heredoc is a mention. A command the parser cannot
+# read is judged on the raw string, as before.
+if NORM=$(printf '%s' "$CMD" | python3 "$HOME/.claude/scripts/hooks/shellparse.py" lines 2>/dev/null); then
+  CMD=$(printf '%s\n' "$NORM" | rg '^curl ' 2>/dev/null)
+  [[ -z "$CMD" ]] && exit 0
+fi
 echo "$CMD" | rg -q "\-X\s+(POST|PUT|PATCH|DELETE)\b|--request\s+(POST|PUT|PATCH|DELETE)\b|--(data|data-raw|data-binary|data-urlencode|json|form)\b" 2>/dev/null || exit 0
 echo "$CMD" | rg -q "Authorization\s*:|-u\s+\S+:|--user\s+\S+:" 2>/dev/null || exit 0
 

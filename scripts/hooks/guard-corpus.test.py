@@ -57,7 +57,7 @@ GUARDS = {
 }
 ALLOW_ONLY = {"quoted-text", "allow-claude-ipc"}
 # Guards that read commands through shellparse today. Every F row must pass all of them.
-MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy"}
+MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy", "repo-visibility", "curl-post-auth"}
 
 # The trailer is assembled at run time: the ai-signature Write hook refuses the literal in any file.
 TRAILER = "Co-Authored" + "-By: Claude <noreply@anthropic.com>"
@@ -90,8 +90,8 @@ F = [  # id, command, cwd key, guard named in the plan, expectation for that gua
     ("F25", "git commit -m 'run env to see vars'", "plain", "env-dump", "quiet"),
     ("F26", 'git commit -m "docs: never tee /etc/hosts"', "plain", "system-dir-writes", "quiet"),
     ("F27", "echo 'writes to ~/.claude/.claude/ are blocked' > /tmp/note.txt", "plain", "block-nested-claude", "quiet"),
-    ("F28", 'echo "gh repo create versable-git/x --public is banned"', "plain", "repo-visibility", "xfire"),
-    ("F29", "echo 'curl -X POST -H \"Authorization: Bearer abc\" https://api.example.com'", "plain", "curl-post-auth", "xfire"),
+    ("F28", 'echo "gh repo create versable-git/x --public is banned"', "plain", "repo-visibility", "quiet"),
+    ("F29", "echo 'curl -X POST -H \"Authorization: Bearer abc\" https://api.example.com'", "plain", "curl-post-auth", "quiet"),
     ("F30", 'echo "next step: git commit"', "protected", "user-commit", "xfire"),
     ("F31", 'rg -n "mv ~/.claude/old" notes.md', "plain", "migrate-hint", "quiet"),
 ]

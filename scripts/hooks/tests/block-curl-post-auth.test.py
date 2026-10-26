@@ -22,6 +22,8 @@ MUST_BLOCK = [
      "loopback AND a remote host in one line"),
     (f'curl --data @body.json {AUTH} https://api.example.com/v1',
      "a body flag rather than -X"),
+    (f"bash -c 'curl -X POST {AUTH} https://api.example.com/v1'",
+     "a bash -c wrapper"),
 ]
 
 MUST_PASS = [
@@ -33,6 +35,8 @@ MUST_PASS = [
      "an unexpanded variable, the pre-existing exemption"),
     ("curl -s http://127.0.0.1:5110/health", "a plain local read"),
     ("curl -s https://api.example.com/health", "a plain remote read"),
+    (f"echo 'curl -X POST {AUTH} https://api.example.com'", "a mention in echo"),
+    (f"cat > notes.md <<'EOF'\ncurl -X POST {AUTH} https://api.example.com\nEOF", "a heredoc written to a file"),
 ]
 
 
