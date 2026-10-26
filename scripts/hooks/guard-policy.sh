@@ -20,9 +20,10 @@
 # they already own. The GitHub MCP's push tools are here because no git
 # command runs for them.
 #
-# Known over-match (accepted, the same trade guard-user-commit makes): a Bash
-# command that merely mentions "wrangler deploy" inside a quoted string is
-# treated as a deploy. It only matters while that policy is block.
+# Bash commands are read through shellparse.py, so "wrangler deploy" inside a
+# quoted string or a heredoc is a mention, not a deploy. Only when the parser
+# cannot read a command does the raw string decide, and then a mention can
+# still over-match.
 set -uo pipefail
 command -v jq >/dev/null 2>&1 || exit 0
 POL="${POL_SH:-$HOME/.claude/scripts/pol/pol.sh}"
@@ -146,12 +147,21 @@ case "$tool" in
     # Start of a command word. "/" is included so /opt/homebrew/bin/gh and
     # ./node_modules/.bin/wrangler are the same command as gh and wrangler.
     S='(^|[;&|(`[:space:]/])'
+    # Match the commands the shell would run, one per line with the tool name
+    # first (npx and pnpm dlx unwrapped), so a tool named inside quotes or a
+    # heredoc is data and `rg "vercel|gh"` stays quiet. When the parser cannot
+    # read the command, the raw string is matched as before, so a broken parse
+    # never opens this gate.
+    if norm=$(printf '%s' "$cmd" | python3 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/shellparse.py" lines 2>/dev/null); then
+      cmd="$norm"; S='^'
+      [ -n "$cmd" ] || exit 0
+    fi
     GH="${S}gh[[:space:]]+"
     # gh api: the method is explicit (-X/--method) or implied. With no -X, any
     # field or input flag makes it a POST, exactly as gh itself decides.
     api_write=0; api_ep=""
     if printf '%s' "$cmd" | grep -qE "${GH}api([[:space:]]|$)"; then
-      api_args=$(printf '%s' "$cmd" | sed -E 's/.*(^|[;&|(`[:space:]\/])gh[[:space:]]+api([[:space:]]|$)//')
+      api_args=$(printf '%s' "$cmd" | grep -E "${GH}api([[:space:]]|$)" | head -1 | sed -E 's/.*(^|[;&|(`[:space:]\/])gh[[:space:]]+api([[:space:]]|$)//')
       m=$(printf '%s' "$api_args" | grep -oE '(-X|--method)[[:space:]=]*[A-Za-z]+' | head -1 | grep -oE '[A-Za-z]+$' | tr 'a-z' 'A-Z')
       case "$m" in
         POST|PATCH|PUT|DELETE) api_write=1;;

@@ -24,6 +24,8 @@ each guard keeps its own documented failure direction):
     shellparse.py skeleton             same-length text with quoted contents,
                                        heredoc bodies and comments blanked, but
                                        bash -c / eval bodies and $( ) left visible
+    shellparse.py lines                one line per command run (name, then
+                                       arguments); exit 3 when unreadable
 """
 import json
 import re
@@ -928,6 +930,38 @@ def message_args(command, p=None):
     return out
 
 
+RUNNERS = {"npx": {"-p", "--package"}, "bunx": {"-p", "--package"}, "pnpx": set()}
+RUNNER_PAIRS = {("pnpm", "dlx"), ("yarn", "dlx"), ("npm", "exec"), ("bun", "x")}
+
+
+def command_lines(cmd):
+    """One line per command the shell would run: its name, then its arguments.
+
+    A package runner (npx vercel, pnpm dlx wrangler) is unwrapped to the tool it
+    runs, so a guard can match the tool at the start of a line. Newlines inside
+    an argument become spaces, so one command is always one line.
+    """
+    out = []
+    for c in parse(cmd).commands:
+        if not c.name:
+            continue
+        words = c.words()
+        rest = None
+        if c.name in RUNNERS:
+            k = 1
+            while k < len(words) and words[k].startswith("-"):
+                k += 2 if words[k] in RUNNERS[c.name] else 1
+            rest = words[k:]
+        elif len(words) > 1 and (c.name, words[1]) in RUNNER_PAIRS:
+            rest = words[2:]
+        if rest:
+            words = [basename(rest[0])] + rest[1:]
+        else:
+            words = [c.name] + words[1:]
+        out.append(" ".join(w.replace("\n", " ") for w in words))
+    return out
+
+
 def exec_texts(cmd):
     """Texts a wrapper would execute, plus each simple command inside them."""
     out = []
@@ -965,7 +999,14 @@ def main(argv):
     if mode == "skeleton":
         sys.stdout.write(parse(cmd)._bridge)
         return 0
-    print("usage: shellparse.py json | has NAME [SUB...] | skeleton  < command", file=sys.stderr)
+    if mode == "lines":
+        # Exit 3 on a command the parser cannot read, so the guard falls back to its raw match.
+        if not parse(cmd).ok:
+            return 3
+        for line in command_lines(cmd):
+            print(line)
+        return 0
+    print("usage: shellparse.py json | has NAME [SUB...] | skeleton | lines  < command", file=sys.stderr)
     return 2
 
 

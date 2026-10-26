@@ -147,7 +147,12 @@ wt = sp.write_targets("echo x > a; cp b c; tee d e; dd if=f of=g; sed -i '' -e s
 check("write_targets", [p for p, _ in wt] == ["a", "c", "d", "e", "g", "h", "i", "j"], wt)
 check("message_args", sp.message_args(sp.parse('git commit -m "a" --message=b -mc').commands[0]) == ["a", "b", "c"])
 check("message_args gh", sp.message_args(sp.parse('gh pr create -t T -b B').commands[0]) == ["T", "B"])
-check("exec_texts", sp.exec_texts('bash -c "ls; rm x"') == ["ls; rm x", "ls", "rm x"], sp.exec_texts('bash -c "ls; rm x"'))
+check("command_lines unwraps runners and keeps one line per command",
+      sp.command_lines('npx -y vercel --prod; pnpm dlx wrangler deploy; rg "a|gh" x; gh pr comment 1 --body "a\nb"')
+      == ["vercel --prod", "wrangler deploy", "rg a|gh x", "gh pr comment 1 --body a b"],
+      sp.command_lines('npx -y vercel --prod; pnpm dlx wrangler deploy; rg "a|gh" x; gh pr comment 1 --body "a\nb"'))
+check("exec_texts includes $( ) bodies", "rm x" in sp.exec_texts('echo "$(rm x)"'))
+check("exec_texts",sp.exec_texts('bash -c "ls; rm x"') == ["ls; rm x", "ls", "rm x"], sp.exec_texts('bash -c "ls; rm x"'))
 
 print("── CLI ──")
 def cli(*args, stdin=""):

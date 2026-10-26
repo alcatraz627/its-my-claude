@@ -57,13 +57,13 @@ GUARDS = {
 }
 ALLOW_ONLY = {"quoted-text", "allow-claude-ipc"}
 # Guards that read commands through shellparse today. Every F row must pass all of them.
-MIGRATED = {"safe-delete", "git-push", "github-agent-marker"}
+MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy"}
 
 # The trailer is assembled at run time: the ai-signature Write hook refuses the literal in any file.
 TRAILER = "Co-Authored" + "-By: Claude <noreply@anthropic.com>"
 
 F = [  # id, command, cwd key, guard named in the plan, expectation for that guard
-    ("F1", 'rg -n "next|vercel|gh" src/', "plain", "guard-policy", "xfire"),
+    ("F1", 'rg -n "next|vercel|gh" src/', "plain", "guard-policy", "quiet"),
     ("F2", "ps -axo pid,command | rg 'next-server|next dev'", "plain", "dev-server-port", "quiet"),
     ("F3", "git add src/cli.ts && git commit -m 'add serve and tail verbs'", "plain", "dev-server-port", "quiet"),
     ("F4", "cat <<EOF > /tmp/d.md\nvite --port 3000 is what we used\nEOF", "plain", "dev-server-port", "quiet"),
@@ -157,8 +157,8 @@ N = [  # id, command, cwd key, owning guard, expectation today
 ]
 
 F_EXTRA = [  # false fires a second guard has on an F row's command
-    ("F10", "cat <<EOF > /tmp/gh.md\ngh release create v1\nEOF", "plain", "guard-policy", "xfire"),
-    ("F20", 'echo "run gh pr create --title t --body x later"', "plain", "guard-policy", "xfire"),
+    ("F10", "cat <<EOF > /tmp/gh.md\ngh release create v1\nEOF", "plain", "guard-policy", "quiet"),
+    ("F20", 'echo "run gh pr create --title t --body x later"', "plain", "guard-policy", "quiet"),
 ]
 
 # A guard the owner has switched off cannot be exercised; its rows are skipped and named.
