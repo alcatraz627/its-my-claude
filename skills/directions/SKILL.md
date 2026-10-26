@@ -60,8 +60,10 @@ already carries its own legend keeps that legend; this is the default for a new 
    goal-record row, `GH#n` GitHub issue, letters for recon rows.
 3. **Where things stand today**: three to five lines; the biggest gap first.
 4. **The shape**: the overview table, one row per direction, with when and state.
-5. **Waiting on you**: `id | ask | if you say nothing`. Then one line naming what
-   waits on other people.
+5. **Waiting on you**: `id | ask | what I need from you | if you say nothing`. The
+   third column says exactly what the owner must do or provide to clear the ask (a
+   setting to tick, a token with its scope and where it is saved), so they can act
+   without asking back. Then one line naming what waits on other people.
 6. One section per direction. Each opens with when and one sentence of what it is
    for, then one sub-section per goal with its accepted-when line and a
    `id | state | task` table. A gap nobody owns gets a gap line under its goal;
@@ -119,7 +121,8 @@ name. Order directions by when, then by what the owner asked first.
 
 **Waiting on you.** An entry belongs there only if the owner can act on it today and
 nothing else must happen first. Anything waiting on other work, or on another person,
-moves to its direction or to the "waiting on others" line. Every entry has a default.
+moves to its direction or to the "waiting on others" line. Every entry has a default,
+and should say what the owner must do or provide; `lint` warns when that is missing.
 
 **Rewrite.** Replace the file; do not append to the old one. Carry over any open row
 of the old file that recon did not see, under Sources as "still open from the

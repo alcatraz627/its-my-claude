@@ -57,9 +57,9 @@ GOOD = """# Directions
 
 ## Waiting on you
 
-| id | ask | if you say nothing |
-| --- | --- | --- |
-| `#4` | Look at the new reply | stays shipped |
+| id | ask | what I need from you | if you say nothing |
+| --- | --- | --- | --- |
+| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |
 
 ## 🧭 Things work
 
@@ -117,6 +117,13 @@ variant("- `A1`: %s, `src/real.py`." % SHA, "- `A1`: deadbee, `src/gone.py`.", "
 variant("| A doc-only row with proof |", "| A row with %s in it |" % SHA, "proof-in-row", "a commit in a row is caught")
 variant("| Ship the second change |", "| %s |" % ("word " * 25), "row-long", "a paragraph in a row is caught")
 variant("| stays shipped |", "| — |", "ask-no-default", "an ask with no default is caught")
+found, rc = lint(GOOD.replace("| Read the reply on PR 12 and say keep or revert |", "| — |"))
+check("an ask with an empty need is a warning, not an error",
+      "ask-no-need" in codes(found, "warn") and "ask-no-need" not in codes(found, "error") and rc == 0, str(found))
+found, rc = lint(GOOD.replace("| id | ask | what I need from you | if you say nothing |\n| --- | --- | --- | --- |\n"
+                              "| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |",
+                              "| id | ask | if you say nothing |\n| --- | --- | --- |\n| `#4` | Look at the new reply | stays shipped |"))
+check("a Waiting on you table without the need column is a warning", "ask-no-need" in codes(found, "warn") and rc == 0, str(found))
 variant("| `#4` | Look at the new reply |", "| `#1` | Look at the new reply |", "ask-stale",
         "an ask already done at its source is caught")
 variant("| `#4` | Look at the new reply |", "| `#3` | Look at the new reply |", "ask-blocked",
@@ -135,7 +142,7 @@ check("an ask whose row is not 🔴 is a warning", "ask-row-state" in codes(foun
 many = "\n".join("| `B%d` | 🟢 | Row %d |" % (i, i) for i in range(9))
 found, _ = lint(GOOD.replace("| `A2` | ✅ | 💭 A row the agent inferred |", many))
 check("more than eight rows under a goal is a warning", "too-many-rows" in codes(found, "warn"), str(codes(found)))
-found, _ = lint(GOOD.replace("| `#4` | Look at the new reply | stays shipped |", "| `#2 to #3` | Look | — |"))
+found, _ = lint(GOOD.replace("| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |", "| `#2 to #3` | Look | Say which | — |"))
 ids = [f["ids"] for f in found if f["code"] == "ask-no-default"]
 check("a range inside one pair of backticks reads as each id", ids == [["#2", "#3"]], str(ids))
 

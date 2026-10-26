@@ -301,6 +301,12 @@ def lint(path, text=None):
         if kind(t) != "waiting":
             continue
         ci, cd = col(t["head"], "id"), col(t["head"], "if you say nothing", "default", "if")
+        # What the owner must do or provide (a setting to tick, a token and where it
+        # goes), so an ask can be cleared without a question back. Recommended, so warn only.
+        cn = col(t["head"], "what i need from you", "what you need to do", "needs", "need")
+        if cn is None and t["rows"]:
+            out.append(warn("ask-no-need", "Waiting on you has no \"what I need from you\" column. Add it between ask "
+                            "and default, saying what the owner must do or provide for each entry."))
         if len(t["rows"]) > MAX_WAITING:
             out.append(warn("too-many-asks", "Waiting on you has %d entries (limit %d). Move the rest under their directions."
                             % (len(t["rows"]), MAX_WAITING)))
@@ -318,6 +324,9 @@ def lint(path, text=None):
             default = c[cd] if cd is not None and cd < len(c) else ""
             if default.strip().lower() in NO_DEFAULT:
                 out.append(error("ask-no-default", "%s: say what happens if the owner says nothing." % label, ids))
+            need = c[cn] if cn is not None and cn < len(c) else None
+            if need is not None and need.strip().lower() in NO_DEFAULT:
+                out.append(warn("ask-no-need", "%s: say what exactly the owner must do or provide to clear it." % label, ids))
             srcs = [source_state(i, gs_rows, issues) for i in ids]
             if ids and all(s == "done" for s in srcs):
                 where = "goal record" if any(i in gs_rows for i in ids) else "issue tracker"
