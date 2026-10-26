@@ -57,7 +57,7 @@ GUARDS = {
 }
 ALLOW_ONLY = {"quoted-text", "allow-claude-ipc"}
 # Guards that read commands through shellparse today. Every F row must pass all of them.
-MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy", "repo-visibility", "curl-post-auth", "user-commit"}
+MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy", "repo-visibility", "curl-post-auth", "user-commit", "system-dir-writes"}
 
 # The trailer is assembled at run time: the ai-signature Write hook refuses the literal in any file.
 TRAILER = "Co-Authored" + "-By: Claude <noreply@anthropic.com>"
@@ -146,7 +146,7 @@ N = [  # id, command, cwd key, owning guard, expectation today
     ("N2", "{ rm x; }", "plain", "safe-delete", "fire"),
     ("N3", "echo $((1<<n))\nrm x", "plain", "safe-delete", "fire"),
     ("N4", "if true; then git push origin main; fi", "main", "git-push", "fire"),
-    ("N5", 'bash -c "echo x > /etc/hosts"', "plain", "system-dir-writes", "xquiet"),
+    ("N5", 'bash -c "echo x > /etc/hosts"', "plain", "system-dir-writes", "fire"),
     ("N6", 'claude-ipc send --to a "$(sudo rm x)"', "plain", "allow-claude-ipc", "quiet"),
     ("N7", "rg -rn foo src/", "plain", "rg-replace-bundle", "fire"),
     ("N8", "echo for && ls", "plain", "command-chaining", "xquiet"),

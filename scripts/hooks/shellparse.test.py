@@ -151,6 +151,10 @@ check("command_lines unwraps runners and keeps one line per command",
       sp.command_lines('npx -y vercel --prod; pnpm dlx wrangler deploy; rg "a|gh" x; gh pr comment 1 --body "a\nb"')
       == ["vercel --prod", "wrangler deploy", "rg a|gh x", "gh pr comment 1 --body a b"],
       sp.command_lines('npx -y vercel --prod; pnpm dlx wrangler deploy; rg "a|gh" x; gh pr comment 1 --body "a\nb"'))
+check("command_lines with redirects puts each write on its own line",
+      sp.command_lines('bash -c "echo x > /etc/h"; cat <<E >> o\nb\nE\necho 2>&1', redirects=True)
+      == ["bash -c echo x > /etc/h", "echo x", "> /etc/h", "cat", ">> o", "echo"],
+      sp.command_lines('bash -c "echo x > /etc/h"; cat <<E >> o\nb\nE\necho 2>&1', redirects=True))
 check("exec_texts includes $( ) bodies", "rm x" in sp.exec_texts('echo "$(rm x)"'))
 check("exec_texts",sp.exec_texts('bash -c "ls; rm x"') == ["ls; rm x", "ls", "rm x"], sp.exec_texts('bash -c "ls; rm x"'))
 

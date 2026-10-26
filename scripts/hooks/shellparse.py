@@ -24,8 +24,9 @@ each guard keeps its own documented failure direction):
     shellparse.py skeleton             same-length text with quoted contents,
                                        heredoc bodies and comments blanked, but
                                        bash -c / eval bodies and $( ) left visible
-    shellparse.py lines                one line per command run (name, then
-                                       arguments); exit 3 when unreadable
+    shellparse.py lines [--redirects]  one line per command run (name, then
+                                       arguments), optionally each write
+                                       redirect after it; exit 3 when unreadable
 """
 import json
 import re
@@ -934,16 +935,26 @@ RUNNERS = {"npx": {"-p", "--package"}, "bunx": {"-p", "--package"}, "pnpx": set(
 RUNNER_PAIRS = {("pnpm", "dlx"), ("yarn", "dlx"), ("npm", "exec"), ("bun", "x")}
 
 
-def command_lines(cmd):
+def command_lines(cmd, redirects=False):
     """One line per command the shell would run: its name, then its arguments.
 
     A package runner (npx vercel, pnpm dlx wrangler) is unwrapped to the tool it
     runs, so a guard can match the tool at the start of a line. Newlines inside
-    an argument become spaces, so one command is always one line.
+    an argument become spaces, so one command is always one line. With
+    redirects, each write redirect follows its command as its own line,
+    "> target" or ">> target", so a guard can anchor on it too.
     """
     out = []
     for c in parse(cmd).commands:
+        writes = []
+        if redirects:
+            for r in c.redirects:
+                if r.target is None:
+                    continue
+                if r.op in WRITE_OPS or (r.op == ">&" and not re.match(r"^(\d+|-)$", r.target.text)):
+                    writes.append((">>" if r.op in (">>", "&>>") else ">") + " " + r.target.text.replace("\n", " "))
         if not c.name:
+            out.extend(writes)
             continue
         words = c.words()
         rest = None
@@ -959,6 +970,7 @@ def command_lines(cmd):
         else:
             words = [c.name] + words[1:]
         out.append(" ".join(w.replace("\n", " ") for w in words))
+        out.extend(writes)
     return out
 
 
@@ -1003,7 +1015,7 @@ def main(argv):
         # Exit 3 on a command the parser cannot read, so the guard falls back to its raw match.
         if not parse(cmd).ok:
             return 3
-        for line in command_lines(cmd):
+        for line in command_lines(cmd, redirects="--redirects" in argv[2:]):
             print(line)
         return 0
     print("usage: shellparse.py json | has NAME [SUB...] | skeleton | lines  < command", file=sys.stderr)

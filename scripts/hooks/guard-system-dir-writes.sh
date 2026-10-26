@@ -42,6 +42,15 @@ else
   cmd_nohd="$cmd"
 fi
 scan=$(printf '%s' "$cmd_nohd" | sed "s/'[^']*'//g; s/\"[^\"]*\"//g")
+# Preferred reading: shellparse.py lists every command the shell would run, one
+# per line, each followed by its write redirects ("> /etc/hosts"). That sees
+# into bash -c and eval, which the de-quoting above erases, and every check
+# below can anchor at a line start. The de-quoted scan stays as the fallback
+# for a command the parser cannot read.
+A=''
+if norm=$(printf '%s' "$cmd" | python3 "$HOME/.claude/scripts/hooks/shellparse.py" lines --redirects 2>/dev/null); then
+  scan="$norm"; A='^'
+fi
 
 # Protected system roots (regex alternation). Each followed by / or word-end so
 # "/etcetera" or "/booth" do NOT match — only the real dir.
@@ -73,19 +82,19 @@ touch ~/.claude/.allow-system-writes" \
 }
 
 # 1. redirect (>, >>, 2>, &>) into a protected root — zero-or-more spaces after op
-printf '%s' "$scan" | rg -q ">>?[[:space:]]*/($ROOTS)$END" \
+printf '%s' "$scan" | rg -q "${A}>>?[[:space:]]*/($ROOTS)$END" \
   && block "redirect into a system dir: $cmd"
 # 2. tee (any flags) writing a protected root
-printf '%s' "$scan" | rg -q "\btee\b[^|;&]*[[:space:]]/($ROOTS)$END" \
+printf '%s' "$scan" | rg -q "${A}\btee\b[^|;&]*[[:space:]]/($ROOTS)$END" \
   && block "tee into a system dir: $cmd"
 # 3. dd of= a protected root
-printf '%s' "$scan" | rg -q "\bdd\b[^|;&]*of=/($ROOTS)$END" \
+printf '%s' "$scan" | rg -q "${A}\bdd\b[^|;&]*of=/($ROOTS)$END" \
   && block "dd writing a system dir: $cmd"
 # 4. rm targeting a protected root
-printf '%s' "$scan" | rg -q "\brm\b[^|;&]*[[:space:]]/($ROOTS)$END" \
+printf '%s' "$scan" | rg -q "${A}\brm\b[^|;&]*[[:space:]]/($ROOTS)$END" \
   && block "rm of a system path: $cmd"
 # 5. recursive chmod/chown on a protected root
-printf '%s' "$scan" | rg -q "\b(chmod|chown)\b[^|;&]*-R[^|;&]*[[:space:]]/($ROOTS)$END" \
+printf '%s' "$scan" | rg -q "${A}\b(chmod|chown)\b[^|;&]*-R[^|;&]*[[:space:]]/($ROOTS)$END" \
   && block "recursive perm change on a system dir: $cmd"
 
 exit 0
