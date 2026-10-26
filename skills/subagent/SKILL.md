@@ -77,6 +77,11 @@ Name the shape from the goal. A goal with two shapes is two seats.
 | research | bring back evidence from outside the tree | sonnet | high |
 | digest | compress a large input to what matters | sonnet | medium |
 
+For a review seat, ask `python3 ~/.claude/scripts/review-lane/review-lane.py pick`
+first. It probes codex, then gemini-4-argon, then falls back to a sonnet seat (add
+`--need opus` when the work calls for opus). After the review, record what it found
+with `review-lane.py record` so `review-lane.py report` can compare the lanes.
+
 Lane rules that override the table: a fable main does involved work itself and
 delegates only review, verification and cheap passes; codex takes build work behind
 a written spec and is then checked by a Claude seat (`/codex-handback`); a corpus too
