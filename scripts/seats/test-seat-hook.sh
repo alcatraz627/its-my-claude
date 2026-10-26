@@ -37,11 +37,27 @@ echo "result" > "$OUT"
 eq "sweep lands it once the output exists" "$(python3 "$HERE/seat" sweep)" "landed $sid: ok (landed by sweep: output exists)"
 eq "the landed outcome is ok" "$(field "$sid" outcome)" "ok"
 
+hdr2=$(python3 "$HERE/seat" header --role reviewer --model sonnet --output "$SEATS_DIR/out2.md" --goal "harness backgrounded it")
+sid2=$(printf '%s' "$hdr2" | sed -E 's/^\[seat (s-[0-9]{8}-[0-9]{6}-[0-9a-f]{4})\].*/\1/')
+p2="$hdr2
+review it"
+python3 -c 'import json,sys;print(json.dumps({"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"prompt":sys.argv[1],"model":"sonnet"}}))' "$p2" | hook >/dev/null
+python3 -c 'import json,sys;print(json.dumps({"hook_event_name":"PostToolUse","tool_name":"Agent","tool_input":{"prompt":sys.argv[1]},"tool_response":"Async agent launched successfully. The agent is working in the background."}))' "$p2" | hook
+eq "a seat the harness backgrounded is not landed at launch" "$(field "$sid2" state)" "dispatched"
+eq "and is marked background for the sweep" "$(field "$sid2" background)" "True"
+hdr3=$(python3 "$HERE/seat" header --role reviewer --model sonnet --output "$SEATS_DIR/out3.md" --goal "foreground")
+sid3=$(printf '%s' "$hdr3" | sed -E 's/^\[seat (s-[0-9]{8}-[0-9]{6}-[0-9a-f]{4})\].*/\1/')
+p3="$hdr3
+review it"
+python3 -c 'import json,sys;print(json.dumps({"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"prompt":sys.argv[1],"model":"sonnet"}}))' "$p3" | hook >/dev/null
+python3 -c 'import json,sys;print(json.dumps({"hook_event_name":"PostToolUse","tool_name":"Agent","tool_input":{"prompt":sys.argv[1]},"tool_response":"done, here are my findings"}))' "$p3" | hook
+eq "a foreground return still lands at once" "$(field "$sid3" state)" "landed"
+
 bare=$(python3 -c 'import json;print(json.dumps({"hook_event_name":"PreToolUse","tool_name":"Agent","tool_input":{"prompt":"x"*5000}}))')
 has "an unseated dispatch is warned, however long" "$(printf '%s' "$bare" | hook)" "seat header --role"
-eq "every dispatch is logged" "$(wc -l < "$SEATS_DIR/dispatch.jsonl" | tr -d ' ')" "2"
+eq "every dispatch is logged" "$(wc -l < "$SEATS_DIR/dispatch.jsonl" | tr -d ' ')" "4"
 has "the log records clauses" "$(head -n 1 "$SEATS_DIR/dispatch.jsonl")" '"nesting": true'
-has "weekly shows the seated share" "$(python3 "$HERE/seat" weekly)" "Agent dispatches, last 7 days: 2, seated 1 (50%)"
+has "weekly shows the seated share" "$(python3 "$HERE/seat" weekly)" "Agent dispatches, last 7 days: 4, seated 3 (75%)"
 
 trash "$SEATS_DIR" "$SEATS_DOMAIN" >/dev/null 2>&1
 printf '\n%d passed, %d failed\n' "$pass" "$fail"

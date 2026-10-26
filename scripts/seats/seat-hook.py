@@ -81,6 +81,18 @@ def main():
             json.dump(rec, f, indent=2)
         os.replace(tmp, rec_p)
     elif event == "PostToolUse" and not rec.get("background"):
+        # The harness can background a seat without run_in_background in the
+        # tool input, and then this call returns at launch. Read the response:
+        # a launch notice means the seat is still working, so leave it for the
+        # sweep instead of landing it "partial" before it has started.
+        resp = json.dumps(inp.get("tool_response") or "")
+        if re.search(r"async agent launched|working in the background", resp, re.I):
+            rec["background"] = True
+            tmp = rec_p + ".tmp"
+            with open(tmp, "w") as f:
+                json.dump(rec, f, indent=2)
+            os.replace(tmp, rec_p)
+            return 0
         outcome = "ok" if rec.get("output") and os.path.exists(rec["output"]) else "partial"
         subprocess.run([sys.executable, SEAT, "land", sid, "--outcome", outcome,
                         "--note", "landed by hook"], capture_output=True)
