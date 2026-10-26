@@ -56,6 +56,9 @@ check "awk with pipe in string"    quiet "awk '{print \$1}' /abs/f"
 echo
 echo "MUST STAY QUIET, shell constructs whose punctuation is syntax"
 check "until loop (the wake payload)" quiet 'until [ -f /tmp/x ]; do sleep 5; done; echo done'
+check "a loop keyword only as an argument still chains" fires 'echo for && ls'
+check "a keyword inside quotes still chains" fires 'git commit -m "fix the for loop" && git push'
+check "a loop inside \$( ) is not a top-level compound" fires 'echo "$(for f in a; do :; done)" && ls'
 check "for loop"                   quiet 'for r in a b c; do echo $r; done'
 check "if statement"               quiet 'if [ -f /tmp/x ]; then echo yes; fi'
 check "heredoc body with pipes"    quiet "$(printf 'cat >> /tmp/f <<%s\na | b && c; d\nROWS\n' 'ROWS')"

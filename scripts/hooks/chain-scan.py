@@ -102,16 +102,61 @@ def scan(cmd):
     return hits
 
 
+CHAIN = {"&&", "||", "|", "|&", ";"}
+OPEN, CLOSE = {"for", "while", "until", "if", "case", "select"}, {"done", "fi", "esac"}
+STARTERS = {"do", "then", "else", "elif", "!", "{"}
+
+
+def parsed_hits(cmd):
+    """Top-level chaining operators, read by the shared parser, or None if it cannot read cmd.
+
+    A command holding a loop or an if/case is exempt as a whole, as before: its
+    semicolons are syntax, and the owner's own wake payload is such a loop with an
+    `echo` after it. What changed is how a loop is recognised: only a keyword in
+    command position opens one, so `echo for && ls` still chains.
+    """
+    import importlib.util
+    import os
+    spec = importlib.util.spec_from_file_location("shellparse", os.environ.get(
+        "SHELLPARSE_UNDER_TEST", os.path.join(os.path.dirname(os.path.abspath(__file__)), "shellparse.py")))
+    sp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sp)
+    lx = sp.Lexer(cmd, 0).run()
+    if not lx.ok:
+        return None
+    hits, depth, at_start, compound = [], 0, True, False
+    for t in lx.toks:
+        if isinstance(t, sp.Op):
+            if depth == 0 and t.op in CHAIN:
+                hits.append("|" if t.op == "|&" else t.op)
+            at_start = t.op not in (")",)
+            continue
+        if isinstance(t, sp.Word) and at_start and t.quoted == "none":
+            if t.text in OPEN:
+                depth += 1
+                compound = True
+            elif t.text in CLOSE:
+                depth = max(0, depth - 1)
+            elif t.text in STARTERS:
+                continue
+        if isinstance(t, sp.Word) and t.raw:
+            at_start = False
+    return [] if compound else hits
+
+
 def main():
     cmd = sys.stdin.read()
     if not cmd.strip():
         return
-    # A shell loop or an if/case is ONE statement whose semicolons are syntax,
-    # not chaining. The owner's own wake payload is such a loop, and blocking
-    # those would be a false fire on a construct the rule never meant.
-    if re.search(r"\b(for|while|until|if|case)\b", cmd):
-        return
-    hits = scan(cmd)
+    try:
+        hits = parsed_hits(cmd)
+    except Exception:  # noqa: BLE001  a parser fault falls back to the walk below
+        hits = None
+    if hits is None:
+        # The parser could not read it: the old walk, with the old blanket loop exemption.
+        if re.search(r"\b(for|while|until|if|case)\b", cmd):
+            return
+        hits = scan(cmd)
     if not hits:
         return
     order, seen = [], set()
