@@ -20,6 +20,7 @@ import {
 } from "./lib.ts";
 import { wakeOrigin } from "./dp-wake.ts";
 import { IPC_DB, seenAgoByAlias, reachOf } from "./ipc-reach.ts";
+import { startTailnetListener } from "./tailnet.ts";
 import { compose as dpCompose, parse as dpParse, configOf as dpConfigOf } from "../decision-page/dp-core.ts";
 
 const portArg = process.argv.indexOf("--port");
@@ -2123,3 +2124,4 @@ const server = Bun.serve({
 // This file is server-owned (single-writer split), written once per boot.
 atomicWrite(SERVER_INFO, { port: server.port, pid: process.pid, startedAt: new Date().toISOString() }, "server-boot");
 console.log(`[kanban] serving on http://127.0.0.1:${server.port} (boards: ${Object.keys(registry().boards).length})`);
+startTailnetListener(server, server.port, DP_ROOT);
