@@ -115,7 +115,7 @@ Output path:
 Model plan:
   ledger+dossier → main agent · assembly only
   prosecution    → Agent(general-purpose) · model: opus · effort: high · isolation: worktree
-  presentation   → main agent · findings verbatim
+  presentation   → main agent · digest.py output verbatim, full table linked
 ```
 
 Opus is the judgment-seat ceiling per `rules/model-tier-routing.md`; high effort is
@@ -154,11 +154,25 @@ Run it when the owner asks for a non-Claude seat, or a cross-check on a high-sta
 ### 4. Present: verbatim, then dispositions
 
 Verify the report file exists (the return abstract is a pointer, not the artifact) and that it ends with the `Coverage:` and `Observations:` lines.
-Present the findings table **verbatim**. The parent must not soften, summarize away,
-or pre-filter findings, or the sycophancy this lane exists to bypass re-enters through
-the parent. You may append your own annotations _below_ the verbatim table (e.g. "I
-believe finding 3 misreads X because file:line"), clearly marked as the defendant's
-response.
+
+The parent must not soften, summarize away, or pre-filter findings, or the sycophancy
+this lane exists to bypass re-enters through the parent. The full six-column table is
+too wide for a terminal: pasting it gave the owner a 17k-character wall they could not
+read (i-dream, 2026-10-26). So the reply carries the digest, and the full table stays
+in the file:
+
+```bash
+python3 ~/.claude/skills/adversarial-review/digest.py <indictment.md>
+```
+
+Paste its output unchanged, inside the reply, before anything you add. It holds the
+report's verdict lines, one row per finding in the prosecutor's order (claims refuted,
+evidence tag, the prosecutor's own opening sentences of what is broken), the count of
+failed attacks, and the report's absolute path. Every word comes from the report, so
+no finding is dropped or reworded. Do not paste the six-column table. When the owner
+asks about a finding, quote that row from the file verbatim. You may add your own
+annotations _below_ the digest (e.g. "I believe finding 3 misreads X because
+file:line"), clearly marked as the defendant's response.
 
 Record the user's verdict per finding in a Dispositions table (fixed /
 deferred-with-owner / rejected-with-reason), same contract as /skeptical-review. If
