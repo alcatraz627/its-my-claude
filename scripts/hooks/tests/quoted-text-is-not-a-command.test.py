@@ -7,7 +7,7 @@ that exists to stop it (D33 audit, 2026-10-15: all six wrapper forms were
 allowed). A plain `echo "sudo rm"` must still be allowed, or the hook is dead.
 
 HOOK_UNDER_TEST points the suite at a mutated copy; the copy must sit in
-scripts/hooks/ so it finds shell-scan.py.
+scripts/hooks/ so it finds shellparse.py.
 """
 
 import json
@@ -40,6 +40,10 @@ MUST_BE_SILENT = [
     ("cat <<'EOF' | bash\nsudo rm x\nEOF", "heredoc piped to bash"),
     ('echo "sudo rm"; bash -c "sudo rm x"', "a mention beside a real wrapper"),
     ("sudo rm -rf /tmp/x", "a bare command (tiers decide)"),
+    ('claude-ipc send --to a "$(sudo rm x)"', "$( ) inside double quotes runs"),
+    ("echo `sudo rm x`", "a backtick runs"),
+    ("cat <<EOF > notes.md\n$(sudo rm x)\nEOF", "$( ) in an unquoted heredoc runs"),
+    ("echo 'sudo rm", "an unreadable command"),
 ]
 
 

@@ -646,6 +646,7 @@ class Builder:
             # Substitutions run wherever they sit, even in a dropped header.
             for w in words + [r.target for r in redirs if r.target is not None]:
                 for sv, body, off in w.substs:
+                    self.p.exec_bodies.append((sv, body))
                     self.parse(body, sv, depth + 1, seg_i, off)
             heads = [w.text for w in words[:1] if w.quoted == "none"]
             if case_pattern and op == ")":

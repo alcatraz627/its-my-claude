@@ -57,16 +57,20 @@ def glob_matches(glob: str, command: str) -> bool:
 
 
 def executed_texts(command: str) -> list[str]:
-    """Quoted text the shell would run (bash -c, eval, ssh, a heredoc fed to a shell).
+    """Quoted text the shell would run (bash -c, eval, ssh, $( ), a heredoc fed to a shell).
 
-    If the scanner cannot be loaded, the whole command counts as executed, which
-    makes this hook stay silent rather than allow something it cannot read.
+    If the parser cannot be loaded or cannot read the command, the whole command
+    counts as executed, which makes this hook stay silent rather than allow
+    something it cannot read.
     """
     try:
         here = os.path.dirname(os.path.abspath(__file__))
-        spec = importlib.util.spec_from_file_location("shell_scan", os.path.join(here, "shell-scan.py"))
+        spec = importlib.util.spec_from_file_location("shellparse", os.environ.get(
+            "SHELLPARSE_UNDER_TEST", os.path.join(here, "shellparse.py")))
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
+        if not mod.parse(command).ok:
+            return [command]
         return mod.exec_texts(command)
     except Exception:  # noqa: BLE001
         return [command]

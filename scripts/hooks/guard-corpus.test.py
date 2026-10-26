@@ -147,11 +147,13 @@ N = [  # id, command, cwd key, owning guard, expectation today
     ("N3", "echo $((1<<n))\nrm x", "plain", "safe-delete", "fire"),
     ("N4", "if true; then git push origin main; fi", "main", "git-push", "fire"),
     ("N5", 'bash -c "echo x > /etc/hosts"', "plain", "system-dir-writes", "xquiet"),
-    ("N6", 'claude-ipc send --to a "$(sudo rm x)"', "plain", "allow-claude-ipc", "xfire"),
+    ("N6", 'claude-ipc send --to a "$(sudo rm x)"', "plain", "allow-claude-ipc", "quiet"),
     ("N7", "rg -rn foo src/", "plain", "rg-replace-bundle", "fire"),
     ("N8", "echo for && ls", "plain", "command-chaining", "xquiet"),
-    # Found by this suite: the ask/deny-tier allow hook reads $( ) inside quotes as a mention.
-    ("N9", 'claude-ipc send --to a "$(sudo rm x)"', "plain", "quoted-text", "xfire"),
+    # Found by this suite: the ask/deny-tier allow hook read $( ) inside quotes as a mention.
+    ("N9", 'claude-ipc send --to a "$(sudo rm x)"', "plain", "quoted-text", "quiet"),
+    # Found by allow-claude-ipc's own suite: shlex kept `hi;` as one word, so the chain was allowed.
+    ("N10", "claude-ipc send --to peer hi; git push", "plain", "allow-claude-ipc", "quiet"),
 ]
 
 F_EXTRA = [  # false fires a second guard has on an F row's command
