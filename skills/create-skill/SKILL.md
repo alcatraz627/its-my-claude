@@ -41,13 +41,11 @@ it.
 
 ## Mode: subagent-prompt
 
-When the first argument is `subagent-prompt`, this skill writes the brief a sub-agent
-will receive instead of a SKILL.md. The whole mode, with the shape table, the six-line
-checklist, the section order and the traps, is in `subagent-prompt.md` beside this
-file; read it and follow it, then return here for nothing. Owner ruling 2026-08-26
-(decision page skills-0826, D5a): seed the structure from the shape of the goal, do not
-overconstrain, name what moves the needle, the pitfalls, and the claims to prove or
-contradict; ask the owner one batched question only when the checklist has blanks.
+Writing a sub-agent's brief moved to `/subagent` (its Compose section carries the shape
+table, the six-line checklist and the traps). When the first argument is
+`subagent-prompt`, run `/subagent` instead. When the skill you are writing dispatches
+seats of its own, have its seat step follow `/subagent`'s Compose and Land sections
+rather than writing a brief format of its own.
 
 ## Phase 1: what the skill is (spec-first)
 

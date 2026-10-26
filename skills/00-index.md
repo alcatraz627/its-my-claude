@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-10-22
+updated: 2026-10-26
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-10-22 15:36.
+Regenerated 2026-10-26 14:24.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -83,6 +83,7 @@ Regenerated 2026-10-22 15:36.
 | `preference-graduation` | user-only | Harvesting recurring preferences from atone, affirm, notes and checkpoints. Dedupes and files each signal to a glossary term, memory or rule after confirmation. Not for … |
 | `probe` | yes | A fix did not work or a cause is still a guess. Isolates the mechanism with a runnable probe before any fix. Not for defects whose cause is already confirmed. |
 | `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep that mines a large transcript corpus for candidate items with cheap mechanical passes, then refines through progressively … |
+| `quiz` | yes | Quizzes the owner on an agent-built artifact (spec, plan, diff, app, feature, analysis, deck, docs) in rounds of three graded questions; a wrong answer opens the part … |
 | `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports, then generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
 | `recommend` | yes | Answers what to do next on a session, project, or plan file as a call already made, splitting what it needs from you into gates you can clear today and defaults it took … |
 | `retro-dump` | yes | A past session ended without a core-dump (crash, context ran out). Spawns a headless resume that writes a mini checkpoint, one LLM call. Not for live sessions (use … |
@@ -92,6 +93,7 @@ Regenerated 2026-10-22 15:36.
 | `session-stats` | yes | Asked for session cost, tokens, tools, rate limits or context usage. Renders a full analytics report. Not for project or code metrics. |
 | `skeptical-review` | yes | Skeptically reviews the code changed this session by forking a fresh adversarial reviewer that grounds every finding in the actual tree, surrounding context, sibling … |
 | `ste-writing` | yes | Rewrites docs, READMEs, PR descriptions, error messages, release notes, runbooks and hook text into plain Simplified Technical English, strict for procedures and errors, … |
+| `subagent` | yes | Takes one sub-agent dispatch from decision to verified return: inline vs one seat vs fleet, a price line, lane and model, a seated brief, then waiting, landing and … |
 | `summarize-changes` | yes | A changelog of recent work is wanted by time, topic or source. Reads git, WAL, checkpoints, notes and the code itself. Not for PR bodies (use pr-description). |
 | `svg` | yes | Vector graphic wanted (icon, logo, diagram, favicon) or an SVG to clean up. Writes the SVG, render-checks it, runs svgo. Not for raster images (use generate-image). |
 | `tag` | user-only | Something worth keeping (rule, convention, term, note) must be filed in ~/.claude at its right home. Updates indices, promotes to CLAUDE.md only when tiers justify. Not … |

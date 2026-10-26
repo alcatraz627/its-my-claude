@@ -8,7 +8,7 @@ related:
   - rules/README.md
 tier: 0
 category: rules
-updated: 2026-10-21
+updated: 2026-10-26
 stale_after_days: 365
 ---
 
@@ -18,7 +18,7 @@ One line per rule in `rules/`. Scan it, then Read `rules/<name>.md` when a rule 
 `always` = loaded every session; `scoped` = not loaded, Read it when it applies.
 DERIVED from each rule's `brief:`; regenerate with `bash ~/.claude/scripts/rules-index.sh`.
 
-Regenerated 2026-10-21 00:47.
+Regenerated 2026-10-26 14:24.
 
 | Rule | Load | Gist |
 |------|------|------|
@@ -78,7 +78,7 @@ Regenerated 2026-10-21 00:47.
 | `structural-claim-without-reading-code` | always | Before asserting how a subsystem works (authority, data flow, hot path), name |
 | `structure-over-one-shotting` | scoped | Default to plan→implement→review on non-trivial work |
 | `sub-agent-outputs` | scoped | Dispatch prompts for material sub-agent work (research, analysis, audit, design) |
-| `subagent-dispatch-prompt` | always | Every sub-agent dispatch prompt carries four clauses |
+| `subagent-dispatch-prompt` | always | Every sub-agent dispatch prompt carries five clauses |
 | `subagent-fleet-discipline` | scoped | When a parallel sub-agent fleet hits a transient API throttle, salvage finished work |
 | `surface-hook-nudges-to-user` | scoped | When a PreToolUse hook injects an advisory nudge (additionalContext), surface |
 | `testing-patterns` | scoped | The 17 topic-tagged testing patterns from recurring mistakes |

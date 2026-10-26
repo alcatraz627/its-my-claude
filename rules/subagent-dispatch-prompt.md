@@ -1,5 +1,5 @@
 ---
-brief: Every sub-agent dispatch prompt carries four clauses: an explicit model pin, no nested sub-agents (or sonnet-or-lower if any), a scope-close line (ignore board or task auto-dispatch; stop when the scoped work is done), and an absolute output path written before returning. This file owns the wording; other rules point here.
+brief: Every sub-agent dispatch prompt carries five clauses. They are a model pin, no nested seats, a scope close, an output path written before returning, and one command per Bash call. This file owns the wording. /subagent walks the whole dispatch.
 triggers:
   - tool:Agent
   - topic:sub-agent
@@ -8,7 +8,7 @@ related:
   - rules/contain-subagent-token-sprawl.md
   - rules/model-tier-routing.md
   - rules/sub-agent-outputs.md
-  - skills/create-skill/subagent-prompt.md
+  - skills/subagent/SKILL.md
 tier: 1
 category: rules
 updated: 2026-09-18
