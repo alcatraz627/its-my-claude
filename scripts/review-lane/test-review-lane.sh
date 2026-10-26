@@ -21,6 +21,15 @@ printf '{"codex":{"ok":false,"detail":"x","at":%s},"gemini-4-argon":{"ok":false,
 has "both outside lanes down falls to sonnet" "$(python3 "$RL" pick)" "lane: sonnet"
 has "ab offers two lanes" "$(python3 "$RL" ab)" "B: opus"
 
+printf '{"codex":{"ok":true,"detail":"m","at":%s},"gemini-4-argon":{"ok":true,"detail":"g","at":%s}}' "$now" "$now" > /tmp/review-lane-probe.json
+python3 "$RL" lead gemini-4-argon >/dev/null
+out=$(python3 "$RL" pick)
+has "a set lead goes first even when codex is up" "$out" "lane: gemini-4-argon"
+has "and pick says codex is back" "$out" "codex is answering again"
+python3 "$RL" lead --reset >/dev/null
+has "reset restores codex first" "$(python3 "$RL" pick)" "lane: codex"
+has "lead with no lane reports the default" "$(python3 "$RL" lead)" "no lead set"
+
 python3 "$RL" record --lane sonnet --change repo#1 --found 4 --confirmed 3 --false-positive 1 >/dev/null
 python3 "$RL" record --lane sonnet --change repo#2 --found 6 --confirmed 3 --false-positive 3 >/dev/null
 has "report sums a lane's reviews and precision" "$(python3 "$RL" report)" "sonnet                 2     10          6       4        60%"

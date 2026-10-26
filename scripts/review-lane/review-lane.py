@@ -7,6 +7,7 @@ is down, capped or refusing its model falls through instead of burning a dispatc
   review-lane.py pick [--need opus] [--fresh]   print the first usable lane and how to run it
   review-lane.py probe [--fresh]                probe every lane, print each verdict
   review-lane.py ab                             two lanes to run on the same diff, to compare
+  review-lane.py lead [<lane> | --reset]        put one lane first for now; --reset restores the default order
   review-lane.py record --lane L --change REF --found N --confirmed N --false-positive N [--note T]
   review-lane.py report [--days N]              findings per lane: found, confirmed, false positives
 
@@ -27,6 +28,9 @@ CACHE = "/tmp/review-lane-probe.json"
 TTL = 1800
 TELEMETRY = os.path.join(HOME, ".claude", "review-lane", "telemetry.jsonl")
 CODEX_CONFIG = os.path.join(HOME, ".codex", "config.toml")
+# A temporary "this lane goes first" preference, kept out of the code so it is
+# one command to set and one to undo.
+LEAD = os.path.join(HOME, ".claude", "review-lane", "lead.json")
 PROBE = "Reply with the single word OK and nothing else."
 
 
@@ -109,9 +113,42 @@ def probes(fresh):
     return out
 
 
+def read_lead():
+    try:
+        return json.load(open(LEAD)).get("lead")
+    except (OSError, ValueError):
+        return None
+
+
+def cmd_lead(a):
+    if a.reset:
+        try:
+            os.remove(LEAD)
+        except FileNotFoundError:
+            pass
+        print("lead reset: the default order applies (" + ", ".join(n for n, _, _ in LANES if n != "opus") + ")")
+        return 0
+    if not a.lane:
+        cur = read_lead()
+        print(f"lead: {cur}" if cur else "no lead set: the default order applies")
+        return 0
+    os.makedirs(os.path.dirname(LEAD), exist_ok=True)
+    json.dump({"lead": a.lane, "set": dt.datetime.now().isoformat(timespec="seconds"), "note": a.note or ""},
+              open(LEAD, "w"))
+    print(f"lead: {a.lane} goes first until `review-lane.py lead --reset`")
+    return 0
+
+
 def cmd_pick(a):
     res = probes(a.fresh)
     order = [n for n, _, _ in LANES if n != "opus"]
+    lead = read_lead()
+    if lead and lead in order:
+        order = [lead] + [n for n in order if n != lead]
+        # The lead is a temporary preference, so say when the default leader is back.
+        default = LANES[0][0]
+        if lead != default and res[default]["ok"]:
+            print(f"note: {default} is answering again; `review-lane.py lead --reset` puts it back first")
     if a.need == "opus":
         order = ["opus"]
     for name in order:
@@ -181,6 +218,8 @@ def main(argv):
     pk = sub.add_parser("pick"); pk.add_argument("--need", choices=["opus"]); pk.add_argument("--fresh", action="store_true")
     pr = sub.add_parser("probe"); pr.add_argument("--fresh", action="store_true")
     sub.add_parser("ab")
+    ld = sub.add_parser("lead"); ld.add_argument("lane", nargs="?", choices=[n for n, _, _ in LANES if n != "opus"])
+    ld.add_argument("--reset", action="store_true"); ld.add_argument("--note")
     rc = sub.add_parser("record")
     rc.add_argument("--lane", required=True, choices=[n for n, _, _ in LANES]); rc.add_argument("--change", required=True)
     for k in ("--found", "--confirmed", "--false-positive"):
@@ -188,7 +227,8 @@ def main(argv):
     rc.add_argument("--note")
     rp = sub.add_parser("report"); rp.add_argument("--days", type=int, default=30)
     a = p.parse_args(argv)
-    return {"pick": cmd_pick, "probe": cmd_probe, "ab": cmd_ab, "record": cmd_record, "report": cmd_report}[a.cmd](a)
+    return {"pick": cmd_pick, "probe": cmd_probe, "ab": cmd_ab, "record": cmd_record, "report": cmd_report,
+            "lead": cmd_lead}[a.cmd](a)
 
 
 if __name__ == "__main__":
