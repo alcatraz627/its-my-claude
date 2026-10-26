@@ -10,13 +10,19 @@
 # Card file, ~/.claude/handoffs/<name>.json:
 #   name, title, prompt, cwd, model, raised_at, carried (times re-raised while
 #   still open), done_at (absent while open)
-# Tag file, ~/.claude/handoffs/tags/<ts>-<slug>.md: one note for the next
-#   weekly session to pick up; the session deletes each tag it handles.
+# Tag file, ~/.claude/handoffs/tags/<ts>-<slug>.md: one note for the weekly
+#   session, markdown with frontmatter (format: features/weekly-tags.md). The
+#   session closes each tag it handles with close-tag, which counts down
+#   `times`, re-dates it a week out or trashes it, and tells `reply-to`.
 #
 # Usage:
 #   handoff.sh raise <name> <title> <cwd> <model> <prompt-file>
 #   handoff.sh done  <name>          mark the card done (the session's last step)
-#   handoff.sh tag   "<note>"        queue a note for the next weekly session
+#   handoff.sh tag   "<note>" [--title T] [--kind review|decide|do|fyi] [--after YYYY-MM-DD]
+#                    [--times N] [--domain D] [--reply-to ALIAS|PROJECT|MSG] [--ref R]...
+#                                    queue a note for the weekly session
+#   handoff.sh tags                  queued tags, due ones first, with their fields
+#   handoff.sh close-tag <file> "<outcome>"   after handling: count down, re-date or trash, reply
 #   handoff.sh list                  open cards and queued tags
 set -uo pipefail
 
@@ -58,11 +64,85 @@ case "$cmd" in
     echo "done: $name"
     ;;
   tag)
-    note="${1:?note}"
-    slug=$(printf '%s' "$note" | tr -cs 'A-Za-z0-9' '-' | cut -c1-40)
+    note="${1:?note}"; shift
+    title="" kind="review" after="" times=1 domain="" replyto="" refs=""
+    while [[ $# -gt 0 ]]; do case "$1" in
+      --title) title="$2"; shift 2 ;;
+      --kind) kind="$2"; shift 2 ;;
+      --after) after="$2"; shift 2 ;;
+      --times) times="$2"; shift 2 ;;
+      --domain) domain="$2"; shift 2 ;;
+      --reply-to) replyto="$2"; shift 2 ;;
+      --ref) refs="${refs:+$refs, }$2"; shift 2 ;;
+      *) echo "handoff tag: unknown flag $1" >&2; exit 2 ;;
+    esac; done
+    case "$kind" in review|decide|do|fyi) ;; *) echo "handoff tag: --kind is review, decide, do or fyi" >&2; exit 2 ;; esac
+    [[ "$times" =~ ^[1-9][0-9]*$ ]] || { echo "handoff tag: --times is a positive number" >&2; exit 2; }
+    [[ -z "$after" || "$after" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]] || { echo "handoff tag: --after is YYYY-MM-DD" >&2; exit 2; }
+    [[ -n "$title" ]] || title=$(printf '%s' "$note" | head -n 1 | cut -c1-80)
+    # Who tagged it: the ipc alias the session registered, else its session id.
+    sid="${CLAUDE_CODE_SESSION_ID:-}"
+    by=""
+    [[ -n "$sid" ]] && by=$(claude-ipc peers 2>/dev/null \
+      | jq -r --arg s "$sid" '[.peers[] | select(.sessionId == $s and (.service | not))][0].alias // empty' 2>/dev/null)
+    slug=$(printf '%s' "$title" | tr -cs 'A-Za-z0-9' '-' | cut -c1-40)
     f="$TAGS/$(date +%Y%m%d-%H%M%S)-$slug.md"
-    printf '%s\n' "$note" > "$f"
+    {
+      echo "---"
+      echo "title: $title"
+      echo "kind: $kind"
+      [[ -n "$after" ]] && echo "after: $after"
+      echo "times: $times"
+      [[ -n "$domain" ]] && echo "domain: $domain"
+      [[ -n "$sid" ]] && echo "sessions: ${sid:0:8}${by:+ ($by)}"
+      [[ -n "$replyto" ]] && echo "reply-to: $replyto"
+      [[ -n "$refs" ]] && echo "refs: $refs"
+      echo "created: $(now)"
+      echo "---"
+      echo
+      printf '%s\n' "$note"
+    } > "$f"
     echo "tagged: $f"
+    ;;
+  tags)
+    today=$(date +%Y-%m-%d)
+    found=0
+    for f in "$TAGS"/*.md; do
+      [[ -f "$f" ]] || continue; found=1
+      fm() { awk -v k="$1" 'NR==1&&$0!="---"{exit} NR>1&&$0=="---"{exit} NR>1{ if (index($0, k": ")==1) { print substr($0, length(k)+3); exit } }' "$f"; }
+      a=$(fm after); due="due"; [[ -n "$a" && "$a" > "$today" ]] && due="after $a"
+      printf '%-12s %-7s x%-2s %-18s %s\n    %s\n' "$due" "$(fm kind)" "$(fm times)" "$(fm reply-to)" "$(fm title)" "$f"
+    done
+    [[ "$found" = 1 ]] || echo "no tags queued"
+    ;;
+  close-tag)
+    f="${1:?tag file}"; outcome="${2:?outcome}"
+    [[ -f "$f" ]] || { echo "handoff: no tag file $f" >&2; exit 1; }
+    times=$(awk 'NR>1&&$0=="---"{exit} /^times: /{print $2; exit}' "$f"); times="${times:-1}"
+    replyto=$(awk 'NR>1&&$0=="---"{exit} /^reply-to: /{sub(/^reply-to: /,""); print; exit}' "$f")
+    title=$(awk 'NR>1&&$0=="---"{exit} /^title: /{sub(/^title: /,""); print; exit}' "$f")
+    if [[ "$times" -gt 1 ]]; then
+      next=$(date -v+7d +%Y-%m-%d)
+      awk -v t="$((times-1))" -v a="$next" -v o="$outcome" -v d="$(date +%Y-%m-%d)" '
+        NR==1 {print; next}
+        !done && $0=="---" { if (!had) print "after: " a; print; done=1; print ""; print "Session " d ": " o; next }
+        !done && /^times: / { print "times: " t; next }
+        !done && /^after: / { print "after: " a; had=1; next }
+        { print }' "$f" > "$f.tmp" && mv -f "$f.tmp" "$f"
+      echo "kept for $((times-1)) more session(s), next after $next: $f"
+    else
+      trash "$f" 2>/dev/null || mv -f "$f" "$DIR/history-tag-$(basename "$f")"
+      echo "closed: $f"
+    fi
+    # Best effort: tell whoever asked. An alias, a project path or a message id.
+    if [[ -n "$replyto" ]]; then
+      msg="weekly session handled \"$title\": $outcome"
+      case "$replyto" in
+        msg-*) claude-ipc reply "$replyto" --from gcc-weekly "$msg" >/dev/null 2>&1 ;;
+        /*|~*) claude-ipc send --to-project "${replyto/#\~/$HOME}" --from gcc-weekly --no-reply-expected "$msg" >/dev/null 2>&1 ;;
+        *) claude-ipc send --to "$replyto" --from gcc-weekly --no-reply-expected "$msg" >/dev/null 2>&1 ;;
+      esac && echo "told $replyto" || echo "could not reach $replyto (left in the report)"
+    fi
     ;;
   list)
     for c in "$DIR"/*.json; do
@@ -72,5 +152,5 @@ case "$cmd" in
     n=$(find "$TAGS" -name '*.md' | wc -l | tr -d ' ')
     echo "tags queued for the next weekly session: $n"
     ;;
-  *) echo "usage: handoff.sh raise|done|tag|list (see header)" >&2; exit 2 ;;
+  *) echo "usage: handoff.sh raise|done|tag|tags|close-tag|list (see header)" >&2; exit 2 ;;
 esac
