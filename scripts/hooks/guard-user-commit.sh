@@ -20,10 +20,11 @@
 #   - the worktree's toplevel contains .claude/require-user-commit (a tracked
 #     marker file — committed once, shared by all worktrees via git).
 #
-# Known over-block surface (accepted; the gate is meant to be hard): any Bash
-# command string in a protected repo that contains a git...commit shape blocks,
-# including strings that merely mention it. Staging (git add), diffing, status,
-# push of existing commits are all untouched — only commit creation is gated.
+# Commands are read through shellparse.py, so a commit inside bash -c, eval or
+# if/then is gated and a commit named in an echo or a heredoc is not. Only a
+# command the parser cannot read falls back to matching the raw string, where a
+# mention can still block. Staging (git add), diffing, status and pushing
+# existing commits are untouched; only commit creation is gated.
 set -uo pipefail
 
 LIST="$HOME/.claude/protected-repos.list"
@@ -37,6 +38,18 @@ cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 
 # git <flags> commit — as a subcommand, tolerating -C/-c/long flags before it.
 GIT_COMMIT_RE='(^|[;&|[:space:](])git([[:space:]]+-C[[:space:]]+[^[:space:]]+|[[:space:]]+-c[[:space:]]+[^[:space:]]+|[[:space:]]+--[[:alnum:]-]+(=[^[:space:]]*)?)*[[:space:]]+commit([[:space:]]|$|")'
+[[ "$cmd" == *commit* ]] || exit 0
+# Read the commands the shell would run (shellparse.py), one per line, so a
+# commit named in an echo or a heredoc is a mention and `bash -c "git commit"`
+# is a commit. A command the parser cannot read is judged on the raw string.
+segs=$(printf '%s' "$cmd" | tr ';\n' '\n\n' | sed -E 's/&&|\|\|/\n/g')
+if norm=$(printf '%s' "$cmd" | python3 "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/shellparse.py" lines 2>/dev/null); then
+  cmd=$(printf '%s\n' "$norm" | rg '^(cd|git) ' 2>/dev/null)
+  segs="$cmd"
+  # One command per line: git must start the line, or a quoted "; git commit"
+  # inside an argument would count.
+  GIT_COMMIT_RE="^${GIT_COMMIT_RE#*\)}"
+fi
 printf '%s' "$cmd" | grep -qE "$GIT_COMMIT_RE" || exit 0
 
 # ── Resolve the repo the commit would land in ────────────────────────────────
@@ -56,7 +69,7 @@ while IFS= read -r seg; do
   cd_opt=$(printf '%s' "$seg" | sed -nE 's/^[[:space:]]*cd[[:space:]]+([^[:space:]]+).*/\1/p' | head -1)
   [ -n "$cd_opt" ] && seg_cd=$(expand_tilde "$cd_opt")
 done <<EOF
-$(printf '%s' "$cmd" | tr ';\n' '\n\n' | sed -E 's/&&|\|\|/\n/g')
+$segs
 EOF
 [ -n "$target" ] || exit 0
 

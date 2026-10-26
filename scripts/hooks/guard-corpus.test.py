@@ -57,7 +57,7 @@ GUARDS = {
 }
 ALLOW_ONLY = {"quoted-text", "allow-claude-ipc"}
 # Guards that read commands through shellparse today. Every F row must pass all of them.
-MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy", "repo-visibility", "curl-post-auth"}
+MIGRATED = {"safe-delete", "git-push", "github-agent-marker", "guard-policy", "repo-visibility", "curl-post-auth", "user-commit"}
 
 # The trailer is assembled at run time: the ai-signature Write hook refuses the literal in any file.
 TRAILER = "Co-Authored" + "-By: Claude <noreply@anthropic.com>"
@@ -92,7 +92,7 @@ F = [  # id, command, cwd key, guard named in the plan, expectation for that gua
     ("F27", "echo 'writes to ~/.claude/.claude/ are blocked' > /tmp/note.txt", "plain", "block-nested-claude", "quiet"),
     ("F28", 'echo "gh repo create versable-git/x --public is banned"', "plain", "repo-visibility", "quiet"),
     ("F29", "echo 'curl -X POST -H \"Authorization: Bearer abc\" https://api.example.com'", "plain", "curl-post-auth", "quiet"),
-    ("F30", 'echo "next step: git commit"', "protected", "user-commit", "xfire"),
+    ("F30", 'echo "next step: git commit"', "protected", "user-commit", "quiet"),
     ("F31", 'rg -n "mv ~/.claude/old" notes.md', "plain", "migrate-hint", "quiet"),
 ]
 
