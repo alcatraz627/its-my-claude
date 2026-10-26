@@ -35,6 +35,17 @@ blocked "unlink notes.txt"
 blocked 'bash -c "rm notes.txt"'
 blocked "sh -c 'rm -rf build'"
 
+# Inside shell keywords (missed until 2026-10-26: the parser did not peel them)
+blocked 'for f in a b; do rm $f; done'
+blocked '{ rm notes.txt; }'
+blocked 'if true; then rm notes.txt; fi'
+blocked 'if true; then :; else rm notes.txt; fi'
+blocked 'while false; do :; done; until true; do rm x; done'
+blocked '! rm notes.txt'
+blocked 'if rm notes.txt; then :; fi'
+allowed 'for f in a b; do echo rm $f; done'
+allowed 'if true; then echo "rm it"; fi'
+
 # Mentions and look-alikes stay silent
 allowed 'echo "do not rm -rf the repo"'
 allowed 'git commit -m "remove rm usage"'

@@ -32,6 +32,9 @@ import sys
 
 SHELLS = {"bash", "sh", "zsh", "dash", "ksh"}
 PREFIXES = {"command", "builtin", "exec", "env", "sudo", "doas", "nohup", "time", "nice"}
+# Shell keywords that open a compound command: the word after one is a command
+# the shell runs (`do rm x`, `then git push`, `{ rm x; }`, `! rm x`).
+KEYWORDS = {"do", "then", "else", "elif", "if", "while", "until", "!", "{"}
 MAX_DEPTH = 5
 XARGS_WITH_VALUE = {"-I", "-n", "-P", "-L", "-d", "-E", "-s", "-J", "-R", "-S"}
 REDIRECT = re.compile(r"^\d*[<>&]")
@@ -163,11 +166,11 @@ def tokenize_segment(seg):
 
 
 def peel_prefixes(argv):
-    """Drop env assignments and wrapper words (env, sudo, command ...) from the front."""
+    """Drop env assignments, shell keywords and wrapper words (env, sudo, command ...) from the front."""
     i = 0
     while i < len(argv):
         w = argv[i]
-        if ASSIGNMENT.match(w):
+        if ASSIGNMENT.match(w) or w in KEYWORDS:
             i += 1
         elif w.rsplit("/", 1)[-1] in PREFIXES:
             i += 1

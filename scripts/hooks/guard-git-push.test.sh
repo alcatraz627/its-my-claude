@@ -47,6 +47,8 @@ gated "$F" "git push origin master" "explicit master from a feature checkout"
 
 # Spellings that used to slip past the pattern (D33 audit, 2026-10-15):
 gated "$R" 'bash -c "git push origin main"' "bash -c wrapper"
+gated "$R" 'if true; then git push origin main; fi' "push inside if/then"
+gated "$R" 'for r in origin; do git push $r main; done' "push inside a for loop"
 gated "$R" "sh -c 'git push origin main'" "sh -c wrapper"
 gated "$R" "/usr/bin/git push origin main" "absolute path to git"
 gated "$R" "git push origin +main" "force-refspec +main"
