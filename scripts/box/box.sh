@@ -22,6 +22,10 @@ SELF=$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || printf '%s' "${BASH_SOURCE
 SELF_DIR=$(cd "$(dirname "$SELF")" && pwd)
 VOCAB="${BOX_VOCAB:-$SELF_DIR/vocab.tsv}"
 WIDTH=72
+# The action line's lead glyph and the reference line's marker. One place, so a
+# change of glyph is one edit; BOX_ACT and BOX_REF override them for a trial.
+ACT_GLYPH="${BOX_ACT:-👉}"
+REF_GLYPH="${BOX_REF:-📎}"
 
 die() {
   printf 'box: %s\n' "$1" >&2
@@ -105,8 +109,8 @@ compose  box <kind> <name> --body "…" --action "…" [--ref <abs-path>]…
          [--attr "…"] [--kv "k:v"]… [--count N] [--seal "…"] [--block|--light]
 tag      box tag <kind> "<text>"     tag-tier kinds never grow rails
 skeleton box <kind> --template
-rules    the → line is what makes it a box · body caps ~6 lines, digest +
-         ▸ ref past that · paths absolute, one per line, nothing after them
+rules    the 👉 action line is what makes it a box · body caps ~6 lines, digest +
+         📎 ref past that · paths absolute, one per line, nothing after them
 EOF
 }
 
@@ -167,9 +171,9 @@ render_box() {
   [ -n "$kv" ] && emit_kv "$kv" "$V"
   local r
   for r in "$@"; do
-    [ -n "$r" ] && printf '%s ▸ %s\n' "$V" "$r"
+    [ -n "$r" ] && printf '%s %s %s\n' "$V" "$REF_GLYPH" "$r"
   done
-  [ -n "$action" ] && wrap_rail "→ $action" "$V"
+  [ -n "$action" ] && wrap_rail "$ACT_GLYPH $action" "$V"
 
   if [ -n "$seal" ]; then
     local s="$BL$H ✅ $seal "
@@ -240,7 +244,7 @@ if [ -z "$ACTION" ] && [ -z "$BODY" ] && [ -z "$KV" ]; then
 fi
 if [ -z "$ACTION" ] && [ "$RAW" = "0" ]; then
   case "$BODY$KV" in
-    *"→"*) : ;;  # body carries its own arrow line
+    *"→"*|*"$ACT_GLYPH"*) : ;;  # body carries its own action line
     *) die "a box without an action line is ambient context in a costume" \
       "add --action \"<who does what next>\", or if nothing is owed compose a
 line-tag:  box tag <tag-kind> \"<text>\"   (box list shows tag-tier kinds)" ;;

@@ -704,11 +704,18 @@ on a strong signal if this step is skipped), so a missed contribution is never l
 
 ## Phase 4: close
 
-finalize's render is the closing statement, with the checkpoint path as a `file` row
-and the paste-ready resume line (`/catchup at <checkpoint path>`). Do not follow it
-with a summary box. Say only what the render cannot: an unverified claim, a decision
-the owner owes, a `DECIDE:` you resolved. End with one line naming the path forward:
-`/clear` then the resume line.
+finalize's render lands in tool output, which the TUI collapses, so the owner sees
+the closing record only when the reply carries it (owner, 2026-10-26). Close with
+one 💾 dump box pasted into the reply in a code fence:
+
+```bash
+bash ~/.claude/scripts/box/box.sh dump "<session id> · <alias>" --attr "<context %>" \
+  --body "$(printf 'carries       <commits, open tasks, rulings>\nnext action   <the Resume Contract next action>\nwaits on you  <owner gate, or nothing>\nresume with   /catchup at the path below')" \
+  --ref "<absolute checkpoint path>" --action "Run /clear, then /catchup at the path above"
+```
+
+Then say only what the box cannot: an unverified claim, a decision the owner owes,
+a `DECIDE:` you resolved.
 
 ## Notes
 

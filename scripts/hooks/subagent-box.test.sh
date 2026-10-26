@@ -51,13 +51,13 @@ printf '%s' "$d" | rg -q "[a-z]{2,} …" && ok "the cut lands after a whole word
 printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
 l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | ev)
 printf '%s' "$l" | rg -q "goal: golden review" && ok "landing names the goal" || ko "landing lost the goal: $l"
-printf '%s' "$l" | rg -q "→ output NOT written" && ok "landing says the file is missing" || ko "missing file not flagged: $l"
+printf '%s' "$l" | rg -q "👉 output NOT written" && ok "landing says the file is missing" || ko "missing file not flagged: $l"
 printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' "$SID" | bash "$BX" >/dev/null
 d=$(ev < "$T/pre.json"); echo "done" > "$OUTF"
 printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
 l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | ev)
-printf '%s' "$l" | rg -q "→ output written" && ok "landing says the file was written" || ko "written file not shown: $l"
-printf '%s' "$l" | rg -qF "▸ $OUTF" && ok "the path is absolute on its own line" || ko "path not absolute: $l"
+printf '%s' "$l" | rg -q "👉 output written" && ok "landing says the file was written" || ko "written file not shown: $l"
+printf '%s' "$l" | rg -qF "📎 $OUTF" && ok "the path is absolute on its own line" || ko "path not absolute: $l"
 n=$(body_lines "$l"); [ "$n" -le 3 ] && ok "the landing is at most 3 lines (goal, path, next step)" || ko "landing grew to $n lines"
 printf '%s' "$l" | rg -q "ran [0-9]+s" && ok "a short run shows seconds, not 0m" || ko "duration: $l"
 

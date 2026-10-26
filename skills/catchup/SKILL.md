@@ -128,13 +128,22 @@ briefing cites them one line each.
 
 ## Phase 3: the briefing, status first
 
-Write the briefing data to `/tmp/catchup-data-<session-id>.json` and render it:
+The briefing is one 🧭 catchup box, 72 wide and colourless, so it survives being
+pasted into the reply (owner, 2026-10-26: the old render was a raw tool-output
+dump the TUI truncated). Compose it with `box.sh`, one fact per body line:
 
 ```bash
-/bin/bash ~/.claude/scripts/render/trace.sh /tmp/catchup-data-<session-id>.json --kind catchup
+bash ~/.claude/scripts/box/box.sh catchup "<checkpoint name>" --attr "<N open · M for you>" \
+  --body "$(printf 'resumed from  <name>, dumped <age>, <N> done\nnext          <next action>\nwaits on you  <owner gate, or nothing>\ndrift         <branch, dirty, commits since>\nauth carried  <verbatim grant · target now>')" \
+  --ref "<absolute checkpoint path>" --action "<what you are starting; say stop to redirect>"
 ```
 
-Order and content (keys in REFERENCE §3.1):
+Keep the body to about six lines; anything past that (the full done list, every
+fence) goes in plain lines under the box. The trace.sh render
+(`~/.claude/scripts/render/trace.sh <data.json> --kind catchup`) stays available
+for the long form when the owner asks for it.
+
+What the lines hold (keys in REFERENCE §3.1):
 
 1. `done`: up to six short lines from gather's done list, "as of dump" unless
    re-checked.
@@ -158,10 +167,10 @@ Then the task table, below the briefing, as the tool prints it (owner, 2026-08-1
 python3 ~/.claude/scripts/goals/views/path.py --goal <goal id from the contract>
 ```
 
-The render and the table are the whole report. The TUI collapses long tool output
-to a couple of lines, so the owner may never see the render itself: copy its
-lines into the reply as plain text, unchanged and without restating them in
-prose. Nothing after them except the Phase 4 line. No Insight or star blocks, no restated summary, no "the briefing above shows"
+The box and the table are the whole report. The TUI collapses long tool output
+to a couple of lines, so the owner never sees a box left in tool output: paste
+its lines into the reply inside a code fence, unchanged, without restating them
+in prose. Nothing after them except the Phase 4 line. No Insight or star blocks, no restated summary, no "the briefing above shows"
 prose.
 
 ## Phase 4: continue or ask

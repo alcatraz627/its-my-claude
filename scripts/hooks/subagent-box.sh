@@ -112,7 +112,7 @@ print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
     if [ -n "$lout" ] && [ -x "$HOME/.claude/scripts/box/box.sh" ]; then
       if [ -s "$lout" ]; then act="output written; read it before using what the seat said"
       else act="output NOT written: check the seat before relying on it"; fi
-      box=$(printf '%s\n→ %s\n' "$body" "$act" | "$HOME/.claude/scripts/box/box.sh" landing "${typ:-unknown}" \
+      box=$(printf '%s\n👉 %s\n' "$body" "$act" | "$HOME/.claude/scripts/box/box.sh" landing "${typ:-unknown}" \
         --attr "ran $dur" --ref "$lout" 2>/dev/null) || box=""
     fi
     [ -n "$box" ] || box=$(printf '%s\n' "$body" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
