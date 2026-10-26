@@ -179,10 +179,13 @@ def setup_dirs():
                             "GIT_COMMITTER_NAME": "t", "GIT_COMMITTER_EMAIL": "t@t"})
     os.makedirs(os.path.join(prot, ".claude"))
     open(os.path.join(prot, ".claude", "require-user-commit"), "w").close()
-    # Every policy reads "ask", so the owner's live menu-bar switches cannot turn a gate off mid-suite.
+    # Every policy reads "block", so the owner's live menu-bar switches cannot turn a gate off
+    # mid-suite. Not "ask": the ask path writes a real pending approval under ~/.claude/.policy-ask
+    # that the Switchboard panel shows the owner (it did, 2026-10-26, and was approved).
     stub = os.path.join(root, "pol-stub.sh")
     with open(stub, "w") as fh:
-        fh.write('#!/bin/bash\n[ "$1" = get ] && echo ask\nexit 0\n')
+        # git.commit stays allow: F rows hold real commits whose messages are the mention under test.
+        fh.write('#!/bin/bash\n[ "$1" = get ] || exit 0\ncase "$2" in git.commit) echo allow;; *) echo block;; esac\n')
     os.chmod(stub, 0o755)
     return root, {"plain": plain, "main": main, "protected": prot, "pol": stub}
 
