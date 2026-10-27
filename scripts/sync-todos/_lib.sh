@@ -33,7 +33,7 @@ sync_notes_dir() {
 }
 
 # The `_active.md` convenience symlink (most-recently-initialised session's doc).
-# This is a POINTER for humans + a fallback for readers — NEVER a write target,
+# This is a POINTER for humans + a fallback for readers: NEVER a write target,
 # because all same-dir sessions would share it (realpath collapse). Writers use
 # sync_session_doc_path instead.
 sync_workspace_path() {

@@ -432,12 +432,12 @@ reported where it fought back. Full report and its unedited feedback in
 `design/`. Six asks, ranked by it, verdicts mine.
 
 1. **A milestone should be an object, not a tag** `[spine]` **RULED YES,
-   owner 2026-08-26 — BUILT 2026-08-26.** A registry kind in `kinds.js`,
+   owner 2026-08-26: BUILT 2026-08-26.** A registry kind in `kinds.js`,
    stored in `plan.json`, with `kanban.sh milestone add|goal|doc|order|done|
    reopen|rm`, `/api/milestone`, `/api/milestones`, and a hub view.
    Membership is deliberately still the `milestone:` tag, so the showcase
    board's existing M1 picked up its ten cards with no migration, and
-   `milestone done M1` shipped it and moved three cards in one command —
+   `milestone done M1` shipped it and moved three cards in one command:
    the seven-by-hand moves this ask was about. Original text follows.** Becomes a registry kind. Owner's note: *"as many plans
    and reference docs per entity is fine"*, so an entity carries N docs rather
    than one.** Milestones have an order, a goal sentence and a done
@@ -470,7 +470,7 @@ dependency, nothing carries the sibling relationship).
 transitions, read by `kanban.sh changed --since` and `/api/changes`. It is
 deliberately not derived from card timestamps: a derivation reports only what
 the current state implies, so a card that went to active and back reads as
-never having moved, and a deleted card leaves no trace — which are the two
+never having moved, and a deleted card leaves no trace: which are the two
 changes anyone actually asks about. It also distinguishes "nothing changed in
 this window" from "nothing was ever recorded".
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Open a Ghostty window that starts a FRESH Claude Code session with a chosen
-# model + permission mode — safely, from a scheduled (launchd) context. Sibling
+# model + permission mode: safely, from a scheduled (launchd) context. Sibling
 # of launch-claude-resume.sh; that one resumes an existing session by UUID, this
 # one boots a new session (no --resume) and pins the model (e.g. claude-fable-5).
 #
@@ -9,7 +9,7 @@
 # session's hooks/tools need). We still exec claude by ABSOLUTE PATH (never relying
 # on a PATH lookup) and source ~/.local/bin/env defensively/idempotently, so nothing
 # breaks even if the profile changes. (launchd's own env is bare; the Ghostty login
-# shell is what restores PATH — not this env-source, which is belt-and-suspenders.)
+# shell is what restores PATH: not this env-source, which is belt-and-suspenders.)
 #
 # Permission mode is a REQUIRED arg (no silent default): pass acceptEdits for an
 # audit-style run (auto-accepts edits, still gates Bash), or default / plan.
@@ -42,8 +42,8 @@ fi
 # printf %q keeps every argument a single token when zsh re-parses the string.
 # exec -a claude: force argv[0]="claude" even though we exec the ABSOLUTE binary
 # path (needed so a launchd job finds it, §PATH note above). Without this, the
-# process presents as `/…/.local/bin/claude …`, and tools that key on argv[0] —
-# notably the claude-instances widget's scanner — don't recognise it as a session.
+# process presents as `/…/.local/bin/claude …`, and tools that key on argv[0]:
+# notably the claude-instances widget's scanner \u2014 don't recognise it as a session.
 inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec -a claude $(printf %q "$CLAUDE") --permission-mode $(printf %q "$PERM") --model $(printf %q "$MODEL")"
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
 

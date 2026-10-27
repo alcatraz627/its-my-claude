@@ -1,4 +1,4 @@
-# callout-gate — the owner's own sentences, as checks that fail by themselves
+# callout-gate: the owner's own sentences, as checks that fail by themselves
 
 Parked sketch, not wired into anything. Owner ruling 2026-09-01: "keep it as
 something to reuse later".

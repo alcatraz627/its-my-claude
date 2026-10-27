@@ -384,7 +384,7 @@ typed corner arrows became one drawn `EXT_ICON`, and **`test-charter.sh` was
 widened in the same change** rather than left behind the rule: its §5 row read
 only a button whose ENTIRE content is a dingbat, so both arrows hid from it
 because they carried a label too. The new row bans the character outright in all
-three pages, and it was mutation-tested — putting `open in tab ↗` back turns it
+three pages, and it was mutation-tested: putting `open in tab ↗` back turns it
 red while the old row stays green, which is what "the widening was necessary"
 looks like as evidence. Two keycap styles became one `kbd`.
 

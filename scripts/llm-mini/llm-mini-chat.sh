@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# llm-mini-chat.sh — Interactive multi-turn chat with mini models.
+# llm-mini-chat.sh: Interactive multi-turn chat with mini models.
 #
 # Features:
 #   - Multi-turn conversation with automatic context management
@@ -209,7 +209,7 @@ _chat_cloud_api() {
         -d "$payload" 2>/dev/null
 }
 
-# ─── Chat: Cloud (CLI — subscription) ────────────────────────────
+# ─── Chat: Cloud (CLI: subscription) ────────────────────────────
 
 _chat_cloud_cli() {
     local history
@@ -264,7 +264,7 @@ _chat_send_with_tools() {
             '[.content[] | select(.type=="text") | .text] | join("")' 2>/dev/null)
 
         if [[ "$stop_reason" != "tool_use" ]]; then
-            # No tools — done
+            # No tools: done
             _add_message "assistant" "$text"
             printf '%s' "$text"
             return 0

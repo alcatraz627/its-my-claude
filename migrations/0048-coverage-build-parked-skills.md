@@ -7,7 +7,7 @@
 ## What changed
 
 1. **`~/.claude/skills-parked/`** (new top level): 11 skills moved out of
-   `skills/` per the owner's 2026-08-20 rulings — apple, type-audit, route-audit,
+   `skills/` per the owner's 2026-08-20 rulings: apple, type-audit, route-audit,
    invalidate-audit, sync-api-types, add-mcp, clean-html, scaffold, dep-audit,
    daily-todo, forgotten-todos. Kept, not loaded: no roster cost, no auto-trigger.
    `README.md` + generated `INDEX.md` (tldr/tags/activation) + `tags.tsv` +
@@ -16,7 +16,7 @@
    `scripts/hooks/parked-skills-nudge.sh` (registered; runs the owner's two-way
    check in non-gcc projects; mute `.no-parked-nudge`).
 2. **Callout ledger**: `scripts/callouts/callouts.sh` writes
-   `<project>/.claude/callouts.jsonl` (gcc: `~/.claude/callouts.jsonl`) — owner
+   `<project>/.claude/callouts.jsonl` (gcc: `~/.claude/callouts.jsonl`): owner
    review findings as re-runnable rows; `gate <surface>` blocks done-claims with
    unmet rows; only `retire --by owner` closes a row. Skill `/callouts`;
    /validate Vf and the ui-gripe / ui-categorical-check feeders reference it.
@@ -40,7 +40,7 @@ A reference to `skills/<name>/` for any of the 11 moved names now points at
 `skills-parked/<name>/`. `skills/00-index.md` regenerates clean; the one
 load-bearing reader found (core-dump's See Also) was updated in this change.
 
-## Amendment 2026-08-20 — skills-parked/ is tracked
+## Amendment 2026-08-20: skills-parked/ is tracked
 
 This migration created a new top level and did not say whether git should track
 it. `.gitignore` runs an allowlist (`/*`, then un-ignore the config/code layer),
@@ -49,7 +49,7 @@ destination. The next `git add -A` would therefore have recorded the move as 428
 bare deletions: the skills stay on this disk and leave the repo and every clone.
 
 The bi-weekly repo-sync caught it before pushing, held the deletions back, and
-put it to the owner, who ruled **track it** — consistent with "Kept, not loaded"
+put it to the owner, who ruled **track it**: consistent with "Kept, not loaded"
 above, which is about roster cost rather than about what the repo keeps.
 `!/skills-parked/` is now in `.gitignore` (431 files, 5.4M).
 

@@ -3,9 +3,9 @@
 #
 # The thresholds in that file (PHRASE_SUPPORT_MIN, MIN_TOKENS, BOILERPLATE_DF) were
 # set from measurements, and both directions of failure have already shipped once:
-#   over-merge  — templated [atone] proposals scored 0.81 against each other and
+#   over-merge: templated [atone] proposals scored 0.81 against each other and
 #                 would have fused every atone slug into one cluster;
-#   no-op       — a "rare = appears in <=1 proposal" cutoff made an edge impossible,
+#   no-op: a "rare = appears in <=1 proposal" cutoff made an edge impossible,
 #                 so the feature silently did nothing.
 # This pins both. Run it after touching any threshold.
 #
@@ -66,7 +66,7 @@ else
   ok "templated [atone] proposals stayed separate (link-identified, not fuzzy-matched)"
 fi
 
-# 5. Exactly one edge on this corpus — no silent extras.
+# 5. Exactly one edge on this corpus: no silent extras.
 if [ "$edges" = "1" ]; then
   ok "exactly 1 content edge drawn"
 else

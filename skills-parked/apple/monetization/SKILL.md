@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, WebSearch, AskUserQuestion]
 
 # Monetization Strategy
 
-End-to-end monetization guidance for Apple platform apps — from "should I charge?" to "here's your pricing page structure."
+End-to-end monetization guidance for Apple platform apps: from "should I charge?" to "here's your pricing page structure."
 
 ## When This Skill Activates
 
@@ -300,9 +300,9 @@ Present monetization strategy as:
 
 ## References
 
-- **pricing-models.md** — Detailed comparison of all pricing models
-- **app-type-guides.md** — Category-specific monetization recommendations
-- **paywall-generator** skill — For StoreKit 2 code generation
-- **app-store** skill — For App Store description optimization
+- **pricing-models.md**: Detailed comparison of all pricing models
+- **app-type-guides.md**: Category-specific monetization recommendations
+- **paywall-generator** skill: For StoreKit 2 code generation
+- **app-store** skill: For App Store description optimization
 - Apple App Store Review Guidelines §3 (Business)
 - Apple StoreKit 2 documentation

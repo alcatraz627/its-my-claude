@@ -11,7 +11,7 @@ Interactively view and toggle statusline segment visibility across profiles.
 
 ## Config Location
 
-`~/.claude/statusline.conf` — INI-style with sections `[default]`, `[minimal]`, `[full]`, `[custom]`. Each segment is `key=value` where value is `1` (always on), `0` (always off), or `auto` (context-dependent).
+`~/.claude/statusline.conf`: INI-style with sections `[default]`, `[minimal]`, `[full]`, `[custom]`. Each segment is `key=value` where value is `1` (always on), `0` (always off), or `auto` (context-dependent).
 
 ## Segments Reference
 
@@ -58,7 +58,7 @@ node ~/.claude/assets/static/statusline-server.mjs
 
 ## Execution Phases
 
-### Phase 1 — Read and Display
+### Phase 1: Read and Display
 
 1. Read `~/.claude/statusline.conf` using the Read tool.
 2. Parse all three profiles: `[default]`, `[minimal]`, `[full]`.
@@ -97,7 +97,7 @@ Use the actual current values from the file, not hardcoded values. Render the fu
 
 5. State which profile is currently active. Check for `$STATUSLINE_PROFILE` env var; if unset, state that `default` is active.
 
-### Phase 1.5 — Live Preview of Current Config
+### Phase 1.5: Live Preview of Current Config
 
 Before asking what to change, show a live rendered preview of the active profile at two widths. Use the Bash tool:
 
@@ -113,7 +113,7 @@ echo "$PREVIEW_JSON" | STATUSLINE_COLS=80 STATUSLINE_PROFILE=${ACTIVE_PROFILE} b
 
 Replace `${ACTIVE_PROFILE}` with the active profile. This shows what the statusline currently looks like before any changes are made.
 
-### Phase 2 — Ask What to Toggle
+### Phase 2: Ask What to Toggle
 
 Ask the user what they want to change. Accept any of these input styles:
 
@@ -133,7 +133,7 @@ Proposed changes to [default]:
 
 Wait for the user to confirm (yes/y/ok/go/do it) or revise.
 
-### Phase 3 — Apply and Show Diff
+### Phase 3: Apply and Show Diff
 
 1. Use the Edit tool to modify `~/.claude/statusline.conf`, changing only the specific `key=value` lines in the target profile section(s).
 2. Preserve all comments, blank lines, and section ordering exactly as they are.
@@ -158,11 +158,11 @@ echo "── 80 cols ──"
 echo "$PREVIEW_JSON" | STATUSLINE_COLS=80 STATUSLINE_PROFILE=<PROFILE> bash ~/.claude/scripts/statusline/statusline.sh 2>/dev/null
 ```
 
-Replace `<PROFILE>` with the profile that was just edited. The output shows the rendered statusline — use the Bash tool to run this and display the result to the user.
+Replace `<PROFILE>` with the profile that was just edited. The output shows the rendered statusline: use the Bash tool to run this and display the result to the user.
 
 6. Ask if the user wants to make more changes. If yes, loop back to Phase 2.
 
-### Phase 4 — Profile Switch (Optional)
+### Phase 4: Profile Switch (Optional)
 
 If the user asks to switch the active profile, explain that the active profile is controlled by the environment variable:
 

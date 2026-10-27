@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# export-agents-md.sh — regenerate $CODEX_HOME/AGENTS.md, the instruction file
+# export-agents-md.sh: regenerate $CODEX_HOME/AGENTS.md, the instruction file
 # Codex loads on every turn. DERIVED from two inputs; never hand-edit the output.
 #
 #   adapters/codex/preamble.md  (hand-authored: the working agreement)

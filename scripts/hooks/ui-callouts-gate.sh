@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ui-callouts-gate — a done-claim on a UI surface re-runs the owner's open
+# ui-callouts-gate: a done-claim on a UI surface re-runs the owner's open
 # call-outs first, or the Stop is refused once.
 #
 # The owner's review findings live in <repo>/.claude/callouts.jsonl with a

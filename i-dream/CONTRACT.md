@@ -2,7 +2,7 @@
 
 > **Audience:** an agent integrating a *local* system into i-dream's dreaming
 > layer. You own a system that produces signals (events, observations,
-> feedback). You want those signals dreamed over — correlated, surfaced, and
+> feedback). You want those signals dreamed over: correlated, surfaced, and
 > (optionally) fed back to you as insights.
 >
 > **You do not need to read i-dream's source.** This document is the whole
@@ -19,7 +19,7 @@
 i-dream is a subconscious layer. On a cadence (or on demand), it runs a
 **dream pass**: per registered domain, it reads the new events since it last
 looked, sends them to an LLM with *your* prompt, and gets back structured
-**insights** — latent patterns, cross-event associations, graduation/decay
+**insights**: latent patterns, cross-event associations, graduation/decay
 candidates. When two or more domains produce insights in the same pass, a
 **cross-domain join** finds correlations spanning them (e.g. "this mistake
 pattern co-occurs with that hook-usage signal").
@@ -44,7 +44,7 @@ Pick the one that matches your system. Both register identically.
 | Cadence | i-dream reads your log as-is | i-dream runs your extractor (via `[consolidation].script`) first, then reads |
 
 If your system emits a feedback signal per occurrence (a hook firing, a
-mistake, an affirmation), you are **native-emitted** — just append a line.
+mistake, an affirmation), you are **native-emitted**: just append a line.
 
 ---
 
@@ -55,13 +55,13 @@ everything else is *your* schema and stays opaque until you expose it (§4).
 
 | Field | Required? | Contract |
 |---|---|---|
-| `id` | **REQUIRED** | Stable, unique, **never changes across reads**. It's the cursor key — if an event's id changes between passes, i-dream re-dreams it. (Field name configurable via `[event_stream].id_field`.) |
+| `id` | **REQUIRED** | Stable, unique, **never changes across reads**. It's the cursor key: if an event's id changes between passes, i-dream re-dreams it. (Field name configurable via `[event_stream].id_field`.) |
 | `ts` | **REQUIRED** | RFC-3339 string (`2026-05-21T11:08:14Z`). Used for ordering + cursor fallback. (Configurable via `ts_field`.) |
 | `slug` | recommended | Kebab-case category key. The unit i-dream correlates on across domains. Reused across recurrences (3 events with the same slug = a recurring pattern). |
 | *content* | recommended | Whatever describes the event in human terms (atone uses `issue`/`cause`/`fix`). The LLM only sees fields you list in `prompt_fields` (§4). |
 | *importance* | optional | An ordered tag (atone: `severity` = S1/S2/S3). Lets i-dream weight surfacing (§4). |
 
-**Append-only is a hard invariant.** Never rewrite or delete lines — i-dream
+**Append-only is a hard invariant.** Never rewrite or delete lines: i-dream
 tracks a cursor by id. Corrections are new events, not edits.
 
 ---
@@ -70,9 +70,9 @@ tracks a cursor by id. Corrections are new events, not edits.
 
 Drop one TOML file. Either location works:
 
-- **`~/.claude/i-dream/domains/<name>.toml`** — the centralized dir. **Use this
-  for new integrations** — discovered on boot, zero code change in i-dream.
-- `<your-root>/.i-dream-domain.toml` — inline sibling (only auto-discovered for
+- **`~/.claude/i-dream/domains/<name>.toml`**: the centralized dir. **Use this
+  for new integrations**: discovered on boot, zero code change in i-dream.
+- `<your-root>/.i-dream-domain.toml`: inline sibling (only auto-discovered for
   a few built-in roots; new systems use the centralized dir).
 
 ```toml
@@ -128,14 +128,14 @@ subprocess = true
 ## 4. Expressing your system's semantics (the subjective part)
 
 i-dream is deliberately ignorant of what your events *mean*. You express that
-through four knobs. This is the part that's subjective per system — design it
+through four knobs. This is the part that's subjective per system: design it
 deliberately.
 
-### Importance — "how much should this surface?"
+### Importance: "how much should this surface?"
 - **`severity_field`**: name the event field carrying an ordered tag. i-dream
   looks up each insight's max severity (via its evidence events) and weights
   cross-domain association confidence by it.
-- **`severity_order`**: your severity vocabulary, lowest → highest — e.g.
+- **`severity_order`**: your severity vocabulary, lowest → highest: e.g.
   `["low","med","high"]`. Rank = position in this list, so **you own your scale**
   instead of being forced onto atone's S1/S2/S3. Omit it and ranking defaults to
   `S1`/`S2`/`S3`. Set `severity_field` to the field, `severity_order` to its
@@ -144,19 +144,19 @@ deliberately.
   compete for the top-N union slots shown in the digest/SessionStart. Raise it
   if your signals should outrank others.
 
-### Categorization — "what is this event about?"
+### Categorization: "what is this event about?"
 - **`slug`**: the correlation key. Same slug across events = recurrence.
   Cross-domain joins link slugs. Choose stable, meaningful kebab-case slugs.
 - `tags` / `cluster` (optional fields): finer grouping the LLM can use if you
   surface them via `prompt_fields`.
 
-### What the LLM sees — `prompt_fields`
+### What the LLM sees: `prompt_fields`
 The dream prompt renders each delta event as `- {id} ({ts})` plus one line per
 field you list here. **Without `prompt_fields`, the LLM sees only id + ts and
 cannot ground patterns in content.** List the fields that actually describe the
 event. Long values are truncated to `prompt_field_max_chars`.
 
-### How the LLM processes it — your `dream/prompt.md`
+### How the LLM processes it: your `dream/prompt.md`
 Your prompt is the instruction. It receives `{{delta_count}}` and
 `{{delta_events}}` (the rendered events). Tell the model what to look for, how
 to weight by your importance tag, and to return `DreamOutput` v1 (§6). See the
@@ -169,7 +169,7 @@ atone prompt (`~/.claude/atone/dream/prompt.md`) for a worked template.
 Dreaming is not write-only. If you want insights back, author
 `dream/adapter.sh` and point `[dream].adapter` at it. After each pass, i-dream
 pipes the `DreamOutput` JSON to your adapter's **stdin** (30s timeout, SIGTERM
-on overrun). Your adapter decides what to do — examples:
+on overrun). Your adapter decides what to do: examples:
 
 - Forward `graduation_candidate` insights to your own backlog / proposal system.
 - Write `decay_marker` synthetic events back into your stream (append-only).
@@ -208,7 +208,7 @@ type Insight =
 
 i-dream tolerates malformed insights (defaults missing fields, drops unknown
 types) so one bad insight never loses the whole pass. `evidence_event_ids` must
-reference real ids from the delta — instruct your prompt accordingly.
+reference real ids from the delta: instruct your prompt accordingly.
 
 ---
 
@@ -218,7 +218,7 @@ This is the handshake artifact. Fill it in. **Default for a system's *first*
 integration: produce this as a report and hand it to the user** (who routes it
 to i-dream's owner agent to finish wiring + validate). Once your system's shape
 is proven, you may **self-register** (write the manifest + events to the
-centralized dir directly) — see §8 for which to choose.
+centralized dir directly): see §8 for which to choose.
 
 ```markdown
 ## i-dream Integration Request — <your-system>
@@ -262,12 +262,12 @@ make the dream prompt demand grounded `evidence_event_ids`, and run one
 
 ## 9. Worked examples
 
-- **atone** (proven) — native-emitted mistake tracking.
+- **atone** (proven): native-emitted mistake tracking.
   `~/.claude/atone/.i-dream-domain.toml` + `~/.claude/atone/dream/prompt.md`.
   Importance via `severity` (S1–S3); categorization via `slug`/`cluster`;
   `prompt_fields = ["slug","severity","issue","cause","fix"]`. Read these three
   files for a complete reference.
-- **claude-audit** (in progress) — hook-usage feedback; the first integration
+- **claude-audit** (in progress): hook-usage feedback; the first integration
   driven by *this* contract. See its Integration Request once filed.
 
 ---
@@ -277,7 +277,7 @@ make the dream prompt demand grounded `evidence_event_ids`, and run one
 - [ ] `i-dream domain list` shows your domain (`kind=external`).
 - [ ] `i-dream dream-pass` reports your domain `status: ok` with `insight_count > 0`.
 - [ ] The produced `dream/insights.jsonl` insights cite **real** delta event ids
-      (not invented) — proof the prompt is grounded.
+      (not invented): proof the prompt is grounded.
 - [ ] If bidirectional: your `adapter.sh` ran (check its side effects) and is idempotent.
 - [ ] Event `id`s are stable across two consecutive passes (no re-dreaming).
 

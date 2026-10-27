@@ -1,6 +1,6 @@
 ---
 name: describe
-description: Analyzes a named Claude skill, MCP server, plugin, or custom feature in depth — reads its prompt, code, and runtime notes, then generates a terminal-style HTML report with architecture diagrams, workflow breakdowns, examples, and operational insights.
+description: Analyzes a named Claude skill, MCP server, plugin, or custom feature in depth, reads its prompt, code, and runtime notes, then generates a terminal-style HTML report with architecture diagrams, workflow breakdowns, examples, and operational insights.
 allowed-tools: Read, Glob, Grep, Bash, Write, Agent
 user-invocable: true
 argument-hint: "<name>"
@@ -9,15 +9,15 @@ context: fork
 
 ## Brief
 
-Deep-analyzes any Claude Code extension by name — skills, MCP servers, plugins, or custom
-features — producing a structured terminal-themed HTML report via `/create-report`. Reads all
+Deep-analyzes any Claude Code extension by name: skills, MCP servers, plugins, or custom
+features: producing a structured terminal-themed HTML report via `/create-report`. Reads all
 source files, maps the workflow, generates architecture diagrams, and compiles operational notes.
 
 # Describe Skill
 
 Generates a comprehensive, structured analysis of any named Claude Code extension. The output
 is a terminal-style HTML report covering intent, architecture, workflow, tool usage, examples,
-and operational notes — with inline ASCII diagrams.
+and operational notes: with inline ASCII diagrams.
 
 ## Usage
 
@@ -32,9 +32,9 @@ and operational notes — with inline ASCII diagrams.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` (or the project's `.claude/skills/GUIDELINES.md` when one exists) before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the **file lock
-protocol** — for the entire duration of this skill run.
+protocol**: for the entire duration of this skill run.
 
 Also read the `## describe:` entries in `~/.claude/skills/runtime-notes*.md` for past run history.
 
@@ -45,12 +45,12 @@ acquire` before every Edit/Write, and release it immediately after. Never write 
 
 ---
 
-## Phase 1 — Discovery & Resolution
+## Phase 1: Discovery & Resolution
 
 Resolve `<name>` to one or more source locations. Search in this order (stop at first match
 category, but collect all files within that category):
 
-### 1.1 — Skills Directory
+### 1.1: Skills Directory
 
 ```
 Glob(".claude/skills/<name>/SKILL.md")
@@ -60,12 +60,12 @@ Glob(".claude/skills/<name>/**/*")       # code, scripts, templates
 
 If found, this is a **skill**. Collect:
 
-- `SKILL.md` — the primary definition (frontmatter + workflow)
-- `USAGE.md` — quick-reference card (if exists)
+- `SKILL.md`: the primary definition (frontmatter + workflow)
+- `USAGE.md`: quick-reference card (if exists)
 - All files in the skill directory (scripts, templates, configs)
 - Runtime notes mentioning this skill: `Grep("<name>", path=".claude/skills/runtime-notes.md")`
 
-### 1.2 — MCP Server (Project-level)
+### 1.2: MCP Server (Project-level)
 
 ```
 Read(".mcp.json")   # or the project's MCP config
@@ -77,7 +77,7 @@ Search for `<name>` in the MCP server definitions. If found, this is an **MCP se
 - Any tool schemas available via the MCP connection
 - Related CLAUDE.md instructions mentioning this MCP server
 
-### 1.3 — MCP Server (Global)
+### 1.3: MCP Server (Global)
 
 ```
 Read("~/.claude.json")
@@ -85,7 +85,7 @@ Read("~/.claude.json")
 
 Search for `<name>` in global MCP server definitions. Same collection as 1.2.
 
-### 1.4 — Plugin Registry
+### 1.4: Plugin Registry
 
 Check if `<name>` matches a known plugin prefix (e.g., `chrome-devtools`, `playwright`).
 Plugins appear in MCP configs with a `plugin_` prefix pattern. Collect:
@@ -94,7 +94,7 @@ Plugins appear in MCP configs with a `plugin_` prefix pattern. Collect:
 - Any skill files that reference this plugin (e.g., `.claude/skills/chrome-devtools-mcp/`)
 - CLAUDE.md instructions mentioning the plugin
 
-### 1.5 — Custom Feature in CLAUDE.md
+### 1.5: Custom Feature in CLAUDE.md
 
 Search all CLAUDE.md files for a section or feature matching `<name>`:
 
@@ -105,7 +105,7 @@ Grep("<name>", path="~/.claude/CLAUDE.md")
 
 If found, this is a **custom feature**. Collect the relevant CLAUDE.md sections.
 
-### 1.6 — Ambiguity Resolution
+### 1.6: Ambiguity Resolution
 
 If **no match** is found:
 
@@ -119,12 +119,12 @@ If **multiple categories** match (e.g., `chrome-devtools` matches both a plugin 
 
 ---
 
-## Phase 2 — Analysis
+## Phase 2: Analysis
 
 Parse all collected source files into a structured analysis. The analysis must cover these
 sections, adapting to the item type:
 
-### 2.1 — Identity & Intent
+### 2.1: Identity & Intent
 
 | Field       | Source                                          |
 | ----------- | ----------------------------------------------- |
@@ -136,7 +136,7 @@ sections, adapting to the item type:
 
 Write a **1-paragraph plain-English summary** of what this item does and why it exists.
 
-### 2.2 — Workflow & Phases
+### 2.2: Workflow & Phases
 
 For **skills**: extract the phase structure from SKILL.md headings and content.
 For **MCP servers**: map the available tools into logical groups by operation type.
@@ -150,7 +150,7 @@ Generate an **architecture or flow diagram** using `/diagram`:
 - MCP servers → tree diagram of tool categories
 - Plugins → sequence diagram of the interaction cycle
 
-### 2.3 — Tool & Dependency Analysis
+### 2.3: Tool & Dependency Analysis
 
 List all tools/dependencies this item uses:
 
@@ -163,7 +163,7 @@ List all tools/dependencies this item uses:
 
 For MCP servers, list all available tools with a one-line description of each.
 
-### 2.4 — Configuration & Frontmatter
+### 2.4: Configuration & Frontmatter
 
 For skills, extract and explain every frontmatter field:
 
@@ -177,7 +177,7 @@ For MCP servers, explain the configuration:
 - Environment variables required
 - Arguments and their purpose
 
-### 2.5 — Examples & Usage Patterns
+### 2.5: Examples & Usage Patterns
 
 Extract examples from:
 
@@ -191,16 +191,16 @@ Present 2-4 concrete examples with:
 - What happens (step by step, briefly)
 - What the output looks like
 
-### 2.6 — Operational Notes
+### 2.6: Operational Notes
 
 Compile from runtime-notes.md and any gotchas:
 
 - **Known issues** or edge cases discovered in past runs
 - **Performance notes** (how long it takes, what's expensive)
 - **Tips** from runtime insights
-- **Version history** — significant changes visible in the skill's evolution
+- **Version history**: significant changes visible in the skill's evolution
 
-### 2.7 — Interactive Clarification
+### 2.7: Interactive Clarification
 
 At any point during analysis, if the agent determines that additional context from the user
 would significantly improve the report quality, ask in plain text with numbered options. Examples:
@@ -213,19 +213,19 @@ Keep questions focused and actionable. Maximum 2 clarifying questions per run.
 
 ---
 
-## Phase 3 — Report Assembly
+## Phase 3: Report Assembly
 
-### 3.1 — Generate Diagrams
+### 3.1: Generate Diagrams
 
 Invoke `/diagram` for each diagram identified in Phase 2. Capture the ASCII output and embed
 it in the markdown as fenced code blocks.
 
 Minimum diagrams:
 
-- **Architecture/flow diagram** — the main workflow or tool taxonomy
-- **Dependency diagram** (if the item has 3+ dependencies) — tree showing what it depends on
+- **Architecture/flow diagram**: the main workflow or tool taxonomy
+- **Dependency diagram** (if the item has 3+ dependencies): tree showing what it depends on
 
-### 3.2 — Compose Markdown Report
+### 3.2: Compose Markdown Report
 
 Write the analysis to a temporary markdown file at `/tmp/describe-<name>.md`.
 
@@ -315,7 +315,7 @@ Write the analysis to a temporary markdown file at `/tmp/describe-<name>.md`.
 | Report style   | terminal |
 ```
 
-### 3.3 — Generate HTML Report
+### 3.3: Generate HTML Report
 
 Invoke `/create-report` on the markdown file:
 
@@ -327,9 +327,9 @@ This produces the final HTML output in `.claude/output/<timestamp>-describe-<nam
 
 ---
 
-## Phase 4 — Verification
+## Phase 4: Verification
 
-### 4.1 — Confirm Output
+### 4.1: Confirm Output
 
 Check that the HTML report was created:
 
@@ -339,7 +339,7 @@ ls -la .claude/output/*describe-<name>*/
 
 Verify `index.html` exists and is non-empty.
 
-### 4.2 — Print Summary
+### 4.2: Print Summary
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh
@@ -354,7 +354,7 @@ gum_complete "describe" \
   "Errors=<any issues, or none>"
 ```
 
-### 4.3 — Open Report
+### 4.3: Open Report
 
 After printing the summary, open the HTML report in the default browser:
 
@@ -366,14 +366,14 @@ open .claude/output/*describe-<name>*/index.html
 
 ## Notes
 
-- **Read-only analysis** — never modify the target skill/MCP/plugin files being analyzed
-- **Never execute** the target skill or its scripts — only read and document them
-- **Output only** to `.claude/output/` via `/create-report` — never write to the target's directory
-- **Interactive clarification** — plain numbered questions in the conversation when the name is
+- **Read-only analysis**: never modify the target skill/MCP/plugin files being analyzed
+- **Never execute** the target skill or its scripts: only read and document them
+- **Output only** to `.claude/output/` via `/create-report`: never write to the target's directory
+- **Interactive clarification**: plain numbered questions in the conversation when the name is
   ambiguous or more context would improve the depth; never a dialog tool. Maximum 2 per run.
-- **Chains with `/diagram`** — generates architecture and flow diagrams inline in the markdown
-- **Chains with `/create-report --style=terminal`** — final output is a terminal-themed HTML report
-- **Runtime notes** — always check for existing entries about the target to include operational
+- **Chains with `/diagram`**: generates architecture and flow diagrams inline in the markdown
+- **Chains with `/create-report --style=terminal`**: final output is a terminal-themed HTML report
+- **Runtime notes**: always check for existing entries about the target to include operational
   history in the report
 
 ## Validation

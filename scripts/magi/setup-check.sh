@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# setup-check.sh — does a /magi run's SETUP actually distribute, or is it an echo?
+# setup-check.sh: does a /magi run's SETUP actually distribute, or is it an echo?
 #
 # The deeper root cause behind the 2026-06-13 skipped votes: convergence was
-# MANUFACTURED — all voters were fed one shared corpus (the supervisor's own
+# MANUFACTURED: all voters were fed one shared corpus (the supervisor's own
 # digest) with no per-voter evidence partition, so they agreed by construction,
 # and "they converged" became the excuse to skip voting. Persona richness is a
 # decoy; evidence independence is the load-bearing axis. This check runs
@@ -12,7 +12,7 @@
 # It reads a per-voter EVIDENCE MANIFEST from meta.json `params.voter_evidence`
 # (a list of {voter, slice, model}); init-archive.sh persists it when the
 # supervisor supplies one. ADDITIVE + graceful: no manifest → WARN (not block),
-# so existing runs don't break — but the warning is loud, because an unmeasurable
+# so existing runs don't break: but the warning is loud, because an unmeasurable
 # setup is echo-prone by default.
 #
 # Usage: setup-check.sh <archive-root>
@@ -60,7 +60,7 @@ else:
                     "not discovered. Partition the evidence (distinct primary slice "
                     "per voter) before dispatching.")
     # CRITICAL: a supervisor-authored digest is the shared substrate (D2)
-    # Strong supervisor-artifact terms only — "summary" was too broad (would trip
+    # Strong supervisor-artifact terms only: "summary" was too broad (would trip
     # a legit slice like "summary-of-reviews"); keep the unambiguous ones.
     digestish = [s for s in slices if any(k in s for k in
                  ("baseline", "digest", "sweep"))]

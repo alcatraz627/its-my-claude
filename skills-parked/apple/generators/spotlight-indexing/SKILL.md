@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Spotlight Indexing Generator
 
-Generate production Core Spotlight indexing infrastructure — makes app content searchable via Spotlight (and Siri suggestions). Indexes items with rich attributes, handles search continuation into your app, and manages index lifecycle.
+Generate production Core Spotlight indexing infrastructure: makes app content searchable via Spotlight (and Siri suggestions). Indexes items with rich attributes, handles search continuation into your app, and manages index lifecycle.
 
 ## When This Skill Activates
 
@@ -48,7 +48,7 @@ If deep linking exists:
 - If not, generate standalone handler with guidance on wiring it up
 
 ### 4. Entitlements Check
-Verify CoreSpotlight doesn't require special entitlements (it doesn't — it's a standard framework), but check if the app uses App Groups for shared index across extensions.
+Verify CoreSpotlight doesn't require special entitlements (it doesn't: it's a standard framework), but check if the app uses App Groups for shared index across extensions.
 
 ## Configuration Questions
 
@@ -62,8 +62,8 @@ Ask user via AskUserQuestion:
    - Custom (user describes their model)
 
 2. **Include thumbnails?**
-   - Yes — index thumbnail images alongside text attributes
-   - No — text-only attributes (smaller index, faster)
+   - Yes: index thumbnail images alongside text attributes
+   - No: text-only attributes (smaller index, faster)
 
 3. **Indexing strategy?**
    - Batch indexing (index all content at once, e.g., on first launch or sync)
@@ -71,8 +71,8 @@ Ask user via AskUserQuestion:
    - Both (batch for initial load, incremental for changes)
 
 4. **Include Siri suggestions / shortcuts?**
-   - Yes — make content eligible for Siri suggestions and predictions
-   - No — Spotlight search only
+   - Yes: make content eligible for Siri suggestions and predictions
+   - No: Spotlight search only
 
 ## Generation Process
 
@@ -82,16 +82,16 @@ Read `patterns.md` for architecture guidance and best practices.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `SpotlightIndexable.swift` — Protocol any model can conform to
-2. `SpotlightIndexManager.swift` — Actor wrapping CSSearchableIndex with batching
-3. `SpotlightAttributeBuilder.swift` — Fluent builder for CSSearchableItemAttributeSet
+1. `SpotlightIndexable.swift`: Protocol any model can conform to
+2. `SpotlightIndexManager.swift`: Actor wrapping CSSearchableIndex with batching
+3. `SpotlightAttributeBuilder.swift`: Fluent builder for CSSearchableItemAttributeSet
 
 ### Step 3: Create Integration Files
-4. `SpotlightSearchHandler.swift` — Handles NSUserActivity continuation from Spotlight taps
+4. `SpotlightSearchHandler.swift`: Handles NSUserActivity continuation from Spotlight taps
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `SpotlightSyncModifier.swift` — If incremental indexing selected (ViewModifier for auto index/deindex)
+- `SpotlightSyncModifier.swift`: If incremental indexing selected (ViewModifier for auto index/deindex)
 - Add NSUserActivity + eligibleForSearch if Siri suggestions selected
 
 ### Step 5: Determine File Location
@@ -266,7 +266,7 @@ When user taps a Spotlight result, the app receives an NSUserActivity. Extract t
 - Never call `indexSearchableItems` from multiple threads simultaneously
 
 ### Handling App Launch from Spotlight Tap
-- The app may be cold-launched — ensure navigation state is ready before handling the activity
+- The app may be cold-launched: ensure navigation state is ready before handling the activity
 - Use `.onContinueUserActivity` in SwiftUI, not `application(_:continue:)` alone
 - The activity type is `CSSearchableItemActionType` (a constant from CoreSpotlight)
 
@@ -276,12 +276,12 @@ When user taps a Spotlight result, the app receives an NSUserActivity. Extract t
 - Store indexed schema version in UserDefaults to detect when reindex is needed
 
 ### Domain Identifiers
-- Always set `domainIdentifier` on items — it allows bulk removal by domain
+- Always set `domainIdentifier` on items: it allows bulk removal by domain
 - Use reverse-DNS style: `"com.myapp.articles"`, `"com.myapp.products"`
 - Without domains, you can only remove by individual identifier or remove everything
 
 ## References
 
-- **templates.md** — All production Swift templates for Spotlight indexing
-- **patterns.md** — CSSearchableItemAttributeSet content types, batch strategies, Siri suggestions, testing
-- Related: `generators/deep-linking` — Deep link routing from Spotlight taps
+- **templates.md**: All production Swift templates for Spotlight indexing
+- **patterns.md**: CSSearchableItemAttributeSet content types, batch strategies, Siri suggestions, testing
+- Related: `generators/deep-linking`: Deep link routing from Spotlight taps

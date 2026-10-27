@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# regression.sh — self-contained reproduce-then-fixed test for review-gate-stop.sh
+# regression.sh: self-contained reproduce-then-fixed test for review-gate-stop.sh
 # (Gate 2, export/API surface). This hook's verdict depends on git state +
 # /tmp/claude-edited-files-<sid>, NOT on a transcript, so it cannot ride the
 # shared JSONL replay harness (run_fixtures.py). This script builds its own
@@ -69,14 +69,14 @@ printf 'const n = 42\nconsole.log(n)\n' > "$REPO/src/internal.ts"
 edited "$REPO/src/internal.ts"
 check "code-no-export" SILENT "$(run "$SID")"
 
-# E: mixed — real code adds NO export, but a tracked .md fence has one → SILENT
+# E: mixed: real code adds NO export, but a tracked .md fence has one → SILENT
 SID=e0e0e0e0; reset "$SID"
 printf 'export const existing = 1\nconsole.log("x")\n' > "$REPO/src/base.ts"
 printf '# base\n\n```ts\nexport function widget(){return 1}\n```\n' > "$REPO/docs/base.md"
 edited "$REPO/src/base.ts" "$REPO/docs/base.md"
 check "mixed-md-fence-export" SILENT "$(run "$SID")"
 
-# F: loop-safety — block once, then step aside (REMIND), no re-block as docs grow
+# F: loop-safety: block once, then step aside (REMIND), no re-block as docs grow
 SID=f0f0f0f0; reset "$SID"
 printf 'export function api(){return 1}\n' > "$REPO/src/feat.ts"
 edited "$REPO/src/feat.ts"

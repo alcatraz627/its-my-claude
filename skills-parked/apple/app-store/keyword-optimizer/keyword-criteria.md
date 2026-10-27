@@ -184,9 +184,9 @@ Target keywords competitors rank for weakly:
 ### Check Before Targeting
 
 Some keywords are trademarked:
-- "Divvy" — Bill.com trademark
-- "Splitwise" — Brand name
-- "Venmo" — Brand name
+- "Divvy": Bill.com trademark
+- "Splitwise": Brand name
+- "Venmo": Brand name
 
 ### Safe vs Risky Keywords
 

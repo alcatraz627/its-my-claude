@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tty.sh — honest interactivity probe + a bounded terminal read for std::claude::tui.
+# tty.sh: honest interactivity probe + a bounded terminal read for std::claude::tui.
 #
 # Why this exists: `[ -r /dev/tty ]` LIES on macOS. When a tool runs with no
 # controlling terminal (a launchd job, a sub-agent, `cmd </dev/null`), the path
@@ -10,12 +10,12 @@
 #
 # Sourced library. Functions return status; tui_read_tty assigns into a named var.
 #
-# Under `set -e`: GUARD the call — `if tui_have_tty; then …`, `tui_read_tty v ||
+# Under `set -e`: GUARD the call: `if tui_have_tty; then …`, `tui_read_tty v ||
 # v=default`. A bare `tui_read_tty v` that returns non-zero (no tty / EOF) aborts a
 # set -e caller. That's standard bash for a non-zero return in an unguarded spot,
-# not a bug in this lib — the lib returns status precisely so you can branch on it.
+# not a bug in this lib: the lib returns status precisely so you can branch on it.
 
-# tui_have_tty — return 0 iff /dev/tty is genuinely openable (not just present).
+# tui_have_tty: return 0 iff /dev/tty is genuinely openable (not just present).
 # Opens fd 3 in a throwaway subshell; if there is no controlling terminal the
 # `exec` fails and the subshell exits non-zero. No output, no args.
 tui_have_tty() {
@@ -45,7 +45,7 @@ tui_read_tty() {
   done
   [ -n "$__tui_dst" ] || return 2
   # bash 3.2 has no sub-second read timeout; round a fractional value UP to 1s (a
-  # real bounded wait) rather than truncating to 0 — `-t 0` is an instant poll.
+  # real bounded wait) rather than truncating to 0: `-t 0` is an instant poll.
   case "$__tui_to" in *.*) __tui_to="${__tui_to%%.*}"; [ "${__tui_to:-0}" = 0 ] && __tui_to=1 ;; esac
   tui_have_tty || return 1                                    # no tty → return now, don't block
   [ -n "$__tui_pr" ] && printf '%s' "$__tui_pr" > /dev/tty

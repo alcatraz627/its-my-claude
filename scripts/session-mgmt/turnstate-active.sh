@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# turnstate-active.sh — is a session GENUINELY mid-turn right now?
+# turnstate-active.sh: is a session GENUINELY mid-turn right now?
 #
 # A turn-state sentinel (~/.claude/.turn-state/<sid>.json) is written at turn
 # start and removed by the Stop hook at turn end. Every abnormal exit skips Stop

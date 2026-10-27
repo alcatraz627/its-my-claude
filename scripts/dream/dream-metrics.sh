@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# dream-metrics.sh — extract actionable session-level metrics from events.jsonl
+# dream-metrics.sh: extract actionable session-level metrics from events.jsonl
 #
 # Produces four signal types:
-#   1. Session quality scores — productivity metrics per session
-#   2. Recurring error taxonomy — clustered tool failures
-#   3. Topic drift detection — project/focus shifts over time
-#   4. Collaboration style — correction vs confirmation patterns
+#   1. Session quality scores: productivity metrics per session
+#   2. Recurring error taxonomy: clustered tool failures
+#   3. Topic drift detection: project/focus shifts over time
+#   4. Collaboration style: correction vs confirmation patterns
 #
 # Output: ~/.claude/subconscious/dreams/dream-metrics.json
 # Called by: post-wake.sh, or manually.
@@ -105,10 +105,10 @@ for sid, s in sessions.items():
         continue  # skip empty sessions
 
     # Quality heuristics:
-    # - tool diversity (unique tools / total tools) — higher = more varied work
-    # - error rate (errors / tools) — lower = cleaner execution
-    # - efficiency (tools per prompt) — higher = more autonomous
-    # - completion (has stop event) — finished sessions score higher
+    # - tool diversity (unique tools / total tools): higher = more varied work
+    # - error rate (errors / tools): lower = cleaner execution
+    # - efficiency (tools per prompt): higher = more autonomous
+    # - completion (has stop event): finished sessions score higher
 
     diversity = len(s['tools']) / tc if tc else 0
     error_rate = s['errors'] / tc if tc else 0

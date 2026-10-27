@@ -153,7 +153,7 @@ What to fix if low:
 What to fix if low:
 - No reason to come back (add notifications, reminders, streaks)
 - Core loop not engaging enough
-- Too complex — users haven't learned enough features
+- Too complex: users haven't learned enough features
 - Missing "aha moment" in first week
 
 **Day 7 → Day 30 Retention**
@@ -162,7 +162,7 @@ What to fix if low:
 |--------|-----|---------------|
 | Good | > 10% | Strong product-market fit signal |
 | Average | 5-10% | Decent but room to grow |
-| Poor | < 5% | Retention cliff — users churning |
+| Poor | < 5% | Retention cliff: users churning |
 
 What to fix if low:
 - Feature depth too shallow (users exhaust value)
@@ -172,7 +172,7 @@ What to fix if low:
 
 ### Step 4: AARRR Funnel Analysis
 
-The pirate metrics framework — diagnose where your funnel leaks.
+The pirate metrics framework: diagnose where your funnel leaks.
 
 #### Acquisition: How do users find you?
 
@@ -434,7 +434,7 @@ Present analysis as an Analytics Health Report:
 
 ## References
 
-- **metrics-reference.md** — Metric definitions, formulas, and benchmarks
-- **app-store/keyword-optimizer/** — For ASO-related fixes
-- **monetization/** — For pricing and paywall optimization
-- **testing/** — For A/B test methodology
+- **metrics-reference.md**: Metric definitions, formulas, and benchmarks
+- **app-store/keyword-optimizer/**: For ASO-related fixes
+- **monetization/**: For pricing and paywall optimization
+- **testing/**: For A/B test methodology

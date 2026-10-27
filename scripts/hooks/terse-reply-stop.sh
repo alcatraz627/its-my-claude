@@ -3,7 +3,7 @@
 # instrument: warn-log.sh --hook terse-reply
 # review-by: 2026-11-13
 # retire-if: heed-rate < 40% over 100 fires
-# terse-reply-stop.sh — Stop hook: the final assistant message is short unless the
+# terse-reply-stop.sh: Stop hook: the final assistant message is short unless the
 # owner asked for length.
 #
 # Prose is the message minus fenced code, inline code, blockquotes and table

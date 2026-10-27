@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
-# desktop.sh — macOS GUI automation helper (Phase 1 / v1)
+# desktop.sh: macOS GUI automation helper (Phase 1 / v1)
 #
 # Usage:
-#   desktop screenshot display N           — capture display N to ~/.claude/assets/images/
-#   desktop screenshot app NAME            — capture named app's front window (region-based)
-#   desktop screenshot region X Y W H      — capture a specific screen region
-#   desktop annotate PATH [--grid N]       — overlay coordinate grid on a screenshot
-#   desktop annotate PATH --marks "X,Y ..." — add crosshair marks at given coords
-#   desktop windows                        — list all visible windows with bounds
-#   desktop click X Y                      — click at screen coordinates (STEALS FOCUS)
-#   desktop type "text"                    — type text into focused window (STEALS FOCUS)
-#   desktop key COMBO                      — send key combo (STEALS FOCUS)
-#   desktop space N                        — switch to Space N 1-4 (STEALS FOCUS)
-#   desktop focus APP                      — bring app to front (STEALS FOCUS)
-#   desktop check                          — verify permissions and tool availability
+#   desktop screenshot display N: capture display N to ~/.claude/assets/images/
+#   desktop screenshot app NAME: capture named app's front window (region-based)
+#   desktop screenshot region X Y W H: capture a specific screen region
+#   desktop annotate PATH [--grid N]: overlay coordinate grid on a screenshot
+#   desktop annotate PATH --marks "X,Y ...": add crosshair marks at given coords
+#   desktop windows: list all visible windows with bounds
+#   desktop click X Y: click at screen coordinates (STEALS FOCUS)
+#   desktop type "text": type text into focused window (STEALS FOCUS)
+#   desktop key COMBO: send key combo (STEALS FOCUS)
+#   desktop space N: switch to Space N 1-4 (STEALS FOCUS)
+#   desktop focus APP: bring app to front (STEALS FOCUS)
+#   desktop check: verify permissions and tool availability
 #
 # Screenshot storage: ~/.claude/assets/images/ (timestamped filenames)
 # Focus behaviour: screenshot/windows/annotate do NOT steal focus.
 #                  click/type/key/space/focus DO steal focus.
 #
 # Error policy: ALL commands exit non-zero on failure with a clear message to stderr.
-#   Screenshot commands additionally check file size — < 5KB is treated as a failure.
+#   Screenshot commands additionally check file size: < 5KB is treated as a failure.
 #   Never silently swallow errors. Claude must STOP on any failure.
 #
 # Phase 2 note: this script is the shell foundation for the future MCP server.
@@ -30,7 +30,7 @@ set -euo pipefail
 
 IMAGES_DIR="$HOME/.claude/assets/images"
 ANNOTATE_SCRIPT="$HOME/.claude/scripts/annotate-screenshot.py"
-# Run the annotate helper's Pillow dep in uv's isolated, cached env — no global
+# Run the annotate helper's Pillow dep in uv's isolated, cached env: no global
 # install. Override with DESKTOP_PY (a python/command that already has Pillow).
 if [ -n "${DESKTOP_PY:-}" ]; then ANNOTATE_PY="$DESKTOP_PY"
 elif command -v uv >/dev/null 2>&1; then ANNOTATE_PY="uv run --with pillow python3"
@@ -122,7 +122,7 @@ case "$cmd" in
   annotate)
     # Overlay a coordinate grid (and optional crosshair marks) on an existing screenshot.
     # Output is saved alongside the original with '-annotated' suffix.
-    # Does NOT steal focus. Does NOT take a new screenshot — annotates an existing file.
+    # Does NOT steal focus. Does NOT take a new screenshot: annotates an existing file.
     input="${2:-}"
     if [[ -z "$input" ]]; then
       echo "Usage: desktop annotate PATH [--grid N] [--marks 'X1,Y1 X2,Y2']" >&2
@@ -186,7 +186,7 @@ OSASCRIPT
       echo "Usage: desktop click X Y" >&2
       exit 1
     fi
-    # STEALS FOCUS — caller must have confirmed with user before invoking
+    # STEALS FOCUS: caller must have confirmed with user before invoking
     if ! cliclick c:"${x},${y}" 2>/dev/null; then
       echo "CLICK FAILED at (${x},${y})" >&2
       echo "Is Accessibility permission granted? Run: desktop check" >&2
@@ -200,7 +200,7 @@ OSASCRIPT
       echo "Usage: desktop type \"text\"" >&2
       exit 1
     fi
-    # STEALS FOCUS — caller must have confirmed with user before invoking
+    # STEALS FOCUS: caller must have confirmed with user before invoking
     if ! cliclick t:"$text" 2>/dev/null; then
       echo "TYPE FAILED: could not send keystrokes" >&2
       echo "Is Accessibility permission granted? Run: desktop check" >&2
@@ -232,7 +232,7 @@ OSASCRIPT
         cmd_parts+=("ku:${parts[$i]}")
       done
     fi
-    # STEALS FOCUS — caller must have confirmed with user before invoking
+    # STEALS FOCUS: caller must have confirmed with user before invoking
     if ! cliclick "${cmd_parts[@]}" 2>/dev/null; then
       echo "KEY FAILED: could not send combo '$combo'" >&2
       echo "Is Accessibility permission granted? Run: desktop check" >&2
@@ -249,7 +249,7 @@ OSASCRIPT
       echo "ERROR: Space must be 1-4" >&2
       exit 1
     fi
-    # STEALS FOCUS — switches the active virtual desktop
+    # STEALS FOCUS: switches the active virtual desktop
     osascript -e "tell application \"System Events\" to key code $kc using control down"
     sleep 0.4
     echo "Switched to Space $n"
@@ -261,7 +261,7 @@ OSASCRIPT
       echo "Usage: desktop focus AppName" >&2
       exit 1
     fi
-    # STEALS FOCUS — raises app to foreground
+    # STEALS FOCUS: raises app to foreground
     osascript -e "tell application \"$app\" to activate"
     sleep 0.2
     echo "Focused: $app"
@@ -280,7 +280,7 @@ OSASCRIPT
       echo "[FAIL] cliclick not found — install with: brew install cliclick"
     fi
 
-    # annotate's Pillow dep — isolated via uv (no global install)
+    # annotate's Pillow dep: isolated via uv (no global install)
     if command -v uv >/dev/null 2>&1; then
       echo "[OK] annotate: Pillow via uv (isolated, no global install)"
     elif python3 -c "from PIL import Image" &>/dev/null; then
@@ -290,7 +290,7 @@ OSASCRIPT
       echo "       Fix: install uv, or set DESKTOP_PY to a python that has Pillow"
     fi
 
-    # Accessibility — test cliclick by moving mouse 0px (no-op)
+    # Accessibility: test cliclick by moving mouse 0px (no-op)
     if cliclick m:0,0 &>/dev/null 2>&1; then
       echo "[OK] Accessibility permission: granted"
     else
@@ -298,7 +298,7 @@ OSASCRIPT
       echo "       Grant in: System Settings → Privacy & Security → Accessibility → add ghostty"
     fi
 
-    # Screen Recording — test screencapture
+    # Screen Recording: test screencapture
     test_png="/tmp/desktop-check-$$.png"
     if screencapture -x -R "0,0,10,10" "$test_png" 2>/dev/null && [[ -f "$test_png" ]]; then
       size=$(stat -f%z "$test_png")

@@ -1,4 +1,4 @@
-# ipc domain — parked 2026-07-13 (process-audit phase 2)
+# ipc domain: parked 2026-07-13 (process-audit phase 2)
 
 Moved out of the live `~/.claude/i-dream/domains/` directory because its event
 stream (`~/.claude-ipc/i-dream-events.jsonl`) has been 0 bytes since creation:
@@ -23,7 +23,7 @@ our own forensics: the original one-liner piped `claude-ipc log` with stderr
 discarded, so a failing/absent verb yielded a silent 0-byte store; and two
 CLI-side traps persisted into 2026-07 (party-scoped body redaction since
 02dddca needs `--operator`; piped output >~64KB truncates mid-JSON until their
-flush fix deploys — bounded with `--since` and file capture, never a pipe).
+flush fix deploys: bounded with `--since` and file capture, never a pipe).
 
 Canonical manifest now lives at `~/.claude/i-dream/domains/ipc.toml` with a LIVE
 header; `ipc.toml` here remains the historical staging artifact

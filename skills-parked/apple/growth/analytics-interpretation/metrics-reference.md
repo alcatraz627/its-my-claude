@@ -184,7 +184,7 @@ First-time downloads. Does not include re-downloads or updates.
 | D30 Retention | < 2% | 2-5% | 5-10% | > 10% |
 | Session Length | < 30s | 30s-2 min | 2-5 min | > 5 min |
 
-Note: Utility apps often have low DAU/MAU because they are used only when needed (e.g., a calculator). Low stickiness is not necessarily bad for utilities — focus on retention and satisfaction instead.
+Note: Utility apps often have low DAU/MAU because they are used only when needed (e.g., a calculator). Low stickiness is not necessarily bad for utilities: focus on retention and satisfaction instead.
 
 ### Subscription Apps (General)
 | Metric | Poor | Average | Good | Excellent |

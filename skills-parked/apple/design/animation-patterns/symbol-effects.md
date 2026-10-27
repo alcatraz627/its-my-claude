@@ -1,6 +1,6 @@
 # SF Symbol Effects
 
-Animate SF Symbols using the `.symbolEffect()` modifier (iOS 17+). These are purpose-built animations — do **not** use `withAnimation` for symbol effects.
+Animate SF Symbols using the `.symbolEffect()` modifier (iOS 17+). These are purpose-built animations: do **not** use `withAnimation` for symbol effects.
 
 ## Available Effects
 
@@ -142,16 +142,16 @@ Text("Hello")
 // symbolEffect only works on Image views with SF Symbols
 ```
 
-## Accessibility — Reduce Motion
+## Accessibility: Reduce Motion
 
 Symbol effects automatically respect the system's Reduce Motion setting:
 
-- **Bounce, wiggle, rotate** — suppressed entirely when Reduce Motion is on
-- **Pulse, breathe** — reduced to opacity-only change
-- **Variable color** — still plays (it's informational, not decorative)
-- **Replace** — falls back to cross-fade
+- **Bounce, wiggle, rotate**: suppressed entirely when Reduce Motion is on
+- **Pulse, breathe**: reduced to opacity-only change
+- **Variable color**: still plays (it's informational, not decorative)
+- **Replace**: falls back to cross-fade
 
-No manual handling needed for symbol effects — the system manages this automatically. However, if you use `isActive:` to show ongoing state, ensure the state is also communicated through non-motion means (label, color, VoiceOver):
+No manual handling needed for symbol effects: the system manages this automatically. However, if you use `isActive:` to show ongoing state, ensure the state is also communicated through non-motion means (label, color, VoiceOver):
 
 ```swift
 Image(systemName: "wifi")

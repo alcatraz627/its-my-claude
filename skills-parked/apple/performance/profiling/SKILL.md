@@ -172,10 +172,10 @@ final class PerformanceReporter: NSObject, MXMetricManagerSubscriber {
 
 ## References
 
-- **time-profiler.md** — CPU profiling, hang detection, signpost API
-- **memory-profiling.md** — Allocations, Leaks, memory graph debugger
-- **launch-optimization.md** — App launch phases, cold/warm start optimization
-- **energy-diagnostics.md** — Battery, thermal state, network efficiency
+- **time-profiler.md**: CPU profiling, hang detection, signpost API
+- **memory-profiling.md**: Allocations, Leaks, memory graph debugger
+- **launch-optimization.md**: App launch phases, cold/warm start optimization
+- **energy-diagnostics.md**: Battery, thermal state, network efficiency
 - [WWDC: Ultimate Application Performance Survival Guide](https://developer.apple.com/videos/play/wwdc2021/10181/)
 - [WWDC: Analyze Hangs with Instruments](https://developer.apple.com/videos/play/wwdc2023/10248/)
 - [WWDC: Detect and Diagnose Memory Issues](https://developer.apple.com/videos/play/wwdc2021/10180/)

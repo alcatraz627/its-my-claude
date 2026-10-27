@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-ai-signature.sh — no harness signatures in anything a human reads.
+# guard-ai-signature.sh: no harness signatures in anything a human reads.
 #
 # The commit-trailer ban (memory feedback_no-claude-commit-trailers, atone
 # mist-20260811-145935-47) kept leaking onto non-commit surfaces: a PR body

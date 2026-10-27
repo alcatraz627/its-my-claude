@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-snapshot.sh — daily backup of ~/.claude/atone/.
+# atone-snapshot.sh: daily backup of ~/.claude/atone/.
 #
 # Each day starts as an APFS clone of the newest snapshot (copy-on-write, so
 # unchanged files share their blocks and storage cost ≈ the day's changes), then
@@ -57,7 +57,7 @@ rsync -a --delete --delete-excluded --exclude=.git "$SRC/" "$DST/"
 # Apply append-only flag (no-op on already-flagged inodes from hardlinks)
 find "$DST" -type f -exec chflags uappnd {} \; 2>/dev/null || true
 
-# Promote to weekly tier (Sundays — date +%u == 7)
+# Promote to weekly tier (Sundays: date +%u == 7)
 if [ "$(date +%u)" = "7" ]; then
   if [ ! -e "$DST_ROOT/_weekly/$TODAY" ]; then
     cp -cR "$DST" "$DST_ROOT/_weekly/$TODAY" 2>/dev/null || rsync -a "$DST/" "$DST_ROOT/_weekly/$TODAY/"

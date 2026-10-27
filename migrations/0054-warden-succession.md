@@ -38,7 +38,7 @@ L0/governor/mid-turn) · the epilogue duties · ipc alias persistence.
       lifecycle, brief content, read-back demand, stamp-commit-on-success,
       retirement announce + pointer clear, timeout presence).
 - [x] bash -n clean; in-situ run proceeded to a live production beat.
-- [ ] First real retirement (~day 5-6) — WATCH item 13 carries it.
+- [ ] First real retirement (~day 5-6): WATCH item 13 carries it.
 
 ## Rollback
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# conformance-check.sh — does a /magi run actually conform to its declared mode?
+# conformance-check.sh: does a /magi run actually conform to its declared mode?
 #
 # The 2026-06-13 fable-audit meta-review found all four full-mode runs skipped the
-# Phase-6 voting round (every 04-voting/ empty) while citing convergence — i.e. the
+# Phase-6 voting round (every 04-voting/ empty) while citing convergence: i.e. the
 # anti-groupthink mechanism was bypassed exactly where it mattered, and the spec's
 # mandate was advisory (no enforcement) so nothing caught it. This is that gate.
 #
 # It is invoked by the MANDATORY Phase-11 finalize (cost-estimate.sh) so the
 # verdict rides on a step the supervisor can't skip without losing its required
-# cost block — per rules/skill-spec-update-not-honored: enforcement lives at the
+# cost block: per rules/skill-spec-update-not-honored: enforcement lives at the
 # data-write, not in advisory SKILL.md prose.
 #
 # Usage: conformance-check.sh <archive-root>
@@ -43,7 +43,7 @@ voting_ran  = bool(glob.glob(p("04-voting", "*scores*.json"))
 
 # Voting is EXPECTED when there's positive evidence of a full/voting run:
 #   declared voting:true, declared mode:full, a jester is present, OR >=5 voter
-#   proposals (lite=3, full=5/7 per spec — so 5+ ⇒ full ⇒ voting on). The
+#   proposals (lite=3, full=5/7 per spec: so 5+ ⇒ full ⇒ voting on). The
 #   voter-count signal is the robust fallback when params are unrecorded and the
 #   jester is numerically named (e.g. voter-5, not voter-jester). Lite/voting-off
 #   is exempt.

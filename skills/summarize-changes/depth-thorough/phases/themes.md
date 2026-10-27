@@ -17,8 +17,8 @@ For under-reported chunks (coverage status != OK), cross-reference the chunk's f
 
 ## Supplementary signals (optional, read if present)
 
-These project-local files carry risk signals that commit messages alone miss — use them to inform issue tiers (an item the team is still mid-implementation on, or has flagged "unverified", is higher-risk):
-- `{PROJECT_NOTES_GLOB}` — e.g. `frontend/.claude/notes/*.md`, `_*.claude.md` checkpoints, plan docs
+These project-local files carry risk signals that commit messages alone miss: use them to inform issue tiers (an item the team is still mid-implementation on, or has flagged "unverified", is higher-risk):
+- `{PROJECT_NOTES_GLOB}`: e.g. `frontend/.claude/notes/*.md`, `_*.claude.md` checkpoints, plan docs
 - Any `MEMORY.md` index at the project memory path
 - Commit-message risk language in `{COMMITS_TSV}`: "unverified", "could break", "still broken", "wip", "hack", "todo"
 
@@ -26,8 +26,8 @@ When an issue's underlying change appears in an in-progress task note or carries
 
 ## Outputs (write both before returning)
 
-- `{THEMES_OUTPUT}` — theme map
-- `{ISSUES_OUTPUT}` — issue list
+- `{THEMES_OUTPUT}`: theme map
+- `{ISSUES_OUTPUT}`: issue list
 
 ## THEMES.md format
 
@@ -49,15 +49,15 @@ Issues raised: <count or "none">
 - A theme = coherent user/system-facing story, not "files in folder X".
 - Target 25-50 themes for a release-scale diff.
 - Bucket type strictly:
-  - **feature** — new capability
-  - **improvement** — existing capability enhanced
-  - **fix** — bug repair
-  - **perf** — speed/cost optimization
-  - **infra** — tooling/ci/config
-  - **breaking** — signature/route/schema/contract change visible to callers
+  - **feature**: new capability
+  - **improvement**: existing capability enhanced
+  - **fix**: bug repair
+  - **perf**: speed/cost optimization
+  - **infra**: tooling/ci/config
+  - **breaking**: signature/route/schema/contract change visible to callers
 - Coupling: trace file paths. backend/ + frontend/src/ = coupled.
 - Summary speaks to non-engineer first, mechanism second.
-- **SHA hygiene**: if a SHA you'd cite isn't in commits.tsv, write `(post-cutoff)` — never fake-precise.
+- **SHA hygiene**: if a SHA you'd cite isn't in commits.tsv, write `(post-cutoff)`: never fake-precise.
 
 ## ISSUES.md format
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# parked.sh — the working surface over ~/.claude/skills-parked/.
+# parked.sh: the working surface over ~/.claude/skills-parked/.
 #
 # Parked skills are kept but not loaded, so they need three things a live skill
 # gets for free: an index the agent can read (tldr + tags + activation criteria),

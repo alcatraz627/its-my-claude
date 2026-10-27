@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# zreclaim.test.sh — proves zreclaim never deletes anything you could need.
+# zreclaim.test.sh: proves zreclaim never deletes anything you could need.
 #
 # Self-contained: builds a fixture tree in a temp dir, asserts against the
 # hidden verbs and the real commands, tears down. PASS/FAIL per case; exits

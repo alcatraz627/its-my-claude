@@ -1,4 +1,4 @@
-# Apple Human Interface Guidelines — App Icons
+# Apple Human Interface Guidelines: App Icons
 
 Reference for generating HIG-compliant app icons.
 
@@ -7,12 +7,12 @@ Reference for generating HIG-compliant app icons.
 ### Simplicity
 - Embrace simplicity. Find a single element that captures the essence of your app.
 - Express that element in a unique shape or combination of shapes.
-- Add detail carefully — too much makes the icon muddy at small sizes.
+- Add detail carefully: too much makes the icon muddy at small sizes.
 
 ### Recognizability
 - People should be able to identify your icon at a glance.
 - Avoid replicas of Apple hardware or system icons.
-- Use a unique silhouette — if you squint, can you tell it apart from other icons?
+- Use a unique silhouette: if you squint, can you tell it apart from other icons?
 
 ### Consistency
 - Use a single, centered, front-facing perspective.
@@ -29,9 +29,9 @@ Reference for generating HIG-compliant app icons.
 ### macOS Icons
 - **Shape**: Square canvas, system applies rounded rect mask with ~18.75% corner radius
 - **Size range**: 16x16 to 512x512@2x (1024x1024)
-- **Detail level**: Can be more detailed than iOS — icons display larger in Finder, Dock
+- **Detail level**: Can be more detailed than iOS: icons display larger in Finder, Dock
 - **Visual weight**: Centered in canvas, fill ~80% of the space
-- **Background**: Must fill the entire canvas (no transparency — the system mask handles the shape)
+- **Background**: Must fill the entire canvas (no transparency: the system mask handles the shape)
 
 Required sizes:
 | Size | Scale | Pixels | Context |
@@ -50,14 +50,14 @@ Required sizes:
 ### iOS Icons
 - **Shape**: Square canvas, system applies continuous rounded rect (squircle) mask
 - **Size**: Single 1024x1024 PNG, system auto-generates all sizes
-- **Detail level**: Keep simpler than macOS — icons are smaller on screen
+- **Detail level**: Keep simpler than macOS: icons are smaller on screen
 - **Background**: Must fill canvas, no transparency, no rounded corners (system does this)
 - **No alpha channel**: iOS icons must be opaque
 
 ### watchOS Icons
 - **Shape**: Circular mask applied by system
 - **Size**: 1024x1024 master, system generates circular variants
-- **Detail level**: Very simple — icons are tiny on Watch
+- **Detail level**: Very simple: icons are tiny on Watch
 
 ## Design Techniques
 
@@ -67,7 +67,7 @@ Required sizes:
 - Top-to-bottom or diagonal
 - Use 2 colors maximum
 - Darker at bottom, lighter at top (natural lighting)
-- Don't use pure black (#000000) — use very dark colors instead
+- Don't use pure black (#000000): use very dark colors instead
 
 **Radial Gradient** (for depth):
 - Center glow behind the primary element
@@ -87,7 +87,7 @@ Required sizes:
 - Consistent stroke weights if using lines (minimum 2% of canvas = ~20px at 1024)
 
 **Shape rendering at small sizes:**
-- Test at 16x16 and 32x32 — if the shape is unrecognizable, simplify
+- Test at 16x16 and 32x32: if the shape is unrecognizable, simplify
 - Thick strokes (3%+ of canvas) survive downscaling
 - Thin details (<1% of canvas) vanish at small sizes
 - Round shapes scale better than sharp corners
@@ -136,13 +136,13 @@ Required sizes:
 
 ## Anti-Patterns (What NOT to Do)
 
-1. **No photos or screenshots** — they become unrecognizable blobs at small sizes
-2. **No text or words** — unreadable at 16x16
-3. **No Apple hardware** — violates guidelines and trademark
-4. **No transparency** (iOS) — must be fully opaque
-5. **No manual rounded corners** — the system applies the mask
-6. **No borders that follow the icon shape** — the system mask clips them unevenly
-7. **No overly detailed illustrations** — test at 32x32, if it's muddy, simplify
-8. **No pure white backgrounds** — blends with light mode UI, use off-white or a color
-9. **No pure black backgrounds** — blends with dark mode UI, use very dark color (e.g., #0f0c29)
-10. **No busy patterns or textures** — compete with the focal element
+1. **No photos or screenshots**: they become unrecognizable blobs at small sizes
+2. **No text or words**: unreadable at 16x16
+3. **No Apple hardware**: violates guidelines and trademark
+4. **No transparency** (iOS): must be fully opaque
+5. **No manual rounded corners**: the system applies the mask
+6. **No borders that follow the icon shape**: the system mask clips them unevenly
+7. **No overly detailed illustrations**: test at 32x32, if it's muddy, simplify
+8. **No pure white backgrounds**: blends with light mode UI, use off-white or a color
+9. **No pure black backgrounds**: blends with dark mode UI, use very dark color (e.g., #0f0c29)
+10. **No busy patterns or textures**: compete with the focal element

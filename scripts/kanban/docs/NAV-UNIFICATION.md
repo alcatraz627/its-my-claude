@@ -21,7 +21,7 @@ and, on the shape to extend:
 ## The two models, as they are
 
 **A · the views toolbar** (`shared.js:107-130`, `shared.css:86-98`). Three fixed
-destinations — Boards, Your asks, Drafts — as a segmented control, each with a
+destinations: Boards, Your asks, Drafts: as a segmented control, each with a
 glyph, an optional count, and a key. Some pages switch in place, others navigate
 (`shared.js:99-100,126`).
 
@@ -32,7 +32,7 @@ searchable overlay over recents, starred and all boards. Beside it the crumb
 ## The thing neither model is
 
 They are not two ways to do one thing, which matters, because the charter's
-standing anti-pattern list already bans that ("Two ways to fire one action — two
+standing anti-pattern list already bans that ("Two ways to fire one action: two
 Send to agent buttons became one", §13). They are two halves of one thing.
 
 **There is a single address space with two levels: a KIND, and an INSTANCE
@@ -51,19 +51,19 @@ controls; it is **completing one table**.
 
 ## Testing that against the charter, axis by axis
 
-**§1 disposition — "nothing modal by default", "everything shown is a handle".**
+**§1 disposition: "nothing modal by default", "everything shown is a handle".**
 The palette is an overlay, which §9 permits, but the crumb is not: `All boards /
 <name>` is a handle sitting in the page at rest. Extending the crumb rather than
 the overlay is the more charter-native move, and it is also the piece the owner
 singled out.
 
-**§2 language — "name a thing once and use that name everywhere".** Today the
+**§2 language: "name a thing once and use that name everywhere".** Today the
 toolbar says "Your asks" while the CLI verb is `items` and the data file is
 `items.json`. A unified switcher will list all three kinds side by side, which
 puts that inconsistency on one line for the first time. It needs settling before
 it is displayed, not after.
 
-**§4 colour — the semantic set is CLOSED.** blue = you and your controls, amber =
+**§4 colour: the semantic set is CLOSED.** blue = you and your controls, amber =
 wants attention, red = destructive, green = peer, violet = milestone, grey =
 neutral, and "a fourth claimant on a closed palette is a bug."
 
@@ -82,27 +82,27 @@ Two ways out, and this is the owner's call rather than mine:
   reading" is what icons and section headers are for, and hue is the scarcer
   resource here.
 - **(b) Amend §4 to add a second, orthogonal axis: hue-as-kind, distinct from
-  hue-as-semantics.** Honest, and a real charter change with a real cost — every
+  hue-as-semantics.** Honest, and a real charter change with a real cost: every
   future colour decision then has to say which axis it is on.
 
-**§5 icons — "one glyph per meaning across the whole board".** `NAV_ICON` already
+**§5 icons: "one glyph per meaning across the whole board".** `NAV_ICON` already
 satisfies this for the three kinds. A unified switcher reuses those exact glyphs;
 drawing new ones would break the rule the moment the toolbar and the switcher
 disagreed.
 
-**§7 interactivity — "state is visible at rest".** Where you are must be legible
+**§7 interactivity: "state is visible at rest".** Where you are must be legible
 without hovering or opening anything. That argues for the crumb as the primary
 statement of location and the palette as the way to change it, not as the way to
 know it.
 
-**§10 keyboard — three layers, shifted twins, every binding in the help modal.**
+**§10 keyboard: three layers, shifted twins, every binding in the help modal.**
 `b` opens the board palette today. If one palette covers three kinds, the natural
 grammar is the existing shifted-twin rule: a key for the palette, and the kind
 either pre-filtered by a modifier or chosen by typing. Whatever is chosen appears
 in the Keyboard tab, which is generated from the shortcut table, so it cannot
 drift (§13's last row).
 
-**§9 overlays — the z ladder is fixed** (popover 30 · palettes 40 · help 50 · doc
+**§9 overlays: the z ladder is fixed** (popover 30 · palettes 40 · help 50 · doc
 preview 60 · tooltip 90) and the keyboard's idea of topmost must match. A
 widened palette stays at 40; it does not become a new layer.
 

@@ -2,7 +2,7 @@
 
 Patterns for running concurrent work with automatic cancellation and scoped lifetimes. Prefer structured concurrency over unstructured `Task {}` whenever possible.
 
-## async let — Fixed Parallel Operations
+## async let: Fixed Parallel Operations
 
 Run a known number of operations concurrently:
 
@@ -54,7 +54,7 @@ let images = try await withThrowingTaskGroup(of: UIImage.self) { group in
 }
 ```
 
-## TaskGroup — Dynamic Parallel Operations
+## TaskGroup: Dynamic Parallel Operations
 
 ### Collecting Results
 
@@ -134,7 +134,7 @@ await withTaskGroup(of: Void.self) { group in
 
 Use `withThrowingDiscardingTaskGroup` if child tasks can throw.
 
-## .task Modifier — SwiftUI View Lifecycle
+## .task Modifier: SwiftUI View Lifecycle
 
 ### Basic .task
 
@@ -160,7 +160,7 @@ struct ItemListView: View {
 - Automatically cancels the task when the view disappears
 - The task inherits the view's actor isolation (usually `@MainActor`)
 
-### .task(id:) — Re-run on Value Change
+### .task(id:): Re-run on Value Change
 
 ```swift
 struct ItemDetailView: View {

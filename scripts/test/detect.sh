@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/test/detect.sh — Detect testing framework + command for a folder.
+# scripts/test/detect.sh: Detect testing framework + command for a folder.
 #
 # Cache: ~/.claude/cache/test-patterns/<encoded-folder>.json
 # Cache hit  → print cached pattern (<200ms target)
@@ -43,7 +43,7 @@ FOLDER=$(cd "$FOLDER" 2>/dev/null && pwd) || { printf 'no such dir\n' >&2; exit 
 ENCODED=$(printf '%s' "$FOLDER" | sed 's|/|-|g')
 CACHE="$CACHE_DIR/${ENCODED}.json"
 
-# Cache hit — print and exit (fast path)
+# Cache hit: print and exit (fast path)
 if [[ -f "$CACHE" && $REFRESH -eq 0 ]]; then
   cat "$CACHE"
   exit 0

@@ -285,7 +285,7 @@ The pager-holder signs off when:
 3. **Every action step has an expected observable,** so they know whether it worked
    without asking.
 4. **At least one failure branch is documented** per risky step, OR the doc explicitly
-   says "if anything in this section fails, escalate immediately — do not improvise".
+   says "if anything in this section fails, escalate immediately: do not improvise".
 5. **An escalation block names channel + owner + what context to attach.**
 6. **Rollback / idempotency is addressed,** with safe-to-retry status explicit per action.
 7. **Status, owner, last-verified date are present and current** (≤90 days for hot

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# efficacy.sh — the human lens on gate efficacy (P3.5).
+# efficacy.sh: the human lens on gate efficacy (P3.5).
 #
 # Answers, for every slug→gate mapping in ledger/efficacy.toml: after the gate
 # deployed, did the atone slug's recurrence-rate actually drop? Prints a table of
 # pre-rate vs post-rate (events per 30 days), the window maturity, a status
-# (insufficient-data / improving / flat / regressing), and — where the gate emits
-# telemetry — its fire and heed counts in the post window.
+# (insufficient-data / improving / flat / regressing), and: where the gate emits
+# telemetry: its fire and heed counts in the post window.
 #
 # READ-ONLY. This is the /doctor + ad-hoc surface; it never writes alerts, never
 # mutates state, never files a proposal. The alerting half lives in the
@@ -84,7 +84,7 @@ if os.path.exists(warn_path):
         try: d = json.loads(line)
         except Exception: continue
         # Fires only: kind:"heed" resolutions share the hook_id but are responses
-        # to a fire, not fires — counting them would double every heeded event.
+        # to a fire, not fires: counting them would double every heeded event.
         if d.get("kind") != "warn": continue
         t = parse_ts(d.get("ts", ""))
         if t is None: continue

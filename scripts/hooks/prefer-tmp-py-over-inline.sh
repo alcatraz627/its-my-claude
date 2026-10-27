@@ -3,14 +3,14 @@
 # instrument: self (next command shape)
 # review-by: 2026-10-16
 # retire-if: heed-rate < 30% over 200 fires
-# prefer-tmp-py-over-inline.sh — PreToolUse[Bash] nudge, with heed measurement.
+# prefer-tmp-py-over-inline.sh: PreToolUse[Bash] nudge, with heed measurement.
 # Multi-line `python3 -c '...'` has no traceback line numbers in Bash output
 # and is shell-quoting-sensitive. Suggests /tmp/<slug>.py for debuggability.
 #
 # Threshold: >5 newlines in the -c arg. Short one-liners are fine.
 #
 # Heed measurement (added 2026-07-18): this was the highest-volume nudge in the
-# whole config with zero heed data — 696 fires, never once checked. It now records
+# whole config with zero heed data: 696 fires, never once checked. It now records
 # whether the nudge worked, mirroring the Stop-hook pattern in prose-smell-stop.sh
 # but adapted for a PreToolUse gate:
 #   - on a nudge, drop a session-scoped marker.
@@ -19,7 +19,7 @@
 #     with >5 newlines is heeded=false. Anything else leaves the marker for later.
 # The resolve check runs BEFORE the nudge's own early-exit, because a heeded run
 # has no `-c` and would otherwise exit unrecorded. A nudge that is simply never
-# followed by more python is left unresolved on purpose — an honest gap beats a
+# followed by more python is left unresolved on purpose: an honest gap beats a
 # guessed verdict (the heed rate reads over observed follow-ups only).
 #
 # Mute: touch ~/.claude/.no-inline-py-hint
@@ -58,7 +58,7 @@ fi
 kind=$(python3 - "$SCAN" <<'PY' 2>/dev/null
 import sys, re
 cmd = sys.argv[1]
-# inline: python3 -c '<body>' — capture the body to count newlines
+# inline: python3 -c '<body>': capture the body to count newlines
 m = re.search(r"python3?\s+-c\s+(['\"])((?:(?!\1).|\n)*)\1", cmd)
 if m:
     print("inline", m.group(2).count("\n"))

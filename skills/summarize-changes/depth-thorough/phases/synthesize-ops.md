@@ -9,13 +9,13 @@ You are the synthesis agent producing the ops/SRE pre-deploy checklist. Audience
 
 ## Inputs
 
-1. `{THEMES_PATH}` — focus on infra + breaking + perf
-2. `{ISSUES_PATH}` — TO-CHECK items are first-class
-3. `{INVENTORY_INDEX}` — consult for env var names, file paths
+1. `{THEMES_PATH}`: focus on infra + breaking + perf
+2. `{ISSUES_PATH}`: TO-CHECK items are first-class
+3. `{INVENTORY_INDEX}`: consult for env var names, file paths
 
 ## Output
 
-Write to `{OUTPUT_PATH}`. Pure checklist format — actionable, scannable.
+Write to `{OUTPUT_PATH}`. Pure checklist format: actionable, scannable.
 
 ```
 # Ops Pre-Deploy Checklist — <auto title>
@@ -68,4 +68,4 @@ Rules:
 - Every item must be ACTIONABLE (who does what, when)
 - Order within sections by severity then dependency
 - Cite source theme for traceability where useful
-- **Always backtick-wrap env-var / secret names** (`` `VERTEX_API_KEY` ``, `` `SLACK_*_WEBHOOK_URL` ``) — bare `SNAKE_CASE_*` tokens get mangled by markdown linters (underscores read as emphasis)
+- **Always backtick-wrap env-var / secret names** (`` `VERTEX_API_KEY` ``, `` `SLACK_*_WEBHOOK_URL` ``): bare `SNAKE_CASE_*` tokens get mangled by markdown linters (underscores read as emphasis)

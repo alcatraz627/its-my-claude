@@ -3,7 +3,7 @@
 # token cost + usage can be reviewed against the alternatives (`see` ≈ free local,
 # gemini ≈ abundant separate budget). One JSONL line per image read:
 #   {ts, session_id, file, bytes, w, h, est_tokens}
-# est_tokens ≈ (w*h)/750 — the Claude vision sizing rule of thumb; a proxy, not billing.
+# est_tokens ≈ (w*h)/750: the Claude vision sizing rule of thumb; a proxy, not billing.
 # Companion streams: lm see-history / imagine-history / (future) gem-history.
 # Review cadence: gcc-schedule `image-tools-review` (one-shot 2026-07-28T15:00).
 # Mute: touch ~/.claude/.no-image-read-log

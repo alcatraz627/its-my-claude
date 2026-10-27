@@ -1,12 +1,12 @@
 ---
 migration: 0028
-title: Checkpoint pointer collision-preservation — <slug>.<uuid8>.json siblings
+title: Checkpoint pointer collision-preservation, <slug>.<uuid8>.json siblings
 session: audit-gcc-7c@2026-07-09
 status: complete
 date: 2026-07-10
 ---
 
-# Migration 0028 — Checkpoint pointer collision-file schema
+# Migration 0028: Checkpoint pointer collision-file schema
 
 ## Why
 
@@ -30,7 +30,7 @@ retains every entry regardless (reachable via `--pick`).
 
 ## What does NOT change
 
-- `index.jsonl` (append-only chronological log) — untouched, still the ground truth.
+- `index.jsonl` (append-only chronological log): untouched, still the ground truth.
 - `<session-uuid>.json` naming for the pointer files themselves (still slug-keyed).
 - The deprecated `_last-checkpoint.json` back-compat slot (still pending migration
   0008 reader removal, `prop-20260515-141140-44`).
@@ -53,4 +53,4 @@ git checkout HEAD -- scripts/checkpoint/write.sh scripts/checkpoint/resolve.sh
 ## Notes / followups
 
 - Consumers of `resolve.sh --session-id` should parse only the JSON object (a
-  `note:` line may appear on stderr) — catchup SKILL.md Phase 0.3 documents this.
+  `note:` line may appear on stderr): catchup SKILL.md Phase 0.3 documents this.

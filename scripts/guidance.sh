@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# guidance.sh — neutral standing directives the user wants internalized.
+# guidance.sh: neutral standing directives the user wants internalized.
 #
 # A third channel alongside atone (mistakes) and affirm (good calls): NEITHER a
-# correction NOR a compliment — a steer on how to think/choose, written rarely
+# correction NOR a compliment: a steer on how to think/choose, written rarely
 # when the user observes the agent's work. Read by the MAIN agent (relevance-
 # gated, via the 06-guidance hinter) AND by every dispatch checker (juror,
 # skeptical-review, future homework-checkers) via `guidance.sh show`.
@@ -20,7 +20,7 @@ cmd="${1:-show}"
 init_notes() {
   mkdir -p "$(dirname "$NOTES")"
   cat > "$NOTES" <<'HDR'
-# Guidance — standing directives from the user
+# Guidance: standing directives from the user
 
 Neutral steers the user wants internalized — NOT mistakes (see atone) or
 compliments (see affirm). Written rarely, when observing the agent's work.
@@ -42,7 +42,7 @@ case "$cmd" in
     note="${2:-}"; scope="${3:-all}"
     [ -n "$note" ] || { echo "usage: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2; }
     # A note that IS a flag means the caller invented a syntax this tool doesn't
-    # have (e.g. --scope) — the real directive would be silently dropped. Two
+    # have (e.g. --scope): the real directive would be silently dropped. Two
     # entries were lost exactly this way (2026-06-25, 2026-07-10) pre-guard.
     case "$note" in
       --*) echo "guidance add: note looks like a flag ('$note') — args are POSITIONAL: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2 ;;

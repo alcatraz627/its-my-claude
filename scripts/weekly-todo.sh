@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# weekly-todo.sh — CLI for managing ~/.claude/weekly-todos.md
+# weekly-todo.sh: CLI for managing ~/.claude/weekly-todos.md
 #
 # Usage:
 #   weekly-todo list [week]              List items (default: current week)
@@ -215,7 +215,7 @@ cmd_add() {
     fi
     if $in_week; then
       if [[ "$line" =~ ^##\  ]] && [[ "$line" != "###"* ]]; then
-        # Hit next week section — stop
+        # Hit next week section: stop
         break
       fi
       if [[ "$line" == "$cat_header" ]]; then

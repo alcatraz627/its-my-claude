@@ -67,16 +67,16 @@ The decision matrix evaluates these dimensions:
 - Content/events → Whether in-app events fit
 - **Minimum eligibility thresholds** → Whether the app has sufficient scale for each feature
 
-**CRITICAL — Check Eligibility Before Recommending:**
-Not every feature makes sense at every scale. The decision matrix (Dimension 6) defines minimum thresholds. Features that require traffic volume (PPO, CPPs) or user base size (win-back, promotional offers) should NOT be recommended for apps below those thresholds. Instead, recommend the alternatives specified in the matrix. Always be honest about what will and won't work at the app's current scale — recommending PPO to an app with 200 impressions/month wastes their time.
+**CRITICAL: Check Eligibility Before Recommending:**
+Not every feature makes sense at every scale. The decision matrix (Dimension 6) defines minimum thresholds. Features that require traffic volume (PPO, CPPs) or user base size (win-back, promotional offers) should NOT be recommended for apps below those thresholds. Instead, recommend the alternatives specified in the matrix. Always be honest about what will and won't work at the app's current scale: recommending PPO to an app with 200 impressions/month wastes their time.
 
 ### Phase 3: Strategy Generation
 
 Based on the analysis, read the appropriate strategy template:
-- `strategy-templates/subscription-app.md` — For subscription-based apps
-- `strategy-templates/paid-app.md` — For paid upfront apps
-- `strategy-templates/freemium-app.md` — For freemium with IAP
-- `strategy-templates/game-app.md` — For games (any monetization)
+- `strategy-templates/subscription-app.md`: For subscription-based apps
+- `strategy-templates/paid-app.md`: For paid upfront apps
+- `strategy-templates/freemium-app.md`: For freemium with IAP
+- `strategy-templates/game-app.md`: For games (any monetization)
 
 Customize the template with the app's specific details.
 
@@ -218,9 +218,9 @@ Present the strategy as:
 
 ## References
 
-- **decision-matrix.md** — Feature recommendation logic by app attributes
-- **strategy-templates/** — Monetization-specific strategy playbooks
-- Related: `app-store/keyword-optimizer` — ASO keyword strategy
-- Related: `app-store/app-description-writer` — Product page copy
-- Related: `app-store/screenshot-planner` — Screenshot sequences
-- Related: `monetization` — Pricing and tier strategy
+- **decision-matrix.md**: Feature recommendation logic by app attributes
+- **strategy-templates/**: Monetization-specific strategy playbooks
+- Related: `app-store/keyword-optimizer`: ASO keyword strategy
+- Related: `app-store/app-description-writer`: Product page copy
+- Related: `app-store/screenshot-planner`: Screenshot sequences
+- Related: `monetization`: Pricing and tier strategy

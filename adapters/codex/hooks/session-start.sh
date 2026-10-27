@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-start.sh — codex SessionStart: join the fabric, brief the contractor.
+# session-start.sh: codex SessionStart: join the fabric, brief the contractor.
 #
 # 1. Registers this codex session on claude-ipc as cx-<dir>-<id8> and drains
 #    its backlog, using claude-ipc's own compiled hook (same stdin contract).

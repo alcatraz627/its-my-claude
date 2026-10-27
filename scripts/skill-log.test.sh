@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# skill-log.test.sh — runnable checks for skill-log.sh.
+# skill-log.test.sh: runnable checks for skill-log.sh.
 # Isolation: SKILL_LOG_EVENTS redirects the stream so the live log is never touched.
 # Run: bash ~/.claude/scripts/skill-log.test.sh   (exit 0 = all pass)
 

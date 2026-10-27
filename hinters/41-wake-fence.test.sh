@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 41-wake-fence.test.sh — a wake prompt while the owner typed inside the window
+# 41-wake-fence.test.sh: a wake prompt while the owner typed inside the window
 # gets the fence; a quiet session, a non-wake prompt, a cron-only transcript and
 # the mute stay silent. One mutation: the fence text removed reads as silent.
 set -uo pipefail

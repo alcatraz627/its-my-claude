@@ -162,7 +162,7 @@
   // Search
   __RPT.initSearch('#search', '#search-count', '#no-results', '.section');
 
-  // Copy buttons (shared module — also works alongside hover copy above)
+  // Copy buttons (shared module: also works alongside hover copy above)
   __RPT.initCopyButtons('.copy-btn');
 
   // Width picker

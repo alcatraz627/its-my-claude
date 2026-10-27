@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-consolidate.sh — regenerate derived views from the raw atone log.
+# atone-consolidate.sh: regenerate derived views from the raw atone log.
 #
 # READS  (read-only):  ~/.claude/atone/events.jsonl
 #                      ~/.claude/atone/rca/*.md
@@ -25,7 +25,7 @@
 #   --help
 
 # Note: bash 3.2 (macOS default) lacks `declare -A`; we use a function instead.
-# `set -u` is too brittle for shell of this size — keep pipefail only.
+# `set -u` is too brittle for shell of this size: keep pipefail only.
 set -o pipefail
 
 # shellcheck disable=SC1091
@@ -50,7 +50,7 @@ AFFIRM_EVENTS="$AFFIRM_DIR/events.jsonl"
 META="$DERIVED/_meta.json"
 LAST_RUN_MARKER="$DERIVED/.last-run-ts"
 
-# Synthetic test/debug slugs generated while building the atone/juror system —
+# Synthetic test/debug slugs generated while building the atone/juror system:
 # kept in the immutable raw log, but excluded from the human-facing VIEWS so
 # they don't skew the curated top-20, TL;DR, proposals, or cluster counts.
 # ANCHORED to the specific synthetic stems (each `^`-rooted) rather than loose
@@ -129,7 +129,7 @@ mkdir -p "$DERIVED/clusters" "$DERIVED_BAK" "$TOPICS_DIR"
 # ─── Proposal routing ─────────────────────────────────────────────
 # For each qualifying pattern (≥3 recurrences OR S3), pick a graduation target
 # based on slug characteristics, draft a proposal payload, and append to
-# ~/.claude/proposals.jsonl via propose.sh — UNLESS we've already proposed for
+# ~/.claude/proposals.jsonl via propose.sh: UNLESS we've already proposed for
 # this slug (idempotency check).
 #
 # Targets (routing matrix):
@@ -154,7 +154,7 @@ PROPOSALS_JSONL="$HOME/.claude/proposals.jsonl"
 
 # Build the filtered view EVERY human-facing builder reads (the raw log is never
 # touched). Built here, before the mode branch, so the --triggers-only fast-path
-# — which feeds the per-session TL;DR hinter and triggers.json — is filtered too.
+# : which feeds the per-session TL;DR hinter and triggers.json: is filtered too.
 # On any failure, fall back to the raw log so a bad regex can't blank the views.
 if [ -f "$EVENTS" ] && jq -c --arg re "$ATONE_TEST_SLUG_RE" 'select((.slug // "") | test($re) | not)' "$EVENTS" > "$EVENTS_VIEW.tmp" 2>/dev/null; then
   mv "$EVENTS_VIEW.tmp" "$EVENTS_VIEW"

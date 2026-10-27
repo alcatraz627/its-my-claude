@@ -1,6 +1,6 @@
 ---
 name: daily-todo
-description: Scans all project runtime-notes for recent entries, checks todo files for unchecked items, reads MEMORY.md indexes for activity hints — generates a daily todo file at ~/.claude/todo-YYYY-MM-DD.md.
+description: Scans all project runtime-notes for recent entries, checks todo files for unchecked items, reads MEMORY.md indexes for activity hints, generates a daily todo file at ~/.claude/todo-YYYY-MM-DD.md.
 allowed-tools: Read, Edit, Write, Bash, Glob, Grep, Agent
 user-invocable: true
 argument-hint: "[YYYY-MM-DD]"
@@ -15,9 +15,9 @@ Generates a daily todo file by aggregating pending work across all active projec
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `~/.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -38,13 +38,13 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Determine Date & Check Existing
+## Phase 1: Determine Date & Check Existing
 
 1. Parse the argument for a date. Default to today (`YYYY-MM-DD`).
 2. Set output path: `~/.claude/todo-YYYY-MM-DD.md`.
 3. If the file already exists, read it and note which items are checked/unchecked. These carry forward.
 
-## Phase 2 — Scan All Projects
+## Phase 2: Scan All Projects
 
 ### 2.1 Discover active projects
 
@@ -66,7 +66,7 @@ For each project that has a `.claude/` directory, it's considered active.
 
 ### 2.2 Scan runtime-notes
 
-For each active project, read `.claude/skills/runtime-notes.md` (first 30 lines only — recent entries are at top).
+For each active project, read `.claude/skills/runtime-notes.md` (first 30 lines only: recent entries are at top).
 
 Extract:
 - Sessions from yesterday and today (match `## session:` or `## skill-name:` headers with dates)
@@ -84,7 +84,7 @@ For each active project, check if a project-scoped MEMORY.md exists at:
 
 Read each index for project-type memories that suggest active work (look for keywords like "active", "in progress", "blocked", "pending").
 
-## Phase 3 — Generate Todo
+## Phase 3: Generate Todo
 
 Write the todo file to `~/.claude/todo-YYYY-MM-DD.md`:
 
@@ -117,7 +117,7 @@ Write the todo file to `~/.claude/todo-YYYY-MM-DD.md`:
 - **P1 (Active):** Unchecked items from yesterday's todo that are still relevant
 - **P2 (Suggested):** Inferred from stale project state (no CLAUDE.md, large runtime-notes, etc.)
 
-## Phase 4 — Report
+## Phase 4: Report
 
 Print a compact summary:
 
@@ -128,7 +128,7 @@ Print a compact summary:
   Items:    X carried forward, Y new
 ```
 
-## Phase 5 — Post-Run
+## Phase 5: Post-Run
 
 Write a runtime note via:
 

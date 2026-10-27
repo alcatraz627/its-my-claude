@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-juror-dispatch.sh — run the atone juror as a headless `claude -p` call
+# atone-juror-dispatch.sh: run the atone juror as a headless `claude -p` call
 # and persist its verdict to disk. This takes the agent OUT of verdict
 # composition: the agent prepares a case file; THIS script produces the verdict
 # via a process the agent does not invoke and cannot interpose on.
@@ -43,7 +43,7 @@ export ATONE_JUROR_SESSION=1
 # The juror is a DIFFERENT model from the offender, by design: the same model
 # that made the mistake, asked to grade itself, misses its own error far more
 # often than an externally-attributed one (the self-correction illusion). So the
-# juror defaults to Sonnet — independent of the Opus main loop and cheaper — with
+# juror defaults to Sonnet: independent of the Opus main loop and cheaper: with
 # only the genuinely-hard 'ambiguous' verdicts escalated to Opus for a second
 # opinion. This became viable once the headless prompt was made compact (the full
 # persona made claude -p slow/parse-fragile → the June juror-unavailable events);
@@ -74,7 +74,7 @@ prior_slugs=$(bash "$HOME/.claude/scripts/atone.sh" slugs 2>/dev/null | head -20
 prior_verdicts=$(jq -rc --arg s "$slug" 'select((.related_atone_slugs // []) | any(. == $s)) | {verdict, confidence, ts: .ts[:10]}' \
   "$ATONE_DIR/judgments.jsonl" 2>/dev/null | tail -5 || true)
 
-# Pull the case fields into vars FIRST (no command-substitution inside a heredoc —
+# Pull the case fields into vars FIRST (no command-substitution inside a heredoc:
 # bash 3.2 mis-parses $()-containing-heredoc-containing-$(), which is what broke
 # the first cut of this script).
 uc=$(jq -r '.user_callout // ""'  "$case_file")
@@ -83,7 +83,7 @@ adf=$(jq -r '.agent_defense // ""' "$case_file")
 ctx=$(jq -r '.context // ""'      "$case_file")
 [ -n "$prior_verdicts" ] || prior_verdicts="(none recorded yet)"
 
-# Build the prompt by appending pieces to a temp file — no nesting, no fragility.
+# Build the prompt by appending pieces to a temp file: no nesting, no fragility.
 prompt_file=$(mktemp "${TMPDIR:-/tmp}/atone-juror-prompt.XXXXXX")
 trap 'rm -f "$prompt_file" 2>/dev/null' EXIT
 {
@@ -91,7 +91,7 @@ trap 'rm -f "$prompt_file" 2>/dev/null' EXIT
   # headless `claude -p` ruminate for minutes and frequently return no parseable
   # verdict (the juror-unavailable failures). A distilled prompt returns a clean
   # verdict in ~10s. persona.md ($PERSONA) remains the canonical spec/rationale;
-  # this is its operational distillation — keep the two in sync when either moves.
+  # this is its operational distillation: keep the two in sync when either moves.
   cat <<'JUROR_EOF'
 You are a JUROR giving a fair second opinion on whether an agent's mistake was
 real. You are the juror, not the judge — the USER is the judge and can overrule
@@ -147,7 +147,7 @@ JUROR_EOF
 # retry converts most "unavailable" events into real verdicts).
 # Extract the LAST balanced top-level {...} that parses as a dict with "verdict"
 # (A7: robust to a ```json fence, prose-before-the-object, pretty-print, and
-# trailing prose — the old sed-from-first-brace broke on a stray prose brace).
+# trailing prose: the old sed-from-first-brace broke on a stray prose brace).
 extract_verdict() {
   printf '%s' "$1" | python3 -c '
 import sys, json
@@ -165,7 +165,7 @@ for i, c in enumerate(t):
 for o in reversed(objs):
     try:
         # strict=False permits literal control chars (newlines/tabs) inside
-        # string values — the juror reasoning field is multi-paragraph, so the
+        # string values: the juror reasoning field is multi-paragraph, so the
         # model routinely emits raw newlines there; strict parsing rejected them
         # ("control characters U+0000-U+001F must be escaped") and dropped every
         # verdict, which is the juror-unavailable-with-rc=0 failure.
@@ -178,7 +178,7 @@ for o in reversed(objs):
 }
 # Run the juror at a given model; retry once on empty/parse failure. Called
 # DIRECTLY (not via $()) so the exit code and the verdict both propagate to the
-# parent — a command-substitution subshell would strip both. Outputs: global
+# parent: a command-substitution subshell would strip both. Outputs: global
 # `rc` (claude's exit code) and global `JUROR_VERDICT` (verdict JSON, "" on fail).
 run_juror() {
   local model="$1" attempt raw
@@ -224,7 +224,7 @@ esac
 printf '%s\n' "$verdict" > "$out"
 echo "VERDICT_PATH=$out" >&2
 
-# Persona usage residue — best-effort. MUST NOT write to stdout (the verdict is the
+# Persona usage residue: best-effort. MUST NOT write to stdout (the verdict is the
 # only thing on stdout, parsed by the caller); errors are swallowed so a logging
 # failure can never break the gate. outcome is 'unknown' because whether the verdict
 # is later overruled is a downstream signal this script doesn't see.

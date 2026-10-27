@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-extension-root.sh — keep unpacked browser extensions loadable.
+# guard-extension-root.sh: keep unpacked browser extensions loadable.
 #
 # Chrome refuses to load (or reload) an unpacked extension whose root folder
 # holds any file or folder whose name starts with "_", apart from its own

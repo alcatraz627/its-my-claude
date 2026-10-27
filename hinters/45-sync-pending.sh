@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# UserPromptSubmit hinter — surface workspace todos carried over for a new/revived
+# UserPromptSubmit hinter: surface workspace todos carried over for a new/revived
 # session (written by SessionStart pull.sh) so the agent seeds them via TaskCreate.
 #
-# Hinters get only the prompt text on stdin — no session id (CLAUDE_SESSION_ID is
+# Hinters get only the prompt text on stdin: no session id (CLAUDE_SESSION_ID is
 # empty here). So, like 46/47, pick the newest recent pending file and fire ONLY
 # when exactly one session is unambiguous; with two concurrent pending files we
 # stay silent rather than inject session A's todos into session B (was: fell back
-# to the global .current-session-id slot — cross-session injection). Latency <100ms.
+# to the global .current-session-id slot: cross-session injection). Latency <100ms.
 
 set -uo pipefail
 

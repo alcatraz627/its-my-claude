@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# policy.sh — one reader for every usage window, with the owner's thresholds.
+# policy.sh: one reader for every usage window, with the owner's thresholds.
 #
 # Prints TIER<TAB>detail and exits 0 (OK or UNKNOWN), 1 (WARN), 2 (STRONG).
 # A tier is advisory: the caller still runs; the line asks it to weigh value.

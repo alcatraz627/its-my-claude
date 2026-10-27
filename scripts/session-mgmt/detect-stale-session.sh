@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# detect-stale-session.sh — SessionStart hook. Detects whether the previous
+# detect-stale-session.sh: SessionStart hook. Detects whether the previous
 # session terminated abnormally (API crash, network loss, kernel panic) and
 # injects an additionalContext hint prompting /catchup.
 #
@@ -34,7 +34,7 @@ acked() { [ -e "$ACK_DIR/$1" ]; }
 if [ -d "$STATE_DIR" ]; then
   while IFS= read -r f; do
     [ -z "$f" ] && continue
-    # Only consider recent files (last 48h) — anything older is likely debris
+    # Only consider recent files (last 48h): anything older is likely debris
     if [ -n "$(find "$f" -mtime -2 2>/dev/null)" ]; then
       sid=$(jq -r '.session_id // ""' "$f" 2>/dev/null)
       ts=$(jq -r '.ts // ""' "$f" 2>/dev/null)
@@ -57,7 +57,7 @@ fi
 
 # Check 2: WAL has dangling session_start (no matching session_end) within 24h
 if [ -f "$GLOBAL_WAL" ]; then
-  # Pull the last 200 lines — enough to find a session_start and its matching
+  # Pull the last 200 lines: enough to find a session_start and its matching
   # end if both exist recently. This is a defensive limit, not a correctness
   # one; /catchup itself does a thorough read.
   TAIL=$(tail -n 200 "$GLOBAL_WAL" 2>/dev/null)

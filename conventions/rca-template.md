@@ -7,7 +7,7 @@ triggers:
   - phrase:"write an RCA"
   - phrase:"incident report"
   - skill:gdoc
-related: [conventions/report-writing.md, rules/audience-aware-writing.md]
+related: [conventions/doc-writing.md, rules/audience-aware-writing.md]
 tier: 2
 category: conventions
 updated: 2026-10-05
@@ -16,7 +16,7 @@ stale_after_days: 180
 
 # RCA template
 
-The standard shape for an incident report, owner-approved 2026-10-05 (worked example: Versable `frontend/docs/team/postmortems/2026-10-05-extractor-blank-jobs.md`). It extends `conventions/report-writing.md`, which still governs voice and grounding. Section order follows the public Google SRE, Atlassian and PagerDuty templates.
+The standard shape for an incident report, owner-approved 2026-10-05 (worked example: Versable `frontend/docs/team/postmortems/2026-10-05-extractor-blank-jobs.md`). It extends `conventions/doc-writing.md` §16, which still governs voice and grounding. Section order follows the public Google SRE, Atlassian and PagerDuty templates.
 
 ## Writing rules
 

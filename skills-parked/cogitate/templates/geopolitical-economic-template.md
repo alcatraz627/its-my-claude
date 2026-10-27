@@ -1,10 +1,10 @@
 ---
 template: geopolitical-economic
-use-case: Active geopolitical conflict with multi-domain economic impact analysis — war status, commodity markets, country-specific macro stress, sector winners/losers, and political/domestic fallout.
+use-case: Active geopolitical conflict with multi-domain economic impact analysis, war status, commodity markets, country-specific macro stress, sector winners/losers, and political/domestic fallout.
 created: 2026-03-18
 ---
 
-# <!-- EVENT NAME --> — Economic & Market Impact
+# <!-- EVENT NAME -->: Economic & Market Impact
 > <!-- One-line summary: what conflict, what economic angle, what timeframe -->
 
 **Date / Last Updated:** <!-- DD MMM YY -->

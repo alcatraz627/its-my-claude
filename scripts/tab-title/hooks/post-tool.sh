@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/hooks/post-tool.sh — PostToolUse hook (async).
+# tab-title/hooks/post-tool.sh: PostToolUse hook (async).
 # Decrements the in-flight tool counter and clears TRANSIENT_FOCUS when no
 # tool is running. Manual focus (set via set-focus.sh) is then visible again.
 #
@@ -59,5 +59,5 @@ case "$tool" in
 esac
 
 tab_save_state "$sid"
-# No tab_emit — same reason as pre-tool.sh: PreTool/PostTool /dev/tty
+# No tab_emit: same reason as pre-tool.sh: PreTool/PostTool /dev/tty
 # doesn't reach the visible terminal under Claude Code's hook arrangement.

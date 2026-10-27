@@ -636,7 +636,7 @@ evidence that a moment is actually being missed.
   change. Two things had to be built rather than deleted: the `data-keys="own"`
   rule in §10, and an explicit top margin on `.term p` and `.hplay .pane-l p`,
   because `shared.css` resets `*{margin:0}` and both had been living on the UA
-  default. **G13's check was wrong in both directions** — a bare filename grep
+  default. **G13's check was wrong in both directions**: a bare filename grep
   is satisfied by a comment that names the files, so it passed before the work
   (2, matching the copy note) and failed after the work was correct (3). It is
   pinned to the attribute form now. The lesson is the one this board already

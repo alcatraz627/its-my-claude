@@ -1,4 +1,4 @@
-// shared.js — the behaviour every kanban surface has in common.
+// shared.js: the behaviour every kanban surface has in common.
 //
 // Same reason as shared.css: the theme toggle, the tooltip and the page nav
 // were re-implemented per page, so a fix landed on one surface and not the
@@ -284,12 +284,12 @@ function crumbFor(kindId, instance) {
 // no page keeps a tally of its own.
 //
 // One request per kind, once per page: a second caller gets the first one's
-// promise. A kind that cannot be reached answers null, NOT zero — an unknown
+// promise. A kind that cannot be reached answers null, NOT zero: an unknown
 // count is not a count of none (§12), and an empty pill is hidden rather than
 // asserting an emptiness nothing verified.
 // Every instance of every kind, loaded once per page. The tab counts, the
-// palette and the board's search are three views of one question — what is
-// there, of each kind — and each used to ask it separately, so a kind wired
+// palette and the board's search are three views of one question: what is
+// there, of each kind: and each used to ask it separately, so a kind wired
 // into one was missing from the others.
 //
 // One request per kind: a second caller gets the first one's promise. A kind
@@ -504,7 +504,7 @@ const KIND_ROW = {
 const searchKinds = () => KINDS.filter((k) => KIND_ROW[k.id])
   .slice().sort((a, b) => (a.searchRank ?? 99) - (b.searchRank ?? 99));
 
-// "a, b and c" — for sentences that must name what was searched.
+// "a, b and c": for sentences that must name what was searched.
 const andList = (xs) => xs.length < 2 ? (xs[0] ?? "")
   : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`;
 
@@ -619,8 +619,8 @@ function navbar({ mount, active, title, sub, crumb, identity, find, actions, cou
 
   // The bar sheds in a fixed order when it runs out of room, instead of letting
   // whatever happens to sit last in the DOM fall off the right edge. On a board
-  // with a longer name and two live peers, that was "Send to agent" — the point
-  // of the whole app — while an ellipsised path kept its pixels.
+  // with a longer name and two live peers, that was "Send to agent": the point
+  // of the whole app: while an ellipsised path kept its pixels.
   //
   // The signal is the page group scrolling: if this board's verbs do not fit,
   // the bar is over-subscribed. What goes first is the path, because the crumb
@@ -764,7 +764,7 @@ const termsTab = (terms, { intro = "" } = {}) => ({
 //
 // Two ways in, because the board's panes are long hand-written tables and
 // moving them into JavaScript would be a rewrite, not a reuse. A page that
-// already has the markup gets ADOPTED — this takes over the tab strip, the
+// already has the markup gets ADOPTED: this takes over the tab strip, the
 // close and the Escape, and leaves the panes alone. A page that has none gets
 // one BUILT from a tab spec. Either way the behaviour has one implementation.
 function helpModal({ id = "help", title = "Help", sub = "", tabs = [], onOpen, onShow } = {}) {

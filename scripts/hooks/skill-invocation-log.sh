@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# skill-invocation-log.sh — PostToolUse on Skill: record that a skill actually ran.
+# skill-invocation-log.sh: PostToolUse on Skill: record that a skill actually ran.
 #
 # skills/usage/events.jsonl is written by a `skill-log.sh record` step inside each
 # SKILL.md, which means it measures WHICH SKILLS REMEMBERED TO REPORT, not which

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title.sh — Unified CLI for the Ghostty tab-title composer.
+# tab-title.sh: Unified CLI for the Ghostty tab-title composer.
 #
 # Reads, writes, validates, and fixes the structured title:
 #   ✻ <decorators> <base> [:<focus>]
@@ -221,7 +221,7 @@ cmd_enum_slot() {
     --clear)      cmd_set "$field=" ;;
     --list)       tab_"${field}"_list ;;
     *)
-      # Validate the name maps to a glyph; warn if not (still accept — enum
+      # Validate the name maps to a glyph; warn if not (still accept: enum
       # might grow later; better to render empty than refuse).
       local g; g=$(tab_"${field}"_glyph "$1")
       [[ -z "$g" ]] && tab_notice "unknown $field '$1' — run '$PROG $field --list'"

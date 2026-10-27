@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ledger.sh — the read/query surface over the gcc event-ledger family.
+# ledger.sh: the read/query surface over the gcc event-ledger family.
 #
 # One dispatcher across the durable judgment ledgers (atone, affirm, pinned,
 # proposals, personas) + the alert ledger. Generalizes atone's loved ergonomics
@@ -7,12 +7,12 @@
 # unified session_id key unlocks, and gives agents a cheap, cited `ask`/`status`.
 #
 # Design choices (per design-red-alert / the critique):
-#   - Filters key on session_id / tags / id / ts / the DOMAIN-declared classifier —
+#   - Filters key on session_id / tags / id / ts / the DOMAIN-declared classifier:
 #     never a global --kind/--severity (those are domain-owned, so a global filter
 #     would silently return nothing for most domains).
 #   - `ask` returns CITED FACTS, not LLM prose (the caller is already an LLM).
 #   - `ask`/`status` read the ledger + alert-state ONLY, never the daemon `::logs`
-#     firehoses (valence/introspection/injections) — they are capped/rewritten and
+#     firehoses (valence/introspection/injections): they are capped/rewritten and
 #     out of the family.
 #   - No `why` command in v1 (its cross-event `corr` join needs a field v1 lacks).
 #
@@ -40,7 +40,7 @@ _emit() {
     [ -n "$only" ] && [ "$only" != "$dom" ] && continue
     [ -f "$path" ] || continue
     # Session key: the family never actually agreed on one name. personas writes
-    # `session`, warn-events writes `sid`, everyone else writes `session_id` — so
+    # `session`, warn-events writes `sid`, everyone else writes `session_id`: so
     # reading only .session_id made 2 of 8 domains silently invisible to every
     # session-scoped `list`/`timeline` query (they returned empty, not an error).
     # Accept all three rather than migrate on-disk history.
@@ -65,7 +65,7 @@ cmd_list() {  # list [--src D] [--session S] [--since ISO] [--limit N]
   # `head` closes the pipe once it has $limit rows, which kills the upstream
   # readers with SIGPIPE; under `set -o pipefail` that made a SUCCESSFUL listing
   # exit 141, so `ledger list … && …` and any `set -e` caller read it as failure.
-  # The rows are right either way — only the status was lying.
+  # The rows are right either way: only the status was lying.
   _emit "$src" | awk -F'\t' -v s="$session" -v d="$since" \
     '($1!="") && (s=="" || $4==s) && (d=="" || $1>=d)' \
     | sort -rt$'\t' -k1 | head -n "$limit" | _trunc | _tbl || true

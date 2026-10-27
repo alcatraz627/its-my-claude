@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Quick Win Session Generator
 
-Generate a "quick win" session system that guides users to complete a meaningful action within their first 60 seconds. Reduces time-to-value by surfacing the simplest high-impact task, walking the user through it step by step, and celebrating completion. Critical for onboarding retention — users who achieve a quick win in the first minute are significantly more likely to return.
+Generate a "quick win" session system that guides users to complete a meaningful action within their first 60 seconds. Reduces time-to-value by surfacing the simplest high-impact task, walking the user through it step by step, and celebrating completion. Critical for onboarding retention: users who achieve a quick win in the first minute are significantly more likely to return.
 
 ## When This Skill Activates
 
@@ -60,13 +60,13 @@ Ask user via AskUserQuestion:
    - Coach marks (tooltip arrows pointing at UI elements)
 
 3. **Celebrate on completion?**
-   - Yes — animated checkmark, congratulations message, time stat
-   - Minimal — brief success banner, auto-dismiss
-   - No — silently mark as complete
+   - Yes: animated checkmark, congratulations message, time stat
+   - Minimal: brief success banner, auto-dismiss
+   - No: silently mark as complete
 
 4. **Track as activation metric?**
-   - Yes — log completion time, step-by-step progress, abandonment point
-   - No — just persist completed/not completed
+   - Yes: log completion time, step-by-step progress, abandonment point
+   - No: just persist completed/not completed
 
 ## Generation Process
 
@@ -75,16 +75,16 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `QuickWinTask.swift` — Model for a quick win task and its steps
-2. `QuickWinSession.swift` — @Observable session manager: task selection, step tracking, timing, completion
+1. `QuickWinTask.swift`: Model for a quick win task and its steps
+2. `QuickWinSession.swift`: @Observable session manager: task selection, step tracking, timing, completion
 
 ### Step 3: Create UI Files
-3. `QuickWinGuideView.swift` — Overlay that shows instructions and progress
-4. `SpotlightHintView.swift` — Spotlight cutout overlay with callout arrow
-5. `QuickWinCelebrationView.swift` — Completion celebration with stats
+3. `QuickWinGuideView.swift`: Overlay that shows instructions and progress
+4. `SpotlightHintView.swift`: Spotlight cutout overlay with callout arrow
+5. `QuickWinCelebrationView.swift`: Completion celebration with stats
 
 ### Step 4: Create Integration File
-6. `QuickWinModifier.swift` — ViewModifier that triggers the quick win for new users
+6. `QuickWinModifier.swift`: ViewModifier that triggers the quick win for new users
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -251,15 +251,15 @@ QuickWinCelebrationView(
 
 ## Gotchas
 
-- **Don't block experienced users** — Always check completion status before showing. Provide a "Skip" button. Never show again after completion or dismissal.
-- **Make it genuinely useful, not just a tutorial** — The quick win should produce a real artifact (a note, a list item, an imported file). Users should feel they accomplished something, not that they watched a demo.
-- **Handle interruptions gracefully** — If the user backgrounds the app, navigates away, or receives a notification mid-session, persist progress and resume where they left off.
-- **Different quick wins for different user types** — A power user migrating from another app needs a different quick win (import data) than a brand-new user (create first item). Detect context and choose accordingly.
-- **Keep it under 60 seconds** — If a quick win takes longer, it's not quick. Trim steps ruthlessly. Three steps is ideal, five is the maximum.
-- **Test with real timing** — Run the flow yourself with a stopwatch. If it feels slow, it is slow.
+- **Don't block experienced users**: Always check completion status before showing. Provide a "Skip" button. Never show again after completion or dismissal.
+- **Make it genuinely useful, not just a tutorial**: The quick win should produce a real artifact (a note, a list item, an imported file). Users should feel they accomplished something, not that they watched a demo.
+- **Handle interruptions gracefully**: If the user backgrounds the app, navigates away, or receives a notification mid-session, persist progress and resume where they left off.
+- **Different quick wins for different user types**: A power user migrating from another app needs a different quick win (import data) than a brand-new user (create first item). Detect context and choose accordingly.
+- **Keep it under 60 seconds**: If a quick win takes longer, it's not quick. Trim steps ruthlessly. Three steps is ideal, five is the maximum.
+- **Test with real timing**: Run the flow yourself with a stopwatch. If it feels slow, it is slow.
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/onboarding-generator` — Full onboarding flow generation
-- Related: `generators/milestone-celebration` — Celebration UI for achievements beyond first action
+- **templates.md**: All production Swift templates
+- Related: `generators/onboarding-generator`: Full onboarding flow generation
+- Related: `generators/milestone-celebration`: Celebration UI for achievements beyond first action

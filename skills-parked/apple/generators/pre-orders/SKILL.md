@@ -49,9 +49,9 @@ Ask user via AskUserQuestion:
    - WWDC/new OS tie-in
 
 2. **Pre-order duration?**
-   - Short (1-2 weeks) — urgency-driven
-   - Medium (4-6 weeks) — time to build awareness
-   - Long (2-6 months) — major marketing campaign
+   - Short (1-2 weeks): urgency-driven
+   - Medium (4-6 weeks): time to build awareness
+   - Long (2-6 months): major marketing campaign
 
 3. **Pricing strategy?**
    - Free app (maximize pre-orders)
@@ -166,11 +166,11 @@ Ask user via AskUserQuestion:
 | Free launch | Free | Free | Freemium apps, maximum pre-orders |
 | Introductory price | $0.99-2.99 | $4.99-9.99 | Create urgency, reward early adopters |
 | Full price | $X.99 | $X.99 | Premium apps with strong demand |
-| Free then paid | Free | $X.99 | Controversial — may frustrate expectations |
+| Free then paid | Free | $X.99 | Controversial: may frustrate expectations |
 
 ## References
 
-- Related: `generators/in-app-events` — Launch event for release day
-- Related: `generators/featuring-nomination` — Featuring during pre-order
-- Related: `generators/app-store-assets` — Asset specs for pre-order page
-- Related: `app-store/marketing-strategy` — Pre-launch as part of overall strategy
+- Related: `generators/in-app-events`: Launch event for release day
+- Related: `generators/featuring-nomination`: Featuring during pre-order
+- Related: `generators/app-store-assets`: Asset specs for pre-order page
+- Related: `app-store/marketing-strategy`: Pre-launch as part of overall strategy

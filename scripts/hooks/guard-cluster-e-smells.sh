@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-cluster-e-smells.sh — PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
+# guard-cluster-e-smells.sh: PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
 #
 # Runs the shared atone-lint catalog against the code I am ABOUT TO write.
 #   - A BLOCK-level smell (precise, e.g. IIFE/scope-wrapper in JSX) → denies the
@@ -54,9 +54,9 @@ instead of wrapping a function. Genuine exception? mute: touch ~/.claude/.no-clu
   exit 0
 fi
 
-# No block-level smell — surface any warn-level advisory (non-blocking) via
+# No block-level smell: surface any warn-level advisory (non-blocking) via
 # additionalContext (the agent reads it + surfaces to the user; plain stdout
-# would reach neither — see hooks-tui-limits).
+# would reach neither: see hooks-tui-limits).
 all_hits=$(printf '%s' "$payload" | "$LINT" --path "$file_path" 2>/dev/null)
 if [ -n "$all_hits" ]; then
   hint_lines=$(printf '%s' "$all_hits" | msg_lines)

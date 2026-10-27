@@ -8,7 +8,7 @@ subagent_type: general-purpose
 > DISPATCH NOTE (for the orchestrator): dispatch inventory sub-agents as
 > `general-purpose`, NOT `Explore`. The Explore agent type has a restricted
 > tool set and has been observed to hallucinate a "cannot write files due to
-> safety restrictions" refusal — then dump content inline instead of saving.
+> safety restrictions" refusal: then dump content inline instead of saving.
 > `general-purpose` has full Write access and does not exhibit this failure.
 > If any sub-agent returns a refusal ("cannot write", "safety restriction",
 > "unable to save"), retry once as general-purpose before accepting a gap.
@@ -52,9 +52,9 @@ One `## File:` header per file in the chunk. Headers MUST be at column 0 (no lea
 4. `Ambiguous: <question>` for unknowns; never guess
 5. `(formatting only)` marker for whitespace-only changes
 6. `(unstaged)` marker for working-tree-only changes
-7. Terse — one-line bullets, no paragraphs
+7. Terse: one-line bullets, no paragraphs
 
-## CRITICAL — output hygiene
+## CRITICAL: output hygiene
 
 - **Write raw markdown to disk**. Do NOT pipe your output through `gum`, `glow`, `bat`, or any TTY renderer before saving.
 - **No leading-space indentation**. Every line at column 0 unless it's intentional list nesting.

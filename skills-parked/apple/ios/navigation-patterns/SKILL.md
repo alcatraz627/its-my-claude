@@ -71,11 +71,11 @@ Read the user's code or requirements to determine:
 ### 2. Load Relevant Reference Files
 
 Based on the need, read from this directory:
-- `navigation-stack.md` — NavigationStack, NavigationLink, navigationDestination
-- `navigation-split-view.md` — Two/three column layouts, column control, adaptive behavior
-- `tab-view.md` — TabView, iOS 18 customizable tabs, sidebar mode
-- `programmatic-navigation.md` — NavigationPath, state restoration, coordinators, pop-to-root
-- `navigation-transitions.md` — Custom push/pop transitions (iOS 18+)
+- `navigation-stack.md`: NavigationStack, NavigationLink, navigationDestination
+- `navigation-split-view.md`: Two/three column layouts, column control, adaptive behavior
+- `tab-view.md`: TabView, iOS 18 customizable tabs, sidebar mode
+- `programmatic-navigation.md`: NavigationPath, state restoration, coordinators, pop-to-root
+- `navigation-transitions.md`: Custom push/pop transitions (iOS 18+)
 
 ### 3. Review or Recommend
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-# cron-duty.sh — a name and a liveness verdict for session-scoped cron duties.
+# cron-duty.sh: a name and a liveness verdict for session-scoped cron duties.
 #
 # CronCreate jobs live in the harness process's memory and die with the process
 # (5h cap, crash, closed terminal). Whether they survive /clear has been seen both
@@ -9,7 +9,7 @@
 # says nothing across sessions. This ledger gives each recurring DUTY a stable
 # slug, records which harness process armed it, and answers the one question a
 # resuming or sibling session has: is this duty already armed by a process that
-# is still alive? (Provenance: duplicate check-in crons at :23, 2026-08-21 —
+# is still alive? (Provenance: duplicate check-in crons at :23, 2026-08-21:
 # the resume re-armed a duty whose process had survived the /clear.)
 #
 # Usage:

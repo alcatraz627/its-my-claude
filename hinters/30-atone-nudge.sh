@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 30-atone-nudge.sh — UserPromptSubmit hinter.
+# 30-atone-nudge.sh: UserPromptSubmit hinter.
 #
 # TWO-PART LOGIC:
 #
@@ -27,8 +27,8 @@ set -uo pipefail
 PROMPT=$(cat)
 [ -z "$PROMPT" ] && exit 0
 
-# Which session's marker this is. CLAUDE_SESSION_ID is never set by the harness —
-# the real variable is CLAUDE_CODE_SESSION_ID — so reading it alone always fell
+# Which session's marker this is. CLAUDE_SESSION_ID is never set by the harness:
+# the real variable is CLAUDE_CODE_SESSION_ID: so reading it alone always fell
 # through to the date, and every session running that day then shared ONE marker:
 # one session's correction snippet surfaced in an unrelated session's escalation,
 # quoted as if it were that agent's own prior turn. Env-first (not stdin) because
@@ -36,7 +36,7 @@ PROMPT=$(cat)
 # step with atone-stop-check.sh, atone-stop-gate.sh and atone.sh:_add_exit_trap;
 # sanitized because a polluted env id once named a marker after an error message.
 # No id, no marker. The old fallback here keyed on the date, which every session
-# running that day then shared — that IS the 2026-05-24 bug, not a safety net for
+# running that day then shared: that IS the 2026-05-24 bug, not a safety net for
 # it. Degrade to doing nothing: a nudge this session misses costs one advisory,
 # while a marker keyed on today's date leaks one session's correction into another
 # session's escalation. Silence is the safe direction.
@@ -48,7 +48,7 @@ MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
 mkdir -p "$STATE_DIR" 2>/dev/null || true
 
 # ─── Part 0: explicit /atone invocation → always arm the gate ──────
-# When the user literally types /atone, an event MUST be recorded this turn —
+# When the user literally types /atone, an event MUST be recorded this turn:
 # this is the deterministic case, not a heuristic guess. Arm an explicit marker
 # that the blocking Stop gate (atone-stop-gate.sh) enforces.
 #
@@ -56,7 +56,7 @@ mkdir -p "$STATE_DIR" 2>/dev/null || true
 # nudges (what .nudge-off does) must NOT also disable enforcement of an explicit
 # request to record. The explicit gate has its OWN opt-out, .gate-off, default
 # off. The /atone may not be at offset 0 (e.g. a second line after "Did you just
-# skip the atone call?"), so match any line that *starts* with /atone — grep is
+# skip the atone call?"), so match any line that *starts* with /atone: grep is
 # line-oriented, so this scans every line of the prompt.
 if [ ! -f "$HOME/.claude/atone/.gate-off" ] \
    && printf '%s' "$PROMPT" | grep -Eq '^[[:space:]]*/atone([[:space:]]|$)'; then
@@ -67,7 +67,7 @@ if [ ! -f "$HOME/.claude/atone/.gate-off" ] \
       '{ts: $ts, turns_unaddressed: 0, correction_snippet: $snip, explicit: true}' \
       > "$MARKER" 2>/dev/null || true
   fi
-  # No nudge text — the user already invoked /atone. Just arm the gate and
+  # No nudge text: the user already invoked /atone. Just arm the gate and
   # stay out of the way (the skill's own instructions drive the recording).
   exit 0
 fi
@@ -95,7 +95,7 @@ for p in patterns:
     cat <<'EOF'
 [atone-nudge] Marker cleared — user signaled this wasn't a correction.
 EOF
-    # Don't fall through to standard nudge — the user is explicitly disclaiming.
+    # Don't fall through to standard nudge: the user is explicitly disclaiming.
     exit 0
   fi
 fi
@@ -129,7 +129,7 @@ EOF
   esac
 fi
 
-# ─── Part 2: standard nudge — same logic as before ─────────────────
+# ─── Part 2: standard nudge: same logic as before ─────────────────
 HIT=$(ATONE_PROMPT="$PROMPT" python3 - <<'PY' 2>/dev/null
 import os, re
 text = os.environ.get("ATONE_PROMPT", "").lower()

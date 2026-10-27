@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# containment.test.sh — --unfiled counts the open rows that sit under no goal or
+# containment.test.sh: --unfiled counts the open rows that sit under no goal or
 # no milestone, and the human table stays silent about it.
 #
 # The silence is deliberate and is asserted here so nobody removes it by

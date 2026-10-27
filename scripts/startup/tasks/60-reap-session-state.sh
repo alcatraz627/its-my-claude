@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 60-reap-session-state.sh — prune leaked session state that the Stop hook never
+# 60-reap-session-state.sh: prune leaked session state that the Stop hook never
 # cleaned up.
 #
 # The lifecycle model cleans up on the Stop hook at turn end. Every abnormal exit
@@ -15,7 +15,7 @@
 # SAFETY: files are session-scoped and recreated on demand by their owning
 # hooks. Only entries older than their window are dropped, so any live session's
 # state (touched recently) is safe. A checkpoint file still referenced by
-# checkpoints/index.jsonl is NEVER dropped regardless of age — a resume needs it.
+# checkpoints/index.jsonl is NEVER dropped regardless of age: a resume needs it.
 # Runs at startup after the narrower reapers (10/20/50).
 
 set -uo pipefail
@@ -45,7 +45,7 @@ drop_file() { # $1 = path
 # ── turn-state debris older than the window. The whole dir is session-scoped
 #    ephemera recreated on demand: per-turn sentinels (<sid>.json), heartbeat
 #    counters, the speculative-atone counter-<sid> and spec-atone-* nag files.
-#    Match by AGE, not by a name list — a pattern list silently misses whatever
+#    Match by AGE, not by a name list: a pattern list silently misses whatever
 #    sentinel type gets added next (the counter-<uuid> files, 94% of the pile at
 #    build time, were exactly this miss).
 reap_turn_state() {
@@ -67,7 +67,7 @@ reap_checkpoints() {
   [ -d "$dir" ] || { printf '  %-14s (absent)\n' checkpoints; return; }
   # basenames still referenced by any index row. The index carries THREE keys a
   # pointer can be reached by: checkpoint_path, session_id, and (newer schema)
-  # session_uuid. Miss any one and a referenced pointer gets reaped — a
+  # session_uuid. Miss any one and a referenced pointer gets reaped: a
   # uuid-only-referenced checkpoint was deleted in an adversarial fixture before
   # session_uuid was added here (2026-09-02).
   local refs=""
@@ -108,7 +108,7 @@ reap_session_env() {
     # Stale needs BOTH: no file inside touched within the window, AND the dir's
     # OWN mtime is older than the window. Without the dir-mtime check an EMPTY
     # dir passes vacuously (no files to be recent), so a dir created seconds ago
-    # would be rm -rf'd — an adversarial fixture hit exactly that (2026-09-02).
+    # would be rm -rf'd: an adversarial fixture hit exactly that (2026-09-02).
     newest=$(find "$d" -type f -mtime "-${SESSION_ENV_DAYS}" -print -quit 2>/dev/null)
     local dir_fresh; dir_fresh=$(find "$d" -maxdepth 0 -mtime "-${SESSION_ENV_DAYS}" -print 2>/dev/null)
     if [ -z "$newest" ] && [ -z "$dir_fresh" ]; then

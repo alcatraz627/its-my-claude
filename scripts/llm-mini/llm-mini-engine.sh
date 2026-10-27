@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# llm-mini-engine.sh — Ollama lifecycle manager for llm-mini.
+# llm-mini-engine.sh: Ollama lifecycle manager for llm-mini.
 #
 # Manages Ollama as a cold-start serverless runtime:
 # - Auto-starts on first query (with user confirmation or silently)
@@ -543,7 +543,7 @@ cmd_ensure() {
                             ;;
                     esac
                 else
-                    # No gum — simple prompt
+                    # No gum: simple prompt
                     printf 'Start Ollama with %s? [Y/n] ' "$DEFAULT_MODEL" >&2
                     local answer
                     read -r answer < /dev/tty 2>/dev/null || return 1

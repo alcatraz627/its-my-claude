@@ -114,26 +114,26 @@ These are the reusable ones. Each was found more than once.
 
 ## 3 · Reference surfaces, in the order a plan should read them
 
-- `UI-CHARTER.md` — the standard. §13 anti-patterns and §14's capped round are
+- `UI-CHARTER.md`: the standard. §13 anti-patterns and §14's capped round are
   the QA instrument; §17 is the thorough review, never run; §18 space; §19 log.
-- `hazards.md` — facts code reading does not recover.
-- `SEARCH-DESIGN.md` — 7 intents, 8 capabilities, written before search existed.
-- `DRAFTS-ROUTING-PLAN.md` + `DRAFTS-ROUTING-TODAY.md` — slices 1-3 shipped, 4 deferred.
-- `NAV-UNIFICATION.md` — the kind/instance analysis; slice 1 only.
-- `DRAFTS-EDITOR-TODAY.md` — the pre-change capability baseline.
-- `HELP-MODAL-SCROLL-PARITY.md` — the owner's no-hiccup constraint and its re-runs.
-- `~/.claude/assets/reports/20260822-0640-drafts-editor-direction/` — memo +
+- `hazards.md`: facts code reading does not recover.
+- `SEARCH-DESIGN.md`: 7 intents, 8 capabilities, written before search existed.
+- `DRAFTS-ROUTING-PLAN.md` + `DRAFTS-ROUTING-TODAY.md`: slices 1-3 shipped, 4 deferred.
+- `NAV-UNIFICATION.md`: the kind/instance analysis; slice 1 only.
+- `DRAFTS-EDITOR-TODAY.md`: the pre-change capability baseline.
+- `HELP-MODAL-SCROLL-PARITY.md`: the owner's no-hiccup constraint and its re-runs.
+- `~/.claude/assets/reports/20260822-0640-drafts-editor-direction/`: memo +
   cited research sheet. NOT git-tracked; `assets/` is gitignored.
-- `~/.claude/assets/reports/20260728-ui-categorical/patterns.md` — C1-C5 classes.
+- `~/.claude/assets/reports/20260728-ui-categorical/patterns.md`: C1-C5 classes.
 
 ## 4 · What the owner has NOT reviewed, and what was barely touched
 
 **This is the section the plan must not skim.** Everything above was seen by the
 owner or verified against their words. What follows was not.
 
-- **hub.html** — never audited for the button contract (#46). Drafts looked fine
+- **hub.html**: never audited for the button contract (#46). Drafts looked fine
   until it was measured at 0 of 5 glyphs.
-- **board.html has no shared stylesheet** — links neither `shared.css` nor
+- **board.html has no shared stylesheet**: links neither `shared.css` nor
   `shared.js`, alone among the pages. Its kind glyphs are a KNOWN COPY of
   `NAV_ICON`, named in a comment at the copy site. Converting it was listed as
   riskier and deferred by the previous session, and it is still deferred.
@@ -145,10 +145,10 @@ owner or verified against their words. What follows was not.
   note body.
 - **Every commit is unreviewed.** 16 predate today; today's work is entirely
   uncommitted. No independent review has run on any of it.
-- **The direction memo's numbers were never independently verified** — the capped
+- **The direction memo's numbers were never independently verified**: the capped
   ruling meant no second seat, and that skill exists because a memo once shipped
   false measurements.
-- **The doc viewer and drafts.html rich content** — `renderMd` gained lazy
+- **The doc viewer and drafts.html rich content**: `renderMd` gained lazy
   continuation and GFM, but the doc viewer was never re-checked after either.
 - **Light theme** is verified on the surfaces touched today and nowhere else.
 - **Nudge delivery to a live peer** was verified as far as target resolution only.
@@ -161,9 +161,9 @@ owner or verified against their words. What follows was not.
    or keep the original copy. Nothing is committed, so the plan opens by deciding
    how today's work lands before adding to it.
 2. **Whether §17 runs, and against what.** It was displaced once already.
-3. **Scope of "improve the editing surface everywhere" (#13)** — the one ask still
+3. **Scope of "improve the editing surface everywhere" (#13)**: the one ask still
    open with no boundary on it.
-4. **vb-fable's answer path (#48)** — build a decision kind, or tell them the
+4. **vb-fable's answer path (#48)**: build a decision kind, or tell them the
    board is not that surface.
 
 ## 6 · Compliance pass the owner asked for

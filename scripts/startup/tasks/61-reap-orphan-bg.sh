@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# reap-orphan-bg.sh — reconcile background-process TRACKING left active by a
+# reap-orphan-bg.sh: reconcile background-process TRACKING left active by a
 # session that exited abnormally.
 #
 # shell-mem marks a [BG] command [BG:DONE] via session-end-shell.sh, which is a

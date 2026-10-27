@@ -1,4 +1,4 @@
-# `~/.claude/skills/` — Global skill definitions
+# `~/.claude/skills/`: Global skill definitions
 
 > Skills are user-invocable `/command` entrypoints. Each lives in its own subdir with a `SKILL.md`.
 
@@ -23,16 +23,16 @@ skills/<skill-name>/
   <scripts/>        # optional helper scripts
 ```
 
-`SKILL.md` requires frontmatter: `name`, `description` (used by router agents to pick skills), `tools` (optional restrictions). The description is **load-bearing** — it's how `pick-skill` and similar selectors decide what fits.
+`SKILL.md` requires frontmatter: `name`, `description` (used by router agents to pick skills), `tools` (optional restrictions). The description is **load-bearing**: it's how `pick-skill` and similar selectors decide what fits.
 
 ## Discoverability
 
-Claude Code surfaces every `SKILL.md` it finds under this tree flat in the per-session skill list — there is no nested-routing benefit to filesystem groups (with rare exceptions like `apple/` which uses a router skill internally).
+Claude Code surfaces every `SKILL.md` it finds under this tree flat in the per-session skill list: there is no nested-routing benefit to filesystem groups (with rare exceptions like `apple/` which uses a router skill internally).
 
-For scoping which skills appear in a given project, use that project's `.claude/settings.json` (mechanism TBD — see follow-up audit task).
+For scoping which skills appear in a given project, use that project's `.claude/settings.json` (mechanism TBD: see follow-up audit task).
 
 ## See also
 
-- `~/.claude/skills/GUIDELINES.md` — authoring rubric
-- `/create-skill` — interactive new-skill wizard
-- `/improve-skill` — audit / refresh an existing skill
+- `~/.claude/skills/GUIDELINES.md`: authoring rubric
+- `/create-skill`: interactive new-skill wizard
+- `/improve-skill`: audit / refresh an existing skill

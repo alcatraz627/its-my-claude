@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tests.sh — Self-tests for the tab-title CLI + lib. Uses a sandbox
+# tests.sh: Self-tests for the tab-title CLI + lib. Uses a sandbox
 # TAB_STATE_DIR so it does not touch a live Claude session's state.
 #
 # Run:  bash ~/.claude/scripts/tab-title/tests.sh
@@ -149,7 +149,7 @@ rc=$?
 [[ $rc -ne 0 ]] && ok "unknown command exits non-zero" || bad "unknown command exits non-zero" "rc!=0" "rc=$rc"
 
 # ── 10b. state mutates even when /dev/tty is unavailable ────────────────────
-# Bash-tool calls (setsid'd, no controlling tty) can't emit OSC visibly —
+# Bash-tool calls (setsid'd, no controlling tty) can't emit OSC visibly:
 # tab_emit silently no-ops. But state file MUST still be updated, so the
 # next hook firing (which has /dev/tty) emits the latest composed title.
 # This test verifies the state-mutation-without-OSC contract.
@@ -199,7 +199,7 @@ eq "unknown mode name still stored" "flibbertigibbet" \
 got=$(CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" show)
 eq "unknown mode produces no glyph in compose" "✻ Slot test" "$got"
 
-# ── 13. glyph slot (perm/ssh) — named alias + raw emoji ──────────────────────
+# ── 13. glyph slot (perm/ssh): named alias + raw emoji ──────────────────────
 seed "Glyph test" ""
 CLAUDE_TAB_SESSION_ID=sess-test bash "$CLI" glyph perm robot >/dev/null
 eq "glyph perm robot resolves to 🤖" "🤖" \

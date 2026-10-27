@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# regress.sh — compare a fresh thorough-run against a pinned baseline.
+# regress.sh: compare a fresh thorough-run against a pinned baseline.
 #
 # Usage:
 #   regress.sh <baseline-dir> <candidate-dir>
@@ -10,7 +10,7 @@
 #   - candidate ops-checklist covers >=80% of baseline ops-checklist line items
 #
 # Exits 0 on pass, 1 on regression. Prints a diff summary either way.
-# Does NOT re-run the LLM phases — validates already-produced artifacts.
+# Does NOT re-run the LLM phases: validates already-produced artifacts.
 
 set -euo pipefail
 BASE="${1:?usage: regress.sh <baseline-dir> <candidate-dir>}"

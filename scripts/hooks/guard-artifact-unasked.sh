@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-artifact-unasked.sh — an Artifact publish needs the owner to have asked
+# guard-artifact-unasked.sh: an Artifact publish needs the owner to have asked
 # for a hosted surface.
 #
 # Publishing sends user content to claude.ai, off this machine. Atone slug

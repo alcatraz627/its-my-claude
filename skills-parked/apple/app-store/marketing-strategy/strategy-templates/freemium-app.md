@@ -25,7 +25,7 @@ ACQUIRE → ENGAGE → UPGRADE → EXPAND → RE-ENGAGE
 - **Featuring Nomination**: Free apps with IAP are Apple's bread and butter
 
 ### Freemium Product Page Strategy
-- **DO** lead with free value — what users get without paying
+- **DO** lead with free value: what users get without paying
 - **DON'T** lead with premium features (scares off downloads)
 - Show the app is fully functional for free, with premium as "more"
 
@@ -68,7 +68,7 @@ Users must invest time and data before seeing a paywall:
 
 ### Promoted IAP Best Practices
 - Choose your most compelling IAP to promote (usually "Pro" or "Premium" unlock)
-- Use a clear, benefit-focused name ("Pro — Unlimited Everything")
+- Use a clear, benefit-focused name ("Pro: Unlimited Everything")
 - Set an attractive promotional image (1024x1024)
 - This appears on your product page and in search results
 

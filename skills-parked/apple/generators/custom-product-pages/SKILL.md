@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion, WebSearch]
 
 # Custom Product Pages Generator
 
-Generate metadata templates for Custom Product Pages (CPPs) — targeted App Store product page variants optimized for specific audiences, ad campaigns, or traffic sources.
+Generate metadata templates for Custom Product Pages (CPPs): targeted App Store product page variants optimized for specific audiences, ad campaigns, or traffic sources.
 
 ## When This Skill Activates
 
@@ -28,7 +28,7 @@ Use this skill when the user:
 | **10,000-50,000** | Create 2-3 CPPs. Enough traffic to compare performance across pages. |
 | **50,000+** | Full CPP strategy. Multiple pages per segment, ad campaign-specific pages, seasonal variants. |
 
-**Exception:** If you're running paid Apple Search Ads campaigns, CPPs are valuable even at lower organic volume because ad traffic is directed specifically to your CPP — you're not splitting organic impressions.
+**Exception:** If you're running paid Apple Search Ads campaigns, CPPs are valuable even at lower organic volume because ad traffic is directed specifically to your CPP: you're not splitting organic impressions.
 
 ## How Custom Product Pages Work
 
@@ -99,9 +99,9 @@ For each custom page:
 ### Step 3: Screenshot Sequencing
 
 Design the screenshot order for each page to match the audience's priorities:
-- **Screenshot 1**: The hook — the single most compelling feature for this audience
-- **Screenshot 2-3**: Core value proof — features that solve their specific problem
-- **Screenshot 4-5**: Depth and trust — breadth of features, social proof
+- **Screenshot 1**: The hook: the single most compelling feature for this audience
+- **Screenshot 2-3**: Core value proof: features that solve their specific problem
+- **Screenshot 4-5**: Depth and trust: breadth of features, social proof
 
 ### Step 4: Produce Strategy Document
 
@@ -217,7 +217,7 @@ Example: Photo editing app with multiple use cases
 
 ## References
 
-- Related: `generators/product-page-optimization` — A/B test the default page
-- Related: `app-store/screenshot-planner` — Screenshot design and sequencing
-- Related: `app-store/keyword-optimizer` — Keyword strategy per audience
-- Related: `app-store/marketing-strategy` — Overall promotional strategy
+- Related: `generators/product-page-optimization`: A/B test the default page
+- Related: `app-store/screenshot-planner`: Screenshot design and sequencing
+- Related: `app-store/keyword-optimizer`: Keyword strategy per audience
+- Related: `app-store/marketing-strategy`: Overall promotional strategy

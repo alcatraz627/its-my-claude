@@ -1,5 +1,5 @@
 #!/bin/bash
-# codex-usage-gate.sh — may a Codex seat be dispatched right now?
+# codex-usage-gate.sh: may a Codex seat be dispatched right now?
 #
 # Sibling of usage-gate.sh with the same contract (VERDICT<TAB>detail; exit 0
 # PASS / 1 GATED; UNKNOWN is a PASS that says so). The reading comes from Codex's

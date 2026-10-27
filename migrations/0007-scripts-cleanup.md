@@ -1,11 +1,11 @@
-# Migration 0007 — Scripts Folder Cleanup
+# Migration 0007: Scripts Folder Cleanup
 
 **Status:** ✅ Complete (2026-04-24)
 **Session:** `impr-cfg-7a`
 **Diff log:** `~/.claude/assets/reports/20260424-claude-md-restructure/scripts-cleanup-diff-log.md`
 **Audit:** `~/.claude/assets/reports/20260424-claude-md-restructure/scripts-ref-audit.md`
 
-> **Historical note:** Path-update automation from Phase 2d also edited this doc's own "before → after" cells into "after → after" (predictably — the automation doesn't know which docs describe history vs. current state). Tables below were regenerated from the diff log after the updater ran.
+> **Historical note:** Path-update automation from Phase 2d also edited this doc's own "before → after" cells into "after → after" (predictably: the automation doesn't know which docs describe history vs. current state). Tables below were regenerated from the diff log after the updater ran.
 
 ## Summary
 
@@ -35,13 +35,13 @@ Grouped related scripts into subdirectories (`llm-mini/`, `statusline/`, `dream/
 | `scripts/_checkpoint.claude.md` · `_precompact-checkpoint.claude.md` | Trashed (stale; root-level copies canonical) | B |
 | `scripts/analyze_inference.py` | `~/.claude/code/ideas/analyze_inference.py` | 1e |
 
-Each moved file has a **back-compat symlink** at its old top-level path pointing into the cluster subdir — e.g., `scripts/wal.sh` → `wal/wal.sh`.
+Each moved file has a **back-compat symlink** at its old top-level path pointing into the cluster subdir: e.g., `scripts/wal.sh` → `wal/wal.sh`.
 
 ## Files trashed (24 total)
 
 **Editor backups (19):** `process-stats-daemon.sh_bak`, `.bak_2`, `.bak_2.hdr`, `.bak_2.tmp`; `statusline.sh_bak`, `.bak_2` through `.bak_12`, plus `.bak_7.hdr`, `.bak_7.tmp`, `.bak_8.hdr`.
 
-**Stale predecessors (3):** `mini-core.sh`, `mini-hook.sh`, `mini-mcp-server.js` — renamed to `llm-mini-*` on 2026-04-24; only `mini.sh` retained as deprecation shim.
+**Stale predecessors (3):** `mini-core.sh`, `mini-hook.sh`, `mini-mcp-server.js`: renamed to `llm-mini-*` on 2026-04-24; only `mini.sh` retained as deprecation shim.
 
 **Duplicate-naming (2):** `ascii_art_library.py` (kept dashed variant `ascii-art-library.py`); `test_hooks.sh` (kept dashed variant `test-hooks.sh`).
 
@@ -51,15 +51,15 @@ All recoverable from macOS `~/.Trash/` until emptied.
 
 Core hooks + high-reference workflow utilities. See `scripts/README.md` for the annotated list.
 
-## Files NOT updated (historical — intentionally preserved)
+## Files NOT updated (historical: intentionally preserved)
 
 Per scope agreement with the user, paths in the following were NOT rewritten:
-- `~/.claude/_*.claude.md` — session checkpoints describing past state
-- `~/.claude/scratchpad/global/milestones/*` — historical milestone docs
-- `~/.claude/migrations/0001`–`0005` — past-tense migration records
-- `~/.claude/plans/*` — past plans
-- `~/.claude/assets/reports/<dated-dirs-except-this-session>/` — historical reports
-- `~/.claude/shell-logs/*.md` — command history
+- `~/.claude/_*.claude.md`: session checkpoints describing past state
+- `~/.claude/scratchpad/global/milestones/*`: historical milestone docs
+- `~/.claude/migrations/0001`–`0005`: past-tense migration records
+- `~/.claude/plans/*`: past plans
+- `~/.claude/assets/reports/<dated-dirs-except-this-session>/`: historical reports
+- `~/.claude/shell-logs/*.md`: command history
 
 Rationale: rewriting them falsifies the record of what was true when they were written.
 
@@ -74,7 +74,7 @@ Major touched files: `settings.json`, `settings.local.json`, `.mcp.json`, `CLAUD
 | Group | Command | Result |
 |-------|---------|--------|
 | D | `bash scripts/llm-mini/llm-mini.sh --help` | help rendered |
-| D | `bash scripts/llm-mini.sh --help` (via symlink) | help rendered — back-compat verified |
+| D | `bash scripts/llm-mini.sh --help` (via symlink) | help rendered: back-compat verified |
 | E | `bash -n scripts/statusline/statusline.sh` | syntax OK |
 | F | `bash scripts/dream/dream-metrics.sh` | metrics output |
 | G | `bash scripts/session-mgmt/detect-stale-session.sh` | JSON with orphan turn-states |
@@ -92,7 +92,7 @@ Major touched files: `settings.json`, `settings.local.json`, `.mcp.json`, `CLAUD
 
 ### Full rollback
 
-All moves were `os.rename` + symlink creation — reversible by moving files back and removing symlinks. All trashes went to macOS Trash (recoverable from Finder). A rollback script is not provided; if needed, reverse the moves from the diff log and remove the cluster subdirs.
+All moves were `os.rename` + symlink creation: reversible by moving files back and removing symlinks. All trashes went to macOS Trash (recoverable from Finder). A rollback script is not provided; if needed, reverse the moves from the diff log and remove the cluster subdirs.
 
 ### Back-compat symlink removal
 
@@ -107,9 +107,9 @@ Before removing, audit for any remaining stale references:
 
 ## Cross-references
 
-- **Post-migration watchpoints:** `~/.claude/assets/reports/20260424-claude-md-restructure/post-migration-watchpoints.md` — **read this during the 2-week transition window**
+- **Post-migration watchpoints:** `~/.claude/assets/reports/20260424-claude-md-restructure/post-migration-watchpoints.md`: **read this during the 2-week transition window**
 - **Audit:** `~/.claude/assets/reports/20260424-claude-md-restructure/scripts-ref-audit.md`
 - **Diff log:** `~/.claude/assets/reports/20260424-claude-md-restructure/scripts-cleanup-diff-log.md`
 - **New entry-point:** `~/.claude/scripts/README.md`
-- **Related migration:** 0006 (CLAUDE.md restructure — same session, same "group by purpose" instinct)
-- **Filed proposal:** `prop-20260424-141055-b5` — remove back-compat symlinks ~2026-05-08
+- **Related migration:** 0006 (CLAUDE.md restructure: same session, same "group by purpose" instinct)
+- **Filed proposal:** `prop-20260424-141055-b5`: remove back-compat symlinks ~2026-05-08

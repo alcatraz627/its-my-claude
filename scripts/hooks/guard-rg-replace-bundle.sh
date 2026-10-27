@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# guard-rg-replace-bundle.sh — PreToolUse[Bash], SYNCHRONOUS.
+# guard-rg-replace-bundle.sh: PreToolUse[Bash], SYNCHRONOUS.
 #
 # Blocks the `rg -r` footgun. In ripgrep, `-r`/`--replace` is the REPLACEMENT
-# flag — it consumes the next token as a replacement string and prints mangled,
+# flag: it consumes the next token as a replacement string and prints mangled,
 # transformed output. It is NOT "recursive" (rg is recursive by default). Coming
 # from grep, `-r` is muscle-memory for recursive, so `rg -r pattern path` or a
-# bundle like `-rn` silently corrupts output — and the output looks plausible,
+# bundle like `-rn` silently corrupts output: and the output looks plausible,
 # so it poisons whatever consumes it (the `metadata`→`mnidata` incident,
 # atone mist-20260612-110132-40 / prop-20260612-110331-da).
 #
 # Precise + low-false-positive: blocks the SHORT `-r` flag (standalone or bundled
-# like -rn/-ri/-rl), but ALLOWS the long `--replace` form — so a genuine,
+# like -rn/-ri/-rl), but ALLOWS the long `--replace` form: so a genuine,
 # deliberate replacement just spells it out. Mute: touch ~/.claude/.no-rg-replace-guard
 
 set -euo pipefail
@@ -31,7 +31,7 @@ command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/nul
 # distinct over-fires come from skipping this, both verified: `rg "jq -r .cwd" f`
 # read the pattern's -r as rg's, and a `|` inside a pattern split the segment and
 # stranded that -r in what looked like rg's args. An earlier version of this
-# comment claimed a mid-quote split could "at most cause an under-fire — the safe
+# comment claimed a mid-quote split could "at most cause an under-fire: the safe
 # direction". It over-fired instead. Blanking keeps flag positions intact while
 # emptying the pattern, so both directions are settled here rather than reasoned about.
 # Blank quoted spans so a `-r` inside a search PATTERN is not read as rg's own

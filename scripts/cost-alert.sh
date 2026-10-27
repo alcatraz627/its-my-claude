@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Stop hook: alert when cost velocity is dangerously high
-# Outputs warning to stderr only — no context injection
+# Outputs warning to stderr only: no context injection
 set -uo pipefail
 
 input=$(cat)

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# api-recovery-nudge.sh — UserPromptSubmit hook that turns a terse "keep going"
+# api-recovery-nudge.sh: UserPromptSubmit hook that turns a terse "keep going"
 # after an API outage into a context-aware resume.
 #
 # When an interactive turn dies on a transient API error, Claude Code emits no
-# Stop and no Notification — but the user's NEXT prompt always fires
+# Stop and no Notification: but the user's NEXT prompt always fires
 # UserPromptSubmit. That is the only foothold for recovery. This hook checks
 # whether the last real assistant turn was a synthetic "API Error" abort; if so,
 # it injects a short directive telling the resuming agent to re-orient (goal,
-# what's done, the interrupted step) before continuing — per
+# what's done, the interrupted step) before continuing: per
 # rules/api-error-recovery.md.
 #
 # Advisory only: prints {additionalContext} when it fires, nothing otherwise,
@@ -40,11 +40,11 @@ case "$model" in
   "<synthetic>") : ;;
   *) exit 0 ;;
 esac
-# Match the error signature on the (short) text — rg if present, grep otherwise.
+# Match the error signature on the (short) text: rg if present, grep otherwise.
 if command -v rg >/dev/null 2>&1; then match() { rg -qi "$1"; }; else match() { grep -qiE "$1"; }; fi
 printf '%s' "$errtext" | match 'api error|rate limit|overloaded|temporarily limiting' || exit 0
 
-# Keyword gist only — the full 4-step ritual is the single source of truth in
+# Keyword gist only: the full 4-step ritual is the single source of truth in
 # rules/api-error-recovery.md (keep them from drifting by not duplicating it).
 msg="[api-recovery] The previous turn died on a transient API error (not your usage limit) and produced nothing. Re-orient before continuing — don't trust pre-abort memory: restate the goal · verify what's actually done (Task list, git status/diff, recent files) · find the in-flight step and check it on disk, rolling back if half-done · then resume. Fleet died? → ~/.claude/scripts/fleet-triage.py (reuse finished, re-dispatch only the dead). Starting a NEW task instead? note the abort and proceed. Full ritual: rules/api-error-recovery.md."
 

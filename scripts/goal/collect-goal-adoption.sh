@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# collect-goal-adoption.sh — the observation window for the goal re-arm fix.
+# collect-goal-adoption.sh: the observation window for the goal re-arm fix.
 #
 # Shipped 2026-08-18: goal.sh (harness + gcc goal), the 37-goal-standing hinter,
 # and core-dump/catchup edits that record and re-arm the goal. This appends one dated

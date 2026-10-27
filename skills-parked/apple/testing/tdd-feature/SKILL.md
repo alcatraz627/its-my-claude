@@ -24,7 +24,7 @@ Traditional:     AI generates code → You hope it's correct → Ship → Find b
 TDD with AI:     You write tests (spec) → AI generates code to pass → Proven correct
 ```
 
-The test is your **acceptance criteria in code form**. AI excels at going from failing test to passing implementation — it's a concrete, unambiguous target.
+The test is your **acceptance criteria in code form**. AI excels at going from failing test to passing implementation: it's a concrete, unambiguous target.
 
 ## Process
 
@@ -53,20 +53,20 @@ protocol FavoriteManaging {
 }
 ```
 
-This doesn't need to compile yet — it's the contract you'll test against.
+This doesn't need to compile yet: it's the contract you'll test against.
 
-### Phase 3: RED — Write Failing Tests
+### Phase 3: RED: Write Failing Tests
 
 Write tests for each behavior. Start with the simplest case and build up.
 
 #### Order of Tests (Simple → Complex)
 
-1. **Construction** — can you create the object?
-2. **Happy path** — does the basic operation work?
-3. **State verification** — does state update correctly?
-4. **Edge cases** — empty, nil, boundaries
-5. **Error handling** — what fails and how?
-6. **Integration** — does it work with dependencies?
+1. **Construction**: can you create the object?
+2. **Happy path**: does the basic operation work?
+3. **State verification**: does state update correctly?
+4. **Edge cases**: empty, nil, boundaries
+5. **Error handling**: what fails and how?
+6. **Integration**: does it work with dependencies?
 
 #### Template: Feature Test Suite
 
@@ -160,9 +160,9 @@ struct FavoriteManagerTests {
 }
 ```
 
-**Run tests — they should ALL fail** (the type doesn't even exist yet).
+**Run tests: they should ALL fail** (the type doesn't even exist yet).
 
-### Phase 4: GREEN — Implement to Pass
+### Phase 4: GREEN: Implement to Pass
 
 Now implement the feature. Pass the **tests as context to AI**:
 
@@ -174,9 +174,9 @@ Follow the protocol FavoriteManaging."
 
 #### Implementation Rules
 
-- **One test at a time** — make the first test pass, then the second, etc.
+- **One test at a time**: make the first test pass, then the second, etc.
 - **Write the simplest code** that passes each test
-- **Don't anticipate future tests** — only satisfy current failing tests
+- **Don't anticipate future tests**: only satisfy current failing tests
 - **Run tests after each change**
 
 ```bash
@@ -193,7 +193,7 @@ With all tests green, clean up the implementation:
 - Remove duplication
 - Optimize performance (if tests cover perf requirements)
 
-**Run tests after every refactor step.** If any test fails, you've changed behavior — revert.
+**Run tests after every refactor step.** If any test fails, you've changed behavior: revert.
 
 ### Phase 6: Integration
 
@@ -321,6 +321,6 @@ All [X] tests passing.
 ## References
 
 - Kent Beck, *Test-Driven Development: By Example*
-- `testing/test-contract/` — for protocol-level test suites
-- `testing/test-data-factory/` — for reducing test setup boilerplate
-- `generators/test-generator/` — for standalone test generation
+- `testing/test-contract/`: for protocol-level test suites
+- `testing/test-data-factory/`: for reducing test setup boilerplate
+- `generators/test-generator/`: for standalone test generation

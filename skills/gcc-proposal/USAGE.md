@@ -1,4 +1,4 @@
-# /gcc-proposal — Usage Guide
+# /gcc-proposal: Usage Guide
 
 ## What it does
 
@@ -48,7 +48,7 @@ If the conversation references an atone slug or prior proposal, the filed entry 
 
 ## Caveats
 
-- Filing only — reviewing, promoting, and dropping proposals is `/backlog-triage`'s job.
+- Filing only: reviewing, promoting, and dropping proposals is `/backlog-triage`'s job.
 - Refuses non-gcc ideas (project-local fixes, one-off tasks) rather than polluting the
   backlog.
 - Never sets value/priority (computed at triage) and never edits `proposals.jsonl` by
@@ -65,7 +65,7 @@ If the conversation references an atone slug or prior proposal, the filed entry 
 
 ## Tips
 
-- Invoke it the moment friction happens — the conversation context makes the derived
+- Invoke it the moment friction happens: the conversation context makes the derived
   proposal sharper than a reconstructed one later.
 - Agents mid-task should call `propose.sh` directly; this skill is the human-ergonomics
   wrapper.

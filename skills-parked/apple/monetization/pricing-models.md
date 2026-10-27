@@ -6,7 +6,7 @@ Detailed comparison of monetization models for Apple platform apps.
 
 **How it works**: User pays recurring fee (weekly/monthly/quarterly/yearly). Apple handles billing, renewals, and cancellation.
 
-**Best for**: Apps with ongoing value — content, sync, storage, AI features, data tracking.
+**Best for**: Apps with ongoing value: content, sync, storage, AI features, data tracking.
 
 **Pros:**
 - Predictable recurring revenue (MRR)
@@ -18,7 +18,7 @@ Detailed comparison of monetization models for Apple platform apps.
 
 **Cons:**
 - Users increasingly wary of "subscription fatigue"
-- Higher churn — must continuously deliver value
+- Higher churn: must continuously deliver value
 - More complex to implement than one-time purchase
 - Requires demonstrating ongoing value to App Review
 
@@ -48,7 +48,7 @@ Net: $4,241.50/mo = $50,898/yr
 **Best for**: Complete, self-contained tools with clear value.
 
 **Pros:**
-- Simple — no ongoing obligation
+- Simple: no ongoing obligation
 - Users prefer paying once
 - No churn management
 - Easy to implement
@@ -77,7 +77,7 @@ Net: $4,241.50/mo = $50,898/yr
 **Best for**: Apps that need large user base, where free tier drives organic growth.
 
 **Pros:**
-- Low friction — massive download potential
+- Low friction: massive download potential
 - Users try before buying
 - Word of mouth from free users
 - Non-consumable IAP = one-time revenue per user
@@ -232,7 +232,7 @@ Apple provides 87 price tiers with automatic localization. Key considerations:
 
 **Raise prices when:**
 - You've added significant new features
-- Conversion rate is high (> 8%) — may be underpriced
+- Conversion rate is high (> 8%): may be underpriced
 - Competitors charge more for less
 - Costs have increased (API, infrastructure)
 

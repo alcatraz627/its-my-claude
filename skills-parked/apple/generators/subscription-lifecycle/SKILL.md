@@ -1,6 +1,6 @@
 ---
 name: subscription-lifecycle
-description: Generates StoreKit 2 subscription lifecycle management — grace periods, billing retry, offer codes, win-back offers, upgrade/downgrade paths, and subscription status monitoring. Use when user needs post-purchase subscription state handling beyond the initial paywall.
+description: Generates StoreKit 2 subscription lifecycle management, grace periods, billing retry, offer codes, win-back offers, upgrade/downgrade paths, and subscription status monitoring. Use when user needs post-purchase subscription state handling beyond the initial paywall.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 Generate production StoreKit 2 subscription lifecycle management with real-time status monitoring, grace period handling, billing retry detection, offer code redemption, win-back offers, and upgrade/downgrade path support.
 
-**Different from paywall-generator:** The paywall generator handles the purchase UI and initial transaction. This skill handles everything that happens *after* purchase — monitoring subscription state changes, handling payment failures, retaining churning users, and managing tier transitions.
+**Different from paywall-generator:** The paywall generator handles the purchase UI and initial transaction. This skill handles everything that happens *after* purchase: monitoring subscription state changes, handling payment failures, retaining churning users, and managing tier transitions.
 
 ## When This Skill Activates
 
@@ -39,12 +39,12 @@ Grep: "import StoreKit" or "Transaction.updates" or "Product.SubscriptionInfo"
 ```
 
 If paywall-generator output found:
-- Integrate with existing `StoreKitManager` — don't duplicate product loading
+- Integrate with existing `StoreKitManager`: don't duplicate product loading
 - Extend existing `SubscriptionStatus` enum if present
 - Wire into existing transaction listener
 
 If no existing StoreKit code found:
-- Generate standalone — include minimal product loading
+- Generate standalone: include minimal product loading
 - Recommend running paywall-generator for purchase UI
 
 ### 3. Entitlement Check
@@ -69,12 +69,12 @@ Ask user via AskUserQuestion:
    - Upgrade/downgrade/crossgrade management
 
 3. **Include subscription dashboard UI?**
-   - Yes — SwiftUI view showing current plan, renewal date, management options
-   - No — logic only, integrate into existing UI
+   - Yes: SwiftUI view showing current plan, renewal date, management options
+   - No: logic only, integrate into existing UI
 
 4. **Server-side verification?**
-   - Client-only (StoreKit 2 on-device verification) — recommended for most apps
-   - Server-side (App Store Server API v2) — for apps with server backends
+   - Client-only (StoreKit 2 on-device verification): recommended for most apps
+   - Server-side (App Store Server API v2): for apps with server backends
 
 ## Generation Process
 
@@ -84,18 +84,18 @@ Read `templates.md` for production Swift code templates.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `SubscriptionState.swift` — Comprehensive enum for all lifecycle states
-2. `SubscriptionMonitor.swift` — @Observable class monitoring real-time status via `Transaction.updates` and `Product.SubscriptionInfo`
-3. `SubscriptionEntitlement.swift` — Maps product IDs to feature access levels
+1. `SubscriptionState.swift`: Comprehensive enum for all lifecycle states
+2. `SubscriptionMonitor.swift`: @Observable class monitoring real-time status via `Transaction.updates` and `Product.SubscriptionInfo`
+3. `SubscriptionEntitlement.swift`: Maps product IDs to feature access levels
 
 ### Step 3: Create Lifecycle Handlers
 Based on configuration:
-4. `GracePeriodHandler.swift` — If grace period selected
-5. `OfferManager.swift` — If offer codes or win-back selected
+4. `GracePeriodHandler.swift`: If grace period selected
+5. `OfferManager.swift`: If offer codes or win-back selected
 
 ### Step 4: Create UI Files
 If dashboard UI selected:
-6. `SubscriptionDashboardView.swift` — SwiftUI view for plan management
+6. `SubscriptionDashboardView.swift`: SwiftUI view for plan management
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -306,8 +306,8 @@ let result = try await proProduct.purchase()
 ## Gotchas
 
 ### Transaction.currentEntitlements vs Product.SubscriptionInfo.status
-- `Transaction.currentEntitlements` — Returns currently active transactions. Use for checking if user has access RIGHT NOW. Does not include grace period or billing retry details.
-- `Product.SubscriptionInfo.status` — Returns detailed subscription status array including grace period state, billing retry, renewal info. Use for lifecycle management and showing appropriate UI.
+- `Transaction.currentEntitlements`: Returns currently active transactions. Use for checking if user has access RIGHT NOW. Does not include grace period or billing retry details.
+- `Product.SubscriptionInfo.status`: Returns detailed subscription status array including grace period state, billing retry, renewal info. Use for lifecycle management and showing appropriate UI.
 - **Rule:** Use `currentEntitlements` for simple access checks. Use `SubscriptionInfo.status` for lifecycle state handling.
 
 ### Grace Period vs Billing Retry Period
@@ -319,7 +319,7 @@ let result = try await proProduct.purchase()
 - Sandbox subscriptions renew at accelerated rates (monthly = ~5 minutes)
 - Sandbox does not support all offer types
 - `Transaction.environment` tells you if you're in sandbox, production, or Xcode
-- Grace periods behave differently in sandbox — shorter durations
+- Grace periods behave differently in sandbox: shorter durations
 - Always test with StoreKit Testing in Xcode first, then sandbox, then TestFlight
 
 ### Offer Eligibility
@@ -333,7 +333,7 @@ Never forget to call `transaction.finish()`. Unfinished transactions will be re-
 
 ## References
 
-- **templates.md** — All production Swift code templates
-- **patterns.md** — Lifecycle state diagrams, StoreKit 2 behavior reference, anti-patterns
-- Related: `generators/paywall-generator` — Purchase UI and initial transaction handling
-- Related: `monetization/monetization-strategy` — Pricing tiers and revenue planning
+- **templates.md**: All production Swift code templates
+- **patterns.md**: Lifecycle state diagrams, StoreKit 2 behavior reference, anti-patterns
+- Related: `generators/paywall-generator`: Purchase UI and initial transaction handling
+- Related: `monetization/monetization-strategy`: Pricing tiers and revenue planning

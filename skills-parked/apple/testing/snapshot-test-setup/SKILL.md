@@ -364,5 +364,5 @@ swift-snapshot-testing 1.17.0 via SPM
 ## References
 
 - [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing)
-- `generators/test-generator/` — for unit/integration test generation
-- `testing/tdd-feature/` — for TDD workflow with UI features
+- `generators/test-generator/`: for unit/integration test generation
+- `testing/tdd-feature/`: for TDD workflow with UI features

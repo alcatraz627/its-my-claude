@@ -1,4 +1,4 @@
-# skills-parked — kept, not loaded
+# skills-parked: kept, not loaded
 
 Skills the owner ruled out of the live roster (2026-08-20) but explicitly kept:
 project-specific packs and zero-use tools that may earn their way back. Nothing in

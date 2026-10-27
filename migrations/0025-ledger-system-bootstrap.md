@@ -1,6 +1,6 @@
 ---
 number: 0025
-title: Event-ledger system bootstrap — spec, shared writer, proposals domain, alert layer (P0-P3)
+title: Event-ledger system bootstrap, spec, shared writer, proposals domain, alert layer (P0-P3)
 slug: ledger-system-bootstrap
 status: complete
 date: 2026-06-27
@@ -18,7 +18,7 @@ affected_paths:
   - i-dream/domains/proposals.toml
 ---
 
-# Migration 0025 — Event-ledger system bootstrap
+# Migration 0025: Event-ledger system bootstrap
 
 ## Summary
 
@@ -31,28 +31,28 @@ marked in-progress.
 
 ## What changed (new canonical paths)
 
-- **`skills/shared/ledger-format.md`** (P0) — the canonical event-line contract
+- **`skills/shared/ledger-format.md`** (P0): the canonical event-line contract
   (minimal envelope `{id, ts, domain-classifier}`, the family-boundary test, the
   corrected i-dream registration mechanism). No behavior change; a spec doc.
-- **`scripts/ledger/ledger-common.sh`** (P1) — the one sanctioned ledger writer
+- **`scripts/ledger/ledger-common.sh`** (P1): the one sanctioned ledger writer
   (`ledger_id` / `ledger_ts` / `ledger_append` / `ledger_commit` / `ledger_seal_*`
   / `LEDGER_STRIP_EMPTY` / `ledger_split_array`), extracted byte-for-byte from
   atone/affirm/propose. **Not yet wired into atone/affirm/propose** (owed); its
   first live caller is the alert evaluator below.
-- **`proposals-domain/` + `i-dream/domains/proposals.toml`** (P2) — registers
+- **`proposals-domain/` + `i-dream/domains/proposals.toml`** (P2): registers
   `~/.claude/proposals.jsonl` as an i-dream dream-domain (dedup/stale surfacing).
   Native-emitted; events symlinked as `{root}/events.jsonl`; deterministic
   `_tldr.txt` via `consolidate.sh`. Verified end-to-end (runbook §4).
-- **`ledger/goals.toml`** (P3) — the value-system alerts are downstream of (the
+- **`ledger/goals.toml`** (P3): the value-system alerts are downstream of (the
   binding rule: no `goal_ref` here → an alert downgrades to a silent LOG).
-- **`ledger/detectors.toml`** (P3) — alert detectors (v1: `atone-s3-burn`,
+- **`ledger/detectors.toml`** (P3): alert detectors (v1: `atone-s3-burn`,
   burn_rate). Central + evaluator-owned for v1; per-domain `[[detector]]` blocks
-  deferred (i-dream's parser rejects some unknown keys — see runbook §5).
-- **`scripts/ledger/evaluate-detectors.sh`** (P3) — the stateless alert evaluator:
+  deferred (i-dream's parser rejects some unknown keys: see runbook §5).
+- **`scripts/ledger/evaluate-detectors.sh`** (P3): the stateless alert evaluator:
   spec-lint + offset-cursor lint + staleness + the binding rule + burn-rate math
   with two-window/hysteresis/cooldown. Appends `kind:"alert"` records via
   `ledger-common.sh`. 8/8 unit tests; live run fired a real ticket (25 S3 in 30d).
-- **`ledger/alerts.jsonl` + `ledger/detector-state.json`** (P3) — the alert log +
+- **`ledger/alerts.jsonl` + `ledger/detector-state.json`** (P3): the alert log +
   per-detector firing state (created at first run).
 
 ## Compatibility / rollback
@@ -64,9 +64,9 @@ marked in-progress.
 - The alert layer is removable by deleting `ledger/` + `scripts/ledger/`; nothing
   else reads them yet.
 
-## Done — P1 wiring + P3 deploy (2026-06-29)
+## Done: P1 wiring + P3 deploy (2026-06-29)
 
-- ✓ Wired `ledger-common.sh` into atone/affirm/propose — now 4 live callers
+- ✓ Wired `ledger-common.sh` into atone/affirm/propose: now 4 live callers
   (incl. the evaluator); source-chain + affirm/propose end-to-end verified.
 - ✓ Scheduled `evaluate-detectors.sh` daily 03:15 via gcc-schedule (launchd
   `com.alcatraz.ledger-evaluate` + Calendar companion `102C7758-...`).
@@ -74,14 +74,14 @@ marked in-progress.
 - ✓ Auto-file a `propose.sh` gate candidate on a `graduate-to-mechanism` ticket
   (idempotent via the alert's idempotence_key; tested fire + no-dup).
 
-## Done — P4 query surface + facet (2026-06-30)
+## Done: P4 query surface + facet (2026-06-30)
 
-- ✓ `scripts/ledger/ledger.sh` — the read surface over the family
+- ✓ `scripts/ledger/ledger.sh`: the read surface over the family
   (list/search/show/stats/timeline/sources + agent ask/status), no global
   `--kind/--severity`, `why` cut, scoped to ledger+alert-state. Verified live.
 - ✓ `std::claude::ledger` promoted as a facet in NAMESPACE.md (relabel, not move;
   `::logs` boundary deliberately not promoted).
-- ✓ Agent verbs already allowed (settings `Bash(bash:*)`) — no new permission.
+- ✓ Agent verbs already allowed (settings `Bash(bash:*)`): no new permission.
 
 ## Still owed (deferred, out of the MVP arc)
 
@@ -99,8 +99,8 @@ marked in-progress.
 
 - `evaluate-detectors.sh` reads atone raw; running it by hand with the path inline
   trips `protect-atone-raw.sh`. The script's own internal read is fine (and cron is
-  unaffected) — call the script, don't put the atone path in your Bash command.
+  unaffected): call the script, don't put the atone path in your Bash command.
 - **`cat` is aliased to `glow`** in the interactive shell the Bash tool inherits.
   Inline `cat > file <<EOF` heredocs write rendered garbage, and `cat <bigfile>`
   launches a pager that hangs (~2-min timeouts seen repeatedly this build). Use the
-  Read tool, `printf`, or a `bash script.sh` (aliases off) — never inline `cat`.
+  Read tool, `printf`, or a `bash script.sh` (aliases off): never inline `cat`.

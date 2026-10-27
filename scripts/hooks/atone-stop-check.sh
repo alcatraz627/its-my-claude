@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-stop-check.sh — Stop hook handler.
+# atone-stop-check.sh: Stop hook handler.
 #
 # Fires after the assistant response completes (before user's next prompt).
 # Checks the per-session .pending-atone marker (written by 30-atone-nudge.sh
@@ -7,12 +7,12 @@
 #
 # Logic:
 #   - If events.jsonl gained a new entry timestamped AFTER the marker.ts →
-#     clear the marker (loop closed cleanly — agent invoked /atone).
+#     clear the marker (loop closed cleanly: agent invoked /atone).
 #   - Otherwise increment turns_unaddressed in the marker (it ages).
 #
 # The escalation behavior lives in 30-atone-nudge.sh (which reads the marker
 # on next UserPromptSubmit and emits progressively stronger nudges). This
-# script ONLY updates the marker — it doesn't print anything to the user.
+# script ONLY updates the marker: it doesn't print anything to the user.
 #
 # Stop hook exit codes don't affect anything visible; we always exit 0.
 
@@ -21,7 +21,7 @@ set -uo pipefail
 INPUT=$(cat 2>/dev/null || echo "{}")
 command -v jq >/dev/null 2>&1 || exit 0
 
-# Resolve session marker — stdin session_id first, sanitized; derivation
+# Resolve session marker: stdin session_id first, sanitized; derivation
 # MIRRORED in atone-stop-gate.sh and atone.sh:_add_exit_trap (all must agree).
 # Legacy date-keyed markers are still honored during the transition.
 _sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
@@ -37,7 +37,7 @@ MARKER="$STATE_DIR/$SESSION_KEY.pending-atone"
 # Explicit /atone markers (explicit:true) are owned by the BLOCKING gate
 # (scripts/hooks/atone-stop-gate.sh, a direct settings.json Stop entry whose
 # stdout can carry a decision:block). This hook runs inside the orchestrator,
-# whose task stdout is /dev/null'd, so it can only nudge — never enforce. Leave
+# whose task stdout is /dev/null'd, so it can only nudge: never enforce. Leave
 # explicit markers to the gate so the two don't both age/clear the same file.
 if [ "$(jq -r '.explicit // false' "$MARKER" 2>/dev/null)" = "true" ]; then
   exit 0
@@ -51,7 +51,7 @@ MARKER_TURNS=$(jq -r '.turns_unaddressed // 0' "$MARKER" 2>/dev/null)
 # Check events.jsonl for any event timestamped after the marker
 EVENTS="$HOME/.claude/atone/events.jsonl"
 if [ -f "$EVENTS" ]; then
-  # `>=` not `>` — marker.ts and event.ts both floor to second precision,
+  # `>=` not `>`: marker.ts and event.ts both floor to second precision,
   # so a same-second match means the event was written AFTER the marker
   # (marker is created at UserPromptSubmit; events come from the agent's
   # response, which is necessarily later in wall-clock terms).
@@ -60,7 +60,7 @@ if [ -f "$EVENTS" ]; then
   ' "$EVENTS" 2>/dev/null | head -1)
 
   if [ -n "$RECENT_EVENT" ]; then
-    # Loop closed cleanly — clear the marker
+    # Loop closed cleanly: clear the marker
     rm -f "$MARKER" 2>/dev/null || true
 
     # Optional: log a `fired-and-useful` feedback (the nudge worked)
@@ -78,7 +78,7 @@ if [ -f "$EVENTS" ]; then
   fi
 fi
 
-# Marker is stale — agent didn't /atone this turn. Increment counter.
+# Marker is stale: agent didn't /atone this turn. Increment counter.
 NEW_TURNS=$((MARKER_TURNS + 1))
 
 # Decay: if turns_unaddressed >= 3, auto-clear with a `missed` feedback event

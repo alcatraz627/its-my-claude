@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# store-backup.test.sh — the snapshot is faithful, the lock is respected, and the
+# store-backup.test.sh: the snapshot is faithful, the lock is respected, and the
 # restore does not destroy what it replaces.
 #
 # The restore cases matter most. A backup nobody has restored is a belief, not a

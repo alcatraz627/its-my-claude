@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Characterization Test Generator
 
-Generate tests that document what existing code **actually does** — not what it should do. These tests capture current behavior so you can refactor with confidence, especially when using AI to modify code.
+Generate tests that document what existing code **actually does**: not what it should do. These tests capture current behavior so you can refactor with confidence, especially when using AI to modify code.
 
 ## When This Skill Activates
 
@@ -201,7 +201,7 @@ This is the key step. For each test:
 
 ### Phase 5: Verify and Lock
 
-1. **Run all characterization tests** — they must ALL pass
+1. **Run all characterization tests**: they must ALL pass
 2. **If any fail**, adjust assertions to match actual behavior
 3. **Tag them** so they're easy to find later:
 
@@ -261,6 +261,6 @@ Run `xcodebuild test` after each change to verify no behavior changed.
 
 ## References
 
-- Michael Feathers, *Working Effectively with Legacy Code* — coined "characterization test"
-- `generators/test-generator/` — for standard test generation (not characterization)
-- `testing/tdd-refactor-guard/` — pre-refactor checklist that uses these tests
+- Michael Feathers, *Working Effectively with Legacy Code*: coined "characterization test"
+- `generators/test-generator/`: for standard test generation (not characterization)
+- `testing/tdd-refactor-guard/`: pre-refactor checklist that uses these tests

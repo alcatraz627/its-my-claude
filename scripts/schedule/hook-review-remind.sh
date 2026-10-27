@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fired by the one-shot launchd job 'hook-telemetry-review' (2026-07-28). Its job
-# is to REMIND — notify the user that ~3 weeks of hook telemetry has accumulated
+# is to REMIND: notify the user that ~3 weeks of hook telemetry has accumulated
 # and a review session should be started. The Calendar companion is the primary
 # reminder; this adds a desktop notification + a durable due-log line. Never fails.
 set -uo pipefail

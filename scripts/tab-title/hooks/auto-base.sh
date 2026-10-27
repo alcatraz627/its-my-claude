@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/hooks/auto-base.sh — UserPromptSubmit hook (async).
+# tab-title/hooks/auto-base.sh: UserPromptSubmit hook (async).
 # Two jobs, both without any agent action:
 #
 # 1. INTENT, once per session: the first real prompt picks the session's kind of
@@ -44,7 +44,7 @@ Q="${HOME}/.local/bin/q"
 [[ -x "$Q" ]] || exit 0
 LM_DIR="${HOME}/Code/local-models"
 [[ -f "$LM_DIR/config.sh" && -f "$LM_DIR/bin/_lib.sh" ]] || exit 0
-# Pure assignments + helper functions — gives us WARM_MODEL and ollama_resident
+# Pure assignments + helper functions: gives us WARM_MODEL and ollama_resident
 # so the gate tracks config changes instead of a hardcoded model name.
 # shellcheck source=/dev/null
 source "$LM_DIR/config.sh"

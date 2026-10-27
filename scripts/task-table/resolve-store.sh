@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# resolve-store.sh — answer "which task store belongs to THIS live session?"
+# resolve-store.sh: answer "which task store belongs to THIS live session?"
 #
 # THE PROBLEM. The store directory is named for the session that CREATED the
 # tasks. A task list survives /clear, so the live session id usually does not

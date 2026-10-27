@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# warn-git-add-enumeration.test.sh — runnable checks for the git-add enumeration nudge.
+# warn-git-add-enumeration.test.sh: runnable checks for the git-add enumeration nudge.
 #
 # The nudge must fire on a real `git add` with four or more path arguments and stay
 # silent when those words only appear as text: a commit message, an echo, a heredoc

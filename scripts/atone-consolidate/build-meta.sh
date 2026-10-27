@@ -16,7 +16,7 @@ build_meta() {
   [ -f "$AFFIRM_EVENTS" ] && affirm_count=$(wc -l < "$AFFIRM_EVENTS" | tr -d ' ')
 
   # juror_health rollup (T3.3): counts of the juror's per-event outcome. Events
-  # written before the field shipped bucket as "unset" — expected, forward-looking.
+  # written before the field shipped bucket as "unset": expected, forward-looking.
   local juror_rollup="{}"
   [ -f "$EVENTS" ] && juror_rollup=$(jq -s '
     group_by(.juror_health // "unset")

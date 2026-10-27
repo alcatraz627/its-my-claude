@@ -19,11 +19,11 @@ build_proposals() {
   local skipped_covered=0
   local report_lines=""
 
-  # Process atone (mistakes) only — affirm doesn't need prevention proposals
+  # Process atone (mistakes) only: affirm doesn't need prevention proposals
   while IFS=$'\t' read -r src slug cnt sev_str ts cluster title latest_id; do
     [ -z "$slug" ] && continue
 
-    # Skip if already proposed (open, done, OR rejected — no auto-resurrection).
+    # Skip if already proposed (open, done, OR rejected: no auto-resurrection).
     if echo "$skip_slugs" | grep -qFx "$slug"; then
       continue
     fi
@@ -144,7 +144,7 @@ EOF
     # The `link:atone:<slug>` tag is load-bearing, not decoration: the backlog
     # consolidator builds its corroboration graph from `link:*` edges ONLY. The
     # original tag here was a bare "atone-prevention <target> <slug>" string,
-    # which carried no edge — so every atone-graduated proposal was born
+    # which carried no edge: so every atone-graduated proposal was born
     # uncorroborated, could never cluster with the gcc-signal-capture auto-stub
     # naming the SAME slug, and aged out into DROP-REVIEW as "stale, no
     # corroboration". Keep this in the link:<stream>:<id> shape.
@@ -163,7 +163,7 @@ EOF
   done < <(aggregate_slugs atone "${EVENTS_VIEW:-$EVENTS}")
 
   # Annotate proposals.jsonl entries that came from atone with .type = atone-prevention
-  # propose.sh's category was "hooks" — that's its native field. We re-mark via
+  # propose.sh's category was "hooks": that's its native field. We re-mark via
   # appending a marker line. Actually: propose.sh tracks the type internally;
   # we use tags to find them later (tag "atone-prevention" is set).
 

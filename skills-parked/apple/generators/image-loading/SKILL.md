@@ -34,7 +34,7 @@ Grep: "AsyncImage" or "UIImage" or "NSImage" or "ImageCache"
 
 If third-party library found (Kingfisher, SDWebImage, Nuke):
 - Ask if user wants to replace or keep it
-- If keeping, don't generate — advise on best practices instead
+- If keeping, don't generate: advise on best practices instead
 
 ### 3. Platform Detection
 Determine if generating for iOS (UIImage) or macOS (NSImage) or both (cross-platform typealias).
@@ -45,7 +45,7 @@ Ask user via AskUserQuestion:
 
 1. **Cache sizes?**
    - Small (50 MB memory / 100 MB disk)
-   - Medium (100 MB memory / 250 MB disk) — recommended
+   - Medium (100 MB memory / 250 MB disk): recommended
    - Large (200 MB memory / 500 MB disk)
 
 2. **Image processing?**
@@ -71,19 +71,19 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `ImageCache.swift` — Protocol for cache interface
-2. `MemoryImageCache.swift` — NSCache-based with configurable size
-3. `DiskImageCache.swift` — FileManager LRU with expiration
-4. `ImageDownloader.swift` — Actor-based with deduplication + cancellation
-5. `ImagePipeline.swift` — Orchestrator (cache → download → process → store)
+1. `ImageCache.swift`: Protocol for cache interface
+2. `MemoryImageCache.swift`: NSCache-based with configurable size
+3. `DiskImageCache.swift`: FileManager LRU with expiration
+4. `ImageDownloader.swift`: Actor-based with deduplication + cancellation
+5. `ImagePipeline.swift`: Orchestrator (cache → download → process → store)
 
 ### Step 3: Create UI Files
-6. `CachedAsyncImage.swift` — Drop-in SwiftUI view replacement
+6. `CachedAsyncImage.swift`: Drop-in SwiftUI view replacement
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `ImageProcessor.swift` — If resize or thumbnail selected
-- `ImagePrefetcher.swift` — If prefetching selected
+- `ImageProcessor.swift`: If resize or thumbnail selected
+- `ImagePrefetcher.swift`: If prefetching selected
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -202,7 +202,7 @@ func deduplicatesConcurrentRequests() async throws {
 
 ## References
 
-- **image-loading-patterns.md** — Why not AsyncImage, NSCache config, LRU disk cache, deduplication
-- **templates.md** — All production Swift templates
-- Related: `generators/http-cache` — General HTTP response caching
-- Related: `generators/pagination` — Prefetch images in paginated lists
+- **image-loading-patterns.md**: Why not AsyncImage, NSCache config, LRU disk cache, deduplication
+- **templates.md**: All production Swift templates
+- Related: `generators/http-cache`: General HTTP response caching
+- Related: `generators/pagination`: Prefetch images in paginated lists

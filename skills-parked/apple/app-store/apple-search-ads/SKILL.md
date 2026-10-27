@@ -1,6 +1,6 @@
 ---
 name: apple-search-ads
-description: Apple Search Ads campaign strategy for indie developers — paid acquisition, keyword bidding, budget planning, and ROAS optimization. Use when user asks about running ads, paid user acquisition, or Apple Search Ads campaigns.
+description: Apple Search Ads campaign strategy for indie developers, paid acquisition, keyword bidding, budget planning, and ROAS optimization. Use when user asks about running ads, paid user acquisition, or Apple Search Ads campaigns.
 allowed-tools: [Read, Glob, Grep, AskUserQuestion, WebSearch]
 ---
 
@@ -28,7 +28,7 @@ Before recommending any campaign setup, verify these minimum thresholds. Running
 | Requirement | Threshold | Why |
 |-------------|-----------|-----|
 | Organic downloads | 100+/month | Proves baseline demand exists |
-| App Store page CVR | > 20% | Ads amplify your listing — a bad listing wastes spend |
+| App Store page CVR | > 20% | Ads amplify your listing: a bad listing wastes spend |
 | Screenshots | 5+ optimized | Paid traffic sees your product page first |
 | Ratings | 3.5+ stars (or none) | Low ratings kill conversion from ads |
 | Crash-free rate | > 99% | Crashes destroy ROAS through refunds and bad reviews |
@@ -103,7 +103,7 @@ Stage 4: Search Tab (brand awareness)
 
 **1. Brand Keywords (Your App Name)**
 - Bid on these ONLY if competitors are bidding on your name
-- Check by searching your app name — if a competitor appears above you, bid
+- Check by searching your app name: if a competitor appears above you, bid
 - Otherwise, save the budget; you already rank #1 organically
 
 **2. Category Keywords (Generic Terms)**
@@ -126,12 +126,12 @@ Stage 4: Search Tab (brand awareness)
 
 ### Keyword Research Process
 
-1. **Start with brainstorming** — List 50+ terms a user might search
-2. **Use Search Ads keyword suggestions** — Apple provides recommendations in the campaign manager
-3. **Mine your ASO research** — Keywords from `keyword-optimizer` skill that you can't rank organically
-4. **Check autocomplete** — Type partial queries in the App Store
-5. **Analyze competitors** — What keywords trigger their ads?
-6. **Use Search Ads intelligence tools** — SearchAds.com, SplitMetrics Acquire, AppTweak
+1. **Start with brainstorming**: List 50+ terms a user might search
+2. **Use Search Ads keyword suggestions**: Apple provides recommendations in the campaign manager
+3. **Mine your ASO research**: Keywords from `keyword-optimizer` skill that you can't rank organically
+4. **Check autocomplete**: Type partial queries in the App Store
+5. **Analyze competitors**: What keywords trigger their ads?
+6. **Use Search Ads intelligence tools**: SearchAds.com, SplitMetrics Acquire, AppTweak
 
 ### Keyword Selection Criteria
 
@@ -339,7 +339,7 @@ CAMPAIGN: [App Name] - Product Page
 
 - You already rank #1 organically for your name
 - Brand defense is only needed when competitors actively bid on your name
-- Check first by searching — if no competitor ad appears, save the budget
+- Check first by searching: if no competitor ad appears, save the budget
 
 ### 2. Starting with Broad Match Only
 
@@ -356,7 +356,7 @@ CAMPAIGN: [App Name] - Product Page
 
 ### 4. Running Ads Before Optimizing Your Listing
 
-- Ads drive traffic to your product page — if it doesn't convert, ads just cost money
+- Ads drive traffic to your product page: if it doesn't convert, ads just cost money
 - Optimize screenshots, description, and ratings FIRST
 - Target 30%+ CVR organically before turning on ads
 
@@ -381,7 +381,7 @@ CAMPAIGN: [App Name] - Product Page
 ### 8. Expecting Instant Results
 
 - Apple Search Ads needs 7-14 days minimum to gather meaningful data
-- Don't change bids daily — let data accumulate
+- Don't change bids daily: let data accumulate
 - Statistical significance requires volume: aim for 100+ taps per keyword before judging
 
 ## Output Format
@@ -461,8 +461,8 @@ When advising on Apple Search Ads, produce this document:
 
 ## References
 
-- Related: `app-store/keyword-optimizer` — ASO keyword strategy (organic, complements paid)
-- Related: `app-store/screenshot-planner` — Product page optimization (improves ad CVR)
-- Related: `generators/custom-product-pages` — Custom Product Page creation for ad groups
-- Related: `app-store/marketing-strategy` — Overall marketing strategy including paid acquisition
+- Related: `app-store/keyword-optimizer`: ASO keyword strategy (organic, complements paid)
+- Related: `app-store/screenshot-planner`: Product page optimization (improves ad CVR)
+- Related: `generators/custom-product-pages`: Custom Product Page creation for ad groups
+- Related: `app-store/marketing-strategy`: Overall marketing strategy including paid acquisition
 - Apple Search Ads documentation: https://searchads.apple.com

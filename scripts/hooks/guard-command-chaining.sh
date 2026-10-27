@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-command-chaining.sh — PreToolUse[Bash], SYNCHRONOUS, BLOCK tier.
+# guard-command-chaining.sh: PreToolUse[Bash], SYNCHRONOUS, BLOCK tier.
 #
 # Owner ruling 2026-09-04, re-stated 2026-09-05: one command per Bash call, no
 # `&&`, no `;`, no pipe. This enforces it, because prose did not.

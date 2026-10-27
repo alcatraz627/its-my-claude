@@ -37,11 +37,11 @@ REPORT = Path("/tmp/atone-migrate-report.txt")
 # Schema: slug → (severity, cluster_or_None, extra_tags)
 #
 # Clusters:
-#   A — Ungrounded assertion
-#   B — Claim-ready-before-runtime
-#   C — Literal-list-as-action / lost-the-user's-frame
-#   D — Output-shape laziness
-#   E — Convention-blind code
+#   A: Ungrounded assertion
+#   B: Claim-ready-before-runtime
+#   C: Literal-list-as-action / lost-the-user's-frame
+#   D: Output-shape laziness
+#   E: Convention-blind code
 
 CLASSIFICATION: dict[str, tuple[str, str | None, list[str]]] = {
     "bypass-abstraction-instead-of-extending":                          ("S2", "E",  ["refactor"]),
@@ -114,7 +114,7 @@ CLASSIFICATION: dict[str, tuple[str, str | None, list[str]]] = {
 # ─── Helpers ─────────────────────────────────────────────────────
 
 SECTION_HEADERS = re.compile(
-    # Match **Header**, **Header:**, **Header.**  — colon may live inside or outside the bold
+    # Match **Header**, **Header:**, **Header.**: colon may live inside or outside the bold
     r"\*\*([A-Z][\w \-/]+?)[:.]?\*\*[:.]?\s*", re.MULTILINE
 )
 
@@ -160,7 +160,7 @@ def build_fields(body: str, slug: str) -> dict[str, str]:
     """Extract issue/cause/fix/what_not_to_do/precheck from body."""
     sections = extract_sections(body)
 
-    # Heuristic mapping — multiple v1 section names map to one field
+    # Heuristic mapping: multiple v1 section names map to one field
     def first(keys: list[str]) -> str:
         for k in keys:
             if k in sections and sections[k]:

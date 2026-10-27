@@ -1,8 +1,8 @@
-# /readme — Usage Guide
+# /readme: Usage Guide
 
 ## What it does
 
-Generates a production-quality `README.md` for any git repository — with GitHub-style
+Generates a production-quality `README.md` for any git repository: with GitHub-style
 badges, a pixel-art SVG cover image, a quick-start guide, and a linked documentation
 index built from existing docs. Writes collected repo data to the global scratchpad for
 handoff to future `/git-repo` or `/readme` re-runs.
@@ -65,9 +65,9 @@ for Phase 1, making re-runs faster.
 - **Overwrite guard:** Always confirms before overwriting an existing `README.md`. It will
   never silently clobber an existing file.
 - **Pixel art is a placeholder:** The SVG cover is a small inline graphic. It is intentional
-  placeholder art — swap it for a real banner image when you have one.
+  placeholder art: swap it for a real banner image when you have one.
 - **No network calls at generation time:** Badge URLs are shields.io pattern strings written
-  as markdown — they are not fetched during the skill run. The README works offline.
+  as markdown: they are not fetched during the skill run. The README works offline.
 - **Must be run inside a git repo:** The skill uses `git rev-parse --show-toplevel` to find
   the root. It will stop and report if the current directory is not a git repository.
 - **Doc summarization is approximate:** Large doc files (>200KB) are skipped. Very short
@@ -80,19 +80,19 @@ for Phase 1, making re-runs faster.
 | `GUIDELINES.md`                         | Shared rules  | Read at start of every run                       |
 | `git` CLI                               | System tool   | Used for repo metadata, remote URL, tags         |
 | `gum`                                   | CLI tool      | Used for overwrite confirm + report style picker |
-| `/create-report`                        | Skill         | Optional — called in Phase 4 if user opts in     |
+| `/create-report`                        | Skill         | Optional: called in Phase 4 if user opts in     |
 | `~/.claude/scratchpad/global/`          | Directory     | Must exist; scratchpad entry written here        |
 | `.claude/project-index.md` (if present) | File          | Read in Phase 1 for richer project description   |
 | `lock-file.sh`                          | Shared script | Used before every Write/Edit operation           |
 
 ## Tips
 
-- **Run `/project-index` first** in large repos — the skill reads `.claude/project-index.md`
+- **Run `/project-index` first** in large repos: the skill reads `.claude/project-index.md`
   and uses it to write a better "About" section without re-scanning every file.
-- **Run `/arch-qa` first** for complex backend projects — its `_*.claude.md` output is read
+- **Run `/arch-qa` first** for complex backend projects: its `_*.claude.md` output is read
   in Phase 1.6 and informs the README's architecture description.
 - **The scratchpad file persists** at `~/.claude/scratchpad/global/readme-<owner>-<repo>.md`.
-  The future `/git-repo` skill reads this instead of re-running Phase 1 — so running
+  The future `/git-repo` skill reads this instead of re-running Phase 1: so running
   `/readme` early in a repo setup workflow pays dividends.
 - **Pick `notion` or `magazine` style** for the HTML report if the README is going into
-  documentation — these styles render markdown headings and tables most cleanly.
+  documentation: these styles render markdown headings and tables most cleanly.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# svc.sh — idle lifecycle for pm2-managed services.
+# svc.sh: idle lifecycle for pm2-managed services.
 #
 # pm2 is the boundary of ownership: if pm2 runs it, this tool may stop it. A
 # server started by hand in a terminal is the human's, and nothing here can
@@ -10,7 +10,7 @@
 # scope, because the tier says who owns the PORT, not who owns the process.
 #
 # Idle means "nobody opened a new connection in IDLE_HOURS", not "nothing is
-# connected" — see svc-sample.py for why that distinction is the whole design.
+# connected": see svc-sample.py for why that distinction is the whole design.
 #
 # Stopping is never losing: reap records a revive line, and `up` brings the
 # service straight back. Same principle as ports.sh reap/revive.
@@ -70,7 +70,7 @@ unlock() { rm -rf "$LOCK"; trap - EXIT; }
 # sample <watch|report> [json|table]
 #   watch persists the new sample; report leaves state untouched.
 sample() {
-  # shellcheck disable=SC2086 — NEVER_REAP is a deliberate word-split list
+  # shellcheck disable=SC2086: NEVER_REAP is a deliberate word-split list
   "$PM2" jlist 2>/dev/null | python3 "$SAMPLER" \
     --state "$STATE" --mode "${1:-report}" --format "${2:-json}" \
     --idle-hours "$IDLE_HOURS" --grace-min "$GRACE_MIN" \
@@ -121,7 +121,7 @@ cmd_status() { sample report table; }
 
 cmd_ports() { state_field "${1:-}" ports | tr -d '[],' | tr -s ' '; }
 
-# Ports an app is known to use even while stopped — last-observed plus whatever
+# Ports an app is known to use even while stopped: last-observed plus whatever
 # pm2's config declares. This is what the pre-start squatter check reads.
 known_ports() { state_field "${1:-}" known_ports | tr -d '[],' | tr -s ' '; }
 

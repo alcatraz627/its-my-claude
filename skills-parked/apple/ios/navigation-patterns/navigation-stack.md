@@ -105,7 +105,7 @@ struct CategoryView: View {
 }
 ```
 
-No need for nested `NavigationStack` — there is one stack at the root and all pushed views participate in it.
+No need for nested `NavigationStack`: there is one stack at the root and all pushed views participate in it.
 
 ## Common Mistakes
 

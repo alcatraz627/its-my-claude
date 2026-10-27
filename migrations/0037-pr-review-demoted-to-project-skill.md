@@ -1,4 +1,4 @@
-# 0037 — pr-review demoted from a global skill to a project skill
+# 0037: pr-review demoted from a global skill to a project skill
 
 ## Summary
 
@@ -18,15 +18,15 @@ A Notes block records why the skill is project-scoped, so a future agent does no
 ## Why
 
 The skill was global in location and project-specific in content. Phase 3's entire
-convention set is one repo's stack — `useQ`/`useM`, TanStack Query cache invalidation,
-NextAuth session handling, Drizzle schema/migration pairing, `src/app/api/**` routing —
+convention set is one repo's stack: `useQ`/`useM`, TanStack Query cache invalidation,
+NextAuth session handling, Drizzle schema/migration pairing, `src/app/api/**` routing:
 counted at 15 stack-specific references in a 277-line file. In any other repo those
 phases are dead weight that still consume the reviewer's attention, and the skill's own
 `description` advertises them, so it routes into projects it cannot serve.
 
 The user's framing settled it: it is targeted to one project because that is the only
 project that needs it, and they had assumed it was already local. `frontend/CLAUDE.md`
-had in fact listed `/pr-review` among its project skills for some time — documentation
+had in fact listed `/pr-review` among its project skills for some time: documentation
 that was drift before this migration and is accurate after it.
 
 ## What moved
@@ -40,7 +40,7 @@ that was drift before this migration and is accurate after it.
 Replication to the repo's other worktrees rides git: `frontend/.claude/skills/` is
 tracked, so a commit reaches each worktree on its next checkout. `sync-claude.sh` covers
 the uncommitted case. As of this migration the project copy is **written but not
-committed** — this repo forbids agent commits, so the human owns that step.
+committed**: this repo forbids agent commits, so the human owns that step.
 
 ## Known limitations (accepted at migration time)
 
@@ -51,7 +51,7 @@ empirically this session by invoking the sibling `/release-changelog` from the r
 If that harness behavior changes, the skill becomes `frontend/`-only and Step 0's `$PKG`
 anchor is what keeps it correct rather than what makes it reachable.
 
-The underlying Step 0 boilerplate defect is NOT fixed by this migration — it is fixed
+The underlying Step 0 boilerplate defect is NOT fixed by this migration: it is fixed
 only in this one skill's copy. 33 of 221 global skills still open with the bare relative
 `Read \`.claude/skills/GUIDELINES.md\``, which silently reads either nothing or the
 project's guidelines in place of the global ones. Tracked as `prop-20260722-204245-15`.

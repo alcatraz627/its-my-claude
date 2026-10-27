@@ -1,6 +1,6 @@
 ---
 name: Guardrail mute-risk = FP-rate × cost-of-a-false-fire
-description: Judge a hook/gate by mute-risk (false-positive-rate × cost-of-a-false-fire), not raw FP. A muted hook enforces nothing, and the mute is the model's in-the-moment escape valve — so price what a false fire actually costs before disabling or softening a guardrail.
+description: Judge a hook/gate by mute-risk (false-positive-rate × cost-of-a-false-fire), not raw FP. A muted hook enforces nothing, and the mute is the model's in-the-moment escape valve, so price what a false fire actually costs before disabling or softening a guardrail.
 type: feedback
 ---
 

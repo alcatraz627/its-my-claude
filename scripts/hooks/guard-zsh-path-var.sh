@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-zsh-path-var.sh — PreToolUse[Bash], SYNCHRONOUS, WARN tier.
+# guard-zsh-path-var.sh: PreToolUse[Bash], SYNCHRONOUS, WARN tier.
 #
 # Inline Bash-tool commands run zsh, and zsh binds the scalar $PATH to an array
 # named $path. So `while read path` or `for path in …` overwrites PATH with a

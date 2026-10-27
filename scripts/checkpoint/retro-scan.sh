@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/checkpoint/retro-scan.sh — Discover candidate sessions for retroactive
+# scripts/checkpoint/retro-scan.sh: Discover candidate sessions for retroactive
 # /core-dump and either print or enqueue them.
 #
 # A candidate is a transcript .jsonl that:
@@ -96,7 +96,7 @@ for proj_dir in sorted(Path(projects_dir).iterdir() if Path(projects_dir).exists
         except: continue
         age_days = (now - mtime).total_seconds() / 86400
         if age_days > max_age: continue
-        # Count turns (user messages) — read the file's line count as a cheap proxy;
+        # Count turns (user messages): read the file's line count as a cheap proxy;
         # a more accurate count would parse {"type":"user"} entries.
         try:
             with open(tx) as fp:

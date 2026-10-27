@@ -1,4 +1,4 @@
-# Node.js CLI Tool — TypeScript
+# Node.js CLI Tool: TypeScript
 
 ## Meta
 - Runtime: node

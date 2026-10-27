@@ -2,7 +2,7 @@
 # Queues a real (LLM-synthesized) /core-dump for this session to run later.
 #
 # The shell checkpoint (PreCompact/SessionEnd) captures structure but not the
-# *reasoning* of a session — that needs an LLM reading the transcript. Running
+# *reasoning* of a session: that needs an LLM reading the transcript. Running
 # that inline would block the hot path and cost money every compaction, so this
 # instead drops the session's UUID into retro-dump's queue; the out-of-band
 # `retro-dump.sh --queue` processor turns it into a /core-dump mini, cost-capped.
@@ -35,7 +35,7 @@ MIN_TOOLS="${AUTO_COREDUMP_MIN_TOOLS:-15}"
 
 QUEUE_DIR="$HOME/.claude/checkpoints/retro-queue"
 mkdir -p "$QUEUE_DIR"
-# touch is idempotent — re-queuing the same session before it's processed is a
+# touch is idempotent: re-queuing the same session before it's processed is a
 # no-op, so PreCompact + SessionEnd both firing for one session is harmless.
 touch "$QUEUE_DIR/${sid}.queued" 2>/dev/null || true
 

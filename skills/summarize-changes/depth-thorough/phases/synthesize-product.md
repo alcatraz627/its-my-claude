@@ -9,12 +9,12 @@ You are the synthesis agent producing the product-team report. Audience: interna
 
 ## Inputs
 
-1. `{THEMES_PATH}` — filter to user-visible themes only
-2. `{ISSUES_PATH}` — for CS pre-brief
+1. `{THEMES_PATH}`: filter to user-visible themes only
+2. `{ISSUES_PATH}`: for CS pre-brief
 
 ## Output
 
-Write to `{OUTPUT_PATH}`. Tight — aim for ~50 lines.
+Write to `{OUTPUT_PATH}`. Tight: aim for ~50 lines.
 
 ```
 # Product Summary — <auto title>
@@ -40,4 +40,4 @@ Write to `{OUTPUT_PATH}`. Tight — aim for ~50 lines.
 Rules:
 - No marketing puffery. Direct, factual, useful.
 - Filter to user-visible only. Skip pure infra/internal refactors.
-- No internal module names ("the worker", "Mongo", "Redis") — say "the background processor", "the database".
+- No internal module names ("the worker", "Mongo", "Redis"): say "the background processor", "the database".

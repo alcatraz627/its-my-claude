@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# store-backup.sh — snapshot a task store before anything rewrites it.
+# store-backup.sh: snapshot a task store before anything rewrites it.
 #
 # The migration plan had no backup directive at all, and its own losslessness
 # check compared a copy against itself, so nothing in it could restore a store it

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# validate-memory.sh — scan memory/*.md files for referenced paths and verify they exist.
+# validate-memory.sh: scan memory/*.md files for referenced paths and verify they exist.
 #
 # Motivation: reference-type memories point to external resources (scripts, docs,
 # config files). If those resources move or get deleted, the memory silently rots.
@@ -14,8 +14,8 @@
 #   - Verifies each path exists. Reports stale ones grouped by memory file.
 #
 # Exit codes:
-#   0 — all references valid
-#   1 — at least one stale reference found (useful for CI / Stop hooks)
+#   0: all references valid
+#   1: at least one stale reference found (useful for CI / Stop hooks)
 #
 # Usage:
 #   validate-memory.sh                    # scan default path
@@ -60,12 +60,12 @@ while IFS= read -r mfile; do
   #   ~/home-relative/paths
   #   `/backticked/paths` or `~/backticked/paths`
   # Then filter out placeholder patterns that are never real file references:
-  #   /path/to/...            — doc-example placeholder
-  #   ...YYYY... ...MM-DD...  — date/time templates
-  #   ...<placeholder>...     — angle-bracket templates
-  #   ...{placeholder}...     — brace templates
-  #   Triple-slash starts (//...) — malformed/fragment
-  #   Bare /api/, /docs/ with no suffix — URL route fragments, not files
+  #   /path/to/...: doc-example placeholder
+  #   ...YYYY... ...MM-DD...: date/time templates
+  #   ...<placeholder>...: angle-bracket templates
+  #   ...{placeholder}...: brace templates
+  #   Triple-slash starts (//...): malformed/fragment
+  #   Bare /api/, /docs/ with no suffix: URL route fragments, not files
   paths=$(grep -oE '(\`?~?/?[A-Za-z0-9_./-]+(\.[A-Za-z0-9]+|/))+' "$mfile" 2>/dev/null \
           | sed -E 's/[`,;.]+$//; s/^`//; s/`$//' \
           | grep -E '^(/|~/|\$HOME/)' \

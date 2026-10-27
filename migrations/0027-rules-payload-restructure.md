@@ -1,12 +1,12 @@
 ---
 migration: 0027
-title: Rules payload restructure — 3 merges + 5 sentinel-paths demotions
+title: Rules payload restructure, 3 merges + 5 sentinel-paths demotions
 session: audit-gcc-7c@2026-07-09
 status: complete
 date: 2026-07-09
 ---
 
-# Migration 0027 — Rules payload restructure (merges + autoload demotions)
+# Migration 0027: Rules payload restructure (merges + autoload demotions)
 
 ## Why
 
@@ -40,22 +40,22 @@ Cross-references updated: `LOOKUP.md`, `NAMESPACE.md` (§ std::claude::schedule)
 ## What does NOT change
 
 - **Atone/affirm slugs** (`prescribed-flattery-as-fix-for-pushback`,
-  `performative-self-criticism`, etc.) — event history keys are permanent; the merged
+  `performative-self-criticism`, etc.): event history keys are permanent; the merged
   file names them so greps still connect.
 - **`trusted-linter-reminder.md` and `ambiguous-file-action-halt.md`** stay always-on
-  (silent-failure / irreversible-overwrite class) — explicitly excluded from demotion.
+  (silent-failure / irreversible-overwrite class): explicitly excluded from demotion.
 - **`helper-return-type-assumption.md`** stays always-on (re-confirmed the 2026-07-05
   rejection: no clean glob captures "code that chains a method on a helper return").
-- Migration docs and `.bak` files referencing retired filenames — point-in-time
+- Migration docs and `.bak` files referencing retired filenames: point-in-time
   records, intentionally untouched.
-- CLAUDE.md itself — 193 lines, structure unchanged (the audit found it correctly
+- CLAUDE.md itself: 193 lines, structure unchanged (the audit found it correctly
   tiered; the budget lever was `rules/`).
 
 ## Verification
 
-- [x] `bash scripts/rules-index.sh` — regenerated, 34 rules, retired files absent,
+- [x] `bash scripts/rules-index.sh`: regenerated, 34 rules, retired files absent,
       merged/demoted rows correct (`scoped` for the 5, `always` for the merged doctrine)
-- [x] `bash scripts/validate-triggers.sh` — 0 errors (26 pre-existing cross-file topic warnings)
+- [x] `bash scripts/validate-triggers.sh`: 0 errors (26 pre-existing cross-file topic warnings)
 - [x] `bash -n scripts/schedule/schedule.sh scripts/hooks/guard-model-tier.sh` + `schedule.sh --help` runs
 - [x] Payload re-measured: always-on `rules/` 106,561 chars (~26.6k tok) + CLAUDE.md
       28,582 chars (~7.1k tok) = ~33.8k tokens, down from ~42.9k (−21%)

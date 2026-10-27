@@ -6,7 +6,7 @@ allowed-tools: [Read, Glob, Grep, AskUserQuestion]
 
 # App Store Rejection Handler
 
-Guide developers through handling App Store rejections — from understanding why the rejection happened, to crafting effective responses, to escalating when appropriate.
+Guide developers through handling App Store rejections: from understanding why the rejection happened, to crafting effective responses, to escalating when appropriate.
 
 ## When This Skill Activates
 
@@ -86,7 +86,7 @@ Run through this before submitting to avoid the most common rejections. Each ite
 - [ ] Privacy policy accurately describes data collection
 - [ ] App Tracking Transparency prompt shown before tracking (if applicable)
 - [ ] Privacy Nutrition Labels in App Store Connect match actual behavior
-- [ ] Data minimization — only collect what you need
+- [ ] Data minimization: only collect what you need
 - [ ] User data deletion mechanism exists (if data is collected)
 - [ ] Privacy manifest included (required for certain APIs, iOS 17+)
 
@@ -262,14 +262,14 @@ If Level 1 and Level 2 fail:
 - Submit a formal appeal at https://developer.apple.com/contact/app-store/
 - Choose "App Review" and then "Appeal"
 - This goes to a separate board, not the same reviewer
-- One appeal per rejection — make it count
+- One appeal per rejection: make it count
 - Response time: 5-14 business days
 
 **Appeal writing tips:**
 - Lead with facts, not emotions
 - Reference specific guideline language
 - Explain why the rejection criteria don't apply or are being misapplied
-- Mention comparable apps on the App Store (carefully — don't name-shame, but establish precedent)
+- Mention comparable apps on the App Store (carefully: don't name-shame, but establish precedent)
 - Keep it under 500 words
 - Include a demo video link if the issue is about functionality
 
@@ -328,9 +328,9 @@ Do NOT request expedited review for:
 ### Tone
 
 - Professional and respectful, always
-- Concise — reviewers handle hundreds of cases
-- Evidence-based — screenshots, videos, step-by-step instructions
-- Solution-oriented — "here's what we changed" or "here's why this complies"
+- Concise: reviewers handle hundreds of cases
+- Evidence-based: screenshots, videos, step-by-step instructions
+- Solution-oriented: "here's what we changed" or "here's why this complies"
 
 ### What to Include
 
@@ -395,8 +395,8 @@ When handling a rejection, produce this assessment:
 
 ## Related Skills
 
-- **common-rejections.md** — Detailed breakdown of top 20 rejection reasons with fix guides
-- Related: `release-review` — Pre-release audit that catches rejection-causing issues
-- Related: `security/privacy-manifests` — Privacy manifest compliance
-- Related: `app-store/app-description-writer` — Metadata accuracy (prevents Guideline 2.3 rejections)
-- Related: `monetization` — IAP compliance guidance (prevents Guideline 3.1 rejections)
+- **common-rejections.md**: Detailed breakdown of top 20 rejection reasons with fix guides
+- Related: `release-review`: Pre-release audit that catches rejection-causing issues
+- Related: `security/privacy-manifests`: Privacy manifest compliance
+- Related: `app-store/app-description-writer`: Metadata accuracy (prevents Guideline 2.3 rejections)
+- Related: `monetization`: IAP compliance guidance (prevents Guideline 3.1 rejections)

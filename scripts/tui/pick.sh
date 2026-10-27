@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pick.sh — the one fzf → gum → read degradation ladder for std::claude::tui.
+# pick.sh: the one fzf → gum → read degradation ladder for std::claude::tui.
 #
 # Candidates arrive on STDIN (one per line); the chosen value goes to STDOUT; all
 # UI (the picker, prompts) goes to the terminal, so these compose in a pipe:
@@ -14,16 +14,16 @@
 : "${HOME:?pick.sh: HOME must be set to locate sibling modules}"
 command -v tui_have     >/dev/null 2>&1 || . "$HOME/.claude/scripts/tui/require.sh" 2>/dev/null || true
 command -v tui_read_tty >/dev/null 2>&1 || . "$HOME/.claude/scripts/tui/tty.sh"     2>/dev/null || true
-# Fail loud + early if a sibling didn't load — better than an undefined-function
+# Fail loud + early if a sibling didn't load: better than an undefined-function
 # crash later, far from the cause.
 if ! command -v tui_have >/dev/null 2>&1 || ! command -v tui_read_tty >/dev/null 2>&1; then
   printf 'pick.sh: sibling modules not found under %s/.claude/scripts/tui/ (require.sh / tty.sh)\n' "$HOME" >&2
   return 1 2>/dev/null || exit 1
 fi
 
-# tui_pick_one [--prompt P] [--preview CMD] [--non-tty fail|first|passthrough] — pick one line from stdin
+# tui_pick_one [--prompt P] [--preview CMD] [--non-tty fail|first|passthrough]: pick one line from stdin
 #   Ladder: fzf (fuzzy + preview) → gum filter → numbered read menu. With no usable
-#   tty, applies the --non-tty policy (default fail — a picker can't guess for you):
+#   tty, applies the --non-tty policy (default fail: a picker can't guess for you):
 #     fail        return 1, print nothing (caller takes its own default)
 #     first       echo the first candidate
 #     passthrough echo it iff there is exactly one candidate, else return 1
@@ -37,7 +37,7 @@ tui_pick_one() {
       *) shift ;;
     esac
   done
-  # Candidates MUST be piped. If stdin is a terminal the caller forgot to pipe —
+  # Candidates MUST be piped. If stdin is a terminal the caller forgot to pipe:
   # reading would hang waiting for hand-typed EOF, so fail fast instead.
   [ -t 0 ] && { echo "tui_pick_one: candidates must be piped on stdin" >&2; return 2; }
   local input; input="$(command cat)"          # `command` so a cat=… alias can't bite
@@ -63,7 +63,7 @@ tui_pick_one() {
   esac
 }
 
-# tui_pick_many [--prompt P] — multi-select from stdin; selections newline-separated on stdout
+# tui_pick_many [--prompt P]: multi-select from stdin; selections newline-separated on stdout
 #   Ladder: fzf -m → gum choose --no-limit → numbered "1 3 5" read. No tty → return 1.
 tui_pick_many() {
   local prompt='pick (multi)> '
@@ -83,7 +83,7 @@ tui_pick_many() {
   return 1
 }
 
-# tui_choose [--prompt P] [--preview C] OPT1 OPT2 ... — pick one from a STATIC arg list
+# tui_choose [--prompt P] [--preview C] OPT1 OPT2 ...: pick one from a STATIC arg list
 #   Ergonomic wrapper around tui_pick_one for small fixed option sets (no stdin plumbing).
 tui_choose() {
   local pass=()
@@ -125,7 +125,7 @@ EOF
   done
 }
 
-# tui_confirm PROMPT — destructive-action gate. Returns 0=yes, 1=no. With no tty
+# tui_confirm PROMPT: destructive-action gate. Returns 0=yes, 1=no. With no tty
 # it returns 1 (safe default = NO; a confirm must never auto-yes headless).
 tui_confirm() {
   local prompt="${1:-Proceed?}"
@@ -147,11 +147,11 @@ tui_confirm() {
 # selection still parses cleanly, and a selector that suggests existing options
 # without forbidding a new one. See conventions/tui-handbook.md § Enriched pickers.
 
-# tui_strip_ansi — filter: drop SGR color escapes from stdin. The clean way to get
+# tui_strip_ansi: filter: drop SGR color escapes from stdin. The clean way to get
 # a plain value back out of a colored display.
 tui_strip_ansi() { sed $'s/\033\\[[0-9;]*m//g'; }
 
-# tui_pick_key [--prompt P] [--preview CMD] [--non-tty POLICY] — pick from
+# tui_pick_key [--prompt P] [--preview CMD] [--non-tty POLICY]: pick from
 # `key<TAB>display` lines on stdin; SHOWS the (possibly colored) display, RETURNS
 # the clean key. This is THE idiom for a colored list: fzf renders the color
 # (--ansi) and searches only the display column, the key column never shows, and
@@ -198,7 +198,7 @@ tui_pick_key() {
   fi
 }
 
-# tui_pick_or_add [--prompt P] — pick one of the seeded candidates (stdin, may be
+# tui_pick_or_add [--prompt P]: pick one of the seeded candidates (stdin, may be
 # `key<TAB>display`) OR type a NEW value. Returns the chosen key, or the typed
 # query verbatim when it matches nothing. For path / name selectors that should
 # SUGGEST without RESTRICTING. fzf --print-query gives the typed query even when

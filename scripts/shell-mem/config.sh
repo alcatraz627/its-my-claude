@@ -2,7 +2,7 @@
 # Shared configuration for diy-claude-mem.
 # Source this file in other scripts:
 #   source "$(dirname "$0")/config.sh"
-# Always exits cleanly — never call directly.
+# Always exits cleanly: never call directly.
 
 # ── Noise filter ──────────────────────────────────────────────────────────────
 # Commands matching any of these ERE patterns are skipped (not logged).
@@ -50,7 +50,7 @@ fi
 
 # ── Port detection ─────────────────────────────────────────────────────────────
 # Regex patterns used to detect port numbers in commands and tool output.
-# Order matters — first match wins.
+# Order matters: first match wins.
 DIYMEN_PORT_CMD_PATTERNS=(
   "--port[= ]([0-9]+)"
   "-p ([0-9]+)"

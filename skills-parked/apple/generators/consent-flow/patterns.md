@@ -57,9 +57,9 @@ App Launch ──► Show Own Consent Banner ──► User Taps "Accept" ──
 ```
 
 **Key rules:**
-1. Never request ATT at cold launch — Apple may reject the app
+1. Never request ATT at cold launch: Apple may reject the app
 2. Show your own explanation first, then call `requestTrackingAuthorization`
-3. ATT dialog can only be shown once — subsequent calls return the cached status
+3. ATT dialog can only be shown once: subsequent calls return the cached status
 4. If denied, you cannot re-prompt; guide users to Settings > Privacy > Tracking
 
 ### ATT and Consent Relationship
@@ -292,7 +292,7 @@ Every consent event must record:
 ### Retention Period
 
 - **GDPR:** Keep consent records for as long as the processing occurs + reasonable period after
-- **Recommended:** 3 years minimum — matches many statute of limitations periods
+- **Recommended:** 3 years minimum: matches many statute of limitations periods
 - **Pruning:** Periodically remove entries older than retention period
 
 ### Export Format

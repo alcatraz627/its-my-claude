@@ -2,7 +2,7 @@
 name: cogitate
 description: >
   Use when the user wants to research a topic and keep a durable, growing note
-  on it — answers a query and files a dated structured response under
+  on it: answers a query and files a dated structured response under
   ~/Documents/Claude/Topics/, maintaining _index.claude.md, _insights.claude.md,
   and topic-specific templates. For heavy multi-source fact-checked reports,
   route to /deep-research instead.
@@ -14,7 +14,7 @@ user-invocable: true
 ## Brief
 
 Interprets a user query, refines it with context, researches online or from
-existing topic files, and produces a structured response — saved to a dated
+existing topic files, and produces a structured response: saved to a dated
 topic file and indexed automatically. Learns over time via `_insights.claude.md`
 and a growing library of topic-specific templates.
 
@@ -22,9 +22,9 @@ and a growing library of topic-specific templates.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -47,9 +47,9 @@ If it does not exist yet, continue without it.
 | `<query>` | required | The question, topic, or direction to cogitate on |
 
 **Modes:**
-- **Normal** (default) — ask 1–2 targeted questions if the query is genuinely ambiguous
-- **Quick** — state all assumptions upfront, proceed without waiting for confirmation
-- **Deep** — triggered automatically when broad multi-source research or
+- **Normal** (default): ask 1–2 targeted questions if the query is genuinely ambiguous
+- **Quick**: state all assumptions upfront, proceed without waiting for confirmation
+- **Deep**: triggered automatically when broad multi-source research or
   fact-checking is needed; delegates to the `/deep-research` skill rather than
   running cogitate's own researcher (see Phase 2.2)
 
@@ -81,17 +81,17 @@ This directory is created automatically on first run.
 
 ---
 
-## Phase 0 — Session Bootstrap
+## Phase 0: Session Bootstrap
 
 1. **Ensure working directory exists:**
    ```bash
    mkdir -p ~/Documents/Claude/Topics
    ```
 
-2. **Read `_insights.claude.md`** (last 5–10 entries) — apply any efficiency lessons
+2. **Read `_insights.claude.md`** (last 5–10 entries): apply any efficiency lessons
    to the current run before doing anything else.
 
-3. **Read `_index.claude.md`** — scan for existing topic files that may be relevant
+3. **Read `_index.claude.md`**: scan for existing topic files that may be relevant
    to the current query (look for title/summary overlap).
 
 4. **Glob for template variants:**
@@ -102,16 +102,16 @@ This directory is created automatically on first run.
 
 ---
 
-## Phase 1 — Intent Interpretation
+## Phase 1: Intent Interpretation
 
-### 1.1 — Parse query and detect mode
+### 1.1: Parse query and detect mode
 
 - If the query starts with `quickly` (case-insensitive): set **quick mode**. Strip the word.
 - If the query contains `deep research`, `investigate thoroughly`, or `full analysis`:
-  set **deep mode** — a sub-agent will be spawned in Phase 2.
+  set **deep mode**: a sub-agent will be spawned in Phase 2.
 - Otherwise: **normal mode**.
 
-### 1.2 — Assess ambiguity
+### 1.2: Assess ambiguity
 
 Ask yourself: *"Could this query mean two meaningfully different things?"*
 
@@ -122,7 +122,7 @@ Ask yourself: *"Could this query mean two meaningfully different things?"*
 Do not ask more than one clarifying question. Prefer proceeding with a stated assumption
 over blocking on confirmation.
 
-### 1.3 — Select template
+### 1.3: Select template
 
 Review the variant map from Phase 0. Match the topic's category against variant use-cases:
 
@@ -146,23 +146,23 @@ Else:
 
 ---
 
-## Phase 2 — Refinement & Research
+## Phase 2: Refinement & Research
 
-### 2.1 — List sharpening context
+### 2.1: List sharpening context
 
 Before researching, briefly state:
 - What you already know about this topic
 - What the 1–2 most important unknowns are
 - What sources you plan to consult
 
-### 2.2 — Research
+### 2.2: Research
 
 **For online topics:** use WebSearch → WebFetch on the 2–3 most promising results.
 
 **For local topics:** Glob `~/Documents/Claude/Topics/` for related files, Read the
 most relevant ones.
 
-**For deep mode:** delegate to the `/deep-research` skill — the shared harness
+**For deep mode:** delegate to the `/deep-research` skill: the shared harness
 for fan-out web search, source fetching, adversarial claim verification, and
 cited synthesis. Don't reimplement it here; cogitate's job is to file the result
 as a topic note, not to re-run a multi-source pipeline.
@@ -176,16 +176,16 @@ report, carry that into Phase 2.3 (Synthesise) and Phase 3 (file it as the topic
 response). The legacy `agents/deep-research.md` sub-agent is retained only as a
 fallback for when `/deep-research` is unavailable.
 
-### 2.3 — Synthesise
+### 2.3: Synthesise
 
 Combine research findings into a coherent answer. For multi-part questions, handle each
 part in order. Flag anything you couldn't verify.
 
 ---
 
-## Phase 3 — Execution
+## Phase 3: Execution
 
-### 3.1 — Create topic file
+### 3.1: Create topic file
 
 ```bash
 SKILL_DIR="$HOME/.claude/skills/cogitate"
@@ -202,16 +202,16 @@ bash "$SKILL_DIR/scripts/new-topic.sh" \
 If the script fails: manually derive the filename (`DD MMM YY - <Title>.md`), copy
 the template content, and write the file with the Write tool.
 
-### 3.2 — Fill the topic file
+### 3.2: Fill the topic file
 
 Write the research output into the file following the template structure.
 Fill every section; mark sections that don't apply as `N/A` rather than leaving them blank.
 
 **After every subsequent user message in this session:** update the topic file with the
-new exchange — append to the relevant sections (Answer/Findings, Sources, Open Questions).
+new exchange: append to the relevant sections (Answer/Findings, Sources, Open Questions).
 Increment the `Interactions:` counter in the frontmatter.
 
-### 3.3 — Update index
+### 3.3: Update index
 
 ```bash
 bash "$SKILL_DIR/scripts/update-index.sh" \
@@ -224,7 +224,7 @@ If the script fails: manually Edit `_index.claude.md` to add or update the row.
 
 ---
 
-## Phase 3.5 — Template Variant Review
+## Phase 3.5: Template Variant Review
 
 After writing the topic file, assess structural fit:
 
@@ -269,9 +269,9 @@ If 2+ sections were wrong/missing/invented:
 
 ---
 
-## Phase 4 — Insights + Verification
+## Phase 4: Insights + Verification
 
-### 4.1 — Write insights entry
+### 4.1: Write insights entry
 
 Compose a run entry for `_insights.claude.md`:
 
@@ -295,7 +295,7 @@ bash "$SKILL_DIR/scripts/update-insights.sh" \
 
 If the script fails: manually prepend the entry to `_insights.claude.md` using Edit.
 
-### 4.2 — Print run summary
+### 4.2: Print run summary
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh
@@ -308,7 +308,7 @@ gum_complete "cogitate" \
   "New variant=<name> | none"
 ```
 
-### 4.3 — Offer /create-report
+### 4.3: Offer /create-report
 
 If the topic file is substantive (>300 words, multiple sections with real content):
 
@@ -320,7 +320,7 @@ Want an HTML report of this topic? Run /create-report on the topic file.
 
 ## Notes
 
-- **Quick mode** must state all assumptions before the first tool call — never silently assume.
+- **Quick mode** must state all assumptions before the first tool call: never silently assume.
 - **Template variant creation** always requires user approval. Never auto-save silently.
 - **Fallback rule:** if any script fails, attempt the equivalent operation manually using
   Write/Edit tools. Never fail the run because a script errored.
@@ -334,14 +334,14 @@ Want an HTML report of this topic? Run /create-report on the topic file.
 
 ## See Also
 
-- **`/deep-research`** — the multi-source fact-checking research harness. Deep mode
+- **`/deep-research`**: the multi-source fact-checking research harness. Deep mode
   routes here (Phase 2.2) instead of re-running its own pipeline.
-- **`~/.claude/personas/web-researcher.md`** — the cited, adversarial open-web
+- **`~/.claude/personas/web-researcher.md`**: the cited, adversarial open-web
   research disposition. Adopt it when a query needs rigorous sourcing before it
   becomes a cogitate topic note; cogitate then files the result.
-- **scratchpad MCP** (`mcp__scratchpad__sp_*`) — inter-skill working memory. Use it
+- **scratchpad MCP** (`mcp__scratchpad__sp_*`): inter-skill working memory. Use it
   to hand off intermediate research notes when chaining cogitate with
   `/deep-research`, web-researcher, or `/create-report`, rather than passing large
   blobs through the conversation.
-- **`/create-report`** — turns a substantive topic file into a standalone HTML
+- **`/create-report`**: turns a substantive topic file into a standalone HTML
   report (offered in Phase 4.3).

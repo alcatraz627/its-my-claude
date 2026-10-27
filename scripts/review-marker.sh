@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# review-marker.sh — tracks which changed code files /skeptical-review has
+# review-marker.sh: tracks which changed code files /skeptical-review has
 # covered this session, so the Stop gate can require a review only for the
-# UNREVIEWED DELTA — not re-trigger on every later turn.
+# UNREVIEWED DELTA: not re-trigger on every later turn.
 #
 # The "signature" is the set of changed code-file PATHS (content-independent):
 # fixing review findings in already-reviewed files does NOT re-trigger; touching
@@ -33,7 +33,7 @@ USAGE="usage: review-marker.sh {files|unreviewed|count|write|edited|edited-unrev
 
 MARK="/tmp/claude-review-done-${sid8}"
 CODE_RE='\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|sh|bash|rb|java|kt|swift|c|cc|cpp|h|hpp|sql)$'
-# Paths that are artifacts / reports / generated / vendored — NOT production
+# Paths that are artifacts / reports / generated / vendored: NOT production
 # source. A change here is never "code that needs adversarial review" (a release
 # bundle, a report dir, node_modules). This is what stopped the gate firing on
 # 25 markdown reports under <proj>/.claude/release-v-5.0/.

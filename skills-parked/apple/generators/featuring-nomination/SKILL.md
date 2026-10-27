@@ -38,7 +38,7 @@ Apple's editorial team hand-picks apps for featuring based on:
 - Submit **6-8 weeks** before desired featuring date
 - Apple reviews and plans editorial calendar in advance
 - Seasonal features are planned months ahead
-- No guarantee of featuring — but quality nominations increase odds significantly
+- No guarantee of featuring: but quality nominations increase odds significantly
 
 ## Configuration Questions
 
@@ -165,8 +165,8 @@ Read `nomination-template.md` and fill all fields.
 
 ## References
 
-- **nomination-template.md** — Detailed nomination form and angle framework
-- Related: `app-store/marketing-strategy` — Featuring as part of broader strategy
-- Related: `app-store/app-description-writer` — Compelling app copy
-- Related: `generators/in-app-events` — Pair featuring with events
+- **nomination-template.md**: Detailed nomination form and angle framework
+- Related: `app-store/marketing-strategy`: Featuring as part of broader strategy
+- Related: `app-store/app-description-writer`: Compelling app copy
+- Related: `generators/in-app-events`: Pair featuring with events
 - Apple: [Nominate your app for featuring](https://developer.apple.com/app-store/discoverability/)

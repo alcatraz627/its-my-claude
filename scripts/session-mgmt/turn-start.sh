@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# turn-start.sh — UserPromptSubmit hook. Writes a per-session turn-state file
+# turn-start.sh: UserPromptSubmit hook. Writes a per-session turn-state file
 # BEFORE Claude begins processing the user's prompt. If the turn dies mid-flight
 # (API 5xx, network loss, kernel panic), this file is the only signal that a
 # turn was in progress. Paired with detect-stale-session.sh (SessionStart hook)
@@ -8,11 +8,11 @@
 # Hook input (stdin): {session_id, prompt, cwd, ...}
 #
 # Output:
-#   - ~/.claude/.turn-state/<sid>.json  — atomic state for this session's live turn
+#   - ~/.claude/.turn-state/<sid>.json: atomic state for this session's live turn
 #   - WAL entry (turn_start) in session's wal.jsonl if WAL is resolvable
 #
 # Design notes:
-# - Fails silently — never blocks the prompt.
+# - Fails silently: never blocks the prompt.
 # - Overwrites prior turn-state file for same session (last turn only).
 # - Cleanup: Stop hook clears ~/.claude/.turn-state/<sid>.json on normal exit.
 
@@ -48,7 +48,7 @@ STATE_FILE="$STATE_DIR/$SAFE_SID.json"
 
 # A state file still present here means the PREVIOUS turn died mid-flight (a
 # clean turn is cleared by the Stop hook). Preserve it as prev_aborted inside
-# the new file — /wake's halted-on-purpose-vs-cut-off triage reads it, and
+# the new file: /wake's halted-on-purpose-vs-cut-off triage reads it, and
 # overwriting would destroy the only evidence. del(.prev_aborted) keeps the
 # chain one level deep.
 PREV_ABORTED=$(jq -c 'del(.prev_aborted)' "$STATE_FILE" 2>/dev/null || echo "null")

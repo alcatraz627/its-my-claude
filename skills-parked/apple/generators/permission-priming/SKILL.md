@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Permission Priming Generator
 
-Generate pre-permission priming screens — shown before iOS system permission dialogs to explain WHY the app needs access. Dramatically increases permission grant rates vs. cold-prompting users with the system alert.
+Generate pre-permission priming screens: shown before iOS system permission dialogs to explain WHY the app needs access. Dramatically increases permission grant rates vs. cold-prompting users with the system alert.
 
 ## When This Skill Activates
 
@@ -62,13 +62,13 @@ Ask user via AskUserQuestion:
    - App Tracking Transparency (ATT)
 
 2. **Priming style?**
-   - Full-screen (dedicated view with illustration, title, benefits, CTA) — recommended
+   - Full-screen (dedicated view with illustration, title, benefits, CTA): recommended
    - Alert-style (compact alert-like overlay before system prompt)
    - Inline (embedded card within existing content)
 
 3. **Include "Not Now" option?**
-   - Yes (recommended — reduces user frustration, can re-prompt later)
-   - No (only "Enable" button — more aggressive)
+   - Yes (recommended: reduces user frustration, can re-prompt later)
+   - No (only "Enable" button: more aggressive)
 
 4. **Show benefits illustration?**
    - SF Symbol (simple, matches system style)
@@ -82,16 +82,16 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `PermissionType.swift` — Enum of all permission types with metadata
-2. `PermissionStatus.swift` — Unified status enum wrapping platform-specific statuses
-3. `PermissionManager.swift` — @Observable class that checks, requests, and opens Settings
+1. `PermissionType.swift`: Enum of all permission types with metadata
+2. `PermissionStatus.swift`: Unified status enum wrapping platform-specific statuses
+3. `PermissionManager.swift`: @Observable class that checks, requests, and opens Settings
 
 ### Step 3: Create UI Files
-4. `PermissionPrimingView.swift` — Pre-permission screen with benefits and CTA
-5. `PermissionStatusTracker.swift` — Monitors status changes from Settings
+4. `PermissionPrimingView.swift`: Pre-permission screen with benefits and CTA
+5. `PermissionStatusTracker.swift`: Monitors status changes from Settings
 
 ### Step 4: Create Modifier Files
-6. `PermissionGatedModifier.swift` — ViewModifier that gates content behind permission check
+6. `PermissionGatedModifier.swift`: ViewModifier that gates content behind permission check
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -239,7 +239,7 @@ if permissionManager.status(for: .camera) == .denied {
 ## Gotchas
 
 - **Cannot re-show system prompt after denial.** Once the user denies a permission, iOS will never show the system dialog again. You must direct the user to Settings > Privacy to re-enable. Always handle the `.denied` state gracefully.
-- **App Tracking Transparency (ATT) has special requirements.** ATT must be requested before tracking begins. The priming screen must NOT use misleading language. Apple reviews ATT implementations closely — avoid incentivizing users to allow tracking.
+- **App Tracking Transparency (ATT) has special requirements.** ATT must be requested before tracking begins. The priming screen must NOT use misleading language. Apple reviews ATT implementations closely: avoid incentivizing users to allow tracking.
 - **Health permissions have unique two-column UI.** HealthKit authorization uses its own system sheet with read/write toggles per data type. You cannot customize it. Your priming screen should explain which health data you need and why before presenting the HealthKit sheet.
 - **Location "Always" requires progressive authorization.** You must first request `.whenInUse`, then separately request `.always`. iOS shows a follow-up prompt only after the user has used the app with When In Use access. Do not request Always upfront.
 - **Provisional notifications (iOS 12+) bypass the prompt entirely.** With `.provisional`, notifications are delivered silently to Notification Center without asking. Consider whether quiet delivery is acceptable before building a priming screen.
@@ -247,6 +247,6 @@ if permissionManager.status(for: .camera) == .denied {
 
 ## References
 
-- **templates.md** — All production Swift templates for permission priming
-- Related: `generators/push-notifications` — Push notification setup and handling
-- Related: `generators/consent-flow` — GDPR/privacy consent flows
+- **templates.md**: All production Swift templates for permission priming
+- Related: `generators/push-notifications`: Push notification setup and handling
+- Related: `generators/consent-flow`: GDPR/privacy consent flows

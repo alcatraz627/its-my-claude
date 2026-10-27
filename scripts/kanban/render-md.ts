@@ -109,7 +109,7 @@ export function renderMd(input: string): string {
     const flushList = () => closeTo(0);
     // A table indented under a list item is that item's content. It used to
     // close the list instead, so a numbered procedure with a table under step 1
-    // restarted at 1 on step 2 — two <ol> elements, both starting at one, which
+    // restarted at 1 on step 2: two <ol> elements, both starting at one, which
     // reads as a renderer that cannot count. `kids` is the same slot nested
     // lists already fold into.
     let tableInList = false;
@@ -126,7 +126,7 @@ export function renderMd(input: string): string {
     };
     // Quotes were passing through as literal "> " text, and the docs carry 224
     // lines of them. The first fix rendered prose only, on the reasoning that no
-    // quote in this repo held a list — true when written, false since
+    // quote in this repo held a list: true when written, false since
     // docs/SIMPLIFICATION-REPORT.md began quoting agents' replies verbatim and
     // one of them is numbered. So the body is re-parsed as its own document,
     // which costs one recursion and buys every construct at once.

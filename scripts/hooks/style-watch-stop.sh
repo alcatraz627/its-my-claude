@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# style-watch-stop.sh — Stop hook, collector half of the style watcher.
+# style-watch-stop.sh: Stop hook, collector half of the style watcher.
 #
 # Gathers files this session edited (the /tmp/claude-edited-files-<sid8>
 # tracker), drops everything the watcher must not touch (critic-gated
 # deliverables, scratch, machine-written digests, unchanged-since-last-look),
-# and hands survivors to a DETACHED background worker. Exits 0 immediately —
+# and hands survivors to a DETACHED background worker. Exits 0 immediately:
 # zero latency on the user's turn; the worker's verdict reaches the agent at
 # the NEXT turn via hinters/02-style-watch.sh.
 #
 # Division of labor (audit P19, mig 0035): prose-smell-stop.sh owns the CHAT
 # message; this stack owns FILES. Deliverables the readers-advocate already
 # gated are skipped via the sha-keyed voice-passed marker (style-log.sh
-# --check) — the watcher never re-nags what the critic passed or what the user
+# --check): the watcher never re-nags what the critic passed or what the user
 # is about to review themselves.
 #
 # Mute: touch ~/.claude/.no-style-watch (machine-wide) · STYLE_WATCH_OFF=1 (process)

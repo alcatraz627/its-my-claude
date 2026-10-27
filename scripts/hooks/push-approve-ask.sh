@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# push-approve-ask.sh — the owner approves a gated push by answering a question.
+# push-approve-ask.sh: the owner approves a gated push by answering a question.
 #
 # guard-git-push.sh blocks a push to main (or in a protected repo) and prints a
 # nonce. The agent then asks through AskUserQuestion with one option labelled

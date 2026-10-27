@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal-gate-note-stop.sh — tells the owner when a goal needs a step only he can take.
+# goal-gate-note-stop.sh: tells the owner when a goal needs a step only he can take.
 #
 # A goal like "production runs the latest main" can never be met by the agent
 # while pushing to main waits on the owner's approval, and the goal checker then

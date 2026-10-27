@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# depth-runner.sh — orchestrate the thorough-depth multipass discovery flow.
+# depth-runner.sh: orchestrate the thorough-depth multipass discovery flow.
 #
 # Usage:
 #   depth-runner.sh discover <source-spec>
@@ -15,7 +15,7 @@
 # the Agent tool with prompts from phases/*.md.
 #
 # DISPATCH NOTE: inventory sub-agents MUST be dispatched as `general-purpose`,
-# not `Explore` (Explore hallucinates write-refusals — see phases/inventory.md).
+# not `Explore` (Explore hallucinates write-refusals: see phases/inventory.md).
 
 set -euo pipefail
 SKILL_DIR=~/.claude/skills/summarize-changes/depth-thorough

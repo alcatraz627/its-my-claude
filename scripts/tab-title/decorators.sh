@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/decorators.sh — Icon decorators applied to the tab title.
+# tab-title/decorators.sh: Icon decorators applied to the tab title.
 #
 # ░ HOW TO EXTEND ░
 # 1. Pick a short name (lowercase, no spaces): e.g. `docker`, `tmux`, `gitdirty`.
@@ -71,7 +71,7 @@ dec_agents() {
 # Cheap + gated: only fires for sessions that actually registered an ipc alias
 # (the side-file exists), reads the count via the compiled binary's one indexed
 # `count` op, and degrades to nothing on any failure (broker down, no alias, no
-# binary) — never blocks the tab render.
+# binary): never blocks the tab render.
 dec_ipc() {
   local sid="${TAB_SESSION_ID:-}"
   [[ -n "$sid" ]] || return 0
@@ -84,11 +84,11 @@ dec_ipc() {
   [[ -n "$n" ]] && [ "$n" -gt 0 ] 2>/dev/null && printf '📨%s' "$n"
 }
 
-# ── cost: spend tier indicator (SCAFFOLD — no integration wired yet) ─────────
+# ── cost: spend tier indicator (SCAFFOLD: no integration wired yet) ─────────
 # Reads /tmp/claude-spend-today (a single number in USD). Emits $/$$/$$$ above
 # thresholds. Wire a producer by appending to that file from a UserPromptSubmit
 # or Stop hook that has access to usage info (see ~/.claude/scripts/cost-alert.sh
-# for an existing cost source). Returns nothing if file absent or unreadable —
+# for an existing cost source). Returns nothing if file absent or unreadable:
 # safe to leave enabled.
 dec_cost() {
   local f="${CLAUDE_TAB_SPEND_FILE:-/tmp/claude-spend-today}"

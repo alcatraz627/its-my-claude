@@ -1,8 +1,8 @@
-# Migration 0004 — Global Memory Tier
+# Migration 0004: Global Memory Tier
 
 <!-- sessions: catcu-std-c0@2026-04-17 -->
 
-**Status:** ✅ Complete — all 3 phases executed 2026-04-17. 14 memories seeded.
+**Status:** ✅ Complete: all 3 phases executed 2026-04-17. 14 memories seeded.
 **Opened:** 2026-04-17
 **Last updated:** 2026-04-17
 
@@ -22,10 +22,10 @@ directories.
    "always test small samples") is never loaded in project B. Truly universal learnings
    have no canonical home.
 2. **The harness owns per-project paths.** `~/.claude/projects/<slug>/memory/` is injected
-   by the Claude Code CLI — not configurable via CLAUDE.md or settings. Moving these dirs
+   by the Claude Code CLI: not configurable via CLAUDE.md or settings. Moving these dirs
    would break every project's auto-memory immediately.
 3. **The implicit "global" is fragile.** Currently, memories stored under the `~/.claude/`
-   project slug (`-Users-*--claude/memory/`) act as pseudo-global — but they're only loaded
+   project slug (`-Users-*--claude/memory/`) act as pseudo-global: but they're only loaded
    when CWD is `~/.claude/` itself.
 
 ---
@@ -39,9 +39,9 @@ directories.
 It is not user-configurable. Moving directories would:
 - Break all 15 existing project memory dirs (67 files total as of 2026-04-17)
 - Affect every running and future session until the harness itself is updated
-- Require symlinks or harness patches — both fragile
+- Require symlinks or harness patches: both fragile
 
-The revised scope (below) achieves the original goal — cross-project memory — without
+The revised scope (below) achieves the original goal (cross-project memory) without
 touching the harness path.
 
 ---
@@ -90,13 +90,13 @@ None. This migration is purely additive.
 
 | File | Change |
 |---|---|
-| `~/.claude/memory/global/README.md` | **created** — tier docs |
-| `~/.claude/memory/global/MEMORY.md` | **created** — global memory index |
-| `~/.claude/CLAUDE.md` | **edit** — add instruction to check global memory |
-| `~/.claude/NAMESPACE.md` | **edit** — update `::memory` section |
-| `~/.claude/LOOKUP.md` | **edit** — add memory tier row |
-| `~/.claude/migrations/MIGRATIONS.md` | **edit** — flip status |
-| Various `projects/*/memory/*.md` | **copy** (not move) — seed globals |
+| `~/.claude/memory/global/README.md` | **created**: tier docs |
+| `~/.claude/memory/global/MEMORY.md` | **created**: global memory index |
+| `~/.claude/CLAUDE.md` | **edit**: add instruction to check global memory |
+| `~/.claude/NAMESPACE.md` | **edit**: update `::memory` section |
+| `~/.claude/LOOKUP.md` | **edit**: add memory tier row |
+| `~/.claude/migrations/MIGRATIONS.md` | **edit**: flip status |
+| Various `projects/*/memory/*.md` | **copy** (not move): seed globals |
 
 ---
 

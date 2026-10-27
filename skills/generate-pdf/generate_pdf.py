@@ -398,7 +398,7 @@ def main():
             print(result.stderr)
             sys.exit(1)
 
-        # If we used a temp markdown, the output is next to it — move to expected location
+        # If we used a temp markdown, the output is next to it: move to expected location
         if temp_md:
             temp_output = os.path.splitext(temp_md)[0] + ".pdf"
             if os.path.exists(temp_output) and temp_output != expected_output:

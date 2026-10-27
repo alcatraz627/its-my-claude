@@ -3,7 +3,7 @@
 # instrument: self (a review marker covering the files after the nudge records heeded:true)
 # review-by: 2026-11-15
 # retire-if: heed-rate < 30% over 40 fires
-# review-nudge-stop.sh — Stop hook: when this session wrote a substantial amount of
+# review-nudge-stop.sh: Stop hook: when this session wrote a substantial amount of
 # code and no /skeptical-review or /adversarial-review has covered it, tell the owner.
 #
 # The old review-gate-stop.sh blocked the turn, was retired on 2026-10-14 (zero

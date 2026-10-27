@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# warn-git-add-enumeration.sh — PreToolUse hook on Bash.
+# warn-git-add-enumeration.sh: PreToolUse hook on Bash.
 #
 # Graduated from atone pattern: generalize-before-enumerate (S3, 3×).
 # When the agent ships `git add a.ts b.ts c.ts d.ts ...` with ≥4 paths, it
@@ -8,7 +8,7 @@
 #
 # This hook is ADVISORY (always exits 0). It injects an additionalContext nudge
 # before the command runs, suggesting a parent-dir check; the agent still runs
-# the command but surfaces the nudge to the user (stderr would reach neither —
+# the command but surfaces the nudge to the user (stderr would reach neither:
 # see features/hooks-tui-limits.md).
 #
 # Why advisory instead of blocking: legitimate cases exist (cherry-picking

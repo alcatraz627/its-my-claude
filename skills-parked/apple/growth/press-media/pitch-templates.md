@@ -1,15 +1,15 @@
 # Pitch Templates
 
-Email templates for press and media outreach. Customize every template for each recipient — generic mass emails get ignored.
+Email templates for press and media outreach. Customize every template for each recipient: generic mass emails get ignored.
 
 ## General Tips (Apply to All Templates)
 
 - **Subject line**: Keep under 60 characters, include app name, be specific
-- **Opening line**: Reference something the journalist recently wrote or covered — proves you did your homework
+- **Opening line**: Reference something the journalist recently wrote or covered: proves you did your homework
 - **Body**: Under 200 words total. Journalists receive hundreds of emails daily.
 - **One screenshot inline**: Embed one compelling screenshot directly in the email (not as attachment)
 - **Links**: Include App Store link, press kit link, TestFlight link (if pre-launch)
-- **Call to action**: One clear ask — "Would you like a TestFlight invite?" or "Can I send a promo code?"
+- **Call to action**: One clear ask: "Would you like a TestFlight invite?" or "Can I send a promo code?"
 - **Signature**: Name, title, website, social media handle
 
 ---
@@ -107,7 +107,7 @@ Thanks for considering,
 
 ## Template 4: Podcast Pitch
 
-Use for podcast hosts. Keep it shorter — they need to see interview value, not just app features.
+Use for podcast hosts. Keep it shorter: they need to see interview value, not just app features.
 
 ```
 Subject: Podcast guest pitch — [one-line hook about your story]
@@ -135,7 +135,7 @@ Best,
 
 ## Template 5: Follow-Up
 
-Use exactly once, 5-7 business days after the initial pitch. Add new information — do not just repeat the original pitch.
+Use exactly once, 5-7 business days after the initial pitch. Add new information: do not just repeat the original pitch.
 
 ```
 Subject: Re: [original subject line]
@@ -183,6 +183,6 @@ Before sending ANY pitch, verify:
 - Do not use "Dear Sir/Madam" or "To whom it may concern"
 - Do not send more than one follow-up
 - Do not pitch on the same day as a major Apple event
-- Do not ask "did you get my email?" — it's passive-aggressive
+- Do not ask "did you get my email?": it's passive-aggressive
 - Do not offer payment for coverage (violates journalistic ethics)
 - Do not get upset or respond negatively if they don't cover you

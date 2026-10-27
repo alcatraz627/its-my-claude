@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# ARCHIVED — DO NOT RUN. Reference artifact only. (retired 2026-05-21)
+# ARCHIVED: DO NOT RUN. Reference artifact only. (retired 2026-05-21)
 # ============================================================================
 #
 # WHAT THIS WAS
@@ -32,8 +32,8 @@
 #   the reusable pieces below are:
 #     1. atone-event → ingest-schema field mapping (issue→didnt_work,
 #        cause→gotchas, fix/what_not→notes, precheck→pending, slug/cluster/
-#        severity→tags) — see the jq block ~line 80 below.
-#     2. cluster-map.tsv → jq object overlay (line ~33) — same trick build-
+#        severity→tags): see the jq block ~line 80 below.
+#     2. cluster-map.tsv → jq object overlay (line ~33): same trick build-
 #        clusters.sh uses to bucket null-cluster events.
 #     3. Idempotency marker pattern (.dream-bridged.tsv): slug→latest-event-id,
 #        re-emit only when the latest id changes. Aggregate-to-temp + exit-check
@@ -76,7 +76,7 @@ emitted=0; skipped=0
 AGG="$ATONE_DIR/derived/.dream-agg.jsonl"
 
 # Aggregate to a temp file FIRST and check the exit code. If jq fails, abort
-# WITHOUT touching the marker — otherwise an empty result would blank the marker
+# WITHOUT touching the marker: otherwise an empty result would blank the marker
 # and the next run would re-emit every slug as duplicates.
 if ! jq -cs --argjson map "$map_json" '
     group_by(.slug)

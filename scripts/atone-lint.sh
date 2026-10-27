@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# atone-lint.sh — scan code for recurring, already-flagged code smells.
+# atone-lint.sh: scan code for recurring, already-flagged code smells.
 #
 # This is the single source of truth for the "convention-blind code" family
 # (atone cluster E). It is run at TWO points so the pattern that flagged a
 # smell a dozen times and the check that should have caught it in review are
 # literally the same code:
-#   1. write-time  — hooks/nudge-cluster-e-smells.sh nudges as code is written
-#   2. review-time — hooks/review-gate-stop.sh refuses "done" while a smell survives
+#   1. write-time: hooks/nudge-cluster-e-smells.sh nudges as code is written
+#   2. review-time: hooks/review-gate-stop.sh refuses "done" while a smell survives
 #
 # Each rule cites the atone slug it descends from, so the message names the
 # pattern the user has already seen go wrong.
@@ -19,7 +19,7 @@
 # Output: one match per line, TAB-separated:
 #   <severity>\t<rule>\t<slug>\t<message>
 #   severity ∈ { block, warn }
-# Always exits 0 — this is a reporter; callers decide what to do with matches.
+# Always exits 0: this is a reporter; callers decide what to do with matches.
 
 set -uo pipefail
 
@@ -45,7 +45,7 @@ else
 fi
 [ -z "$body" ] && exit 0
 
-# Recurrence count for a slug — names the "flagged N times" reality. Reading the
+# Recurrence count for a slug: names the "flagged N times" reality. Reading the
 # raw log here is safe: this script runs inside a hook, not as a tool call, so
 # the append-only protection hook does not gate it (it gates writes, not reads).
 slug_count() {
@@ -81,8 +81,8 @@ case "$path_hint" in
   *.md|*.markdown) is_md=1 ;;
 esac
 
-# A prose/doc file (.md/.markdown/.mdx/.txt) can DESCRIBE code — a findings
-# report, a design doc, a skeptical-review write-up — without BEING code. Rules
+# A prose/doc file (.md/.markdown/.mdx/.txt) can DESCRIBE code: a findings
+# report, a design doc, a skeptical-review write-up: without BEING code. Rules
 # that assume an interactive/runtime surface (e.g. R3's destructive-action guard)
 # must not fire on docs; a doc has no surface to guard.
 is_doc=0
@@ -110,7 +110,7 @@ fi
 # Slug: feature-built-without-precondition-guard (S3).
 # Docs are exempt: a findings report / design doc under a *review*/*panel* name
 # describes destructive actions (quoting onClick/<Button>) without rendering any,
-# so gating it is meaningless — it was the dominant FP source for this rule.
+# so gating it is meaningless: it was the dominant FP source for this rule.
 if [ "$is_doc" = "0" ]; then
 case "$path_hint" in
   *modal*|*review*|*inspect*|*viewer*|*detail*|*panel*)
@@ -124,13 +124,13 @@ esac
 fi
 
 # ── R4  comment-essay  (WARN) ─────────────────────────────────────────────
-# A block/JSDoc comment that runs past the essay bar — proxy for the "dumped my
+# A block/JSDoc comment that runs past the essay bar: proxy for the "dumped my
 # working context into a comment" smell. The qualitative call (restates-code vs
 # explains-why, jargon-flexing) is left to the review LLM pass; this only flags
 # the shape. Slug: source-comment-hygiene (S3).
 #
 # The bar is rules/comments.md's own: >8 lines is an essay. This used to fire on
-# ANY `/*` opener, so a three-line JSDoc — the shape that rule explicitly blesses —
+# ANY `/*` opener, so a three-line JSDoc: the shape that rule explicitly blesses:
 # got flagged as an essay. A linter that fires on compliant code trains you to
 # dismiss it, which costs more than the rule earns.
 if [ "$is_jsts" = "1" ]; then
@@ -148,7 +148,7 @@ fi
 
 # ── R5  raw-process-env  (WARN) ───────────────────────────────────────────
 # Reading process.env directly instead of the project's config/flag layer.
-# Skip genuine config/env/flag modules where direct reads are expected — a
+# Skip genuine config/env/flag modules where direct reads are expected: a
 # flags.ts IS the config layer this rule points everyone else toward.
 case "$path_hint" in
   *config*|*env*|*.config.*|*settings*|*flag*) : ;;
@@ -164,10 +164,10 @@ esac
 # An import that is indented (inside a function/block) or a require() mid-body.
 # Per the user's standing rule (feedback_no_defensive_imports.md): an inline
 # import must carry a one-line comment above it explaining why inline. Advisory.
-# Scoped to the JS "defensive import" the rule actually names — an indented
+# Scoped to the JS "defensive import" the rule actually names: an indented
 # require()/dynamic import() mid-body. Deliberately NOT plain indented `import`
 # (false-fires on py try/except-ImportError fallbacks, TYPE_CHECKING blocks, and
-# TS `import type` in namespaces — all idiomatic, all noise).
+# TS `import type` in namespaces: all idiomatic, all noise).
 if [ "$is_jsts" = "1" ]; then
   if printf '%s' "$body" | rg -q '^[ \t]+(const [A-Za-z0-9_{}, ]+ = require\(|[A-Za-z0-9_]+ = require\(|await import\()'; then
     emit warn inline-import-without-justification inline-import-without-justification \
@@ -179,11 +179,11 @@ fi
 # Catches the table corruptions prettier can't fix: a row whose pipe-count ≠
 # the header's (usually an unescaped `|` inside a cell), a `…` at a fixed-width
 # cell-truncation boundary (a TTY-rendered table saved as source), and an
-# unclosed code fence. Skips fenced code blocks. Universal — fires for any
+# unclosed code fence. Skips fenced code blocks. Universal: fires for any
 # agent/scope writing .md. The pipe-count half is the load-bearing structural
 # signal and is untouched; the ellipsis half is deliberately narrow (truncation
 # boundary + column padding) so a plain `…` in prose or an ASCII diagram never
-# trips it — that bare-`…` version was the corpus noise leader.
+# trips it: that bare-`…` version was the corpus noise leader.
 if [ "$is_md" = "1" ]; then
   md_msgs=$(printf '%s' "$body" | python3 -c '
 import sys, re
@@ -195,7 +195,7 @@ if t.count("```") % 2 != 0:
 
 # A real GFM table is a header row FOLLOWED BY a separator row (|---|---|).
 # Only after that do we compare data-row column counts. Escaped pipes (\|) are
-# stripped before counting — a correctly-escaped cell must not be flagged.
+# stripped before counting: a correctly-escaped cell must not be flagged.
 intable = False; hdr = 0; in_fence = False; cand = None
 for i, l in enumerate(lines):
     s = l.strip()
@@ -219,14 +219,14 @@ for i, l in enumerate(lines):
             cand = n                                  # candidate header; needs a separator next
     else:
         intable = False; cand = None
-    # Ellipsis TTY-truncation signal — fire ONLY on a genuinely rendered/aligned
+    # Ellipsis TTY-truncation signal: fire ONLY on a genuinely rendered/aligned
     # table saved as source: a "…" sitting at a fixed-width cell-truncation
     # boundary. A deliberate "…" in prose (even inside a hand-written GFM cell, a
     # citation, an ID pattern like `mist-…`, or an ASCII box diagram) is NOT
     # truncation and must not fire. Two co-signals, BOTH required:
     #   (a) "…" at a pipe cell-boundary:      …<spaces>|<space-or-EOL>
     #   (b) fixed-width column padding on the line:  <non-space><2+ spaces>|
-    # ASCII "|" only — box-drawing diagrams (│) and prose `───` dividers are
+    # ASCII "|" only: box-drawing diagrams (│) and prose `───` dividers are
     # deliberate here, so keying on them re-introduced the prose false positive.
     if (chr(0x2026) in l
             and re.search(chr(0x2026) + r"[ \t]*\|([ \t]|$)", l)

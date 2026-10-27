@@ -19,13 +19,13 @@ EVALUATIVE = re.compile(r"\b(this is|that is|that's|it's|feels|looks|seems|reads
 STOPEDGE = {'the','and','for','you','that','this','with','are','was','not','but','have','has','had','can','will','its','all','our','your','out','use','get','one','two','how','what','when','where','why','who','which','should','would','could','than','then','them','they','there','here','from','into','onto','over','under','about','just','also','been','being','because','while','after','before','only','same','some','any','each','very','more','most','less','least','too','own','off','per','via','let','lets'}
 
 # Gate checks only lexical positives; contextual words (intent, stupid,
-# one-shot) are unreachable at word level — planted as P3/P4 tracers.
+# one-shot) are unreachable at word level: planted as P3/P4 tracers.
 POSITIVES = ['efficacy', 'overindex']
 POSITIVES_TRACER = ['intent', 'stupid', 'one-shot']
 POSITIVES_INFO = ['pragmatic', 'one-shotting', 'waste my time']
 # User verdict 2026-07-16 (option 1): ultra-common words gate P2; the
 # transcript-class (domain nouns lexically twinned with steering words) is a
-# planted NEGATIVE tracer for P4 — P4 must classify it domain-jargon or halt.
+# planted NEGATIVE tracer for P4: P4 must classify it domain-jargon or halt.
 NEGATIVES = ['the', 'month', 'more', 'better']
 NEGATIVES_TRACER = ['transcript']
 

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# 0030 — give atone-graduated proposals a real provenance edge.
+# 0030: give atone-graduated proposals a real provenance edge.
 #
 # Proposals filed by atone-consolidate carried a bare `atone-prevention <target>
 # <slug>` tag. The backlog consolidator builds its corroboration graph from
 # `link:*` tags ONLY (backlog-consolidate.py:127), so those proposals could never
-# corroborate — not even with the gcc-signal-capture auto-stub naming the same
-# slug — and aged out into DROP-REVIEW as "stale, no corroboration".
+# corroborate: not even with the gcc-signal-capture auto-stub naming the same
+# slug: and aged out into DROP-REVIEW as "stale, no corroboration".
 #
 # This rewrites them in place to the protocol shape:
 #   atone-prevention <target> <slug>

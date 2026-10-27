@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pin-location.test.sh — the live-session pin lives outside ~/.claude/tasks, and
+# pin-location.test.sh: the live-session pin lives outside ~/.claude/tasks, and
 # a pin left in the old place still resolves.
 #
 # WHY IT MOVED. The pin used to sit at tasks/.live-session-map/<live8> and the

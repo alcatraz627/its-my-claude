@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# resolve-config-path.sh — resolve a config path relative to i-dream data dir.
+# resolve-config-path.sh: resolve a config path relative to i-dream data dir.
 #
 # Usage:
 #   source ~/.claude/skills/shared/resolve-config-path.sh
@@ -7,7 +7,7 @@
 #   echo "$RESOLVED_PATH"              # ~/.claude/subconscious/state.json
 #
 # Environment:
-#   IDREAM_DATA_DIR  — override the base directory (default: ~/.claude/subconscious)
+#   IDREAM_DATA_DIR: override the base directory (default: ~/.claude/subconscious)
 #
 # The function echoes the resolved path AND sets $RESOLVED_PATH for callers
 # that prefer variable access over command substitution.

@@ -1,6 +1,6 @@
 ---
 name: Autonomous mode preference
-description: User prefers fully autonomous operation — don't stop for permission, batch all work, use background agents
+description: User prefers fully autonomous operation, don't stop for permission, batch all work, use background agents
 type: feedback
 ---
 

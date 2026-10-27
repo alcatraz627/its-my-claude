@@ -1,8 +1,8 @@
-# Migration 0003 — Add `::backups` and `::improvement` namespaces
+# Migration 0003: Add `::backups` and `::improvement` namespaces
 
 <!-- sessions: ns-plan-7f@2026-04-17 -->
 
-**Status:** ✅ Phase 0b executed 2026-04-17 — namespaces documented in NAMESPACE.md; no files moved.
+**Status:** ✅ Phase 0b executed 2026-04-17: namespaces documented in NAMESPACE.md; no files moved.
 **Opened:** 2026-04-17
 **Last updated:** 2026-04-17
 
@@ -12,16 +12,16 @@
 
 Introduce two new sibling namespaces under `std::claude::`:
 
-- `::backups` — revert & recovery artifacts (3 path surfaces, marked `[facet]`)
-- `::improvement` — self-correction & learning (6+ path surfaces, marked `[facet]`), with 5 sub-labels: `::ideas`, `::mistakes`, `::proposals`, `::insights`, `::dreams`
+- `::backups`: revert & recovery artifacts (3 path surfaces, marked `[facet]`)
+- `::improvement`: self-correction & learning (6+ path surfaces, marked `[facet]`), with 5 sub-labels: `::ideas`, `::mistakes`, `::proposals`, `::insights`, `::dreams`
 
-Both are **pure relabelling** — zero file moves, zero hook changes, zero risk to existing references.
+Both are **pure relabelling**: zero file moves, zero hook changes, zero risk to existing references.
 
 ---
 
 ## Why
 
-1. The Phase 1+2 upgrade (Migration 0002) landed significant self-correction infrastructure — `mistake-patterns.md`, `proposals.jsonl`, `subconscious/dreams/`, runtime-notes quarterly archives — that had no shared label. Without one, the artifacts were scattered in NAMESPACE's "Under consideration" section or unnamed in LOOKUP.md.
+1. The Phase 1+2 upgrade (Migration 0002) landed significant self-correction infrastructure: `mistake-patterns.md`, `proposals.jsonl`, `subconscious/dreams/`, runtime-notes quarterly archives: that had no shared label. Without one, the artifacts were scattered in NAMESPACE's "Under consideration" section or unnamed in LOOKUP.md.
 2. Backups surfaced as a distinct concern across three locations (`assets/backups/`, root `backups/`, in-place `bak_*`) with a retention policy (`prune-backups.sh`) and a convention (RESTORE.md). This meets the "wait until at least two artifacts want the label" test comfortably.
 3. Sharp distinction needed: `::code::ideas` (code-pattern seeds for building features) vs `::improvement::ideas` (Claude-system improvements). Previously conflated in Migration 0001's Phase 1 plan; now split cleanly.
 
@@ -37,11 +37,11 @@ Both are **pure relabelling** — zero file moves, zero hook changes, zero risk 
 - Update MIGRATIONS.md index with rows for 0002, 0003, 0004
 
 **Out of scope (no file moves):**
-- `improvement-ideas.md` stays at `~/.claude/improvement-ideas.md` — relabelled as `::improvement::ideas`
-- `mistake-patterns.md` stays at root — relabelled as `::improvement::mistakes`
-- `proposals.jsonl` stays at root — relabelled as `::improvement::proposals`
-- `subconscious/` stays — relabelled as `::improvement::dreams`
-- `assets/backups/`, root `backups/`, in-place `bak_*` all stay — covered by `::backups` facet
+- `improvement-ideas.md` stays at `~/.claude/improvement-ideas.md`: relabelled as `::improvement::ideas`
+- `mistake-patterns.md` stays at root: relabelled as `::improvement::mistakes`
+- `proposals.jsonl` stays at root: relabelled as `::improvement::proposals`
+- `subconscious/` stays: relabelled as `::improvement::dreams`
+- `assets/backups/`, root `backups/`, in-place `bak_*` all stay: covered by `::backups` facet
 
 ---
 
@@ -69,15 +69,15 @@ No existing labels renamed. Only additions:
 
 ## Files affected
 
-### Phase 0b — docs only (executed 2026-04-17)
+### Phase 0b: docs only (executed 2026-04-17)
 
 | File | Change |
 |---|---|
-| `~/.claude/NAMESPACE.md` | **rewritten** — added two clusters, tree updated, 8th design principle added ("prefer relabelling over moving"), migration history table updated |
-| `~/.claude/migrations/MIGRATIONS.md` | **edit** — added rows for 0002, 0003, 0004 |
-| `~/.claude/migrations/0002-phase12-upgrade-retrofit.md` | **created** — retrospective migration doc for Phase 1+2 upgrade |
-| `~/.claude/migrations/0003-backups-improvement-namespaces.md` | **created** — this doc |
-| `~/.claude/migrations/0001-namespace-introduction.md` | **edit** — Phase 1 revised to drop `improvement-ideas.md` move |
+| `~/.claude/NAMESPACE.md` | **rewritten**: added two clusters, tree updated, 8th design principle added ("prefer relabelling over moving"), migration history table updated |
+| `~/.claude/migrations/MIGRATIONS.md` | **edit**: added rows for 0002, 0003, 0004 |
+| `~/.claude/migrations/0002-phase12-upgrade-retrofit.md` | **created**: retrospective migration doc for Phase 1+2 upgrade |
+| `~/.claude/migrations/0003-backups-improvement-namespaces.md` | **created**: this doc |
+| `~/.claude/migrations/0001-namespace-introduction.md` | **edit**: Phase 1 revised to drop `improvement-ideas.md` move |
 
 Zero file moves, zero hook changes, zero renames of existing artifacts.
 
@@ -88,7 +88,7 @@ Zero file moves, zero hook changes, zero renames of existing artifacts.
 Migration 0001's Phase 1 originally planned:
 > Move `~/.claude/improvement-ideas.md` → `~/.claude/code/ideas/ROADMAP.md`
 
-**Revised:** dropped. `improvement-ideas.md` is Claude-system improvement backlog, not code-pattern seeds — it belongs in `::improvement::ideas`, not `::code::ideas`. Relabelling is sufficient; no move needed.
+**Revised:** dropped. `improvement-ideas.md` is Claude-system improvement backlog, not code-pattern seeds: it belongs in `::improvement::ideas`, not `::code::ideas`. Relabelling is sufficient; no move needed.
 
 The rest of 0001's Phase 1 (rename `std::claude` → `::shared` across docs, create `~/.claude/code/` skeleton) is unchanged and remains ⏳ Planned.
 
@@ -104,7 +104,7 @@ If you see a reference to `~/.claude/code/ideas/ROADMAP.md` in any memory file, 
 
 If you encounter a self-correction artifact that doesn't seem to fit anywhere (e.g., a new "audit" output file):
 
-- Check `::improvement` sub-labels — it probably fits `::insights`, `::dreams`, or warrants a new sub-label.
+- Check `::improvement` sub-labels: it probably fits `::insights`, `::dreams`, or warrants a new sub-label.
 - Open a new migration before introducing a new sub-label.
 
 ---
@@ -114,7 +114,7 @@ If you encounter a self-correction artifact that doesn't seem to fit anywhere (e
 | Phase | Scope | Status |
 |---|---|---|
 | 0b | Documentation writes (this migration's core work) | ✅ Executed 2026-04-17 |
-| 1 | _(no Phase 1 needed — relabelling only)_ | — |
+| 1 | _(no Phase 1 needed: relabelling only)_ | - |
 
 ---
 

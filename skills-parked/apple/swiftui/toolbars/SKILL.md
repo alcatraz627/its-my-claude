@@ -226,9 +226,9 @@ ContentView()
 | # | Mistake | Fix |
 |---|---------|-----|
 | 1 | Missing `id` on ToolbarItem in customizable toolbar | Every item in `.toolbar(id:)` must have its own `id` parameter |
-| 2 | Using `.searchToolbarBehavior(.minimize)` without `.searchable()` | Must pair with `.searchable()` modifier — `.minimize` only affects rendering |
+| 2 | Using `.searchToolbarBehavior(.minimize)` without `.searchable()` | Must pair with `.searchable()` modifier: `.minimize` only affects rendering |
 | 3 | Putting `.matchedTransitionSource` on the Button instead of ToolbarItem | Apply `.matchedTransitionSource(id:in:)` on the `ToolbarItem`, not its content |
-| 4 | Using `.largeSubtitle` alongside `.navigationSubtitle()` expecting both to show | `.largeSubtitle` takes precedence — the subtitle modifier value is hidden |
+| 4 | Using `.largeSubtitle` alongside `.navigationSubtitle()` expecting both to show | `.largeSubtitle` takes precedence: the subtitle modifier value is hidden |
 | 5 | Forgetting `placement:` on DefaultToolbarItem | Without explicit placement, system items use their default position |
 
 ## Platform Considerations

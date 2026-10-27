@@ -77,7 +77,7 @@ Extracted 2026-08-27 to `rules/owner-gate-means-actionable-today.md`: before any
   decision, or any doc-review ask.
 - Not a reason to ask more. The wizard is the surface for the questions that
   survive step 2; most questions should not survive it.
-- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
+- A halt under this rule needs a genuinely missing thing: information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

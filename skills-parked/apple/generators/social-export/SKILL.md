@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Social Export Generator
 
-Generate a production social export pipeline with platform-specific formatters, aspect ratio handling, branding overlays, and a complete SwiftUI export flow. Different from share-card (which creates the visual image) — this handles the full export pipeline to each social platform.
+Generate a production social export pipeline with platform-specific formatters, aspect ratio handling, branding overlays, and a complete SwiftUI export flow. Different from share-card (which creates the visual image): this handles the full export pipeline to each social platform.
 
 ## When This Skill Activates
 
@@ -62,8 +62,8 @@ Ask user via AskUserQuestion:
    - Text + Image (quote cards, text overlays on images)
 
 3. **Include app branding overlay?**
-   - Yes — add app logo/name watermark to exported content
-   - No — export clean content
+   - Yes: add app logo/name watermark to exported content
+   - No: export clean content
 
 4. **Watermark style?** (if branding selected)
    - Corner logo (small, unobtrusive)
@@ -77,16 +77,16 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `SocialPlatform.swift` — Enum for supported platforms with requirements (aspect ratio, max file size, URL scheme)
-2. `ExportConfiguration.swift` — Configuration struct for export options (platform, quality, branding, watermark)
-3. `SocialExporter.swift` — Protocol + platform-specific implementations for each social network
+1. `SocialPlatform.swift`: Enum for supported platforms with requirements (aspect ratio, max file size, URL scheme)
+2. `ExportConfiguration.swift`: Configuration struct for export options (platform, quality, branding, watermark)
+3. `SocialExporter.swift`: Protocol + platform-specific implementations for each social network
 
 ### Step 3: Create Content Formatting
-4. `ContentFormatter.swift` — Formats content per platform (resize, crop to aspect ratio, add metadata)
+4. `ContentFormatter.swift`: Formats content per platform (resize, crop to aspect ratio, add metadata)
 
 ### Step 4: Create UI Files
-5. `ExportPreviewView.swift` — SwiftUI preview showing how content will look on each platform
-6. `SocialExportSheet.swift` — Complete export flow with platform picker, preview, and share action
+5. `ExportPreviewView.swift`: SwiftUI preview showing how content will look on each platform
+6. `SocialExportSheet.swift`: Complete export flow with platform picker, preview, and share action
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -256,7 +256,7 @@ For video content, use `AVAssetExportSession` to transcode to platform-required 
 ### App Detection
 - `UIApplication.shared.canOpenURL()` requires LSApplicationQueriesSchemes in Info.plist
 - iOS limits you to 50 URL schemes in LSApplicationQueriesSchemes
-- Always test on physical device — simulator does not have social apps installed
+- Always test on physical device: simulator does not have social apps installed
 
 ### Thread Safety
 - `UIPasteboard.general` must be accessed on the main thread
@@ -265,6 +265,6 @@ For video content, use `AVAssetExportSession` to transcode to platform-required 
 
 ## References
 
-- **templates.md** — All production Swift templates for social export
-- Related: `generators/share-card` — Generate the visual share image/card
-- Related: `generators/watermark-engine` — Advanced watermark and branding overlays
+- **templates.md**: All production Swift templates for social export
+- Related: `generators/share-card`: Generate the visual share image/card
+- Related: `generators/watermark-engine`: Advanced watermark and branding overlays

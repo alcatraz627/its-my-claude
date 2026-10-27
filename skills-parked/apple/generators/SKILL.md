@@ -172,7 +172,7 @@ Programmatic app icon generation using CoreGraphics.
 - 3 variant generation for user selection
 - Automatic resizing to all required sizes (macOS + iOS)
 - Asset catalog installation with correct Contents.json
-- No external dependencies — pure CoreGraphics
+- No external dependencies: pure CoreGraphics
 
 ### feature-flags/
 Feature flag infrastructure with local and remote support.

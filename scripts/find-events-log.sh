@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# find-events-log.sh — resolve the path of the global Claude events log.
+# find-events-log.sh: resolve the path of the global Claude events log.
 #
 # Why this exists: rather than every skill hardcoding ~/.claude/events.jsonl,
 # they call this helper. If the path ever moves (e.g. rotated to

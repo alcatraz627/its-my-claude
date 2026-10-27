@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# permission-notify.sh — Extracts tool details from hook input, sends notification
+# permission-notify.sh: Extracts tool details from hook input, sends notification
 # Called from Claude Code PermissionRequest hook
 #
 # Uses OSC 9 so the notification is Ghostty-attributed and clicking it navigates
-# to the exact tab that needs permission — critical when multiple sessions are open.
+# to the exact tab that needs permission: critical when multiple sessions are open.
 # Plays a sound separately since OSC 9 has no audio support.
 
 set -uo pipefail
@@ -48,7 +48,7 @@ case "$tool" in
     ;;
 esac
 
-# OSC 9: Ghostty-attributed notification — clicking navigates to this exact tab
+# OSC 9: Ghostty-attributed notification: clicking navigates to this exact tab
 # TTY_PATH can be overridden in tests (defaults to /dev/tty)
 msg=$(printf '%s' "$tool: $summary" | tr -d '\000-\031\177')
 ( printf '\033]9;%s\007' "Permission Required — $msg" > "${TTY_PATH:-/dev/tty}" ) 2>/dev/null || true

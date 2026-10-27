@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Test Contract
 
-Define behavioral contracts as test suites. Any class conforming to a protocol must pass the contract tests. Ensures consistent behavior across implementations — human-written, AI-generated, or mock.
+Define behavioral contracts as test suites. Any class conforming to a protocol must pass the contract tests. Ensures consistent behavior across implementations: human-written, AI-generated, or mock.
 
 ## When This Skill Activates
 
@@ -341,6 +341,6 @@ protocol DataStore { ... }
 
 ## References
 
-- `testing/tdd-feature/` — for TDD workflow using contract tests
-- `generators/test-generator/` — for standard test generation
-- Design by Contract (Bertrand Meyer) — theoretical foundation
+- `testing/tdd-feature/`: for TDD workflow using contract tests
+- `generators/test-generator/`: for standard test generation
+- Design by Contract (Bertrand Meyer): theoretical foundation

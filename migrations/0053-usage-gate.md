@@ -26,7 +26,7 @@ existed (statusline writes ~/.claude/widgets/.limits.json with both windows).
 
 ## What does NOT change
 
-- /wake keeps its own limits-check.sh (5h-only) — extending it to weekly was
+- /wake keeps its own limits-check.sh (5h-only): extending it to weekly was
   not in the ruling.
 - The governor (12 invoked beats/day) and $0 delta short-circuit stay; the gate
   sits after both, so gated rows still record roster size.

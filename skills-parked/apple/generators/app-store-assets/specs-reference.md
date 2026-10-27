@@ -10,15 +10,15 @@ Complete specifications for all App Store Connect assets, updated for 2025.
 | Format | PNG |
 | Color Space | sRGB or Display P3 |
 | Transparency | Not allowed |
-| Rounded Corners | Do not round — system applies mask |
+| Rounded Corners | Do not round: system applies mask |
 | Interlaced | Not allowed |
 | Layers | Single layer, flat |
 
 ### Icon Design Guidelines
 - Simple, recognizable at small sizes (29x29 px on Watch)
-- Single focal point — avoid clutter
+- Single focal point: avoid clutter
 - Use brand colors consistently
-- No photos — use graphic design or illustration
+- No photos: use graphic design or illustration
 - No text (except single letters/numbers for brand identity)
 - Test at all sizes: 1024, 180, 120, 87, 80, 60, 58, 40, 29, 20
 
@@ -166,7 +166,7 @@ Complete specifications for all App Store Connect assets, updated for 2025.
 - Feature the value of the subscription visually
 - Don't just repeat the app icon
 - Show premium features or content
-- Keep text minimal — product name is shown separately
+- Keep text minimal: product name is shown separately
 - Test at thumbnail size (appears small in search results)
 
 ---
@@ -181,7 +181,7 @@ Apple may request additional artwork if your app is selected for featuring.
 | App of the Day card | 2400 x 1200 px | Feature hero image |
 | Collection banner | 2560 x 686 px | Horizontal banner |
 
-These are requested only after Apple confirms featuring — don't pre-create.
+These are requested only after Apple confirms featuring: don't pre-create.
 
 ---
 
@@ -189,15 +189,15 @@ These are requested only after Apple confirms featuring — don't pre-create.
 
 ### Minimum Viable Assets
 - [ ] App icon (1024 x 1024)
-- [ ] iPhone screenshots (6.9" size) — minimum 3, recommended 5-10
-- [ ] iPad screenshots (13" size) — if iPad app
+- [ ] iPhone screenshots (6.9" size): minimum 3, recommended 5-10
+- [ ] iPad screenshots (13" size): if iPad app
 - [ ] App Store description and promotional text
 
 ### Recommended Additional Assets
 - [ ] iPhone screenshots (6.7" size)
 - [ ] App preview video (15-30 seconds)
-- [ ] Mac screenshots — if Mac app
-- [ ] Watch screenshots — if Watch app
+- [ ] Mac screenshots: if Mac app
+- [ ] Watch screenshots: if Watch app
 - [ ] Localized screenshots for top markets
 
 ### Promotional Assets (When Needed)

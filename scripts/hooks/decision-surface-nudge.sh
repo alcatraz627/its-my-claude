@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# decision-surface-nudge.sh — PreToolUse hook on AskUserQuestion.
+# decision-surface-nudge.sh: PreToolUse hook on AskUserQuestion.
 #
 # Points the agent at the right surface when a question to the owner is
 # really a decision set or a visual comparison. More than one question goes

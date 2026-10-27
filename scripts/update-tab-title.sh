@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# update-tab-title.sh — Stop-hook entry point. Composes the Ghostty tab title
+# update-tab-title.sh: Stop-hook entry point. Composes the Ghostty tab title
 # as: ✻ <decorators> <base> [:<focus>]
 #
 # Composition / decorator / focus details:    ~/.claude/scripts/tab-title/lib.sh
@@ -53,7 +53,7 @@ prior_focus="${FOCUS:-}"
 prior_base="${BASE:-}"
 
 # The base is the session's identity. A session you named with `claude --name X`
-# shows that name; an un-named one shows "Am❓ <folder>" — the ❓ is a visible
+# shows that name; an un-named one shows "Am❓ <folder>": the ❓ is a visible
 # "this session has no name" flag, and the folder is the only identity hint we
 # have for it. The old "Claude: <folder> (<branch>)" form is dropped: "Claude:"
 # is constant noise, and the folder/branch already live in the statusline.
@@ -95,7 +95,7 @@ else
   printf '%s' "$auto_base" > "$base_auto_file"
 fi
 
-# End-of-turn implies no tools in flight — auto-heal any drift in the
+# End-of-turn implies no tools in flight: auto-heal any drift in the
 # transient runtime state (missed PostToolUse hooks accumulate over time).
 TRANSIENT_FOCUS=""
 TRANSIENT_DEPTH=0

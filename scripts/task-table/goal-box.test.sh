@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal-box.test.sh — the ruled goal-box layout, and the guards that hold it up.
+# goal-box.test.sh: the ruled goal-box layout, and the guards that hold it up.
 #
 # The design is assets/reports/20260904-tasks-visual-variants/final.md, revision
 # 2, owner-approved after four rounds. This suite pins the claims that document
@@ -28,7 +28,7 @@ ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  
 has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — no match for [$2]"; fi; }
 hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1 — unexpected match for [$2]"; else pass=$((pass+1)); fi; }
 
-# mutate <name> <find> <replace> — a copy of the renderer with one defect planted.
+# mutate <name> <find> <replace>: a copy of the renderer with one defect planted.
 # It asserts the substitution actually applied, because a mutation that silently
 # matches nothing reads as a passing guard and is the commonest way this kind of
 # test lies about itself.
@@ -78,7 +78,7 @@ echo "── 2. the column grid survives double-width emoji ──"
 # The one defect most likely to sink this layout: emoji are two terminal columns
 # and box characters are one, so a width computed with len() drifts the right
 # edge of every line that carries a ball. The oracle below is deliberately NOT
-# the renderer's own function — it is a hardcoded table of the glyphs this
+# the renderer's own function: it is a hardcoded table of the glyphs this
 # fixture uses, so a bug in dwidth() cannot hide by being consulted twice.
 width_check(){
   python3 - "$1" <<'PY'

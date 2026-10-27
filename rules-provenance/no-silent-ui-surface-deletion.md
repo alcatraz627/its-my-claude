@@ -37,4 +37,4 @@ currently 7× S3 with four events in a single week, annotated in the session
 briefing as a standing blind spot, which is why it now has two activation points
 instead of one.
 
-A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
+A halt under this rule needs a genuinely missing thing: information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).

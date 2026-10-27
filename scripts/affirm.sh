@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# affirm.sh — affirmed-good-behavior tracker (sibling of atone.sh).
+# affirm.sh: affirmed-good-behavior tracker (sibling of atone.sh).
 #
 # Schema is lighter: no severity, no RCA. Required fields:
 #   slug, title, behavior, why_good, trigger_condition, instruction
@@ -115,7 +115,7 @@ cmd_add() {
 
   _git_commit "affirm: $id $slug"
 
-  # Fast-path: refresh triggers.json + _tldr.txt (background — don't wait).
+  # Fast-path: refresh triggers.json + _tldr.txt (background: don't wait).
   ( bash "$HOME/.claude/scripts/atone-consolidate.sh" --triggers-only \
       >/dev/null 2>&1 & ) &
 

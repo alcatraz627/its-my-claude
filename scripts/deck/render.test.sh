@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# render.test.sh — the deck renderer's contract: every slide type renders, an
+# render.test.sh: the deck renderer's contract: every slide type renders, an
 # over-budget slide is refused, a colour literal is refused, notes never reach the
 # slides' HTML, and lint.py fires on the shapes it names. No browser here; check.sh
 # owns the pixel measurement (proven by hand: a 30-bullet slide reads OVER 1933/684).

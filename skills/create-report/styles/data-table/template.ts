@@ -37,7 +37,7 @@ export function buildHtml(data: ReportData): string {
     )
     .join("\n        ");
 
-  // Build tab panels — each section is a panel
+  // Build tab panels: each section is a panel
   const tabPanels = data.sections
     .map(
       (section, i) =>

@@ -1,6 +1,6 @@
 ---
 name: app-store-assets
-description: Comprehensive App Store asset specifications and guidelines for all promotional artwork — app icons, screenshots, app previews, event cards, subscription images, and featuring artwork. Use when preparing assets for App Store Connect upload.
+description: Comprehensive App Store asset specifications and guidelines for all promotional artwork, app icons, screenshots, app previews, event cards, subscription images, and featuring artwork. Use when preparing assets for App Store Connect upload.
 allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion]
 ---
 
@@ -80,7 +80,7 @@ Read `specs-reference.md` and generate a customized asset checklist for the user
 
 ## References
 
-- **specs-reference.md** — Complete specifications for all asset types
-- Related: `app-store/screenshot-planner` — Screenshot strategy and captioning
-- Related: `generators/in-app-events` — Event card design guidance
-- Related: `generators/custom-product-pages` — CPP-specific asset planning
+- **specs-reference.md**: Complete specifications for all asset types
+- Related: `app-store/screenshot-planner`: Screenshot strategy and captioning
+- Related: `generators/in-app-events`: Event card design guidance
+- Related: `generators/custom-product-pages`: CPP-specific asset planning

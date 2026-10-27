@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# cleanup.sh — periodic housekeeping for ~/.claude/
+# cleanup.sh: periodic housekeeping for ~/.claude/
 #
 # Usage: bash ~/.claude/scripts/rotation/cleanup.sh
 #

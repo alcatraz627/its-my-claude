@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# folders-index.sh — Regenerate the auto-generated census section of
+# folders-index.sh: Regenerate the auto-generated census section of
 # ~/.claude/FOLDERS.md without disturbing the hand-written policy above.
 #
 # The doc has a marker line that splits hand-written policy from the

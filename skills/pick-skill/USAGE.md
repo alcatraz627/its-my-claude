@@ -1,4 +1,4 @@
-# /pick-skill — Usage Guide
+# /pick-skill: Usage Guide
 
 ## What it does
 
@@ -26,13 +26,13 @@ executes the skill end-to-end and optionally generates an HTML report from the o
 
 Identifies `/sync-api-types` as best match, confirms with `gum confirm`, then runs it end-to-end.
 
-### Example 2: Ambiguous intent — clarifying question
+### Example 2: Ambiguous intent: clarifying question
 
 ```
 /pick-skill "something feels off with my react query setup"
 ```
 
-Asks: "Is the problem stale data after mutations, or a missing query key?" — user selects,
+Asks: "Is the problem stale data after mutations, or a missing query key?": user selects,
 skill identifies `/invalidate-audit`, confirms, executes.
 
 ### Example 3: Architecture question
@@ -46,7 +46,7 @@ offers `/create-report` on the output markdown.
 
 ## Caveats
 
-- Always requires a `gum confirm` before executing — never auto-dispatches
+- Always requires a `gum confirm` before executing: never auto-dispatches
 - No-match path surfaces 3 closest partial matches before suggesting `/create-skill`
 - Post-run `/create-report` is offered only if the invoked skill produced a markdown file
 - Re-matching is attempted up to 2 times if the user declines the first suggestion
@@ -65,5 +65,5 @@ offers `/create-report` on the output markdown.
 ## Tips
 
 - Pass the prompt inline for faster routing: `/pick-skill "audit my route handlers for missing auth"`
-- If pick-skill matches the wrong skill, say "no" at the confirm gate — it will re-match
+- If pick-skill matches the wrong skill, say "no" at the confirm gate: it will re-match
 - Use `/user-config` to browse the full skill catalogue before invoking if you already know which skill you want

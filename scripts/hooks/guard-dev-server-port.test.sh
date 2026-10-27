@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-dev-server-port.test.sh — runnable checks for the dev-server port gate.
+# guard-dev-server-port.test.sh: runnable checks for the dev-server port gate.
 #
 # Six false-fire proposals accumulated against this guard in three weeks while it
 # had no test file at all. That is the cost this suite exists to stop: with
@@ -8,7 +8,7 @@
 # three lines later by the hook_cmd_skeleton assignment, so it never ran once.
 #
 # The controls matter more than the cases. This guard blocks via
-# {"decision":"block"} on stdout with exit 0, NOT exit 2 — a probe that only reads
+# {"decision":"block"} on stdout with exit 0, NOT exit 2: a probe that only reads
 # the exit code sees every block as "allowed" and gives a broken hook a clean bill
 # of health. Both mechanisms are checked below.
 #
@@ -97,7 +97,7 @@ ok "A-P9  pm2 command passes (not an exemption proof)" "$(verdict 'pm2 restart a
 ok "A-P12 quoted mention"         "$(verdict "echo 'vite --port 3000'")" allow
 ok "      rg searching the string" "$(verdict "rg -n 'npm run dev' package.json")" allow
 
-# A-P11 — the config-sniffed port. This was the highest-frequency historical
+# A-P11: the config-sniffed port. This was the highest-frequency historical
 # false fire (review finding 3): the framework-recommended place to pin a port is
 # the project config, and blocking that correct setup is worse than useless.
 if [ -n "$FREE_PORT" ]; then

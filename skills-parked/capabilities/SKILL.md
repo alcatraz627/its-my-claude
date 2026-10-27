@@ -1,6 +1,6 @@
 ---
 name: capabilities
-description: Generates a report of everything this Claude instance can do — skills, hooks, MCP servers, memory, runtime architecture, widgets, and all std::claude infrastructure.
+description: Generates a report of everything this Claude instance can do, skills, hooks, MCP servers, memory, runtime architecture, widgets, and all std::claude infrastructure.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
 user-invocable: true
 argument-hint: "[small | medium | large] [specific question]"
@@ -10,15 +10,15 @@ context: fork
 ## Brief
 
 Self-discovering meta-skill that scans the actual Claude configuration and generates a report
-of everything this Claude instance can do — beyond a factory-default Claude. Covers skills,
+of everything this Claude instance can do: beyond a factory-default Claude. Covers skills,
 hooks, MCP servers, memory, WAL, scratchpad, assets, widgets, statusline, dreaming, and all
 std::claude infrastructure. Maintains a cache but always verifies freshness.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -40,14 +40,14 @@ If it does not exist yet, continue without it.
 
 | Argument | Description |
 | -------- | ----------- |
-| `small` | Compact summary: skill count, MCP server list, key features — fits in one screen |
+| `small` | Compact summary: skill count, MCP server list, key features: fits in one screen |
 | `medium` | Default: categorized inventory with brief descriptions and key stats |
 | `large` | Full deep-dive: every skill's purpose, every hook's trigger, architecture diagrams, usage examples |
 | `<question>` | Answer a specific question by searching the config (e.g., "how does memory work?", "what hooks exist?") |
 
 ---
 
-## Discovery Sources — MANDATORY
+## Discovery Sources: MANDATORY
 
 Scan ALL of these locations. This list is the canonical discovery manifest. If a scan reveals
 new locations not listed here, add them to this list in the report cache metadata for future runs.
@@ -58,7 +58,7 @@ new locations not listed here, add them to this list in the report cache metadat
 | ------ | --------------- |
 | `~/.claude/CLAUDE.md` | Global instructions, mandatory rules, behavioral config |
 | `~/.claude/settings.json` | Permissions, enabled plugins, custom keybindings |
-| `~/.claude/NAMESPACE.md` | std::claude namespace tree — all 18+ clusters, facets, surfaces |
+| `~/.claude/NAMESPACE.md` | std::claude namespace tree: all 18+ clusters, facets, surfaces |
 | `~/.claude/GLOSSARY.md` | Terminology definitions |
 | `~/.claude/LOOKUP.md` | Address book for all config files, scripts, hooks |
 | `~/.claude/.mcp.json` | Global MCP server definitions (always-on) |
@@ -69,7 +69,7 @@ new locations not listed here, add them to this list in the report cache metadat
 
 | Source | What to extract |
 | ------ | --------------- |
-| `~/.claude/skills/*/SKILL.md` | All skill definitions — name, description, user-invocable, tools |
+| `~/.claude/skills/*/SKILL.md` | All skill definitions: name, description, user-invocable, tools |
 | `~/.claude/skills/GUIDELINES.md` | Shared skill rules |
 | `~/.claude/skills/shared/` | Shared library: Python exports, Bash scripts, gum-tui |
 | `~/.claude/skills/shared/README.md` | Full API reference for std::claude::shared |
@@ -86,10 +86,10 @@ new locations not listed here, add them to this list in the report cache metadat
 
 | Source | What to extract |
 | ------ | --------------- |
-| `~/.claude/memory/` | Memory system — per-project MEMORY.md + individual memory files |
-| `~/.claude/memory/global/` | Global memory tier — cross-project memories |
-| `~/.claude/scratchpad/` | Scratchpad system — local + global tiers |
-| `~/.claude/assets/` | Asset management — types, manifest, storage |
+| `~/.claude/memory/` | Memory system: per-project MEMORY.md + individual memory files |
+| `~/.claude/memory/global/` | Global memory tier: cross-project memories |
+| `~/.claude/scratchpad/` | Scratchpad system: local + global tiers |
+| `~/.claude/assets/` | Asset management: types, manifest, storage |
 | `~/.claude/mistake-patterns.md` | Mistake pattern index |
 | `~/.claude/proposals.jsonl` | Improvement backlog |
 | `~/.claude/disabled-plugins.json` | Disabled plugin registry |
@@ -129,14 +129,14 @@ new locations not listed here, add them to this list in the report cache metadat
 
 | Source | What to extract |
 | ------ | --------------- |
-| Desktop automation | `desktop.sh` capabilities — screenshots, clicks, annotation |
+| Desktop automation | `desktop.sh` capabilities: screenshots, clicks, annotation |
 | Shell memory (diy-mem) | Shell history tracking system |
 | Dev servers guide | pm2 port conventions |
 | `~/.claude/dev-servers-guide.md` | Server management rules |
 
 ---
 
-## Phase 1 — Check Cache
+## Phase 1: Check Cache
 
 1. Look for the most recent cache file in `~/.claude/skills/capabilities/cache/`:
    - Files named `capabilities-<YYYY-MM-DD>.json`
@@ -167,7 +167,7 @@ new locations not listed here, add them to this list in the report cache metadat
 
 ---
 
-## Phase 2 — Full Discovery Scan
+## Phase 2: Full Discovery Scan
 
 Scan every source in the Discovery Sources table above. For each:
 
@@ -176,14 +176,14 @@ Scan every source in the Discovery Sources table above. For each:
 3. Count items (skills, hooks, servers, scripts, memory files, etc.)
 4. Note any NEW locations not in the Discovery Sources list
 
-**Scan order** (optimized for speed — fast checks first):
+**Scan order** (optimized for speed: fast checks first):
 
-1. `settings.json` — plugins, hooks, permissions (single file, high info density)
-2. Skill SKILL.md files — Glob + read frontmatter only for `small`, full read for `large`
-3. `.mcp.json` files — global + project + catalog
-4. Scripts directory — `ls` for count and names
-5. Memory files — Glob for count, read MEMORY.md index
-6. Everything else — widgets, statusline, agents, WAL, assets
+1. `settings.json`: plugins, hooks, permissions (single file, high info density)
+2. Skill SKILL.md files: Glob + read frontmatter only for `small`, full read for `large`
+3. `.mcp.json` files: global + project + catalog
+4. Scripts directory: `ls` for count and names
+5. Memory files: Glob for count, read MEMORY.md index
+6. Everything else: widgets, statusline, agents, WAL, assets
 
 Print progress as you scan:
 ```
@@ -197,7 +197,7 @@ Scanning memory...      12 files
 
 ---
 
-## Phase 3 — Generate Report
+## Phase 3: Generate Report
 
 ### Size: `small`
 
@@ -322,7 +322,7 @@ If the user provides a question instead of a size keyword:
 1. Parse the question for topic keywords
 2. Scan only the relevant Discovery Sources
 3. Answer the question directly with supporting evidence from the config
-4. Keep the response focused — don't generate a full report
+4. Keep the response focused: don't generate a full report
 
 Examples:
 - "what MCP servers are available?" → scan `.mcp.json` + catalog, list all with status
@@ -331,7 +331,7 @@ Examples:
 
 ---
 
-## Phase 4 — Cache & Output
+## Phase 4: Cache & Output
 
 1. **Write cache:** Save the report data to `~/.claude/skills/capabilities/cache/capabilities-<YYYY-MM-DD>.json`
    - Include the fingerprint counts for freshness checking
@@ -353,7 +353,7 @@ The Discovery Sources table in this SKILL.md is the starting point, but the conf
 During each scan:
 
 1. Check if any new directories or files exist under `~/.claude/` that aren't in the table
-2. If found, include them in the report and note: "New discovery: <path> — <what it contains>"
+2. If found, include them in the report and note: "New discovery: <path>: <what it contains>"
 3. Update the cache's `discovery_sources` list so future runs check the new location
 4. At the end of the run, if new sources were found, print:
    ```
@@ -368,10 +368,10 @@ This ensures the skill doesn't go stale as the config grows.
 
 ## Notes
 
-- This skill is read-only — it never modifies configuration, only reports on it
+- This skill is read-only: it never modifies configuration, only reports on it
 - The `context: fork` frontmatter runs this in a subagent to avoid polluting the main context with discovery data
-- Cache is per-day, not per-session — multiple runs on the same day reuse the cache if counts match
-- For `large` reports, the scan may take 30-60 seconds due to reading many files — this is expected
-- The skill should feel like running `neofetch` but for your Claude config — a quick snapshot of everything available
+- Cache is per-day, not per-session: multiple runs on the same day reuse the cache if counts match
+- For `large` reports, the scan may take 30-60 seconds due to reading many files: this is expected
+- The skill should feel like running `neofetch` but for your Claude config: a quick snapshot of everything available
 - When listing skills, always indicate which are user-invocable vs background-only
-- The "Unique Capabilities" section should explicitly contrast with factory Claude — what can THIS instance do that a fresh `claude` install cannot?
+- The "Unique Capabilities" section should explicitly contrast with factory Claude: what can THIS instance do that a fresh `claude` install cannot?

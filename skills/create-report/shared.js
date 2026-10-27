@@ -434,7 +434,7 @@
           e.stopPropagation();
           openDialog(wrap);
         });
-      // Pre click removed — only expand button opens the dialog
+      // Pre click removed: only expand button opens the dialog
     });
 
     if (dlgClose) dlgClose.addEventListener("click", closeDialog);
@@ -597,7 +597,7 @@
       if (e.key === "Escape") closeMenu();
     });
 
-    // Style preview float on hover — move to body to escape transform containing block
+    // Style preview float on hover: move to body to escape transform containing block
     var previewFloat = document.getElementById("style-preview-float");
     if (previewFloat) {
       document.body.appendChild(previewFloat);
@@ -902,7 +902,7 @@
           tableHtml += "</table>";
           parts.push(tableHtml);
         }
-        // Containers — recurse into divs, sections, details, main, article, etc.
+        // Containers: recurse into divs, sections, details, main, article, etc.
         else if (tag === "div" || tag === "section" || tag === "details" ||
                  tag === "main" || tag === "article" || tag === "summary" ||
                  tag === "header" || tag === "footer" || tag === "figure") {
@@ -1031,7 +1031,7 @@
   }
 
   // ── Print: force tree <details> open ─────────────────────────────────────
-  // CSS cannot toggle the `open` attribute — use beforeprint/afterprint events.
+  // CSS cannot toggle the `open` attribute: use beforeprint/afterprint events.
   (function () {
     var savedStates = [];
     window.addEventListener("beforeprint", function () {

@@ -21,8 +21,10 @@
 #   relpath       (D7) the reply names a file this turn wrote or edited, or a
 #                 deliverable under docs/ assets/ .claude/output, and the full
 #                 absolute path of it appears nowhere in the reply.
-# Advisory classes (systemMessage only): prose-smell, dense-briefing, and the
-# terse-reply warn tier between TERSE_WARN (1500) and the cap.
+#   prose-smell   two or more block-tier tells, only while policy gates.prose_smell
+#                 is enforce; fewer tells, or policy warn, only advise.
+# Advisory classes (systemMessage only): dense-briefing, the remaining prose-smell
+# tells, and the terse-reply warn tier between TERSE_WARN (1500) and the cap.
 #
 # Loop safety: marker /tmp/claude-format-gate-<sid8> holds "<signature> <blocks> <classes>".
 # An identical reply, three blocks in a row, or stop_hook_active (a block already

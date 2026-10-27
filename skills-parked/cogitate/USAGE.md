@@ -1,9 +1,9 @@
-# /cogitate — Usage Guide
+# /cogitate: Usage Guide
 
 ## What it does
 
 Interprets a query or direction, refines context, researches online or from existing
-topic files, and saves a structured dated response to `~/Documents/Claude/Topics/` —
+topic files, and saves a structured dated response to `~/Documents/Claude/Topics/`:
 updating the index and insights log after every run.
 
 ## Usage
@@ -79,9 +79,9 @@ Template Registry table.
 
 ## Caveats
 
-- A new topic file is only created for a genuinely new topic — follow-ups update
+- A new topic file is only created for a genuinely new topic: follow-ups update
   the existing file.
-- Template variant creation always requires user approval — never auto-saved silently.
+- Template variant creation always requires user approval: never auto-saved silently.
 - Deep mode spawns a sub-agent that may take longer; normal and quick modes are fast.
 - Scripts in `scripts/` are helpers; if any fail, the skill falls back to manual
   Write/Edit operations and continues.
@@ -100,8 +100,8 @@ Template Registry table.
 ## Tips
 
 - Use `quickly` when you just want an answer fast and don't need interactive refinement.
-- After several runs on similar topics, the template library grows — `/cogitate` gets
+- After several runs on similar topics, the template library grows: `/cogitate` gets
   better at picking the right structure automatically.
 - Combine with `/create-report` for a polished HTML view of any topic file.
-- The `_insights.claude.md` file is worth reading manually — it accumulates genuinely
+- The `_insights.claude.md` file is worth reading manually: it accumulates genuinely
   useful patterns about how to research different topic types efficiently.

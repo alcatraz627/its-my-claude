@@ -4,9 +4,9 @@ Fundamentals of SwiftUI animation: `withAnimation`, spring configurations, compl
 
 ## withAnimation vs .animation Modifier
 
-Two ways to animate state changes. Use one or the other — never both on the same property.
+Two ways to animate state changes. Use one or the other: never both on the same property.
 
-### withAnimation (Explicit — Preferred)
+### withAnimation (Explicit: Preferred)
 
 Wraps a state change and animates all views that depend on that state:
 
@@ -50,7 +50,7 @@ Three API generations exist. **Never mix parameter names across generations.**
 
 ### Generation 1: Physics Parameters (iOS 13+)
 
-Raw physics model. Rarely needed — hard to reason about visually.
+Raw physics model. Rarely needed: hard to reason about visually.
 
 ```swift
 Spring(mass: 1.0, stiffness: 100.0, damping: 10.0, initialVelocity: 0.0)
@@ -176,7 +176,7 @@ withAnimation(.default) {
 
 ## Transaction Control
 
-### withTransaction — Override Animation
+### withTransaction: Override Animation
 
 Replace the animation for a specific state change:
 
@@ -333,4 +333,4 @@ struct CountingText: View, Animatable {
 }
 ```
 
-Use `withAnimation` to drive the value change — SwiftUI interpolates `animatableData` each frame.
+Use `withAnimation` to drive the value change: SwiftUI interpolates `animatableData` each frame.

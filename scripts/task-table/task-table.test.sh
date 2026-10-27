@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# task-table.test.sh — the grouped /tasks view: grouping resolution (flag > project
+# task-table.test.sh: the grouped /tasks view: grouping resolution (flag > project
 # view file > auto), full-width ids, a loud empty store, and a loud height cap that
 # names what it hid. Runs against a sandbox HOME so no real store or view file moves.
 #

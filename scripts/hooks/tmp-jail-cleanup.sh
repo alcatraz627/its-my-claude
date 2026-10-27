@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SessionEnd: remove this session's /tmp-jail marker. Tidiness only — orphan
+# SessionEnd: remove this session's /tmp-jail marker. Tidiness only: orphan
 # markers are harmless (keyed to a dead session_id that no live session reuses).
 # Fail-open and silent.
 set -uo pipefail

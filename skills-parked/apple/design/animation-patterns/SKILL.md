@@ -82,13 +82,13 @@ What are you animating?
 | `.matchedTransitionSource` | iOS 18 | transitions.md |
 | `.navigationTransition(.zoom)` | iOS 18 | transitions.md |
 
-## Top 5 Mistakes — Quick Reference
+## Top 5 Mistakes: Quick Reference
 
 | # | Mistake | Fix | Details |
 |---|---------|-----|---------|
-| 1 | `spring(response:bounce:)` — mixing parameter generations | Use either `spring(response:dampingFraction:)` (iOS 13) or `spring(duration:bounce:)` (iOS 17) | core-animations.md |
-| 2 | `.animation(.spring())` without `value:` parameter | Always pass `value:` — the no-value variant is deprecated (iOS 15) | core-animations.md |
-| 3 | Wrong PhaseAnimator closure signature | `PhaseAnimator(phases) { content, phase in }` — not `{ phase in }` | phase-keyframe-animators.md |
+| 1 | `spring(response:bounce:)`: mixing parameter generations | Use either `spring(response:dampingFraction:)` (iOS 13) or `spring(duration:bounce:)` (iOS 17) | core-animations.md |
+| 2 | `.animation(.spring())` without `value:` parameter | Always pass `value:`: the no-value variant is deprecated (iOS 15) | core-animations.md |
+| 3 | Wrong PhaseAnimator closure signature | `PhaseAnimator(phases) { content, phase in }`: not `{ phase in }` | phase-keyframe-animators.md |
 | 4 | Using `matchedGeometryEffect` for NavigationStack transitions | Use `matchedTransitionSource` + `.navigationTransition(.zoom)` on iOS 18+ | transitions.md |
 | 5 | Using `withAnimation` for SF Symbol effects | Use `.symbolEffect()` modifier instead | symbol-effects.md |
 
@@ -96,13 +96,13 @@ What are you animating?
 
 When reviewing animation code, verify:
 
-- [ ] **Reduce motion** — animations respect `AccessibilityMotionEffect` or `UIAccessibility.isReduceMotionEnabled`; provide non-motion alternatives
-- [ ] **Duration limits** — no animation exceeds ~0.5s for UI feedback; longer only for decorative/ambient effects
-- [ ] **Spring vs linear** — springs for interactive/physical motion; linear/easeInOut only for opacity fades or progress indicators
-- [ ] **No deprecated APIs** — `.animation(.spring())` without `value:` is deprecated; `.animation(nil)` is replaced by `withTransaction`
-- [ ] **Correct spring generation** — parameter names match the same API generation (never mix `response` with `bounce`)
-- [ ] **Completion handlers** — using `withAnimation(_:completionCriteria:_:completion:)` (iOS 17+), not inventing `.onAnimationCompleted`
-- [ ] **Transition scope** — `.transition()` only affects views inside `if`/`switch` controlled by state; not for views that are always present
+- [ ] **Reduce motion**: animations respect `AccessibilityMotionEffect` or `UIAccessibility.isReduceMotionEnabled`; provide non-motion alternatives
+- [ ] **Duration limits**: no animation exceeds ~0.5s for UI feedback; longer only for decorative/ambient effects
+- [ ] **Spring vs linear**: springs for interactive/physical motion; linear/easeInOut only for opacity fades or progress indicators
+- [ ] **No deprecated APIs**: `.animation(.spring())` without `value:` is deprecated; `.animation(nil)` is replaced by `withTransaction`
+- [ ] **Correct spring generation**: parameter names match the same API generation (never mix `response` with `bounce`)
+- [ ] **Completion handlers**: using `withAnimation(_:completionCriteria:_:completion:)` (iOS 17+), not inventing `.onAnimationCompleted`
+- [ ] **Transition scope**: `.transition()` only affects views inside `if`/`switch` controlled by state; not for views that are always present
 
 ## Reference Files
 

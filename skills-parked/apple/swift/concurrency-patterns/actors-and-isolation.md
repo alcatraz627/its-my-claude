@@ -189,7 +189,7 @@ func processData() async {
 }
 ```
 
-Prefer `@MainActor` on the type/method over `MainActor.run` — it's more declarative and catches errors at compile time.
+Prefer `@MainActor` on the type/method over `MainActor.run`: it's more declarative and catches errors at compile time.
 
 ## Sendable
 
@@ -360,7 +360,7 @@ actor SafeCache {
 ## Checklist
 
 - [ ] Shared mutable state protected by actors (not locks or DispatchQueue)
-- [ ] Actor reentrancy considered — state mutations before `await` points
+- [ ] Actor reentrancy considered: state mutations before `await` points
 - [ ] `@MainActor` on all UI-bound types (ViewModels, UI state)
 - [ ] `Sendable` conformance on types that cross isolation boundaries
 - [ ] `@unchecked Sendable` used only with proven synchronization, never to silence warnings

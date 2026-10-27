@@ -1,28 +1,28 @@
 #!/usr/bin/env bash
-# gcc-signal-capture.sh — SessionEnd hook, side-effect only.
+# gcc-signal-capture.sh: SessionEnd hook, side-effect only.
 #
 # The /core-dump + /catchup "gcc-contribution" phase asks the agent to file an
 # improvement proposal when a reusable ~/.claude friction surfaced this session.
 # That phase is advisory: a stale-spec or rushed session skips it (the
-# skill-spec-update-not-honored failure mode). This is its DATA-PATH safety net —
+# skill-spec-update-not-honored failure mode). This is its DATA-PATH safety net:
 # when a session clearly worked on the gcc, hit a friction, and filed nothing, it
 # auto-stubs ONE proposal so the signal reaches the backlog regardless of agent
 # compliance. The weekly backlog-consolidate then triages it.
 #
 # Gated HARD to avoid churning the backlog (the user's explicit allergy). It fires
 # only when ALL of these hold:
-#   1. the session edited files under ~/.claude/   — it actually worked on the gcc
-#   2. an atone event was filed this session       — a real friction occurred
-#   3. no proposal carries this session_id         — nothing was contributed
-#   4. it has not already stubbed this session     — idempotent
+#   1. the session edited files under ~/.claude/: it actually worked on the gcc
+#   2. an atone event was filed this session: a real friction occurred
+#   3. no proposal carries this session_id: nothing was contributed
+#   4. it has not already stubbed this session: idempotent
 # The conjunction is deliberately narrow; each clause shrinks the firing set. It
-# does NOT fire on S3/recurrence alone — atone-consolidate already drafts those,
+# does NOT fire on S3/recurrence alone: atone-consolidate already drafts those,
 # so stubbing on severity would duplicate that pipeline. The differentiator is
 # clause 1 (the session was editing the global config).
 #
 # Why SessionEnd, not Stop: it must run AFTER any end-of-session /core-dump
 # contribution (so clause 3 sees it) and exactly once. A hard crash that skips
-# SessionEnd loses only S1/S2 gcc-edit frictions — S3/recurring ones are still
+# SessionEnd loses only S1/S2 gcc-edit frictions: S3/recurring ones are still
 # picked up directly by the weekly consolidate, so nothing important is lost.
 #
 # Side-effect only: writes via propose.sh, prints nothing, always exit 0.
@@ -44,7 +44,7 @@ counter="$GCC/.session-atone-slugs/${sid}.json"
 store="${PROPOSE_STORE:-$GCC/proposals.jsonl}"
 marker="$GCC/.session-atone-slugs/${sid}.gcc-stub-emitted"
 
-# 4. idempotent — at most one stub per session.
+# 4. idempotent: at most one stub per session.
 [ -f "$marker" ] && exit 0
 
 # 1. did this session edit the global config? (a path under $HOME/.claude/)

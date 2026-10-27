@@ -55,8 +55,8 @@ sentence that parses linearly is fine. Evidence-density never excuses it
 > against the CPRD with a structured brief: extract every user-facing
 > capability (numbered, section-cited), verify each adversarially in code
 > (file:line) and in the live app at :5101 (read-only, no mutations), classify
-> BUILT / PARTIAL / MISSING — with doc-31 supplied so your deliberate changes
-> read as divergences, not gaps — then rank what's missing…" (93 words)
+> BUILT / PARTIAL / MISSING: with doc-31 supplied so your deliberate changes
+> read as divergences, not gaps: then rank what's missing…" (93 words)
 >
 > After: "The review agent is a fable seat. Its brief has five steps: 1.
 > Extract every user-facing capability from the CPRD; number and cite each.
@@ -131,7 +131,7 @@ category is the prose-level name for the same failure.
 |---|---|---|
 | structure | word tiers >25/>35/>50; connective dashes (digit ranges like L15-L36 never count) | parenthetical-interruption severity |
 | verdict-first | verdict token opening the first sentence | verdict contradicted by its own details |
-| contrastive-scaffold | "not X, but Y" and "— it's" (the bare "not X —" form fires on plain negation; rejected) | none observed |
+| contrastive-scaffold | "not X, but Y" and ": it's" (the bare "not X:" form fires on plain negation; rejected) | none observed |
 | bare-ids | counter-gate-stop.sh cluster count | whether a gloss is honest |
 | option-menu | none yet (candidate: closing-region numbered list + trailing ?) | fork-is-real judgment |
 | buried-question | counter-gate-stop.sh first-question position | whether the ask needed asking |
@@ -183,7 +183,7 @@ docs, error messages, runbooks, and hook text only.
 
 | surface | gate | tier |
 |---|---|---|
-| chat final message | prose-smell-stop.sh (Stop) | hard block since mig 0044 (PROSE_SMELL_ENFORCE=1 in settings env; ≥2 block-tier tells; loop-safe, fires once per message). Promoted on 29d dry-run telemetry: 57 would-blocks, ~2/day |
+| chat final message | format-gate-stop.sh (Stop), which absorbed prose-smell-stop.sh on 2026-10-19 | block on ≥2 block-tier tells while policy `gates.prose_smell` is `enforce` (live value; was PROSE_SMELL_ENFORCE=1 from mig 0044); em-dash blocks on its own; loop-safe, fires once per message |
 | commit message trailers | git-hooks/commit-msg + guard-commit-signature | hard block (mig 0040) |
 | commit message prose | rules/git.md hygiene bar + prose-lint | rule, advisory |
 | PR bodies (gh pr) | guard-commit-signature | hard block: signature + connective dash (mig 0042) |

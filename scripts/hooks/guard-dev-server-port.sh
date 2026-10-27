@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-dev-server-port.sh — PreToolUse(Bash): port discipline for dev servers.
+# guard-dev-server-port.sh: PreToolUse(Bash): port discipline for dev servers.
 #
 # The failure this ends: one-off dev servers launched with no port land on
 # framework defaults (5173, 3000, …), collide with the user's mature apps,
@@ -7,7 +7,7 @@
 # where. The three-tier policy lives in features/dev-servers.md; the ledger is
 # scripts/dev-servers/ports.sh.
 #
-# Behavior (user decision 2026-07-10: BLOCK, not nudge — nudging didn't bind):
+# Behavior (user decision 2026-07-10: BLOCK, not nudge: nudging didn't bind):
 #   • launch on a blocklisted framework default        → block, corrected cmd
 #   • launch on a port pinned to another project (T1)  → block
 #   • launch on a port claimed by another service      → block
@@ -20,7 +20,7 @@
 # (machine-wide, ALL sessions until removed).
 # False fire? That IS reviewable feedback: file
 #   propose.sh add --category hooks --title "guard-dev-server-port false fire: …"
-# — the hook-telemetry review reads both that and this hook's warn-log records.
+# : the hook-telemetry review reads both that and this hook's warn-log records.
 
 set -uo pipefail
 [ -f "$HOME/.claude/.no-dev-port-gate" ] && exit 0
@@ -31,7 +31,7 @@ CMD=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 [ -n "$CMD" ] || exit 0
 
 # Per-command escape + pm2 exemption, before any heavier work. The exemption
-# applies only when the WHOLE command is pm2 (tier-2 lane) — a pm2 prefix must
+# applies only when the WHOLE command is pm2 (tier-2 lane): a pm2 prefix must
 # not smuggle a raw launch past the gate (`pm2 ls; vite --port 5173` was a
 # full bypass, review finding 8).
 case "$CMD" in *PORTS_OK=1*) exit 0 ;; esac
@@ -43,7 +43,7 @@ case "$CMD" in *PORTS_OK=1*) exit 0 ;; esac
 # the passing A-P9 test case as proof this line works; it does not isolate it.
 printf '%s' "$CMD" | rg -q '^\s*pm2\s[^;&|]*$' 2>/dev/null && exit 0
 
-# Launch detection — the common local dev-server spawners. Env-var prefixes
+# Launch detection: the common local dev-server spawners. Env-var prefixes
 # (PORT=… NODE_ENV=…) before the launcher are part of the launch form.
 # `\b` is the wrong boundary for a bare tool name, because a hyphen satisfies it:
 # `vite\b` matched `vite-node` and `vite-plugin-inspect`, so a one-shot script
@@ -54,7 +54,7 @@ printf '%s' "$CMD" | rg -q '^\s*pm2\s[^;&|]*$' 2>/dev/null && exit 0
 LAUNCH_RE='(^|[;&|(]\s*)([A-Za-z_]+=\S+\s+)*(npx\s+)?((npm|pnpm|yarn|bun)\s+(run\s+)?dev\b|vite([^-\w]|$)|next\s+(dev|start)\b|react-router\s+dev\b|remix\s+(vite:)?dev\b|astro\s+dev\b|nuxt\s+dev\b|webpack\s+serve\b|python3?\s+-m\s+http\.server\b|serve([^-\w]|$)|uvicorn([^-\w]|$)|flask\s+run\b)'
 # Scan a quote-blanked copy: a dev-server name that only appears INSIDE a
 # quoted grep/rg/ps/awk pattern (e.g. `ps … | rg 'next-server|next dev'`) is
-# a read-only inspection, not a launch — but the `|`/`;`/`&` inside those
+# a read-only inspection, not a launch: but the `|`/`;`/`&` inside those
 # quotes would otherwise read as a real command separator. Real launches are
 # unquoted, so blanking quoted spans leaves them intact. Port extraction below
 # still runs on the original command.

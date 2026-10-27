@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # File a MINOR technical issue to this repo's GitHub Issues, with a human gate.
 #
-# What this is for: the small technical cleanups an agent surfaces while working —
+# What this is for: the small technical cleanups an agent surfaces while working:
 # a missing enum entry, dead code, config sprawl, a stale flag. NOT for anything
 # with product or business value; that belongs in Linear and is the team's call,
 # not an agent's.
 #
 # Safety model: default is DRY-RUN. It renders the issue and prints the exact
-# `gh issue create` command, and files nothing. Pass --confirm to file — and even
+# `gh issue create` command, and files nothing. Pass --confirm to file: and even
 # then the repo's cli-gating hook prompts for approval on the `gh` write, so a
 # human signs off on the outward action regardless.
 #

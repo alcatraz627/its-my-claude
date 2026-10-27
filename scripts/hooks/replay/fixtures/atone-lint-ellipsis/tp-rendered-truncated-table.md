@@ -1,7 +1,7 @@
-# TP fixture — a TTY-rendered/truncated table saved as source
+# TP fixture: a TTY-rendered/truncated table saved as source
 
 Expected: atone-lint FIRES the ellipsis warning on the truncated rows. These are
-fixed-width space-padded columns with `…` sitting at a cell-truncation boundary —
+fixed-width space-padded columns with `…` sitting at a cell-truncation boundary:
 the signature of gum/glow output pasted as source instead of markdown.
 
 Scenario          | Native Supp… | Behavior          | Citation

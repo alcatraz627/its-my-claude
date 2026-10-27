@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-pr-title-tags.sh — refuses a `gh pr create` (or `gh pr edit --title`)
+# guard-pr-title-tags.sh: refuses a `gh pr create` (or `gh pr edit --title`)
 # whose title lacks the tags the repo asks for.
 #
 # Agent-raised PRs cost Slack noise and bot-review money, so the owner wants a

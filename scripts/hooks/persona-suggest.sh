@@ -6,7 +6,7 @@
 # Suggests adopting a matching persona when the prompt clearly calls for one.
 #
 # Working-mode personas (~/.claude/personas/) are picked up only when the agent
-# reads the file — there is no proactive trigger. This UserPromptSubmit hook is
+# reads the file: there is no proactive trigger. This UserPromptSubmit hook is
 # that trigger: it matches the prompt against a curated set of strong cues and,
 # on a clear hit, injects one advisory line pointing at the relevant persona.
 # Conservative by design: it fires only on unambiguous cues in a prompt of at
@@ -16,7 +16,7 @@
 # stdin; prints one {additionalContext} JSON object on a match, nothing
 # otherwise. Dedup sentinel: /tmp/claude-personasuggest-<sid8> (one line per
 # already-suggested persona). Mute: touch ~/.claude/personas/usage/.suggest-off.
-# Always exits 0 — an advisory hook must never block a prompt.
+# Always exits 0: an advisory hook must never block a prompt.
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed persona-suggest && exit 0
 
 set -uo pipefail
@@ -73,7 +73,7 @@ bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook persona-suggest --action n
 
 # Arm the heed check. This hook suggests in the hook channel and is answered in
 # personas/usage/events.jsonl, a ledger it never reads, so it accumulated 1381
-# fires and zero heed lines. That absence was then read as "it never converts" —
+# fires and zero heed lines. That absence was then read as "it never converts":
 # a conclusion drawn from missing instrumentation rather than from data, which is
 # why task #31 says to instrument BEFORE tuning. heed-writeback.sh re-reads the
 # usage log at each Stop and records the answer. One suggestion per session, so

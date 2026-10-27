@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# heartbeat.sh — PostToolUse hook. Writes a WAL heartbeat entry every Nth tool
+# heartbeat.sh: PostToolUse hook. Writes a WAL heartbeat entry every Nth tool
 # call, so long-running sessions leave a breadcrumb trail even if they crash
 # before Stop / PreCompact hooks can fire.
 #
@@ -10,14 +10,14 @@
 # Hook input (stdin): {session_id, tool_name, cwd, ...}
 #
 # State:
-#   ~/.claude/.turn-state/heartbeat-<sid> — plain-text integer counter.
+#   ~/.claude/.turn-state/heartbeat-<sid>: plain-text integer counter.
 #   Incremented on every PostToolUse, zero'd by turn-end-cleanup.sh on Stop.
 #
 # Interval:
 #   Every CLAUDE_HEARTBEAT_INTERVAL tool calls (default 10). Override via env
 #   for tests or to tune noise/recoverability tradeoff.
 #
-# Fails silently — never blocks the tool call.
+# Fails silently: never blocks the tool call.
 
 set -uo pipefail
 

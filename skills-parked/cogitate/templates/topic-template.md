@@ -23,7 +23,7 @@ created: <!-- DATE -->
 
 ## Research Notes
 <!-- Sources consulted, searches run, files read, key data points found.
-     Keep this as a working scratchpad — not polished prose. -->
+     Keep this as a working scratchpad: not polished prose. -->
 
 -
 

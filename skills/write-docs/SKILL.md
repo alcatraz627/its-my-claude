@@ -15,12 +15,12 @@ Baked-in anti-fluff rules prevent sycophantic, ChatGPT-style prose.
 ### Two audiences: keep them separate
 
 This SKILL.md is read by Claude as an operating procedure. The docs it produces are
-read by **humans** and follow the human-first house style in
-[`conventions/doc-writing.md`](../../conventions/doc-writing.md). These are different
-audiences with different rules: the procedure below is terse and imperative; the docs
-you write can be warm where warmth helps and prose where prose reads better. Don't let
-the clipped tone of this procedure leak into the docs, and don't soften the procedure
-into doc-prose. When in doubt about doc voice, the human-first canon governs the output
+read by **humans** and follow the house style in
+[`conventions/doc-writing.md`](../../conventions/doc-writing.md): plain, direct, proper
+sentences by default. These are different audiences with different rules: the procedure
+below is terse and imperative; the docs you write use prose where prose reads better.
+Don't let the clipped tone of this procedure leak into the docs, and don't soften the
+procedure into doc-prose. When in doubt about doc voice, that canon governs the output,
 not this file.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
@@ -100,7 +100,7 @@ Run the §4 `rg` against every draft. Every hit is a candidate, not an automatic
 4. **Answer "what do I do?" not "what is this?"** Every section must answer a concrete question a reader has.
 5. **No preamble.** Start with the first useful sentence. No "In this section, we will..."
 6. **Specificity over generality.** "Responds with 401 if the JWT is expired" not "Handles authentication errors appropriately"
-7. **Match existing voice.** If the project has existing docs, read 2-3 of them and match their tone, sentence length, and heading style. If no existing docs, default to terse-technical.
+7. **Match existing voice.** If the project has existing docs, read 2-3 of them and match their tone, sentence length, and heading style. If no existing docs, default to plain technical prose in proper sentences (owner, 2026-10-22).
 
 ### Self-Check
 
@@ -467,7 +467,7 @@ The "I wrote it" claim is not the same as "I saw it render."
 ## Notes
 
 - This skill reads code but never modifies it and produces documentation only
-- Voice calibration reads existing project docs before generating. If no docs exist, falls back to terse-technical baseline
+- Voice calibration reads existing project docs before generating. If no docs exist, falls back to plain technical prose in proper sentences
 - The anti-fluff rules are checked after every section is generated, not just at the end
 - For `api` mode: the skill prefers reading actual type definitions over inferring from usage
 - For `changelog` mode: if the repo uses conventional commits, parsing is automatic; otherwise it falls back to file-path heuristics
@@ -479,7 +479,7 @@ The "I wrote it" claim is not the same as "I saw it render."
 
 - [`conventions/doc-writing.md`](../../conventions/doc-writing.md): the canonical
   anti-AI-voice catalog, structural rules, tables-vs-prose, diagram rules, and the
-  find-and-flag `rg`. The human-first ruleset the docs this skill writes follow.
+  find-and-flag `rg`. The house style the docs this skill writes follow.
 - [`personas/technical-doc-writer.md`](../../personas/technical-doc-writer.md): the
   authoring disposition (classify → ground → draft → flag → rewrite → render); adopt
   it to drive a doc all the way to disk.

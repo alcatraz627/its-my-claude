@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# validate-checkpoint.sh — refuse a checkpoint that breaks /catchup's parse contract.
+# validate-checkpoint.sh: refuse a checkpoint that breaks /catchup's parse contract.
 #
 # /catchup locates sections by EXACT headings. A dump that invents synonyms
 # ("Resume prompt", "Done, and verified") reads fine to a human and parses as
@@ -8,10 +8,10 @@
 # alone is advisory to a running session.
 #
 # Two contracts, one per mode:
-#   full  — exact H2 headings: Initial Goal · Agent Actions · Current
+#   full: exact H2 headings: Initial Goal · Agent Actions · Current
 #           Expectation · Pending Items (Resume Contract and Session Insights
 #           optional, noted when absent)
-#   --mini — "# Mini Core Dump" H1 plus the bold labels Goal/Resume/Done/
+#   --mini: "# Mini Core Dump" H1 plus the bold labels Goal/Resume/Done/
 #           Not Done/Next Steps (minis have NO H2 sections by design)
 #
 # A third mode checks a different kind of breakage. Headings can all be present
@@ -50,7 +50,7 @@ if [ "$mode" = "--diff-caveats" ]; then
   # Match on WORD OVERLAP, not on a prefix. A carried-forward caveat is normally
   # reworded rather than copied, and the edit can land anywhere in it: a counter
   # moves ("152 dirty files" to "156"), or a word is inserted ("committed" to
-  # "committed, now"). Two earlier cuts both failed on real shapes — a 60-char
+  # "committed, now"). Two earlier cuts both failed on real shapes: a 60-char
   # key with digits flagged the counter case, and a 30-char digit-stripped prefix
   # flagged an insertion that happened to fall inside the window. Overlap has no
   # window to fall inside of.
@@ -150,7 +150,7 @@ done
 # Field-level check on the Resume Contract, WARN TIER (ruling D2a: a new gate
 # ships warn-tier and is promoted on evidence). Headings can all be present while
 # a contract FIELD the template specifies is simply absent, which is how the
-# 2026-08-19 dump shipped without "Task list, glanced" — the prose specified the
+# 2026-08-19 dump shipped without "Task list, glanced": the prose specified the
 # field, the emitted template did not carry it, and this validator returned OK.
 # Missing fields are reported, never fatal: older dumps predate later fields.
 if rg -q "^## Resume Contract[[:space:]]*$" "$f"; then
@@ -203,7 +203,7 @@ PYX
     # old read pushed authors to pad the label line to silence this warning
     # (csync, 2026-09-08).
     _next=$(printf '%s\n' "$_contract" | rg -A1 -F "**${lbl}:**" | sed -n 2p)
-    # A lone "-" or "—" is the template's explicit "none", not an empty value.
+    # A lone "-" or "\u2014" is the template's explicit "none", not an empty value.
     case "$(printf '%s' "$_val" | tr -d '[:space:]')" in
       "") printf '%s' "$_next" | rg -q '^\s+[-*]\s+\S' || empty_fields="${empty_fields} '${lbl}'" ;;
     esac

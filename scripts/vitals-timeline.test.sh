@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# vitals-timeline.test.sh — checks for the timeline appender.
+# vitals-timeline.test.sh: checks for the timeline appender.
 # Isolation: VITALS_TIMELINE + a stub GCC_VITALS_BIN so no live file is touched and
 # the vitals computation is deterministic.
 set -uo pipefail

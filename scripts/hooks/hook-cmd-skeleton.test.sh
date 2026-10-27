@@ -57,7 +57,7 @@ else fail=$((fail+1)); echo "  FAIL heredoc silently blanked, contradicting the 
 
 # Quote state does not carry across newlines: awk resets per record, so only the
 # FIRST line of a multi-line quoted argument is blanked. Asserted in both
-# directions, because the split is what makes it dangerous — a guard reading
+# directions, because the split is what makes it dangerous: a guard reading
 # quoted contents passes on one form and is disarmed on the other.
 ML='git commit -m "subject line
 BODYMARKER stays visible"'

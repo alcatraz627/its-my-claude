@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# 50-cleanup-empty-session-env.sh — std::claude::startup task.
+# 50-cleanup-empty-session-env.sh: std::claude::startup task.
 #
 # Removes EMPTY subdirs under ~/.claude/session-env/ older than RETAIN_DAYS.
-# Uses `rmdir` (NOT `rm -r` or `trash`) — fails-safe on non-empty dirs.
+# Uses `rmdir` (NOT `rm -r` or `trash`): fails-safe on non-empty dirs.
 #
 # Why: Claude Code creates a session-env/<uuid>/ subdir per session for env
 # snapshots but appears to never populate them (observed: 834/834 empty).
@@ -11,7 +11,7 @@
 # populating them, this task becomes a no-op.
 #
 # REVIVAL:
-#   Restoration is unnecessary — empty subdirs are recreated by Claude Code
+#   Restoration is unnecessary: empty subdirs are recreated by Claude Code
 #   on next session start. If you NEED to confirm the dir existed for
 #   audit/forensic reasons, check the Claude Code log directly.
 
@@ -42,7 +42,7 @@ while IFS= read -r d; do
   if (( DRY_RUN )); then
     removed=$((removed + 1))
   else
-    # rmdir fails-safe — refuses to delete non-empty dirs
+    # rmdir fails-safe: refuses to delete non-empty dirs
     rmdir "$d" 2>/dev/null && removed=$((removed + 1))
   fi
 done < <(find "$DIR" -mindepth 1 -maxdepth 1 -type d -empty 2>/dev/null)

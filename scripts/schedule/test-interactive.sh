@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# test-interactive.sh — criteria-based tests for gcc-schedule (schedule.sh).
+# test-interactive.sh: criteria-based tests for gcc-schedule (schedule.sh).
 #
 # Run:  bash ~/.claude/scripts/schedule/test-interactive.sh
 #
 # CRITERIA (every one must pass):
-#   A. Claude-safety — text output stays PLAIN when not a terminal (no ANSI leak
+#   A. Claude-safety: text output stays PLAIN when not a terminal (no ANSI leak
 #      on stdout OR stderr), so a piped/headless call is never polluted.
 #      A1 help | cat has no ESC   A2 list/status | cat have no ESC
 #      A3 -h documents -i          A4 add --dry-run still prints PLANNED
-#   B. Colored in a terminal — the palette lights up under a pty (best-effort).
-#   C. Interactive -i — every feature reachable + safe.
+#   B. Colored in a terminal: the palette lights up under a pty (best-effort).
+#   C. Interactive -i: every feature reachable + safe.
 #      C1 no-tty -> clean refusal, non-zero, NO hang
 #      C2 main menu covers browse/create/adopt/audit/status
 #      C3 per-schedule actions cover show/logs/run/disable/enable/duplicate/rm/back

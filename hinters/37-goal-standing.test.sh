@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 37-goal-standing.test.sh — the goal hinter fires on prompt 1 and every 8th, only when a
+# 37-goal-standing.test.sh: the goal hinter fires on prompt 1 and every 8th, only when a
 # gcc goal exists and the harness /goal is not armed; machine turns cost no slot.
 set -uo pipefail
 H=/Users/alcatraz627/.claude/hinters/37-goal.sh; G=/Users/alcatraz627/.claude/scripts/goal/goal.sh

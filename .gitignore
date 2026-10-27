@@ -23,6 +23,9 @@
 !/.gitignore
 !/PORTABILITY.md
 !/*.md
+!/LICENSE
+# .github/: repo-facing assets for the public GitHub page (README cover).
+!/.github/
 !/settings.json
 !/mcp-catalog.json
 !/scripts/
@@ -64,6 +67,7 @@
 /style/*
 !/style/scope-map.json
 !/style/glossary-hints.tsv
+!/style/profiles.json
 
 # accumulated LEARNED state — real value, version it (all tiny unless noted)
 !/memory/

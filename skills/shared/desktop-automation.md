@@ -1,7 +1,7 @@
-# Desktop Automation — macOS GUI Control
+# Desktop Automation: macOS GUI Control
 
 > **Version:** v1 (shell-only)  
-> **Phase:** 1 of 2 — all operations use native macOS shell tools via the Bash tool  
+> **Phase:** 1 of 2: all operations use native macOS shell tools via the Bash tool  
 > **Installed tools:** `screencapture` (built-in), `osascript` (built-in), `cliclick` (brew)  
 > **Helper script:** `~/.claude/scripts/desktop.sh`
 
@@ -24,7 +24,7 @@
 | Send key combo | `desktop key cmd+c` | **Yes** |
 | Switch to Space N | `desktop space 2` | **Yes** |
 
-Or use the raw commands directly — see sections below.
+Or use the raw commands directly: see sections below.
 
 ### The Improved Vision Loop (with annotation)
 
@@ -49,10 +49,10 @@ Or use the raw commands directly — see sections below.
 
 ## Prerequisites
 
-**Accessibility permission** — required for `cliclick` and `osascript` click/type:
+**Accessibility permission**: required for `cliclick` and `osascript` click/type:
 > System Settings → Privacy & Security → Accessibility → add ghostty (or Terminal)
 
-**Screen Recording permission** — required for `screencapture` in some contexts:
+**Screen Recording permission**: required for `screencapture` in some contexts:
 > System Settings → Privacy & Security → Screen Recording → add ghostty (or Terminal)
 
 ---
@@ -84,7 +84,7 @@ screencapture -x -l "$WINID" ~/.claude/assets/screenshots/chrome-window.png
 
 **Storage rule:** Always save to `~/.claude/assets/screenshots/`. Never use `/tmp` (it resolves to `/private/tmp` which is deny-listed in settings.json).
 
-**Viewing:** Use the `Read` tool on the `.png` file — Claude's vision model reads it directly.
+**Viewing:** Use the `Read` tool on the `.png` file: Claude's vision model reads it directly.
 
 ---
 
@@ -115,7 +115,7 @@ osascript -e 'tell application "System Events" to tell process "Slack" to get {p
 osascript -e 'tell application "System Events" to tell process "Slack" to id of window 1'
 ```
 
-### JXA — JavaScript for Automation (use when AppleScript fails)
+### JXA: JavaScript for Automation (use when AppleScript fails)
 
 Chrome, and some other apps with multi-process architectures, block AppleScript from reading
 window IDs via System Events (error -1728). Use JXA (`osascript -l JavaScript`) instead:
@@ -158,11 +158,11 @@ osascript -l JavaScript -e "
 
 | Situation | Use |
 |-----------|-----|
-| Native macOS app (Slack, Preview, Calendar) | AppleScript — simpler syntax |
-| Chrome tab enumeration or switching | JXA — AppleScript requires Automation permission |
-| Chrome window ID for `screencapture -l` | JXA — System Events returns -1728 for Chrome |
-| Bringing Ghostty to front | JXA `frontmost = true` — `activate` fails if Chrome is pinned |
-| Space switching | AppleScript `key code N using control down` — JXA has no advantage |
+| Native macOS app (Slack, Preview, Calendar) | AppleScript: simpler syntax |
+| Chrome tab enumeration or switching | JXA: AppleScript requires Automation permission |
+| Chrome window ID for `screencapture -l` | JXA: System Events returns -1728 for Chrome |
+| Bringing Ghostty to front | JXA `frontmost = true`: `activate` fails if Chrome is pinned |
+| Space switching | AppleScript `key code N using control down`: JXA has no advantage |
 
 ---
 
@@ -219,13 +219,13 @@ screencapture -x -D 1 ~/.claude/assets/screenshots/space2.png
 osascript -e 'tell application "System Events" to key code 18 using control down'  # back to Space 1
 ```
 
-**Note:** `screencapture -D N` captures *displays* (physical monitors), not Spaces. Spaces are virtual layers — you must switch to them before capturing.
+**Note:** `screencapture -D N` captures *displays* (physical monitors), not Spaces. Spaces are virtual layers: you must switch to them before capturing.
 
 ---
 
 ## The Automation Loop
 
-This is the core pattern for all GUI interactions. **Always annotate before clicking — never guess coordinates from a plain screenshot.**
+This is the core pattern for all GUI interactions. **Always annotate before clicking: never guess coordinates from a plain screenshot.**
 
 ```
 1. screenshot → ~/.claude/assets/images/step-1.png
@@ -242,22 +242,22 @@ This is the core pattern for all GUI interactions. **Always annotate before clic
 
 **Coordinate strategy:**
 - The image is at native resolution (3440×1440 for display 1, 3024×1964 for display 2)
-- Retina displays: coordinates are in logical pixels — divide physical pixel count by scale factor (~2)
-- `desktop windows` output gives you the app's origin (X Y) and size (W H) — element coords are relative to that origin
-- Grid labels in annotated images are **logical pixel coordinates** — use them directly with `cliclick`
+- Retina displays: coordinates are in logical pixels: divide physical pixel count by scale factor (~2)
+- `desktop windows` output gives you the app's origin (X Y) and size (W H): element coords are relative to that origin
+- Grid labels in annotated images are **logical pixel coordinates**: use them directly with `cliclick`
 
-**Hard STOP conditions — never continue past these:**
+**Hard STOP conditions: never continue past these:**
 - Screenshot file < 5KB → captured blank or wrong window → stop, report to user
 - Window bounds returned empty → app not running or not visible → stop, report to user
 - Annotated image shows crosshair in wrong position → recalculate, do not click → re-annotate
 - `desktop.sh` exits non-zero for any reason → stop, show the error, ask user how to proceed
-- Never assume or hallucinate screen content — if you can't see it, say so
+- Never assume or hallucinate screen content: if you can't see it, say so
 
 ---
 
 ## Usage Examples
 
-### Example 1 — Read what's on screen right now
+### Example 1: Read what's on screen right now
 
 ```bash
 screencapture -x -D 1 ~/.claude/assets/screenshots/now.png
@@ -265,7 +265,7 @@ screencapture -x -D 1 ~/.claude/assets/screenshots/now.png
 # Claude describes everything visible
 ```
 
-### Example 2 — Click a button by approximate position
+### Example 2: Click a button by approximate position
 
 ```bash
 # First: screenshot to find where the button is
@@ -277,7 +277,7 @@ sleep 0.3
 screencapture -x -D 1 ~/.claude/assets/screenshots/after.png
 ```
 
-### Example 3 — Type into a text field in a specific app
+### Example 3: Type into a text field in a specific app
 
 ```bash
 # Focus the app window
@@ -291,7 +291,7 @@ cliclick t:"Hello from Claude"
 cliclick p:return
 ```
 
-### Example 4 — Capture a specific app window (not the full display)
+### Example 4: Capture a specific app window (not the full display)
 
 For most apps (Slack, Preview, etc.):
 ```bash
@@ -300,7 +300,7 @@ screencapture -x -l "$WINID" ~/.claude/assets/screenshots/slack-window.png
 # Read ~/.claude/assets/screenshots/slack-window.png
 ```
 
-For Chrome (System Events returns -1728 — use JXA):
+For Chrome (System Events returns -1728: use JXA):
 ```bash
 WINID=$(osascript -l JavaScript -e "
   var se = Application('System Events');
@@ -311,7 +311,7 @@ screencapture -x -l "$WINID" ~/.claude/assets/screenshots/chrome-window.png
 # Read ~/.claude/assets/screenshots/chrome-window.png
 ```
 
-### Example 4b — Screenshot a specific Chrome tab
+### Example 4b: Screenshot a specific Chrome tab
 
 ```bash
 # Step 1: List all tabs to find the right one
@@ -338,7 +338,7 @@ screencapture -x -l "$WINID" ~/.claude/assets/screenshots/chrome-tab.png
 # Read ~/.claude/assets/screenshots/chrome-tab.png
 ```
 
-### Example 5 — Switch Space, capture, come back
+### Example 5: Switch Space, capture, come back
 
 ```bash
 osascript -e 'tell application "System Events" to key code 19 using control down'
@@ -348,7 +348,7 @@ osascript -e 'tell application "System Events" to key code 18 using control down
 # Read the snapshot
 ```
 
-### Example 6 — Enumerate all windows and their bounds
+### Example 6: Enumerate all windows and their bounds
 
 ```bash
 bash ~/.claude/scripts/desktop.sh windows
@@ -366,7 +366,7 @@ bash ~/.claude/scripts/desktop.sh windows
 | Can't screenshot background Spaces | Switch to Space first (adds ~400ms delay) |
 | `cliclick` needs Accessibility permission | Grant in System Settings once |
 | Window IDs are ephemeral (change on reopen) | Re-query `osascript` each time |
-| Chrome window ID fails via System Events (-1728) | Use JXA (`osascript -l JavaScript`) — see Window Discovery section |
+| Chrome window ID fails via System Events (-1728) | Use JXA (`osascript -l JavaScript`): see Window Discovery section |
 | Chrome tab switching via AppleScript needs Automation permission | Use JXA `chrome.windows[0].activeTabIndex = N` instead |
 | `tell application "X" to activate` may not front app if another is pinned to all Spaces | Use JXA `proc.frontmost = true` via System Events |
 
@@ -386,7 +386,7 @@ Build the MCP server when any of these are true:
 
 ### Phase 2 Design Spec
 
-The MCP server **wraps Phase 1 shell tools** — it does not replace them. The Bash tool remains the fallback for any operation the MCP doesn't expose.
+The MCP server **wraps Phase 1 shell tools**: it does not replace them. The Bash tool remains the fallback for any operation the MCP doesn't expose.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -410,11 +410,11 @@ The MCP server **wraps Phase 1 shell tools** — it does not replace them. The B
 **MCP server location:** `~/.claude/mcp-servers/desktop-automation/`  
 **Registration:** inject into `.mcp.json` as a global always-on server
 
-**Key difference from v1:** Phase 2 adds `find_text()` which uses image recognition to locate UI elements by their label text — eliminating coordinate guessing.
+**Key difference from v1:** Phase 2 adds `find_text()` which uses image recognition to locate UI elements by their label text: eliminating coordinate guessing.
 
 ### Migration notes
 
 - All Phase 1 shell patterns continue to work after Phase 2 is built
-- Phase 2 MCP tools are additive — use whichever is more convenient per task
+- Phase 2 MCP tools are additive: use whichever is more convenient per task
 - No config changes needed: the Bash tool is always available as fallback
-- To trigger Phase 2 build: "Build the desktop automation MCP" — Claude will read this doc first
+- To trigger Phase 2 build: "Build the desktop automation MCP": Claude will read this doc first

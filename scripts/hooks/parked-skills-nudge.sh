@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# parked-skills-nudge.sh — SessionStart, the owner's two-way parked-skills check.
+# parked-skills-nudge.sh: SessionStart, the owner's two-way parked-skills check.
 #
 # When a session opens in a real project (not the gcc), this asks parked.sh two
 # questions and surfaces the answers as one 🪝 hook box: which parked skills match

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# guard-comment-verbosity.sh — PostToolUse[Edit|Write|MultiEdit], SYNCHRONOUS nudge.
+# guard-comment-verbosity.sh: PostToolUse[Edit|Write|MultiEdit], SYNCHRONOUS nudge.
 #
 # Catches the "code essay" the user keeps hand-pruning: an over-long docstring or
 # a wall of comments that got added this turn. The sibling guard-comment-hygiene
-# (PreToolUse) blocks decorative banners / plan-refs / archeology — the NOISE
+# (PreToolUse) blocks decorative banners / plan-refs / archeology: the NOISE
 # dimension. This one owns the VERBOSITY dimension: length. It nudges (never
 # blocks) so a fuzzy signal can't earn a mute.
 #
@@ -15,8 +15,8 @@
 # Tuned HARD for precision (rules/comments.md: docstrings >8 lines move to a doc):
 # a single-line comment, a 2-4 line docstring, a license header, a structured API
 # doc (@param/@returns), a pragma block (eslint-disable/@ts-/noqa), a decorative
-# banner (comment-hygiene's job — never double-fired here), and a module
-# orientation all pass. "Prose restates the code" is left to the agent — a line
+# banner (comment-hygiene's job: never double-fired here), and a module
+# orientation all pass. "Prose restates the code" is left to the agent: a line
 # regex can't tell an essay from a load-bearing caveat (cleanup-comments/detect.py
 # makes the same call), so length is the only mechanical proxy encoded here.
 #
@@ -47,7 +47,7 @@ case "$FP" in
 esac
 
 # The text this turn is responsible for. For Edit/MultiEdit that's the new_string
-# only — exactly the slice the agent just authored (matches comment-hygiene).
+# only: exactly the slice the agent just authored (matches comment-hygiene).
 NEW_CONTENT=$(echo "$INPUT" | jq -r '
   .tool_input.content
   // .tool_input.new_string

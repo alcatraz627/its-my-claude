@@ -4,7 +4,7 @@
 
 ### The 10 MB Limit
 
-App Clips must be under **10 MB** after App Thinning. This is a hard limit enforced by the system — if exceeded, the App Clip will not launch.
+App Clips must be under **10 MB** after App Thinning. This is a hard limit enforced by the system: if exceeded, the App Clip will not launch.
 
 ### Strategies to Stay Under 10 MB
 
@@ -69,12 +69,12 @@ fi
 
 | Framework | Alternative |
 |-----------|-------------|
-| CallKit | Not available — prompt full app download |
-| HealthKit | Not available — prompt full app download |
-| CareKit | Not available — prompt full app download |
-| HomeKit | Not available — prompt full app download |
-| ResearchKit | Not available — prompt full app download |
-| SensorKit | Not available — prompt full app download |
+| CallKit | Not available: prompt full app download |
+| HealthKit | Not available: prompt full app download |
+| CareKit | Not available: prompt full app download |
+| HomeKit | Not available: prompt full app download |
+| ResearchKit | Not available: prompt full app download |
+| SensorKit | Not available: prompt full app download |
 
 ### Limited in App Clips
 
@@ -83,7 +83,7 @@ fi
 | Background modes | No background fetch, no silent push |
 | Push notifications | Ephemeral notifications only (8-hour window) |
 | Keychain | Data cleared when App Clip data is deleted |
-| File system | Sandbox is temporary — data deleted after inactivity |
+| File system | Sandbox is temporary: data deleted after inactivity |
 
 ## Data Lifecycle
 
@@ -268,7 +268,7 @@ Set the `_XCAppClipURL` environment variable in the App Clip scheme:
 
 1. Edit Scheme > Run > Arguments > Environment Variables
 2. Add: `_XCAppClipURL` = `https://example.com/clip/order?location=store-42`
-3. Run the App Clip target — it will receive the URL on launch
+3. Run the App Clip target: it will receive the URL on launch
 
 ### TestFlight Testing
 
@@ -460,7 +460,7 @@ struct SharedDataManagerTests {
 ## Best Practices
 
 ### Instant Value
-The user tapped an NFC tag or scanned a QR code — they expect immediate results. Every second of delay increases abandonment.
+The user tapped an NFC tag or scanned a QR code: they expect immediate results. Every second of delay increases abandonment.
 
 ```swift
 // ✅ Show UI immediately, load data in background

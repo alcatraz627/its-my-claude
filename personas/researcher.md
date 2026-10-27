@@ -65,7 +65,7 @@ Activate this persona when:
 - "Why does country X play action Y in scenario Z?"
 - "Is the Saudi Arabia posture correct in the Iran war scenario?"
 - "Audit the nuclear deterrence mechanism across all scenarios"
-- "Calibrate Turkey's composite indices — current behavior seems too aggressive"
+- "Calibrate Turkey's composite indices: current behavior seems too aggressive"
 - "Design a new scenario for the South China Sea with realistic phase progression"
 - "Review the Fearon model payoff formula for edge cases"
 - "Add a new country and ensure its indices produce plausible equilibria"

@@ -3,45 +3,45 @@
 <!-- Cross-project memories. scripts/hooks/memory-reach.py injects this index at every session start. See README.md for format. -->
 
 ## User Profile
-- [User Profile](user_profile.md) — Terminal-first macOS developer; vim-style nav; prefers CLI tools and dark mode
+- [User Profile](user_profile.md): Terminal-first macOS developer; vim-style nav; prefers CLI tools and dark mode
 
 ## Reference
 - [Repo census 2026-09-30](reference_repo_census.md): every versable-git and alcatraz627 repo classified with evidence. Reuse it before surveying repos.
 - [Test logins](reference_test-logins.md): Speedway FLIP and F3 accounts, Walmart test account. Read before any browser test or login ask.
 
-## Feedback — Communication & Autonomy
-- [Challenge user requests](feedback_challenge_user_asks.md) — Push back on suboptimal asks; be opinionated, not a yes-machine
-- [Autonomous mode](feedback_autonomous.md) — Prefers fully autonomous operation; batch work, use background agents
-- [No speculative output descriptions](feedback_agent_output_descriptions.md) — Agents producing files: return path only, don't describe visual design
-- [Skip Learn by Doing](feedback_no_learn_by_doing.md) — Don't use scaffolded learning prompts for simple mechanical tasks
-- [Proactive question ownership](feedback_proactive_question_ownership.md) — Own meta-questions (project ceiling, user-stories, safety nets); ASK + RE-ASK + save answers; user explicitly endorses re-asking
+## Feedback: Communication & Autonomy
+- [Challenge user requests](feedback_challenge_user_asks.md): Push back on suboptimal asks; be opinionated, not a yes-machine
+- [Autonomous mode](feedback_autonomous.md): Prefers fully autonomous operation; batch work, use background agents
+- [No speculative output descriptions](feedback_agent_output_descriptions.md): Agents producing files: return path only, don't describe visual design
+- [Skip Learn by Doing](feedback_no_learn_by_doing.md): Don't use scaffolded learning prompts for simple mechanical tasks
+- [Proactive question ownership](feedback_proactive_question_ownership.md): Own meta-questions (project ceiling, user-stories, safety nets); ASK + RE-ASK + save answers; user explicitly endorses re-asking
 
-## Feedback — Task Framing & Scope
-- [Asks keep their context](feedback_asks_keep_context.md) — Never surface an owner ask stripped of its context or merged across work; "I am not a dumb meat proxy"
-- [Maximalist ≠ ambitious](feedback_ambitious_vs_maximalist.md) — Wide-and-flat works for agents; tall-stacked dependent layers fail (tower without spine)
-- [Propose safety nets](feedback_propose_safety_nets.md) — Surface missing safety nets (idempotency, dry-runs, diff previews, undo) ASAP, even on existing projects; over-suggesting is fine, missing is regrettable
+## Feedback: Task Framing & Scope
+- [Asks keep their context](feedback_asks_keep_context.md): Never surface an owner ask stripped of its context or merged across work; "I am not a dumb meat proxy"
+- [Maximalist ≠ ambitious](feedback_ambitious_vs_maximalist.md): Wide-and-flat works for agents; tall-stacked dependent layers fail (tower without spine)
+- [Propose safety nets](feedback_propose_safety_nets.md): Surface missing safety nets (idempotency, dry-runs, diff previews, undo) ASAP, even on existing projects; over-suggesting is fine, missing is regrettable
 
-## Feedback — Workflow, Efficacy & Tool Routing
-- [Efficacy over speed](feedback_efficacy_over_speed.md) — Judge tools/models/agents by efficacy (result-per-user-effort), not tok/s; willing to dedicate resources for ballpark efficacy
-- [Structure over one-shotting](feedback_structure_over_oneshot.md) — One-shotting is a fantasy; a failed one-shot wastes more than plan→implement→review. Default to structure on non-trivial work
-- [Work-routing triad ("just use chatgpt")](user_work_routing_triad.md) — Routes by ease–effort–output: trivial one-offs → ChatGPT/small `lm`; structured heavy work → the agent. "Just use chatgpt" = light task, not a knock on the agent
+## Feedback: Workflow, Efficacy & Tool Routing
+- [Efficacy over speed](feedback_efficacy_over_speed.md): Judge tools/models/agents by efficacy (result-per-user-effort), not tok/s; willing to dedicate resources for ballpark efficacy
+- [Structure over one-shotting](feedback_structure_over_oneshot.md): One-shotting is a fantasy; a failed one-shot wastes more than plan→implement→review. Default to structure on non-trivial work
+- [Work-routing triad ("just use chatgpt")](user_work_routing_triad.md): Routes by ease–effort–output: trivial one-offs → ChatGPT/small `lm`; structured heavy work → the agent. "Just use chatgpt" = light task, not a knock on the agent
 
-## Feedback — Verification & Testing
-- [Always test small sample first](feedback_always_test_small_sample.md) — MANDATORY: test every transform on 2-3 rows before full run
-- [Verify before refactoring](feedback_verify_before_refactoring.md) — Spot-check 2-3 targets against actual code before starting cleanup
-- [Verify imports before reporting](feedback_verify_imports.md) — Check import sites and actual usage before reporting audit findings
-- [Respect human comments](feedback_respect_human_comments.md) — Ask before changing human-commented code; verify each change independently
-- [Test naming conventions](feedback_test_conventions.md) — Prefer generic reusable tests with specific naming conventions
+## Feedback: Verification & Testing
+- [Always test small sample first](feedback_always_test_small_sample.md): MANDATORY: test every transform on 2-3 rows before full run
+- [Verify before refactoring](feedback_verify_before_refactoring.md): Spot-check 2-3 targets against actual code before starting cleanup
+- [Verify imports before reporting](feedback_verify_imports.md): Check import sites and actual usage before reporting audit findings
+- [Respect human comments](feedback_respect_human_comments.md): Ask before changing human-commented code; verify each change independently
+- [Test naming conventions](feedback_test_conventions.md): Prefer generic reusable tests with specific naming conventions
 
-## Feedback — Git & Session
-- [No commit unless asked](feedback_no_commit_unless_asked.md) — Only commit when user says "commit" explicitly; "don't push" means no git ops
-- [Session continuity](feedback_session_continuity.md) — Long sessions with frequent compaction; relies on /catchup and /core-dump
+## Feedback: Git & Session
+- [No commit unless asked](feedback_no_commit_unless_asked.md): Only commit when user says "commit" explicitly; "don't push" means no git ops
+- [Session continuity](feedback_session_continuity.md): Long sessions with frequent compaction; relies on /catchup and /core-dump
 
-## Feedback — Guardrails & Model Temperament
-- [Guardrail mute-risk = FP × cost](feedback_guardrail_mute_risk.md) — Judge a hook by FP-rate × cost-of-a-false-fire, not raw FP; a muted hook enforces nothing, the mute is the model's escape valve
-- [Hooks fuzzy-by-default; hard-blocks earned](feedback_hard_gate_earned.md) — Guardrails default to fuzzy+mutable; deterministic hard-blocks only for vital, near-zero-mismatch actions (commit-in-protected-repo, rm-vs-trash)
-- [Fable vs Opus temperaments](feedback_fable_opus_temperaments.md) — Two temperaments not a ranking: Fable intent-eager/creative, Opus literal/reliable; hold each to a floor then play to type
+## Feedback: Guardrails & Model Temperament
+- [Guardrail mute-risk = FP × cost](feedback_guardrail_mute_risk.md): Judge a hook by FP-rate × cost-of-a-false-fire, not raw FP; a muted hook enforces nothing, the mute is the model's escape valve
+- [Hooks fuzzy-by-default; hard-blocks earned](feedback_hard_gate_earned.md): Guardrails default to fuzzy+mutable; deterministic hard-blocks only for vital, near-zero-mismatch actions (commit-in-protected-repo, rm-vs-trash)
+- [Fable vs Opus temperaments](feedback_fable_opus_temperaments.md): Two temperaments not a ranking: Fable intent-eager/creative, Opus literal/reliable; hold each to a floor then play to type
 
-## Feedback — Technical
-- [Node.js require cache](feedback_require_cache_clearing.md) — Always clear require.cache before re-loading config in pipeline engine
-- [Use uv, avoid context overflow](feedback_uv_context.md) — Use uv package manager; don't load large files into context
+## Feedback: Technical
+- [Node.js require cache](feedback_require_cache_clearing.md): Always clear require.cache before re-loading config in pipeline engine
+- [Use uv, avoid context overflow](feedback_uv_context.md): Use uv package manager; don't load large files into context

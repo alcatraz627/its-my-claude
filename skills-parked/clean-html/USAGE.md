@@ -1,4 +1,4 @@
-# /clean-html — Usage Guide
+# /clean-html: Usage Guide
 
 ## What it does
 
@@ -25,9 +25,9 @@ Strips HTML markup and converts to clean, readable markdown while downloading em
 
 Creates `article/` folder with:
 
-- `article/index.md` — cleaned markdown
-- `article/media/` — any embedded images, PDFs, videos
-- `article/metadata.json` — source info and download log
+- `article/index.md`: cleaned markdown
+- `article/media/`: any embedded images, PDFs, videos
+- `article/metadata.json`: source info and download log
 
 ### Example 2: Fetch and clean a remote page
 
@@ -47,12 +47,12 @@ Creates `my-doc/` folder with cleaned markdown and any embedded media.
 
 ## Caveats
 
-- **Never modifies the original HTML file** — read-only only
-- **Output folder isolated** in current working directory — all files stay together
-- **Media downloads can fail** gracefully — failed URLs are logged in `metadata.json` but don't block the run
+- **Never modifies the original HTML file**: read-only only
+- **Output folder isolated** in current working directory: all files stay together
+- **Media downloads can fail** gracefully: failed URLs are logged in `metadata.json` but don't block the run
 - **Requires clean_html.ts script** to exist at `.claude/skills/clean-html/clean_html.ts`
 - **If HTML is convoluted,** the agent may fall back to manual cleanup instead of using the script
-- **JavaScript and CSS imports are excluded** — only media and document links are downloaded
+- **JavaScript and CSS imports are excluded**: only media and document links are downloaded
 
 ## Dependencies
 
@@ -70,4 +70,4 @@ Creates `my-doc/` folder with cleaned markdown and any embedded media.
 - Use `/clean-html <source>` to quickly convert any HTML to markdown
 - Chain with `/create-report` to turn the cleaned markdown into a polished HTML report
 - Check `metadata.json` to see which media files were downloaded and any failures
-- Output folder contains everything needed — archive the folder to preserve the cleaned content
+- Output folder contains everything needed: archive the folder to preserve the cleaned content

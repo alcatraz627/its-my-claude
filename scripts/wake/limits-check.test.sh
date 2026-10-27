@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# limits-check.test.sh — is it worth waking into the current 5h window?
+# limits-check.test.sh: is it worth waking into the current 5h window?
 #
 # The wake monitor must not burn the user's last quota on self-checks. It cannot
 # schedule against the window's reset, because Claude Code sends
-# resets_at=9999999999 when it doesn't know one — the sentinel IS the message.
+# resets_at=9999999999 when it doesn't know one: the sentinel IS the message.
 # So the only honest signal is how full the window already is, and this is the
 # thing that reads it.
 #
@@ -65,7 +65,7 @@ r=$(run '{"5h":{"pct":null},"resets_at":"9999999999"}')
 
 echo
 echo "== numbers the writer might plausibly emit =="
-# bash -ge cannot compare "43.5" — it aborts. A float must floor, not blind the check.
+# bash -ge cannot compare "43.5": it aborts. A float must floor, not blind the check.
 r=$(run '{"5h":{"pct":43.5},"resets_at":"9999999999"}')
 [ "${r%% *}" = "OPEN" ] && ok "float 43.5 -> OPEN (floored, not UNKNOWN)" || bad "float gave '$r', want OPEN"
 r=$(run '{"5h":{"pct":97.9},"resets_at":"9999999999"}')
@@ -81,7 +81,7 @@ echo
 echo "== magnitudes big enough to break the comparison itself =="
 # jq renders >=16-digit numbers in scientific notation (1e+16). If that reaches the
 # `-ge` it errors, the if reads false, and control falls through to the
-# unconditional OPEN at the bottom — confident headroom off a comparison that never
+# unconditional OPEN at the bottom: confident headroom off a comparison that never
 # ran. This case is what pins the character-class check; without it, weakening that
 # check to only-reject-empty leaves the suite green (validator finding, 2026-07-17).
 r=$(run '{"5h":{"pct":9999999999999999},"resets_at":"9999999999"}')
@@ -91,7 +91,7 @@ r=$(run '{"5h":{"pct":999999999999999},"resets_at":"9999999999"}')
 
 echo
 echo "== jq's own non-numbers (the deny-list's blind spot) =="
-# `jq -rn 'nan|floor'` emits `null` — FOUR characters, under the length bound. The
+# `jq -rn 'nan|floor'` emits `null`: FOUR characters, under the length bound. The
 # shipped script fell through this to exit 0 with no verdict at all: the length
 # guard was written believing jq's shortest non-digit output was "1e+16" (5 chars).
 # It enumerated big integers and generalised. Every case here is one that
@@ -114,7 +114,7 @@ rm -rf "$T"
 echo
 echo "== a broken threshold must not fail OPEN =="
 # The bug this replaced: a digit-string too long for a 64-bit int passed the
-# junk filter, aborted `-ge`, and fell through to OPEN exit 0 — a typo turning the
+# junk filter, aborted `-ge`, and fell through to OPEN exit 0: a typo turning the
 # guard off silently.
 thr() { # $1 threshold, $2 pct  -> "verdict exit"
   local T; T=$(mktemp -d); printf '{"5h":{"pct":%s}}' "$2" > "$T/.limits.json"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# sl-cli.sh — Statusline CLI dispatcher
+# sl-cli.sh: Statusline CLI dispatcher
 # Usage: sl-cli.sh <config|explain|audit> [args...]
-# This script is the 0-LLM entry point — no Claude involvement.
+# This script is the 0-LLM entry point: no Claude involvement.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

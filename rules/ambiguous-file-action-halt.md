@@ -68,5 +68,5 @@ instruction. Stop and confirm.
 2026-05-31: user pointed me at `~/mac-migration/HANDOFF-RESPONSE-i-dream.md` to
 save a handoff, and the path already held the other agent's 61-line response. I
 overwrote it (via a same-block Read+Write race), then restored from the Read
-output. User: "I did not tell you what to do with that file — halt and get my
+output. User: "I did not tell you what to do with that file: halt and get my
 confirmation when the action is ambiguous."

@@ -19,9 +19,9 @@ The Energy Impact gauge shows a composite score:
 
 | Level | Score | Meaning |
 |-------|-------|---------|
-| Low | 0-3 | Good — minimal battery drain |
+| Low | 0-3 | Good: minimal battery drain |
 | Medium | 3-8 | Acceptable for active use, not idle |
-| High | 8+ | Investigate — significant drain |
+| High | 8+ | Investigate: significant drain |
 | Overhead | Red bar | System overhead from your app |
 
 ### Component Breakdown
@@ -281,7 +281,7 @@ Access in **Xcode > Window > Organizer > Energy**:
 - Shows energy reports from **real users** via TestFlight and App Store
 - Breaks down by: CPU, Location, Display, Network, GPU, Accessories
 - Filter by app version to track regressions
-- Shows **background energy** separately — critical for battery complaints
+- Shows **background energy** separately: critical for battery complaints
 
 ## Energy Optimization Checklist
 
@@ -289,7 +289,7 @@ Access in **Xcode > Window > Organizer > Energy**:
 - [ ] No polling timers without `tolerance` set
 - [ ] Background work uses `BGTaskScheduler`, not continuous timers
 - [ ] Heavy computation offloaded and cancellable
-- [ ] Idle state truly idle — no periodic wake-ups without reason
+- [ ] Idle state truly idle: no periodic wake-ups without reason
 
 ### Network
 - [ ] Requests batched when possible (single endpoint > multiple calls)

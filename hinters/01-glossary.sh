@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# 01-glossary.sh — steering-vocabulary hinter.
+# 01-glossary.sh: steering-vocabulary hinter.
 #
 # When the user's prompt contains a User Shorthand term (efficacy, overindex,
 # pragmatic, ...), inject its one-line canonical meaning so every session hears
-# the word the way the user means it — the activation half of the vocabulary
+# the word the way the user means it: the activation half of the vocabulary
 # pipeline (the glossary bake is the storage half; see
 # conventions/preference-graduation.md).
 #
@@ -60,7 +60,7 @@ END {
 HITTERMS=${RESULT%%$'\t'*}
 echo "${RESULT#*$'\t'}"
 
-# usage ledger: one line per matched term (ts, term, session) — read by
+# usage ledger: one line per matched term (ts, term, session): read by
 # glossary-decay.sh for the dormancy review. Never let it break hinting.
 {
     HITLOG="${GLOSSARY_HITLOG:-$HOME/.claude/style/glossary-hit-log.tsv}"

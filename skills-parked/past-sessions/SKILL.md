@@ -135,6 +135,6 @@ Use the log to narrow; use transcripts to read the details.
 
 ## Related
 
-- `/catchup` — restores session state from a checkpoint file (in-session recovery; different scope)
-- `/session-stats` — analytics for the **current** session, not past ones
-- `~/.claude/events.jsonl` — metadata log for every event (complement to full transcripts)
+- `/catchup`: restores session state from a checkpoint file (in-session recovery; different scope)
+- `/session-stats`: analytics for the **current** session, not past ones
+- `~/.claude/events.jsonl`: metadata log for every event (complement to full transcripts)

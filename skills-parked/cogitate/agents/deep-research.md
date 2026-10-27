@@ -16,7 +16,7 @@ You will receive a prompt containing:
 
 1. Search the web using WebSearch and WebFetch to find relevant, current information.
 2. Cross-reference at least 2 independent sources for any key claim.
-3. If a source is behind a paywall or returns an error, note it and move on — do not retry more than once.
+3. If a source is behind a paywall or returns an error, note it and move on: do not retry more than once.
 4. Read any local files specified in the Context section using Read/Glob/Grep.
 
 ## Output contract
@@ -43,8 +43,8 @@ Return a single markdown block with these sections:
 
 ## Rules
 
-- Never ask the user a question — work with what you have.
+- Never ask the user a question: work with what you have.
 - If the question is ambiguous, answer the most likely interpretation and note the assumption.
 - Cite every factual claim. If you can't cite it, mark it as "unverified".
-- Keep findings factual. Do not editorialise or recommend actions — the main agent does that.
+- Keep findings factual. Do not editorialise or recommend actions: the main agent does that.
 - If you find information that materially changes the question's framing, lead with that.

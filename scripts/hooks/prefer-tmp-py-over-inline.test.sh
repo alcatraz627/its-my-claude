@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# prefer-tmp-py-over-inline.test.sh — nudge behaviour + heed measurement.
+# prefer-tmp-py-over-inline.test.sh: nudge behaviour + heed measurement.
 #
 # The hook nudges on a multi-line inline `python3 -c`, then measures whether the
 # agent's NEXT python run switched to a script file (heeded) or went inline again

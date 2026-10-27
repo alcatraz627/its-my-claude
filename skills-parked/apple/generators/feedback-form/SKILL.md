@@ -1,6 +1,6 @@
 ---
 name: feedback-form
-description: Generates an in-app feedback collection form with category selection, text input, optional screenshot attachment, device diagnostics, and smart routing — directing happy users to App Store reviews and unhappy users to support. Use when user wants feedback, bug reports, feature requests, or contact support forms.
+description: Generates an in-app feedback collection form with category selection, text input, optional screenshot attachment, device diagnostics, and smart routing, directing happy users to App Store reviews and unhappy users to support. Use when user wants feedback, bug reports, feature requests, or contact support forms.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
@@ -35,7 +35,7 @@ Grep: "MFMailComposeViewController" or "FeedbackForm" or "SKStoreReviewControlle
 
 If third-party feedback SDK found (Instabug, UserVoice, Zendesk):
 - Ask if user wants to replace or keep it
-- If keeping, don't generate — advise on best practices instead
+- If keeping, don't generate: advise on best practices instead
 
 ### 3. Framework Detection
 Check for MessageUI availability:
@@ -54,23 +54,23 @@ Ask user via AskUserQuestion:
    - General Feedback
    - Praise
    - Other
-   - All of the above — recommended
+   - All of the above: recommended
 
 2. **Delivery method?**
    - Email (via MFMailComposeViewController / NSSharingService)
    - Webhook (POST to a URL endpoint)
-   - Both — recommended
+   - Both: recommended
 
 3. **Include screenshot capture?**
-   - Yes — recommended (capture current screen + annotation overlay)
+   - Yes: recommended (capture current screen + annotation overlay)
    - No
 
 4. **Include device diagnostics?**
-   - Yes — recommended (device model, OS, app version, disk, memory)
+   - Yes: recommended (device model, OS, app version, disk, memory)
    - No
 
 5. **Sentiment routing?**
-   - Yes — recommended (rating >= 4 suggests App Store review, rating <= 2 routes to support)
+   - Yes: recommended (rating >= 4 suggests App Store review, rating <= 2 routes to support)
    - No (all feedback goes through the same channel)
 
 ## Generation Process
@@ -80,19 +80,19 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `FeedbackCategory.swift` — Enum with SF Symbol icons and display names
-2. `FeedbackEntry.swift` — Data model for a feedback submission
-3. `DeviceDiagnostics.swift` — Collects device and app info
+1. `FeedbackCategory.swift`: Enum with SF Symbol icons and display names
+2. `FeedbackEntry.swift`: Data model for a feedback submission
+3. `DeviceDiagnostics.swift`: Collects device and app info
 
 ### Step 3: Create UI Files
-4. `FeedbackFormView.swift` — SwiftUI form with sentiment, category, message, screenshots
+4. `FeedbackFormView.swift`: SwiftUI form with sentiment, category, message, screenshots
 
 ### Step 4: Create Delivery Files
-5. `FeedbackSubmitter.swift` — Protocol + EmailFeedbackSubmitter + WebhookFeedbackSubmitter
+5. `FeedbackSubmitter.swift`: Protocol + EmailFeedbackSubmitter + WebhookFeedbackSubmitter
 
 ### Step 5: Create Optional Files
 Based on configuration:
-- `ScreenshotCapture.swift` — If screenshot capture selected
+- `ScreenshotCapture.swift`: If screenshot capture selected
 
 ### Step 6: Determine File Location
 Check project structure:
@@ -264,5 +264,5 @@ if entry.suggestsAppStoreReview {
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/review-prompt` — App Store review prompt timing and strategy
+- **templates.md**: All production Swift templates
+- Related: `generators/review-prompt`: App Store review prompt timing and strategy

@@ -33,7 +33,7 @@
 
   // ─── Shared module initialization ──────────────────────────────────────────
   if (window.__RPT) {
-    // Theme toggle — corporate defaults to light
+    // Theme toggle: corporate defaults to light
     __RPT.initThemeToggle('.theme-toggle', { defaultTheme: 'light' });
 
     // Code dialog for expand buttons

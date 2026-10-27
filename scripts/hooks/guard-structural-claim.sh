@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# guard-structural-claim.sh — Stop hook: a GROUNDING GATE, not an error detector.
+# guard-structural-claim.sh: Stop hook: a GROUNDING GATE, not an error detector.
 #
-# When the agent's final message asserts how a subsystem works — authority /
-# source-of-truth / call-chain / an external tool's behavior / a dependency claim —
+# When the agent's final message asserts how a subsystem works: authority /
+# source-of-truth / call-chain / an external tool's behavior / a dependency claim:
 # and this turn shows NO grounding (no in-message cite AND no Read/Grep of the named
 # subject), the gate fires. A fire forces the agent to SYNC WITH THE FILESYSTEM
 # before proceeding.
@@ -12,12 +12,12 @@
 # worse when things are MISSED." So this gate's value is FORCED GROUNDING, not
 # true-positive yield:
 #   - A false FIRE (the claim was actually right) is ACCEPTABLE when a grounding
-#     read was possible and simply wasn't done — the sync is the point.
+#     read was possible and simply wasn't done: the sync is the point.
 #   - A fire is BAD only when grounding is IMPOSSIBLE (person/team owns; external
 #     behavior already looked up) or ALREADY DONE (subject read/edited this turn,
 #     a file:line cited, a run verified). Those are the carve-outs.
 # Anti-paralysis comes from LOOP-SAFETY (block once per claim sentence, then step
-# aside) — NOT from silencing. The block is kept because a nudge forces nothing.
+# aside): NOT from silencing. The block is kept because a nudge forces nothing.
 #
 # Backstop for atone `structural-claim-without-reading-code` (S3, #1 recurring).
 #
@@ -39,7 +39,7 @@
 #
 # Response (stakes-scaled, loop-safe on the MATCHED CLAIM SENTENCE):
 #   - docs-only turn (no code edited)      → systemMessage (never a block, never
-#                                            silent — grounding still valued in design)
+#                                            silent: grounding still valued in design)
 #   - high-stakes repo + code edited       → decision:block once, then step aside
 #   - low-stakes                           → systemMessage
 # Mute: touch ~/.claude/.no-structural-claim-gate
@@ -69,19 +69,19 @@ WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
 # ── SHIP-GATE RESULTS (full-corpus replay over 923 transcripts / 2958 turns,
 # 2026-07-02; see assets/reports/20260702-hook-lanes/lane4-structural-claim.md).
 # Baseline (old live hook): 31 fires (27 BLOCK / 4 SOFT), ~0 TP by error-detection.
-#   authority : SHIP. Final corpus: 4 fires (0 BLOCK / 4 SOFT) — all 4 hand-read as
+#   authority : SHIP. Final corpus: 4 fires (0 BLOCK / 4 SOFT): all 4 hand-read as
 #               GROUNDABLE (0% pointless); the person/meta/verified/grounded subset
 #               correctly drops, the design-from-memory authoring fires stay. The
 #               owns/mints branch is KEPT (drives those valued authoring fires).
-#               (BLOCK is reachable — proven by fixtures — but no high-stakes
+#               (BLOCK is reachable: proven by fixtures: but no high-stakes
 #               blind-in-code turn exists in this corpus, consistent with the
 #               empirical 0/48-TP finding.)
 #   callchain : HOLD (default-off). Restricted (subject+verb+checkable object,
 #               "calls" dropped as a noun homograph) it fires 0 MARGINAL times on
-#               the corpus — its prior fires were all "tool calls"/"N calls" noun
+#               the corpus: its prior fires were all "tool calls"/"N calls" noun
 #               matches. Nothing to validate; kept precise for opt-in. Enable:
 #               STRUCTCLAIM_SHAPES=authority,callchain
-#   extmech   : HOLD (default-off). 1 corpus fire — cannot validate a ≥10 sample;
+#   extmech   : HOLD (default-off). 1 corpus fire: cannot validate a ≥10 sample;
 #               adversarial flagged framework-behavior prose ("React renders").
 #               -i bug fixed (matched case-sensitively). Enable to test.
 #   manifest  : HOLD (default-off). 0 corpus fires; "dependency" homograph risk.
@@ -109,7 +109,7 @@ else
 fi
 [ -n "$turn_json" ] || exit 0
 
-# ── Final assistant message text — the claim lives here.
+# ── Final assistant message text: the claim lives here.
 # Taken from the Stop input's last_assistant_message, because the transcript tail
 # lags one message at Stop time (hook_last_assistant_text in hook-common.sh).
 # turn_json stays the source of tool evidence only.
@@ -117,12 +117,12 @@ text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 
 # ── Regexes ──────────────────────────────────────────────────────────────────
-# ①a AUTHORITY — present-tense authority predicates. owns/mints KEPT (drives the
+# ①a AUTHORITY: present-tense authority predicates. owns/mints KEPT (drives the
 #    authoring fires the philosophy values). E5 PERSON_RX + the authoring read-gate
 #    are what tame the owns/mints homograph, not deletion of the branch.
 AUTHORITY_RX='\bis the (authority|source of truth|final (check|word|authority|arbiter)|only (writer|owner|source)|hot path|canonical (source|owner)|single source of truth)\b|\b(owns|mints|minted|is the only thing that writes) the\b|\bis the only (writer|owner|authority) (of|for|on)\b|\b(is|are)\s+(just|merely|only)\s+a\s+(jwt|cookie|cache( hit| lookup)?|single (function|call|query)|thin wrapper|getter|setter|no-?op)\b'
 
-# ①e DEPLOY — a limit asserted about deploys, CI, pipelines or infrastructure.
+# ①e DEPLOY: a limit asserted about deploys, CI, pipelines or infrastructure.
 #    Three forms, each needing a blocker word so a plain mention of deploying
 #    ("I'll deploy after review") never matches:
 #      A  can't / must wait / blocked ... deploy|go live|ship|release ... because|until|needs
@@ -135,45 +135,45 @@ DEPLOY_RX='\b(can(no|'\''?)t|cannot|won'\''t|will not|unable to|must wait|have t
 # read does not ground a claim about how the deploy path works.
 DEPLOYREAD_RX='deploy|cloudbuild|\.github/|workflows?/|dockerfile|makefile|terraform|\.tf\b|pipeline|\.gitlab-ci|circleci|render\.ya?ml|fly\.toml|procfile|cicd|\bci\b|release|gcloud|kubectl|helm|wrangler|vercel|netlify'
 
-# ①b CALLCHAIN — SUBJECT + flow verb + a CHECKABLE object (backtick span /
+# ①b CALLCHAIN: SUBJECT + flow verb + a CHECKABLE object (backtick span /
 #    snake_case / path / file.ext). Two restrictions vs the design draft, both from
 #    the adversarial review: (a) the object must be read-gate-matchable (no generic
 #    "the handler"); (b) a SUBJECT (pronoun / `the <noun>` / Name / backtick) must
 #    precede the verb, so noun usages ("tool calls", "six calls", "2-3 calls") do
-#    NOT match. Default-OFF (see ship-gate results) — kept precise anyway.
-# "calls" is deliberately dropped from the verb list — it is the dominant noun
+#    NOT match. Default-OFF (see ship-gate results): kept precise anyway.
+# "calls" is deliberately dropped from the verb list: it is the dominant noun
 # homograph ("tool calls", "six calls", "2-3 calls") and even a capitalized-noun
 # subject anchor ("Tool calls collapse") slips past. The remaining verbs are rarely
 # nouns. Subject prefix still required.
 CALLCHAIN_RX='\b(it|this|which|that|the [a-z][a-zA-Z]+|[A-Z][a-zA-Z0-9]+|`[^`]+`)\s+(hits|consumes|invokes|reads from|writes to|routes? (to|through)|goes through|feeds into|is consumed by|dispatched to|delegates to|proxies to)\b[^.\n]{0,40}?(`[^`]+`|\b[a-z][a-z0-9]*(_[a-z0-9]+)+\b|\b[A-Za-z0-9_]+/[A-Za-z0-9_./-]+\b|\b[a-zA-Z0-9_-]+\.(py|ts|tsx|js|jsx|go|rs|swift|rb|sh)\b)'
 
-# ①c EXTERNAL-MECHANISM — Capitalized service token + behavior verb. Run
+# ①c EXTERNAL-MECHANISM: Capitalized service token + behavior verb. Run
 #    CASE-SENSITIVELY (the capital is the ONLY anchor; the -i bug that defeated it
 #    is fixed by matching this shape with `rg -P`, no -i).
 EXTMECH_RX='\b([A-Z][a-zA-Z0-9]{2,}(\.[a-z]+)?) (renders?|supports?|returns?|handles?|interprets?|strips?|escapes?|parses?|accepts?|serializes?|validates?)\b'
 
-# ①d DEPENDENCY-MANIFEST — dependency / manifest-membership claims.
+# ①d DEPENDENCY-MANIFEST: dependency / manifest-membership claims.
 MANIFEST_RX='\bis (a |an )?(direct |transitive |dev )?(dependency|dep)\b|\bis (already |still )?(installed|in (package\.json|Cargo\.toml|go\.mod|requirements\.txt|pyproject\.toml|Gemfile|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|go\.sum))\b|\bnpm (un)?install\b'
 
-# ② clearing carve-outs (silent — grounding present or impossible)
+# ② clearing carve-outs (silent: grounding present or impossible)
 CITE_RX='[A-Za-z0-9_./-]+\.[A-Za-z0-9]+:[0-9]+|\[UN(VERIFIED|CONFIRMED)\]'
 VERIFY_RX='\b(confirmed|verified|verifications? (pass|passed)|all (checks|verifications) pass|checks pass|i (ran|read|grepped|opened|checked|traced|inspected)|read all [0-9]+|read [0-9]+ (files|hunks)|after reading|tests? (pass|passed|green)|built (and|,) tested|tested (it|live|and|against)|ran it|launchctl|\bPID [0-9]+|exit[- ]status [0-9]|:build\b|eslint green|ts:build|built, tested|code[- ]truth)\b'
-# E5 person/team/ROLE ownership — "owns" here is responsibility, not a code
+# E5 person/team/ROLE ownership: "owns" here is responsibility, not a code
 # mechanism, so grounding is impossible. PERSON_RX is the adjacency form; PERSON2_RX
 # catches a Claude/human ROLE within 50 chars of "owns" (non-adjacent), added after a
 # pointless BLOCK on a tool-less juror: "the supervising agent that dispatched this
 # juror call and owns the atone event pipeline". Code entities (worker/daemon/
-# service) are deliberately NOT roles — "the worker owns the queue" is a groundable
+# service) are deliberately NOT roles: "the worker owns the queue" is a groundable
 # code claim, not responsibility.
-# "owner" is deliberately NOT a role here — in a state-ownership DESIGN "the owner"
+# "owner" is deliberately NOT a role here: in a state-ownership DESIGN "the owner"
 # is a code module, and clearing on it silences the exact authoring fire we want.
 PERSON_RX='\b(whoever|the (team|person|dev|developer|maintainer)|someone) (that |who )?owns\b'
 PERSON2_RX='\b(agent|juror|supervisor|parent|caller|sub-process|the team|the person|maintainer|developer|whoever|someone)\b[^.\n]{0,50}\bowns\b'
-# "owned by <Name>/@handle" — human/team attribution. Matched CASE-SENSITIVELY (the
+# "owned by <Name>/@handle": human/team attribution. Matched CASE-SENSITIVELY (the
 # capital IS the anchor; -i makes it match "owned by the output-data hook", a code
-# entity — the same -i-defeats-capital bug the extmech shape had).
+# entity: the same -i-defeats-capital bug the extmech shape had).
 OWNEDBY_RX='\bowned by (@|[A-Z][a-z])'
-# META must be genuinely about THIS pattern/gate. A bare "this hook" is dropped — it
+# META must be genuinely about THIS pattern/gate. A bare "this hook" is dropped: it
 # matches React hooks in ordinary design prose ("this hook holds a map …").
 META_RX='structural-claim|AUTHORITY_RX|CALLCHAIN_RX|EXTMECH_RX|MANIFEST_RX|atone pattern|the atone|guard-structural|this (structural-claim|grounding)[- ](gate|hook)|(gate|hook) (would )?fire on the (pattern|claim|authority)'
 
@@ -184,7 +184,7 @@ BTPATH_RX='`[^`]*[A-Za-z0-9_-]+/[A-Za-z0-9_./-]+\.[A-Za-z0-9]+[^`]*`'
 #    state-ownership map). Detected on the whole message.
 # Box-drawing arrows (──►/─►) are always ownership/dataflow diagrams → authoring.
 # A plain prose arrow "→" is authoring ONLY when it sits within 50 chars of an
-# ownership word ("owns X → Y"), never on its own — the bare "→" appears in
+# ownership word ("owns X → Y"), never on its own: the bare "→" appears in
 # ordinary prose ("changed → unchanged") and mis-routed non-authoring claims into
 # the authoring branch (skipping the E2 clear).
 AUTHORING_RX='\|[^|]*\b(owner|owns|authority|writer|owned)\b[^|]*\||──►|──?►|─►|->[[:space:]]*(hook|owns)|\bowns?\b[^\n]{0,50}→|→[^\n]{0,50}\bowns?\b|\b(should|will|would|propose[ds]?|plan(ned)? to|let'\''s have|going to) (own|be the (owner|authority|source)|act as)\b|state[- ]ownership map|ownership[- ]first|owns? its (data|state|shape|wiring)'
@@ -192,7 +192,7 @@ AUTHORING_RX='\|[^|]*\b(owner|owns|authority|writer|owned)\b[^|]*\||──►|�
 CODE_RE='\.(py|ts|tsx|js|jsx|mjs|cjs|go|rs|swift|rb|java|kt|c|cc|cpp|h|hpp|sh|sql|vue|svelte|scala|php|lua)([^a-zA-Z0-9]|$)'
 MAN_RE='(package\.json|Cargo\.toml|go\.mod|requirements\.txt|pyproject\.toml|Gemfile|package-lock\.json|yarn\.lock|pnpm-lock\.yaml|go\.sum)'
 
-# ── Stage ① — first matching sentence of the first enabled shape ─────────────
+# ── Stage ①: first matching sentence of the first enabled shape ─────────────
 segs_file=$(mktemp 2>/dev/null) || segs_file="/tmp/sc-segs-$$"
 printf '%s' "$text" | rg -oP '[^.!?\n]+[.!?]?' > "$segs_file" 2>/dev/null || true
 
@@ -212,7 +212,7 @@ done
 rm -f "$segs_file" 2>/dev/null || true
 [ -n "$klass" ] || exit 0
 
-# ── Stage ② — clearing carve-outs on the whole message (silent) ──────────────
+# ── Stage ②: clearing carve-outs on the whole message (silent) ──────────────
 for rx in "$CITE_RX" "$VERIFY_RX" "$PERSON_RX" "$PERSON2_RX" "$META_RX"; do
   printf '%s' "$text" | rg -qiP "$rx" 2>/dev/null && exit 0
 done
@@ -257,7 +257,7 @@ fi
 manifest_read=0
 printf '%s\n' "$read_targets" | rg -qiP "$MAN_RE" 2>/dev/null && manifest_read=1
 
-# ── Stage ③ — read-gate ──────────────────────────────────────────────────────
+# ── Stage ③: read-gate ──────────────────────────────────────────────────────
 authoring=0
 printf '%s' "$text" | rg -qiP "$AUTHORING_RX" 2>/dev/null && authoring=1
 
@@ -304,7 +304,7 @@ fi
 #                                          EXISTING code, the canonical S3).
 #   blind fire, edited only docs/config  → SOFT (M11 docs-only demotion)
 #   blind fire, high-stakes (code edited
-#     OR nothing edited — a bare analysis
+#     OR nothing edited: a bare analysis
 #     turn asserting architecture blind)  → BLOCK (the forcing sync)
 #   blind fire, low-stakes               → SOFT
 stakes=$(bash "$HOME/.claude/scripts/stakes-tier.sh" "$cwd" 2>/dev/null || echo low)
@@ -332,7 +332,7 @@ emit_block() { jq -cn --arg r "⛔ structural-claim (grounding gate) — $body" 
   [ -x "$WARN" ] && bash "$WARN" --hook structural-claim --action block --heeded unknown >/dev/null 2>&1 || true; }
 
 if ! hook_loop_check "$MARK" "$claim_sentence"; then
-  # Same claim sentence as the last Stop — step aside (never trap).
+  # Same claim sentence as the last Stop: step aside (never trap).
   [ "$base" = "block" ] && emit_soft   # a would-be block demotes to a visible note
   exit 0                                # a would-be soft goes silent on repeat
 fi

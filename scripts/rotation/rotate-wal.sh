@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# rotate-wal.sh — archive wal.jsonl when it grows large.
+# rotate-wal.sh: archive wal.jsonl when it grows large.
 #
 # Wired as a Stop hook (async, fire-and-forget). Behavior mirrors rotate-events.sh:
 #   - Rotates BOTH the global ~/.claude/wal.jsonl AND any project-local .claude/wal.jsonl
 #     discovered from the session's CWD (the Stop hook receives the CWD in its JSON input).
-#   - If size < THRESHOLD (default 5MB — WAL is smaller than events by nature), exit 0.
+#   - If size < THRESHOLD (default 5MB: WAL is smaller than events by nature), exit 0.
 #   - Otherwise:
 #       - Compute date range from first/last ts.
 #       - Move to ~/.claude/assets/backups/wal-archive/wal-<project>-<first>_<last>.jsonl.gz
@@ -76,7 +76,7 @@ rotate_one() {
 }
 
 # Same idea for the markdown WAL. The header is the first two lines
-# ("# WAL — …" and the keep-policy comment); the body after them is archived
+# ("# WAL \u2014 …" and the keep-policy comment); the body after them is archived
 # and the header is written back so /catchup and the shell-mem hooks find the
 # file shape they expect.
 rotate_md() {

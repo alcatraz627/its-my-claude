@@ -168,8 +168,8 @@ Severity 3/10 + WEAK opportunity = months of wasted effort. If it's a learning p
 ## Best Practices
 
 1. **Always produce JSON output** for structured analysis
-2. **Read the recommendation field first** — it's the most important
+2. **Read the recommendation field first**: it's the most important
 3. **Provide platform and target user** when known for better results
-4. **Trust "don't build" verdicts** — the analysis is designed to be honest
+4. **Trust "don't build" verdicts**: the analysis is designed to be honest
 5. **Compare multiple ideas** before committing to one
 6. **Use web research** to validate assumptions about competitors and market

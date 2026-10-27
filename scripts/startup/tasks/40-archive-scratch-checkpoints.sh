@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 40-archive-scratch-checkpoints.sh — std::claude::startup task.
+# 40-archive-scratch-checkpoints.sh: std::claude::startup task.
 #
 # Moves root-level _YYYYMMDD-*.claude.md scratch checkpoints older than
 # RETAIN_DAYS into ~/.claude/assets/checkpoints/YYYYMM/. Preserves the
@@ -13,7 +13,7 @@
 #   accumulation = noise; archival is reversible.
 #
 # Rationale (per conventions/scratch-files.md): "monthly archive to
-# assets/checkpoints/YYYYMM/" — this task implements that.
+# assets/checkpoints/YYYYMM/": this task implements that.
 
 set -uo pipefail
 

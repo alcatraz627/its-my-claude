@@ -30,7 +30,7 @@ if [ ! -f "$PATTERNS_FILE" ]; then
 fi
 
 # Hand the scan off to claude --print non-interactively. The prompt is
-# self-contained — the agent reads the file inline rather than relying on
+# self-contained: the agent reads the file inline rather than relying on
 # any session context.
 PROMPT=$(cat <<'EOF'
 You are doing the weekly mistake-patterns graduation scan.
@@ -91,7 +91,7 @@ fi
     "$CLAUDE_BIN" --print "$PROMPT" 2>&1
 } > "$OUTPUT"
 
-# Surface a notification (osascript — UN crashes for unbundled processes).
+# Surface a notification (osascript: UN crashes for unbundled processes).
 osascript -e "display notification \"Report at ~/.claude/topics/mistake-patterns-graduation-$TODAY.md\" with title \"Mistake patterns scan complete\" sound name \"Glass\"" 2>/dev/null || true
 
 echo "✓ Wrote $OUTPUT"

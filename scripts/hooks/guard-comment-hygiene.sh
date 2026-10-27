@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# guard-comment-hygiene.sh — PreToolUse hook on Edit/Write/MultiEdit.
+# guard-comment-hygiene.sh: PreToolUse hook on Edit/Write/MultiEdit.
 #
 # Warns, at write time, when the content about to land carries comment-style
 # smells: tier-1 archeology ([claude@] tags, plan refs, pre/post-fix notes,
 # banners), emoji AI-tells, or a long comment block (an essay that should be a
 # doc). The existing cleanup-comments-nudge.sh catches archeology at end-of-turn;
 # this catches it BEFORE the write, naming the finding, so it's fixed before it
-# lands. Em-dash is deliberately not flagged (legitimate prose punctuation).
+# lands. Em-dash is flagged as advisory (zero budget, owner ruling D4a 2026-10-27).
 #
 # Graduated from atone slug source-comment-hygiene (S3, persisting despite
 # rules/comments.md). Filed as proposals.jsonl prop-20260531-120409-8a.
@@ -17,7 +17,7 @@
 #     (plan-ref, archeology, or a pure decorative-rule line) → BLOCK the write so
 #     the noise can't land. [claude@] agent-note blocks (permitted by
 #     rules/comments.md), em-dash, emoji, and long-comment-block are NEVER
-#     blocked — they stay advisory, because each can be legitimate.
+#     blocked: they stay advisory, because each can be legitimate.
 #   - everything else (low-stakes, or only ambiguous findings) → the original
 #     advisory additionalContext note, exit 0.
 # (This file used to be advisory in ALL repos; the MAGI atone-recurrence
@@ -52,7 +52,7 @@ case "$FP" in
 esac
 
 # The content about to be written, per tool. For Edit/MultiEdit this is just
-# the new text — exactly the slice the agent is responsible for this turn.
+# the new text: exactly the slice the agent is responsible for this turn.
 NEW_CONTENT=""
 case "$TOOL" in
   Write)     NEW_CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty') ;;
@@ -70,23 +70,22 @@ mv "$probe" "$probe_ext" 2>/dev/null || { rm -f "$probe"; exit 0; }
 trap 'rm -f "$probe_ext"' EXIT
 printf '%s' "$NEW_CONTENT" >"$probe_ext" 2>/dev/null || exit 0
 
-# Mechanical strip findings (tier1) + emoji (a near-pure AI-tell — humans rarely
-# emoji source comments). Em-dash is deliberately excluded: it's legitimate prose
-# punctuation, so flagging it floods with false positives. Report the matched
-# text, not a line number (for Edit the number is snippet-relative).
+# Mechanical strip findings (tier1), emoji, and em-dash. The em-dash budget is
+# zero in comments as everywhere else (owner ruling D4a, 2026-10-27). Report the
+# matched text, not a line number (for Edit the number is snippet-relative).
 detect_json=$(python3 "$DETECT" "$probe_ext" 2>/dev/null)
 
-# Advisory findings (unchanged): all tier1 noise + emoji. Listed in the note.
+# Advisory findings: all tier1 noise, emoji and em-dash. Listed in the note.
 findings=$(printf '%s' "$detect_json" | jq -r '
   .files[]?.findings[]?
-  | select(.tier == "tier1_strip" or (.tier == "tier2_voice" and .category == "emoji"))
+  | select(.tier == "tier1_strip" or (.tier == "tier2_voice" and (.category == "emoji" or .category == "em-dash")))
   | "    [\(.category)] \(.text)"' 2>/dev/null)
 
-# Blockable subset: ONLY unambiguous noise — plan-refs, archeology, and pure
+# Blockable subset: ONLY unambiguous noise: plan-refs, archeology, and pure
 # decorative-rule lines. Deliberately EXCLUDES claude-tag (rules/comments.md
 # permits [claude@] agent-note blocks), any finding sharing a line with a
 # [claude@] tag (a sanctioned agent-note that merely mentions a phase), labelled
-# banners (keep their label), emoji, and long blocks — each can be legitimate.
+# banners (keep their label), emoji, and long blocks: each can be legitimate.
 blockable=$(printf '%s' "$detect_json" | jq -r '
   .files[]?.findings[]?
   | select(.tier == "tier1_strip"
@@ -138,7 +137,7 @@ msg="[comment-hygiene] new content for $(basename "$FP") has comment-style smell
 $report_body
 rules/comments.md: strip archeology (plan refs, [claude@] tags, banners), drop emoji/AI-tells, move long comment blocks (>8 lines) to a doc. (mute: touch ~/.claude/.comment-hygiene-off)"
 
-# additionalContext (stdout JSON) → the agent — the only non-blocking channel any
+# additionalContext (stdout JSON) → the agent: the only non-blocking channel any
 # audience reads (user-transcript channels are all invisible; see
 # hooks-tui-limits). The directive makes the agent relay this to the user.
 msg="$msg

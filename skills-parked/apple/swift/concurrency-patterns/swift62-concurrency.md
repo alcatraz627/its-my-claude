@@ -160,7 +160,7 @@ nonisolated struct ImageExporter {
 }
 ```
 
-## @concurrent — Explicit Background Execution
+## @concurrent: Explicit Background Execution
 
 When you need true parallelism (CPU-heavy work off the main thread), use `@concurrent`:
 

@@ -30,7 +30,7 @@ import sys
 DOC_MAX = int(os.environ.get("COMMENT_VERBOSITY_DOC_MAX", "10"))
 # Fire on a run of >10 consecutive full-line comments. Started at 8; corpus replay
 # showed 9-line runs are routinely legitimate (a cache-key explanation, a file
-# header, a reference table), so tightened to 10 for precision — a genuinely-needed
+# header, a reference table), so tightened to 10 for precision: a genuinely-needed
 # long explanation must not fire.
 RUN_MAX = int(os.environ.get("COMMENT_VERBOSITY_RUN_MAX", "10"))
 # A module/file-header block explaining the whole file is legitimately longer than

@@ -1,4 +1,4 @@
-# Help modal scroll parity — baseline before the 2026-08-22 hierarchy work
+# Help modal scroll parity: baseline before the 2026-08-22 hierarchy work
 
 Owner constraint, verbatim: *"the modal title and tab stay as is without any
 scroll hiccups (there are none right now, don't cause a mess here)"*.
@@ -33,7 +33,7 @@ Repeat the same measurement after any help-modal change. Every `title moved` and
 and body must still not scroll. A non-zero cell is the hiccup the owner is
 protecting against.
 
-## Re-run 1 — after the table-hierarchy and sticky-reference work, same SHA
+## Re-run 1: after the table-hierarchy and sticky-reference work, same SHA
 
 | Tab | title moved | tabs moved | band above pinned head | rows bleeding through |
 |---|---|---|---|---|
@@ -59,7 +59,7 @@ measured. The bleed was neither uniform nor invisible, so flush wins.
 Recorded because the reasoning was sound and the measurement still disagreed with
 it, which is the whole reason this file takes numbers rather than intentions.
 
-## Re-run 2 — after the two-column keyboard, the Hey Claude move, and the Charter tab
+## Re-run 2: after the two-column keyboard, the Hey Claude move, and the Charter tab
 
 | Tab | pane really scrolled | scroll range | title moved | tabs moved |
 |---|---|---|---|---|
@@ -85,7 +85,7 @@ modal is open, and each pane's `scrollTop` actually advanced. The verdict is
 taken only over tabs where both held. That is why the table above carries a
 "pane really scrolled" column rather than leaving it implied.
 
-## Re-run 3 — after the untouched-UA-margin fix on term headings
+## Re-run 3: after the untouched-UA-margin fix on term headings
 
 All five tabs genuinely scrolled; title moved 0px and tabs moved 0px on every
 one; body still does not scroll. **Parity holds.**
@@ -95,7 +95,7 @@ carrying about 18px of browser-default `h4` margin that nobody had set. Recorded
 here because a scroll range changing is exactly the kind of side effect this
 check exists to notice, and in this case it was the intended one.
 
-## Re-run 2 — after design-system pass 2b (radius ladder), 2026-08-24
+## Re-run 2: after design-system pass 2b (radius ladder), 2026-08-24
 
 `#help .box` went from a 12px corner to `var(--r-panel)` (10px). Nothing else in
 the modal changed. All five tabs, each pane scrolled to `scrollHeight`:

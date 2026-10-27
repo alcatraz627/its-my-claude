@@ -4,7 +4,7 @@ The top 20 App Store rejection reasons, organized by guideline. For each: what t
 
 ## Guideline 2.1: App Completeness
 
-### 2.1 — Crashes
+### 2.1: Crashes
 
 **What triggers it:** App crashes during review, on launch, or during core flows. Apple tests on current-generation devices with the latest OS.
 
@@ -24,7 +24,7 @@ The issue was caused by [root cause]. Build [X.X (XX)] includes
 the fix, verified on iPhone 15 Pro / iOS 18.2.
 ```
 
-### 2.1 — Broken Links or Placeholder Content
+### 2.1: Broken Links or Placeholder Content
 
 **What triggers it:** Links that 404, screens that say "Coming Soon", lorem ipsum text, test data visible in the UI.
 
@@ -44,7 +44,7 @@ This feature has been removed from the current release and will
 be included in a future update when fully implemented.
 ```
 
-### 2.1 — Missing Demo Account
+### 2.1: Missing Demo Account
 
 **What triggers it:** App requires login but no test credentials were provided in App Review Notes.
 
@@ -66,7 +66,7 @@ full access to all app features.
 
 ## Guideline 2.3: Accurate Metadata
 
-### 2.3 — Misleading Description or Screenshots
+### 2.3: Misleading Description or Screenshots
 
 **What triggers it:** Screenshots don't match the current app UI, description promises features that don't exist, or marketing overstates capabilities.
 
@@ -86,7 +86,7 @@ Screenshot 3 has been replaced with an accurate representation
 of the [feature name] screen as it appears in this build.
 ```
 
-### 2.3 — Keyword Stuffing or Misleading Keywords
+### 2.3: Keyword Stuffing or Misleading Keywords
 
 **What triggers it:** Irrelevant keywords in the keyword field, competitor names, category names, or misleading terms.
 
@@ -108,7 +108,7 @@ app's features and functionality.
 
 ## Guideline 2.5.1: Software Requirements
 
-### 2.5.1 — Private API Usage
+### 2.5.1: Private API Usage
 
 **What triggers it:** App calls private Apple frameworks or undocumented APIs. Apple's static analysis detects these automatically.
 
@@ -117,7 +117,7 @@ app's features and functionality.
 
 **How to fix:**
 - Search your codebase for the cited API name
-- Check third-party SDKs and libraries — they often contain private API calls
+- Check third-party SDKs and libraries: they often contain private API calls
 - Replace with public alternatives
 - Update any outdated libraries that may use deprecated private APIs
 - Use `nm` or `otool` on your binary to check for private symbols
@@ -131,7 +131,7 @@ version [X.X] that uses only public APIs.
 
 ## Guideline 3.1.1: In-App Purchase
 
-### 3.1.1 — Digital Goods Not Using IAP
+### 3.1.1: Digital Goods Not Using IAP
 
 **What triggers it:** App sells digital content, features, or subscriptions through external payment processors (Stripe, PayPal, etc.) instead of Apple's In-App Purchase.
 
@@ -152,7 +152,7 @@ IAPs through StoreKit 2. External payment references have been
 removed.
 ```
 
-### 3.1.1 — Directing Users to External Purchase
+### 3.1.1: Directing Users to External Purchase
 
 **What triggers it:** App includes language, buttons, or links encouraging users to purchase outside the app (even if IAP is also offered).
 
@@ -174,7 +174,7 @@ removed. All digital purchases now go through IAP exclusively.
 
 ## Guideline 3.1.2: Subscriptions
 
-### 3.1.2 — Subscription Requirements
+### 3.1.2: Subscription Requirements
 
 **What triggers it:** Subscription doesn't provide ongoing value, unclear pricing terms, no way to manage subscription in-app, or auto-renewal terms not clearly communicated.
 
@@ -199,7 +199,7 @@ management.
 
 ## Guideline 4.0: Design
 
-### 4.0 — Not Enough Native UI / Web Wrapper
+### 4.0: Not Enough Native UI / Web Wrapper
 
 **What triggers it:** App is primarily a web view wrapping an existing website without meaningful native functionality.
 
@@ -226,7 +226,7 @@ These features require a native app and cannot be delivered
 through a website alone.
 ```
 
-### 4.0 — Poor UI Quality
+### 4.0: Poor UI Quality
 
 **What triggers it:** App has obviously unfinished UI, uses no standard iOS patterns, has layout issues, or looks unprofessional.
 
@@ -250,7 +250,7 @@ and supports Dynamic Type and Dark Mode.
 
 ## Guideline 4.2: Minimum Functionality
 
-### 4.2 — App Is Too Simple
+### 4.2: App Is Too Simple
 
 **What triggers it:** App provides functionality that could be achieved with a bookmark, a simple website, or is too basic for the App Store.
 
@@ -294,7 +294,7 @@ use case] that demonstrates its value to users.
 
 ## Guideline 4.3: Spam
 
-### 4.3 — Duplicate or Template Apps
+### 4.3: Duplicate or Template Apps
 
 **What triggers it:** App is substantially similar to other apps you've submitted, appears to be generated from a template without meaningful customization, or copies another developer's app.
 
@@ -320,7 +320,7 @@ These apps serve different user segments: [App 1] targets
 
 ## Guideline 5.1.1: Data Collection and Storage
 
-### 5.1.1 — Missing Privacy Policy
+### 5.1.1: Missing Privacy Policy
 
 **What triggers it:** App collects any user data but doesn't provide a privacy policy URL, or the URL leads to a dead page.
 
@@ -340,7 +340,7 @@ collection, usage, and sharing practices in the app. The URL
 has been added to App Store Connect.
 ```
 
-### 5.1.1 — Excessive Data Collection
+### 5.1.1: Excessive Data Collection
 
 **What triggers it:** App collects data that isn't necessary for its core functionality, or collects data without clear user consent.
 
@@ -363,7 +363,7 @@ requests [remaining permissions] which are required for
 
 ## Guideline 5.1.2: Data Use and Sharing
 
-### 5.1.2 — App Tracking Transparency
+### 5.1.2: App Tracking Transparency
 
 **What triggers it:** App tracks users across apps/websites without presenting the ATT prompt first, or collects IDFA without the ATT framework.
 
@@ -386,7 +386,7 @@ is collected for tracking purposes until explicit consent is
 granted.
 ```
 
-### 5.1.2 — Privacy Nutrition Label Mismatch
+### 5.1.2: Privacy Nutrition Label Mismatch
 
 **What triggers it:** The privacy labels declared in App Store Connect don't match the app's actual data collection practices.
 
@@ -409,7 +409,7 @@ third-party SDKs to ensure complete disclosure.
 
 ## Guideline 5.2.1: Legal Requirements
 
-### 5.2.1 — Local Law Compliance
+### 5.2.1: Local Law Compliance
 
 **What triggers it:** App content or functionality violates laws in specific territories (gambling, health claims, age restrictions, financial regulations).
 

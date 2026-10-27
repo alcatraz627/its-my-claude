@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# group.sh — a named set of sessions working one goal, with the things a lane kept
+# group.sh: a named set of sessions working one goal, with the things a lane kept
 # losing on its own: the goal every member reads, the store each lane's rows live
 # in, the authority line that says what may be decided alone, and one address.
 #

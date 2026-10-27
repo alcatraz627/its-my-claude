@@ -45,7 +45,7 @@ regimes, and each regime gets a different logging strategy:
    adopt"** section (observable cues, not intent-guessing).
 2. **A persona-suggest hint (proposed, P4 mechanism).** A `UserPromptSubmit` hinter (same
    pipeline as `features/hinter-pipeline.md`) that matches the prompt against each persona's
-   trigger keywords and, on a strong match, injects one line: *"This looks like X — consider
+   trigger keywords and, on a strong match, injects one line: *"This looks like X: consider
    adopting `~/.claude/personas/X.md`."* It is advisory, deduped per session and muteable. This is the
    only way a working-mode persona gets picked up *proactively* rather than on explicit ask.
 

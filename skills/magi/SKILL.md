@@ -305,7 +305,7 @@ in the run:
    but their register must NOT leak into this report. Before drafting, load
    `~/.claude/style/derived/prose.md` + `structure.md` and write to those
    verdicts (per finding: symptom → impact → path → detail; caveats verbatim
-   `conventions/report-writing.md`).
+   `conventions/doc-writing.md` §16).
 2. **Gate before the user sees it.** Dispatch the readers-advocate persona
    (`~/.claude/personas/readers-advocate.md`, sonnet) on the drafted report,
    apply or consciously reject its findings, and log the pass via

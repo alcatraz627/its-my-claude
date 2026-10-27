@@ -51,13 +51,13 @@ fire() {                                  # fire <hook> <cmd> [home] -> FIRE|SIL
 ok()   { pass=$((pass+1)); echo "  ok   $1"; }
 bad()  { fail=$((fail+1)); echo "  FAIL $1"; }
 
-# invocation <hook> <label> <cmd> — a real call must still fire
+# invocation <hook> <label> <cmd>: a real call must still fire
 invocation() {
   local got; got=$(fire "$1" "$3")
   [ "$got" = FIRE ] && ok "$1 · $2 still fires" || bad "$1 · $2 went silent (guard disarmed)"
 }
 
-# mention <hook> <label> <cmd> — quoted prose must be silent NOW and loud BEFORE
+# mention <hook> <label> <cmd>: quoted prose must be silent NOW and loud BEFORE
 mention() {
   local now before; now=$(fire "$1" "$3"); before=$(fire "$1" "$3" "$BARE")
   if [ "$before" != FIRE ]; then
@@ -87,7 +87,7 @@ f'"'"' instead"'
 
 # The weld case the replaced perl/sed blankers got wrong: deleting a quoted span
 # joins its neighbours, so vi'x'te read as a `vite` launch. Blanking to spaces of
-# equal length keeps the boundary. No pre-migration control here — the old perl
+# equal length keeps the boundary. No pre-migration control here: the old perl
 # also produced silence, by a different and wrong route.
 echo "== token welding (regression on the replaced blankers) =="
 got=$(fire guard-dev-server-port "rg 'vi''te' /tmp/x")

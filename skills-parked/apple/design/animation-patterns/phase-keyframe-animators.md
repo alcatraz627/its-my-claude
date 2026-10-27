@@ -17,7 +17,7 @@ PhaseAnimator(
 )
 ```
 
-**Critical:** The content closure receives **two** parameters — the content proxy and the current phase. Not just the phase.
+**Critical:** The content closure receives **two** parameters: the content proxy and the current phase. Not just the phase.
 
 ### Auto-Advancing (Continuous Loop)
 
@@ -71,7 +71,7 @@ struct NotificationBadge: View {
 
 ### Using an Array of Values
 
-Phases don't have to be an enum — any `Equatable` sequence works:
+Phases don't have to be an enum: any `Equatable` sequence works:
 
 ```swift
 PhaseAnimator([0.0, 1.0, 0.5, 1.0]) { content, opacity in
@@ -323,7 +323,7 @@ LinearKeyframe(1.0, duration: 0.3)
 
 ## CustomAnimation Protocol (iOS 17+)
 
-For entirely custom animation curves. Rarely needed — prefer built-in springs and timing curves.
+For entirely custom animation curves. Rarely needed: prefer built-in springs and timing curves.
 
 ```swift
 struct CustomBounce: CustomAnimation {

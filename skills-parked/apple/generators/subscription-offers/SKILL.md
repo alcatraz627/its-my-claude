@@ -1,6 +1,6 @@
 ---
 name: subscription-offers
-description: Generates StoreKit 2 code for all subscription offer types — introductory, promotional, offer codes, and win-back. Includes eligibility checks, offer presentation, and the preferredSubscriptionOffer modifier. Use when adding subscription offers, free trials, or promotional pricing.
+description: Generates StoreKit 2 code for all subscription offer types, introductory, promotional, offer codes, and win-back. Includes eligibility checks, offer presentation, and the preferredSubscriptionOffer modifier. Use when adding subscription offers, free trials, or promotional pricing.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
@@ -93,32 +93,32 @@ Read `templates.md` for all offer implementation code.
 
 ### Step 2: Create Core Files
 
-1. **SubscriptionOfferManager.swift** — Central offer management
+1. **SubscriptionOfferManager.swift**: Central offer management
    - Offer eligibility checking for all types
    - Offer presentation logic
    - Transaction handling for offer purchases
 
-2. **OfferEligibility.swift** — Eligibility verification
+2. **OfferEligibility.swift**: Eligibility verification
    - Introductory offer eligibility (`isEligibleForIntroOffer`)
    - Promotional offer eligibility (your business logic)
    - Win-back offer eligibility (iOS 18+)
 
-3. **OfferConfiguration.swift** — Offer type definitions and configuration
+3. **OfferConfiguration.swift**: Offer type definitions and configuration
 
 ### Step 3: Create UI Files (conditional)
 
-4. **OfferBannerView.swift** — Contextual offer banners
+4. **OfferBannerView.swift**: Contextual offer banners
    - Shows appropriate offer based on user state
    - Introductory offer for new users
    - Promotional offer for at-risk subscribers
    - Win-back offer for churned subscribers
 
-5. **OfferCodeRedemptionView.swift** — Offer code entry UI (if offer codes selected)
+5. **OfferCodeRedemptionView.swift**: Offer code entry UI (if offer codes selected)
 
 ### Step 4: Create Optional Files
 
-6. **OfferSignatureProvider.swift** — Server-side signature handling (if promotional offers)
-7. **OfferAnalytics.swift** — Track offer impression, tap, and conversion events
+6. **OfferSignatureProvider.swift**: Server-side signature handling (if promotional offers)
+7. **OfferAnalytics.swift**: Track offer impression, tap, and conversion events
 
 ### Step 5: Determine File Location
 ```
@@ -197,7 +197,7 @@ if let bestOffer = winBackOffers.first {
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/win-back-offers` — Dedicated win-back flow skill
-- Related: `generators/paywall-generator` — Full paywall with offer integration
-- Related: `app-store/marketing-strategy` — Strategic offer planning
+- **templates.md**: All production Swift templates
+- Related: `generators/win-back-offers`: Dedicated win-back flow skill
+- Related: `generators/paywall-generator`: Full paywall with offer integration
+- Related: `app-store/marketing-strategy`: Strategic offer planning

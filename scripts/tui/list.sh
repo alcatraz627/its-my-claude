@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# list.sh — show what std::claude::tui provides, scanned live from the modules.
+# list.sh: show what std::claude::tui provides, scanned live from the modules.
 #
-# It reads the `# tui_name … — description` doc-header above each public function
+# It reads the `# tui_name …: description` doc-header above each public function
 # (and each module's own header), so the catalog can't drift from the code the way
 # a hand-written list does. Run it whenever you're about to build/touch a TUI:
 #
@@ -21,7 +21,7 @@ for f in "$DIR"/*.sh; do
   [ "$base" = "list.sh" ] && continue
   # public-function doc headers: lines beginning "# tui_<name>"
   hdrs="$(grep -E '^# tui_[a-z_]+' "$f" 2>/dev/null || true)"
-  # file-preview is exec'd, not sourced — surface its contract from its usage line
+  # file-preview is exec'd, not sourced: surface its contract from its usage line
   if [ -z "$hdrs" ] && [ "$base" = "file-preview.sh" ]; then
     hdrs="# file-preview.sh <path> — rich bounded preview (jq/bat/xlsx-sheets → head), always exits 0"
   fi

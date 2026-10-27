@@ -22,7 +22,7 @@ now=$(date +%s)
 
 write_meta() { [[ -n "${GCC_SCHED_META:-}" ]] && printf '%s\n' "$@" > "$GCC_SCHED_META"; return 0; }
 
-# Cadence gate — skip if <14 days since the last recorded run.
+# Cadence gate: skip if <14 days since the last recorded run.
 if [[ -f "$STAMP" ]]; then
   last=$(cat "$STAMP" 2>/dev/null || echo 0)
   elapsed=$(( now - last ))

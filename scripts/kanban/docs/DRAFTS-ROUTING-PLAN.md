@@ -40,7 +40,7 @@ session's ipc inbox, and the response names who received it.
 Proof: `drafts.html:338` flips the button to "Offered" on a successful PATCH,
 which only records the flag. Nothing checks whether anyone can see it.
 Fixed when: offering to a recipient who is not live returns and displays
-"nobody live — it will wait in their inbox", and offering to nobody at all is
+"nobody live: it will wait in their inbox", and offering to nobody at all is
 refused rather than accepted.
 
 **P4 · There is no inbox, only a per-project sweep.**
@@ -114,7 +114,7 @@ Delivery { draftId, to, at, ok, sent: string[], reason?: string }
 D7 is the one to write first. It is the only directive whose failure is silent
 and whose blast radius is the owner's private text going to the wrong reader.
 
-## Parity ledger — what must not change
+## Parity ledger: what must not change
 
 | Behaviour | Why it is load-bearing | Check |
 |---|---|---|

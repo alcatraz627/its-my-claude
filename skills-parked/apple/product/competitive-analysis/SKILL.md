@@ -19,7 +19,7 @@ Use this Skill when the user wants to:
 - Map market positioning
 - Deep-dive after initial problem discovery
 
-**This is a follow-up to the product-agent skill** — use this when you need more competitive depth.
+**This is a follow-up to the product-agent skill**: use this when you need more competitive depth.
 
 ## What This Skill Does
 

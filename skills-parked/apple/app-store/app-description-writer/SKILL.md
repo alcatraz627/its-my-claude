@@ -138,7 +138,7 @@ a smarter way to manage your day.
 ## Localization Tips
 
 When localizing descriptions:
-- Don't just translate—adapt to cultural context
+- Don't just translate: adapt to cultural context
 - Research local competitors' descriptions
 - Adjust feature emphasis by market
 - Use native speakers for review

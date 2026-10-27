@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sl-config.sh — Show active statusline configuration
+# sl-config.sh: Show active statusline configuration
 # Usage: sl-config.sh [--profile <name>] [--raw]
 
 CONF="${HOME}/.claude/statusline.conf"
@@ -31,7 +31,7 @@ seg_color() {
   esac
 }
 
-# Parse the active profile into a temp file (bash 3.2 compatible — no declare -A)
+# Parse the active profile into a temp file (bash 3.2 compatible: no declare -A)
 _TMP_CONF=$(mktemp)
 trap "rm -f '$_TMP_CONF'" EXIT
 

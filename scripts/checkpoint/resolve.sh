@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# checkpoint/resolve.sh — Resolve which checkpoint /catchup should use.
+# checkpoint/resolve.sh: Resolve which checkpoint /catchup should use.
 #
 # Resolution order:
 #   1. --session-id ID       → ~/.claude/checkpoints/<id>.json if exists
@@ -20,7 +20,7 @@
 #   2  ambiguous (caller should run list.sh and prompt)
 #   3  none found
 #
-# Used by /catchup. Keep dumb — picker UX lives in the skill, not here.
+# Used by /catchup. Keep dumb: picker UX lives in the skill, not here.
 
 set -uo pipefail
 
@@ -47,7 +47,7 @@ case "$MODE" in
     if [[ -f "$f" ]]; then cat "$f"; exit 0; fi
     # Collision-preserved pointers: <slug>.<uuid8>.json (written by write.sh when
     # a later session reused the slug). Serve the newest whose recorded session_id
-    # actually equals the query — the glob alone would also match the PRIMARY
+    # actually equals the query: the glob alone would also match the PRIMARY
     # pointer of a different session whose dotted slug starts with "$safe."
     # (querying "web" must not silently serve "web.api").
     newest=""; n=0
@@ -89,7 +89,7 @@ print(lines[-n] if n <= len(lines) else '', end='')
     ;;
   auto)
     [[ -f "$INDEX" ]] || {
-      # No new index — fall back to legacy if it's fresh.
+      # No new index: fall back to legacy if it's fresh.
       [[ -f "$LEGACY" ]] || exit 3
       age=$(( $(date +%s) - $(stat -f %m "$LEGACY") ))
       (( age < 1800 )) && { cat "$LEGACY"; exit 0; }

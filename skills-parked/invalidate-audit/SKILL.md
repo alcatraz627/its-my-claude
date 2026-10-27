@@ -1,6 +1,6 @@
 ---
 name: invalidate-audit
-description: Scans all useM and useMutation calls in src/ and reports any missing QueryKeys invalidation in their onSuccess callback — catching stale-data risks with file:line references. Project-specific: requires TanStack Query with useM/useMutation pattern.
+description: Scans all useM and useMutation calls in src/ and reports any missing QueryKeys invalidation in their onSuccess callback: catching stale-data risks with file:line references. Project-specific: requires TanStack Query with useM/useMutation pattern.
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep
 user-invocable: true
@@ -10,7 +10,7 @@ context: fork
 
 ## Brief
 
-Finds every `useM(` and `useMutation(` call in the codebase and checks whether its `onSuccess` (or `onSettled`) callback includes a `queryClient.invalidateQueries` call. Reports mutations with missing cache invalidation — the most common source of stale UI data. Read-only, never modifies files.
+Finds every `useM(` and `useMutation(` call in the codebase and checks whether its `onSuccess` (or `onSettled`) callback includes a `queryClient.invalidateQueries` call. Reports mutations with missing cache invalidation: the most common source of stale UI data. Read-only, never modifies files.
 
 # Invalidate Audit
 
@@ -29,14 +29,14 @@ unmatched project, and never from ~/.claude itself.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
 
-> This skill is read-only — it acquires no locks and modifies no files.
+> This skill is read-only: it acquires no locks and modifies no files.
 
 ## Usage
 
@@ -50,9 +50,9 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Find All Mutation Hooks
+## Phase 1: Find All Mutation Hooks
 
-### 1.1 — Grep for mutation calls
+### 1.1: Grep for mutation calls
 
 Scan `src/` (or `path` if provided) for mutation hook usage:
 
@@ -67,7 +67,7 @@ Deduplicate the file lists. Print:
   Found N files containing mutation hooks.
 ```
 
-### 1.2 — Locate each call within its file
+### 1.2: Locate each call within its file
 
 For each file found, run:
 
@@ -79,25 +79,25 @@ Record every line number where a mutation hook call starts.
 
 ---
 
-## Phase 2 — Check for Cache Invalidation
+## Phase 2: Check for Cache Invalidation
 
 For each mutation call found:
 
-### 2.1 — Read surrounding context
+### 2.1: Read surrounding context
 
 Read the file from the mutation's start line through approximately 50 lines later. This window captures the full mutation configuration object including `onSuccess`, `onError`, `onSettled`, and `mutationFn`.
 
-### 2.2 — Classify the mutation
+### 2.2: Classify the mutation
 
 | Finding                                                               | Classification                                       |
 | --------------------------------------------------------------------- | ---------------------------------------------------- |
-| `// no-invalidate` comment inside the mutation                        | **SKIP** — intentionally suppressed                  |
-| `onSuccess` or `onSettled` with `invalidateQueries` or `resetQueries` | **PASS** — cache properly invalidated                |
-| `onSettled` with `invalidateQueries` (instead of `onSuccess`)         | **PASS** — acceptable pattern                        |
-| `onSuccess` present, no `invalidateQueries` or `resetQueries`         | **WARNING** — stale data risk                        |
-| No `onSuccess` or `onSettled` callback at all                         | **WARNING** — mutations should invalidate on success |
+| `// no-invalidate` comment inside the mutation                        | **SKIP**: intentionally suppressed                  |
+| `onSuccess` or `onSettled` with `invalidateQueries` or `resetQueries` | **PASS**: cache properly invalidated                |
+| `onSettled` with `invalidateQueries` (instead of `onSuccess`)         | **PASS**: acceptable pattern                        |
+| `onSuccess` present, no `invalidateQueries` or `resetQueries`         | **WARNING**: stale data risk                        |
+| No `onSuccess` or `onSettled` callback at all                         | **WARNING**: mutations should invalidate on success |
 
-### 2.3 — Extract mutation identifier for the report
+### 2.3: Extract mutation identifier for the report
 
 Try to identify the mutation by:
 
@@ -107,7 +107,7 @@ Try to identify the mutation by:
 
 ---
 
-## Phase 3 — Output Report
+## Phase 3: Output Report
 
 Source gum-tui.sh and render using panels. Render only sections that have data:
 
@@ -147,8 +147,8 @@ If all mutations are clean: call `gum_success "All mutations have proper cache i
 
 ## Notes
 
-- Read-only — never modifies any files.
-- Uses `context: fork` — runs in isolated context.
+- Read-only: never modifies any files.
+- Uses `context: fork`: runs in isolated context.
 - Add `// no-invalidate` comment inside a `useM()` or `useMutation()` call to suppress the warning for fire-and-forget mutations (e.g., analytics pings, logging calls, one-way notifications).
-- `useM` is the project-preferred wrapper over raw `useMutation`. Raw `useMutation` calls are also scanned — flag them as a secondary concern.
-- `onSettled` with `invalidateQueries` is treated as equivalent to `onSuccess` — both invalidate the cache on completion.
+- `useM` is the project-preferred wrapper over raw `useMutation`. Raw `useMutation` calls are also scanned: flag them as a secondary concern.
+- `onSettled` with `invalidateQueries` is treated as equivalent to `onSuccess`: both invalidate the cache on completion.

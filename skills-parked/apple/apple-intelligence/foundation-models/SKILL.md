@@ -365,7 +365,7 @@ do {
 
 ### Get Context Size Programmatically
 
-Don't hardcode `4096` — query the model at runtime:
+Don't hardcode `4096`: query the model at runtime:
 
 ```swift
 let model = SystemLanguageModel.default
@@ -570,4 +570,4 @@ Before shipping:
 - [Tool calling](https://developer.apple.com/documentation/FoundationModels/expanding-generation-with-tool-calling)
 - [HIG: Generative AI](https://developer.apple.com/design/human-interface-guidelines/technologies/generative-ai)
 - [TN3193: Managing the on-device foundation model's context window](https://developer.apple.com/documentation/technotes/tn3193-managing-the-on-device-foundation-model-s-context-window)
-- [Tracking token usage in Foundation Models](https://artemnovichkov.com/blog/tracking-token-usage-in-foundation-models) — Artem Novichkov
+- [Tracking token usage in Foundation Models](https://artemnovichkov.com/blog/tracking-token-usage-in-foundation-models): Artem Novichkov

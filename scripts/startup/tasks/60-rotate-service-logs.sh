@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# 60-rotate-service-logs.sh — Keep local service logs to a 2-week window.
+# 60-rotate-service-logs.sh: Keep local service logs to a 2-week window.
 #
 # Policy (owner, 2026-08-06: "retention of 2 weeks, I don't need older logs locally"):
 #   - a tracked log over --min-size is rotated to <name>.<YYYYMMDD-HHMM>.gz
 #   - rotations older than --keep-days are deleted
 #
 # These logs are single append-only files, not dated series, so "keep 2 weeks"
-# cannot mean "delete old files" — there are none. It has to mean rotate first,
+# cannot mean "delete old files": there are none. It has to mean rotate first,
 # then expire the rotations. The window therefore starts filling from today.
 #
 # ROTATION SAFETY:

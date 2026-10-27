@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# scripts/checkpoint/retro-dump.sh — Run /core-dump retroactively on ONE session.
+# scripts/checkpoint/retro-dump.sh: Run /core-dump retroactively on ONE session.
 #
 # Spawns: claude -p --resume <uuid> --no-session-persistence
 #         "/core-dump mini --no-prompt --name retroactive-<uuid8>"
 #
 # The --no-session-persistence flag prevents the retro run from creating a NEW
-# transcript entry. The mini mode keeps cost bounded — we just want a structured
+# transcript entry. The mini mode keeps cost bounded: we just want a structured
 # summary, not a deep analysis.
 #
 # A run counts as done only when the checkpoint index gains an entry for it. The
@@ -115,7 +115,7 @@ run_one() {
   fi
   printf '[%s] end retro-dump %s (rc=%d)\n' "$(now_utc)" "$uuid" "$rc" >> "$LOG"
 
-  # Remove queue file regardless — if it failed, we don't keep retrying forever.
+  # Remove queue file regardless: if it failed, we don't keep retrying forever.
   # Add to a failed/ subdir for inspection.
   if [[ -n "$queue_file" && -f "$queue_file" ]]; then
     if (( rc == 0 )); then

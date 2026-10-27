@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# resolve-claude-path.sh — resolve a path relative to the correct .claude/ dir.
+# resolve-claude-path.sh: resolve a path relative to the correct .claude/ dir.
 #
 # Prevents the ".claude/.claude/" double-nesting bug when CWD is ~/.claude itself.
 # Source this file, then call resolve_claude_path with a relative path.
@@ -16,7 +16,7 @@
 #   4. Fallback: return $HOME/.claude/<path>
 #
 # Environment:
-#   CLAUDE_CONFIG_DIR — override the global config dir (default: $HOME/.claude)
+#   CLAUDE_CONFIG_DIR: override the global config dir (default: $HOME/.claude)
 
 CLAUDE_CONFIG_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
@@ -37,7 +37,7 @@ resolve_claude_path() {
         return
     fi
 
-    # Project-local .claude/ exists — use it
+    # Project-local .claude/ exists: use it
     if [[ -d "./.claude" ]]; then
         echo "./.claude/$rel"
         return

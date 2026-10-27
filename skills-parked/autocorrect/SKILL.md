@@ -1,10 +1,10 @@
 ---
 name: autocorrect
-description: Manage the autocorrect typo-correction dictionaries — view/edit mappings, review correction logs, teach new corrections, and check stats. Use to inspect or tune the autocorrect hinter that runs on every prompt.
+description: Manage the autocorrect typo-correction dictionaries, view/edit mappings, review correction logs, teach new corrections, and check stats. Use to inspect or tune the autocorrect hinter that runs on every prompt.
 user-invocable: true
 ---
 
-# /autocorrect — Manage Typo Correction Dictionaries
+# /autocorrect: Manage Typo Correction Dictionaries
 
 ## Brief
 
@@ -33,11 +33,11 @@ Manage the autocorrect pipeline: view/edit dictionaries, review correction logs,
 
 Read `~/.claude/skills/GUIDELINES.md`. Apply all rules for the duration of this skill run.
 
-## Phase 1 — Parse Subcommand
+## Phase 1: Parse Subcommand
 
 Parse the args string. If no subcommand or empty args, default to `stats`.
 
-## Phase 2 — Execute
+## Phase 2: Execute
 
 ### `list [dict]`
 
@@ -107,7 +107,7 @@ If no dict specified, show a summary of all three: entry count and last 5 entrie
    - Dictionary sizes (custom-terms, typo-map, blacklist)
 3. Use `gum table` for the top-words table
 
-## Phase 3 — Completion
+## Phase 3: Completion
 
 Print a one-line status and offer related actions:
 
@@ -120,5 +120,5 @@ Options: list, add <word>, teach <a>=<b>, ignore <word>, log, test <sentence>
 - Dictionary files are plain text, one entry per line, `#` comments supported
 - The autocorrect hinter runs as part of the hint-injector pipeline on every UserPromptSubmit
 - Corrections are additive (injected as additionalContext), never rewrite the prompt
-- Log file: `~/.claude/.autocorrect-log.jsonl` — JSONL with ts, sid, orig, corrected, layer, accepted fields
+- Log file: `~/.claude/.autocorrect-log.jsonl`: JSONL with ts, sid, orig, corrected, layer, accepted fields
 - Latency budget: <50ms total for the hinter (currently ~34ms including Python startup)

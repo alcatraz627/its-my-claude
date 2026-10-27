@@ -50,11 +50,11 @@ Ask user via AskUserQuestion:
    - Both API calls and file uploads
 
 2. **Persistence strategy?**
-   - SwiftData (iOS 17+ / macOS 14+) — structured queries, migration support
-   - File-based (JSON files in app support) — simpler, wider compatibility — recommended
+   - SwiftData (iOS 17+ / macOS 14+): structured queries, migration support
+   - File-based (JSON files in app support): simpler, wider compatibility: recommended
 
 3. **Retry strategy?**
-   - Exponential backoff with jitter — recommended (prevents thundering herd)
+   - Exponential backoff with jitter: recommended (prevents thundering herd)
    - Linear backoff (fixed interval between retries)
    - Immediate (retry as soon as connectivity returns, no delay)
 
@@ -71,17 +71,17 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `OfflineOperation.swift` — Codable model for queued operations
-2. `OfflineQueueManager.swift` — Actor managing enqueue, dequeue, process, retry
-3. `QueuePersistence.swift` — Protocol + file-based implementation for saving operations
-4. `NetworkMonitor.swift` — @Observable wrapper around NWPathMonitor
+1. `OfflineOperation.swift`: Codable model for queued operations
+2. `OfflineQueueManager.swift`: Actor managing enqueue, dequeue, process, retry
+3. `QueuePersistence.swift`: Protocol + file-based implementation for saving operations
+4. `NetworkMonitor.swift`: @Observable wrapper around NWPathMonitor
 
 ### Step 3: Create Policy Files
-5. `RetryPolicy.swift` — Configurable backoff strategy with jitter
+5. `RetryPolicy.swift`: Configurable backoff strategy with jitter
 
 ### Step 4: Create UI Files
-6. `OfflineQueueDashboardView.swift` — Debug view showing queue state and manual controls
-7. `OfflineQueueModifier.swift` — ViewModifier showing "Offline" banner when disconnected
+6. `OfflineQueueDashboardView.swift`: Debug view showing queue state and manual controls
+7. `OfflineQueueModifier.swift`: ViewModifier showing "Offline" banner when disconnected
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -291,7 +291,7 @@ Set a maximum queue size (e.g., 500 operations or 50 MB) to prevent unbounded gr
 
 ## References
 
-- **templates.md** — All production Swift templates
-- **patterns.md** — Offline-first architecture, conflict resolution, idempotency
-- Related: `generators/networking-layer` — Base networking layer to wrap with offline support
-- Related: `generators/http-cache` — Cache GET responses for offline reading
+- **templates.md**: All production Swift templates
+- **patterns.md**: Offline-first architecture, conflict resolution, idempotency
+- Related: `generators/networking-layer`: Base networking layer to wrap with offline support
+- Related: `generators/http-cache`: Cache GET responses for offline reading

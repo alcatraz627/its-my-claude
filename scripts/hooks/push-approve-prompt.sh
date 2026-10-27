@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# push-approve-prompt.sh — the owner approves a gated push by typing one line.
+# push-approve-prompt.sh: the owner approves a gated push by typing one line.
 #
 # guard-git-push.sh blocks a push to main and records a nonce for the session.
 # The owner then types, as an ordinary message from any client (terminal, web,

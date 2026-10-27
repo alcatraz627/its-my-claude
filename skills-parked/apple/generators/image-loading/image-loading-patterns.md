@@ -43,8 +43,8 @@ CachedAsyncImage (SwiftUI View)
 
 - **Automatic eviction** on memory pressure
 - **Thread-safe** without manual locking
-- **Cost-based** — assign cost = byte size of image
-- **Count limit** — cap maximum entries
+- **Cost-based**: assign cost = byte size of image
+- **Count limit**: cap maximum entries
 
 ### Configuration
 
@@ -60,7 +60,7 @@ cache.setObject(image, forKey: key as NSString, cost: cost)
 
 ### Memory Pressure
 
-NSCache automatically evicts objects when the system is under memory pressure. You don't need to handle `UIApplication.didReceiveMemoryWarningNotification` — NSCache does it for you.
+NSCache automatically evicts objects when the system is under memory pressure. You don't need to handle `UIApplication.didReceiveMemoryWarningNotification`: NSCache does it for you.
 
 However, for disk cache, listen for memory warnings to clear the memory layer:
 
@@ -87,10 +87,10 @@ CachesDirectory/
 
 ### Key Design Decisions
 
-1. **Use Caches directory** — system can clear it, not backed up to iCloud
-2. **Hash URL for filename** — SHA-256 avoids path conflicts, special characters
-3. **Track access dates** — for LRU eviction, use file system's content access date
-4. **Background eviction** — don't evict synchronously during load
+1. **Use Caches directory**: system can clear it, not backed up to iCloud
+2. **Hash URL for filename**: SHA-256 avoids path conflicts, special characters
+3. **Track access dates**: for LRU eviction, use file system's content access date
+4. **Background eviction**: don't evict synchronously during load
 
 ### Expiration
 
@@ -149,9 +149,9 @@ actor ImageDownloader {
 
 ### Why an Actor?
 
-- **Thread-safe** — no data races on `activeDownloads`
-- **Serialized access** — checks for existing download before starting new one
-- **Automatic cleanup** — remove completed tasks
+- **Thread-safe**: no data races on `activeDownloads`
+- **Serialized access**: checks for existing download before starting new one
+- **Automatic cleanup**: remove completed tasks
 
 ## Image Processing
 

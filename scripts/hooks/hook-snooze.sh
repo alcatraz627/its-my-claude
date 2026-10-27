@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# hook-snooze.sh — an expiring, scoped, reasoned off-switch for a hook.
+# hook-snooze.sh: an expiring, scoped, reasoned off-switch for a hook.
 #
 # Replaces the machine-wide, no-expiry sentinel files for the tune-able hooks.
 # Ledger: ~/.claude/hooks/snooze.jsonl, one row per snooze:

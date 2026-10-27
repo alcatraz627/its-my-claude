@@ -51,23 +51,23 @@ If a networking layer exists, generate the version checker to use it rather than
 Ask user via AskUserQuestion:
 
 1. **Update check source?**
-   - Remote JSON endpoint (your own server hosts a JSON config) — recommended
+   - Remote JSON endpoint (your own server hosts a JSON config): recommended
    - App Store lookup API (uses iTunes Search API, no server needed)
    - Firebase Remote Config (requires Firebase SDK)
 
 2. **Update types to support?**
    - Hard block only (always force update)
    - Soft prompt only (always dismissible)
-   - Both hard block and soft prompt — recommended
+   - Both hard block and soft prompt: recommended
 
 3. **Check frequency?**
    - Every app launch
-   - Once per day — recommended
+   - Once per day: recommended
    - Once per week
 
 4. **Include skip option for soft updates?**
-   - Yes — user can skip a specific version and won't be prompted again until a newer version is available
-   - No — prompt shows every time (respecting check frequency)
+   - Yes: user can skip a specific version and won't be prompted again until a newer version is available
+   - No: prompt shows every time (respecting check frequency)
 
 ## Generation Process
 
@@ -76,19 +76,19 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `AppVersion.swift` — Semantic version model (major.minor.patch) with Comparable
-2. `UpdateRequirement.swift` — Enum: none, softUpdate, hardUpdate with message and store URL
-3. `VersionChecker.swift` — Protocol + implementation based on chosen source
+1. `AppVersion.swift`: Semantic version model (major.minor.patch) with Comparable
+2. `UpdateRequirement.swift`: Enum: none, softUpdate, hardUpdate with message and store URL
+3. `VersionChecker.swift`: Protocol + implementation based on chosen source
 
 ### Step 3: Create Manager
-4. `UpdateManager.swift` — @Observable manager that coordinates checks, caches timing, exposes state
+4. `UpdateManager.swift`: @Observable manager that coordinates checks, caches timing, exposes state
 
 ### Step 4: Create UI Files
-5. `ForceUpdateView.swift` — Full-screen blocking view with App Store button
-6. `SoftUpdateBannerView.swift` — Dismissible banner with Update and Later buttons
+5. `ForceUpdateView.swift`: Full-screen blocking view with App Store button
+6. `SoftUpdateBannerView.swift`: Dismissible banner with Update and Later buttons
 
 ### Step 5: Create Integration
-7. `UpdateCheckModifier.swift` — ViewModifier that auto-checks on appear and presents UI
+7. `UpdateCheckModifier.swift`: ViewModifier that auto-checks on appear and presents UI
 
 ### Step 6: Determine File Location
 Check project structure:
@@ -252,7 +252,7 @@ SoftUpdateBannerView(
 The iTunes Search API (`itunes.apple.com/lookup?bundleId=...`) has undocumented rate limits. For high-volume apps, prefer a remote JSON endpoint you control. Cache the response and avoid calling on every cold launch.
 
 ### Version String Comparison
-Never compare version strings lexicographically — `"9.0.0" > "10.0.0"` evaluates to `true`. Always parse into semantic version components (major, minor, patch) and compare numerically.
+Never compare version strings lexicographically: `"9.0.0" > "10.0.0"` evaluates to `true`. Always parse into semantic version components (major, minor, patch) and compare numerically.
 
 ### Don't Block During Onboarding
 If the user hasn't completed onboarding, defer the force update check until after. Blocking a first-launch user with an update screen creates confusion.
@@ -275,7 +275,7 @@ Apple may reject apps that show an update prompt during review if the current Ap
 
 ## References
 
-- **templates.md** — All production Swift code templates
-- Related: `generators/networking-layer` — Base networking layer for API calls
-- Related: `generators/feature-flags` — Feature flags can control update enforcement
-- Related: `generators/whats-new` — Show what's new after an update completes
+- **templates.md**: All production Swift code templates
+- Related: `generators/networking-layer`: Base networking layer for API calls
+- Related: `generators/feature-flags`: Feature flags can control update enforcement
+- Related: `generators/whats-new`: Show what's new after an update completes

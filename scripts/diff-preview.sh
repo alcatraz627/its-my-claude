@@ -5,7 +5,7 @@ set -uo pipefail
 
 input=$(cat)
 
-# Respect detail level — skip in minimal mode
+# Respect detail level: skip in minimal mode
 DETAIL_FILE="/tmp/claude-detail-${PPID}"
 detail="normal"
 [[ -f "$DETAIL_FILE" ]] && detail=$(cat "$DETAIL_FILE" 2>/dev/null | tr -d '[:space:]') || true

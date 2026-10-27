@@ -25,14 +25,14 @@ DISCOVER → EVALUATE → PURCHASE → ADVOCATE
 - **App Store Assets**: Premium visual presentation signals premium quality
 
 ### Paid App Advantage
-Apple editorially features paid apps more willingly — they indicate a healthy ecosystem. Lean into this with strong nomination pitches.
+Apple editorially features paid apps more willingly: they indicate a healthy ecosystem. Lean into this with strong nomination pitches.
 
 ---
 
 ## Stage 2: Evaluate (Product Page Conversion)
 
 ### Key Features
-- **Product Page Optimization**: Critical — you have one shot to convert
+- **Product Page Optimization**: Critical: you have one shot to convert
 - **Custom Product Pages**: Match messaging to traffic source
 - **App Store Description**: Must clearly justify the price
 
@@ -45,7 +45,7 @@ Apple editorially features paid apps more willingly — they indicate a healthy 
 
 ### Description Strategy
 - Lead with the problem you solve
-- Emphasize "no subscriptions, no ads — one purchase, everything included"
+- Emphasize "no subscriptions, no ads: one purchase, everything included"
 - Include a feature list that makes the price feel like a steal
 - Mention update history ("regularly updated since 20XX")
 

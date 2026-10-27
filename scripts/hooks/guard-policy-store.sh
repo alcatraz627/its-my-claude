@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-policy-store.sh — agents read the owner's policy; they never change it.
+# guard-policy-store.sh: agents read the owner's policy; they never change it.
 #
 # The policy store is how the owner tells agents what they may do, so an agent
 # that could edit it could grant itself anything. This hook refuses agent

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# auto-continue.sh — opt a session into error-recovery auto-continue.
+# auto-continue.sh: opt a session into error-recovery auto-continue.
 #
 # Pairs with the Stop hook scripts/hooks/auto-continue-stop.sh. Enabling writes a
 # per-session flag; the hook then re-drives THIS session (and only this one) when

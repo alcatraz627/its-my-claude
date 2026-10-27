@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# update-index.sh — upserts a file entry in _index.claude.md
+# update-index.sh: upserts a file entry in _index.claude.md
 # Usage: bash update-index.sh "<filepath>" "<one-liner>" "<topics-dir>"
 #
 # If the file is already listed: increments interaction count + updates one-liner.

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# auto-continue-stop.sh — Stop hook for opt-in, per-session error recovery.
+# auto-continue-stop.sh: Stop hook for opt-in, per-session error recovery.
 #
 # KNOWN-INEFFECTIVE FOR API-ERROR ABORTS. Verified 2026-06-18 (48h transcripts):
-# a turn that dies on a transient 429 emits NO Stop event — 50/51 such errors had
+# a turn that dies on a transient 429 emits NO Stop event: 50/51 such errors had
 # no Stop before the user's manual re-prompt (all sessions logged other Stops, so
 # not a logging gap). This hook's surface never fires on the case it targets, so
 # enabling it would not have recovered any of the observed errors. It can still
@@ -13,14 +13,14 @@
 # When a session the user enabled (via auto-continue.sh on) ends a turn that was
 # cut short by a TRANSIENT API error (rate limit / 5xx / overloaded / timeout)
 # that Claude Code did not recover from, this waits a cooldown and tells the
-# agent to resume — using the native Stop `decision:block` lever. No keystroke
+# agent to resume: using the native Stop `decision:block` lever. No keystroke
 # injection, no dependency on Claude's servers for the scheduling (the delay is a
 # local sleep). Clean turn-ends are NOT re-driven: the session stops and waits.
 #
 # Loop safety: a consecutive-error STREAK, capped at max_retries (default 3). The
 # streak resets to 0 the instant a turn completes cleanly (progress = the error
 # was transient). So a blip costs one retry and resets; a sustained outage tries
-# max_retries times, gives up, and waits for you — never an endless loop.
+# max_retries times, gives up, and waits for you: never an endless loop.
 #
 # Inert unless a per-session flag exists; every decision is logged.
 # Enable:  bash ~/.claude/scripts/auto-continue.sh on [max_retries] [cooldown]

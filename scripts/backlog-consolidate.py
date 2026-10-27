@@ -188,7 +188,7 @@ TOKEN_RE = None  # compiled lazily in tokens()
 BOILERPLATE_DF = 0.25
 
 # Below this many distinctive tokens, a proposal is too thin for a ratio to mean
-# anything — it can still be joined by a shared rare phrase, never by Jaccard.
+# anything: it can still be joined by a shared rare phrase, never by Jaccard.
 MIN_TOKENS = 8
 
 # A shared rare phrase only draws an edge when the two proposals ALSO have this
@@ -197,7 +197,7 @@ MIN_TOKENS = 8
 #
 # Measured on this backlog (n=59, shared DF cutoff): the real duplicate pair
 # (the task-sync bug, filed twice) scores 0.116, while the two false merges
-# score 0.022 and 0.021 — a 5x gap. 0.06 sits clear of both. Re-measure before
+# score 0.022 and 0.021: a 5x gap. 0.06 sits clear of both. Re-measure before
 # moving it; the number is evidence, not taste.
 PHRASE_SUPPORT_MIN = 0.06
 
@@ -269,7 +269,7 @@ def content_edges(items, jaccard_min=0.55, rare_max_df=0.05):
         for g in bg:
             bigram_df[g].add(i)
 
-    # A phrase is distinctive when few proposals carry it — but the floor must be 2,
+    # A phrase is distinctive when few proposals carry it: but the floor must be 2,
     # not 1: an edge needs the phrase in BOTH endpoints, so a "rare = appears in <=1"
     # rule can never draw one. That off-by-one made the whole feature a silent no-op
     # (the task-sync pair it exists to catch shared "task-sync" and still didn't merge).
@@ -280,7 +280,7 @@ def content_edges(items, jaccard_min=0.55, rare_max_df=0.05):
     # thin proposal can only be joined by a shared phrase, never by ratio.
     #
     # A shared phrase alone is NOT enough. "task-sync", "follow-up" and "sub-agent"
-    # are structurally identical (one hyphen, 9 chars) — no shape rule can tell the
+    # are structurally identical (one hyphen, 9 chars): no shape rule can tell the
     # system's hook-name from an ordinary English compound, and matching on shape
     # alone falsely merged "Drifting systems follow-up" with "[follow-up] Migrate
     # ref-points". So a phrase edge additionally requires baseline topical overlap:

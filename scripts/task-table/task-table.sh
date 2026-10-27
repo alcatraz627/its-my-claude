@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# task-table.sh — the task list, rendered so it never has to be scrolled to, and
+# task-table.sh: the task list, rendered so it never has to be scrolled to, and
 # so a reader without the backstory can tell what each row is about.
 #
 # TWO OWNER RULINGS SHAPE THIS.

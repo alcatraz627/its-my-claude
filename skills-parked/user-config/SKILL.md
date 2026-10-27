@@ -1,13 +1,13 @@
 ---
 name: user-config
-description: Lists and manages all Claude configuration in this project — guidelines, skill definitions, personal settings, and shared utilities. Use /user-config to view config or /user-config edit to interactively explain, edit, or simplify any item.
+description: Lists and manages all Claude configuration in this project, guidelines, skill definitions, personal settings, and shared utilities. Use /user-config to view config or /user-config edit to interactively explain, edit, or simplify any item.
 user-invocable: true
 argument-hint: "[edit]"
 ---
 
 ## Brief
 
-Provides a structured overview of all Claude configuration in .claude/ — guidelines, skill definitions, personal settings, and shared utilities. In edit mode, launches an interactive numbered menu to explain, edit, or simplify any config item.
+Provides a structured overview of all Claude configuration in .claude/: guidelines, skill definitions, personal settings, and shared utilities. In edit mode, launches an interactive numbered menu to explain, edit, or simplify any config item.
 
 # User Config Skill
 
@@ -15,8 +15,8 @@ Scans `.claude/` and presents a structured overview of every piece of Claude con
 
 ## Step 0: Load Shared Guidelines
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
-retry logic, tool preferences, verbosity, timeouts, and post-run insights — for the entire
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
+retry logic, tool preferences, verbosity, timeouts, and post-run insights: for the entire
 duration of this skill run.
 
 ## Usage
@@ -54,7 +54,7 @@ duration of this skill run.
 
 Print: `Scanning .claude/ for configuration files...`
 
-Discover in this order — print each path as it is found:
+Discover in this order: print each path as it is found:
 
 1. `Read .claude/personal.md` → print: `  ✓ personal.md`
 2. `Read .claude/settings.local.json` → print: `  ✓ settings.local.json`
@@ -73,13 +73,13 @@ Discover in this order — print each path as it is found:
 
 For each `SKILL.md` found in Step 1:
 
-**2.1** — Print: `Reading brief for [skill-name]...`
+**2.1**: Print: `Reading brief for [skill-name]...`
 
-**2.2** — Scan the file for a `## Brief` section (must appear before the `# Title` heading).
+**2.2**: Scan the file for a `## Brief` section (must appear before the `# Title` heading).
 
-**2.3a — Brief found:** Extract the text immediately after `## Brief` up to the next heading. Print: `  ✓ [skill-name]: [brief text]`
+**2.3a: Brief found:** Extract the text immediately after `## Brief` up to the next heading. Print: `  ✓ [skill-name]: [brief text]`
 
-**2.3b — Brief NOT found:**
+**2.3b: Brief NOT found:**
 
 Print: `  ✗ No brief found for [skill-name] — generating...`
 
@@ -179,10 +179,10 @@ After completing any action (4a/4b/4c), return to the menu automatically unless 
 
 1. Read the full content of the selected file. Print: `Reading [filename]...`
 2. Provide a plain-English explanation covering:
-   - **Purpose** — what this file/skill does and why it exists
-   - **Structure** — key sections and their roles
-   - **Key rules or patterns** — the most important things to know
-   - **Dependencies** — what other files it references or affects
+   - **Purpose**: what this file/skill does and why it exists
+   - **Structure**: key sections and their roles
+   - **Key rules or patterns**: the most important things to know
+   - **Dependencies**: what other files it references or affects
 3. Use concrete quotes from the actual content. Keep the tone conversational.
 4. Print `─────` then return to the menu.
 
@@ -232,6 +232,6 @@ After the run completes (whether overview or edit mode), follow GUIDELINES.md §
 
 ## Notes for Self-Updating
 
-After running `/user-config`, if new skills were discovered that did not previously have a `## Brief` section, those briefs are now saved. No further action is needed — future runs will read them directly.
+After running `/user-config`, if new skills were discovered that did not previously have a `## Brief` section, those briefs are now saved. No further action is needed: future runs will read them directly.
 
 When creating a new skill, always add a `## Brief` section immediately after the frontmatter closing `---`. See the README.md template for the correct format.

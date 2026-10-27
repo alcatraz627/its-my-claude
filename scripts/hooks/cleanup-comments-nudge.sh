@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# cleanup-comments-nudge.sh — Stop hook. Suggests /cleanup-comments when the
+# cleanup-comments-nudge.sh: Stop hook. Suggests /cleanup-comments when the
 # code edited this session carries comment-hygiene findings (em dashes,
 # [claude@] tags, decorative banners, plan refs).
 #

@@ -31,7 +31,7 @@ hasnt() { if printf '%s' "$2" | grep -qF -- "$3"; then bad "$1" "unwanted [$3] i
 # its header line, so a bare `grep -F d3` matched "proj-e34cd3" and this suite
 # failed at random. The loud half was the 67/1 above; the quiet half is worse,
 # because the same collision lets a `has` pass while its row is absent. These
-# match the ID COLUMN — start of line, then the id, then whitespace — so the
+# match the ID COLUMN: start of line, then the id, then whitespace: so the
 # assertion asks about the row it names and nothing else.
 idrow()    { printf '%s' "$1" | grep -qE "^[[:space:]]*$2([[:space:]]|$)"; }
 hasrow()   { if idrow "$2" "$3"; then ok "$1"; else bad "$1" "no row for [$3] in [$2]"; fi; }
@@ -200,7 +200,7 @@ has "the id's new owner arrives pending, not pre-consumed" "$out" "d2  [pending]
 # ---- 8. a revision outlives its pull ------------------------------------
 # A pull consumes the text that was there when it was taken. If the owner edits
 # the draft afterwards, or offers it again, what is waiting is no longer what the
-# agent read — so the pull is spent and the draft comes back. Keyed on the id
+# agent read: so the pull is spent and the draft comes back. Keyed on the id
 # alone this never happened: a draft consumed once was invisible to every session
 # forever, while the board went on rendering it as offered.
 seed d9 "first version"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# restyle-report.sh — Regenerate a /create-report output in a different style (no Claude needed)
+# restyle-report.sh: Regenerate a /create-report output in a different style (no Claude needed)
 # Usage: bash ~/.claude/skills/create-report/restyle-report.sh <report_dir> <style>
 # Available styles: default, notion, dashboard, magazine, terminal, data-table, feed, corporate
 set -euo pipefail

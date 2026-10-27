@@ -8,7 +8,7 @@
 #   <skill-name>   Name of the skill writing the note (used for lock ownership)
 #   <entry-file>   Path to a file containing the full formatted markdown entry.
 #                  The entry must start with a "## Skill: description · YYYY-MM-DD HH:MM"
-#                  heading. Do NOT include a trailing "---" — the script adds it.
+#                  heading. Do NOT include a trailing "---": the script adds it.
 #
 # Usage:
 #   cat > /tmp/note.md << 'ENTRY'
@@ -23,9 +23,9 @@
 #   bash .claude/skills/shared/prepend-runtime-note.sh "my-skill" /tmp/note.md
 #
 # Exit codes:
-#   0  — success
-#   1  — lock acquisition failed or file error
-#   2  — bad usage (missing arguments)
+#   0: success
+#   1: lock acquisition failed or file error
+#   2: bad usage (missing arguments)
 
 set -euo pipefail
 
@@ -92,7 +92,7 @@ if [[ ! -f "$ENTRY_FILE" ]]; then
   exit 1
 fi
 
-# Acquire write lock — exits 1 with instructions if lock cannot be obtained
+# Acquire write lock: exits 1 with instructions if lock cannot be obtained
 bash "$SCRIPT_DIR/lock-file.sh" acquire "$NOTES_FILE" "$SKILL_NAME"
 
 # Create runtime-notes.md with a standard header if it does not exist yet

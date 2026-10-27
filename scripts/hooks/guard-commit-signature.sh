@@ -7,7 +7,7 @@
 # 0040; owner ruling 2026-07-28: hard block, not silent strip).
 #
 # Layer 2 of 2: the git-level commit-msg hook rejects trailers in every local
-# commit; this guard catches what that hook cannot see — --no-verify runs and
+# commit; this guard catches what that hook cannot see: --no-verify runs and
 # repos whose local core.hooksPath bypasses the global hook dir. Out of scope
 # by construction: commits created server-side (GitHub API, squash-merge).
 # Mute (owner only): touch ~/.claude/.no-commit-signature-gate

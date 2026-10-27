@@ -15,7 +15,7 @@ affected_paths:
   - ~/.claude.json
 ---
 
-# Migration 0018 — Context-capture automation
+# Migration 0018: Context-capture automation
 
 ## Why
 
@@ -25,7 +25,7 @@ Two driving constraints, both surfaced in one session (2026-06-05):
    MCP servers (shell-mem missing node deps; mongodb unpinned npx hitting an
    `Invalid Version`) plus a duplicate github definition where a broken global
    copy (empty token) shadowed the working pinned project copy. There was **no
-   write-time guard** against invalid settings — only a non-blocking SessionStart
+   write-time guard** against invalid settings: only a non-blocking SessionStart
    warning that fired *after* corruption.
 
 2. **Context-management paralysis.** The user wanted the compact /
@@ -50,9 +50,9 @@ Two driving constraints, both surfaced in one session (2026-06-05):
 ## What does NOT change
 
 - The existing PreCompact/PostCompact recovery flow, `/catchup`, `/core-dump`,
-  `/workspace`, sync-todos — all unchanged; this is additive.
+  `/workspace`, sync-todos: all unchanged; this is additive.
 - `validate-settings-hooks.sh` (the SessionStart warning) stays as a backstop.
-- C1 (auto core-dump) is **inert until opted in** — wiring it changes nothing
+- C1 (auto core-dump) is **inert until opted in**: wiring it changes nothing
   until `~/.claude/.auto-coredump-enabled` exists AND a queue processor is
   scheduled.
 - shell-mem MCP config (path unchanged; only its `node_modules` were installed).
@@ -90,10 +90,10 @@ by design, so this would be a bug), or the new nudges prove noisy.
 
 ## Phases
 
-1. **Tier A** — PreCompact enrichment + SessionEnd hook + tool-counter awareness ✅
-2. **Tier B** — ctx-signal-nudge UserPromptSubmit hook ✅
-3. **Tier C** — opt-in enqueue-auto-coredump (inert until enabled) ✅
-4. **MCP cleanup** — mongodb removed, github deduped ✅
+1. **Tier A**: PreCompact enrichment + SessionEnd hook + tool-counter awareness ✅
+2. **Tier B**: ctx-signal-nudge UserPromptSubmit hook ✅
+3. **Tier C**: opt-in enqueue-auto-coredump (inert until enabled) ✅
+4. **MCP cleanup**: mongodb removed, github deduped ✅
 
 ## Notes / followups
 

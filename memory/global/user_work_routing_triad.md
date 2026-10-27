@@ -6,9 +6,9 @@ type: user
 
 The user mentally routes each task across an **ease–effort–output triad**:
 
-- **Ease** — how little friction it takes to invoke the tool
-- **Effort** — how much of their own input/structuring it demands
-- **Output** — the quality bar the task actually needs
+- **Ease**: how little friction it takes to invoke the tool
+- **Effort**: how much of their own input/structuring it demands
+- **Output**: the quality bar the task actually needs
 
 From this they pick a lane:
 
@@ -20,11 +20,11 @@ From this they pick a lane:
 **Why:** Spinning up the structured agent for a trivial one-off is over-investment;
 "just use chatgpt" is the deliberate escape hatch optimizing for ease + low effort.
 Conversely, pushing heavy structured work through the light path under-serves the
-output bar. Saying "I can just use chatgpt" is **not** a signal the agent is bad —
+output bar. Saying "I can just use chatgpt" is **not** a signal the agent is bad:
 it signals the *task* is light.
 
 **How to apply:**
-- Don't over-engineer trivial asks — match the structure to the lane.
+- Don't over-engineer trivial asks: match the structure to the lane.
 - Reserve heavy planning/review machinery for the structured lane.
 - When the user invokes "just use chatgpt" / "use the small model," read it as a
   routing decision (the task is light), not a quality complaint.
@@ -32,6 +32,6 @@ it signals the *task* is light.
   STRUCTURED lane offline; one-offs stay on ChatGPT / small `lm` (`q`).
 
 ## Cross-references
-- `~/.claude/GLOSSARY.md` — "ease–effort–output triad", "just use chatgpt (mode)"
+- `~/.claude/GLOSSARY.md`: "ease–effort–output triad", "just use chatgpt (mode)"
 - Pairs with: feedback_efficacy_over_speed.md, feedback_structure_over_oneshot.md
 - local-models project: docs/GOALS.md (routing), the `q` small-model lane

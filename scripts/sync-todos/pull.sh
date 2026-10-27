@@ -12,7 +12,7 @@ source "$SCRIPT_DIR/_lib.sh"
 sync_is_disabled && exit 0
 
 INPUT=$(cat 2>/dev/null || echo "{}")
-# Session id from stdin only — never the global .current-session-id slot.
+# Session id from stdin only: never the global .current-session-id slot.
 SID=$(printf '%s' "$INPUT" | jq -r '.session_id // ""' 2>/dev/null)
 CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null)
 
@@ -20,7 +20,7 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null)
 [ -z "$CWD" ] && exit 0
 
 # Read THIS session's own prior notes (session_id is stable across resume), not
-# the shared _active.md — so a revived session rehydrates its own todos.
+# the shared _active.md: so a revived session rehydrates its own todos.
 WORKSPACE=$(sync_session_doc_path "$CWD" "$SID")
 [ -f "$WORKSPACE" ] || exit 0
 
@@ -28,7 +28,7 @@ PENDING=$(sync_pending_path "$SID")
 
 # No lock: every write below is session-keyed (pending file + memory focus), so
 # concurrent pulls don't collide. (The old global sync.lock had no reaper and
-# could wedge SessionStart pull for ALL projects — F3.)
+# could wedge SessionStart pull for ALL projects: F3.)
 OP_ID=$(bash "$SCRIPT_DIR/wal.sh" start pull "$SID")
 
 # Extract unchecked items from a `## Todos` section. Supports `- [ ]` and `* [ ]`.
@@ -75,7 +75,7 @@ jq -nc \
 mv -f "$TMP" "$PENDING" 2>/dev/null
 
 # Memory "current focus": session-keyed hidden subdir (matches writeback; avoids
-# the shared current-focus.md collision + torn shared-.tmp race — F2).
+# the shared current-focus.md collision + torn shared-.tmp race: F2).
 FIRST=$(echo "$TODOS_JSON" | jq -r '.[0] // ""')
 if [ -n "$FIRST" ]; then
   PROJECT_KEY=$(echo "$CWD" | sed 's|^/||;s|[/.]|-|g')   # '/' AND '.' → '-' (matches CC project-dir encoding)

@@ -8,10 +8,10 @@
 #   3. Rebuild derived/active.md (un-decayed pins as one markdown view).
 #   4. Rebuild derived/_tldr.txt (top-5 newest active pins).
 #
-# Idempotent — reads events.jsonl, writes only to derived/ and _archived/.
+# Idempotent: reads events.jsonl, writes only to derived/ and _archived/.
 # events.jsonl itself is append-only and never modified here; archival is
 # a state-write into individual pin objects (the original file remains
-# the source of truth — we track decay-state in a sidecar).
+# the source of truth: we track decay-state in a sidecar).
 
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -67,7 +67,7 @@ for ev in events:
     initial = (ev.get("decay") or {}).get("cycles_remaining", 2)
     # cycles_remaining = initial - age_weeks. Floor at 0. A stored sidecar value
     # acts as an override FLOOR (pin resolve forces 0) but never blocks age from
-    # advancing decay — the old stored-value-wins branch froze any pin first
+    # advancing decay: the old stored-value-wins branch froze any pin first
     # seen young at its initial value forever (found 2026-07-13: a 07-06 pin
     # frozen at 3 cycles).
     age_derived = max(0, initial - age_weeks)
@@ -98,18 +98,18 @@ def ts_key(e):
 
 active.sort(key=ts_key, reverse=True)
 
-# Archive: append (don't delete from events.jsonl — that's append-only).
+# Archive: append (don't delete from events.jsonl \u2014 that's append-only).
 if to_archive:
     arch_path = os.path.join(arch_dir, "events-decayed.jsonl")
     with open(arch_path, "a") as f:
         for ev in to_archive:
             f.write(json.dumps(ev) + "\n")
 
-# active.md — one markdown bullet per active pin, with key context.
+# active.md: one markdown bullet per active pin, with key context.
 active_md_path = os.path.join(derived_dir, "active.md")
 with open(active_md_path + ".tmp", "w") as f:
     if not active:
-        # Leave empty — l2_digest's Rust-side fallback shows an actionable
+        # Leave empty: l2_digest's Rust-side fallback shows an actionable
         # placeholder ("use /pin-for-dream or i-dream pin add"). Writing
         # any content here would shadow that.
         pass
@@ -135,7 +135,7 @@ with open(active_md_path + ".tmp", "w") as f:
             f.write(f"  `{pid}`\n")
 os.replace(active_md_path + ".tmp", active_md_path)
 
-# _tldr.txt — one-liner per active pin (top-5 newest).
+# _tldr.txt: one-liner per active pin (top-5 newest).
 tldr_path = os.path.join(derived_dir, "_tldr.txt")
 with open(tldr_path + ".tmp", "w") as f:
     for ev in active[:5]:

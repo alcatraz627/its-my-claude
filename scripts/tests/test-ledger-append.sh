@@ -2,7 +2,7 @@
 # Concurrency test for ledger_append (scripts/ledger/ledger-common.sh).
 #
 # There is no `flock` on macOS, so the original `flock -x 9 || true` idiom fell
-# through to an unlocked `>>` in every ledger — protected-looking, unprotected in
+# through to an unlocked `>>` in every ledger: protected-looking, unprotected in
 # fact. This test induces the state that matters: many concurrent writers emitting
 # lines LONGER than PIPE_BUF, which is exactly where an unlocked append interleaves
 # and produces a corrupt line an append-only store can never repair.

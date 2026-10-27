@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Glob, Grep, AskUserQuestion]
 
 # Beta Testing Strategy
 
-End-to-end beta testing workflow for Apple platform apps — from TestFlight setup through feedback collection to launch readiness decision.
+End-to-end beta testing workflow for Apple platform apps: from TestFlight setup through feedback collection to launch readiness decision.
 
 ## When This Skill Activates
 
@@ -48,7 +48,7 @@ Before recruiting testers, understand Apple's two-tier beta system.
 | Attribute | Details |
 |-----------|---------|
 | Max testers | 10,000 |
-| App Review required | Yes (Beta App Review — usually 24-48 hours) |
+| App Review required | Yes (Beta App Review: usually 24-48 hours) |
 | Build availability | After Beta App Review approval |
 | Tester requirement | Anyone with an email address and iOS/macOS device |
 | Best for | Real users, broader audience, validating product-market fit |
@@ -73,7 +73,7 @@ Create tester cohorts for targeted feedback:
 **TestFlight group tips:**
 - Name groups clearly (e.g., "Wave 1 - Power Users", "Wave 2 - General")
 - Use different "What to Test" descriptions per group
-- Stagger group invitations — don't invite everyone at once
+- Stagger group invitations: don't invite everyone at once
 
 ### Phase 2: Beta Tester Recruitment
 
@@ -91,16 +91,16 @@ Create tester cohorts for targeted feedback:
 #### Where to Find Beta Testers
 
 **High-quality sources (engaged, will give feedback):**
-- **Indie dev communities** — Indie Dev Monday, iOS Dev Weekly Slack, Mastodon #iosdev
-- **Reddit communities** — r/iOSBeta, r/apple, domain-specific subreddits (r/productivity, r/fitness, etc.)
-- **Twitter/X** — Post "Looking for beta testers for [one-line pitch]" with a screenshot
-- **ProductHunt Upcoming** — List your app, collect emails before launch
-- **Friends and family** — Honest if you tell them honesty matters more than kindness
+- **Indie dev communities**: Indie Dev Monday, iOS Dev Weekly Slack, Mastodon #iosdev
+- **Reddit communities**: r/iOSBeta, r/apple, domain-specific subreddits (r/productivity, r/fitness, etc.)
+- **Twitter/X**: Post "Looking for beta testers for [one-line pitch]" with a screenshot
+- **ProductHunt Upcoming**: List your app, collect emails before launch
+- **Friends and family**: Honest if you tell them honesty matters more than kindness
 
 **Medium-quality sources (volume, less feedback):**
-- **BetaList** — Submit for free listing
-- **Beta testing communities** — BetaFamily, ErliBird
-- **Discord servers** — App development and domain-specific servers
+- **BetaList**: Submit for free listing
+- **Beta testing communities**: BetaFamily, ErliBird
+- **Discord servers**: App development and domain-specific servers
 
 **Low-quality sources (avoid for signal):**
 - Random giveaway sites (testers who just want free stuff)
@@ -110,7 +110,7 @@ Create tester cohorts for targeted feedback:
 
 | Incentive | Best For | Notes |
 |-----------|----------|-------|
-| Early access | All testers | The default — being first is often enough |
+| Early access | All testers | The default: being first is often enough |
 | Lifetime free / pro unlock | Power users | Strong motivator, limited cost to you |
 | Credit in app (About screen) | Engaged testers | Recognition matters to some users |
 | Direct access to developer | Power users | They feel heard, you get deep feedback |
@@ -120,7 +120,7 @@ Create tester cohorts for targeted feedback:
 
 ### Phase 3: Feedback Collection Methodology
 
-Collect feedback through multiple channels — different methods catch different signals.
+Collect feedback through multiple channels: different methods catch different signals.
 
 #### Channel 1: In-App Feedback Form
 
@@ -166,11 +166,11 @@ Send a survey at the end of each beta wave. Use AskUserQuestion to help design s
 1. **How would you rate the overall experience?** (1-5 stars)
 2. **What was the most confusing part?** (free text)
 3. **What feature would make you use this daily?** (free text)
-4. **Would you pay for this app?** (Yes / No / Maybe — if Yes, how much?)
+4. **Would you pay for this app?** (Yes / No / Maybe: if Yes, how much?)
 5. **How likely are you to recommend this to a friend?** (0-10 NPS scale)
 
 **Survey rules:**
-- Maximum 5 questions — completion rate drops 20% per additional question
+- Maximum 5 questions: completion rate drops 20% per additional question
 - Always include one open-ended question (the best insights come from free text)
 - Send via email, not in-app (don't interrupt usage)
 - Send 5-7 days after they start testing (enough time to form opinions)
@@ -221,7 +221,7 @@ Ask these in order. Each builds on the previous:
 - Nod and say "Tell me more about that"
 - Ask "Why?" at least twice to get past surface answers
 - Take notes on exact phrases they use (their words, not your interpretation)
-- Let silence sit — people fill silence with valuable thoughts
+- Let silence sit: people fill silence with valuable thoughts
 - Ask "What else?" after they finish answering
 
 **Don't:**
@@ -231,7 +231,7 @@ Ask these in order. Each builds on the previous:
 - Dismiss feedback ("That's an edge case" or "Nobody else reported that")
 - Promise to fix things in the interview ("We'll definitely add that")
 
-**The golden rule:** Your job is to understand their experience, not to educate them about your app. If they're confused, the app is confusing — full stop.
+**The golden rule:** Your job is to understand their experience, not to educate them about your app. If they're confused, the app is confusing: full stop.
 
 ### Phase 5: Interpreting Beta Feedback
 
@@ -254,10 +254,10 @@ Assign every piece of feedback to a priority level:
 
 | Priority | Category | Examples | Action |
 |----------|----------|----------|--------|
-| P0 — Critical | Crash / data loss | App crashes on launch, saved data disappears, sync destroys content | Fix immediately, push new build within 24 hours |
-| P1 — High | Broken flow | Cannot complete core task, flow dead-ends, save doesn't work | Fix before next beta wave |
-| P2 — Medium | UX confusion | Users don't find feature, misunderstand UI, take wrong path | Fix before launch |
-| P3 — Low | Nice-to-have | Feature requests, polish suggestions, "it would be cool if..." | Add to backlog, consider for v1.1 |
+| P0: Critical | Crash / data loss | App crashes on launch, saved data disappears, sync destroys content | Fix immediately, push new build within 24 hours |
+| P1: High | Broken flow | Cannot complete core task, flow dead-ends, save doesn't work | Fix before next beta wave |
+| P2: Medium | UX confusion | Users don't find feature, misunderstand UI, take wrong path | Fix before launch |
+| P3: Low | Nice-to-have | Feature requests, polish suggestions, "it would be cool if..." | Add to backlog, consider for v1.1 |
 
 #### Distinguishing Problem Types
 
@@ -271,7 +271,7 @@ Two types of negative feedback require different solutions:
 **"I don't need X"** = Feature/product problem
 - The feature exists but doesn't match user needs
 - Solution: Rethink whether this feature belongs in v1, or pivot the approach
-- More expensive to fix — may require cutting or rebuilding
+- More expensive to fix: may require cutting or rebuilding
 
 **How to tell the difference:** Ask "If this feature were easier to use, would you use it?" If yes, it's UX. If no, it's a product problem.
 
@@ -489,4 +489,4 @@ Good: Fix P0/P1 between waves, push new build, re-test
 
 ---
 
-**A beta test isn't a checkbox — it's your last chance to learn before the whole world sees your app. Treat tester feedback as a gift, even when it hurts.**
+**A beta test isn't a checkbox: it's your last chance to learn before the whole world sees your app. Treat tester feedback as a gift, even when it hurts.**

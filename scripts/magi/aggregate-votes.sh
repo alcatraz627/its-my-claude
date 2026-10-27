@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/magi/aggregate-votes.sh — Aggregate N voter score JSONs into
+# scripts/magi/aggregate-votes.sh: Aggregate N voter score JSONs into
 # matrix.md + bias-matrix.md per design doc § 8.
 #
 # Reads: <archive>/04-voting/voter-*-scores.json
@@ -66,7 +66,7 @@ def avg(xs):
   xs = [x for x in xs if x is not None]
   return statistics.mean(xs) if xs else 0.0
 
-# matrix.md — for each (voter, target_voter), weighted-total score
+# matrix.md: for each (voter, target_voter), weighted-total score
 matrix_rows = []
 header = ["voter↓ / proposal→"] + voters
 matrix_rows.append(header)
@@ -96,7 +96,7 @@ winner = max(prop_avgs.items(), key=lambda kv: kv[1])
 
 # scope-axis analysis (P0-A fix: was measuring voter self-strictness; now measures
 # cross-voter disagreement about each proposal's scope, then takes max across proposals).
-# Per Q6 — capture BOTH absolute mean AND cross-voter std for each proposal.
+# Per Q6: capture BOTH absolute mean AND cross-voter std for each proposal.
 scope_std = None  # max across proposals of (cross-voter std on scope axis)
 scope_abs = None  # max across proposals of (mean cross-voter score on scope axis)
 scope_per_proposal = {}  # {proposal_id: {"mean": x, "pstdev": y}}

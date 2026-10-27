@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# box — compose callout boxes and line-tags in the account's one dialect.
+# box: compose callout boxes and line-tags in the account's one dialect.
 #
 # The single renderer behind conventions/callout-boxes.md v2. Emoji names the
 # emitter, rail weight carries severity, the seal carries lifecycle, and refs
@@ -36,7 +36,7 @@ die() {
 box_kinds() { awk -F'\t' '!/^#/ && $5=="box" {printf "%s ", $1}' "$VOCAB" 2>/dev/null; }
 tag_kinds() { awk -F'\t' '!/^#/ && $5=="tag" {printf "%s ", $1}' "$VOCAB" 2>/dev/null; }
 
-# vlookup <kind> — echoes "emoji<TAB>label<TAB>rail<TAB>tier", empty if unknown.
+# vlookup <kind>: echoes "emoji<TAB>label<TAB>rail<TAB>tier", empty if unknown.
 vlookup() {
   awk -F'\t' -v k="$1" '!/^#/ && $1==k {printf "%s\t%s\t%s\t%s", $2, $3, $4, $5; exit}' "$VOCAB" 2>/dev/null
 }
@@ -61,7 +61,7 @@ rep() {
   printf '%s' "$out"
 }
 
-# wrap_rail <text> <rail> — fold on word boundaries behind the rail.
+# wrap_rail <text> <rail>: fold on word boundaries behind the rail.
 # The `|| [ -n "$l" ]` mirrors hook_box: without it a final line that printf
 # left without a newline is silently dropped.
 wrap_rail() {
@@ -71,7 +71,7 @@ wrap_rail() {
     done
 }
 
-# emit_kv <pairs-joined-by-US> <rail> — two-column ledger rows, row-major.
+# emit_kv <pairs-joined-by-US> <rail>: two-column ledger rows, row-major.
 # Keys split on the first ':'; widths computed per column so values align.
 emit_kv() {
   printf '%s' "$1" | awk -v RS="$(printf '\x1f')" -v rail="$2" '

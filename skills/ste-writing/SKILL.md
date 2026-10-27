@@ -21,7 +21,7 @@ main hazard, so read the two limits below before running it on anything.
 Lead with this rather than with the ban list. A rule set made only of
 prohibitions tells a writer what to avoid and never what to aim at, which is
 the same defect as a validator built only of negative checks
-(`rules/testing.md:67`).
+(`rules/testing-patterns.md`, `[negative-checker-blind-to-omission]`).
 
 Good STE prose has four properties:
 

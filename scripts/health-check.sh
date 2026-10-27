@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SessionStart hook: environment health check
 # Checks for common issues and returns advisory warnings via additionalContext
-# Must complete in <500ms — all checks are lightweight
+# Must complete in <500ms: all checks are lightweight
 set -uo pipefail
 
 LOG=/tmp/hook-debug.log

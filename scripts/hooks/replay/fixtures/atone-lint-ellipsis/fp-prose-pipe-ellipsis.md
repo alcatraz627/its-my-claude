@@ -1,4 +1,4 @@
-# FP fixture — deliberate ellipsis in prose with inline-code pipes
+# FP fixture: deliberate ellipsis in prose with inline-code pipes
 
 Expected: atone-lint fires NOTHING (no ellipsis warning). Every `…` below is a
 deliberate elision inside flowing prose / inline code, not a truncated table.

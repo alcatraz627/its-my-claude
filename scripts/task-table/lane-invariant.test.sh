@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lane-invariant.test.sh — a lane holds at most one running row, and saying so
+# lane-invariant.test.sh: a lane holds at most one running row, and saying so
 # must not cost a row of the 44-line budget.
 #
 # REDESIGN.md:91 makes this the anti-bloat mechanism of the whole model. The

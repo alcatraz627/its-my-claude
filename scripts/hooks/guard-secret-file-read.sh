@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-secret-file-read.sh — PreToolUse[Bash|Read], SYNCHRONOUS.
+# guard-secret-file-read.sh: PreToolUse[Bash|Read], SYNCHRONOUS.
 #
 # Blocks printing the CONTENTS of a secret-shaped file. The existing
 # guard-anthropic-credentials.sh covers credential WRITES; nothing covered a
@@ -137,7 +137,7 @@ while IFS= read -r seg; do
   printf '%s' "$seg" | rg -q "$SECRET_TOKEN" 2>/dev/null || continue
 
 # ── the allowlist, checked BEFORE the block ─────────────────────────────────
-# Each entry reads names, counts, existence or a hash — never a value. Ordered
+# Each entry reads names, counts, existence or a hash: never a value. Ordered
 # first so a legitimate inspection never has to argue with the block.
 # -o is NOT in this list, and that omission is the whole point. Flags that print
 # a COUNT, a FILENAME or nothing (-c -l -L -q) are safe whatever the caller's

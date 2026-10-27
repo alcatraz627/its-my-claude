@@ -13,7 +13,7 @@ The subconscious dream system ingests `/core-dump` Pending Items into a deduped,
 ## When to use
 
 - User asks: "what was I going to do", "anything pending from before", "list forgotten todos"
-- SessionStart hint mentions "N unfinished todos from past sessions" — user clicks through
+- SessionStart hint mentions "N unfinished todos from past sessions": user clicks through
 - Sweeping the backlog after a quiet week, marking items abandoned vs still-pending
 
 ## Usage
@@ -25,7 +25,7 @@ The subconscious dream system ingests `/core-dump` Pending Items into a deduped,
 /forgotten-todos --seen-min N     # only items seen N+ times across sessions
 ```
 
-## Phase 1 — Refresh the backlog
+## Phase 1: Refresh the backlog
 
 ```bash
 ~/.claude/subconscious/scripts/aggregate-todos.sh
@@ -33,7 +33,7 @@ The subconscious dream system ingests `/core-dump` Pending Items into a deduped,
 
 This walks `~/.claude/subconscious/dreams/ingest-queue/*.json` and rebuilds `pending-todos.jsonl`. Cheap (sub-second on a normal corpus). Always re-aggregate before browsing so new `/core-dump` ingests are picked up.
 
-## Phase 2 — Render the picker
+## Phase 2: Render the picker
 
 ```bash
 ~/.claude/subconscious/scripts/aggregate-todos.sh --pretty
@@ -49,21 +49,21 @@ Output (sample):
 
 `SEEN ×N` = item recurred in N different `/core-dump` Pending Items. High-recurrence items are likely either (a) actually important and being forgotten OR (b) genuinely abandoned but never marked so. Both worth attention.
 
-## Phase 3 — Triage (optional, interactive)
+## Phase 3: Triage (optional, interactive)
 
 If user wants to triage, present `mcp__inputs__pick_many` with all rows. Three actions:
-- **Mark done** — append to `~/.claude/subconscious/dreams/done-todos.jsonl` (audit trail); aggregator filters these out next pass
-- **Mark abandoned** — append to `done-todos.jsonl` with `"status":"abandoned"`; same filter effect
-- **Keep open** — no-op (default)
+- **Mark done**: append to `~/.claude/subconscious/dreams/done-todos.jsonl` (audit trail); aggregator filters these out next pass
+- **Mark abandoned**: append to `done-todos.jsonl` with `"status":"abandoned"`; same filter effect
+- **Keep open**: no-op (default)
 
-Triage protocol — write a JSON line per disposition:
+Triage protocol: write a JSON line per disposition:
 ```json
 {"ts": "<now>", "norm_text": "<lowercased-collapsed>", "status": "done|abandoned", "via": "/forgotten-todos"}
 ```
 
-The aggregator's dedup keys against `done-todos.jsonl` to filter completed items on next pass (TODO — wire this into aggregate-todos.sh in a follow-up).
+The aggregator's dedup keys against `done-todos.jsonl` to filter completed items on next pass (TODO: wire this into aggregate-todos.sh in a follow-up).
 
-## Phase 4 — Output
+## Phase 4: Output
 
 If no triage requested: just print the table and exit. The data is useful as-is for the user's awareness.
 
@@ -82,14 +82,14 @@ If triage requested: print a summary after picker submission:
 
 ## Filtering args
 
-- `--project PATH` — filter by project_root prefix
-- `--seen-min N` — only show items with `seen_count >= N` (recurrence threshold)
-- `--all` — disable the default 30-item cap
+- `--project PATH`: filter by project_root prefix
+- `--seen-min N`: only show items with `seen_count >= N` (recurrence threshold)
+- `--all`: disable the default 30-item cap
 
 Pass these through to `aggregate-todos.sh` once it supports them (current impl caps to 30 by default; --all flag is a TODO on the aggregator).
 
 ## Notes
 
-- This skill is a **read-mostly browser** — heavy logic lives in `aggregate-todos.sh`. Keep them separate so the data view (script) can serve other UIs (dashboard, widget) without skill overhead.
+- This skill is a **read-mostly browser**: heavy logic lives in `aggregate-todos.sh`. Keep them separate so the data view (script) can serve other UIs (dashboard, widget) without skill overhead.
 - The pending-todos.jsonl is regenerated on each invocation; it's a derived view, not a primary source. The primary source is the ingest queue.
 - Dedup by lowercased-whitespace-collapsed text. Slight wording variations across sessions ("Disable Sentry" vs "Disable claude.ai Sentry") may produce near-duplicates. Acceptable for an MVP.

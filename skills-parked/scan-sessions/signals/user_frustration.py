@@ -153,7 +153,7 @@ def extract_user_frustration(conn, session_id):
                 "that's right", "that works", "carry on", "continue",
                 "let's go", "let's do", "let's start", "get started",
             ]
-            # Short instructions are NOT frustration — filter them out
+            # Short instructions are NOT frustration: filter them out
             instruction_patterns = [
                 "now ", "also ", "how to", "how do", "what about",
                 "add ", "fix ", "change ", "update ", "show ", "list ",

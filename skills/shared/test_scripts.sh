@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test_scripts.sh — Integration tests for std::claude shell scripts.
+# test_scripts.sh: Integration tests for std::claude shell scripts.
 #
 # Run: bash ~/.claude/skills/shared/test_scripts.sh
 # Exit 0 = all pass, exit 1 = failures
@@ -99,7 +99,7 @@ echo "▸ prepend-runtime-note.sh"
 # Create a temp note
 NOTE_TMP="$TMPDIR_TEST/note.md"
 cat > "$NOTE_TMP" << 'ENTRY'
-## test-skill: Test note — 2026-04-06
+## test-skill: Test note: 2026-04-06
 
 **Purpose:** Testing prepend
 **Insights:**
@@ -110,7 +110,7 @@ ENTRY
 
 # Create a fake runtime-notes in temp dir to avoid modifying real one
 export RUNTIME_NOTES_PATH="$TMPDIR_TEST/runtime-notes.md"
-# prepend-runtime-note.sh may not support custom paths — test existence check only
+# prepend-runtime-note.sh may not support custom paths: test existence check only
 if [[ -f "$SHARED/prepend-runtime-note.sh" ]]; then
   check "prepend-runtime-note.sh exists" "0"
 else

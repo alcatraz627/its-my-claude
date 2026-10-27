@@ -1,6 +1,6 @@
 ---
 name: git-setup
-description: Initializes, audits, and maintains git repositories — sets up .gitignore, branch protection, conventional commits, PR templates, and runs health checks on existing repos.
+description: Initializes, audits, and maintains git repositories, sets up .gitignore, branch protection, conventional commits, PR templates, and runs health checks on existing repos.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebFetch
 user-invocable: true
 argument-hint: "<init | health | clean> [options]"
@@ -14,9 +14,9 @@ Replaces the manual dance of setting up a repo correctly from scratch.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -53,10 +53,10 @@ If it does not exist yet, continue without it.
 
 ## Subcommand: `init`
 
-### Phase 1 — Detect Project Context
+### Phase 1: Detect Project Context
 
 1. Check if `.git/` already exists:
-   - If yes: warn and ask user — "Repo already initialized. Run `/git-setup health` instead? Or reset?" Wait for response.
+   - If yes: warn and ask user: "Repo already initialized. Run `/git-setup health` instead? Or reset?" Wait for response.
    - If no: proceed.
 
 2. Detect project language/framework by scanning the current directory:
@@ -68,7 +68,7 @@ If it does not exist yet, continue without it.
    - `.editorconfig`, `.prettierrc`, `.eslintrc*`, `tsconfig.json`, etc.
    - Note what's already in place to avoid duplicating
 
-### Phase 2 — Gather User Preferences
+### Phase 2: Gather User Preferences
 
 Use `mcp__inputs__wizard` with these steps:
 
@@ -117,16 +117,16 @@ Repository visibility:
 Options: Public (default per CLAUDE.md) / Private
 ```
 
-### Phase 3 — Execute Setup
+### Phase 3: Execute Setup
 
 Execute in this order. Print each step as it happens.
 
-#### 3.1 — Initialize git
+#### 3.1: Initialize git
 ```bash
 git init -b <branch-name>
 ```
 
-#### 3.2 — Generate .gitignore
+#### 3.2: Generate .gitignore
 
 Fetch the official GitHub gitignore template for the detected language:
 ```bash
@@ -143,7 +143,7 @@ _*.claude.md
 .claude/_*.claude.md
 ```
 
-#### 3.3 — Generate .editorconfig (if not present)
+#### 3.3: Generate .editorconfig (if not present)
 
 Write a sensible `.editorconfig`:
 ```ini
@@ -167,7 +167,7 @@ indent_size = 4
 indent_style = tab
 ```
 
-#### 3.4 — Set up conventional commits (if selected)
+#### 3.4: Set up conventional commits (if selected)
 
 For Node.js projects:
 ```bash
@@ -187,17 +187,17 @@ mkdir -p .git/hooks
 # Write a shell-based conventional commit validator
 ```
 
-#### 3.5 — Add PR / Issue templates (if selected)
+#### 3.5: Add PR / Issue templates (if selected)
 
 Create `.github/` directory with:
-- `pull_request_template.md` — checklist format: description, changes, testing, screenshots
-- `ISSUE_TEMPLATE/bug_report.md` — steps to reproduce, expected vs actual
-- `ISSUE_TEMPLATE/feature_request.md` — problem, proposed solution, alternatives
-- `CONTRIBUTING.md` — fork workflow, branch naming, commit format, PR process
+- `pull_request_template.md`: checklist format: description, changes, testing, screenshots
+- `ISSUE_TEMPLATE/bug_report.md`: steps to reproduce, expected vs actual
+- `ISSUE_TEMPLATE/feature_request.md`: problem, proposed solution, alternatives
+- `CONTRIBUTING.md`: fork workflow, branch naming, commit format, PR process
 
-Templates should be concise — no boilerplate essays. Each file < 30 lines.
+Templates should be concise: no boilerplate essays. Each file < 30 lines.
 
-#### 3.6 — Create initial commit
+#### 3.6: Create initial commit
 
 Stage all generated files:
 ```bash
@@ -219,7 +219,7 @@ Commit with conventional format:
 git commit -m "chore: initialize repository with git-setup"
 ```
 
-#### 3.7 — Create remote (if --remote)
+#### 3.7: Create remote (if --remote)
 
 ```bash
 gh repo create <dirname> --public --source . --push
@@ -227,14 +227,14 @@ gh repo create <dirname> --public --source . --push
 
 If `gh` is not authenticated, instruct the user to run `! gh auth login`.
 
-### Phase 4 — Verify
+### Phase 4: Verify
 
-1. Run `git status` — should be clean
-2. Run `git log --oneline -1` — should show the initial commit
-3. If remote: `git remote -v` — should show the GitHub URL
+1. Run `git status`: should be clean
+2. Run `git log --oneline -1`: should show the initial commit
+3. If remote: `git remote -v`: should show the GitHub URL
 4. Print the final file tree of generated files
 
-> Next step for builders: before the first *feature* commit, run `/skeptical-review` and `/test` (exercise-based-verification) — a clean scaffold is not a working feature.
+> Next step for builders: before the first *feature* commit, run `/skeptical-review` and `/test` (exercise-based-verification): a clean scaffold is not a working feature.
 
 ---
 
@@ -293,7 +293,7 @@ Maintenance operations. Each is opt-in via flags, or all run if no flags specifi
 1. Find merged branches: `git branch --merged <default-branch>`
 2. Exclude the default branch and current branch
 3. List branches to delete and ask confirmation
-4. `git branch -d <each>` (safe delete — won't delete unmerged)
+4. `git branch -d <each>` (safe delete: won't delete unmerged)
 5. `git fetch --prune` to clean gone remotes
 
 ### --gc
@@ -318,7 +318,7 @@ Built-in presets for `--template`:
 | -------- | --------------- |
 | `node` | Node.js defaults: `.gitignore` (node), `commitlint`, `husky`, `.nvmrc` |
 | `python` | Python defaults: `.gitignore` (python), `.python-version`, `pyproject.toml` scaffold |
-| `minimal` | Just `.gitignore` + `.editorconfig` — no hooks or templates |
+| `minimal` | Just `.gitignore` + `.editorconfig`: no hooks or templates |
 | `full` | Everything: `.gitignore`, `.editorconfig`, hooks, PR templates, CONTRIBUTING.md |
 
 ---
@@ -327,8 +327,8 @@ Built-in presets for `--template`:
 
 - This skill never force-pushes, never uses `--force`, never runs `rm`
 - GitHub repos are created **public** by default (per CLAUDE.md mandatory rule)
-- The skill detects but does not modify existing `.gitignore` files — it warns about gaps and offers to append
-- Conventional commit setup is recommended but never forced — the user always chooses
+- The skill detects but does not modify existing `.gitignore` files: it warns about gaps and offers to append
+- Conventional commit setup is recommended but never forced: the user always chooses
 - If `gh` CLI is not available for remote operations, the skill provides manual instructions
 - Chains well with `/scaffold` which calls `/git-setup init` as part of its post-scaffold pipeline
-- ⚠️ **README images: file-first, not inline.** When generating or auditing a README that needs hero/cover/diagram art, write SVG/PNG to `assets/` and reference via `<img src="assets/foo.svg">` — do NOT paste raw `<svg>` markup into README.md. Inline SVG renders on github.com but is stripped to bare `<text>` nodes by IDE previews, terminal markdown viewers, npm/crates pages, and AI readers, producing an unreadable wall of words.
+- ⚠️ **README images: file-first, not inline.** When generating or auditing a README that needs hero/cover/diagram art, write SVG/PNG to `assets/` and reference via `<img src="assets/foo.svg">`: do NOT paste raw `<svg>` markup into README.md. Inline SVG renders on github.com but is stripped to bare `<text>` nodes by IDE previews, terminal markdown viewers, npm/crates pages, and AI readers, producing an unreadable wall of words.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# filename-dot-stop.sh — Stop hook: refuse to end a turn whose final message puts
+# filename-dot-stop.sh: Stop hook: refuse to end a turn whose final message puts
 # a period IMMEDIATELY after a file path / filename.
 #
 # Why: Ghostty (the user's terminal) auto-links file paths so they're clickable.
@@ -8,7 +8,7 @@
 # again. Small, persistent, very annoying papercut the user asked to hard-stop.
 #
 # Rule enforced: a filename ending in a known extension must NEVER be immediately
-# followed by a period — in backticks (`foo.md`.) or bare (foo.md.). Follow the
+# followed by a period: in backticks (`foo.md`.) or bare (foo.md.). Follow the
 # path with a space / word / comma, or restructure so it is not sentence-final.
 #
 # Mirrors declared-ready-stop.sh: a DIRECT settings.json Stop hook.
@@ -49,7 +49,7 @@ prose=$(printf '%s\n' "$text" | awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; next} !
 EXT='md|markdown|py|sh|bash|ts|tsx|js|jsx|mjs|cjs|html|htm|css|scss|json|jsonl|ya?ml|toml|swift|go|rs|rb|c|h|hpp|cpp|cc|java|kt|sql|txt|log|plist|xml|svg|conf|cfg|ini|env'
 # Optional line/col suffix. Terminals link `foo.ts:42` and `foo.ts:42:8` as ONE
 # target, so the extension is not always the last thing before the closing
-# backtick / sentence period — a `:line[:col]` tail can sit between them, and the
+# backtick / sentence period: a `:line[:col]` tail can sit between them, and the
 # period still breaks the link. Allow that tail so the anchor doesn't miss it.
 LC='(:[0-9]+){0,2}'
 # Two offending forms (backticks are literal inside single quotes; $ is literal):

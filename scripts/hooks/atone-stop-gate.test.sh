@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-stop-gate.test.sh — an explicit /atone with no recorded event blocks the stop.
+# atone-stop-gate.test.sh: an explicit /atone with no recorded event blocks the stop.
 #
 # Runs against a sandbox HOME. CLAUDE_CODE_CHILD_SESSION=1 is set on purpose:
 # Claude Code sets it for every hook, and a check on it kept the gate silent

@@ -1,43 +1,43 @@
 # v5.0 Engineering Changelog
 
-Scope: ~1209 files / ~273 commits. Worker reliability + observability + jobs UI polish + auth/cycles gate. Many commits cited as "see git log" — work landed on development-branch tips post-TSV cutoff; for exact attribution use `git log --since=<release-fork-point>`.
+Scope: ~1209 files / ~273 commits. Worker reliability + observability + jobs UI polish + auth/cycles gate. Many commits cited as "see git log": work landed on development-branch tips post-TSV cutoff; for exact attribution use `git log --since=<release-fork-point>`.
 
-> ⚠ BREAKING — USER-VISIBLE (read before deploy)
+> ⚠ BREAKING: USER-VISIBLE (read before deploy)
 >
-> - **TanStack Query persist removed** — `PersistQueryClientProvider` is gone; returning users no longer have a localStorage cache. First jobs-list paint after a long idle reloads from network (1-2s). `refetchOnWindowFocus` and `refetchOnReconnect` also dropped.
-> - **Scraper-success refund flow rewritten** — client-side `processCreditsGroup` fan-out replaced by unified `refundCreditsDb` server action. New S4 credit-cycle picker, new `PartToRefund` shape, `excludedColumns` is now `Map<sheet, Set<col>>` (per-sheet granularity).
-> - **Structured job-output errors** — backend now emits `{cause_code, cause_context}` envelope; FE renders user-facing messages by switching on the code. Customer-facing error text may shift slightly (more specific, less generic).
-> - **Deferred-task state surfaced in UI** — items can show a new inline "deferred" badge when a breaker opens or retry budget is exhausted; self-recovers once cooldown elapses.
-> - **Pause/Resume/Hard-delete on jobs and items** — new progress cell with paused state + inline resume button.
-> - **Job-output preview/export** — new visibility filtering (`internal` / `admin_only`), `include_errors` / `include_metadata` flags, FE `excludeUnmappedFields` export option.
+> - **TanStack Query persist removed**: `PersistQueryClientProvider` is gone; returning users no longer have a localStorage cache. First jobs-list paint after a long idle reloads from network (1-2s). `refetchOnWindowFocus` and `refetchOnReconnect` also dropped.
+> - **Scraper-success refund flow rewritten**: client-side `processCreditsGroup` fan-out replaced by unified `refundCreditsDb` server action. New S4 credit-cycle picker, new `PartToRefund` shape, `excludedColumns` is now `Map<sheet, Set<col>>` (per-sheet granularity).
+> - **Structured job-output errors**: backend now emits `{cause_code, cause_context}` envelope; FE renders user-facing messages by switching on the code. Customer-facing error text may shift slightly (more specific, less generic).
+> - **Deferred-task state surfaced in UI**: items can show a new inline "deferred" badge when a breaker opens or retry budget is exhausted; self-recovers once cooldown elapses.
+> - **Pause/Resume/Hard-delete on jobs and items**: new progress cell with paused state + inline resume button.
+> - **Job-output preview/export**: new visibility filtering (`internal` / `admin_only`), `include_errors` / `include_metadata` flags, FE `excludeUnmappedFields` export option.
 
-> 🔧 BREAKING — INTERNAL ONLY (engineering coordination)
+> 🔧 BREAKING: INTERNAL ONLY (engineering coordination)
 >
-> - **Internal API auth refactor** — cookie+password (`_DASHBOARD_PASSWORD`, `_DASHBOARD_COOKIE_NAME`, `require_dashboard_auth`) removed wholesale. Replaced by HMAC `x-api-token` header (`ADMIN_API_TOKEN`) via `InternalApiDependency`. No compat layer.
-> - **`FilterTabsV2` props signature replaced** — internal-state props (`cacheKey`, `setTabFilter`, `_tabState`) removed; component now external/URL-driven via `useQSync`. All in-tree callers migrated.
-> - **`src/data/jobs.data.ts` split** — into `src/data/jobs/` submodule (actions, api, display, export, job-state, list-filter, output, row-cells, status). `data-history-v3.utils.ts` and `modals/job.utils.tsx` deleted.
-> - **`getAppDeploymentUrl()` → `DeployInfo.AppUrl` constant** — 8+ async callsites de-async'd; `VERCEL_PROJECT_PRODUCTION_URL` is the new primary source.
-> - **Gemini → Vertex AI** — all image-gen client init switched from `GEMINI_API_KEY` to `VERTEX_API_KEY` with `vertexai=True`. Missing env-var = boot fail.
-> - **Backend logger consolidation** — `lib/logging/` is the single config point; per-worker loguru handler overrides removed.
-> - **Slack webhook routing** — callers name a `SlackTopic`; URL choice handled by `channels.py` with cascade fallback. New webhooks: INCIDENTS, DEFERS, DAILY, PREFLIGHT, REAPER.
-> - **`pipeline_steps` collection removed from code** — writes + reads + type definition gone. Mongo collection drop is OPS task #85 (post-deploy grace).
-> - **Tooltip system rewrite** — `ShowTooltip` wrapper phased out; callers spread `data-tooltip-*` props instead.
-> - **`SessionRefreshObserver`** — gutted to no-op stub. Export still resolves; importers expecting side-effects get silently no-op.
+> - **Internal API auth refactor**: cookie+password (`_DASHBOARD_PASSWORD`, `_DASHBOARD_COOKIE_NAME`, `require_dashboard_auth`) removed wholesale. Replaced by HMAC `x-api-token` header (`ADMIN_API_TOKEN`) via `InternalApiDependency`. No compat layer.
+> - **`FilterTabsV2` props signature replaced**: internal-state props (`cacheKey`, `setTabFilter`, `_tabState`) removed; component now external/URL-driven via `useQSync`. All in-tree callers migrated.
+> - **`src/data/jobs.data.ts` split**: into `src/data/jobs/` submodule (actions, api, display, export, job-state, list-filter, output, row-cells, status). `data-history-v3.utils.ts` and `modals/job.utils.tsx` deleted.
+> - **`getAppDeploymentUrl()` → `DeployInfo.AppUrl` constant**: 8+ async callsites de-async'd; `VERCEL_PROJECT_PRODUCTION_URL` is the new primary source.
+> - **Gemini → Vertex AI**: all image-gen client init switched from `GEMINI_API_KEY` to `VERTEX_API_KEY` with `vertexai=True`. Missing env-var = boot fail.
+> - **Backend logger consolidation**: `lib/logging/` is the single config point; per-worker loguru handler overrides removed.
+> - **Slack webhook routing**: callers name a `SlackTopic`; URL choice handled by `channels.py` with cascade fallback. New webhooks: INCIDENTS, DEFERS, DAILY, PREFLIGHT, REAPER.
+> - **`pipeline_steps` collection removed from code**: writes + reads + type definition gone. Mongo collection drop is OPS task #85 (post-deploy grace).
+> - **Tooltip system rewrite**: `ShowTooltip` wrapper phased out; callers spread `data-tooltip-*` props instead.
+> - **`SessionRefreshObserver`**: gutted to no-op stub. Export still resolves; importers expecting side-effects get silently no-op.
 
 > ✅ PRE-DEPLOY CHECKLIST (must complete before merge)
 >
 > - [ ] Env vars set on prod Render env-group: `ADMIN_API_TOKEN`, `VERTEX_API_KEY`, `WORKER_BREAKER_*` (incl. `WORKER_BREAKER_IS_GLOBAL`), `WORKER_RETRY_BUDGET_PER_MIN`, `WORKER_DRAIN_TIMEOUT_SEC`, `WORKER_MAX_DEFER_COUNT`, `JOB_OUTPUT_CACHE_TTL_SEC`, `JOB_LIFECYCLE_CACHE_TTL_SEC`, `LOGGER_CRAB_*` (if enabling crab sink), `E2E_TEST_SECRET`, `CRON_SECRET` (Vercel), `PREFLIGHT_ENABLED`
 > - [ ] Slack webhook URLs configured: `SLACK_CIRCUIT_BREAKER_WEBHOOK_URL`, `SLACK_DAILY_REPORT_WEBHOOK_URL`, `SLACK_DEFER_ALERT_WEBHOOK_URL`, `PREFLIGHT_REPORT_WEBHOOK_URL` (cascade falls back to `SLACK_WEBHOOK_URL` but dedicated channels are the design intent)
 > - [ ] Postgres: `team_credit_allocation` table exists in prod, populated for all active teams, indexed on `(team_id, cycle_start, cycle_end, deleted_at)`; confirm `cycle_start`/`cycle_end` are `DATE` columns (asyncpg requires `datetime.date`, not isoformat)
-> - [ ] Mongo: confirm `tasks.(item_id, added_at desc)` index exists (preview aggregate) — boot creates 6 new indexes; verify they reached steady state
-> - [ ] Cron jobs: `/api/cron/expiring-cycles` (daily 14:00 UTC, Vercel cron — needs `CRON_SECRET`); `daily_worker_stats` (24h in-process scheduler, no external cron)
+> - [ ] Mongo: confirm `tasks.(item_id, added_at desc)` index exists (preview aggregate): boot creates 6 new indexes; verify they reached steady state
+> - [ ] Cron jobs: `/api/cron/expiring-cycles` (daily 14:00 UTC, Vercel cron: needs `CRON_SECRET`); `daily_worker_stats` (24h in-process scheduler, no external cron)
 > - [ ] External services: `VERTEX_API_KEY` provisioned in dev + staging + prod env-groups; Sentry release tag confirmed
 > - [ ] Post-deploy: drop `pipeline_steps` Mongo collection after 1-2 week grace period (task #85)
 > - [ ] First-boot tuning: set `JOB_OUTPUT_CACHE_TTL_SEC=60` initially, consider `JOB_OUTPUT_CACHE_DISABLED=true` for first boot, tune up after stable
-> - [ ] Confirm NO prod env-group has `INTEGRATION_CHAOS_ENABLED=true` — chaos.py would silently drop Mongo writes if enabled
+> - [ ] Confirm NO prod env-group has `INTEGRATION_CHAOS_ENABLED=true`: chaos.py would silently drop Mongo writes if enabled
 > - [ ] Verify `app.versable.ai` host guard on `_e2e_test.py` covers custom-domain CNAMEs and www. variants
-> - [ ] Audit env keys on Render dev + prod env-groups (task #63) — 52+ new Config knobs; block deploy on completion
-> - [ ] Verify gh-pages concurrency: `docs-deploy.yaml` and `frontend-e2e-test.yaml` share `gh-pages-deploy` group with `cancel-in-progress: false` — watch queue depth post first scheduled run
+> - [ ] Audit env keys on Render dev + prod env-groups (task #63): 52+ new Config knobs; block deploy on completion
+> - [ ] Verify gh-pages concurrency: `docs-deploy.yaml` and `frontend-e2e-test.yaml` share `gh-pages-deploy` group with `cancel-in-progress: false`: watch queue depth post first scheduled run
 
 ---
 
@@ -136,7 +136,7 @@ Commits: see git log
 
 ## use-query-sync
 
-Bidirectional URL ↔ React state sync (`useQSync`) — framework-free RSC-safe primitives, codecs (string/number/bool/array/json/base64), per-key debounce, dev-time `window.__qSync` registry, presets, cross-instance pub/sub (`share: true`). 12 new files with full test coverage.
+Bidirectional URL ↔ React state sync (`useQSync`): framework-free RSC-safe primitives, codecs (string/number/bool/array/json/base64), per-key debounce, dev-time `window.__qSync` registry, presets, cross-instance pub/sub (`share: true`). 12 new files with full test coverage.
 Files: `frontend/src/utils/hooks/use-query-sync/index.ts`, `core.ts`, `codecs.ts`, `emitter.ts`, `presets.ts`, `registry.ts`
 Risk: medium
 Commits: see git log
@@ -243,7 +243,7 @@ Commits: see git log
 
 ## sentry-centralization
 
-Sentry init consolidated into `lib/sentry/__init__.py` — single entry point, env (local/development/production) + release tag from `Config`. Fixes prior misclassification (dev service with `DEBUG=False` reported as production).
+Sentry init consolidated into `lib/sentry/__init__.py`: single entry point, env (local/development/production) + release tag from `Config`. Fixes prior misclassification (dev service with `DEBUG=False` reported as production).
 Files: `backend/lib/sentry/__init__.py`, `backend/run_worker.py`, `backend/run_workers.py`, `backend/pipeline_runner.py`, `backend/lib/config/app_init.py`, `frontend/sentry.server.config.ts`
 Risk: medium
 Commits: see git log
@@ -299,7 +299,7 @@ Commits: see git log
 
 ## upload-wizard-v2-polish
 
-S1 upload page refactor (+155 lines) and s2\* family non-trivial updates (`s2ig-apply-image-gen.tsx` +93 -14, etc.). FE upload-wizard surface changes for v2 — distinct from BE `image-gen-color-remap`.
+S1 upload page refactor (+155 lines) and s2\* family non-trivial updates (`s2ig-apply-image-gen.tsx` +93 -14, etc.). FE upload-wizard surface changes for v2: distinct from BE `image-gen-color-remap`.
 Files: `frontend/src/app/jobs/v2/pages/s1-upload.tsx`, `s2ig-apply-image-gen.tsx`
 Risk: medium
 Commits: see git log
@@ -308,7 +308,7 @@ Commits: see git log
 
 ## session-refresh-disabled
 
-`SessionRefreshObserver` gutted to no-op stub. `router.refresh()` on auth transitions was racing in-flight soft navigations causing "snap-back" — see `docs/known-issues/nav-snapback-race.md`. SignOut now also drops the `logger_sid` cookie and no longer calls `revalidateTag("token")` (avoided 401 bursts per ADR-007).
+`SessionRefreshObserver` gutted to no-op stub. `router.refresh()` on auth transitions was racing in-flight soft navigations causing "snap-back": see `docs/known-issues/nav-snapback-race.md`. SignOut now also drops the `logger_sid` cookie and no longer calls `revalidateTag("token")` (avoided 401 bursts per ADR-007).
 Files: `frontend/src/core/auth/session-refresh-observer.tsx`, `frontend/src/app/api/auth/[...nextauth]/auth-options.ts`
 Risk: medium
 Commits: see git log
@@ -426,7 +426,7 @@ Commits: see git log
 
 ## structured-job-output-errors _(user-visible)_
 
-Replaces ad-hoc string-matching with `cause_code` + `cause_context` envelope. FE renders user-facing messages by switching on the code and interpolating context — no more silent drift when BE phrasing changes. Adds `cause_code`, `cause_context`, `status_code` fields on `JobOutputCause`.
+Replaces ad-hoc string-matching with `cause_code` + `cause_context` envelope. FE renders user-facing messages by switching on the code and interpolating context: no more silent drift when BE phrasing changes. Adds `cause_code`, `cause_context`, `status_code` fields on `JobOutputCause`.
 Files: `backend/lib/jobs/formats/errors.py`, `frontend/src/app/jobs/(list)/utils/job-output.errors.ts`, `frontend/src/data/jobs/output.ts`
 Risk: medium
 Commits: see git log
@@ -468,14 +468,14 @@ Commits: see git log
 
 ## slack-webhooks-architecture _(internal)_
 
-Slack webhook stack split into 4 modules: `_transport.py` (HTTP, 4xx/5xx/429 classification), `blocks.py` (Block Kit primitives), `templates.py` (per-topic Block Kit templates), `channels.py` (topic→webhook routing with cascade fallback). Callers name a `SlackTopic` instead of choosing a URL. New webhooks for INCIDENTS, DEFERS, DAILY, PREFLIGHT, REAPER. `SlackBlockTemplates` namespace expanded — touched-by callers must migrate.
+Slack webhook stack split into 4 modules: `_transport.py` (HTTP, 4xx/5xx/429 classification), `blocks.py` (Block Kit primitives), `templates.py` (per-topic Block Kit templates), `channels.py` (topic→webhook routing with cascade fallback). Callers name a `SlackTopic` instead of choosing a URL. New webhooks for INCIDENTS, DEFERS, DAILY, PREFLIGHT, REAPER. `SlackBlockTemplates` namespace expanded: touched-by callers must migrate.
 Files: `backend/lib/webhooks/_transport.py`, `blocks.py`, `templates.py`, `channels.py`, `slack.py`, `frontend/src/utils/slack/slack-blocks-templates.ts`
 Risk: medium
 Commits: see git log
 
 ## internal-api-auth-refactor _(internal)_
 
-Internal API routes migrate from cookie+password auth (`_DASHBOARD_PASSWORD`, `_DASHBOARD_COOKIE_NAME`) to HMAC-compared `x-api-token` header (`ADMIN_API_TOKEN`). `require_dashboard_auth` removed; all internal routes use new `InternalApiDependency`. No compat layer — any consumer with cookie-auth bookmark/Postman config 403s on deploy.
+Internal API routes migrate from cookie+password auth (`_DASHBOARD_PASSWORD`, `_DASHBOARD_COOKIE_NAME`) to HMAC-compared `x-api-token` header (`ADMIN_API_TOKEN`). `require_dashboard_auth` removed; all internal routes use new `InternalApiDependency`. No compat layer: any consumer with cookie-auth bookmark/Postman config 403s on deploy.
 Files: `backend/api/auth.py`, `backend/api/internal/__init__.py`, `dashboard.py`, `helpers.py`, `scraper.py`
 Risk: high
 Commits: see git log
@@ -489,7 +489,7 @@ Commits: see git log
 
 ## filter-tabs-v2-refactor _(internal)_
 
-`FilterTabsV2` switches from internal state (`cacheKey`, `setTabFilter`, `_tabState`) to external URL-driven state via `useQSync`. Adds `shallow`, `listenPopState`, other params. Props signature completely changed — every in-tree caller migrated.
+`FilterTabsV2` switches from internal state (`cacheKey`, `setTabFilter`, `_tabState`) to external URL-driven state via `useQSync`. Adds `shallow`, `listenPopState`, other params. Props signature completely changed: every in-tree caller migrated.
 Files: `frontend/src/core/tabs/filter-tabs-v2.tsx`
 Risk: medium
 Commits: post-TSV: `fc813fad`

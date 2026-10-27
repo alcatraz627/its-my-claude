@@ -6,7 +6,7 @@ Hidden strategies that most developers don't know. These can significantly boost
 
 Apple indexes keywords from **multiple locales per storefront**. Each additional locale gives you up to **160 extra indexable characters** (30 title + 30 subtitle + 100 keywords). For the US alone, that's up to **1,440 bonus characters**.
 
-### US App Store — 10 Indexed Locales
+### US App Store: 10 Indexed Locales
 
 | # | Locale | Code | Notes |
 |---|--------|------|-------|
@@ -23,7 +23,7 @@ Apple indexes keywords from **multiple locales per storefront**. Each additional
 
 ### How to Use
 
-In App Store Connect, add secondary localizations with **English keywords** (you don't need to translate — English words index for the US market regardless of which locale they're in):
+In App Store Connect, add secondary localizations with **English keywords** (you don't need to translate: English words index for the US market regardless of which locale they're in):
 
 ```
 English (US) Keywords:
@@ -42,7 +42,7 @@ colleague,lunch,cab,uber,airbnb,weekend,event,party,wedding,gift
 ```
 
 ### Rules
-- **No duplicate words across ANY locale** — each word is counted only once even across locales, so repetition provides zero ranking boost
+- **No duplicate words across ANY locale**: each word is counted only once even across locales, so repetition provides zero ranking boost
 - Words from different locales **DON'T combine** into phrases (only words within the same locale combine)
 - You CAN use English in any locale if targeting an English-speaking market
 - Apply the same Title → Subtitle → Keywords dedup cascade within each locale
@@ -54,8 +54,8 @@ colleague,lunch,cab,uber,airbnb,weekend,event,party,wedding,gift
 |--------|---------------|--------------------------|
 | **United States** | English (US) | Spanish (MX), Arabic, Chinese (Simplified), Chinese (Traditional), French, Korean, Portuguese (BR), Russian, Vietnamese |
 | **Canada** | English (Canada) | French (Canada) |
-| **United Kingdom** | English (UK) | — (single locale) |
-| **Australia** | English (Australia) | — (single locale) |
+| **United Kingdom** | English (UK) |: (single locale) |
+| **Australia** | English (Australia) |: (single locale) |
 | **Mexico** | Spanish (Mexico) | English (US) |
 | **Brazil** | Portuguese (Brazil) | English (US) |
 | **Japan** | Japanese | English (US) |
@@ -235,7 +235,7 @@ expense = expenses
 tracker = trackers
 ```
 
-**Never include both forms** — it wastes precious characters.
+**Never include both forms**: it wastes precious characters.
 
 ## 9. Stop Words Are Auto-Indexed
 

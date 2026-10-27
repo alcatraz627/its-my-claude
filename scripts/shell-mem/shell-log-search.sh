@@ -21,7 +21,7 @@ if [ ! -d "$LOG_DIR" ]; then
   exit 0
 fi
 
-# Returns YYYY-MM-DD for N days ago — one call per scope, not per day
+# Returns YYYY-MM-DD for N days ago: one call per scope, not per day
 days_ago() {
   local n="$1"
   date -v-"${n}d" +%Y-%m-%d 2>/dev/null || date -d "-${n} days" +%Y-%m-%d 2>/dev/null || echo ""

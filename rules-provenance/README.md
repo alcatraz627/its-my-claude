@@ -1,4 +1,4 @@
-# `~/.claude/rules/` — Behavioral rules
+# `~/.claude/rules/`: Behavioral rules
 
 > Rules govern **what Claude MUST do**. They are mandates, not how-to docs.
 
@@ -39,6 +39,6 @@ Rules live or die by adherence. Tier-0 inline in CLAUDE.md, Tier-1 brief+pointer
 
 ## See also
 
-- `PLACEMENT.md` — where new rules go
-- `rules/corrections.md` — graduation path from atone to a rule
-- `features/proposals.md` — backlog of rule candidates
+- `PLACEMENT.md`: where new rules go
+- `rules/corrections.md`: graduation path from atone to a rule
+- `features/proposals.md`: backlog of rule candidates

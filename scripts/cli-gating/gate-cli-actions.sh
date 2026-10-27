@@ -2,7 +2,7 @@
 # PreToolUse[Bash] hook: hard-stop prod/unknown-env writes to gated CLIs.
 #
 # Stops the command (exit 2) so the human confirms by re-issuing after explicit
-# approval. exit-2 is used deliberately — it is the only PreToolUse mechanism
+# approval. exit-2 is used deliberately: it is the only PreToolUse mechanism
 # that fires regardless of permission mode (including --dangerously-skip-
 # permissions), and is immune to CC#39344. Reads + proven-dev writes pass.
 #
@@ -25,7 +25,7 @@ command=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/nul
 [ -n "$command" ] || exit 0
 
 # Early bail: if no gated CLI name appears at all, skip the Python spawn.
-# (Cheap substring screen — the Python core does the real word-boundary check,
+# (Cheap substring screen: the Python core does the real word-boundary check,
 # so over-matching here costs only an extra python spawn, never correctness.)
 # Whitespace is normalized first so a tab/newline between the CLI and its
 # subcommand (`aws<TAB>s3 rm`) can't dodge the screen and skip the classifier.
@@ -42,7 +42,7 @@ fi
 
 # Run the classifier. Use project policy if present (tighten-only merge is the
 # Python core's job in a later iteration; for now project policy fully replaces
-# when present — Phase 1 keeps it simple, global is the safe default).
+# when present: Phase 1 keeps it simple, global is the safe default).
 EFFECTIVE_POLICY="${PROJECT_POLICY:-$POLICY}"
 
 verdict=$(python3 "$DIR/gate_cli_actions.py" "$command" "$EFFECTIVE_POLICY" 2>/dev/null)
@@ -80,7 +80,7 @@ case "$verdict" in
     exit 2
     ;;
   *)
-    # Unknown verdict — fail closed for safety.
+    # Unknown verdict: fail closed for safety.
     printf '🛑 CLI GATE: unrecognized classifier output (%s). Blocked for safety.\n' "$verdict" >&2
     exit 2
     ;;

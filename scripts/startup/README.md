@@ -1,4 +1,4 @@
-# `~/.claude/scripts/startup/` — std::claude::startup
+# `~/.claude/scripts/startup/`: std::claude::startup
 
 > Login-time maintenance for `~/.claude/`. Fires once per macOS user-login session via LaunchAgent.
 
@@ -6,7 +6,7 @@
 
 | Path | Role |
 |---|---|
-| `run.sh` | Orchestrator — runs every `tasks/*.sh` in lexical order |
+| `run.sh` | Orchestrator: runs every `tasks/*.sh` in lexical order |
 | `tasks/10-cleanup-tab-state.sh` | Drops stale `/tmp/claude-tab-*` (>7 days) |
 | `tasks/20-prune-transcripts.sh` | Gzip `projects/*.jsonl` >6 mo, delete `.jsonl.gz` >12 mo |
 | `~/Library/LaunchAgents/dev.claude-startup.plist` | Launch trigger (RunAtLoad=true) |
@@ -14,7 +14,7 @@
 
 ## Cadence
 
-This is a single-user macOS box where the user **restarts ~weekly** but doesn't log out otherwise. RunAtLoad=true fires once per login session — which here means roughly once per reboot. No LaunchDaemon needed (that's for boot-time, requires sudo, no benefit on a single-user system).
+This is a single-user macOS box where the user **restarts ~weekly** but doesn't log out otherwise. RunAtLoad=true fires once per login session: which here means roughly once per reboot. No LaunchDaemon needed (that's for boot-time, requires sudo, no benefit on a single-user system).
 
 ## Usage
 
@@ -36,10 +36,10 @@ bash ~/.claude/scripts/startup/run.sh --list      # list available tasks
 
 Each task documents its own revival path in its header. Quick reference:
 
-- **tab-state cleanup** — files re-created by hooks on next session start
-- **transcript prune** — `gunzip` restores compressed files byte-for-byte; deletion at 12 mo is hard (irreversible)
+- **tab-state cleanup**: files re-created by hooks on next session start
+- **transcript prune**: `gunzip` restores compressed files byte-for-byte; deletion at 12 mo is hard (irreversible)
 
 ## See also
 
-- `NAMESPACE.md` — entry for `std::claude::startup`
-- `FOLDERS.md` — top-level folder map
+- `NAMESPACE.md`: entry for `std::claude::startup`
+- `FOLDERS.md`: top-level folder map

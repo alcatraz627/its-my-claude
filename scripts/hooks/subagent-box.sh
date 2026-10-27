@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# subagent-box.sh — one glanceable box at subagent dispatch and one at landing.
+# subagent-box.sh: one glanceable box at subagent dispatch and one at landing.
 #
 # Owner request 2026-08-13: every dispatch and every landing should print a
 # summary of the seat's config and goal. Hooks cannot write to the transcript,

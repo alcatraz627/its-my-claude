@@ -2,7 +2,7 @@
 # Sum tokens × per-model rates from a magi archive's meta.json.
 # Writes totals + cost_usd_est back into the meta.json. Prints JSON summary.
 #
-# The Agent tool's <usage> block only exposes total_tokens — no input/output
+# The Agent tool's <usage> block only exposes total_tokens: no input/output
 # split. We compute cost via a blended rate using an assumed input/output
 # fraction. Override via env IO_SPLIT (e.g. "60/40"). Default 70/30 reflects
 # research-heavy runs with cache hits.
@@ -23,7 +23,7 @@ IO_SPLIT_RAW="${IO_SPLIT:-70/30}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     # Guard the value's presence before `shift 2`: with one arg left the shift
-    # fails, and without `set -e` the loop simply never advances — a bare
+    # fails, and without `set -e` the loop simply never advances: a bare
     # trailing --io-split hangs forever instead of complaining.
     --io-split)
       [[ $# -ge 2 ]] || { printf -- '--io-split needs a value like 70/30\n' >&2; exit 2; }
@@ -60,7 +60,7 @@ RATES = {
 
 def blended_rate(model):
   # Rate per 1M tokens at the assumed input/output split. Cache is not modeled
-  # here — total_tokens conflates everything; the blend approximates.
+  # here: total_tokens conflates everything; the blend approximates.
   r = RATES.get(model, RATES["opus"])
   return r["input"] * io_in_frac + r["output"] * io_out_frac
 
@@ -143,7 +143,7 @@ if n_unmeasured:
           "tokens; a teammate transport exposes none.", file=sys.stderr)
 PY
 
-# Phase-11 conformance gate — rides on this MANDATORY cost step so it can't be
+# Phase-11 conformance gate: rides on this MANDATORY cost step so it can't be
 # skipped (advisory SKILL.md prose didn't bind; see rules/skill-spec-update-not-
 # honored). Prints the verdict after the cost block; exits non-zero on a CRITICAL
 # failure (e.g. full-mode voting skipped without --no-voting) so the supervisor

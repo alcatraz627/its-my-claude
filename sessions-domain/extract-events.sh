@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# sessions-domain — extract events from ~/.claude/projects/<project>/*.jsonl
+# sessions-domain: extract events from ~/.claude/projects/<project>/*.jsonl
 # (Claude Code session transcripts) into events.jsonl.
 #
 # One event per SESSION (per file), NOT per message. The 104+ session files
-# each have ~30-500 lines — per-message would blow the corpus to 10k+ events.
+# each have ~30-500 lines: per-message would blow the corpus to 10k+ events.
 # Per-session events carry summary metadata (message counts, first user msg
-# preview, timespan) — enough for the dream pass to find patterns across
+# preview, timespan): enough for the dream pass to find patterns across
 # sessions without drowning in transcript bodies.
 #
 # Idempotent + first-run gated to 30-day window. Invoked manually or as

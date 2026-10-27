@@ -1,5 +1,5 @@
 #!/bin/bash
-# Image-tool usage review — digests 3 weeks of image-read activity across every
+# Image-tool usage review: digests 3 weeks of image-read activity across every
 # lane so the human can judge cost vs efficacy: Claude-native reads (token cost,
 # from log-image-reads.sh), local `see` (free), `imagine`, and gemini once its
 # wrapper logs. Writes a dated brief and opens it. Scheduled one-shot by

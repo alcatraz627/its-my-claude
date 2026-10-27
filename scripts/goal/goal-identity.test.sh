@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal-identity.test.sh — a goal is its text, not the session that armed it.
+# goal-identity.test.sh: a goal is its text, not the session that armed it.
 #
 # The store keys one file per session id, so it never looked wrong: nothing was
 # appended to a list and no record was malformed. What it lost was the fact that

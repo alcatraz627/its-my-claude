@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# 30-affirm-nudge.sh — fires when the user message contains an affirmation
+# 30-affirm-nudge.sh: fires when the user message contains an affirmation
 # signal AND a 2nd-person pronoun nearby, to avoid false positives like
 # "the user did a great job".
 #
 # Suggests /affirm for non-obvious choices the user explicitly approved.
-# /affirm has a higher write bar than /atone — only fires when the choice was
+# /affirm has a higher write bar than /atone: only fires when the choice was
 # genuinely surprising or load-bearing. The hinter is just the prompt; the
 # skill is where the bar gets enforced.
 #
@@ -27,7 +27,7 @@ HIT=$(ATONE_PROMPT="$PROMPT" python3 - <<'PY' 2>/dev/null
 import os, re
 text = os.environ.get("ATONE_PROMPT", "").lower()
 
-# Hypothetical / question framing — never fire
+# Hypothetical / question framing: never fire
 if re.search(r'\b(is it (good|right|nice)|would (it )?be (good|right|nice)|might be)\b', text):
     raise SystemExit(0)
 
@@ -39,7 +39,7 @@ kw_re = re.compile(
     re.I,
 )
 
-# 3rd-person subject preceding the keyword — skip ("the user did well")
+# 3rd-person subject preceding the keyword: skip ("the user did well")
 neg_subj_re = re.compile(
     r'\b(the user|users?\b|customer|client|visitor|the (data|csv|file|test)|'
     r'they|he|she|their|his|her)\s+(\w+\s+){0,4}$',

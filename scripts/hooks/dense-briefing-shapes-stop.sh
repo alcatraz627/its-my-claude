@@ -3,7 +3,7 @@
 # instrument: dry-run
 # review-by: 2026-10-02
 # retire-if: pre-registered readout in next-tracks.md
-# dense-briefing-shapes-stop.sh — Stop hook, DRY-RUN tier: the two dense-briefing
+# dense-briefing-shapes-stop.sh: Stop hook, DRY-RUN tier: the two dense-briefing
 # shapes no detector covered (owner D4a, 2026-09-18; sweep S6).
 #
 # rules/dense-briefing-direct-answer.md names three shapes. Shape 1 (a title

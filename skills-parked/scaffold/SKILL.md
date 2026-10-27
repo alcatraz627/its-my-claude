@@ -1,6 +1,6 @@
 ---
 name: scaffold
-description: Scaffolds new projects with opinionated defaults — wizard-based stack selection, file generation, and a post-scaffold pipeline that calls /git-setup, /readme, and other skills to deliver a ready-to-code project.
+description: Scaffolds new projects with opinionated defaults, wizard-based stack selection, file generation, and a post-scaffold pipeline that calls /git-setup, /readme, and other skills to deliver a ready-to-code project.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Skill
 user-invocable: true
 argument-hint: "[<stack>] [--name <project>] [--dir <path>] [--minimal] [--no-git] [--no-readme]"
@@ -14,9 +14,9 @@ initializes git, generates a README, and optionally runs additional setup comman
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `~/.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -42,7 +42,7 @@ If it does not exist yet, continue without it.
 | `<stack>` | optional | Stack name (see list below). Omit to enter wizard mode. |
 | `--name <project>` | optional | Project directory name. Defaults to stack-based suggestion. |
 | `--dir <path>` | optional | Parent directory. Defaults to CWD. |
-| `--minimal` | optional | Bare minimum — skip optional config, linting, testing setup. |
+| `--minimal` | optional | Bare minimum: skip optional config, linting, testing setup. |
 | `--no-git` | optional | Skip git initialization (default: runs `/git-setup init`). |
 | `--no-readme` | optional | Skip README generation (default: runs `/readme`). |
 
@@ -67,12 +67,12 @@ If it does not exist yet, continue without it.
 
 Print the stacks table above. For each stack, also show:
 - Required tools (node, python, etc.)
-- Default port assignment (following dev-servers-guide.md conventions — never 3000 or 5000)
+- Default port assignment (following dev-servers-guide.md conventions: never 3000 or 5000)
 - Estimated file count
 
 ---
 
-## Phase 1 — Resolve Configuration
+## Phase 1: Resolve Configuration
 
 ### 1.1 Interactive Wizard (no stack argument)
 
@@ -114,20 +114,20 @@ target = <dir>/<name>
 
 ---
 
-## Phase 2 — Generate Files
+## Phase 2: Generate Files
 
 Read the stack definition file at `~/.claude/skills/scaffold/stacks/<stack>.md`.
 Each stack definition contains:
 
-1. **File manifest** — ordered list of files to create with their content
-2. **Dependencies** — packages to install (with version constraints)
-3. **Scripts** — package.json scripts or Makefile targets
-4. **Config files** — tsconfig, eslint, prettier, pyproject.toml, etc.
+1. **File manifest**: ordered list of files to create with their content
+2. **Dependencies**: packages to install (with version constraints)
+3. **Scripts**: package.json scripts or Makefile targets
+4. **Config files**: tsconfig, eslint, prettier, pyproject.toml, etc.
 
 ### Generation Rules
 
 - **Use the Write tool** for each file rather than `echo >` or heredocs
-- **Create directories as needed** — `mkdir -p` before writing nested files
+- **Create directories as needed**: `mkdir -p` before writing nested files
 - **Apply experienced defaults:**
   - TypeScript: strict mode, path aliases (`@/`)
   - ESLint: flat config format (eslint.config.js)
@@ -135,7 +135,7 @@ Each stack definition contains:
   - Tailwind: content paths configured, default theme extensions
   - Python: pyproject.toml (not setup.py), ruff for linting, pytest for testing
   - Ports: frontend 30xx, backend 50xx (never 3000 or 5000)
-- **Keep secrets and credentials out** — use `.env.example` with placeholder values, not real ones
+- **Keep secrets and credentials out**: use `.env.example` with placeholder values, not real ones
 - **Include a `.gitignore`** appropriate to the stack
 - **Include a `.env.example`** with documented placeholder values, in place of a real `.env`
 
@@ -159,7 +159,7 @@ Print each file as it's created:
 
 ---
 
-## Phase 3 — Install Dependencies
+## Phase 3: Install Dependencies
 
 After all files are generated:
 
@@ -173,12 +173,12 @@ cd <target> && npm install -y
 cd <target> && python3 -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"
 ```
 
-If installation fails, print the error but continue — the project is still usable,
+If installation fails, print the error but continue: the project is still usable,
 just needs manual dependency resolution.
 
 ---
 
-## Phase 4 — Post-Scaffold Pipeline
+## Phase 4: Post-Scaffold Pipeline
 
 Run these steps in order unless the user opted out:
 
@@ -199,11 +199,11 @@ Generate a `README.md` with:
 - Available scripts/commands
 - Environment variables reference (from `.env.example`)
 
-Use the project's actual file structure — do not use a generic template.
+Use the project's actual file structure: do not use a generic template.
 
 ### 4.3 Boot Test (run-and-observe, not type-check)
 
-A type-check or import-check confirms the code *parses*, not that the app *runs* —
+A type-check or import-check confirms the code *parses*, not that the app *runs*:
 that is collect-not-run, and `rules/exercise-based-verification.md` flags it. Boot the
 scaffolded app once and read its actual startup output. Prefer `/run` (it detects the
 project type and start command); otherwise use the stack's run command directly.
@@ -223,7 +223,7 @@ hardware), report `UNCONFIRMED — <reason>` rather than claiming it passed.
 
 ---
 
-## Phase 5 — Report
+## Phase 5: Report
 
 Print a completion summary:
 
@@ -288,10 +288,10 @@ the complete blueprint for one stack type. Format:
 ```
 
 Placeholders in file content:
-- `{{name}}` — project name
-- `{{port}}` — assigned port
-- `{{year}}` — current year
-- `{{date}}` — current date
+- `{{name}}`: project name
+- `{{port}}`: assigned port
+- `{{year}}`: current year
+- `{{date}}`: current date
 
 ---
 
@@ -315,7 +315,7 @@ These are copied into the project and customized per-stack rather than symlinked
 ## Notes
 
 - The `--minimal` flag skips: linting config, testing setup, CI config, Docker. It still creates the core project structure, package manifest, and source files.
-- Port assignment follows `~/.claude/dev-servers-guide.md` — frontend 30xx, backend 50xx. The last two digits are auto-assigned based on project name hash to avoid collisions.
+- Port assignment follows `~/.claude/dev-servers-guide.md`: frontend 30xx, backend 50xx. The last two digits are auto-assigned based on project name hash to avoid collisions.
 - Stack definitions are intentionally verbose (full file content) rather than using a template engine. This makes each stack self-contained and easy to audit or customize.
 - This skill creates files in a new directory; it leaves existing projects untouched. To add features to an existing project, use the stack's specific tools directly.
 - The monorepo stack creates a Turborepo structure with one `apps/web` (Next.js) and one `packages/ui` (shared components) as starting points.
@@ -325,9 +325,9 @@ These are copied into the project and customized per-stack rather than symlinked
 
 ## See Also
 
-- `~/.claude/rules/exercise-based-verification.md` — why the boot test in Phase 4.3 runs the
+- `~/.claude/rules/exercise-based-verification.md`: why the boot test in Phase 4.3 runs the
   app instead of type-checking it. A scaffold that only compiles is not a scaffold that boots.
-- `/test` — run the generated test suite for the new project once it's scaffolded. Phase 4.3
+- `/test`: run the generated test suite for the new project once it's scaffolded. Phase 4.3
   boots the app; `/test` exercises its tests.
-- `/skeptical-review` — review the generated code before relying on it. Scaffolded defaults are
+- `/skeptical-review`: review the generated code before relying on it. Scaffolded defaults are
   templated, not audited; a fresh adversarial pass catches config drift and stale assumptions.

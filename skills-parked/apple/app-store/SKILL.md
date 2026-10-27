@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion, WebSearch]
 
 # App Store Optimization & Marketing Skills
 
-Skills for optimizing your app's App Store presence and building promotional strategies — from descriptions to comprehensive marketing campaigns.
+Skills for optimizing your app's App Store presence and building promotional strategies: from descriptions to comprehensive marketing campaigns.
 
 ## When This Skill Activates
 
@@ -24,7 +24,7 @@ Use this skill when the user:
 ## Available Skills
 
 ### marketing-strategy/ ⭐ NEW
-Comprehensive marketing strategy advisor — describe your app and get a tailored promotional plan.
+Comprehensive marketing strategy advisor: describe your app and get a tailored promotional plan.
 - Analyzes app type, monetization model, audience, and lifecycle stage
 - Recommends the right App Store features for your situation
 - Builds promotional calendar with implementation roadmap

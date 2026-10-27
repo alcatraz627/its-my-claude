@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# notification-context.sh — Context-aware Claude Code notification handler
+# notification-context.sh: Context-aware Claude Code notification handler
 # Called from Claude Code Notification hook (idle_prompt, elicitation_dialog)
 #
 # Uses OSC 9 to send a notification via the terminal rather than terminal-notifier.
-# This makes the notification appear attributed to Ghostty — clicking it navigates
+# This makes the notification appear attributed to Ghostty: clicking it navigates
 # directly to the correct tab, which terminal-notifier cannot do.
 #
 # Context: reads the cached LLM topic for the session, falls back to last user
@@ -69,7 +69,7 @@ case "$notif_type" in
 esac
 
 # OSC 9: terminal notification, attributed to Ghostty, navigates to the right tab on click.
-# Format: ESC ] 9 ; <message> BEL — TTY_PATH can be overridden in tests
+# Format: ESC ] 9 ; <message> BEL: TTY_PATH can be overridden in tests
 ( printf '\033]9;%s\007' "$label $context" > "${TTY_PATH:-/dev/tty}" ) 2>/dev/null || true
 
 # Bell: triggers Ghostty tab attention indicator + audio cue

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal.test.sh — goal.sh reads the harness /goal from a transcript and keeps a gcc goal.
+# goal.test.sh: goal.sh reads the harness /goal from a transcript and keeps a gcc goal.
 set -uo pipefail
 G="$HOME/.claude/scripts/goal/goal.sh"; pass=0; fail=0
 ok(){ pass=$((pass+1)); echo "  ok    $1"; }; ko(){ fail=$((fail+1)); echo "  FAIL  $1"; }

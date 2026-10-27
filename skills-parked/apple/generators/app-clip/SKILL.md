@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # App Clip Generator
 
-Generate production App Clip infrastructure — a lightweight version of your app invoked from NFC tags, QR codes, Safari banners, or Messages. Includes App Clip target setup, invocation URL handling, experience routing, location confirmation, and full app upgrade flow.
+Generate production App Clip infrastructure: a lightweight version of your app invoked from NFC tags, QR codes, Safari banners, or Messages. Includes App Clip target setup, invocation URL handling, experience routing, location confirmation, and full app upgrade flow.
 
 ## When This Skill Activates
 
@@ -49,7 +49,7 @@ Ask user via AskUserQuestion:
    - QR code only
    - Safari banner (Smart App Banner)
    - Messages
-   - All of the above — recommended
+   - All of the above: recommended
 
 2. **Primary experience?**
    - Order food (restaurant/cafe)
@@ -58,12 +58,12 @@ Ask user via AskUserQuestion:
    - Preview content (article/product)
 
 3. **Include location confirmation?**
-   - Yes — verifies user is physically at the expected location (recommended for physical-world invocations)
-   - No — skip location verification
+   - Yes: verifies user is physically at the expected location (recommended for physical-world invocations)
+   - No: skip location verification
 
 4. **Include full app upgrade prompt?**
-   - Yes — show SKOverlay banner to download full app (recommended)
-   - No — App Clip only, no upgrade path
+   - Yes: show SKOverlay banner to download full app (recommended)
+   - No: App Clip only, no upgrade path
 
 ## Generation Process
 
@@ -73,16 +73,16 @@ Read `patterns.md` for constraints, testing, and best practices.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `AppClipApp.swift` — @main App struct handling invocation via `.onContinueUserActivity`
-2. `InvocationHandler.swift` — Parses invocation URL, extracts parameters, validates against registered experiences
-3. `AppClipExperience.swift` — Protocol and concrete experience implementations
+1. `AppClipApp.swift`: @main App struct handling invocation via `.onContinueUserActivity`
+2. `InvocationHandler.swift`: Parses invocation URL, extracts parameters, validates against registered experiences
+3. `AppClipExperience.swift`: Protocol and concrete experience implementations
 
 ### Step 3: Create Location Files (if selected)
-4. `LocationConfirmationView.swift` — CLLocationManager-based location verification for physical invocations
+4. `LocationConfirmationView.swift`: CLLocationManager-based location verification for physical invocations
 
 ### Step 4: Create Upgrade Files (if selected)
-5. `FullAppUpgradeView.swift` — SKOverlay-based banner prompting full app download
-6. `SharedDataManager.swift` — App Group data sharing between App Clip and full app
+5. `FullAppUpgradeView.swift`: SKOverlay-based banner prompting full app download
+6. `SharedDataManager.swift`: App Group data sharing between App Clip and full app
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -235,18 +235,18 @@ After the user completes the primary task, show an SKOverlay banner with clear b
 
 ## Gotchas
 
-- **10 MB size limit** — App Clip binary must be under 10 MB. Use SF Symbols, avoid large assets, lazy-load images from network.
-- **8-hour data retention** — App Clip data is deleted after 8 hours of inactivity. Use App Group to persist data accessible to the full app.
-- **Limited frameworks** — No CallKit, no HealthKit, no CareKit. Limited background processing. Check Apple's framework availability list.
-- **No background processing** — App Clips cannot run background tasks, background fetch, or silent push notifications.
-- **Must work without sign-in** — App Clips should provide value immediately. Defer sign-in until the full app upgrade.
-- **App Clip Card metadata** — Configure in App Store Connect: card image (3000x2000 px), title, subtitle, call-to-action button text.
-- **Associated Domains required** — Both the main app and App Clip must have the `appclips:` associated domain configured, and the AASA file must be hosted on the domain.
-- **Size budgeting** — Regularly check App Clip size during development with `xcodebuild -exportArchive` or the App Thinning Size Report.
+- **10 MB size limit**: App Clip binary must be under 10 MB. Use SF Symbols, avoid large assets, lazy-load images from network.
+- **8-hour data retention**: App Clip data is deleted after 8 hours of inactivity. Use App Group to persist data accessible to the full app.
+- **Limited frameworks**: No CallKit, no HealthKit, no CareKit. Limited background processing. Check Apple's framework availability list.
+- **No background processing**: App Clips cannot run background tasks, background fetch, or silent push notifications.
+- **Must work without sign-in**: App Clips should provide value immediately. Defer sign-in until the full app upgrade.
+- **App Clip Card metadata**: Configure in App Store Connect: card image (3000x2000 px), title, subtitle, call-to-action button text.
+- **Associated Domains required**: Both the main app and App Clip must have the `appclips:` associated domain configured, and the AASA file must be hosted on the domain.
+- **Size budgeting**: Regularly check App Clip size during development with `xcodebuild -exportArchive` or the App Thinning Size Report.
 
 ## References
 
-- **templates.md** — All production Swift templates for App Clip infrastructure
-- **patterns.md** — Constraints, data lifecycle, testing, and best practices
-- Related: `generators/deep-linking` — Universal link and deep link handling
-- Related: `generators/onboarding-generator` — Onboarding flow for full app upgrade
+- **templates.md**: All production Swift templates for App Clip infrastructure
+- **patterns.md**: Constraints, data lifecycle, testing, and best practices
+- Related: `generators/deep-linking`: Universal link and deep link handling
+- Related: `generators/onboarding-generator`: Onboarding flow for full app upgrade

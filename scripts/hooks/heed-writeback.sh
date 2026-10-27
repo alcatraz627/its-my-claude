@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# heed-writeback.sh — close the loop on an advisory nudge whose heed lands in a
+# heed-writeback.sh: close the loop on an advisory nudge whose heed lands in a
 # channel the nudging hook never looks at again.
 #
 # THE PROBLEM. 34 of 38 hooks measure nothing about whether they worked. The four
@@ -59,7 +59,7 @@
 #
 # NOT INSTRUMENTED, AND WHY. The five loudest advisory hooks still record nothing.
 # Each was examined 2026-08-18 and left alone deliberately, because the cheap check
-# available for it would report a number rather than measure one — and a plausible
+# available for it would report a number rather than measure one: and a plausible
 # wrong number is what this whole file exists to stop. Read this before adding one.
 #
 #   prefer-glob-over-find   306 fires. The nudge says "use the Glob TOOL", and a
@@ -71,7 +71,7 @@
 #   guard-speculative-export 614 fires, the loudest of them, and answerable in
 #                           principle: at Stop, either the export is gone or a
 #                           caller exists, both readable from disk. The blocker is
-#                           that "a caller exists" is not a grep — the hook has
+#                           that "a caller exists" is not a grep: the hook has
 #                           lenient/strict rules where a test file, a comment, and
 #                           a string literal do not count. Re-deriving those here
 #                           makes a second definition that drifts from the hook's.
@@ -101,8 +101,8 @@
 # belonging to other sessions are left alone here and time out below.
 #
 # Markers whose session never comes back are REAPED, never scored. A session can
-# end mid-window, and the alternative — letting some other session's Stops run the
-# window down — manufactures a miss nobody earned. 130 such markers had piled up
+# end mid-window, and the alternative: letting some other session's Stops run the
+# window down: manufactures a miss nobody earned. 130 such markers had piled up
 # by the time this was written. An unscored fire is an honest gap; a fabricated
 # heeded:false is a corrupt instrument, and this file's whole job is the instrument.
 #
@@ -116,7 +116,7 @@ MARK_PREFIX="${TMPDIR:-/tmp}/claude-heed-"
 
 # How many Stops a marker may stay unresolved before it is called unheeded. The
 # window exists because "no tasks yet" at the first Stop is not the same as "they
-# never made any" — the user may still be reading the nudge.
+# never made any": the user may still be reading the nudge.
 MAX_STOPS="${HEED_MAX_STOPS:-3}"
 
 # How long a marker may sit before it is dropped unscored. Sized well past a long
@@ -124,7 +124,7 @@ MAX_STOPS="${HEED_MAX_STOPS:-3}"
 #
 # Validated, because the failure is silent and total. `find -mmin +N` with a
 # negative N is true for every file on disk, so HEED_REAP_HOURS=-1 or 0 deletes
-# every live marker on the next Stop with no ledger line and no error — the whole
+# every live marker on the next Stop with no ledger line and no error: the whole
 # instrument, wiped, looking exactly like a quiet day. A non-numeric value is worse
 # than useless under `set -u`: bash arithmetic treats it as a variable name and
 # throws an unbound-variable line to stderr on every call. Anything that is not a
@@ -192,7 +192,7 @@ check_task_store_nonempty() {
     # Read the value, do NOT launder it. `tr -dc '0-9'` strips the sign, so a
     # corrupt "-5" arrives as 5 and scores a heed for tasks that never existed.
     # A highwatermark that is not a plain non-negative integer is unreadable, and
-    # unreadable is not evidence of anything — fall through to the *.json check.
+    # unreadable is not evidence of anything: fall through to the *.json check.
     local hw; hw=$(tr -d '[:space:]' < "$dir/.highwatermark" 2>/dev/null)
     case "$hw" in
       ''|*[!0-9]*) : ;;
@@ -252,7 +252,7 @@ run_check() {
 }
 
 # ── resolve ─────────────────────────────────────────────────────────────────
-# resolve <current-sid> — judges only markers armed by that session; every other
+# resolve <current-sid>: judges only markers armed by that session; every other
 # marker is left untouched unless it has aged past the reap window.
 resolve() {
   local me="${1:-}" m hook sid check arg stops baseline verdict
@@ -278,12 +278,12 @@ resolve() {
     done < "$m"
     # A marker that does not parse belongs to SOMEBODY, and arm() can be caught
     # mid-write, so a half-written file is a live session's instrumentation a
-    # moment before it becomes valid — not garbage. Deleting it here destroyed
+    # moment before it becomes valid: not garbage. Deleting it here destroyed
     # another session's marker with no ledger trace. Leave it alone; if nobody
     # ever completes it, the reap above collects it.
     [ -n "$hook" ] && [ -n "$check" ] && [ -n "$sid" ] || continue
 
-    # Another session's marker. Not ours to judge, and not ours to delete either —
+    # Another session's marker. Not ours to judge, and not ours to delete either:
     # that session may still be working and owes itself the verdict. It ages out
     # above if it never does. Compared on the FULL session id: two sessions whose
     # ids share their first 8 hex chars would otherwise resolve and delete each
@@ -316,7 +316,7 @@ case "${1:-resolve}" in
     # The Stop payload on stdin is the ONLY reliable statement of which session is
     # stopping. CLAUDE_SESSION_ID is unset in hook processes, and
     # ~/.claude/.current-session-id is written by whichever session touched it last
-    # — on the machine this was written, it named a session other than the one
+    # : on the machine this was written, it named a session other than the one
     # running. Reading it would attribute one session's heed to another.
     payload=$(cat 2>/dev/null || true)
     me=$(printf '%s' "$payload" | jq -r '.session_id // empty' 2>/dev/null || true)

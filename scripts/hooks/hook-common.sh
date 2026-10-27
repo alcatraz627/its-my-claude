@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# hook-common.sh — small primitives shared across the Stop / PreToolUse hooks.
+# hook-common.sh: small primitives shared across the Stop / PreToolUse hooks.
 #
 # What this is, in human terms: two operations that a dozen hooks each hand-rolled
-# a copy of — deriving a short per-session tag for /tmp marker paths, and the
+# a copy of: deriving a short per-session tag for /tmp marker paths, and the
 # "fire once per distinct claim, then step aside on repeats" loop-safety check.
 # Centralizing them fixes one latent bug (an absent session id produced a dangling
 # marker path like /tmp/claude-<name>-) and gives new hooks one correct copy to
 # source instead of pasting the idiom yet again. Provenance: the 2026-07-11 hook
 # subsystem audit, assets/reports/20260711-subsystem-review/hooks.md §2c, §3.
 #
-# Source it (defines functions only — sourcing has no side effects):
+# Source it (defines functions only: sourcing has no side effects):
 #   . "$HOME/.claude/scripts/hooks/hook-common.sh"
 
-# hook_sid8 <session_id> — echo an 8-char, marker-safe session tag.
+# hook_sid8 <session_id>: echo an 8-char, marker-safe session tag.
 #
 # Returns the first 8 characters of the session id, or the literal "nosid" when
 # the id is empty. Every hook builds /tmp marker paths as
@@ -25,13 +25,13 @@ hook_sid8() {
   if [ -n "$s8" ]; then printf '%s' "$s8"; else printf 'nosid'; fi
 }
 
-# hook_loop_check <marker_path> <content> — loop-safety signature check.
+# hook_loop_check <marker_path> <content>: loop-safety signature check.
 #
 # Decides whether <content> is a NEW trigger this session or a REPEAT of the one
 # already recorded at <marker_path>, using the shasum-signature idiom every Stop
 # hook copies by hand. Records the new signature as a side effect so the next call
 # sees it. The caller keeps its own divergent behaviour (block vs soft vs silent,
-# heed-logging) around this decision — this owns only the mechanism.
+# heed-logging) around this decision: this owns only the mechanism.
 #
 #   returns 0  → NEW: the signature differs from the stored one (or none was
 #                stored / could be computed). The marker has been updated to this
@@ -54,7 +54,7 @@ hook_loop_check() {
   return 0
 }
 
-# hook_box <title> [width] — wrap stdin in a titled box, echo it to stdout.
+# hook_box <title> [width]: wrap stdin in a titled box, echo it to stdout.
 #
 # Gives a blocking reason a shape the reader can scan instead of a wall of text.
 # The body arrives on stdin so a caller can build it with printf and pipe it in;
@@ -62,7 +62,7 @@ hook_loop_check() {
 #
 #   reason=$(printf 'line one\nline two\n' | hook_box "⛔ MY GATE")
 #
-# The box is deliberately open on the right — a top rule, a left rail, a bottom
+# The box is deliberately open on the right: a top rule, a left rail, a bottom
 # rule, and no closing column. That is the shape rules/surface-hook-nudges-to-user.md
 # tells the agent to re-render hook output in, so a reason built here can be
 # pasted into a reply verbatim. It also sidesteps the alignment bug the closed
@@ -94,7 +94,7 @@ hook_box() {
   printf '└%s\n' "$rule"
 }
 
-# hook_box_kind <kind> <name> [attr] [width] — vocab-aware hook_box.
+# hook_box_kind <kind> <name> [attr] [width]: vocab-aware hook_box.
 #
 # Composes the v2 anatomy (emoji emitter, kind · name title, heavy rails for
 # gates, right-anchored attr) by delegating to scripts/box/box.sh, so a
@@ -102,7 +102,7 @@ hook_box() {
 # vocabulary (scripts/box/vocab.tsv). Body arrives on stdin exactly like
 # hook_box, and is captured BEFORE the delegate runs so a failed delegate
 # cannot eat it. Falls back to a plain hook_box title when box.sh is missing
-# or fails — a hook degrades, never dies, on a half-installed tree.
+# or fails: a hook degrades, never dies, on a half-installed tree.
 hook_box_kind() {
   local kind="${1:-}" name="${2:-}" attr="${3:-}" width="${4:-72}" body out
   local boxsh="${BOX_SH:-$HOME/.claude/scripts/box/box.sh}"
@@ -118,7 +118,7 @@ hook_box_kind() {
   printf '%s\n' "$body" | hook_box "$kind · $name" "$width"
 }
 
-# hook_owner_wrap <surface> <hook> [model-text] — mark stdin as text for the OWNER.
+# hook_owner_wrap <surface> <hook> [model-text]: mark stdin as text for the OWNER.
 #
 # A session with the gcc-mods plugin draws the block on <surface> (toast, log,
 # band, pane:nudges, pane:tasks, ask) and removes it from what the model reads,
@@ -136,15 +136,15 @@ hook_owner_wrap() {
   fi
 }
 
-# hook_clear_reset <sid8> <counter_file> — reset a per-process counter after /clear.
+# hook_clear_reset <sid8> <counter_file>: reset a per-process counter after /clear.
 #
 # The per-process counters keyed by ${PPID} (the tool tally, ctx %) survive a
-# /clear because /clear does not restart the Claude process — so their pre-clear
+# /clear because /clear does not restart the Claude process: so their pre-clear
 # values leak into the fresh session (false auto-checkpoint / ctx-pressure /
 # todo-discipline nudges). The SessionStart source==clear injector cannot reach
 # those PPID files (its own PPID is the orchestrator's), so it drops a session-
-# keyed sentinel `/tmp/claude-clear-reset-<sid8>`; the reader — which DOES know
-# the right PPID — calls this at the top to drop a stale counter. Idempotent:
+# keyed sentinel `/tmp/claude-clear-reset-<sid8>`; the reader: which DOES know
+# the right PPID: calls this at the top to drop a stale counter. Idempotent:
 # once the reader rewrites its counter, the counter's mtime beats the sentinel,
 # so it will not reset again this session.
 hook_clear_reset() {
@@ -156,7 +156,7 @@ hook_clear_reset() {
   fi
 }
 
-# hook_cmd_skeleton — blank the CONTENTS of quoted regions in a shell command,
+# hook_cmd_skeleton: blank the CONTENTS of quoted regions in a shell command,
 # so a matcher sees what the command INVOKES rather than what it merely MENTIONS.
 #
 # The mention-versus-invocation bug is this account's standing hook defect class:
@@ -216,7 +216,7 @@ hook_clear_reset() {
 # not de-noising there, it is deleting the only thing the guard reads.
 # guard-commit-signature is the live example: every banned trailer arrives inside
 # `commit -m "..."`, so the skeleton erases exactly what it exists to catch. Ask
-# not only "what does a miss cost" but "does this guard read the quotes?" — if it
+# not only "what does a miss cost" but "does this guard read the quotes?": if it
 # does, it stays raw no matter how cheap its misses are.
 #
 # This is the cost-of-miss question from features/hook-design.md applied to the
@@ -246,7 +246,7 @@ hook_cmd_skeleton() {
   }'
 }
 
-# hook_snoozed <hook-id> — is this hook snoozed here and now? (owner D3a, 2026-09-18)
+# hook_snoozed <hook-id>: is this hook snoozed here and now? (owner D3a, 2026-09-18)
 #
 # Reads ~/.claude/hooks/snooze.jsonl through hook-snooze.sh check, matching the
 # global scope, this project (cwd prefix) and this session. Returns 0 when a live
@@ -265,7 +265,7 @@ hook_snoozed() {
   return 0
 }
 
-# hook_last_assistant_text <stop-input-json> [transcript_path] — the reply this Stop is about.
+# hook_last_assistant_text <stop-input-json> [transcript_path]: the reply this Stop is about.
 #
 # The text of the message that just ended the turn, for a Stop hook to inspect.
 # Claude Code hands every Stop hook that message as `last_assistant_message`, so
@@ -288,7 +288,7 @@ hook_last_assistant_text() {
   printf '%s' "$last" | jq -r '.message.content[]? | select(.type=="text") | .text' 2>/dev/null
 }
 
-# hook_heed_note <hook-id> <session_id> <key> fired|clean — heed tracking for a hook
+# hook_heed_note <hook-id> <session_id> <key> fired|clean: heed tracking for a hook
 # that fires on a tool call and is answered by the NEXT call on the same thing.
 #
 # A hook that blocks or nudges a Write, an Edit or a Bash call cannot see whether

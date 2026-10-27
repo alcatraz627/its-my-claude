@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# update-insights.sh — prepends a run entry to _insights.claude.md
+# update-insights.sh: prepends a run entry to _insights.claude.md
 # Usage: bash update-insights.sh "<entry-file>" "<topics-dir>"
 #
 # <entry-file> must be a file containing the formatted entry block.

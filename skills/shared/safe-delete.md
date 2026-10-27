@@ -26,7 +26,7 @@ rm temp.txt
 `rm` is permanent and unrecoverable. `trash` uses macOS's built-in Trash system (`/usr/bin/trash`), which:
 - Preserves the original path for "Put Back" in Finder
 - Allows recovery until the user explicitly empties Trash
-- Is a system binary — no Homebrew install needed
+- Is a system binary: no Homebrew install needed
 
 ## Enforcement
 

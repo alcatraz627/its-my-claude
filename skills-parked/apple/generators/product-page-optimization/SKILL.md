@@ -1,6 +1,6 @@
 ---
 name: product-page-optimization
-description: Generates A/B test plans and optimization checklists for your App Store product page — icon, screenshots, and app previews. Use when running Product Page Optimization tests or improving conversion rates.
+description: Generates A/B test plans and optimization checklists for your App Store product page, icon, screenshots, and app previews. Use when running Product Page Optimization tests or improving conversion rates.
 allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion, WebSearch]
 ---
 
@@ -37,7 +37,7 @@ Use this skill when the user:
 
 | Monthly Impressions | Can You PPO? | Recommendation |
 |--------------------|--------------|----|
-| **Under 1,000** | No | Don't bother — tests will never reach significance. Apply screenshot best practices directly. |
+| **Under 1,000** | No | Don't bother: tests will never reach significance. Apply screenshot best practices directly. |
 | **1,000-5,000** | Barely | Test ONE element at a time with only 1 variant (A/B, not A/B/C). Expect 4-8 week test cycles. |
 | **5,000-20,000** | Yes | Standard testing. Run 2 variants per test, 2-4 week cycles. |
 | **20,000+** | Aggressively | Test 3 variants, rapid iteration. Can test icon + screenshots sequentially. |
@@ -61,7 +61,7 @@ Ask user via AskUserQuestion:
    - Don't know (need baseline measurement)
 
 3. **Monthly impression volume?**
-   - Under 1,000 (PPO may not reach significance — focus on qualitative improvements)
+   - Under 1,000 (PPO may not reach significance: focus on qualitative improvements)
    - 1,000-10,000 (test one element at a time, longer test duration)
    - 10,000-100,000 (can test 2-3 variants, standard duration)
    - 100,000+ (can test aggressively, quick results)
@@ -195,7 +195,7 @@ While waiting for PPO results, implement these proven improvements:
 
 ## References
 
-- Related: `generators/custom-product-pages` — Targeted pages per audience
-- Related: `app-store/screenshot-planner` — Screenshot design guidance
-- Related: `app-store/keyword-optimizer` — Text optimization
-- Related: `app-store/marketing-strategy` — Overall optimization strategy
+- Related: `generators/custom-product-pages`: Targeted pages per audience
+- Related: `app-store/screenshot-planner`: Screenshot design guidance
+- Related: `app-store/keyword-optimizer`: Text optimization
+- Related: `app-store/marketing-strategy`: Overall optimization strategy

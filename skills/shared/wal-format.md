@@ -3,7 +3,7 @@
 Write-Ahead Log captures the agent's actions in near-real-time so a future
 agent (human-invoked or after `/clear`) can resume without losing context.
 
-Since 2026-04-17 the canonical format is **JSONL** — one event per line, ideal
+Since 2026-04-17 the canonical format is **JSONL**: one event per line, ideal
 for piping through `jq`. The legacy **markdown** format is retained so that
 older `.claude/wal.md` files continue to work; new sessions default to `.claude/wal.jsonl`.
 
@@ -21,7 +21,7 @@ One JSON object per line. All entries share these fields:
 | `kind` | string | `session_start` \| `action` \| `decision` \| `agent_start` \| `agent_done` \| `checkpoint` \| `session_end` |
 | `session_id` | string | `<keyword>-<keyword>-<2hex>` (from `shared/doc-naming.md`) |
 
-Kind-specific fields below. Omit empty fields — JSONL compresses well when sparse.
+Kind-specific fields below. Omit empty fields: JSONL compresses well when sparse.
 
 ### `session_start`
 
@@ -58,7 +58,7 @@ Kind-specific fields below. Omit empty fields — JSONL compresses well when spa
 {"ts":"2026-04-17T14:20:00Z","kind":"checkpoint","session_id":"fix-auth-3b","goal":"Add auth guard to /api/users","done":["Read route.ts","Wrote middleware","Added tests"],"current":"Wiring middleware in route handler","next":"Run full test suite","blockers":[],"learnings":["Zod's inference saved the custom type definition we had planned"]}
 ```
 
-Keep checkpoints to one line. If `done`/`next` lists grow huge, truncate — the WAL is not an audit log.
+Keep checkpoints to one line. If `done`/`next` lists grow huge, truncate: the WAL is not an audit log.
 
 ### `session_end`
 
@@ -87,7 +87,7 @@ jq -c 'select(.kind == "session_start" or .kind == "session_end") | {ts, kind, s
 ### Writing with the helper (preferred)
 
 `~/.claude/scripts/wal/wal.sh` wraps `jq -cn` so escaping is always correct. Never
-hand-compose JSON in a WAL line — use the helper:
+hand-compose JSON in a WAL line: use the helper:
 
 ```bash
 # Auto-detects ./.claude/wal.jsonl when CWD has a .claude/ subdir,
@@ -124,7 +124,7 @@ Keep only the last 2 sessions in the file. Prune older entries when starting a n
 ## Legacy: `.claude/wal.md`
 
 Still honored by `/catchup` if `wal.jsonl` is missing. Format spec kept below for
-reference — do NOT use for new WALs.
+reference: do NOT use for new WALs.
 
 ### File Header
 
@@ -167,7 +167,7 @@ Learnings: [1-2 surprising discoveries, if any]
 ===
 ```
 
-Same triggers apply as the JSONL table above — but written as markdown blocks.
+Same triggers apply as the JSONL table above: but written as markdown blocks.
 
 ---
 
@@ -175,5 +175,5 @@ Same triggers apply as the JSONL table above — but written as markdown blocks.
 
 - **No one-shot migration.** Old markdown WALs keep working; new sessions start JSONL.
 - **`/catchup` is dual-mode.** It tries `.claude/wal.jsonl` first, falls back to `.claude/wal.md`. See `skills/catchup/SKILL.md` Phase 0.5.
-- **Mixing in one project is fine.** If you like, delete `wal.md` once you've confirmed `wal.jsonl` works — never required.
+- **Mixing in one project is fine.** If you like, delete `wal.md` once you've confirmed `wal.jsonl` works: never required.
 - **Parsers beware.** Old skills that `grep -B2 "^=== CHECKPOINT"` will only hit markdown files. Update them to detect the `.jsonl` suffix and `jq` it instead.

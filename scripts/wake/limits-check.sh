@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# limits-check.sh — is the 5h usage window open enough to be worth waking into?
+# limits-check.sh: is the 5h usage window open enough to be worth waking into?
 #
 # What this is, in human terms: the wake monitor pokes an idle session every N
 # minutes to see if an outage cut it off. Each poke costs a little of the same 5h
@@ -7,7 +7,7 @@
 # polite thing is to stop poking and let the user have what's left.
 #
 # Why it reads a percentage and not a reset time: Claude Code sends
-# resets_at=9999999999 when it does not know when the window resets — the sentinel
+# resets_at=9999999999 when it does not know when the window resets: the sentinel
 # IS the message, and no amount of parsing conjures a clock out of it (see
 # rules-free note in statusline.sh:_rl_to_epoch, and dcd49a5). So there is nothing
 # to schedule against. How full the window already is, is the only honest signal.
@@ -37,7 +37,7 @@ say() { printf '%s\t%s\t%s\n' "$1" "$2" "$3"; }
 
 # A bad threshold must not reach the `-ge` below. When `[` cannot parse an operand
 # it errors and returns non-zero, the `if` reads as false, and control falls past
-# NEAR-FULL to the unconditional OPEN at the bottom — so a comparison that never
+# NEAR-FULL to the unconditional OPEN at the bottom: so a comparison that never
 # resolved gets reported as confident headroom. Fail-open, from a typo.
 #
 # Two ways in, and the length check must come FIRST: a digit string too long for a
@@ -63,7 +63,7 @@ command -v jq >/dev/null 2>&1 || {
   say UNKNOWN "" "no limits file at $LIMITS (written by every statusline render — is the statusline running?)"; exit 2; }
 
 # `."5h".pct` is the field the statusline writes. Take anything that is honestly a
-# number — int or float, quoted or bare — and floor it, because bash `-ge` cannot
+# number: int or float, quoted or bare: and floor it, because bash `-ge` cannot
 # compare "43.5" and would abort. `tonumber?` swallows everything that is not a
 # number (absent, null, true, "abc", a malformed file), leaving pct empty.
 pct=$(jq -r '(."5h".pct | tonumber? | floor) // empty' "$LIMITS" 2>/dev/null)
@@ -73,14 +73,14 @@ pct=$(jq -r '(."5h".pct | tonumber? | floor) // empty' "$LIMITS" 2>/dev/null)
 #
 # Nothing below can run on a value that is not an integer: `[` errors on an operand
 # it cannot parse, which reads as false, and control falls through to the OPEN at
-# the bottom — confident headroom off a comparison that never happened. So the shape
+# the bottom: confident headroom off a comparison that never happened. So the shape
 # check has to come first and has to be positive.
 #
 # It was briefly a list of prohibitions instead, on the strength of a measurement
 # that jq's shortest non-digit output is "1e+16" (5 chars) and a length bound could
 # therefore cover it. That measurement enumerated large integers and generalised to
-# every input. It is false: `jq -rn 'nan|floor'` emits `null` — four characters,
-# under the bound — and `{"5h":{"pct":"nan"}}` fell straight through to exit 0.
+# every input. It is false: `jq -rn 'nan|floor'` emits `null`: four characters,
+# under the bound: and `{"5h":{"pct":"nan"}}` fell straight through to exit 0.
 # A deny-list is only ever as good as the author's imagination; an allow-list says
 # what is true. (Skeptical review, 2026-07-17.)
 [[ "$pct" =~ ^-?[0-9]+$ ]] || {
@@ -95,7 +95,7 @@ fi
 
 # A percentage below zero is not a reading, it is a broken writer. Say so rather
 # than let it sail under the threshold and read as headroom. Above 100 is different
-# — over-spent is still spent, so it falls through to NEAR-FULL below.
+# : over-spent is still spent, so it falls through to NEAR-FULL below.
 if [ "$pct" -lt 0 ]; then
   say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS — a percentage cannot be negative"
   exit 2

@@ -40,7 +40,7 @@ const BRIEF_AUTO_MIN = 24; // below this a clause cut says less than the cap wou
 export function deriveBrief(title: string): string | undefined {
   const t = (title || "").trim().replace(/\s+/g, " ");
   if (t.length <= BRIEF_AUTO_MAX) return undefined; // already a name; nothing to cut
-  // Prefer a real clause end that lands in the window — those read as written
+  // Prefer a real clause end that lands in the window: those read as written
   // rather than chopped. Semicolons and sentence stops first: they end a
   // thought, where a comma usually continues one.
   for (const sep of ["; ", ". ", " — ", " – ", "), ", ", then ", " · "]) {
@@ -75,7 +75,7 @@ export interface Card {
   docs: string[];        // repo-relative linked docs
   heading?: string;      // section context at harvest time
   staleReason?: string;
-  // How trustworthy is this card's claimed state — agent-set via `verify` verb,
+  // How trustworthy is this card's claimed state: agent-set via `verify` verb,
   // survives sync. Grades reuse the adversarial-review evidence vocabulary.
   verify?: {
     grade: "executed" | "cited" | "reasoned"; needsHuman?: boolean; note?: string; at: string;
@@ -400,10 +400,10 @@ export function answerSeen(ack: Ack, d: { id: string; answeredAt?: string }): bo
 }
 
 // Tagged notes v1 (design: assets/reports/20260727-kanban-ui-stories/STORIES.md).
-// Tags live inside free-form note text, parsed at read time — notes.json keeps
+// Tags live inside free-form note text, parsed at read time: notes.json keeps
 // its shape and stays the only human-authored surface. The human REQUESTS via
 // tags; the agent APPLIES via CLI verbs. Mirrored by parseTags() in board.html
-// and the minimal @me/!now grep in session-start-line.sh — keep all three in sync.
+// and the minimal @me/!now grep in session-start-line.sh: keep all three in sync.
 export type NoteTags = {
   me: boolean; act: boolean; review: boolean; defer: boolean;
   skills: string[]; moves: string[]; free: string[];
@@ -424,7 +424,7 @@ export function parseNoteTags(text: string | undefined): NoteTags {
   return t;
 }
 // Printed WITH the data (notes verb output) so a running session that cached its
-// skill specs still gets the contract — see rules/skill-spec-update-not-honored.
+// skill specs still gets the contract: see rules/skill-spec-update-not-honored.
 export const TAG_LEGEND =
   "tags: @me self-note (not agent-nagged) · !now act on pickup · /skill run it against the card · >lane apply the move via `kanban.sh move` · #review-me human's own queue (don't act) · other #word free";
 
@@ -438,7 +438,7 @@ export const LANDINGS = path.join(KROOT, "landings.json");
 // The human's selection: which cards and which notes they have ticked as
 // "this is what I mean". Board-scoped, server-owned like notes.json, and read
 // by the CLI so an agent picking up work sees the same set the human is
-// looking at. Empty is the resting state — a selection is an act, not a mode.
+// looking at. Empty is the resting state: a selection is an act, not a mode.
 export interface Selection { cards: string[]; notes: string[]; updatedAt: string | null }
 export const emptySelection = (): Selection => ({ cards: [], notes: [], updatedAt: null });
 // a note's key is card:note, so one string identifies it across both stores
@@ -452,7 +452,7 @@ export function saveSelection(boardDir: string, sel: Selection, by: string): voi
 
 // What the agent actually receives. Written for a reader with no board open:
 // every selected card in full, every selected note verbatim, and the one line
-// that says what to do with it. Kept plain text — it arrives as an ipc message.
+// that says what to do with it. Kept plain text: it arrives as an ipc message.
 export function renderSelection(dir: string, name: string, sel: Selection): string {
   const board = loadBoard(dir);
   const notes = loadNotes(dir);
@@ -498,7 +498,7 @@ export function renderSelection(dir: string, name: string, sel: Selection): stri
 //
 // One cross-cutting primitive. A milestone is not a checklist under a card, it
 // is a tag several cards share, so "what is left for M2" is a filter rather
-// than a rollup — and the same machinery then carries the model lane, the
+// than a rollup: and the same machinery then carries the model lane, the
 // effort, and anything else the human finds worth calling out.
 //
 // This is a SEPARATE store from board.json on purpose. board.json belongs to
@@ -575,7 +575,7 @@ export { VIEW_LIMITS, CLAUSE_GRAMMAR, OPERATORS, isOperator, isKnownClause,
 //
 // It stayed a tag for a long time and the tag was doing most of the job: several
 // cards share it, and "what is left for M2" is a filter. What a tag cannot hold
-// is the three things a milestone actually is — an ORDER (M1 before M2), a GOAL
+// is the three things a milestone actually is: an ORDER (M1 before M2), a GOAL
 // SENTENCE (what shipping it means), and a DONE STATE. The usage trial expressed
 // "M1 shipped" by moving seven cards to done one at a time, and each milestone's
 // goal sentence lived only in a design doc, unreachable from the board.
@@ -652,7 +652,7 @@ export const tagsOn = (plan: Plan, cardId: string): Tag[] =>
 //
 // Owner ruled yes, 2026-08-26. Until now a change had no shape: the board held
 // the CURRENT state and nothing held the transitions, so "what changed since
-// last week" could not be built as a view — only inferred by eye from
+// last week" could not be built as a view: only inferred by eye from
 // updatedAt stamps, which say when a card last moved but never what moved or
 // why. The usage trial worked around it and named it as a structural gap.
 //
@@ -1058,7 +1058,7 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
     }
 
     // A harvest that finds NOTHING where a populated board stood is a broken
-    // scanner, not an emptied project — a cap, a moved docs dir, a bad root.
+    // scanner, not an emptied project: a cap, a moved docs dir, a bad root.
     // Sync would otherwise delete every card and GC the overrides with them,
     // and board.json is the one store with no undo. So: refuse, and say what
     // would have gone. Narrow on purpose (zero yield only): a partial drop is a
@@ -1080,7 +1080,7 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
     const board: Board = { cards, overrides: prev.overrides, tombstones, syncedAt: now };
     atomicWrite(file, board, by, `cards=${cards.length}`);
     // Counts alone ("23 new, 0 moved") report that sync RAN, never that the
-    // board is readable — which is how a board rots while every digest stays
+    // board is readable: which is how a board rots while every digest stays
     // green. Coverage is the quality half, and it rides the same line.
     const coverage = {
       total: cards.length,

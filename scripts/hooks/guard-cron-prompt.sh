@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-cron-prompt.sh — vets and records every prompt an agent schedules.
+# guard-cron-prompt.sh: vets and records every prompt an agent schedules.
 #
 # A cron prompt arrives later as an ordinary "user" turn. Two things follow:
 # it must never carry an approval line, or an agent could approve its own push

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# guard-near-dup-env-var.sh — PreToolUse[Edit|Write|MultiEdit], SYNCHRONOUS.
+# guard-near-dup-env-var.sh: PreToolUse[Edit|Write|MultiEdit], SYNCHRONOUS.
 #
 # Catches a new environment-variable name that is a NEAR-DUPLICATE of one the
-# project already defines — the RENDER_API_KEY-added-when-RENDER_API_TOKEN-exists
+# project already defines: the RENDER_API_KEY-added-when-RENDER_API_TOKEN-exists
 # slip (an infra-before-grep event). Near-duplicate env names cause silent config
 # drift: two names for one secret, one of which is never populated.
 #
@@ -14,7 +14,7 @@
 # {KEY, TOKEN, SECRET, PASSWORD, PASS, PWD, ID, URL, URI}, or the same words
 # reordered. If a near-match exists AND X is not itself already defined → nudge.
 #
-# NUDGE, never a block — a genuinely-new var is legitimate and must not be
+# NUDGE, never a block: a genuinely-new var is legitimate and must not be
 # hard-blocked. additionalContext reaches the agent (the only non-blocking
 # channel any audience reads; the trailing directive relays it to the user).
 #

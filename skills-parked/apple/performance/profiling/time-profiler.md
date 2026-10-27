@@ -3,7 +3,7 @@
 ## Instruments Setup
 
 ### Time Profiler Template
-1. **Xcode > Product > Profile** (Cmd+I) — builds Release and opens Instruments
+1. **Xcode > Product > Profile** (Cmd+I): builds Release and opens Instruments
 2. Choose **Time Profiler** template
 3. Click record, reproduce the slow operation, stop recording
 
@@ -28,9 +28,9 @@
 | Flatten Recursion | Collapse recursive calls into one entry |
 
 ### Typical Workflow
-1. **Separate by Thread** — find Main Thread
-2. **Invert Call Tree** — heaviest leaf functions appear at top
-3. **Hide System Libraries** — focus on your functions
+1. **Separate by Thread**: find Main Thread
+2. **Invert Call Tree**: heaviest leaf functions appear at top
+3. **Hide System Libraries**: focus on your functions
 4. Click disclosure triangle to trace back through the call chain
 5. Double-click a function to jump to source code
 
@@ -181,21 +181,21 @@ Issues appear as purple runtime warnings in Xcode's Issue Navigator.
 ## Profiling Tips
 
 ### Profile What Matters
-- Always profile on **physical device** — Simulator has different CPU/memory characteristics
-- Use **Release** configuration — Debug builds disable compiler optimizations
-- Profile with **realistic data** — 10 items vs 10,000 items reveals different bottlenecks
-- **Warm the app first** — first run includes one-time setup that skews results
+- Always profile on **physical device**: Simulator has different CPU/memory characteristics
+- Use **Release** configuration: Debug builds disable compiler optimizations
+- Profile with **realistic data**: 10 items vs 10,000 items reveals different bottlenecks
+- **Warm the app first**: first run includes one-time setup that skews results
 
 ### Interpreting Results
 - Focus on **Self Weight** to find actual bottlenecks (not just call tree weight)
-- A function with high weight but low self-weight is just a caller — dig deeper
+- A function with high weight but low self-weight is just a caller: dig deeper
 - Compare **before/after** traces to validate fixes
-- Look for **repeated patterns** — a function called 1000x at 1ms each = 1s hang
+- Look for **repeated patterns**: a function called 1000x at 1ms each = 1s hang
 
 ### Quick Wins Checklist
 - [ ] Move all file I/O off main thread
 - [ ] Decode images asynchronously
-- [ ] Use `@MainActor` sparingly — only for actual UI updates
+- [ ] Use `@MainActor` sparingly: only for actual UI updates
 - [ ] Batch database writes instead of single-row inserts
 - [ ] Cache expensive computations (JSON parsing, date formatting)
 - [ ] Use `DateFormatter` / `NumberFormatter` as shared instances (creation is expensive)

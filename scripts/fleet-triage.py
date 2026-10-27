@@ -73,7 +73,7 @@ def classify(agent_file):
 
     # An agent COMPLETED only if its last real turn is a finished assistant reply
     # (real model + a text block = the return value). Anything else means it
-    # stopped mid-flight — a synthetic error turn, a dangling tool_result with no
+    # stopped mid-flight: a synthetic error turn, a dangling tool_result with no
     # summarizing reply (died mid-tool, no error line written), or a tool_use with
     # no result. We classify all of those as died and bias toward re-dispatch:
     # re-running a borderline agent is cheap; silently dropping a dead one is not.
@@ -109,7 +109,7 @@ def classify(agent_file):
                             outputs.append(p)
     outputs = sorted(set(outputs))
 
-    # Salvage is only trustworthy for ABSOLUTE paths — a relative path in a
+    # Salvage is only trustworthy for ABSOLUTE paths: a relative path in a
     # transcript would be resolved against THIS tool's CWD, not the agent's, so
     # existence there is meaningless. (sub-agent-outputs.md mandates absolute
     # paths; we surface any relative ones as unverifiable rather than guessing.)
@@ -161,7 +161,7 @@ def main():
     for r in results:
         out = ""
         if r["status"] == "SALVAGED":
-            # absolute paths — what the parent actually needs to open
+            # absolute paths: what the parent actually needs to open
             out = "  reuse: " + ", ".join(os.path.expanduser(p) for p in r["existing"])
         elif r["status"] == "REDISPATCH" and r["outputs"]:
             out = "  (wrote, not found on disk: " + ", ".join(r["outputs"]) + ")"
@@ -169,7 +169,7 @@ def main():
             out += "  [unverifiable relative paths: " + ", ".join(r["rel"]) + "]"
         print(f"  {r['status']:11s} {r['agent']}{out}")
 
-    # EMPTY (zero-row / corrupt agent file) is lost work too — re-dispatch it.
+    # EMPTY (zero-row / corrupt agent file) is lost work too: re-dispatch it.
     redispatch = [r["agent"] for r in results if r["status"] in ("REDISPATCH", "EMPTY")]
     salvaged = {r["agent"]: [os.path.expanduser(p) for p in r["existing"]]
                 for r in results if r["status"] == "SALVAGED"}

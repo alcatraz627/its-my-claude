@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test-hooks.sh — smoke tests for the global hook scripts.
+# test-hooks.sh: smoke tests for the global hook scripts.
 #
 # Each test function (named `test_*`) fires a hook script with a crafted stdin
 # and asserts exit code, stdout, stderr, or resulting filesystem side-effects.
@@ -240,7 +240,7 @@ test_rotate_events_archives_when_over_threshold() {
 # --- test: rotate-wal -------------------------------------------------------
 
 test_rotate_wal_noop_when_absent() {
-  # No wal.jsonl exists — should exit 0, do nothing
+  # No wal.jsonl exists: should exit 0, do nothing
   local r; r=$(run_hook "$SCRIPT_DIR/rotate-wal.sh" "" '{"cwd":"/tmp/nonexistent"}')
   local exit_code; exit_code=$(extract_exit "$r")
   assert_exit 0 "$exit_code" "rotate-wal should exit 0 when no wal.jsonl present" || return 1

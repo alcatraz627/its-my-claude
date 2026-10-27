@@ -1,4 +1,4 @@
-# `~/.claude/i-dream/` — data dir for the i-dream system
+# `~/.claude/i-dream/`: data dir for the i-dream system
 
 This is the **runtime data** directory. The source code lives at
 `~/Code/Claude/i-dream/`. The full primer lives at:

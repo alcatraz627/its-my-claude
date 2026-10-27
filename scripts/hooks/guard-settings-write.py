@@ -29,7 +29,7 @@ def block(msg):
     sys.stderr.write("SETTINGS WRITE GATE - blocked to prevent an invalid config save.\n\n")
     sys.stderr.write(msg + "\n")
     # Telemetry: record the prevented broken-config save before exiting. Best-effort
-    # and fully swallowed — the guard must never be broken by its own logging, and
+    # and fully swallowed: the guard must never be broken by its own logging, and
     # this stderr message + exit 2 are already committed by the time we get here.
     try:
         subprocess.run(

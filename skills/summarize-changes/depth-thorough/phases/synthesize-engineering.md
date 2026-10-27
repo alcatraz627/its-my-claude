@@ -9,9 +9,9 @@ You are the synthesis agent producing the engineering changelog. Audience: backe
 
 ## Inputs
 
-1. `{THEMES_PATH}` — post-incorporate themes
-2. `{ISSUES_PATH}` — post-incorporate issues
-3. `{INVENTORY_INDEX}` — consult when summary is thin
+1. `{THEMES_PATH}`: post-incorporate themes
+2. `{ISSUES_PATH}`: post-incorporate issues
+3. `{INVENTORY_INDEX}`: consult when summary is thin
 
 ## Output
 
@@ -61,12 +61,12 @@ Top-of-doc (in order):
 ```
 
 Per theme:
-- **theme-name** — one-paragraph summary (refined for engineering reader)
+- **theme-name**: one-paragraph summary (refined for engineering reader)
 - Files: top 4-5 representative paths
 - Risk: low | medium | high
 - Commits: SHAs (or "see git log" if (post-cutoff))
 
 Rules:
 - No fake-precise SHAs. Use "(see git log)" if not in commits.tsv.
-- Be exhaustive — all themes get an entry — but each entry tight.
+- Be exhaustive: all themes get an entry: but each entry tight.
 - **Always backtick-wrap env-var / token names** (`` `LOGGER_CRAB_URL` ``, `` `ADMIN_API_TOKEN` ``). Bare `SNAKE_CASE_*` tokens get mangled by markdown linters (underscores → emphasis). Backticks prevent this.

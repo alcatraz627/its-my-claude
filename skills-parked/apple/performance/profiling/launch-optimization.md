@@ -27,7 +27,7 @@ Cold Launch Timeline
 | Warm launch | < 200ms | < 500ms | > 1s |
 | Resume | < 100ms | < 200ms | > 500ms |
 
-**Cold launch**: App not in memory — full DYLD load, runtime init, UI setup.
+**Cold launch**: App not in memory: full DYLD load, runtime init, UI setup.
 **Warm launch**: App recently terminated but system cached some data.
 **Resume**: App was suspended in background.
 
@@ -36,7 +36,7 @@ Cold Launch Timeline
 ### Setup
 1. **Xcode > Product > Profile** (Cmd+I)
 2. Choose **App Launch** template
-3. Record — the app launches and Instruments captures the entire timeline
+3. Record: the app launches and Instruments captures the entire timeline
 4. Stop after app is fully interactive
 
 ### Reading the Results

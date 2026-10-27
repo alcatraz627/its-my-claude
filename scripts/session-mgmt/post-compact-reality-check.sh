@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# post-compact-reality-check.sh — SessionStart injector, fires ONLY on source=="compact".
+# post-compact-reality-check.sh: SessionStart injector, fires ONLY on source=="compact".
 #
 # Compaction reliably preserves task momentum while stripping negative constraints
 # (the 18+-incident push-without-approval cluster traces to exactly this), and an
@@ -10,7 +10,7 @@
 # after BOTH auto and manual compaction, and PreCompact has a reported miss bug
 # on manual /compact (gh anthropics/claude-code#13572).
 #
-# Runtime contract: runs inside sessionstart-inject.sh's injector array — reads
+# Runtime contract: runs inside sessionstart-inject.sh's injector array: reads
 # the SessionStart payload on stdin, prints {additionalContext} or nothing.
 # Always exits 0. Mute: touch ~/.claude/.no-postcompact-check (machine-wide).
 

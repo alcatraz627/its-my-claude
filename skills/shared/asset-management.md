@@ -12,7 +12,7 @@
 **Non-source files agents create (screenshots, reports, PDFs, data exports, debug artifacts) go in `~/.claude/assets/<type>/`.**
 
 Preferred: use `asset.sh register` (handles naming, manifest, and placement in one call).
-Acceptable: copy the file directly to the right subdirectory — the file is still findable by type, just won't appear in MANIFEST.md. A bit of manifest inconsistency is fine; what matters is files land in the right directory, not the `~/.claude/` root.
+Acceptable: copy the file directly to the right subdirectory: the file is still findable by type, just won't appear in MANIFEST.md. A bit of manifest inconsistency is fine; what matters is files land in the right directory, not the `~/.claude/` root.
 
 ## Directory structure
 
@@ -31,7 +31,7 @@ Acceptable: copy the file directly to the right subdirectory — the file is sti
 
 ### Option A: `asset.sh register` (preferred)
 
-One call — moves file, adds datestamp prefix, updates MANIFEST.
+One call: moves file, adds datestamp prefix, updates MANIFEST.
 
 ```bash
 bash ~/.claude/assets/asset.sh register screenshot.png \
@@ -57,7 +57,7 @@ Just put the file in the right subdirectory. Follow naming convention manually.
 cp screenshot.png ~/.claude/assets/images/20260331-screenshot.png
 ```
 
-No manifest entry — file is still findable by browsing `assets/images/`. Use this when speed matters more than tracking.
+No manifest entry: file is still findable by browsing `assets/images/`. Use this when speed matters more than tracking.
 
 ## Finding assets
 
@@ -87,12 +87,12 @@ bash ~/.claude/assets/asset.sh path static/ghostty-icon.png
 
 ## What does NOT go in assets/
 
-- **Source code** — stays in project directories
-- **Plugin artifacts** — managed by Claude Code (`vercel-plugin-*`, `stats-cache.json`)
-- **Image cache** — managed by Claude Code (`~/.claude/image-cache/`)
-- **Config files** — `settings.json`, `CLAUDE.md`, etc. stay at `~/.claude/` root
-- **WAL/checkpoints** — stay in `.claude/` per existing conventions
-- **Scratchpad entries** — stay in `.claude/scratchpad/`
+- **Source code**: stays in project directories
+- **Plugin artifacts**: managed by Claude Code (`vercel-plugin-*`, `stats-cache.json`)
+- **Image cache**: managed by Claude Code (`~/.claude/image-cache/`)
+- **Config files**: `settings.json`, `CLAUDE.md`, etc. stay at `~/.claude/` root
+- **WAL/checkpoints**: stay in `.claude/` per existing conventions
+- **Scratchpad entries**: stay in `.claude/scratchpad/`
 
 ## Naming convention
 
@@ -102,7 +102,7 @@ bash ~/.claude/assets/asset.sh path static/ghostty-icon.png
 
 ## Cleanup
 
-`asset.sh cleanup` runs automatically during auto-compaction. Files registered with a lifetime get trashed (via `trash`) after expiry. Unregistered files in `tmp/` should be cleaned manually or will accumulate — this is an acceptable tradeoff.
+`asset.sh cleanup` runs automatically during auto-compaction. Files registered with a lifetime get trashed (via `trash`) after expiry. Unregistered files in `tmp/` should be cleaned manually or will accumulate: this is an acceptable tradeoff.
 
 ```bash
 # Manual cleanup

@@ -193,7 +193,7 @@ evidence rather than opinion.
   hand-written warning about it. gcp-watcher names the reason it is dangerous
   rather than merely annoying: *"The confident empty table is the dangerous
   output because it looks like an answer."* Their proposed fix is different from
-  gcp-fable's and worth holding beside it — either let a store carry a human
+  gcp-fable's and worth holding beside it: either let a store carry a human
   name that resolution prefers, or make an empty resolved store say "resolved
   store session-X is empty; 3 other stores in this project have tasks".
 - **`add` and `meta` overlap on the same keys: TWO of four.** gcp-fable on the
@@ -212,7 +212,7 @@ evidence rather than opinion.
   lints ids, the single `rec:true` and image existence, so it should fail or
   warn when a declared group key is unreachable. As they put it, it is *"exactly
   the class of defect a human never notices because the page still renders and
-  still looks fine"* — which is the same shape as the empty Inbox lane and the
+  still looks fine"*: which is the same shape as the empty Inbox lane and the
   vanishing status chip this round already fixed.
 - **A decision's `context` is one flat paragraph** (automation). Rewriting 16 of
   them for a human who had said they lacked context, sentence order was the only

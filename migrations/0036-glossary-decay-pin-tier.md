@@ -1,4 +1,4 @@
-# 0036 — glossary vocabulary decay: hit ledger, pin tier, dormancy review
+# 0036: glossary vocabulary decay: hit ledger, pin tier, dormancy review
 
 ## Summary
 
@@ -12,7 +12,7 @@ while in active use (proven by the decay gate).
 `style/glossary-hints.tsv` gains an optional 4th column `pin` (human-set only)
 exempting a term from dormancy; `scripts/style/glossary-decay.sh` reports
 active/dormant/pinned splits over a trailing window (28d default) and is wired
-into `thesaurus.sh review`. Reports only — retirement stays a human decision,
+into `thesaurus.sh review`. Reports only: retirement stays a human decision,
 and verdicts are withheld until the ledger covers a full window.
 
 ## Why

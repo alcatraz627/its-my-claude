@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — wire the gcc into Codex. Idempotent; re-run after any change.
+# install.sh: wire the gcc into Codex. Idempotent; re-run after any change.
 #
 # What it does, in order:
 #   1. skills   ~/.agents/skills/<name> -> ~/.claude/skills/<name> for each line of

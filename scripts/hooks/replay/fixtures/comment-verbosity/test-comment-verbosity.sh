@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test-comment-verbosity.sh — synthetic acceptance suite for
+# test-comment-verbosity.sh: synthetic acceptance suite for
 # guard-comment-verbosity.sh. Synthesizes PostToolUse payloads (the hook reads the
 # ADDED content, not the on-disk tree, so no project scaffolding is needed) and
 # asserts fire/suppress. This is the AUTHORITATIVE gate; the corpus replay is only
@@ -86,7 +86,7 @@ assert_suppressed "8  normal 3-line docstring SILENT" "$out"
 out=$(run Write /tmp/p/h.py "$(py_hash_run 5)")
 assert_suppressed "9  short 5-line # run SILENT" "$out"
 
-# A 9-line comment run (a genuinely-needed long explanation) must stay SILENT —
+# A 9-line comment run (a genuinely-needed long explanation) must stay SILENT:
 # the threshold was tightened to >10 so these no longer fire (corpus FP finding).
 out=$(run Write /tmp/p/h9.py "$(py_hash_run 9)")
 assert_suppressed "9b 9-line # run SILENT (tightened threshold)" "$out"

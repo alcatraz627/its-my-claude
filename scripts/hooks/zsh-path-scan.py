@@ -159,7 +159,7 @@ def footgun_shape(seg):
             for t in rest:
                 if PATH_ASSIGN_RE.match(t):
                     return "%s path=" % head
-            # `local path` with no value sets PATH to empty — measured on zsh
+            # `local path` with no value sets PATH to empty: measured on zsh
             # 5.9. typeset/declare without a value leave PATH intact.
             if head == "local" and any(t == "path" for t in rest):
                 return "local path (no value)"

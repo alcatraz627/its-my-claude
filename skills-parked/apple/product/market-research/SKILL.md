@@ -20,7 +20,7 @@ Use this Skill when the user wants to:
 - Estimate revenue potential
 - Deep-dive after initial problem discovery
 
-**This is a follow-up to the product-agent skill** — use this when you need market depth.
+**This is a follow-up to the product-agent skill**: use this when you need market depth.
 
 ## What This Skill Does
 

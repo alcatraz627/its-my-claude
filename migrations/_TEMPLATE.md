@@ -60,9 +60,9 @@ Conditions under which rollback should be considered:
 
 If multi-step. Mark each as it executes:
 
-1. **Phase 1** — description ✅ / ⏳ / ❌
-2. **Phase 2** — description
-3. **Cleanup** — description (often: remove back-compat shim after N days)
+1. **Phase 1**: description ✅ / ⏳ / ❌
+2. **Phase 2**: description
+3. **Cleanup**: description (often: remove back-compat shim after N days)
 
 ## Notes / followups
 

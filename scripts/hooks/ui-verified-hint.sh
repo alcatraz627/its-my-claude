@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ui-verified-hint.sh — UserPromptSubmit: hand the agent the warning that
+# ui-verified-hint.sh: UserPromptSubmit: hand the agent the warning that
 # ui-verified-stop.py queued at the end of the last turn.
 #
 # A Stop hook has no non-blocking way to talk to the agent: a systemMessage reaches

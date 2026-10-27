@@ -1,4 +1,4 @@
-// match.js — what a view MEANS, in one place.
+// match.js: what a view MEANS, in one place.
 //
 // The board filters on every keystroke, so matching has to run in the browser;
 // the CLI has to answer `view <name>` the same way. lib.ts cannot be loaded by
@@ -16,7 +16,7 @@ const VIEW_LIMITS = { nameMin: 2, nameMax: 40, maxClauses: 4, maxWords: 1 };
 const CLAUSE_GRAMMAR = [
   "is:open", "is:blocked", "is:settled", "needs-you", "review-me",
   // The two absence clauses. Every other clause here names something a card
-  // HAS, and the grammar had no way to ask what a card LACKS — so `sync` could
+  // HAS, and the grammar had no way to ask what a card LACKS: so `sync` could
   // end with "24 still unnamed, 46 untagged" and then offer only one-at-a-time
   // fixes, with no way to list the cards it had just counted. A message that
   // opens a loop has to be able to close it. (automation, 2026-08-26, from

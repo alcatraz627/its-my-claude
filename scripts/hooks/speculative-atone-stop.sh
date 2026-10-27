@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# speculative-atone-stop.sh — Stop: the escalation rung under the speculative-atone
+# speculative-atone-stop.sh: Stop: the escalation rung under the speculative-atone
 # hinter. After the hinter has nagged ESCALATE_AT times with rows still pending for
 # this session, a turn may no longer end silently: this blocks once per turn-count
 # with the unresolved rows, until each is confirmed or refuted. Loop-safe the same

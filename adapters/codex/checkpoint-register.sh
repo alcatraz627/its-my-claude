@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# checkpoint-register.sh — register a Codex handback in the shared checkpoint
+# checkpoint-register.sh: register a Codex handback in the shared checkpoint
 # index, so /catchup and /revive can find it the same way they find a Claude
 # checkpoint.
 #
@@ -22,7 +22,7 @@ shift
 SUMMARY="$*"
 [ -n "$SUMMARY" ] || die "a summary is required; it is what the reader sees in the picker"
 
-# Resolve to absolute — a relative path in the index is unresolvable later, when
+# Resolve to absolute: a relative path in the index is unresolvable later, when
 # the reader's working directory is somewhere else entirely.
 case "$HANDBACK" in
   /*) ;;

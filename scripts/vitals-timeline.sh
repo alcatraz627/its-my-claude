@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# vitals-timeline.sh — append one dated vitals reading to the timeline (WS3).
+# vitals-timeline.sh: append one dated vitals reading to the timeline (WS3).
 #
 # Runs gcc-vitals.sh --json, stamps it with the reading time, and appends one line
 # to vitals/timeline.jsonl. That file's git history IS the config's health trajectory
-# over time — small, low-churn (one line per run), diff-able. This is the "store the
+# over time: small, low-churn (one line per run), diff-able. This is the "store the
 # data on git" answer: version the TREND, not the raw churn.
 #
 # Idempotent-per-day by default: re-running the same day replaces that day's line
@@ -30,7 +30,7 @@ esac
 
 mkdir -p "$(dirname "$OUT")"
 
-# date is passed in (not read via an unavailable helper) — the reading's own clock.
+# date is passed in (not read via an unavailable helper): the reading's own clock.
 day=$(date -u +%Y-%m-%d)
 ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
@@ -47,7 +47,7 @@ printf '%s' "$line" | jq -e 'type=="object"' >/dev/null 2>&1 || {
 if [ "$FORCE" -eq 0 ] && [ -f "$OUT" ]; then
   # Replace today's existing line (idempotent per day), keep all others in order.
   # ROBUST per-line parse: `fromjson? // empty` skips only a malformed line and
-  # keeps every valid one — the naive `jq 'select(...)' file` aborts on the first
+  # keeps every valid one: the naive `jq 'select(...)' file` aborts on the first
   # bad line and, with the old 2>/dev/null||true, silently truncated everything
   # after it (final-review R2). Validate the rebuilt file has >=1 line before mv.
   tmp=$(mktemp "${TMPDIR:-/tmp}/vt-XXXXXX")

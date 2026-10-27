@@ -1,11 +1,11 @@
-# deployq checks — named, not free shell.
+# deployq checks: named, not free shell.
 #
 # A spec may only ask for a check that exists here. That is the same property as
 # named targets: a queue file must not become a shell. Add a check by writing a
 # function, not by putting a command in a spec.
 #
 # Every check: run_check <name> <repo> <ref> <target>; exit 0 pass, non-zero fail.
-# Print one line of evidence either way — a check whose reading nobody can see is
+# Print one line of evidence either way: a check whose reading nobody can see is
 # an assertion, not a check.
 
 _dq_url_for() {  # target -> the URL its post-checks probe, from the registry
@@ -14,7 +14,7 @@ _dq_url_for() {  # target -> the URL its post-checks probe, from the registry
 
 # Defers to the estate's existing preflight rather than re-asking the question.
 # It already distinguishes the three states that all surface as the same
-# unhelpful "auth" error, and prints the one command that fixes each — which is
+# unhelpful "auth" error, and prints the one command that fixes each: which is
 # better error-returning than a bare token probe, and is why this calls it.
 check_gcloud_alive() {
   local pf="${DEPLOYQ_PREFLIGHT:-$HOME/Code/Versable/gcp/bin/gcp-preflight.sh}"
@@ -93,7 +93,7 @@ check_unauth_refused() {
 
 # Born from a real incident: a ticket asked for f3a9ff9, the wrapper deployed the
 # working tree's HEAD (8b7f56d), and build-info-matches-ref caught it AFTER the
-# deploy. `ref` is an expectation, not an instruction — the wrapper decides what
+# deploy. `ref` is an expectation, not an instruction: the wrapper decides what
 # ships. So assert the expectation BEFORE spending a deploy, and fail closed.
 check_head_matches_ref() {
   local repo="$2" ref="$3"

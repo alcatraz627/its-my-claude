@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# guard-env-access.sh — PreToolUse hook on Edit/Write/MultiEdit.
+# guard-env-access.sh: PreToolUse hook on Edit/Write/MultiEdit.
 #
 # Env vars should be reached through ONE accessor a project defines once, not
-# scattered raw reads — but every project does it differently (a config module,
+# scattered raw reads: but every project does it differently (a config module,
 # a validated schema, a typed wrapper). So the first time a session adds env
 # access to a project, this nudges the agent to *establish the convention once*
 # (ask the user how env access should work here, record it), and thereafter to
@@ -15,7 +15,7 @@
 # allowlist, advisory) to all languages + any env var. Graduated from atone slug
 # adding-env-var-reads-without-checking-config (S3, worsening).
 #
-# ADVISORY — always exits 0. (You can't force "ask the user" mid-write; the
+# ADVISORY: always exits 0. (You can't force "ask the user" mid-write; the
 # nudge + the cached convention are the lever, not a block.)
 #
 # Mute:          touch ~/.claude/.env-access-off
@@ -63,7 +63,7 @@ printf '%s' "$NEW_CONTENT" | grep -qE "$ENV_RE" || exit 0
 
 # Rust keeps tests inline in the production .rs file (#[cfg(test)] / #[test] /
 # #[ignore]), so the filename-based test skip above never sees them. When the
-# added code is Rust test scaffolding, the env read is test-only — don't nag.
+# added code is Rust test scaffolding, the env read is test-only: don't nag.
 case "$FP" in
   *.rs) printf '%s' "$NEW_CONTENT" | grep -qE '#\[(cfg\(test\)|test|ignore)' && exit 0 ;;
 esac
@@ -79,7 +79,7 @@ done
 [ -z "$root" ] && exit 0
 
 # Established-idiom: if every env var this edit reads is ALREADY read in the
-# existing file, the convention was settled here — a read following the file's
+# existing file, the convention was settled here: a read following the file's
 # own pattern introduces nothing to nudge about (the reported noise was
 # #[ignore] probes re-reading a var the file's production code already reads).
 if [ -f "$FP" ]; then
@@ -122,7 +122,7 @@ else
 fi
 
 # additionalContext (stdout JSON) → the agent (no non-blocking channel reaches
-# the user's transcript — see hooks-tui-limits). The trailing directive makes
+# the user's transcript: see hooks-tui-limits). The trailing directive makes
 # the agent surface this nudge to the user, the only path to their transcript.
 msg="$msg  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 jq -n --arg c "$msg" '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $c}}'

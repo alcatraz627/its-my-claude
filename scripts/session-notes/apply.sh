@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/session-notes/apply.sh — Apply a proposed diff to the workspace doc.
+# scripts/session-notes/apply.sh: Apply a proposed diff to the workspace doc.
 #
 # Same JSON proposal as diff.sh, but actually writes the changes:
 #   - todos_done   → flip "- [ ] X" lines to "- [x] X"
@@ -8,7 +8,7 @@
 #   - doclinks_new → append bullets to ## Doc Links
 #   - decisions_new → append bullets to ## Decisions (with timestamp)
 #
-# Always preserves the file otherwise — sections it doesn't touch stay intact.
+# Always preserves the file otherwise: sections it doesn't touch stay intact.
 
 set -uo pipefail
 
@@ -60,7 +60,7 @@ def update_section(text, section, transformer):
         return header + new_content
     return pat.sub(repl, text, count=1)
 
-# 1. Mark todos done — replace "- [ ] X" with "- [x] X" if X matches case-insensitively
+# 1. Mark todos done: replace "- [ ] X" with "- [x] X" if X matches case-insensitively
 done_set = set(t.lower().strip() for t in p.get("todos_done", []))
 def mark_todos_done(content):
     lines = content.splitlines()

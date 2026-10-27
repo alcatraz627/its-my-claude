@@ -64,7 +64,7 @@ Grep: "@Test|func test" that reference the classes being refactored
 | Good (> 80%) | Most public methods have tests for happy + error paths | Proceed with refactoring |
 | Partial (40-80%) | Some methods tested, missing edge cases | Add characterization tests for uncovered methods |
 | Minimal (< 40%) | Few or no tests | Generate full characterization test suite first |
-| None (0%) | No test file exists | STOP — create characterization tests before any refactoring |
+| None (0%) | No test file exists | STOP: create characterization tests before any refactoring |
 
 ### Step 3: Evaluate Test Quality
 
@@ -118,7 +118,7 @@ Before refactoring [ClassName], generate characterization tests:
 
 ### Step 5: Green Light / Red Light
 
-#### Green Light — Proceed
+#### Green Light: Proceed
 
 ```markdown
 ## Refactor Guard: ✅ PROCEED
@@ -131,7 +131,7 @@ Safe to refactor. Run tests after each change:
 `xcodebuild test -scheme YourApp`
 ```
 
-#### Yellow Light — Needs Work
+#### Yellow Light: Needs Work
 
 ```markdown
 ## Refactor Guard: ⚠️ NEEDS TESTS
@@ -148,7 +148,7 @@ Safe to refactor. Run tests after each change:
 Use `characterization-test-generator` skill.
 ```
 
-#### Red Light — Stop
+#### Red Light: Stop
 
 ```markdown
 ## Refactor Guard: 🔴 STOP
@@ -240,6 +240,6 @@ Full contract tests recommended:
 
 ## References
 
-- `testing/characterization-test-generator/` — generates tests this guard may require
-- `testing/tdd-feature/` — for building new code during refactor
+- `testing/characterization-test-generator/`: generates tests this guard may require
+- `testing/tdd-feature/`: for building new code during refactor
 - Martin Fowler, *Refactoring: Improving the Design of Existing Code*

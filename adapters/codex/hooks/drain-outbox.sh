@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# drain-outbox.sh — apply the ledger and IPC writes a codex session queued.
+# drain-outbox.sh: apply the ledger and IPC writes a codex session queued.
 #
 # Codex's sandbox blocks writes outside the workspace and blocks the claude-ipc
 # socket, so `gcc` (adapters/codex/bin/gcc) queues those calls to

@@ -1,32 +1,32 @@
 #!/usr/bin/env bash
-# Stop hook: keep the workspace notes in step with the live Task list, and — only
-# when the list has clearly gone stale — make the agent stop and reconcile it.
+# Stop hook: keep the workspace notes in step with the live Task list, and: only
+# when the list has clearly gone stale: make the agent stop and reconcile it.
 #
 # Two jobs, in order:
 #   1. Mechanical mirror (always, silent): project the live Task list into the
 #      project's _active.md + memory pointer via writeback.sh. This half is not
-#      advisory — it just happens.
+#      advisory: it just happens.
 #   2. Liveness nudge (rare, loud): if the session has more than a couple of
 #      tasks AND the list hasn't moved for a stretch of turns during which real
 #      work (edits / commits) happened, refuse to end the turn once and ask the
-#      agent to reconcile — mark done, add new, reprioritise. A second stop is
+#      agent to reconcile: mark done, add new, reprioritise. A second stop is
 #      always allowed (the stop_hook_active escape), so this can never trap a
 #      turn in a loop; a leftover soft reminder is dropped for the next prompt.
 #
 # Trivial sessions (<=2 tasks) are never blocked. The session id comes from the
-# event stdin only — never the global ~/.claude/.current-session-id slot, which
+# event stdin only: never the global ~/.claude/.current-session-id slot, which
 # the most recent session clobbers.
 #
 # Output: nothing (normal stop) unless it decides to block, in which case a
 # single {"decision":"block","reason":...} JSON line goes to stdout. Must be a
-# DIRECT settings.json Stop hook — the orchestrator discards Stop stdout.
+# DIRECT settings.json Stop hook: the orchestrator discards Stop stdout.
 
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/_lib.sh"
 
-# One compact line per run so a no-op is visible instead of silent — this is a
+# One compact line per run so a no-op is visible instead of silent: this is a
 # direct (non-orchestrated) hook, so nothing else logs its outcome.
 SYNC_LOG="$HOME/.claude/logs/sync-todos.log"
 slog() {
@@ -73,8 +73,8 @@ fi
 STATE="$HOME/.claude/tasks/.sync-${SID}.json"
 CLEAN=$(printf '%s' "$SID" | tr -c 'A-Za-z0-9_-' '_')
 
-# Reconstruct the current task list ONCE — from the durable transcript when
-# available, else the volatile task dir — and share it with both the mirror and
+# Reconstruct the current task list ONCE: from the durable transcript when
+# available, else the volatile task dir: and share it with both the mirror and
 # the drift check, so the O(file-size) replay runs a single time per turn.
 if [ -n "$TX" ] && [ -f "$TX" ]; then
   TASKS_JSON=$(python3 "$SCRIPT_DIR/replay_tasks.py" "$TX" 2>/dev/null || echo '[]')
@@ -97,14 +97,14 @@ else
 fi
 
 # An empty list when the transcript actually CONTAINS task calls means the
-# replay/parse broke — flag it. (A task-free session legitimately replays to []
+# replay/parse broke: flag it. (A task-free session legitimately replays to []
 # even with a long transcript, so gate on a real TaskCreate, not on size.)
 if [ "$TASKS_JSON" = "[]" ] && [ -n "$TX" ] && [ -f "$TX" ] \
    && rg -q '"name":"TaskCreate"' "$TX" 2>/dev/null; then
   slog "warn:empty-replay-despite-taskcreate"
 fi
 
-# --- Job 1: mechanical mirror (always, silent) — reuses the list above ------
+# --- Job 1: mechanical mirror (always, silent): reuses the list above ------
 SHARED="/tmp/claude-tasks-${CLEAN}.json"
 printf '%s' "$TASKS_JSON" > "$SHARED" 2>/dev/null
 printf '%s' "$input" | SYNC_TASKS_FILE="$SHARED" bash "$SCRIPT_DIR/writeback.sh" >/dev/null 2>&1 || true
@@ -128,7 +128,7 @@ if [ -n "$TX" ] && [ -f "$TX" ]; then
   if [ "$TX_SIZE" -gt "$PREV_SIZE" ] 2>/dev/null; then
     SLICE=$(tail -c +"$((PREV_SIZE + 1))" "$TX" 2>/dev/null)
     # Count real file-edit tool calls only. (Dropped a literal "git commit"
-    # match — it also hit the string in prose / quoted commands, inflating the
+    # match: it also hit the string in prose / quoted commands, inflating the
     # count; actual edits already imply the work that matters here.)
     NEW_EDITS=$(printf '%s' "$SLICE" | rg -c '"name":"(Edit|Write|NotebookEdit|MultiEdit)"' 2>/dev/null || echo 0)
   fi
@@ -193,7 +193,7 @@ fi
 REASON="Your task list hasn't changed in ${TURNS_SINCE} turns but ~${EDITS_SINCE} edits happened — it's drifted from what you're actually doing. Before stopping, reconcile it with TaskUpdate/TaskCreate: mark finished work completed, add anything new you took on, and set the right task in_progress. Current: ${SUMMARY}. (This check only fires above a few tasks; update the list and it won't fire again.)"
 
 if [ "$STOP_ACTIVE" = "true" ]; then
-  # Already blocked once this stop-cycle — don't block again (escape the loop).
+  # Already blocked once this stop-cycle: don't block again (escape the loop).
   # Leave a soft reminder for the next prompt instead, and reset the window so
   # we don't immediately re-trip.
   CLEAN=$(printf '%s' "$SID" | tr -c 'A-Za-z0-9_-' '_')

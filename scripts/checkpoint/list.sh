@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# checkpoint/list.sh — List recent checkpoints from the index.
+# checkpoint/list.sh: List recent checkpoints from the index.
 #
 # Usage:
 #   list.sh                       # show last 10 entries, formatted for human read

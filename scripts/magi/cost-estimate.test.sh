@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# cost-estimate.test.sh — an unmeasured magi run must never report itself as free.
+# cost-estimate.test.sh: an unmeasured magi run must never report itself as free.
 #
 # What this protects, in human terms: a full-mode magi run costs real money ($6-12).
 # When voter usage never reaches the supervisor, every voter's token count is null,
-# the sums treat null as zero, and the run prices itself at $0.00 — which reads as
+# the sums treat null as zero, and the run prices itself at $0.00: which reads as
 # "this was free" rather than "nobody measured it". Both 2026-07-10 runs did exactly
 # that (archives show total_tokens: 0, cost_usd_est: 0.0 for runs that were not
 # free), and nothing in the output said so.
 #
 # Fixtures, not a live run: exercising this for real costs $6-12 per case. What the
 # fixtures deliberately do NOT model: whether a voter actually EMITS usage under a
-# given dispatch transport. They pin the reporting side only — given tokens present
+# given dispatch transport. They pin the reporting side only: given tokens present
 # / absent / mixed, does the output tell the truth? The emit side needs a real run.
 #
 #   bash ~/.claude/scripts/magi/cost-estimate.test.sh
@@ -91,7 +91,7 @@ ERR=$(bash "$CE" "$D" --nonsense 2>&1 || true)
 printf '%s' "$ERR" | rg -q "unknown option" && ok "unknown option rejected, not ignored" || bad "unknown option silently ignored"
 
 # A bare trailing --io-split used to spin forever: `shift 2` fails with one arg
-# left and, absent `set -e`, the parse loop never advances. Cap it — a hang here
+# left and, absent `set -e`, the parse loop never advances. Cap it: a hang here
 # would otherwise hang the whole Phase-11 finalize.
 if perl -e 'my $p=fork; if($p==0){setpgrp(0,0); open(STDOUT,">/dev/null"); open(STDERR,">/dev/null"); exec(@ARGV) or exit 127}
             local $SIG{ALRM}=sub{kill "KILL",-$p; exit 9}; alarm 10; waitpid($p,0); exit($?>>8)' \

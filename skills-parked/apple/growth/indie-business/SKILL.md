@@ -1,12 +1,12 @@
 ---
 name: indie-business
-description: Business fundamentals for indie app developers — LLC/entity setup, taxes, Apple Small Business Program, revenue tracking, hiring contractors, and financial planning for sustainability. Use when user asks about business setup, tax implications, hiring, or financial planning for their app business.
+description: Business fundamentals for indie app developers, LLC/entity setup, taxes, Apple Small Business Program, revenue tracking, hiring contractors, and financial planning for sustainability. Use when user asks about business setup, tax implications, hiring, or financial planning for their app business.
 allowed-tools: [Read, Glob, Grep, AskUserQuestion, WebSearch]
 ---
 
 # Indie Business Operations
 
-Business fundamentals for indie Apple app developers. Covers the non-code aspects of running an app business — entity setup, taxes, revenue tracking, hiring, and financial planning.
+Business fundamentals for indie Apple app developers. Covers the non-code aspects of running an app business: entity setup, taxes, revenue tracking, hiring, and financial planning.
 
 **Disclaimer:** This skill provides general guidance, not legal or tax advice. Always consult a qualified accountant or attorney for your specific situation.
 
@@ -92,7 +92,7 @@ Already have an LLC and net profit > $80K/year?
 - Most EU countries have sole proprietor equivalents and limited liability company options.
 - VAT registration thresholds vary by country (but Apple handles VAT on app sales).
 - Consider your country's social security implications for self-employment income.
-- Consult a local accountant — EU tax rules are country-specific.
+- Consult a local accountant: EU tax rules are country-specific.
 
 #### India
 
@@ -451,7 +451,7 @@ Present business guidance as:
 
 ## References
 
-- **analytics-interpretation/** — For understanding if your metrics support business decisions
-- **monetization/** — For pricing strategy and revenue model selection
-- **community-building/** — For organic growth that reduces acquisition costs
+- **analytics-interpretation/**: For understanding if your metrics support business decisions
+- **monetization/**: For pricing strategy and revenue model selection
+- **community-building/**: For organic growth that reduces acquisition costs
 - Apple Small Business Program: https://developer.apple.com/app-store/small-business-program/

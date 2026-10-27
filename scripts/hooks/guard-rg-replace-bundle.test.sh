@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-rg-replace-bundle.test.sh — runnable checks for the rg -r guard.
+# guard-rg-replace-bundle.test.sh: runnable checks for the rg -r guard.
 #
 # The guard must tell rg's OWN -r flag from a -r that merely appears in the
 # command text. It already scopes to rg segments and strips runner wrappers; what
@@ -7,7 +7,7 @@
 # the string "jq -r" was refused as if it were a replacement.
 #
 # The controls matter more than the cases. This guard blocks via
-# {"decision":"block"} on stdout with exit 0, NOT exit 2 — a probe that only
+# {"decision":"block"} on stdout with exit 0, NOT exit 2: a probe that only
 # checks the exit code reads every block as "allowed" and reports a clean bill of
 # health for a broken hook. Both mechanisms are checked below.
 #

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pol.sh — the owner's policy switches for what agents may do, read live by hooks.
+# pol.sh: the owner's policy switches for what agents may do, read live by hooks.
 #
 # One place holds every allow/block and every tunable the owner sets without
 # typing a sentence: GitHub, Slack, commits, pushes, deploys, model seats, a few

@@ -1,4 +1,4 @@
-# /core-dump — Examples & Schemas
+# /core-dump: Examples & Schemas
 
 Companion to `SKILL.md`. Holds the visual-summary JSON schema and the
 validation-example scenarios pulled out of the main procedure to keep it lean.
@@ -69,7 +69,7 @@ that schema lives in `~/.claude/skills/catchup/SKILL.md` Phase 3.1.
 
 The `## Todos` machine block (between `<!-- sync:auto:start -->` and
 `<!-- sync:auto:end -->`) is rewritten by the `stop-sync` hook every turn from
-the live Task list. Don't propose todos into it — they'd be overwritten. Only
+the live Task list. Don't propose todos into it: they'd be overwritten. Only
 propose `todos_new` for genuine human-area items the Task list doesn't track.
 
 ## Validation scenarios

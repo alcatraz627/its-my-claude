@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/git/state.sh — Canonical git state check before push/commit.
+# scripts/git/state.sh: Canonical git state check before push/commit.
 #
 # Replaces the three-command chain that CLAUDE.md mandates before any push:
 #   git status + git log --oneline -3 + git diff --stat

@@ -1,4 +1,4 @@
-# Pre-Compaction Checkpoint — 2026-04-06T04:41:52+05:30
+# Pre-Compaction Checkpoint: 2026-04-06T04:41:52+05:30
 
 <!-- sessions: 818391ae-f06f-4413-b1ac-e099c12544a7@2026-04-06 -->
 
@@ -20,12 +20,12 @@ After compaction completes, the agent should:
 
 ## Recently Modified Files
 
-- _(no git changes detected — check WAL for file references)_
+- _(no git changes detected: check WAL for file references)_
 
 ## Additional Context Sources
 
-- WAL: `.claude/wal.md` — action log with checkpoints
-- Scratchpad: `.claude/scratchpad/` — in-progress plans
+- WAL: `.claude/wal.md`: action log with checkpoints
+- Scratchpad: `.claude/scratchpad/`: in-progress plans
 - Tasks: check TaskList for pending items
 
 ---

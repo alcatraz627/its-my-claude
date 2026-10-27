@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-cd-relative-path.sh — PreToolUse[Bash], SYNCHRONOUS.
+# guard-cd-relative-path.sh: PreToolUse[Bash], SYNCHRONOUS.
 #
 # Blocks a relative path that follows a `cd` in the SAME command, because the
 # harness cannot statically resolve it and therefore asks the human. The dialog

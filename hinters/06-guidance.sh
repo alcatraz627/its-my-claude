@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 06-guidance.sh — UserPromptSubmit hinter. Surfaces the user's standing
+# 06-guidance.sh: UserPromptSubmit hinter. Surfaces the user's standing
 # directives (guidance/notes.md) that are relevant to THIS turn. Directives
 # tagged with a keyword come back on every prompt that mentions it; directives
 # scoped `all` apply to every prompt, so they are shown once per session and

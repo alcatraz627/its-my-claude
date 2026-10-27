@@ -22,7 +22,7 @@ SOURCE_EXT_RE = re.compile(
 )
 EDIT_TOOLS = {"Edit", "Write", "MultiEdit"}
 # The whole mute namespace, not just `.no-*-gate`. A muted hook exits 0 silently,
-# so the replay reports SILENT and lies about it — which makes this regex the
+# so the replay reports SILENT and lies about it: which makes this regex the
 # safety net for the entire ship-gate. It used to match only `.no-<x>gate`, missing
 # `<x>-off` (e.g. `.model-tier-off`, live on this machine right now), bare `.no-<x>`
 # with no -gate suffix (`.no-backlog-surface`), and `.allow-<x>` escape hatches.

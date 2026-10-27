@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# task.sh — write to a session's task store from Bash, for harness builds that expose
+# task.sh: write to a session's task store from Bash, for harness builds that expose
 # no TaskCreate / TaskUpdate tool (observed 2026-08-18 on Fable builds by gcc-work-78,
 # vb-fable and gcc-fable), and for anyone who wants /tasks to be the one surface.
 #

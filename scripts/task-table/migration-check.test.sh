@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# migration-check.test.sh — the migration guard must fail on a real store, and
+# migration-check.test.sh: the migration guard must fail on a real store, and
 # it must still pass on a change the migration declared.
 #
 # The plan this exists for asserted row count, id set, and completed count after

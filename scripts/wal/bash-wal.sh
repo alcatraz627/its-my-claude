@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bash-wal.sh — PreToolUse/PostToolUse hook for the Bash tool. Writes
+# bash-wal.sh: PreToolUse/PostToolUse hook for the Bash tool. Writes
 # bash_intent (Pre) and bash_closed (Post) action entries to the session WAL
 # so /catchup can see which shell command was in flight if a session crashes.
 #
@@ -21,7 +21,7 @@
 #   {kind:"action", verb:"bash_closed", target:"<cmd head>",
 #    outcome:"uid=<short-id> status=ok|error|interrupted"}
 #
-# Fails silently — never blocks the tool call.
+# Fails silently: never blocks the tool call.
 
 set -uo pipefail
 

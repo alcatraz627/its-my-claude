@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wizard.sh — answer a decision page in the terminal instead of the browser.
+# wizard.sh: answer a decision page in the terminal instead of the browser.
 #
 # Same page, same config.json, same answer string, same POST endpoint the
 # browser's Submit button uses. The only difference is the surface: this one

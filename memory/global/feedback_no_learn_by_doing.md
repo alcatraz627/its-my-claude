@@ -1,6 +1,6 @@
 ---
 name: Skip Learn by Doing for simple tasks
-description: User does not want to be asked to write code themselves for straightforward/utility tasks — just do it
+description: User does not want to be asked to write code themselves for straightforward/utility tasks, just do it
 type: feedback
 ---
 

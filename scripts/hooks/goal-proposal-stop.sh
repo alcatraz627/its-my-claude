@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal-proposal-stop.sh — Stop hook: a proposed /goal is not a place to stop.
+# goal-proposal-stop.sh: Stop hook: a proposed /goal is not a place to stop.
 #
 # The rule says print the paste line and work under it. Measured over 7 days on
 # 2026-09-08: 84 of 99 mid-work proposals ended the turn with no tool call after

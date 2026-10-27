@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# declared-state.test.sh — the seven ruled states survive the trip from the write
+# declared-state.test.sh: the seven ruled states survive the trip from the write
 # path to the ball. task.sh accepts --state; before 2026-09-05 the renderer
 # ignored metadata.state entirely, so `review` and `deferred` both drew the green
 # ready ball and a row parked on purpose read as a row waiting to be picked up.

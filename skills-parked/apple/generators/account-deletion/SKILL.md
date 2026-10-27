@@ -57,21 +57,21 @@ If CloudKit or server sync found, include remote data cleanup steps.
 Ask user via AskUserQuestion:
 
 1. **Deletion type?**
-   - Immediate — account deleted right away after confirmation
-   - Grace period — account scheduled for deletion, user can cancel
+   - Immediate: account deleted right away after confirmation
+   - Grace period: account scheduled for deletion, user can cancel
 
 2. **Grace period duration?** (if grace period selected)
    - 7 days
-   - 14 days — recommended
+   - 14 days: recommended
    - 30 days
 
 3. **Include data export before deletion?**
-   - Yes — generate DataExportService with JSON/ZIP archive and ShareLink
-   - No — skip data export
+   - Yes: generate DataExportService with JSON/ZIP archive and ShareLink
+   - No: skip data export
 
 4. **Server-side API call needed?**
-   - Yes — generate server deletion request with configurable endpoint
-   - No — local-only deletion (Keychain, UserDefaults, SwiftData/CoreData, files)
+   - Yes: generate server deletion request with configurable endpoint
+   - No: local-only deletion (Keychain, UserDefaults, SwiftData/CoreData, files)
 
 ## Generation Process
 
@@ -80,15 +80,15 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `AccountDeletionManager.swift` — @Observable orchestrator for the full deletion lifecycle
-2. `DeletionConfirmationView.swift` — Multi-step confirmation UI with NavigationStack
-3. `KeychainCleanup.swift` — Utility to remove all app Keychain items
+1. `AccountDeletionManager.swift`: @Observable orchestrator for the full deletion lifecycle
+2. `DeletionConfirmationView.swift`: Multi-step confirmation UI with NavigationStack
+3. `KeychainCleanup.swift`: Utility to remove all app Keychain items
 
 ### Step 3: Create Optional Files
 Based on configuration:
-- `DataExportService.swift` — If data export selected
-- `DeletionGracePeriodView.swift` — If grace period selected
-- `SignInWithAppleRevocation.swift` — If SIWA detected in project
+- `DataExportService.swift`: If data export selected
+- `DeletionGracePeriodView.swift`: If grace period selected
+- `SignInWithAppleRevocation.swift`: If SIWA detected in project
 
 ### Step 4: Determine File Location
 Check project structure:
@@ -232,7 +232,7 @@ func dataExportGeneratesArchive() async throws {
 ## Common Patterns
 
 ### Initiate Deletion from Settings
-Account deletion must be accessible from within the app — typically in Settings > Account. Apple will reject apps that only offer deletion via website or email.
+Account deletion must be accessible from within the app: typically in Settings > Account. Apple will reject apps that only offer deletion via website or email.
 
 ### Confirm with Password or Biometric
 Re-authenticate the user before deletion to prevent accidental or unauthorized account removal. Use LocalAuthentication for biometric or prompt for password.
@@ -245,18 +245,18 @@ Instead of immediate deletion, schedule it for 7-30 days out. Allow users to can
 
 ## Gotchas
 
-- **Apple requires in-app deletion** — App Review will reject apps where account deletion is only available via website, email, or contacting support. The option must be accessible from within the app itself.
-- **Keychain items persist after app uninstall** — You must explicitly call `SecItemDelete` for all item classes (generic password, internet password, certificate, key, identity) during account deletion.
-- **Sign in with Apple token revocation** — If your app supports Sign in with Apple, you must revoke the user's token via Apple's REST API (`https://appleid.apple.com/auth/revoke`). Failure to do so means Apple still considers the account linked.
-- **CloudKit data cleanup** — CloudKit private database records are tied to the user's iCloud account, not your app. You cannot delete them on behalf of the user. Document this limitation and delete any shared/public records your app created.
-- **Subscription cancellation guidance** — Account deletion does not automatically cancel active subscriptions. Display a warning and link to Settings > Subscriptions so users can cancel before deletion.
-- **UserDefaults and app group data** — Remember to clean `UserDefaults.standard` and any shared app group containers (`UserDefaults(suiteName:)`).
-- **SwiftData / CoreData cleanup** — Delete all model containers and persistent stores, not just individual records.
+- **Apple requires in-app deletion**: App Review will reject apps where account deletion is only available via website, email, or contacting support. The option must be accessible from within the app itself.
+- **Keychain items persist after app uninstall**: You must explicitly call `SecItemDelete` for all item classes (generic password, internet password, certificate, key, identity) during account deletion.
+- **Sign in with Apple token revocation**: If your app supports Sign in with Apple, you must revoke the user's token via Apple's REST API (`https://appleid.apple.com/auth/revoke`). Failure to do so means Apple still considers the account linked.
+- **CloudKit data cleanup**: CloudKit private database records are tied to the user's iCloud account, not your app. You cannot delete them on behalf of the user. Document this limitation and delete any shared/public records your app created.
+- **Subscription cancellation guidance**: Account deletion does not automatically cancel active subscriptions. Display a warning and link to Settings > Subscriptions so users can cancel before deletion.
+- **UserDefaults and app group data**: Remember to clean `UserDefaults.standard` and any shared app group containers (`UserDefaults(suiteName:)`).
+- **SwiftData / CoreData cleanup**: Delete all model containers and persistent stores, not just individual records.
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/auth-flow` — Authentication flow generation
-- Related: `generators/persistence-setup` — Data persistence that needs cleanup
-- Related: `generators/settings-screen` — Settings screen where deletion is placed
-- Related: `generators/cloudkit-sync` — CloudKit data that needs cleanup consideration
+- **templates.md**: All production Swift templates
+- Related: `generators/auth-flow`: Authentication flow generation
+- Related: `generators/persistence-setup`: Data persistence that needs cleanup
+- Related: `generators/settings-screen`: Settings screen where deletion is placed
+- Related: `generators/cloudkit-sync`: CloudKit data that needs cleanup consideration

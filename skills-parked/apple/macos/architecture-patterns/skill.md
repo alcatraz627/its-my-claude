@@ -163,7 +163,7 @@ Load these modules as needed:
 
 ## Response Guidelines
 
-- Be pragmatic — don't over-architect small apps
+- Be pragmatic: don't over-architect small apps
 - Show before/after code for refactoring suggestions
 - Acknowledge trade-offs (abstraction vs. simplicity)
 - Consider the team size and project phase

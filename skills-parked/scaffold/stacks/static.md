@@ -5,7 +5,7 @@
 - Default port: 3040
 - Install command: npm install
 - Run command: npm run dev
-- Test command: (none — open index.html in browser)
+- Test command: (none: open index.html in browser)
 
 ## Dev Dependencies
 live-server: ^1.2

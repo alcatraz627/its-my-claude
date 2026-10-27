@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# checkpoint/write.sh — Record a checkpoint event.
+# checkpoint/write.sh: Record a checkpoint event.
 #
 # Writes:
-#   1. ~/.claude/checkpoints/<session-id>.json    — session-keyed pointer
+#   1. ~/.claude/checkpoints/<session-id>.json: session-keyed pointer
 #                                                   (one per active session; safe to refresh)
-#   2. ~/.claude/checkpoints/index.jsonl          — chronological log
+#   2. ~/.claude/checkpoints/index.jsonl: chronological log
 #                                                   (append OR replace-latest matching line)
-#   3. ~/.claude/_last-checkpoint.json            — BACK-COMPAT (deprecated, removed in
+#   3. ~/.claude/_last-checkpoint.json: BACK-COMPAT (deprecated, removed in
 #                                                   migration 0008 once readers updated)
 #
 # Why a directory + index: multiple long-running agents across different projects each
@@ -101,7 +101,7 @@ PY
   fi
 fi
 
-# JSON-escape a value (string only — no nested objects here).
+# JSON-escape a value (string only: no nested objects here).
 json_escape() {
   python3 -c 'import json,sys; print(json.dumps(sys.argv[1]), end="")' "$1"
 }
@@ -114,7 +114,7 @@ SESSION_FILE="$CKPT_DIR/$SAFE_SID.json"
 # reuse them across genuinely different sessions (live example: "local-models",
 # two UUIDs). If the existing pointer belongs to a DIFFERENT session UUID,
 # preserve it under a uuid-suffixed name instead of silently last-writer-winning
-# — the older session stays reachable via <slug>.<uuid8>.json (resolve.sh falls
+# : the older session stays reachable via <slug>.<uuid8>.json (resolve.sh falls
 # back to those) or via --pick from the append-only index.
 if [[ -f "$SESSION_FILE" ]]; then
   OLD_UUID=$(python3 -c 'import json,sys
@@ -127,7 +127,7 @@ except Exception: print("")' "$SESSION_FILE" 2>/dev/null)
     printf 'pointer-collision: slug "%s" was held by uuid %s… — preserved as %s.%s.json\n' \
       "$SESSION_ID" "${OLD_UUID:0:8}" "$SAFE_SID" "${OLD_UUID:0:8}"
   elif [[ -z "$OLD_UUID" && -n "${SESSION_UUID:-}" ]]; then
-    # Old pointer predates uuid recording — sessions are indistinguishable, so we
+    # Old pointer predates uuid recording: sessions are indistinguishable, so we
     # overwrite (old checkpoint stays reachable via --pick in the append-only
     # index). Warn so the no-op is legible instead of silent.
     printf 'pointer-collision-guard: existing "%s" pointer has no session_uuid — cannot distinguish sessions; overwriting (older reachable via --pick)\n' "$SESSION_ID" >&2
@@ -222,7 +222,7 @@ printf 'wrote: %s\n' "$SESSION_FILE"
 [[ -z "${SKIP_INDEX:-}" ]] && printf 'index: %s (%s)\n' "$INDEX" "$MODE" || printf 'index: skipped (guard active)\n'
 printf 'back-compat: %s\n' "$HOME/.claude/_last-checkpoint.json"
 
-# 4. Dreams ingestion — only for full /core-dump entries (skip precompact + retro;
+# 4. Dreams ingestion: only for full /core-dump entries (skip precompact + retro;
 #    they're lower-fidelity sources that would dilute cross-session pattern signal).
 #    Fire async, never block the writer.
 if [[ "$KIND" == "core-dump" && -f "$CHECKPOINT_PATH" ]]; then

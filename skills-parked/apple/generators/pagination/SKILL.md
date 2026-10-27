@@ -48,11 +48,11 @@ If found, ask user whether to replace or extend.
 Ask user via AskUserQuestion:
 
 1. **Pagination style?**
-   - Offset-based (page number + page size) — most common for REST APIs
-   - Cursor-based (opaque cursor token) — better for real-time data, social feeds
+   - Offset-based (page number + page size): most common for REST APIs
+   - Cursor-based (opaque cursor token): better for real-time data, social feeds
 
 2. **Loading trigger?**
-   - Infinite scroll (auto-load when near bottom) — recommended
+   - Infinite scroll (auto-load when near bottom): recommended
    - Manual "Load More" button
    - Both (infinite scroll with manual fallback on error)
 
@@ -73,17 +73,17 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `PaginatedResponse.swift` — Generic response models for offset and cursor
-2. `PaginationState.swift` — State machine (idle, loading, loaded, error, exhausted)
-3. `PaginatedDataSource.swift` — Protocol endpoints conform to
-4. `PaginationManager.swift` — @Observable manager with state transitions
+1. `PaginatedResponse.swift`: Generic response models for offset and cursor
+2. `PaginationState.swift`: State machine (idle, loading, loaded, error, exhausted)
+3. `PaginatedDataSource.swift`: Protocol endpoints conform to
+4. `PaginationManager.swift`: @Observable manager with state transitions
 
 ### Step 3: Create Optional Files
 Based on configuration:
-- `SearchablePaginationManager.swift` — If search selected
-- `Views/PaginatedList.swift` — Infinite scroll SwiftUI wrapper
-- `Views/LoadMoreButton.swift` — Manual load-more button
-- `Views/PaginationStateView.swift` — Empty/loading/error state views
+- `SearchablePaginationManager.swift`: If search selected
+- `Views/PaginatedList.swift`: Infinite scroll SwiftUI wrapper
+- `Views/LoadMoreButton.swift`: Manual load-more button
+- `Views/PaginationStateView.swift`: Empty/loading/error state views
 
 ### Step 4: Determine File Location
 Check project structure:
@@ -200,7 +200,7 @@ func loadAllPagesReachesExhausted() async throws {
 
 ## References
 
-- **pagination-patterns.md** — Offset vs cursor comparison, state machine, threshold prefetching
-- **templates.md** — All production Swift templates
-- Related: `generators/networking-layer` — Base networking layer for data sources
-- Related: `generators/http-cache` — Cache paginated responses
+- **pagination-patterns.md**: Offset vs cursor comparison, state machine, threshold prefetching
+- **templates.md**: All production Swift templates
+- Related: `generators/networking-layer`: Base networking layer for data sources
+- Related: `generators/http-cache`: Cache paginated responses

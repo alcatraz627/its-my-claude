@@ -1,5 +1,5 @@
 #!/bin/bash
-# mint-ci-token.sh — mint a Claude Code OAuth token for a DIFFERENT account than
+# mint-ci-token.sh: mint a Claude Code OAuth token for a DIFFERENT account than
 # the one this machine is logged into, without touching this machine's login.
 #
 # The problem it solves: `claude setup-token` mints for whoever the local CLI is

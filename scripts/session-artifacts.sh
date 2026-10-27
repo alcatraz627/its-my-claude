@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-artifacts.sh — find everything tied to a Claude session id.
+# session-artifacts.sh: find everything tied to a Claude session id.
 #
 # A session leaves traces across several stores; this gathers them in one place
 # so "what happened in session X" is one command, not five greps. Matches the

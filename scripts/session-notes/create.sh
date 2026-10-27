@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/session-notes/create.sh — Initialize a session workspace doc.
+# scripts/session-notes/create.sh: Initialize a session workspace doc.
 #
 # Creates <project>/.claude/session-notes/<session-id>.md with the canonical
 # section template, plus updates the _active.md symlink to point at it.
@@ -44,7 +44,7 @@ ACTIVE="$NOTES_DIR/_active.md"
 
 if [[ ! -f "$DOC" ]]; then
   cat > "$DOC" <<EOF
-# Session: $NAME — $(date "+%Y-%m-%d")
+# Session: $NAME: $(date "+%Y-%m-%d")
 
 <!-- session: $SESSION_ID -->
 

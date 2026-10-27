@@ -6,7 +6,7 @@ allowed-tools: [Read, Glob, Grep]
 
 # Release Review for Apple Platforms
 
-Performs a comprehensive pre-release audit of macOS and iOS applications from a senior developer's perspective. Identifies critical issues that could cause rejection, security vulnerabilities, privacy concerns, and UX problems—with actionable fixes.
+Performs a comprehensive pre-release audit of macOS and iOS applications from a senior developer's perspective. Identifies critical issues that could cause rejection, security vulnerabilities, privacy concerns, and UX problems: with actionable fixes.
 
 ## When This Skill Activates
 

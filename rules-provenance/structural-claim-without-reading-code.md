@@ -1,5 +1,5 @@
 ---
-brief: Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it — or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded") — name the artifact that proves it
+brief: Before asserting how a subsystem works (authority, data flow, hot path), name the file:line that proves it, or read the code first; same precheck for process-completion claims ("the migration ran", "the deploy succeeded"), name the artifact that proves it
 triggers:
   - topic:architectural-claim
   - topic:authority
@@ -18,13 +18,13 @@ stale_after_days: 90
 
 # Architectural claims require file:line citation
 
-Before stating how a subsystem works — its authority, cost model, data flow, "hot path" — **name the file:line that proves the claim, or read the code first**. Pattern-matching from prior projects is not evidence.
+Before stating how a subsystem works: its authority, cost model, data flow, "hot path": **name the file:line that proves the claim, or read the code first**. Pattern-matching from prior projects is not evidence.
 
 Graduated from atone slug `structural-claim-without-reading-code` (S3, **same-conversation repeat** after correction 2026-05-08).
 
 ## Why this gets its own rule
 
-Pattern-matching feels like knowing. The agent confidently asserts "JWT verify is the only cost on the auth path" or "Python BE is the final authority on token validity" — both turned out wrong in adjacent subsystems of the same conversation. The first correction *didn't* prevent the second instance because the agent narrowed the lesson ("verify auth subsystem X") instead of broadening it ("verify before asserting").
+Pattern-matching feels like knowing. The agent confidently asserts "JWT verify is the only cost on the auth path" or "Python BE is the final authority on token validity": both turned out wrong in adjacent subsystems of the same conversation. The first correction *didn't* prevent the second instance because the agent narrowed the lesson ("verify auth subsystem X") instead of broadening it ("verify before asserting").
 
 ## The rule
 
@@ -64,20 +64,20 @@ claim about different things, with nothing in the output saying so, is the shape
 The rule above covers *how a subsystem works*. The same verification failure
 happens one layer up, on *what a process did*: "the migration ran", "the deploy
 succeeded", "the test passed", "the cron fired". Before writing that a step is
-done / succeeded / passed, **name the artifact that proves it** — a log line, an
+done / succeeded / passed, **name the artifact that proves it**: a log line, an
 exit code, a row count, a file timestamp, elapsed time (the clock, not your sense
-of how long it felt) — or run the check first.
+of how long it felt): or run the check first.
 
 Boundary with `rules/exercise-based-verification.md`: that rule binds when *you*
 changed code and must run the changed path before claiming done. This clause
-binds when you assert the outcome of any process — yours, a cron's, a deploy
-pipeline's, another agent's — without holding the evidence. Same precheck, same
+binds when you assert the outcome of any process: yours, a cron's, a deploy
+pipeline's, another agent's: without holding the evidence. Same precheck, same
 gate: can I name what proves this right now?
 
 ## Document provenance gets the same precheck
 
 When asserting a document is "the spec", "the contract", or "the source of
-truth": also check its provenance — is it human-authored, or Claude-generated
+truth": also check its provenance: is it human-authored, or Claude-generated
 documentation downstream of the application? A Claude-authored doc treated as a
 spec produces a circular review.
 
@@ -127,11 +127,11 @@ backs it.
 
 ## When the same correction lands twice in one session
 
-The second instance is the **same overconfidence** in a neighboring subsystem. Treat any in-session repeat of this pattern as auto-S3 and write the RCA — the system is screaming.
+The second instance is the **same overconfidence** in a neighboring subsystem. Treat any in-session repeat of this pattern as auto-S3 and write the RCA: the system is screaming.
 
 ## Diagnostic signal
 
-User responds with "did you actually read X?" or "show me where" — for any sentence that asserts authority. That's the pattern firing.
+User responds with "did you actually read X?" or "show me where": for any sentence that asserts authority. That's the pattern firing.
 
 ## Related
 

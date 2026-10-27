@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# 10-atone-circuit-breaker.sh — UserPromptSubmit hinter (atone T2.1).
+# 10-atone-circuit-breaker.sh: UserPromptSubmit hinter (atone T2.1).
 #
 # The momentum circuit breaker. When the SAME atone slug is recorded twice in one
 # session, that second occurrence is the documented repeat signature: the agent
 # knew the rule, atoned for breaking it, and broke it again within the hour. The
-# data shows awareness is already saturated — adding more reminders scores ~0 on
+# data shows awareness is already saturated: adding more reminders scores ~0 on
 # behaviour change. What's missing is a hard stop at the proven failure point.
 # This injects one, exactly once per repeated slug.
 #
 # It arms only when the repeat actually matters:
 #   - the work is high-stakes (code that ships, or gcc itself), OR
-#   - the slug belongs to a cluster the user weights heavily —
+#   - the slug belongs to a cluster the user weights heavily:
 #       A (ungrounded assertion), C (literal-list-as-action), E (convention-blind).
 # A low-stakes throwaway repeat does not arm it. By construction this fires on
 # under 2% of sessions, which is why it can live as a hinter rather than a block.
@@ -26,7 +26,7 @@
 # reliably at write time. Each field is read from where it is actually populated.
 #
 # Dedup: ~/.claude/.session-atone-slugs/<session>.breaker-fired (one slug per line).
-# Mute (rare — this is the load-bearing signal, not keyword noise, so it does NOT
+# Mute (rare: this is the load-bearing signal, not keyword noise, so it does NOT
 # honour the general .nudge-off): touch ~/.claude/atone/.breaker-off
 #
 # Latency budget: <100ms (a couple of small jq passes; the events.jsonl scan only
@@ -42,14 +42,14 @@ command -v jq >/dev/null 2>&1 || exit 0
 
 # Which session's slug counter to read. This MUST match the key atone.sh writes
 # the counter under (its own session_id, i.e. CLAUDE_CODE_SESSION_ID). Reading
-# CLAUDE_SESSION_ID — a variable the harness never sets — fell through to a date,
+# CLAUDE_SESSION_ID: a variable the harness never sets: fell through to a date,
 # so this looked for <date>.json while every counter on disk is <uuid>.json: the
 # breaker found no counter, concluded nothing had been recorded, and exited
 # silently on every turn since it was written. Env-first because a hinter is fed
 # the prompt text, not the hook's JSON.
 # No id, no reading. A date key here would point at a counter atone.sh never writes
 # (it keys on the session id), so the breaker would "find" nothing and conclude
-# nothing had been recorded — a confident answer from a file that cannot exist.
+# nothing had been recorded: a confident answer from a file that cannot exist.
 # Exiting is the same outcome, honestly arrived at.
 _sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
 [ -n "$_sid" ] || exit 0
@@ -88,7 +88,7 @@ while IFS=$'\t' read -r slug count stakes; do
 
   # cluster + instruction from the derived trigger map (best-effort: a brand-new
   # slug the cron has not clustered yet shows "-", which simply won't arm via the
-  # cluster branch — the stakes branch still can).
+  # cluster branch: the stakes branch still can).
   cluster=$(jq -r --arg s "$slug" \
     'map(select(.from_slug == $s)) | (.[0].cluster // "-")' "$TRIGGERS" 2>/dev/null)
   [ -z "$cluster" ] && cluster="-"

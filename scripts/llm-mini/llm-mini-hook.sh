@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# llm-mini-hook.sh — sourceable mini-model callable for use inside Claude Code hooks.
+# llm-mini-hook.sh: sourceable mini-model callable for use inside Claude Code hooks.
 #
 # Usage (inside a hook script):
 #   source ~/.claude/scripts/llm-mini/llm-mini-hook.sh
@@ -7,7 +7,7 @@
 #
 # Enforces a 3s timeout to stay within hook latency budget.
 # Falls back to empty string on any failure (hooks must never block).
-# Always uses local backend — no cold-start prompts in hook context.
+# Always uses local backend: no cold-start prompts in hook context.
 
 LLM_MINI_CORE="${HOME}/.claude/scripts/llm-mini/llm-mini-core.sh"
 

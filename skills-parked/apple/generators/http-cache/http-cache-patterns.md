@@ -4,11 +4,11 @@
 
 `URLCache` works for basic scenarios but has limitations:
 
-1. **No per-endpoint control** — Can't cache `/users` for 5 min and skip `/orders`
-2. **Server must cooperate** — Requires proper Cache-Control headers from server
-3. **No stale-while-revalidate** — Can't serve stale data while refreshing
-4. **No offline fallback** — Doesn't serve expired cache when offline
-5. **Opaque storage** — Hard to inspect, clear selectively, or migrate
+1. **No per-endpoint control**: Can't cache `/users` for 5 min and skip `/orders`
+2. **Server must cooperate**: Requires proper Cache-Control headers from server
+3. **No stale-while-revalidate**: Can't serve stale data while refreshing
+4. **No offline fallback**: Doesn't serve expired cache when offline
+5. **Opaque storage**: Hard to inspect, clear selectively, or migrate
 
 This generator creates a transparent caching layer you control.
 
@@ -61,14 +61,14 @@ Request arrives
 2. Client stores ETag alongside cached data
 3. On next request, client sends `If-None-Match: "abc123"`
 4. Server responds:
-   - `304 Not Modified` — cached data is still valid, no body transferred
-   - `200 OK` — new data, update cache
+   - `304 Not Modified`: cached data is still valid, no body transferred
+   - `200 OK`: new data, update cache
 
 ### Benefits
 
-- **Bandwidth savings** — 304 responses have no body
-- **Freshness guarantee** — Server confirms data hasn't changed
-- **Works with no-cache** — Even `no-cache` responses use conditional requests
+- **Bandwidth savings**: 304 responses have no body
+- **Freshness guarantee**: Server confirms data hasn't changed
+- **Works with no-cache**: Even `no-cache` responses use conditional requests
 
 ### Implementation Pattern
 
@@ -129,7 +129,7 @@ func requestWithSWR<T>(_ endpoint: Endpoint) async throws -> T {
 
 ### Network Reachability
 
-Use `NWPathMonitor` (Network framework) — not `Reachability` third-party library:
+Use `NWPathMonitor` (Network framework): not `Reachability` third-party library:
 
 ```swift
 import Network

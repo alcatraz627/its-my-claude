@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# hook-orchestrator/run.sh — Parallel orchestrator for fanned-out hook events.
+# hook-orchestrator/run.sh: Parallel orchestrator for fanned-out hook events.
 #
 # Replaces N settings.json blocks for one event with ONE block that forks
 # all registered tasks in parallel. Preserves the per-task parallelism
-# Claude Code's hook system already provides — net cost is ONE extra parent
+# Claude Code's hook system already provides: net cost is ONE extra parent
 # process (~5–10 ms) per event firing.
 #
 # Reads task list from: ~/.claude/scripts/hook-orchestrator/<event>.tasks
@@ -12,7 +12,7 @@
 #
 # Each task receives the SAME stdin (the hook input JSON) via `tee` fan-out.
 # Each task runs with a timeout (TASK_TIMEOUT). Failures are logged and
-# swallowed — orchestrator always exits 0 within ORCHESTRATOR_TIMEOUT.
+# swallowed: orchestrator always exits 0 within ORCHESTRATOR_TIMEOUT.
 #
 # Usage (settings.json):
 #   "command": "~/.claude/scripts/hook-orchestrator/run.sh SessionStart"
@@ -80,7 +80,7 @@ for i in "${!PIDS[@]}"; do
   RESULTS+=($?)
 done
 
-# Cancel watcher — all done.
+# Cancel watcher: all done.
 { kill -9 "$WATCHER" 2>/dev/null; wait "$WATCHER" 2>/dev/null; } >/dev/null 2>&1 || true
 
 # Log a compact summary line.

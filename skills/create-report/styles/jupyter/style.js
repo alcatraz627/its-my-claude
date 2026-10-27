@@ -44,7 +44,7 @@
       "section[data-section-id]",
     );
 
-    // Text size (shared utility — uses .text-size-btn[data-dir] convention)
+    // Text size (shared utility: uses .text-size-btn[data-dir] convention)
     if (R.initTextSize) R.initTextSize(".notebook", "jupyter-text-size");
 
     // Custom jupyter features

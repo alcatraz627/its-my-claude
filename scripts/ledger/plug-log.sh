@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# plug-log.sh — record one session-plug firing to the plug-events ledger.
+# plug-log.sh: record one session-plug firing to the plug-events ledger.
 #
 # A thin wrapper over ledger-common.sh (the sanctioned ledger writer). Session
 # plugs fire a handful of times per session and each firing is human-meaningful
-# ("ctx-pressure fired at band 80 this session, 760 chars") — that is a ledger,
+# ("ctx-pressure fired at band 80 this session, 760 chars"): that is a ledger,
 # not high-volume ::logs, so it belongs here. Keyed on session_id (the join key
 # the /plugs reader needs; a script can't reliably pin the session from $PPID).
 #
@@ -36,7 +36,7 @@ while [ $# -gt 0 ]; do
     --summary)   summary="$2"; shift 2 ;;
     --tags)      tags="$2"; shift 2 ;;
     # Callers are session-lifecycle hooks that must never be broken, so a bad flag
-    # still writes the record (a partial row beats no row) — but it says so on
+    # still writes the record (a partial row beats no row): but it says so on
     # stderr, because a silently-dropped field is how nine audit trails were lost.
     --*|-?*)     echo "plug-log: unknown flag '$1' — ignored; record written without it" >&2; shift ;;
     *)           shift ;;

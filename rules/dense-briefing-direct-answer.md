@@ -26,6 +26,6 @@ Three shapes:
 2. **The reply that restates a file written this turn.** Delete the restatement; keep the absolute path and the one next thing.
 3. **The done-claim that skips the stated acceptance criteria.** List what the owner said would anger them, in their words, mark each pass or fail; a failing one is the report.
 
-Length is not the tell, order is. Structure that does work (a table read across) is fine; structure that describes rigour is shape 1 in costume. Detectors: prose-smell detector 8 (shape 1), dense-briefing-shapes-stop.sh (shapes 2 and 3, dry-run).
+Length is not the tell, order is. Structure that does work (a table read across) is fine; structure that describes rigour is shape 1 in costume. Detectors: the dense-briefing check inside format-gate-stop.sh (shapes 2 and 3, advisory note only).
 
 Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/dense-briefing-direct-answer.md`

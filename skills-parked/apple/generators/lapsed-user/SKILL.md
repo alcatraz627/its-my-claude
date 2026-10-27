@@ -61,9 +61,9 @@ If existing implementation found:
 Ask user via AskUserQuestion:
 
 1. **Inactivity threshold?**
-   - 7 days (light engagement apps — social, news)
-   - 14 days (moderate engagement — productivity, fitness) — recommended
-   - 30 days (low-frequency apps — finance, travel)
+   - 7 days (light engagement apps: social, news)
+   - 14 days (moderate engagement: productivity, fitness): recommended
+   - 30 days (low-frequency apps: finance, travel)
    - Custom (user specifies days)
 
 2. **Re-engagement strategy?**
@@ -75,10 +75,10 @@ Ask user via AskUserQuestion:
 3. **Trigger mechanism?**
    - Show on app return (present sheet when user opens app after inactivity)
    - Via push notification (schedule local notification after X days inactive)
-   - Both — recommended
+   - Both: recommended
 
 4. **Include analytics events?**
-   - Yes (track lapse detection, return screen shown, CTA tapped, offer redeemed) — recommended
+   - Yes (track lapse detection, return screen shown, CTA tapped, offer redeemed): recommended
    - No (skip analytics, just UI)
 
 ## Generation Process
@@ -88,16 +88,16 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `InactivityTracker.swift` — Tracks last active date, calculates days since last use
-2. `LapsedUserDetector.swift` — Evaluates inactivity against thresholds, returns lapse category
-3. `LapsedUserManager.swift` — Orchestrator combining detection + experience selection + analytics
+1. `InactivityTracker.swift`: Tracks last active date, calculates days since last use
+2. `LapsedUserDetector.swift`: Evaluates inactivity against thresholds, returns lapse category
+3. `LapsedUserManager.swift`: Orchestrator combining detection + experience selection + analytics
 
 ### Step 3: Create UI Files
-4. `ReturnExperienceView.swift` — Personalized "Welcome back" screen with what-you-missed
-5. `WinBackOfferView.swift` — Special offer screen for lapsed subscribers
+4. `ReturnExperienceView.swift`: Personalized "Welcome back" screen with what-you-missed
+5. `WinBackOfferView.swift`: Special offer screen for lapsed subscribers
 
 ### Step 4: Create Integration File
-6. `LapsedUserModifier.swift` — SwiftUI ViewModifier for root view auto-detection and presentation
+6. `LapsedUserModifier.swift`: SwiftUI ViewModifier for root view auto-detection and presentation
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -271,7 +271,7 @@ let daysAway = Calendar.current.dateComponents([.day], from: lastActive, to: Dat
 ```
 
 ### Don't Annoy Deliberate Break-Takers
-Provide a "Don't show again" option on the return screen. Respect user preferences — if they dismiss the return experience, increase the threshold before showing again. Store dismissal count and back off exponentially.
+Provide a "Don't show again" option on the return screen. Respect user preferences: if they dismiss the return experience, increase the threshold before showing again. Store dismissal count and back off exponentially.
 
 ### Avoid Stacking with Other Modals
 If your app has onboarding, what's-new, or review prompts, coordinate with them. Don't show a return screen AND a review prompt AND a what's-new modal on the same launch. Use a presentation queue.
@@ -287,6 +287,6 @@ let tracker = InactivityTracker(
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/subscription-lifecycle` — Subscription state management
-- Related: `generators/whats-new` — What's New screen generation
+- **templates.md**: All production Swift templates
+- Related: `generators/subscription-lifecycle`: Subscription state management
+- Related: `generators/whats-new`: What's New screen generation

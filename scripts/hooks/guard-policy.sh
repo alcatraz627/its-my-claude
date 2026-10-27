@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-policy.sh — holds agents to the owner's allow/block policy for actions
+# guard-policy.sh: holds agents to the owner's allow/block policy for actions
 # taken as the owner: GitHub, Slack, Linear, deploys, and heavy local models.
 #
 # The owner sets each policy with one click in the menu bar panel (pol.sh

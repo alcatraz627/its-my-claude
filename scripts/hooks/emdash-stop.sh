@@ -3,7 +3,7 @@
 # instrument: self (clean re-emit records heeded:true)
 # review-by: 2026-11-15
 # retire-if: heed-rate < 50% over 100 fires
-# emdash-stop.sh — Stop hook: a reply to the owner that contains even one em-dash
+# emdash-stop.sh: Stop hook: a reply to the owner that contains even one em-dash
 # is sent back to be rewritten.
 #
 # The owner reads an em-dash as machine prose and has asked for a budget of zero

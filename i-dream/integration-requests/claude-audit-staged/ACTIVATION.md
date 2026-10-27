@@ -1,4 +1,4 @@
-# Activation — claude-audit dream domain
+# Activation: claude-audit dream domain
 
 **Status: STAGED, NOT LIVE.** These artifacts are wired and ready, but the
 hook-feedback system isn't built yet, so there are no events to dream over.
@@ -7,11 +7,11 @@ Registering an empty domain would feed the dreamer noise and can't be validated
 flows.
 
 ## Owner decisions already baked in
-- **Synthesized join** — an `extract-events.sh` LEFT-JOINs vents ⋈ telemetry on
+- **Synthesized join**: an `extract-events.sh` LEFT-JOINs vents ⋈ telemetry on
   `hook_id` into one enriched `events.jsonl` (carries `heeded` + `fire_count`).
-- **Severity** — `severity_field = "impact"`, `severity_order = ["low","med","high"]`
+- **Severity**: `severity_field = "impact"`, `severity_order = ["low","med","high"]`
   (i-dream's `severity_rank` is now data-driven; shipped in i-dream this session).
-- **slug = hook_id**, no domain prefix — the cross-domain join already qualifies
+- **slug = hook_id**, no domain prefix: the cross-domain join already qualifies
   slugs by domain (`from_domain`/`to_domain`), so no collision with atone slugs.
 
 ## Go-live checklist (claude-audit's agent + user)
@@ -20,12 +20,12 @@ flows.
    so vents land at `~/.claude/hooks/feedback.jsonl` and telemetry at
    `~/.claude/hooks/warn-events.jsonl`.
 2. **Create the domain home:** `mkdir -p ~/.claude/hooks-feedback-domain/{dream,derived}`.
-3. **Write `~/.claude/hooks-feedback-domain/extract-events.sh`** — the vents ⋈
+3. **Write `~/.claude/hooks-feedback-domain/extract-events.sh`**: the vents ⋈
    telemetry join on `hook_id`, emitting events matching the request's schema
    (`id, ts, slug, kind, impact, hook_id, note, command_or_context, heeded,
    fire_count_14d`). `impact` derived from `kind` (false-positive/obstructive →
    high; confusing/slowed → med; useful → low).
-4. **Write `~/.claude/hooks-feedback-domain/dream/adapter.sh`** — on a
+4. **Write `~/.claude/hooks-feedback-domain/dream/adapter.sh`**: on a
    `decay_candidate` file a TUNE/PRUNE proposal via `~/.claude/scripts/propose.sh add`;
    on a `graduation_candidate` file a strengthen-hook proposal. Idempotent.
 5. **Copy the staged artifacts:**

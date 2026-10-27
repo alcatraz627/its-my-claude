@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# run-fixtures.sh — regression gate for a Stop-hook change.
+# run-fixtures.sh: regression gate for a Stop-hook change.
 #
 # Runs the pinned fixture set through the REAL hook and fails (non-zero) if any
 # fixture's outcome no longer matches its manifest `expected`. Run this before
 # shipping any change to a Stop hook. Logic lives in run_fixtures.py (shell stays
-# thin — macOS bash is 3.2).
+# thin: macOS bash is 3.2).
 #
 # Usage:
 #   ./run-fixtures.sh <hook-script> [fixtures-subdir]

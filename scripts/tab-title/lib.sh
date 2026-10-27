@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/lib.sh — Shared state, composition, and emission for Ghostty
+# tab-title/lib.sh: Shared state, composition, and emission for Ghostty
 # tab titles. Sourced by update-tab-title.sh (Stop hook) and set-focus.sh
 # (Claude-facing CLI).
 #
@@ -19,7 +19,7 @@ tab_pointer_path() { printf '%s/claude-tab-current' "$TAB_STATE_DIR"; }
 
 # ── State I/O ────────────────────────────────────────────────────────────────
 # Load state into STAR / DECORATORS / BASE / FOCUS shell vars. Returns 1 if
-# the state file is absent — caller decides whether that is fatal.
+# the state file is absent: caller decides whether that is fatal.
 tab_load_state() {
   local sid="$1" path
   path=$(tab_state_path "$sid")
@@ -35,7 +35,7 @@ tab_save_state() {
   local sid="$1" path detected
   path=$(tab_state_path "$sid")
   # Auto-capture controlling tty when the caller has one (hooks do; Bash-tool
-  # callers do not — they're setsid'd). Preserve the previous TTY_PATH
+  # callers do not: they're setsid'd). Preserve the previous TTY_PATH
   # otherwise: the hook seeds it once, mid-turn callers reuse it.
   detected=$(tab_detect_tty)
   [[ -n "$detected" ]] && TTY_PATH="$detected"
@@ -60,12 +60,12 @@ tab_save_state() {
 # Order:
 #   1. $CLAUDE_TAB_TTY env override.
 #   2. /dev/tty resolution (the ONLY reliable way to get the outer Ghostty
-#      pty — Claude inherits it as controlling tty but spawns hooks under
+#      pty: Claude inherits it as controlling tty but spawns hooks under
 #      an *inner* pty; ps -o tty= returns the inner one, which is WRONG).
 #      `tty 0</dev/tty` opens /dev/tty as fd 0 and prints the resolved path.
 #      This works in any context where /dev/tty is openable (hooks: yes;
 #      setsid'd Bash-tool subprocesses: no).
-#   3. Process-tree walk (fallback — may return the inner pty, still wrong
+#   3. Process-tree walk (fallback: may return the inner pty, still wrong
 #      for title writes, but better than nothing for some setups).
 tab_detect_tty() {
   if [[ -n "${CLAUDE_TAB_TTY:-}" ]]; then
@@ -103,7 +103,7 @@ tab_detect_tty() {
 # Strip any leading stars (so a single canonical one can be re-prepended) and
 # absorb a trailing [:focus] suffix the LLM may have emitted into BASE.
 # Sets globals TAB_NORMALISED_BASE and TAB_EMBEDDED_FOCUS (do NOT call via
-# $(...) — command substitution runs in a subshell and globals would be lost).
+# $(...): command substitution runs in a subshell and globals would be lost).
 tab_normalise_base() {
   local s="$1"
   # Strip leading stars + whitespace (handle multiple)
@@ -158,7 +158,7 @@ tab_resolve_sid() {
 # Each map function: input = enum name (case-insensitive), output = single
 # glyph (or empty if unknown). Tab-title CLI exposes these via `--list`.
 
-# Slot 1 — STATUS (semantic icons; ✅⚠️❌💤ℹ️🛑 — GitHub/CI convention).
+# Slot 1: STATUS (semantic icons; ✅⚠️❌💤ℹ️🛑: GitHub/CI convention).
 tab_status_glyph() {
   case "${1:-}" in
     ok|pass|passing|success)        printf '✅' ;;
@@ -180,7 +180,7 @@ blocked  🛑   needs external action, paused
 EOF
 }
 
-# Slot 2 — MODE (24 action-verbs; what KIND of work is happening now).
+# Slot 2: MODE (24 action-verbs; what KIND of work is happening now).
 tab_mode_glyph() {
   case "${1:-}" in
     think|plan|planning)          printf '🤔' ;;
@@ -238,7 +238,7 @@ pair     🤝   collaborating
 EOF
 }
 
-# Slot 3 — INTENT (session-level NOUN; what kind of work overall).
+# Slot 3: INTENT (session-level NOUN; what kind of work overall).
 # Mirrors conventional-commit prefixes so the LLM already knows the vocabulary.
 tab_intent_glyph() {
   case "${1:-}" in
@@ -391,7 +391,7 @@ tab_glyph_ssh_resolve() {
   esac
 }
 
-# ── Compose & emit (v3 — left/right split) ───────────────────────────────────
+# ── Compose & emit (v3: left/right split) ───────────────────────────────────
 # Shape:  <star> <mode?> <intent?> <base> [:<focus?>]  <status?> <decorators?>
 #         └─────── left: stable identifier ────────┘   └── right: volatile ──┘
 # Truncation in Ghostty hits the right side first, preserving the identifier.
@@ -429,7 +429,7 @@ tab_emit() {
   #   - /dev/tty works from hook contexts that inherit a controlling tty
   #   - TTY_PATH (captured outer Ghostty pty) works when /dev/tty is severed
   #     (setsid'd Bash-tool subprocesses, or hooks Claude spawns detached)
-  # The debug log proves which path is firing — without it, every error is
+  # The debug log proves which path is firing: without it, every error is
   # silently swallowed by `2>/dev/null || true` and the bug is invisible.
   local log="${HOME}/.claude/logs/tab-title-emit.log"
   local ts; ts=$(date "+%Y-%m-%d %H:%M:%S")

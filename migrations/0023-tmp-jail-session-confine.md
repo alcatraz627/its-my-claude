@@ -1,6 +1,6 @@
 ---
 number: 0023
-title: Session-scoped /tmp jail — PreToolUse confine hook + run/ dir + tmp-jail CLI
+title: Session-scoped /tmp jail, PreToolUse confine hook + run/ dir + tmp-jail CLI
 slug: tmp-jail-session-confine
 status: complete
 date: 2026-06-25
@@ -14,7 +14,7 @@ affected_paths:
   - CLAUDE.md
 ---
 
-# Migration 0023 — Session-scoped /tmp jail
+# Migration 0023: Session-scoped /tmp jail
 
 ## Summary
 
@@ -22,7 +22,7 @@ Adds an opt-in, session-local "/tmp jail": when a session is jailed, its writes
 (and its sub-agents') are confined to `/tmp` (and `/private/tmp`); reads are
 untouched. Built as a global PreToolUse hook gated by a per-session marker, so the
 single registration enforces per-session and never contaminates other running
-sessions. The off-switch is **by instruction, best-effort** — the agent is told to
+sessions. The off-switch is **by instruction, best-effort**: the agent is told to
 ask the user to run `tmp-jail off <session_id>`, and the gate blocks the common
 self-lift paths (the off command incl. path-qualified, marker delete via
 rm/trash/unlink/truncate/find-delete, settings edits, `..` traversal). It is NOT a
@@ -48,10 +48,10 @@ NEW PATH command (`tmp-jail`).
 
 - Nothing is jailed by default. The hook is a fast no-op (read session_id, stat one
   file, exit 0) unless that session has a marker. Off = zero friction.
-- Other sessions are never affected — enabling the jail in one session writes only
+- Other sessions are never affected: enabling the jail in one session writes only
   its own marker.
 - It does not survive a restart (markers are per-session; a new session is clean).
-- No mute file (deliberate). There is intentionally no `.no-tmp-jail` escape — a
+- No mute file (deliberate). There is intentionally no `.no-tmp-jail` escape: a
   mute hatch would be a silent one-touch bypass of the off-switch.
 - Reads are never blocked; only writes outside /tmp are.
 
@@ -70,7 +70,7 @@ NEW PATH command (`tmp-jail`).
 
 ## Known limits (recorded, accepted)
 
-- A hook is a guardrail, not a sandbox — it cannot confine a Bash-enabled agent
+- A hook is a guardrail, not a sandbox: it cannot confine a Bash-enabled agent
   against its will. Best-effort on Bash: catches common write/self-lift forms but a
   `python -c "open('/x','w')"` / `node -e` / `perl -e` can still escape (closable by
   also gating interpreter-eval while jailed; not yet enabled). The default Bash

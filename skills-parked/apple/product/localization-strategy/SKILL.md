@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Glob, Grep, AskUserQuestion, WebSearch]
 
 # Localization Strategy
 
-End-to-end localization planning for Apple platform apps — from market prioritization through translation workflow to localized App Store optimization.
+End-to-end localization planning for Apple platform apps: from market prioritization through translation workflow to localized App Store optimization.
 
 ## When This Skill Activates
 
@@ -78,7 +78,7 @@ Use AskUserQuestion to gather the user's app category, current markets, and budg
 
 ### Phase 2: Language Tier Recommendations
 
-#### Tier 1 — Highest ROI (Localize First)
+#### Tier 1: Highest ROI (Localize First)
 
 | Language | Key Market | Estimated Revenue Lift |
 |----------|-----------|----------------------|
@@ -90,7 +90,7 @@ Use AskUserQuestion to gather the user's app category, current markets, and budg
 
 **Recommendation:** Localize into 2-3 Tier 1 languages first. Expected combined revenue lift: 20-50%.
 
-#### Tier 2 — Good ROI (Localize Second)
+#### Tier 2: Good ROI (Localize Second)
 
 | Language | Key Market | Estimated Revenue Lift |
 |----------|-----------|----------------------|
@@ -102,11 +102,11 @@ Use AskUserQuestion to gather the user's app category, current markets, and budg
 
 **Recommendation:** Add Tier 2 after Tier 1 languages prove ROI. Expected per-language lift: 3-8%.
 
-#### Tier 3 — Volume Play (Localize for Scale)
+#### Tier 3: Volume Play (Localize for Scale)
 
 | Language | Key Market | Notes |
 |----------|-----------|-------|
-| Arabic (ar) | Middle East, North Africa | RTL support required — higher dev cost |
+| Arabic (ar) | Middle East, North Africa | RTL support required: higher dev cost |
 | Turkish (tr) | Turkey | Growing mobile market |
 | Hindi (hi) | India | Massive volume, very low per-user spend |
 | Thai (th) | Thailand | Mobile-first market |
@@ -189,7 +189,7 @@ Starting with Xcode 15, String Catalogs (.xcstrings) are the standard localizati
 
 **Export workflow:**
 1. Ensure all user-facing strings use `String(localized:)` or `LocalizedStringResource`
-2. Build the project — Xcode auto-discovers strings
+2. Build the project: Xcode auto-discovers strings
 3. Open the `.xcstrings` file to see all strings with translation status
 4. Export: Product > Export Localizations (creates .xcloc bundles)
 5. Send .xcloc files to translators
@@ -199,7 +199,7 @@ Starting with Xcode 15, String Catalogs (.xcstrings) are the standard localizati
 - Add comments to strings that need context (e.g., "Title of settings screen" or "Button label, max 15 characters")
 - Use string interpolation with proper grammar agreement (Foundation's automatic grammar support)
 - Mark strings that should NOT be translated (e.g., brand names) with "Don't Translate"
-- Review the "Stale" state — it flags strings whose source changed after translation
+- Review the "Stale" state: it flags strings whose source changed after translation
 
 #### Translation Service Options
 
@@ -229,7 +229,7 @@ Starting with Xcode 15, String Catalogs (.xcstrings) are the standard localizati
 
 #### Review Process
 
-Native speaker review is mandatory — never ship translations without it.
+Native speaker review is mandatory: never ship translations without it.
 
 **Review checklist per language:**
 - [ ] Grammar and spelling correct
@@ -271,7 +271,7 @@ Text(String(format: "%m/%d/%Y", date))
 #### Currency Display
 
 - Always use the user's locale for display, even if your product is priced in USD
-- App Store handles currency conversion for IAP — but display in marketing materials should match locale
+- App Store handles currency conversion for IAP: but display in marketing materials should match locale
 - Some markets are sensitive to seeing foreign currencies (Japan especially)
 
 #### Color Meanings
@@ -590,4 +590,4 @@ Good: .frame(alignment: .leading)
 
 ---
 
-**Localization is not translation — it's making your app feel native in every market. Start with metadata, prove demand with data, then invest in full localization where the numbers justify it.**
+**Localization is not translation: it's making your app feel native in every market. Start with metadata, prove demand with data, then invest in full localization where the numbers justify it.**

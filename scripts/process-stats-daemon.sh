@@ -3,7 +3,7 @@
 # Writes to /tmp/claude-statusline-$PPID as key=value pairs
 # Started by statusline.sh on first render, self-terminates when parent dies
 
-# Note: set -e intentionally omitted — (( expr )) returns exit 1 when false,
+# Note: set -e intentionally omitted: (( expr )) returns exit 1 when false,
 # which kills the daemon. Matches statusline.sh's documented rationale.
 set -uo pipefail
 
@@ -15,7 +15,7 @@ kill -0 "$TARGET_PID" 2>/dev/null || exit 0
 
 # ── Platform Compatibility ──
 # All platform-specific calls are isolated here.
-# To add a new platform: extend these functions only — no uname checks elsewhere.
+# To add a new platform: extend these functions only: no uname checks elsewhere.
 _PLATFORM="$(uname -s)"
 
 # _stat_mtime <file> → epoch seconds of last modification
@@ -89,7 +89,7 @@ fi
 
 # Parent-death detection, PID-reuse hardened. Plain `kill -0 $TARGET_PID`
 # kept this daemon alive when macOS recycled the parent PID to an unrelated
-# process — leaked daemons stayed up for days feeding stats to whatever
+# process: leaked daemons stayed up for days feeding stats to whatever
 # inherited the PID. Requiring "claude" in the command line catches recycle.
 while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
   _NOW=$(date +%s)  # Single epoch timestamp for entire loop iteration
@@ -278,7 +278,7 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     printf 'scratchpad_count=%s\n' "$sp_count"
 
     # ── External file changes (files changed since session start) ──
-    # Gated behind segment config — disabled by default (ext_changes=auto resolves to off)
+    # Gated behind segment config: disabled by default (ext_changes=auto resolves to off)
     session_marker="/tmp/claude-session-start-${TARGET_PID}"
     if [[ ! -f "$session_marker" ]]; then
       touch "$session_marker"
@@ -312,10 +312,10 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
 
     # ── MCP server health (cached 120s) ──
     # Strategy: npx/uvx servers are managed by Claude Code (spawned on-demand via stdio).
-    # pgrep is unreliable for these — they may be lazy-loaded, wrapped under different
+    # pgrep is unreliable for these: they may be lazy-loaded, wrapped under different
     # process names, or not running between tool calls. Only pgrep-check "persistent"
     # servers (node/python/etc with local scripts). For npx/uvx, check if the Claude
-    # parent process is alive — if so, assume its managed servers are fine.
+    # parent process is alive: if so, assume its managed servers are fine.
     mcp_healthy="" ; mcp_down="" ; mcp_managed=""
     mcp_cache="/tmp/claude-mcp-health-${TARGET_PID}"
     if [[ ! -f "$mcp_cache" ]] || (( _NOW - $(_stat_mtime "$mcp_cache") > 120 )); then
@@ -330,7 +330,7 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
           [[ -z "$name" || "$name" == "null" ]] && continue
           case "$cmd" in
             npx|uvx)
-              # Managed by Claude Code — don't pgrep, trust parent process
+              # Managed by Claude Code: don't pgrep, trust parent process
               if (( claude_alive )); then
                 mcp_managed="${mcp_managed:+$mcp_managed,}$name"
               else
@@ -339,7 +339,7 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
               continue
               ;;
           esac
-          # Persistent servers — pgrep check
+          # Persistent servers: pgrep check
           search_pat=""
           case "$cmd" in
             node) search_pat="${pkg_arg:-}" ;;
@@ -481,7 +481,7 @@ while ps -p "$TARGET_PID" -o command= 2>/dev/null | grep -q claude; do
     fi
 
     # ── Sparkline ring buffer (sample every ~30s for useful history depth) ──
-    # Sampling every 4s fills 20 slots in 80s — too fast to show meaningful trend.
+    # Sampling every 4s fills 20 slots in 80s: too fast to show meaningful trend.
     # By gating to 30s, 20 samples spans ~10 minutes of context usage.
     CTX_FILE="/tmp/claude-ctx-${TARGET_PID}"
     SPARK_FILE="/tmp/claude-sparkline-${TARGET_PID}"

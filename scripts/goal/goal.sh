@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal.sh — keep a session's goal alive across /clear, when the harness cannot.
+# goal.sh: keep a session's goal alive across /clear, when the harness cannot.
 #
 # `/goal <text>` in the Claude Code TUI is a BUILT-IN: it installs a session-scoped
 # Stop hook whose condition is the text (the harness injects "A session-scoped Stop
@@ -255,9 +255,9 @@ owner_actor_warn() {
 # fit on one line, read as compliant, and cannot be marked by anyone:
 #
 #   an unbounded quantifier   "every way stage 7 can fail shows an operator what
-#                             happened" — nobody can confirm it, only fail to
+#                             happened": nobody can confirm it, only fail to
 #                             find a counterexample
-#   a standing behaviour      "every question is answered the turn it arrives" —
+#   a standing behaviour      "every question is answered the turn it arrives":
 #                             true over a window, never at a moment
 #
 # It matters most on a RE-ARM. /catchup revives a checkpoint goal marked STILL

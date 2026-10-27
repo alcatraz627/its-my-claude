@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# track-edits-session.sh — PostToolUse[Write|Edit|MultiEdit], side-effect only.
+# track-edits-session.sh: PostToolUse[Write|Edit|MultiEdit], side-effect only.
 #
 # Records every file I edit this session into a session-scoped list so the Stop
 # review gate can lint exactly the files I touched. Distinct from edit-tracker.sh
-# (which keeps only a 30s window for self-edit filtering) — this list must live
+# (which keeps only a 30s window for self-edit filtering): this list must live
 # for the whole session, because "done" can come long after the edit.
 set -uo pipefail
 

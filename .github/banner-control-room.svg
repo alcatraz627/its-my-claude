@@ -1,0 +1,252 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 270" role="img" aria-labelledby="t d" shape-rendering="crispEdges">
+<title id="t">A session runs and its hooks fire</title>
+<desc id="d">A terminal types out a Claude session. CLAUDE.md and 67 rules load, the user asks to tidy old notes, the agent tries a chained rm command, a hook blocks it, and the agent retries with trash. Beside it a board of hook events lights up in step, with pulses crossing from the terminal: SessionStart, UserPromptSubmit, PreToolUse in red then green, PostToolUse, and Stop.</desc>
+<style>
+:root { --bg:#faf6ef; --panel:#efe6d6; --ink:#2a2438; --muted:#8a8197; --line:#d9cdb8; --dim:#d9cdb8;
+        --accent:#c2603f; --amber:#b9821f; --cream:#5a4e6e; --ok:#3f8a55; --bad:#c2414b; --wood:#9b6b43;
+        --skin:#e8b04a; --night:#2a2640; --star:#f0e6d8; --orange:#e0872e; --orangeD:#b4601a; --skyline:#3d3858; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#1e1b2e; --panel:#2a2640; --ink:#f0e6d8; --muted:#8f86a8; --line:#3b3557; --dim:#3b3557;
+          --accent:#d97757; --amber:#e8b04a; --cream:#f0e6d8; --ok:#7fb685; --bad:#e06c75; --wood:#7a5236;
+          --skin:#e8b04a; --night:#14111f; --star:#f0e6d8; --orange:#f2a14e; --orangeD:#cf7a2a; --skyline:#251f3a; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation-play-state: paused !important; animation-delay: -12.5s !important; } }
+text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: var(--ink); white-space: pre; }
+.bg { fill: var(--bg); } .panel { fill: var(--panel); } .muted { fill: var(--muted); } .ink { fill: var(--ink); }
+.accent { fill: var(--accent); } .amber { fill: var(--amber); } .ok { fill: var(--ok); } .bad { fill: var(--bad); }
+.cream { fill: var(--cream); } .wood { fill: var(--wood); } .skin { fill: var(--skin); } .night { fill: var(--night); }
+.star { fill: var(--star); } .dim { fill: var(--dim); } .line { stroke: var(--line); }
+.orange { fill: var(--orange); } .orangeD { fill: var(--orangeD); } .skyline { fill: var(--skyline); }
+.lbl { font-size: 12px; font-weight: 700; text-anchor: middle; }
+.sub { font-size: 11px; text-anchor: middle; fill: var(--muted); }
+
+.ln { animation: 14s linear infinite; } .cur { fill: var(--accent); animation: cblink 1s step-end infinite; }
+@keyframes cblink { 50% { opacity: 0; } }
+.shake { animation-name: shake; }
+.lampon { animation: 14s linear infinite; }
+.scan { animation: scan 5s linear infinite; }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(190px); } }
+.spn { transform-box: fill-box; transform-origin: 50% 50%; animation: spn .8s steps(4) infinite; }
+@keyframes spn { to { transform: rotate(360deg); } }
+.cover, .bar { transform-box: fill-box; }
+
+@keyframes l0 { 0% { opacity: 0; } 0.49% { opacity: 0; } 0.5% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l0 { animation-name: l0; }
+
+@keyframes cv0 { 0% { transform:scaleX(1) } 0.5% { transform:scaleX(1) } 2.26% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv0 { animation: cv0 14s steps(8) infinite; }
+
+.cv0 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l1 { 0% { opacity: 0; } 6.99% { opacity: 0; } 7% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l1 { animation-name: l1; }
+
+@keyframes cv1 { 0% { transform:scaleX(1) } 7% { transform:scaleX(1) } 14.26% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv1 { animation: cv1 14s steps(33) infinite; }
+
+.cv1 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l2 { 0% { opacity: 0; } 15.99% { opacity: 0; } 16% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l2 { animation-name: l2; }
+
+@keyframes cv2 { 0% { transform:scaleX(1) } 16% { transform:scaleX(1) } 21.06% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv2 { animation: cv2 14s steps(23) infinite; }
+
+.cv2 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l3 { 0% { opacity: 0; } 25.99% { opacity: 0; } 26% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l3 { animation-name: l3; }
+
+@keyframes cv3 { 0% { transform:scaleX(1) } 26% { transform:scaleX(1) } 34.36% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv3 { animation: cv3 14s steps(38) infinite; }
+
+.cv3 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l4 { 0% { opacity: 0; } 35.99% { opacity: 0; } 36% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l4 { animation-name: l4; }
+
+@keyframes cv4 { 0% { transform:scaleX(1) } 36% { transform:scaleX(1) } 47% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv4 { animation: cv4 14s steps(50) infinite; }
+
+.cv4 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l5 { 0% { opacity: 0; } 49.99% { opacity: 0; } 50% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l5 { animation-name: l5; }
+
+@keyframes cv5 { 0% { transform:scaleX(1) } 50% { transform:scaleX(1) } 55.28% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv5 { animation: cv5 14s steps(24) infinite; }
+
+.cv5 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l6 { 0% { opacity: 0; } 57.99% { opacity: 0; } 58% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l6 { animation-name: l6; }
+
+@keyframes cv6 { 0% { transform:scaleX(1) } 58% { transform:scaleX(1) } 65.7% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv6 { animation: cv6 14s steps(35) infinite; }
+
+.cv6 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes l7 { 0% { opacity: 0; } 67.99% { opacity: 0; } 68% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.l7 { animation-name: l7; }
+
+@keyframes cv7 { 0% { transform:scaleX(1) } 68% { transform:scaleX(1) } 78.78% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.cv7 { animation: cv7 14s steps(49) infinite; }
+
+.cv7 { transform-box: fill-box; transform-origin: 100% 50%; }
+
+@keyframes curm { 0% { transform:translate(42px,63px) } 0.48% { transform:translate(42px,63px) } 0.49% { transform:translate(42px,63px) } 0.5% { transform:translate(42px,63px) } 2.26% { transform:translate(109px,63px) } 6.98% { transform:translate(109px,63px) } 6.99% { transform:translate(42px,85px) } 7% { transform:translate(42px,85px) } 14.26% { transform:translate(320px,85px) } 15.98% { transform:translate(320px,85px) } 15.99% { transform:translate(42px,107px) } 16% { transform:translate(42px,107px) } 21.06% { transform:translate(236px,107px) } 25.98% { transform:translate(236px,107px) } 25.99% { transform:translate(42px,129px) } 26% { transform:translate(42px,129px) } 34.36% { transform:translate(362px,129px) } 35.98% { transform:translate(362px,129px) } 35.99% { transform:translate(42px,151px) } 36% { transform:translate(42px,151px) } 47% { transform:translate(464px,151px) } 49.98% { transform:translate(464px,151px) } 49.99% { transform:translate(42px,173px) } 50% { transform:translate(42px,173px) } 55.28% { transform:translate(244px,173px) } 57.98% { transform:translate(244px,173px) } 57.99% { transform:translate(42px,195px) } 58% { transform:translate(42px,195px) } 65.7% { transform:translate(337px,195px) } 67.98% { transform:translate(337px,195px) } 67.99% { transform:translate(42px,217px) } 68% { transform:translate(42px,217px) } 78.78% { transform:translate(455px,217px) } 92.9% { transform:translate(455px,217px) } 93% { transform:translate(42px,239px) } 100% { transform:translate(42px,239px) } }
+.curm { animation: curm 14s linear infinite; }
+
+@keyframes shake { 0%,46.9% { transform: translateX(0); } 47.2% { transform: translateX(-4px); } 47.8% { transform: translateX(4px); } 48.4% { transform: translateX(-3px); } 49%,100% { transform: translateX(0); } }
+
+@keyframes fr1 { 0% { opacity:0 } 47% { opacity:0 } 47.3% { opacity:.9 } 51% { opacity:0 } 100% { opacity:0 } }
+.fr1 { animation: fr1 14s linear infinite; }
+
+@keyframes fr2 { 0% { opacity:0 } 65.5% { opacity:0 } 65.8% { opacity:.9 } 69% { opacity:0 } 100% { opacity:0 } }
+.fr2 { animation: fr2 14s linear infinite; }
+
+@keyframes h0 { 0% { opacity: 0; } 2.99% { opacity: 0; } 3% { opacity: 1; } 14% { opacity: 1; } 15.5% { opacity: 0; } 100% { opacity: 0; } }
+.h0 { animation-name: h0; }
+
+@keyframes bf0 { 0% { transform:scaleX(0) } 3% { transform:scaleX(0) } 5% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bf0 { animation: bf0 14s steps(6) infinite; }
+
+.bf0 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pd0 { 0% { opacity:0;transform:translateX(0px) } 2.9% { opacity:0;transform:translateX(0px) } 3% { opacity:1;transform:translateX(0px) } 4.6% { opacity:1;transform:translateX(58px) } 4.7% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pd0 { animation: pd0 14s linear infinite; }
+
+@keyframes h1 { 0% { opacity: 0; } 21.99% { opacity: 0; } 22% { opacity: 1; } 30% { opacity: 1; } 31.5% { opacity: 0; } 100% { opacity: 0; } }
+.h1 { animation-name: h1; }
+
+@keyframes bf1 { 0% { transform:scaleX(0) } 22% { transform:scaleX(0) } 24% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bf1 { animation: bf1 14s steps(6) infinite; }
+
+.bf1 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pd1 { 0% { opacity:0;transform:translateX(0px) } 21.9% { opacity:0;transform:translateX(0px) } 22% { opacity:1;transform:translateX(0px) } 23.6% { opacity:1;transform:translateX(58px) } 23.7% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pd1 { animation: pd1 14s linear infinite; }
+
+@keyframes h2 { 0% { opacity: 0; } 35.99% { opacity: 0; } 36% { opacity: 1; } 55.5% { opacity: 1; } 57.0% { opacity: 0; } 100% { opacity: 0; } }
+.h2 { animation-name: h2; }
+
+@keyframes bf2 { 0% { transform:scaleX(0) } 36% { transform:scaleX(0) } 38% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bf2 { animation: bf2 14s steps(6) infinite; }
+
+.bf2 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pd2 { 0% { opacity:0;transform:translateX(0px) } 35.9% { opacity:0;transform:translateX(0px) } 36% { opacity:1;transform:translateX(0px) } 37.6% { opacity:1;transform:translateX(58px) } 37.7% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pd2 { animation: pd2 14s linear infinite; }
+
+@keyframes hfix { 0% { opacity: 0; } 55.49% { opacity: 0; } 55.5% { opacity: 1; } 60% { opacity: 1; } 61.5% { opacity: 0; } 100% { opacity: 0; } }
+.hfix { animation-name: hfix; }
+
+@keyframes bfx { 0% { transform:scaleX(0) } 55.5% { transform:scaleX(0) } 57.5% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bfx { animation: bfx 14s steps(6) infinite; }
+
+.bfx { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pdx { 0% { opacity:0;transform:translateX(0px) } 55.4% { opacity:0;transform:translateX(0px) } 55.5% { opacity:1;transform:translateX(0px) } 57.1% { opacity:1;transform:translateX(58px) } 57.2% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pdx { animation: pdx 14s linear infinite; }
+
+@keyframes h3 { 0% { opacity: 0; } 59.99% { opacity: 0; } 60% { opacity: 1; } 66% { opacity: 1; } 67.5% { opacity: 0; } 100% { opacity: 0; } }
+.h3 { animation-name: h3; }
+
+@keyframes bf3 { 0% { transform:scaleX(0) } 60% { transform:scaleX(0) } 62% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bf3 { animation: bf3 14s steps(6) infinite; }
+
+.bf3 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pd3 { 0% { opacity:0;transform:translateX(0px) } 59.9% { opacity:0;transform:translateX(0px) } 60% { opacity:1;transform:translateX(0px) } 61.6% { opacity:1;transform:translateX(58px) } 61.7% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pd3 { animation: pd3 14s linear infinite; }
+
+@keyframes h4 { 0% { opacity: 0; } 67.99% { opacity: 0; } 68% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.h4 { animation-name: h4; }
+
+@keyframes bf4 { 0% { transform:scaleX(0) } 68% { transform:scaleX(0) } 70% { transform:scaleX(1) } 92% { transform:scaleX(1) } 92.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.bf4 { animation: bf4 14s steps(6) infinite; }
+
+.bf4 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes pd4 { 0% { opacity:0;transform:translateX(0px) } 67.9% { opacity:0;transform:translateX(0px) } 68% { opacity:1;transform:translateX(0px) } 69.6% { opacity:1;transform:translateX(58px) } 69.7% { opacity:0;transform:translateX(58px) } 100% { opacity:0;transform:translateX(58px) } }
+.pd4 { animation: pd4 14s linear infinite; }
+
+@keyframes tick { 0% { opacity: 0; } 67.99% { opacity: 0; } 68% { opacity: 1; } 92% { opacity: 1; } 93.5% { opacity: 0; } 100% { opacity: 0; } }
+.tick { animation: tick 14s linear infinite; }
+</style>
+<rect class="bg" width="960" height="270" rx="12"/>
+<rect x="24" y="20" width="572" height="230" class="panel" rx="10"/>
+<rect x="28" y="50" width="564" height="196" class="bg" rx="6"/>
+<circle cx="46" cy="35" r="5" class="bad"/>
+<circle cx="64" cy="35" r="5" class="amber"/>
+<circle cx="82" cy="35" r="5" class="ok"/>
+<text x="310" y="39" class="" font-size="11" text-anchor="middle" style="fill:var(--muted)">~/.claude: claude</text>
+<g class="spn"><rect x="581" y="28" width="4" height="4" class="accent" /><rect x="588" y="35" width="4" height="4" class="accent" opacity=".6"/><rect x="581" y="42" width="4" height="4" class="accent" opacity=".3"/><rect x="574" y="35" width="4" height="4" class="accent" opacity=".12"/></g>
+<text class="ln l0" x="42" y="76" font-size="14" style="fill:var(--ink)">$ claude</text>
+<g class="cv0" opacity="1"><rect x="42" y="63" width="72" height="18" class="bg" /></g>
+<text class="ln l1" x="42" y="98" font-size="14" style="fill:var(--ok)">  ✓ CLAUDE.md and 67 rules loaded</text>
+<g class="cv1" opacity="1"><rect x="42" y="85" width="283" height="18" class="bg" /></g>
+<text class="ln l2" x="42" y="120" font-size="14" style="fill:var(--amber)">&gt; tidy up the old notes</text>
+<g class="cv2" opacity="1"><rect x="42" y="107" width="198" height="18" class="bg" /></g>
+<text class="ln l3" x="42" y="142" font-size="14" style="fill:var(--ink)">  Bash(rm -rf old-notes/ &amp;&amp; echo done)</text>
+<g class="cv3" opacity="1"><rect x="42" y="129" width="325" height="18" class="bg" /></g>
+<text class="ln l4 shake" x="42" y="164" font-size="14" style="fill:var(--bad)">  ✗ blocked: one command per call; trash, never rm</text>
+<g class="cv4" opacity="1"><rect x="42" y="151" width="426" height="18" class="bg" /></g>
+<text class="ln l5" x="42" y="186" font-size="14" style="fill:var(--ink)">  Bash(trash old-notes/)</text>
+<g class="cv5" opacity="1"><rect x="42" y="173" width="207" height="18" class="bg" /></g>
+<text class="ln l6" x="42" y="208" font-size="14" style="fill:var(--ok)">  ✓ moved to the Trash, recoverable</text>
+<g class="cv6" opacity="1"><rect x="42" y="195" width="300" height="18" class="bg" /></g>
+<text class="ln l7" x="42" y="230" font-size="14" style="fill:var(--cream)">  done. old-notes/ can be restored from the Trash</text>
+<g class="cv7" opacity="1"><rect x="42" y="217" width="418" height="18" class="bg" /></g>
+<g class="curm" ><rect class="cur" x="0" y="0" width="9" height="16"/></g>
+<g class="scan" opacity=".07"><rect x="28" y="50" width="564" height="3" class="cream" /></g>
+<rect x="24" y="20" width="572" height="230" rx="10" fill="none" stroke="var(--bad)" stroke-width="3" class="fr1" opacity="0"/>
+<rect x="24" y="20" width="572" height="230" rx="10" fill="none" stroke="var(--ok)" stroke-width="3" class="fr2" opacity="0"/>
+<rect x="644" y="20" width="292" height="230" class="panel" rx="10"/>
+<text x="662" y="44" class="" font-size="13" font-weight="700">hook bindings</text>
+<text x="918" y="44" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">189</text>
+<rect x="598" y="73" width="64" height="2" class="dim" />
+<circle cx="670" cy="74" r="7" class="dim"/>
+<circle cx="670" cy="74" r="7" class="ok lampon h0"/>
+<text x="686" y="78" class="" font-size="13" >SessionStart</text>
+<text x="918" y="78" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">9</text>
+<rect x="686" y="84" width="210" height="3" class="dim" />
+<g class="bf0" ><rect x="686" y="84" width="27" height="3" class="ok" /></g>
+<g class="pd0" opacity="0"><rect x="598" y="72" width="5" height="4" class="ok" /></g>
+<rect x="598" y="103" width="64" height="2" class="dim" />
+<circle cx="670" cy="104" r="7" class="dim"/>
+<circle cx="670" cy="104" r="7" class="amber lampon h1"/>
+<text x="686" y="108" class="" font-size="13" >UserPromptSubmit</text>
+<text x="918" y="108" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">26</text>
+<rect x="686" y="114" width="210" height="3" class="dim" />
+<g class="bf1" ><rect x="686" y="114" width="79" height="3" class="amber" /></g>
+<g class="pd1" opacity="0"><rect x="598" y="102" width="5" height="4" class="amber" /></g>
+<rect x="598" y="133" width="64" height="2" class="dim" />
+<circle cx="670" cy="134" r="7" class="dim"/>
+<circle cx="670" cy="134" r="7" class="bad lampon h2"/>
+<text x="686" y="138" class="" font-size="13" >PreToolUse</text>
+<text x="918" y="138" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">69</text>
+<rect x="686" y="144" width="210" height="3" class="dim" />
+<g class="bf2" ><rect x="686" y="144" width="210" height="3" class="bad" /></g>
+<g class="pd2" opacity="0"><rect x="598" y="132" width="5" height="4" class="bad" /></g>
+<circle cx="670" cy="134" r="7" class="ok lampon hfix"/>
+<g class="bfx" ><rect x="686" y="144" width="210" height="3" class="ok" /></g>
+<g class="pdx" opacity="0"><rect x="598" y="132" width="5" height="4" class="ok" /></g>
+<rect x="598" y="163" width="64" height="2" class="dim" />
+<circle cx="670" cy="164" r="7" class="dim"/>
+<circle cx="670" cy="164" r="7" class="ok lampon h3"/>
+<text x="686" y="168" class="" font-size="13" >PostToolUse</text>
+<text x="918" y="168" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">29</text>
+<rect x="686" y="174" width="210" height="3" class="dim" />
+<g class="bf3" ><rect x="686" y="174" width="88" height="3" class="ok" /></g>
+<g class="pd3" opacity="0"><rect x="598" y="162" width="5" height="4" class="ok" /></g>
+<rect x="598" y="193" width="64" height="2" class="dim" />
+<circle cx="670" cy="194" r="7" class="dim"/>
+<circle cx="670" cy="194" r="7" class="ok lampon h4"/>
+<text x="686" y="198" class="" font-size="13" >Stop</text>
+<text x="918" y="198" class="" font-size="13" text-anchor="end" style="fill:var(--muted)">32</text>
+<rect x="686" y="204" width="210" height="3" class="dim" />
+<g class="bf4" ><rect x="686" y="204" width="97" height="3" class="ok" /></g>
+<g class="pd4" opacity="0"><rect x="598" y="192" width="5" height="4" class="ok" /></g>
+<g class="tick"><text x="662" y="238" class="" font-size="11" style="fill:var(--ok)">Stop: format-gate ✓ declared-ready ✓</text></g>
+</svg>

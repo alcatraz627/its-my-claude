@@ -53,7 +53,7 @@ slug=$(jq -r --arg cwd "$cwd" '
 name=$(jq -r --arg s "$slug" '.boards[$s].name // $s' "$REG" 2>/dev/null)
 
 # Unsorted asks visible on this board. Mirrors displayScope() in lib.ts and the
-# same jq in session-start-line.sh — keep all three in sync; a lib.ts change does
+# same jq in session-start-line.sh: keep all three in sync; a lib.ts change does
 # NOT reach here and no suite can catch the drift, because each is tested alone.
 counts=$(jq -r --slurpfile L <(cat "$LANDINGS" 2>/dev/null || echo '{"landings":{}}') --arg slug "$slug" '
   def scope: if ((.boards // []) | length) > 0 then .boards elif .slug then [.slug] else null end;

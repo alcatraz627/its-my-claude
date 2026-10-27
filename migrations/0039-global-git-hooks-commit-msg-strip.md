@@ -1,4 +1,4 @@
-# 0039 — global git hooksPath: commit-msg trailer strip
+# 0039: global git hooksPath: commit-msg trailer strip
 
 ## Summary
 
@@ -23,7 +23,7 @@ hook makes it mechanical for every commit path on the machine.
 
 - Repos that set `core.hooksPath` locally (husky, lefthook) override global
   config; the strip does NOT run there. Known, accepted gap.
-- Chain resolution must use `git rev-parse --git-dir` — `--git-path hooks/…`
+- Chain resolution must use `git rev-parse --git-dir`: `--git-path hooks/…`
   resolves through core.hooksPath back to this dir itself (bug caught by the
   mutation test: the chain silently self-referenced and a rejecting repo
   hook failed to block).

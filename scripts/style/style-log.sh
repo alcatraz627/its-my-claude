@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# style-log.sh — one appender for style-quality telemetry (critic passes,
+# style-log.sh: one appender for style-quality telemetry (critic passes,
 # watcher fires, user-caught misses). Records land in
 # ~/.claude/logs/style-watch.jsonl; the critic-pass record doubles as the
 # voice-passed marker the async watcher checks (keyed by artifact sha256).

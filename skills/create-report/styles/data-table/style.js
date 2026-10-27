@@ -472,7 +472,7 @@
     initTabsAndFilters();
 
     if (typeof window.__RPT !== "undefined") {
-      // Code dialog — upgrades expand buttons to open modal
+      // Code dialog: upgrades expand buttons to open modal
       __RPT.initCodeDialog("#code-dialog");
 
       // Copy buttons

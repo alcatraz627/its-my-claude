@@ -1,6 +1,6 @@
 ---
 number: 0024
-title: Atone-recurrence-loop fixes — stakes tiering, session counter, schema + juror-health fields, circuit breaker, stakes-gated blocks, efficacy metric
+title: Atone-recurrence-loop fixes, stakes tiering, session counter, schema + juror-health fields, circuit breaker, stakes-gated blocks, efficacy metric
 slug: atone-recurrence-loop-fixes
 status: complete
 date: 2026-06-25
@@ -27,7 +27,7 @@ affected_paths:
   - scripts/hook-orchestrator/Stop.tasks
 ---
 
-# Migration 0024 — Atone-recurrence-loop fixes
+# Migration 0024: Atone-recurrence-loop fixes
 
 ## Summary
 
@@ -50,7 +50,7 @@ paths** (`stakes.json`, `scripts/stakes-tier.sh`, `.session-atone-slugs/`,
 Stop task + three advisory hooks escalated to conditional blocks).
 
 Governing constraint held throughout: **cost attaches to repeat, never to
-confession** — nothing here makes *recording* a mistake harder. And net machinery
+confession**: nothing here makes *recording* a mistake harder. And net machinery
 goes DOWN: every escalation upgrades an existing advisory or removes a channel; no
 new always-on nag was added (the one new hinter fires on <2% of sessions, and an
 ambient-noise hinter was disabled).
@@ -69,7 +69,7 @@ ambient-noise hinter was disabled).
 | `guard-subagent-output.sh` advisory in ALL repos | high-stakes + explicit material verb + no persist instruction → BLOCK | bind the unambiguous "material work, zero persistence" case; quick lookups stay advisory |
 | (no circuit breaker) | `hinters/10-atone-circuit-breaker.sh`: same slug ≥2× in one session + (high-stakes OR cluster A/C/E) → hard STOP + precheck | the second same-session occurrence is the proven momentum signature |
 | (no objective recurrence signal) | `scripts/hooks/atone-fired-and-ignored-check.sh` (Stop.tasks): slug ≥2×/session → objective `fired-and-ignored` to feedback.jsonl | converts the loop's central blind spot into a counted indicator, no agent diligence needed |
-| (no efficacy measure) | `derived/intervention-efficacy.json` via new `build-efficacy.sh`: per slug, recurrence before/after its rule/hook shipped, split by stakes | the falsifiability backbone — read this, not raw counts, to know if a fix worked |
+| (no efficacy measure) | `derived/intervention-efficacy.json` via new `build-efficacy.sh`: per slug, recurrence before/after its rule/hook shipped, split by stakes | the falsifiability backbone: read this, not raw counts, to know if a fix worked |
 | `_meta.json` | + `juror_health` rollup | weekly juror reliability at a glance |
 | `mistake-patterns.md` header | + "honest floor" note (gateable→~0, cognitive→down 20-35%, not zero) emitted by the consolidate builder | stop overselling "break the loop"; point at the efficacy metric |
 | `hinters/50-atone-periodic-refresh.sh` (fires every 12 turns) | disabled (renamed `_disabled-...subsumed-by-breaker-and-dream-insights`) | turn-count ambient noise; its job is now done better by the breaker (at the moment) + dream-insights |
@@ -79,11 +79,11 @@ ambient-noise hinter was disabled).
 
 - `events.jsonl` stays kernel-locked append-only; the new fields are added to NEW
   rows only. Older rows simply lack `stakes`/`juror_health` and bucket as
-  "unknown"/"unset" in the splits — expected, not backfilled.
+  "unknown"/"unset" in the splits: expected, not backfilled.
 - Low-stakes repos see NO new blocking. All three escalated hooks keep their exact
   prior advisory behaviour there; only high-stakes + the unambiguous subset blocks.
 - `[claude@]` agent-note blocks (permitted by `rules/comments.md`), em-dash, emoji,
-  and long-comment-blocks are never blocked by comment-hygiene — advisory only.
+  and long-comment-blocks are never blocked by comment-hygiene: advisory only.
 - `30-atone-nudge.sh` (correction-time, real signal) is untouched.
 - The juror still gates only S3 events; S2/S1 are `juror_health: not-applicable`.
 - `triggers.json`, cluster pages, and the rest of the derived/ views are unchanged
@@ -91,19 +91,19 @@ ambient-noise hinter was disabled).
 
 ## Verification
 
-- [x] Circuit breaker (`10-atone-circuit-breaker.sh`): 6/6 e2e — fires on high-stakes
+- [x] Circuit breaker (`10-atone-circuit-breaker.sh`): 6/6 e2e: fires on high-stakes
       repeat + on cluster-A repeat (real precheck pulled from events.jsonl), silent on
       low-stakes-uncategorized + single occurrence, dedups, honors `.breaker-off`.
-- [x] guard-structural-claim: 8/8 e2e — high-stakes block, loop-safe step-aside,
+- [x] guard-structural-claim: 8/8 e2e: high-stakes block, loop-safe step-aside,
       low-stakes note, file:line + [UNVERIFIED] carve-outs, "just a ..." form, mute.
-- [x] T1.1 flips: 12/12 e2e — both hooks block only high-stakes + unambiguous subset;
+- [x] T1.1 flips: 12/12 e2e: both hooks block only high-stakes + unambiguous subset;
       `[claude@]`-only and plan-ref-on-a-`[claude@]`-line NOT blocked; low-stakes
       advisory; subagent quick-lookup vs material-no-persist split preserved.
 - [x] `build-efficacy.sh`: runs against real events; structural-claim before 4/after 7
-      (worsened — surfaced honestly), infra-before-grep 5→1, declared-ready 5→1;
+      (worsened: surfaced honestly), infra-before-grep 5→1, declared-ready 5→1;
       differently-named-rule slugs mapped via content reference; null ship_date for
       un-intervened slugs. Valid JSON.
-- [x] fired-and-ignored detector: 5/5 e2e (ATONE_DIR-isolated) — one feedback line per
+- [x] fired-and-ignored detector: 5/5 e2e (ATONE_DIR-isolated): one feedback line per
       repeated slug, none for single occurrence, dedup on re-run, missing-counter safe.
 - [x] `juror_health`: S2→not-applicable, S3+ATONE_NO_JUROR→bypassed (live); rollup
       buckets all six values (synthetic). The live ok/timeout/unparseable states are
@@ -138,7 +138,7 @@ git checkout -- scripts/atone-consolidate.sh scripts/atone-consolidate/build-met
 
 Consider rollback if any escalated block traps a session on a false positive that
 the mute file + loop-safe step-aside don't relieve, or if the breaker fires on
-sessions it shouldn't (it shouldn't — it requires the same slug atoned twice).
+sessions it shouldn't (it shouldn't: it requires the same slug atoned twice).
 
 ## Notes / followups
 
@@ -152,5 +152,5 @@ sessions it shouldn't (it shouldn't — it requires the same slug atoned twice).
 - The efficacy metric, juror_health rollup, and the floor note are emitted by
   `atone-consolidate.sh` on its next run (cron every ~2 days, or `--force`).
 - Honest ceiling (do not oversell): gateable classes → ~0, cognitive classes
-  (structural-claim, speculative-abstractions — no greppable surface) → down 20-35%,
+  (structural-claim, speculative-abstractions: no greppable surface) → down 20-35%,
   measured by `intervention-efficacy.json`, not zero.

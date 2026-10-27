@@ -1,6 +1,6 @@
 ---
 name: sync-api-types
-description: Reads FastAPI Pydantic models from ../backend/ and diffs their fields against the TypeScript types used in src/ to consume those endpoints — reports mismatches and prints corrected type definitions. Project-specific: requires FastAPI backend + TypeScript frontend monorepo.
+description: Reads FastAPI Pydantic models from ../backend/ and diffs their fields against the TypeScript types used in src/ to consume those endpoints: reports mismatches and prints corrected type definitions. Project-specific: requires FastAPI backend + TypeScript frontend monorepo.
 disable-model-invocation: true
 allowed-tools: Read, Glob, Grep, Edit, Write
 user-invocable: true
@@ -16,14 +16,14 @@ Reads FastAPI Pydantic `BaseModel` subclasses from `../backend/` and compares th
 
 Cross-stack type safety auditor. Reads Pydantic models from the FastAPI backend (`../backend/`) and diffs them against the TypeScript interfaces used to consume those endpoints in the frontend. Surfaces type drift before it causes runtime errors.
 
-**Backend:** `../backend/` — FastAPI Python (readable, **never written to** by this skill)
-**Frontend:** `src/` — TypeScript types and interfaces
+**Backend:** `../backend/`: FastAPI Python (readable, **never written to** by this skill)
+**Frontend:** `src/`: TypeScript types and interfaces
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -43,9 +43,9 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Discover Backend Response Shapes
+## Phase 1: Discover Backend Response Shapes
 
-### 1.1 — Find Pydantic models
+### 1.1: Find Pydantic models
 
 ```
 Glob("../backend/**/*.py")
@@ -68,7 +68,7 @@ MyModel (../backend/api/jobs.py:45):
   description: Optional[str] = None (nullable)
 ```
 
-### 1.2 — Map endpoints to response shapes
+### 1.2: Map endpoints to response shapes
 
 ```
 Grep("response_model=", glob="../backend/**/*.py", output_mode="content")
@@ -79,7 +79,7 @@ For each `@router.get("/path", response_model=MyModel)` found, record:
 - HTTP method and path
 - Pydantic model name used as `response_model`
 
-### 1.3 — Filter by endpoint-path (if provided)
+### 1.3: Filter by endpoint-path (if provided)
 
 If an `endpoint-path` argument was given, filter discovered routes to only those whose path contains the argument string.
 
@@ -92,9 +92,9 @@ Print:
 
 ---
 
-## Phase 2 — Discover Frontend Type Definitions
+## Phase 2: Discover Frontend Type Definitions
 
-### 2.1 — Match by model name
+### 2.1: Match by model name
 
 For each backend model name (e.g., `JobResponse`, `UserProfile`):
 
@@ -106,15 +106,15 @@ Also search for camelCase variants (e.g., `job_response` → `JobResponse`) and 
 
 For each match, read the surrounding type definition to extract field names and TypeScript types.
 
-### 2.2 — Handle missing frontend types
+### 2.2: Handle missing frontend types
 
 If a backend model has NO matching TypeScript type: record it as `MISSING_TYPE`. Phase 3 will generate a suggested type definition.
 
 ---
 
-## Phase 3 — Diff and Report
+## Phase 3: Diff and Report
 
-### 3.1 — Apply type mapping rules
+### 3.1: Apply type mapping rules
 
 | Pydantic                  | TypeScript                |
 | ------------------------- | ------------------------- |
@@ -136,11 +136,11 @@ If a backend model has NO matching TypeScript type: record it as `MISSING_TYPE`.
 - Field type doesn't match after applying the table above
 - Nullability doesn't match (backend `Optional` → frontend non-nullable)
 
-### 3.2 — Generate corrected TypeScript (print only)
+### 3.2: Generate corrected TypeScript (print only)
 
-For each mismatch and each `MISSING_TYPE`, print the corrected TypeScript type definition as a code block. **Do NOT auto-apply** — print only for the user to review and copy.
+For each mismatch and each `MISSING_TYPE`, print the corrected TypeScript type definition as a code block. **Do NOT auto-apply**: print only for the user to review and copy.
 
-### 3.3 — Output report
+### 3.3: Output report
 
 Source gum-tui.sh and render using panels. Render only sections that have data:
 
@@ -181,9 +181,9 @@ If all in sync: call `gum_success "All backend types are in sync with frontend T
 
 ## Notes
 
-- **Backend is read-only** — this skill never writes to `../backend/`.
-- Uses `context: fork` — reads both repos without polluting the main conversation context.
-- Generated TypeScript type definitions are printed to terminal only — the user must copy them to the appropriate file and commit.
+- **Backend is read-only**: this skill never writes to `../backend/`.
+- Uses `context: fork`: reads both repos without polluting the main conversation context.
+- Generated TypeScript type definitions are printed to terminal only: the user must copy them to the appropriate file and commit.
 - If the backend uses FastAPI's automatic OpenAPI schema, consider fetching `/openapi.json` from the running dev server as an alternative to static Pydantic analysis.
-- Snake_case → camelCase conversion is automatic. If the backend uses a different naming convention (e.g., already camelCase), the diff may have false positives — review carefully.
-- `Optional[X]` in Python maps to `X | null` in TypeScript. The frontend may use `X | undefined` — both are acceptable; only flag if the frontend is completely non-nullable when the backend is optional.
+- Snake_case → camelCase conversion is automatic. If the backend uses a different naming convention (e.g., already camelCase), the diff may have false positives: review carefully.
+- `Optional[X]` in Python maps to `X | null` in TypeScript. The frontend may use `X | undefined`: both are acceptable; only flag if the frontend is completely non-nullable when the backend is optional.

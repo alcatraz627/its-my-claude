@@ -1,5 +1,5 @@
 ---
-brief: Terse protocol, scope control, state verification — how Claude talks, scopes, and verifies before side-effects
+brief: Terse protocol, scope control, state verification, how Claude talks, scopes, and verifies before side-effects
 triggers:
   - topic:terse-responses
   - topic:scope-control
@@ -17,7 +17,7 @@ Three joined rules govern how Claude talks, scopes work, and verifies state befo
 
 ## Terse Command Protocol
 
-When the user sends a short continuation message (`keep going`, `yes`, `do it`, `next`, `continue`, single-word directives), treat it as a directive to continue the current task autonomously. Do not ask clarifying questions — execute.
+When the user sends a short continuation message (`keep going`, `yes`, `do it`, `next`, `continue`, single-word directives), treat it as a directive to continue the current task autonomously. Do not ask clarifying questions: execute.
 
 **Communication density matching:** Match response length to user's message length. Terse input = terse output. A one-word user message does not warrant a three-paragraph response. Precheck before any reply: what is the ONE thing the owner must decide or do after reading it, and is it the first line? The three shapes this fails in (status report, restating a file just written, skipping stated acceptance criteria) are in [`rules/dense-briefing-direct-answer.md`](dense-briefing-direct-answer.md).
 
@@ -45,28 +45,28 @@ Before any side-effecting operation (git push, file write to external system, AP
 
 **Verification triad before git operations:** `git status` + `git log --oneline -3` + `git diff --stat` before any push, branch creation, or merge.
 
-**Treat all state as ephemeral.** File contents, process state, git status, environment variables — all can change between tool calls. When in doubt, re-read rather than assuming.
+**Treat all state as ephemeral.** File contents, process state, git status, environment variables: all can change between tool calls. When in doubt, re-read rather than assuming.
 
 ### Expand paths at the reader boundary
 
 Extracted 2026-08-27 to `rules/absolute-paths-at-the-reader-boundary.md`: any path in a reply the owner reads is absolute on first mention.
 
-## Escape hatch — when to pause and ask
+## Escape hatch: when to pause and ask
 
 Terse protocol + autonomous execution are defaults, not absolutes. Pause when the cost of being wrong is high AND the ambiguity is genuinely non-intuitive. Don't hide behind "keep going" when the right move is a 10-second clarification.
 
 **Ask when any of these apply:**
 
-- **Irreversible at scale** — dropping a table, rewriting shared branch history, force-push to `main`, bulk deletes, sending external messages
-- **Two plausible readings of intent** — and picking wrong would mean redoing work; not a coin-flip between near-equivalent outputs
-- **Scope pivot detected** — user asked for X, but doing X properly requires non-trivial change Y. Confirm before expanding.
-- **Contradicts stored context** — a memory entry, `mistake-patterns.md` rule, or `NOTE(by human)` comment says one thing; current request implies another
-- **Unfamiliar load-bearing assumption** — about to make a structural choice based on an unverified claim (API shape, library contract, file format) that a single read won't confirm
+- **Irreversible at scale**: dropping a table, rewriting shared branch history, force-push to `main`, bulk deletes, sending external messages
+- **Two plausible readings of intent**: and picking wrong would mean redoing work; not a coin-flip between near-equivalent outputs
+- **Scope pivot detected**: user asked for X, but doing X properly requires non-trivial change Y. Confirm before expanding.
+- **Contradicts stored context**: a memory entry, `mistake-patterns.md` rule, or `NOTE(by human)` comment says one thing; current request implies another
+- **Unfamiliar load-bearing assumption**: about to make a structural choice based on an unverified claim (API shape, library contract, file format) that a single read won't confirm
 
 **Don't ask when:**
 
-- User sent a terse continuation — they signaled execute, not discuss
-- A single grep/read resolves the ambiguity — just do the read
+- User sent a terse continuation: they signaled execute, not discuss
+- A single grep/read resolves the ambiguity: just do the read
 - It's a cheap-to-revert local change (new branch, temp file, scoped edit)
 
 **Format, for ONE question only:** one line stating the ambiguity, 2–3 numbered options, wait. Don't pad. More than one question for the owner is a batch and goes through `/decision-wizard` per `rules/owner-decisions-go-through-a-wizard.md`, never as a numbered list in prose.

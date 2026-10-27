@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gate-classification.test.sh — what counts as an owner gate, and what does not.
+# gate-classification.test.sh: what counts as an owner gate, and what does not.
 #
 # The owner's GATES band showed 16 rows on 2026-09-04 of which 2 were real. The
 # other 14 were rows waiting on OTHER WORK, painted in the owner's colour, and
@@ -27,7 +27,7 @@ if not m:
     print("FAIL: could not find AGENT_BLOCKED in task-table.sh"); sys.exit(1)
 AGENT_BLOCKED = eval("re.compile(" + m.group(1) + ")", {"re": re})
 
-# (label, blocked_on, is_owner_gate) — verbatim from session f04ae843, 2026-09-04
+# (label, blocked_on, is_owner_gate): verbatim from session f04ae843, 2026-09-04
 CASES = [
  ("#574 owner must apply a migration", "USER: apply integration's migration to the shared dev database, or say who does", True),
  ("#599 owner must drop a sentinel",   "USER: one push sentinel, then this deploy clears both blockers at once", True),

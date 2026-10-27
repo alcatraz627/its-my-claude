@@ -126,7 +126,7 @@ banner v2, decision origin weaving, the navbar-crowding guidance. The 52
 stale per-page index.html copies were trashed on the owner's nod; every
 page renders from the one template (verified post-trash).
 
-## Transition / retirement — EXECUTED 2026-08-25
+## Transition / retirement: EXECUTED 2026-08-25
 
 The owner ruled the retirement the same day. decision-page.sh and wizard.sh
 now target the kanban server (URLs, ensure-server, submit endpoint); the

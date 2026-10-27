@@ -1,4 +1,4 @@
-# 0040 — commit signature gate: silent strip becomes hard block
+# 0040: commit signature gate: silent strip becomes hard block
 
 ## Summary
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# receipts.sh — the unread receipts for one codex session, as text for the model.
+# receipts.sh: the unread receipts for one codex session, as text for the model.
 #
 # drain-outbox.sh appends one line per replayed call to <sid>.receipts.jsonl.
 # This prints the lines past the cursor and advances it, so a receipt is shown

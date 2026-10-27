@@ -1,6 +1,6 @@
 ---
 name: in-app-events
-description: Generates In-App Event metadata templates for App Store Connect — event names, descriptions, badge types, image specs, and deep link configuration. Use when creating events for App Store visibility, engagement campaigns, or seasonal promotions.
+description: Generates In-App Event metadata templates for App Store Connect, event names, descriptions, badge types, image specs, and deep link configuration. Use when creating events for App Store visibility, engagement campaigns, or seasonal promotions.
 allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion, WebSearch]
 ---
 
@@ -25,7 +25,7 @@ In-App Events appear on:
 - Editorial features and collections
 - Personalized recommendations
 
-Events are visible to ALL users — including people who haven't downloaded your app. This makes them a powerful discovery and re-engagement tool.
+Events are visible to ALL users: including people who haven't downloaded your app. This makes them a powerful discovery and re-engagement tool.
 
 ## Configuration Questions
 
@@ -91,7 +91,7 @@ Write a markdown document with all metadata ready for copy/paste into App Store 
 | **Competition** | Ranked or scored events against other users | "Weekly Leaderboard", "Speed Run Contest" |
 | **Live Event** | Real-time events at a specific time | "Live Q&A with Creator", "Launch Party" |
 | **Special Event** | Limited-time features, offers, or content | "Holiday Collection", "Anniversary Sale" |
-| **Major Update** | Significant new app version | "Version 3.0 — Complete Redesign" |
+| **Major Update** | Significant new app version | "Version 3.0: Complete Redesign" |
 | **New Season** | Seasonal content refreshes | "Winter Season", "Chapter 3" |
 | **Premiere** | First-time content or feature debut | "Introducing Dark Mode", "New Game Mode" |
 
@@ -112,7 +112,7 @@ Write a markdown document with all metadata ready for copy/paste into App Store 
 ### Long Description (120 chars)
 - **DO**: Provide specific details about what users will experience
 - **DO**: Include clear call to action
-- **DON'T**: List features — describe the experience
+- **DON'T**: List features: describe the experience
 
 ## Output Format
 
@@ -203,7 +203,7 @@ Write a markdown document with all metadata ready for copy/paste into App Store 
 
 ## References
 
-- Related: `app-store/marketing-strategy` — Strategic event planning by app type
-- Related: `generators/custom-product-pages` — Pair events with targeted product pages
-- Related: `app-store/app-description-writer` — Event description writing style
+- Related: `app-store/marketing-strategy`: Strategic event planning by app type
+- Related: `generators/custom-product-pages`: Pair events with targeted product pages
+- Related: `app-store/app-description-writer`: Event description writing style
 - Apple: App Store Connect Help > In-App Events

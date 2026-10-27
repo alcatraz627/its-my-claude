@@ -29,9 +29,9 @@ unmatched project, and never from ~/.claude itself.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -51,7 +51,7 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Parse Arguments and Plan the Scan
+## Phase 1: Parse Arguments and Plan the Scan
 
 Extract from the invocation:
 - `--fix` flag → set `FIX_MODE=true`
@@ -65,7 +65,7 @@ Print:
 
 ---
 
-## Phase 2 — Run TypeScript Compiler Checks
+## Phase 2: Run TypeScript Compiler Checks
 
 Run the TypeScript compiler in no-emit mode to collect implicit-any and other type errors:
 
@@ -82,34 +82,34 @@ Store output for Phase 4 analysis.
 
 ---
 
-## Phase 3 — Pattern Grep Scan
+## Phase 3: Pattern Grep Scan
 
 Run targeted searches across `SCAN_PATH`:
 
-**3.1 — Explicit `any`:**
+**3.1: Explicit `any`:**
 ```bash
 rg -n ": any" src/ -g "*.ts" -g "*.tsx" | rg -v "// any-ok"
 rg -n "as any" src/ -g "*.ts" -g "*.tsx" | rg -v "// any-ok"
 ```
 
-**3.2 — Non-null assertions:**
+**3.2: Non-null assertions:**
 ```bash
 rg -n "[^!]![^=]" src/ -g "*.ts" -g "*.tsx" | rg -v "// nonnull-ok"
 ```
 
-**3.3 — Unsafe double casts:**
+**3.3: Unsafe double casts:**
 ```bash
 rg -n "as unknown as" src/ -g "*.ts" -g "*.tsx"
 ```
 
-**3.4 — `@ts-ignore` and `@ts-nocheck`:**
+**3.4: `@ts-ignore` and `@ts-nocheck`:**
 ```bash
 rg -n "@ts-ignore|@ts-nocheck" src/ -g "*.ts" -g "*.tsx"
 ```
 
 ---
 
-## Phase 4 — Classify Findings
+## Phase 4: Classify Findings
 
 For each finding, classify as:
 
@@ -124,13 +124,13 @@ For each finding, classify as:
 | `info` | `as const` | Safe pattern; skip |
 
 **Acceptable patterns (do NOT flag):**
-- `params: { [key: string]: string }` — Next.js App Router dynamic route params
+- `params: { [key: string]: string }`: Next.js App Router dynamic route params
 - `// eslint-disable-next-line @typescript-eslint/no-explicit-any` with an explanatory comment
-- Test files (`*.test.ts`, `*.spec.ts`) — flag as `info` only
+- Test files (`*.test.ts`, `*.spec.ts`): flag as `info` only
 
 ---
 
-## Phase 5 — Report
+## Phase 5: Report
 
 Source gum-tui.sh and render findings grouped by severity. Render only sections that have data:
 
@@ -163,7 +163,7 @@ If zero errors and zero warnings: call `gum_success "No unsafe type patterns fou
 
 ---
 
-## Phase 6 — Fix Mode (if --fix)
+## Phase 6: Fix Mode (if --fix)
 
 If `FIX_MODE=true` and there are errors or warnings:
 
@@ -183,8 +183,8 @@ Wait for input.
 - Missing explicit return type on a simple function → infer and add
 
 **Non-auto-fixable (report only):**
-- `@ts-ignore` suppressions — require developer judgment
-- Complex double casts — require understanding of intent
+- `@ts-ignore` suppressions: require developer judgment
+- Complex double casts: require understanding of intent
 
 For each fix:
 1. Acquire lock: `bash ~/.claude/skills/shared/lock-file.sh acquire "<file>" "type-audit"`
@@ -206,6 +206,6 @@ If yes: re-run `npx tsc --noEmit 2>&1 | head -100` and show diff in error count.
 ## Notes
 
 - Never modifies `.d.ts` files or files in `node_modules/`.
-- Use `// any-ok` or `// nonnull-ok` comments to permanently suppress specific findings — the rg patterns exclude these.
-- Drizzle query results (`.findFirst()`, `.findMany()`) returning `undefined` are the most common source of `!` assertions — prefer null guards or explicit `?? throw new Error(...)`.
-- For TanStack Query hooks, `useQ` and `useM` wrappers already handle the common `data` being possibly undefined pattern — flag raw `useQuery` calls that use `!` on `data`.
+- Use `// any-ok` or `// nonnull-ok` comments to permanently suppress specific findings: the rg patterns exclude these.
+- Drizzle query results (`.findFirst()`, `.findMany()`) returning `undefined` are the most common source of `!` assertions: prefer null guards or explicit `?? throw new Error(...)`.
+- For TanStack Query hooks, `useQ` and `useM` wrappers already handle the common `data` being possibly undefined pattern: flag raw `useQuery` calls that use `!` on `data`.

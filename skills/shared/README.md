@@ -31,7 +31,7 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "<skill-name>" /tmp/note.md
 bash ~/.claude/skills/shared/check-path.sh "<filepath>"
 ```
 
-### Bash — gum TUI library
+### Bash: gum TUI library
 
 Source `gum-tui.sh` for styled terminal output that works without a TTY (safe in Claude
 Code's Bash tool). Requires `gum` installed (`brew install gum`).
@@ -49,7 +49,7 @@ See `gum-guide.md` for the full TTY compatibility matrix and function reference.
 
 ---
 
-## Python API — `banner.py`
+## Python API: `banner.py`
 
 ### Classes
 
@@ -66,10 +66,10 @@ Terminal banner renderer with aligned Unicode borders.
 | `theme` | str | `"default"` | Theme name: `default`, `minimal`, `rounded`, `heavy` |
 
 **Methods:**
-- `add_section(symbol, title, items)` — Add a section with heading and `Item` list
-- `render() -> str` — Render to string with ANSI-safe borders
-- `verify() -> list[str]` — Check all lines are exactly `width` chars (returns misaligned lines)
-- `from_dict(d) -> Banner` — Class method: build from dict/JSON config
+- `add_section(symbol, title, items)`: Add a section with heading and `Item` list
+- `render() -> str`: Render to string with ANSI-safe borders
+- `verify() -> list[str]`: Check all lines are exactly `width` chars (returns misaligned lines)
+- `from_dict(d) -> Banner`: Class method: build from dict/JSON config
 
 #### `Section(symbol, title, items)`
 

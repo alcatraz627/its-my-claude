@@ -1,6 +1,6 @@
 ---
 name: usage-insights
-description: Generates user-facing usage statistics, activity summaries, and personalized insights dashboards (weekly recaps, year-in-review, Spotify Wrapped-style). Use when user wants to show usage stats, activity insights, or shareable recap screens. Different from analytics-setup which sends data to a backend — this shows insights to the USER on-device.
+description: Generates user-facing usage statistics, activity summaries, and personalized insights dashboards (weekly recaps, year-in-review, Spotify Wrapped-style). Use when user wants to show usage stats, activity insights, or shareable recap screens. Different from analytics-setup which sends data to a backend, this shows insights to the USER on-device.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
@@ -59,7 +59,7 @@ Ask user via AskUserQuestion:
 
 1. **Insight period?**
    - Daily (today's activity breakdown)
-   - Weekly (7-day recap with day-by-day comparison) — recommended
+   - Weekly (7-day recap with day-by-day comparison): recommended
    - Monthly (30-day trends with weekly rollups)
    - Yearly (year-in-review with monthly highlights)
    - All of the above (period picker lets user switch)
@@ -67,14 +67,14 @@ Ask user via AskUserQuestion:
 2. **Visualization style?**
    - Cards only (simple stat cards with trend indicators)
    - Charts only (Swift Charts bar/line graphs)
-   - Both cards and charts — recommended
+   - Both cards and charts: recommended
 
 3. **Include shareable recap card?**
    - Yes (generates a recap view that can be rendered to an image and shared)
    - No (dashboard only, no sharing)
 
 4. **Data source?**
-   - SwiftData (generate `UsageEvent` model and recorder) — recommended
+   - SwiftData (generate `UsageEvent` model and recorder): recommended
    - Custom (user provides their own event data; generate calculator and views only)
 
 ## Generation Process
@@ -84,20 +84,20 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Data Files
 Generate these files:
-1. `UsageEvent.swift` — SwiftData `@Model` for recording user activity events
-2. `InsightResult.swift` — Model for computed insights (title, value, trend, visualization type)
+1. `UsageEvent.swift`: SwiftData `@Model` for recording user activity events
+2. `InsightResult.swift`: Model for computed insights (title, value, trend, visualization type)
 
 ### Step 3: Create Calculation Engine
-3. `InsightCalculator.swift` — Pure functions that aggregate events into insights
+3. `InsightCalculator.swift`: Pure functions that aggregate events into insights
 
 ### Step 4: Create UI Files
-4. `InsightsDashboardView.swift` — Main dashboard with grid of insight cards and period picker
-5. `InsightCardView.swift` — Individual insight card with icon, value, trend indicator, sparkline
+4. `InsightsDashboardView.swift`: Main dashboard with grid of insight cards and period picker
+5. `InsightCardView.swift`: Individual insight card with icon, value, trend indicator, sparkline
 
 ### Step 5: Create Optional Files
 Based on configuration:
-- `UsageRecapView.swift` — If shareable recap selected (paged summary with share card generation)
-- `UsageEventRecorder.swift` — If SwiftData data source selected (convenience class for recording events)
+- `UsageRecapView.swift`: If shareable recap selected (paged summary with share card generation)
+- `UsageEventRecorder.swift`: If SwiftData data source selected (convenience class for recording events)
 
 ### Step 6: Determine File Location
 Check project structure:
@@ -314,13 +314,13 @@ if let image = renderer.uiImage {
 - Fetch only the events needed for the current period (use `#Predicate` with date range)
 - For yearly summaries, pre-aggregate monthly totals instead of scanning all events
 - Batch event recording to avoid excessive SwiftData writes (use `UsageEventRecorder`)
-- Set a retention policy — auto-delete events older than 1-2 years
+- Set a retention policy: auto-delete events older than 1-2 years
 
 ### Calendar-Based Period Calculations
-- Always use `Calendar.current` for date math — never assume 7 days = 1 week
+- Always use `Calendar.current` for date math: never assume 7 days = 1 week
 - Respect the user's first-day-of-week setting (`calendar.firstWeekday`)
 - Use `calendar.dateInterval(of: .weekOfYear, for: date)` for accurate week boundaries
-- Handle timezone changes gracefully — store timestamps in UTC, display in local time
+- Handle timezone changes gracefully: store timestamps in UTC, display in local time
 
 ### Swift Charts Considerations
 - Swift Charts is iOS 16+ / macOS 13+, but works best with iOS 17+ for latest features
@@ -329,14 +329,14 @@ if let image = renderer.uiImage {
 - Provide VoiceOver descriptions with `.accessibilityLabel` on chart marks
 
 ### Trend Comparison Edge Cases
-- First week of use has no "previous period" — show "New!" instead of a trend arrow
+- First week of use has no "previous period": show "New!" instead of a trend arrow
 - Handle periods with zero events gracefully (don't divide by zero for averages)
 - Percentage changes can be misleading for small numbers (1 -> 2 = +100%)
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/share-card` — Render recap views as shareable images
-- Related: `generators/analytics-setup` — Backend analytics (complements on-device insights)
-- Related: `generators/streak-tracker` — Streak tracking pairs well with usage insights
-- Related: `generators/milestone-celebration` — Celebrate milestones surfaced by insights
+- **templates.md**: All production Swift templates
+- Related: `generators/share-card`: Render recap views as shareable images
+- Related: `generators/analytics-setup`: Backend analytics (complements on-device insights)
+- Related: `generators/streak-tracker`: Streak tracking pairs well with usage insights
+- Related: `generators/milestone-celebration`: Celebrate milestones surfaced by insights

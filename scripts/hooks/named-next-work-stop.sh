@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# named-next-work-stop.sh — Stop hook: a "Doing now" section is a claim, not a plan.
+# named-next-work-stop.sh: Stop hook: a "Doing now" section is a claim, not a plan.
 #
 # The account's second most-fired slug, named-the-next-work-then-stopped: 15
 # events, 7 in the week to 2026-09-08. The newest shape (forge-brains,

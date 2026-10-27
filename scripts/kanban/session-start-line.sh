@@ -5,7 +5,7 @@
 #
 # Runs in the synchronous SessionStart injection lane (sessionstart-inject.sh):
 # reads the SessionStart payload on stdin, prints {additionalContext} or
-# nothing. Pure file reads (registry.json / notes.json / ack.json) — no server,
+# nothing. Pure file reads (registry.json / notes.json / ack.json): no server,
 # no bun, so it stays sub-100ms and works while the board server is down.
 # Unread definition mirrors cli.ts: note.updatedAt (ms) > ack.lastAckTs (ms).
 
@@ -36,7 +36,7 @@ bdir="$KROOT/boards/$slug"
 
 ack_ms=$(jq -r '.lastAckTs // 0' "$bdir/ack.json" 2>/dev/null || echo 0)
 # @me self-notes never nag the agent; !now marks actionable. Minimal mirror of
-# lib.ts parseNoteTags — keep the token regexes in sync.
+# lib.ts parseNoteTags: keep the token regexes in sync.
 counts=$(jq -r --argjson ack "${ack_ms:-0}" '
   [ to_entries[]
     | select(.value.note != null and .value.note != "")

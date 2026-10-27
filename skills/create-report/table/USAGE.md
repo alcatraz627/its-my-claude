@@ -1,4 +1,4 @@
-# /create-report:table — Usage Guide
+# /create-report:table: Usage Guide
 
 ## What it does
 
@@ -15,7 +15,7 @@ Converts tabular data (CSV, JSON, or inline) into a polished, fully self-contain
 | `data_source` | required | Path to CSV/JSON file, or description of inline data |
 | `instructions` | optional | Natural-language directives: what columns to show, how to sort, theme, highlighting, export, pagination, etc. |
 
-**Output:** `.claude/output/<YYYYMMDD-HHMM>-<slug>/index.html` — single self-contained HTML, no external deps.
+**Output:** `.claude/output/<YYYYMMDD-HHMM>-<slug>/index.html`: single self-contained HTML, no external deps.
 
 ---
 
@@ -132,12 +132,12 @@ The feature is now permanent and documented in the script header for all future 
 | Dependency | Type | Notes |
 |---|---|---|
 | `GUIDELINES.md` | Shared rules | Read at start of every run |
-| `generate-table.ts` | Script | The rendering engine — read its header for current flags |
+| `generate-table.ts` | Script | The rendering engine: read its header for current flags |
 | `npx tsx` | Runtime | Available as npx package, no install required |
 | `Google Chrome` | Browser | Used to open the output (`open -a "Google Chrome"`) |
 | `.claude/output/` | Output dir | Created automatically if missing |
 
 ## Related Skills
 
-- `/create-report` — Generates structured narrative HTML reports from markdown files (not table data)
-- `/project-index` — Generates a markdown project index that can feed into `/create-report`
+- `/create-report`: Generates structured narrative HTML reports from markdown files (not table data)
+- `/project-index`: Generates a markdown project index that can feed into `/create-report`

@@ -169,7 +169,7 @@ class AppleSignInCoordinator: NSObject, ASAuthorizationControllerDelegate {
 }
 ```
 
-## AsyncStream — Bridging Multi-Value Sources
+## AsyncStream: Bridging Multi-Value Sources
 
 For APIs that produce multiple values over time (delegates, NotificationCenter, KVO), use `AsyncStream`:
 

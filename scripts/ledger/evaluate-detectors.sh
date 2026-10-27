@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# evaluate-detectors.sh — the ledger alert evaluator (v1).
+# evaluate-detectors.sh: the ledger alert evaluator (v1).
 #
 # Reads the value-system (goals.toml) and the detectors (detectors.toml), evaluates
 # each detector against its subject stream, and appends any actionable to the alert
 # ledger (alerts.jsonl). It is stateless across runs except for a small state file
-# (per-detector firing/last-fired) and is meant to piggyback an existing cron — it
+# (per-detector firing/last-fired) and is meant to piggyback an existing cron: it
 # never blocks and always exits 0.
 #
 # Three guards the QA review demanded, all here so no detector can opt out:
@@ -12,7 +12,7 @@
 #     or a missing subject stream is flagged LOUDLY (a FINDING), never silently
 #     ignored. A misconfigured detector must not masquerade as correctly-quiet.
 #   - OFFSET-CURSOR LINT: a detector that reads a delta cursor gets its cursor
-#     reconciled against the stream — offset past EOF or a shrunk stream is a
+#     reconciled against the stream: offset past EOF or a shrunk stream is a
 #     FINDING (the QA "silent-failure relocated to the cursor" fix). Window-based
 #     detectors (burn_rate) carry no cursor, so this is a no-op for them.
 #   - STALENESS: each run stamps last_eval per detector; a detector not evaluated in
@@ -48,8 +48,8 @@ yq -p toml -o json "$DETECTORS" > "$TMP/det.json"    2>/dev/null || echo '{}' > 
 cat "$STATE" 2>/dev/null > "$TMP/state.json" || true
 [ -s "$TMP/state.json" ] || echo '{}' > "$TMP/state.json"
 
-# Pre-convert the efficacy registry (TOML→JSON) so the embedded python — which has
-# no TOML parser (macOS python3 < 3.11, no tomllib) — can read the slug→gate
+# Pre-convert the efficacy registry (TOML→JSON) so the embedded python: which has
+# no TOML parser (macOS python3 < 3.11, no tomllib): can read the slug→gate
 # mappings. Mirrors the goals/detectors conversion above. The registry path is
 # whatever the efficacy detector declares; missing/unparseable → {} (the python
 # branch then emits a loud lint finding, never a silent skip).
@@ -70,7 +70,7 @@ else
   echo '{}' > "$TMP/acted.json"
 fi
 
-# Python computes decisions + lints; emits one JSON object (no id/ts — bash stamps
+# Python computes decisions + lints; emits one JSON object (no id/ts: bash stamps
 # those via ledger_id so the alert ids match the ledger format).
 RESULT=$(python3 - "$NOW" "$TMP/goals.json" "$TMP/det.json" "$TMP/state.json" "$TMP/efficacy.json" "$TMP/acted.json" <<'PY'
 import json, sys, os, datetime
@@ -113,7 +113,7 @@ nowiso = now.strftime("%Y-%m-%dT%H:%M:%SZ")
 #   - a provenance entry that is an explicit repo path (contains "/" before any
 #     annotation and ends in a known extension) but no longer exists → the
 #     encoding drifted. Prose refs ("live intention …", bare filenames with
-#     commentary) are exempt — resolving them reliably isn't possible, and a
+#     commentary) are exempt: resolving them reliably isn't possible, and a
 #     false "missing" here would teach readers to ignore the lint.
 #   - reviewed_on (optional field): an existing provenance file modified after
 #     the last review → flag for a re-check.
@@ -261,7 +261,7 @@ for det in dets:
     # For every slug→gate mapping, does the slug's recurrence-rate DROP after the
     # gate deployed? pre = events/30d over the 90d before deploy; post = events/30d
     # since max(deployed, redeployed). A mature window still recurring at/above the
-    # pre rate is "regressing" — a gate that isn't working, which under
+    # pre rate is "regressing": a gate that isn't working, which under
     # graduate-to-mechanism is itself a thrash loop. Only HIGH-confidence mappings
     # alert; provisional ones are informational. Idempotent per (slug, gate, month).
     elif det.get("archetype") == "efficacy":
@@ -299,7 +299,7 @@ for det in dets:
                     try: d = json.loads(line)
                     except Exception: continue
                     # Fires only: kind:"heed" resolutions share the hook_id but
-                    # are responses to a fire, not fires — don't double-count.
+                    # are responses to a fire, not fires: don't double-count.
                     if d.get("kind") != "warn": continue
                     t = parse_ts(d.get("ts", ""))
                     if t is None: continue
@@ -358,7 +358,7 @@ for det in dets:
                 cflag = "" if conf == "high" else f" [{conf}]"
                 summary.append(f"{name} {slug}/{gate}: {status}{cflag} (pre={pre_rate:.1f} post={post_rate:.1f}/30d, win={post_days}d, fires={g_fires} heeded={heed_str})")
 
-                # Alert only on a regressing, mature, HIGH-confidence mapping — and
+                # Alert only on a regressing, mature, HIGH-confidence mapping: and
                 # only once per (slug, gate, month). Provisional mappings never
                 # ticket (their attribution is too fuzzy to auto-file a gate).
                 if status == "regressing" and mature and conf == "high":
@@ -389,7 +389,7 @@ for det in dets:
     # warn-events); this asks whether anything ACTS on a fire. Per mapping:
     # sessions where the plug fired in the window vs those with ≥1 same-session
     # acted event. A mature, high-volume mapping with ZERO conversions means the
-    # injection spends attention/context for nothing — that's an attention-
+    # injection spends attention/context for nothing: that's an attention-
     # scarcity finding, not a badge. Sessions are joined on the first 8 chars of
     # the session id (streams disagree on full-vs-short ids). Idempotent per
     # (plug, month).
@@ -495,7 +495,7 @@ echo "$RESULT" | jq -c '.alerts[]?' 2>/dev/null | while IFS= read -r rec; do
   ledger_append "$ALERTS" "$LOCK" "$line"
 
   # Route: a graduate-to-mechanism ticket/page auto-files a propose.sh gate
-  # candidate — making "a recurring pattern should become a gate" mechanical
+  # candidate: making "a recurring pattern should become a gate" mechanical
   # instead of relying on an agent to remember. Idempotent: skip if an open
   # proposal already carries this alert's idempotence key.
   gref=$(printf '%s' "$rec" | jq -r '.goal_ref // ""')

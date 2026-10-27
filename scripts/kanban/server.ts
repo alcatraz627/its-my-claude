@@ -52,7 +52,7 @@ const bfbAsset = (name: string, type: string) => {
   return new Response(fs.readFileSync(f), { headers: { "content-type": `${type}; charset=utf-8`, "cache-control": "no-store" } });
 };
 
-// The only writer of notes.json is this chain — POSTs serialize through it so
+// The only writer of notes.json is this chain: POSTs serialize through it so
 // load-mutate-save never interleaves (dashboard-tools non-negotiable #1).
 let notesChain: Promise<unknown> = Promise.resolve();
 function enqueueNote(fn: () => unknown): Promise<unknown> {
@@ -341,13 +341,13 @@ function resolveDocPath(reqPath: string): { real: string } | { error: string; st
   ];
   // The checks below run in order and return on the first failure, which means
   // the LAST one inherits every problem the earlier ones did not name. It used
-  // to be the extension test, so a request with no path at all — which resolves
+  // to be the extension test, so a request with no path at all: which resolves
   // to the process CWD, itself inside a board root, and so passes both earlier
-  // gates — came back "doc viewer renders .md/.txt only". A confident, specific
+  // gates: came back "doc viewer renders .md/.txt only". A confident, specific
   // sentence about a file type, for a request that named no file. The two cases
   // that were being swallowed now answer for themselves, first.
   if (!reqPath.trim()) return { error: "no document asked for — /doc needs ?path=<file>", status: 400 };
-  // ~ is how a path is written everywhere else in this app — in card bodies, in
+  // ~ is how a path is written everywhere else in this app: in card bodies, in
   // decision why fields, in notes, in the docs themselves. path.resolve does not
   // expand it, so every one of those was unopenable until now. rootMissing has
   // expanded it for board roots since the beginning; this is the same rule.
@@ -359,7 +359,7 @@ function resolveDocPath(reqPath: string): { real: string } | { error: string; st
   // A directory was the only non-file case checked, and the check was about
   // giving a good message. This one is about staying alive: every read below is
   // synchronous, and a synchronous open() on a NAMED PIPE with no writer blocks
-  // forever. Bun runs one JS thread, so that is not a slow request — it is the
+  // forever. Bun runs one JS thread, so that is not a slow request: it is the
   // whole server, every board, every endpoint, until someone notices and
   // restarts it. Deleting the pipe afterwards does not help; the fd is already
   // open. The validator did exactly this to the live instance on 2026-08-26.
@@ -603,7 +603,7 @@ const server = Bun.serve({
           if (url.searchParams.get("view") === "classic") return classicPage();
           return bfbAsset("index.html", "text/html");
         }
-        // an asset inside the page dir (config.json, images) — no traversal
+        // an asset inside the page dir (config.json, images): no traversal
         const rel = parts.slice(1).join("/");
         const real = path.resolve(dir, rel);
         if (!real.startsWith(path.resolve(dir) + path.sep)) return json({ error: "bad path" }, 400);
@@ -781,7 +781,7 @@ const server = Bun.serve({
             });
           }
         } catch (e: any) { if ((e?.code ?? "") !== "ENOENT") out.decisionsError = String(e?.message ?? e); }
-        // Recorded decisions — the ones an agent wrote down where the work is,
+        // Recorded decisions: the ones an agent wrote down where the work is,
         // with no page behind them. They were missing here entirely, so the
         // `decide` CLI recorded into a store that only the board's own left
         // panel could read: not the hub's Decisions view, and not the navbar
@@ -809,7 +809,7 @@ const server = Bun.serve({
                 board: slug, boardName: b.name ?? slug, card: d.card ?? null,
                 session: d.by ?? null, reach: reachOf(d.by, seenLive),
                 why: d.why ?? null, items: 1,
-                // Same rule /api/owed uses at :561 — a deferred decision is not
+                // Same rule /api/owed uses at :561: a deferred decision is not
                 // pending until its horizon passes. Inlined rather than a shared
                 // helper for one more caller; two callsites is where one earns.
                 pending: !d.answer && !(d.deferUntil && Date.parse(d.deferUntil) > Date.now()),
@@ -932,7 +932,7 @@ const server = Bun.serve({
             .map(([cid, ids]) => [cid, ids.filter((x) => alive.has(x))])) };
         // rootGone was computed for the hub's list and nowhere else, so a board
         // whose project directory has been deleted showed a red pill on the hub
-        // and, once opened, said only "synced 32d ago" — which reads as a stale
+        // and, once opened, said only "synced 32d ago": which reads as a stale
         // mirror rather than a project that no longer exists. Same fact, and the
         // page a person actually works in was the one that did not carry it.
         return json({ slug, name: reg.name, root: reg.root, board: bd,
@@ -1533,7 +1533,7 @@ const server = Bun.serve({
       // `=== true`, never truthiness. The first version of this guard read
       // `!body?.replace`, so `replace: "false"`, `replace: []`, `replace: {}`
       // and any non-empty string all sailed through and destroyed the ruling
-      // with a 200 — the exact bug this guard was written to close, wearing a
+      // with a 200: the exact bug this guard was written to close, wearing a
       // different input. A guard on a destructive path takes the literal true
       // and nothing else.
       if (fs.existsSync(answerFile) && body?.replace !== true) {
@@ -1625,7 +1625,7 @@ const server = Bun.serve({
         else { out = { error: `unknown op ${body!.op}` }; return; }
 
         // Shipping a milestone moves its cards with it. board.json has one
-        // writer and it is the CLI (charter §11) — except that the same
+        // writer and it is the CLI (charter §11): except that the same
         // exception the answers map already takes applies here, and it takes it
         // through the same lock, because the alternative is the owner moving
         // seven cards by hand which is the complaint that produced this object.
@@ -1706,7 +1706,7 @@ const server = Bun.serve({
           // (dpNotifyOrigin); a recorded decision had no equivalent, so the
           // owner ruled on the board and the session that asked went on waiting.
           // Opt-in via `notify` so the CLI's own `decide answer` stays quiet
-          // unless it asks — an agent recording its own answer should not ping
+          // unless it asks: an agent recording its own answer should not ping
           // itself.
           let told: string | null = null;
           if (a && body.notify && d.by) {
@@ -2055,7 +2055,7 @@ const server = Bun.serve({
     }
 
     // "Send to agent": the selection, rendered, pushed at whoever is live in
-    // this project right now. It stays on disk either way — a nudge nobody was
+    // this project right now. It stays on disk either way: a nudge nobody was
     // around to receive must still be there at the next pickup, which is the
     // whole failure mode the pins channel has.
     if (req.method === "POST" && p === "/api/send") {
@@ -2069,7 +2069,7 @@ const server = Bun.serve({
       const peers = livePeers(reg.root);
       // pm2 inherits whatever PATH the shell that started it had, so the binary
       // is resolved explicitly. A missing binary and a down broker used to look
-      // identical from the UI — both "sent nothing" — and only one of them is
+      // identical from the UI: both "sent nothing": and only one of them is
       // something the human can fix.
       const ipcBin = [path.join(os.homedir(), ".local", "bin", "claude-ipc"), "/usr/local/bin/claude-ipc"]
         .find((f) => fs.existsSync(f)) ?? "claude-ipc";
@@ -2077,7 +2077,7 @@ const server = Bun.serve({
       let reason = "";
       // The board is its own actor, not a session. Without --from, the broker
       // resolves the sender from the server's cwd, decides that is whichever
-      // agent is working in this repo, and refuses the send as a self-send —
+      // agent is working in this repo, and refuses the send as a self-send:
       // exactly the peer you most wanted to reach.
       ipcRegister(ipcBin);
       for (const peer of peers.filter((x) => x.alias !== IPC_ALIAS)) {

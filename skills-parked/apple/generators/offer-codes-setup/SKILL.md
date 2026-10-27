@@ -1,6 +1,6 @@
 ---
 name: offer-codes-setup
-description: Generates offer code distribution strategies and configuration guides for subscription and IAP promotions — including partner campaigns, influencer programs, and email re-engagement. Use when setting up offer codes for distribution.
+description: Generates offer code distribution strategies and configuration guides for subscription and IAP promotions, including partner campaigns, influencer programs, and email re-engagement. Use when setting up offer codes for distribution.
 allowed-tools: [Read, Write, Edit, Glob, Grep, AskUserQuestion, WebSearch]
 ---
 
@@ -229,6 +229,6 @@ struct SettingsView: View {
 
 ## References
 
-- Related: `generators/subscription-offers` — StoreKit 2 offer implementation
-- Related: `generators/win-back-offers` — Win-back campaign strategy
-- Related: `app-store/marketing-strategy` — Overall promotional strategy
+- Related: `generators/subscription-offers`: StoreKit 2 offer implementation
+- Related: `generators/win-back-offers`: Win-back campaign strategy
+- Related: `app-store/marketing-strategy`: Overall promotional strategy

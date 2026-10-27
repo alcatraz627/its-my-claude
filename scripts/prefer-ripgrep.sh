@@ -40,7 +40,7 @@ command="$scanned"
 
 if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*(\/usr\/bin\/grep|\/bin\/grep|grep)\s+'; then
 
-  # Allow git grep — operates on git index, rg cannot replace it
+  # Allow git grep: operates on git index, rg cannot replace it
   if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*git\s+grep\b'; then
     # Only allow if the ONLY grep is git grep
     non_git=$(echo "$command" | sed 's/git[[:space:]]\+grep//g')
@@ -88,6 +88,6 @@ if echo "$command" | grep -qE '(^|[;&|]{1,2}|\n)\s*(\/usr\/bin\/grep|\/bin\/grep
   exit 0
 fi
 
-# Not a grep command — allow through
+# Not a grep command: allow through
 heed clean
 exit 0

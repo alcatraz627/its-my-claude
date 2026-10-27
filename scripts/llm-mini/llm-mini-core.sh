@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# llm-mini-core.sh — Fast AI query dispatcher.
+# llm-mini-core.sh: Fast AI query dispatcher.
 #
 # Single source of truth. All surfaces (CLI, MCP, hook, Python) call this.
-# Renamed from mini-core.sh — see llm-mini.sh for the CLI entry point.
+# Renamed from mini-core.sh: see llm-mini.sh for the CLI entry point.
 #
 # Features:
 #   - Local-first: Ollama (<500ms warm) with Haiku cloud fallback (~1-2s)
@@ -80,7 +80,7 @@ else
     gum_header()  { echo "═══ $1 ═══"; }
 fi
 
-# ─── ANSI (for help — works without gum) ──────────────────────────
+# ─── ANSI (for help: works without gum) ──────────────────────────
 
 C_RESET='\033[0m'; C_BOLD='\033[1m'; C_DIM='\033[2m'
 C_CYAN='\033[36m'; C_YELLOW='\033[33m'; C_GREEN='\033[32m'
@@ -280,7 +280,7 @@ _cmd_list_templates() {
 
 # ─── Backend functions ────────────────────────────────────────────
 
-# Dynamic timeout — increase for large prompts
+# Dynamic timeout: increase for large prompts
 _effective_timeout() {
     local len=${#PROMPT}
     if [[ $len -gt 5000 ]]; then
@@ -382,11 +382,11 @@ call_cloud() {
 }
 
 # ═══════════════════════════════════════════════════════════════════
-# MAIN EXECUTION — everything below is sequential top-level code
+# MAIN EXECUTION: everything below is sequential top-level code
 # ═══════════════════════════════════════════════════════════════════
 
 # ─── Capture stdin immediately ────────────────────────────────────
-# Must happen FIRST — before subcommand routing or flag parsing.
+# Must happen FIRST: before subcommand routing or flag parsing.
 # If stdin is a pipe, slurp it now before any subshell consumes it.
 
 STDIN_DATA=""

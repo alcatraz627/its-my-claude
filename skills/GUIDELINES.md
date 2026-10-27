@@ -2,9 +2,9 @@
 
 > **Mandatory for all skills.** Every skill must read this file as its **first step** and apply all rules for the entire run. These rules override any conflicting instructions in individual SKILL.md files.
 >
-> **Fallback (which GUIDELINES.md to read).** This GLOBAL file, `~/.claude/skills/GUIDELINES.md`, is the canonical default. When a skill's Step 0 says to read `.claude/skills/GUIDELINES.md` and the project has no local copy — most projects don't, and that is expected, not an error — read THIS global file instead. Never skip the rules because a project-local copy is absent, and never scaffold one just to satisfy the step.
+> **Fallback (which GUIDELINES.md to read).** This GLOBAL file, `~/.claude/skills/GUIDELINES.md`, is the canonical default. When a skill's Step 0 says to read `.claude/skills/GUIDELINES.md` and the project has no local copy (most projects don't, and that is expected, not an error) read THIS global file instead. Never skip the rules because a project-local copy is absent, and never scaffold one just to satisfy the step.
 >
-> **Need a reference file?** See `~/.claude/LOOKUP.md` — the address book for all config, shared references, hooks, and scripts.
+> **Need a reference file?** See `~/.claude/LOOKUP.md`: the address book for all config, shared references, hooks, and scripts.
 
 ---
 
@@ -14,7 +14,7 @@ Never read from, write to, modify, or delete files in these locations:
 
 | Path Pattern                        | Reason                                                     |
 | ----------------------------------- | ---------------------------------------------------------- |
-| `node_modules/`                     | Third-party code — enormous and irrelevant                 |
+| `node_modules/`                     | Third-party code: enormous and irrelevant                 |
 | `.git/`                             | Version control internals                                  |
 | `dist/`, `.next/`, `build/`, `out/` | Generated build artifacts                                  |
 | `.env`, `.env.local`, `.env.*`      | Secrets and environment config                             |
@@ -22,8 +22,8 @@ Never read from, write to, modify, or delete files in these locations:
 | `coverage/`, `.turbo/`, `.cache/`   | Tool caches                                                |
 **Rules:**
 
-- Never pass `node_modules/` to any Glob, Grep, or Read — always exclude it
-- **Never Glob or Grep from the home directory (`~/`)** — this causes timeouts on large filesystems. Always resolve to a specific project root first, then search within it.
+- Never pass `node_modules/` to any Glob, Grep, or Read: always exclude it
+- **Never Glob or Grep from the home directory (`~/`)**: this causes timeouts on large filesystems. Always resolve to a specific project root first, then search within it.
 - Never **write** outside the project root (directory containing `package.json` or equivalent project marker) unless the task explicitly requires it
 - If a resolved path matches any row above, skip it silently and note it in your summary
 
@@ -33,12 +33,12 @@ Never read from, write to, modify, or delete files in these locations:
 
 ### Safety
 
-- **Commits and pushes follow the repo's protection status** (user ruling 2026-07-11). Protected repos — an entry in `~/.claude/protected-repos.list` or a tracked `.claude/require-user-commit` marker, enforced by guard-user-commit.sh — are USER-commit-only: prepare the change, present the diff, hand the commit to the user. Unprotected repos: the agent may commit per logical unit and push as part of in-scope work. Pushes touching `main`/`master` anywhere still require the push-gate's fresh per-push approval (guard-git-push.sh: print the owner the line `approve push <nonce>` once and keep working; his typed reply from any client writes the sentinel, and never AskUserQuestion for it)
+- **Commits and pushes follow the repo's protection status** (user ruling 2026-07-11). Protected repos: an entry in `~/.claude/protected-repos.list` or a tracked `.claude/require-user-commit` marker, enforced by guard-user-commit.sh: are USER-commit-only: prepare the change, present the diff, hand the commit to the user. Unprotected repos: the agent may commit per logical unit and push as part of in-scope work. Pushes touching `main`/`master` anywhere still require the push-gate's fresh per-push approval (guard-git-push.sh: print the owner the line `approve push <nonce>` once and keep working; his typed reply from any client writes the sentinel, and never AskUserQuestion for it)
 - **Always confirm** before overwriting a file that already exists and was not created by this skill run
 - **Never delete** files; if cleanup is needed, report what would be deleted and ask the user
-- **No force operations** — do not use `--force`, `--no-verify`, or `rm -rf`
-- **Safe delete** — never use `rm` to delete files. Use `trash <path>` (macOS built-in) which moves to Finder Trash. A PreToolUse hook blocks `rm` automatically. Full reference: `shared/safe-delete.md`
-- **Asset management** — non-source output files (screenshots, reports, PDFs, exports) go in `~/.claude/assets/<type>/`. Prefer `asset.sh register` (handles naming + manifest); direct copy to the right subdirectory is also fine. Full reference: `shared/asset-management.md`
+- **No force operations**: do not use `--force`, `--no-verify`, or `rm -rf`
+- **Safe delete**: never use `rm` to delete files. Use `trash <path>` (macOS built-in) which moves to Finder Trash. A PreToolUse hook blocks `rm` automatically. Full reference: `shared/safe-delete.md`
+- **Asset management**: non-source output files (screenshots, reports, PDFs, exports) go in `~/.claude/assets/<type>/`. Prefer `asset.sh register` (handles naming + manifest); direct copy to the right subdirectory is also fine. Full reference: `shared/asset-management.md`
 
 ### Behavior
 
@@ -68,7 +68,7 @@ Never read from, write to, modify, or delete files in these locations:
   every routed run names what it covered and what it skipped in the box itself.
   A run that skipped nothing writes `skipped none`; a silent skip is the defect
   this row exists to prevent.
-- All file paths in output must be **absolute** — clickable in terminals and IDEs
+- All file paths in output must be **absolute**: clickable in terminals and IDEs
 
 ### Task Completion Summary
 
@@ -84,7 +84,7 @@ When a **user-defined goal** is completed (not every small edit, only when the u
 └─ ✅ [how the result was verified] ─────────────────────────────────
 ```
 
-**When to print:** After the final action that resolves what the user asked for — feature implemented, bug fixed, refactor complete, config updated. Do not print for intermediate steps, clarifying questions, or exploratory reads.
+**When to print:** After the final action that resolves what the user asked for: feature implemented, bug fixed, refactor complete, config updated. Do not print for intermediate steps, clarifying questions, or exploratory reads.
 
 ---
 
@@ -101,7 +101,7 @@ Attempt 3 → fail → STOP. Report full error context to the user and ask how t
 **Rules:**
 
 - Never retry more than 3 times for the same logical operation
-- Never silently swallow errors — always surface them with context
+- Never silently swallow errors: always surface them with context
 - If a Bash command fails with a non-zero exit code, treat it as a failure and escalate
 
 ---
@@ -119,7 +119,7 @@ Always use dedicated Claude tools over Bash equivalents:
 | Search file contents   | `Grep`  | `Bash(grep)` / `Bash(rg)`  |
 | Write a new file       | `Write` | `Bash(echo >)`             |
 | Patch an existing file | `Edit`  | `Bash(sed)` / `Bash(awk)`  |
-| Terminal / system ops  | `Bash`  | —                          |
+| Terminal / system ops  | `Bash`  | - |
 
 ### Shared Helper Scripts
 
@@ -139,14 +139,14 @@ Small reusable scripts live in `~/.claude/skills/shared/`. Always use absolute p
 
 All reusable utilities live in `~/.claude/skills/shared/` (the **std::claude::shared** library). Skills must import from this package rather than copy-pasting utility code.
 
-**Python** — canonical import pattern:
+**Python**: canonical import pattern:
 ```python
 import sys, os
 sys.path.insert(0, os.path.expanduser("~/.claude/skills"))
 from shared import Banner, Section, Item, tree, kv_line, truncate_path, THEMES
 ```
 
-**Bash** — always use absolute paths:
+**Bash**: always use absolute paths:
 ```bash
 bash ~/.claude/skills/shared/lock-file.sh <action> <path> [skill]
 bash ~/.claude/skills/shared/prepend-runtime-note.sh <skill> <tmpfile>
@@ -171,7 +171,7 @@ Every skill **may** (and **should**, where it improves clarity) use `gum` to rep
 brew install gum
 ```
 
-**Availability check** — add to any skill that uses gum to fail fast if not installed:
+**Availability check**: add to any skill that uses gum to fail fast if not installed:
 
 ```bash
 command -v gum >/dev/null 2>&1 || { echo "gum not installed — run: brew install gum" >&2; exit 1; }
@@ -193,8 +193,8 @@ command -v gum >/dev/null 2>&1 || { echo "gum not installed — run: brew instal
 
 **When to use gum vs. plain text prompts:**
 
-- Use `gum choose` whenever presenting a fixed list of options — never make the user type one
-- Use `gum confirm` for any yes/no gate — replaces `"(yes / no) →"`
+- Use `gum choose` whenever presenting a fixed list of options: never make the user type one
+- Use `gum confirm` for any yes/no gate: replaces `"(yes / no) →"`
 - Use `gum filter` when the list has more than ~8 items
 - Use `gum spin` for any operation expected to take >3 seconds
 - Use plain text only for truly open-ended, unconstrained input
@@ -217,7 +217,7 @@ gum_complete "skill-name" "Key=Value"
 
 **When to use `gum-tui.sh` vs. raw gum:**
 
-- **Use `gum-tui.sh`** for all styled output in Bash tool calls — headers, tables, status
+- **Use `gum-tui.sh`** for all styled output in Bash tool calls: headers, tables, status
   lines, panels, dashboards, progress counters, completion blocks
 - **Use raw gum** only for interactive TTY components (`gum choose`, `gum confirm`, `gum input`)
   that must run in the user's terminal via `! gum ...`
@@ -233,12 +233,12 @@ Every agent **must** use `lock-file.sh` to coordinate file access and prevent ra
 
 **Rules:**
 
-- **Before any `Edit` or `Write` operation:** acquire a lock. If `acquire` exits 1 (locked), do NOT proceed — print the owner info and wait or abort.
+- **Before any `Edit` or `Write` operation:** acquire a lock. If `acquire` exits 1 (locked), do NOT proceed: print the owner info and wait or abort.
 - **After every `Edit` or `Write` operation:** release the lock immediately, even if the edit failed.
 - **Before any `Read` of a high-contention file** (`runtime-notes.md`, any SKILL.md being improved): run `check`. If locked for writing, print a notice but reads may still proceed.
-- **Stale locks** (>5 minutes old) are auto-cleared by the script. If you see a `STALE_LOCK` message, the previous agent likely crashed without releasing — continue safely.
+- **Stale locks** (>5 minutes old) are auto-cleared by the script. If you see a `STALE_LOCK` message, the previous agent likely crashed without releasing: continue safely.
 - **At skill startup**, run `bash ~/.claude/skills/shared/lock-file.sh cleanup` to sweep all stale locks left by crashed sessions. This is cheap (one `ls` + age check) and prevents stale locks from accumulating.
-- Lock files live in `.claude/skills/shared/locks/` — never commit this directory.
+- Lock files live in `.claude/skills/shared/locks/`: never commit this directory.
 - **Exemption:** a file only one session ever writes needs no lock. `/core-dump`'s
   checkpoint is named per session (`_YYYYMMDD-<session>.claude.md`), so it skips the
   lock; shared files such as `runtime-notes.md` still take one.
@@ -304,7 +304,7 @@ The title must be ≤10 words, imperative or noun-phrase style (e.g., "Generate 
 
 **Exceptions:** The agent may extend these limits only when the process is expected to be long (e.g., `npm install`, large file generation). In that case, it must:
 
-1. Announce the exception before starting ("This command typically takes ~4 minutes — proceeding with extended timeout")
+1. Announce the exception before starting ("This command typically takes ~4 minutes: proceeding with extended timeout")
 2. State the expected duration
 3. Still stop and report if the extended estimate is exceeded
 
@@ -314,9 +314,9 @@ The title must be ≤10 words, imperative or noun-phrase style (e.g., "Generate 
 
 After every skill run, the agent must:
 
-1. **Generate 2–6 insight points** — concrete observations that would make a future run of the same skill faster or more accurate (e.g., "Grepping for `useSession` directly was faster than tracing from the route file")
+1. **Generate 2–6 insight points**: concrete observations that would make a future run of the same skill faster or more accurate (e.g., "Grepping for `useSession` directly was faster than tracing from the route file")
 2. **Print the insights** to the user as the final section of the run output
-3. **Write the entry to a temp file**, then call `prepend-runtime-note.sh` — it handles lock acquire, atomic prepend, and lock release automatically:
+3. **Write the entry to a temp file**, then call `prepend-runtime-note.sh`: it handles lock acquire, atomic prepend, and lock release automatically:
 
    ```bash
    cat > /tmp/runtime-note-entry.md << 'ENTRY'
@@ -352,7 +352,7 @@ When `runtime-notes.md` exceeds **50 entries**, archive older entries to keep th
 4. Preserve the file header in both files
 5. Verify: original count = kept + archived
 
-This prevents context window bloat — a 1,000-entry file costs 30-50K tokens per session load.
+This prevents context window bloat: a 1,000-entry file costs 30-50K tokens per session load.
 
 ### Project CLAUDE.md
 
@@ -409,7 +409,7 @@ names.
 | `context`                  | No                        | `fork` = runs in isolated subagent context; keeps main context clean   |
 | `model`                    | No                        | Override model for this skill                                          |
 
-**When to use `disable-model-invocation: true`:** Any skill with side effects — deploys, commits, git push, sending messages. Prevents accidental auto-invocation.
+**When to use `disable-model-invocation: true`:** Any skill with side effects: deploys, commits, git push, sending messages. Prevents accidental auto-invocation.
 
 **When to use `context: fork`:** Heavy exploration skills (`/pr-review`, `/arch-qa`, `/project-index`) that scan many files. Keeps main conversation context clean.
 
@@ -488,13 +488,13 @@ word-level half; it does not check any of the five points above.
 When **creating a new skill**, follow these conventions (the `/create-skill` wizard
 applies them; `scripts/skill-lint.sh` checks them on every SKILL.md write):
 
-1. **Check existing skills first** — `bash ~/.claude/scripts/skills-index.sh` then read `skills/00-index.md`; enhance or compose rather than duplicate.
-2. **Use the four-phase skeleton** — Information Gathering → Planning → Execution → Testing/Verification (in whatever order, however many iterations). Length is unbounded; altitude is not: procedure and heuristics, not essays.
+1. **Check existing skills first**: `bash ~/.claude/scripts/skills-index.sh` then read `skills/00-index.md`; enhance or compose rather than duplicate.
+2. **Use the four-phase skeleton**: Information Gathering → Planning → Execution → Testing/Verification (in whatever order, however many iterations). Length is unbounded; altitude is not: procedure and heuristics, not essays.
 3. **Always include `## Brief`** immediately after frontmatter, under eight lines.
 4. **Frontmatter uses the real field names** (§8) with `user-invocable`, a capped description, and `Agent` not `Task` in `allowed-tools`.
 5. **Absolute paths only.** Global skills write to `~/.claude/skills/<name>/`; a relative `.claude/skills/...` resolves one level too deep when CWD is the gcc and `block-nested-claude.sh` refuses it.
-6. **Carry a `## Validation` rubric** — what to check and how, suited to what this skill's efficacy actually is (context retention, prose and structure, useful ratio, ...). A rubric, not worked examples: the agent over-indexes on examples (owner, 2026-08-19).
-7. **End with the two ledger steps** — a runtime note (§7) and `bash ~/.claude/scripts/skill-log.sh record <name> ...`, so the skill has an efficacy trail.
+6. **Carry a `## Validation` rubric**: what to check and how, suited to what this skill's efficacy actually is (context retention, prose and structure, useful ratio, ...). A rubric, not worked examples: the agent over-indexes on examples (owner, 2026-08-19).
+7. **End with the two ledger steps**: a runtime note (§7) and `bash ~/.claude/scripts/skill-log.sh record <name> ...`, so the skill has an efficacy trail.
 8. **Regenerate the index** after writing: `bash ~/.claude/scripts/skills-index.sh`.
 9. **Run Prettier** on every file written or modified during the run: `npx prettier --write <filepath>`.
 

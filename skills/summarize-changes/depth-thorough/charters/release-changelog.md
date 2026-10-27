@@ -3,7 +3,7 @@ name: release-changelog
 description: Verifier charter for release-scale diffs (100+ commits, 500+ files)
 ---
 
-# Verifier charter — release-changelog
+# Verifier charter: release-changelog
 
 Apply these 5 failure modes as independent audit passes:
 
@@ -49,7 +49,7 @@ V2 themes often cite "(...)" or fabricate SHAs not in commits.tsv. For 5 themes 
 
 Report 5 themes with concrete SHA-list replacements OR explicit "(post-cutoff)" annotation.
 
-Spot-check 5 random theme `Summary` fields against inventory. Flag any summary that materially misrepresents what shipped (not nits — material).
+Spot-check 5 random theme `Summary` fields against inventory. Flag any summary that materially misrepresents what shipped (not nits: material).
 
 ## Overall verdict
 

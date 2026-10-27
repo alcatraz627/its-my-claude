@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# seat.sh — the standard shape for a fresh-context reviewer, in one place.
+# seat.sh: the standard shape for a fresh-context reviewer, in one place.
 #
 # Three skills grew the same organ independently in one week (validate's second
 # seat, create-skill's intent seat, deck's claim reviewer): a reviewer that did not

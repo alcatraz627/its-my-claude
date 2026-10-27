@@ -201,7 +201,7 @@ export function harvest(root: string): HarvestResult {
 
   // ORDER IS LOAD-BEARING. The MAX_FILES budget is first-come, and the doc glob
   // is alphabetical, so scanning docs first spends the whole budget on whatever
-  // sorts early — which on a big repo is prose plan docs carrying no checkboxes
+  // sorts early: which on a big repo is prose plan docs carrying no checkboxes
   // at all. versable-builder hit exactly that on 2026-08-21: 60 docs scanned,
   // zero cards, and the live workspace mirror plus every checkpoint skipped past
   // the cap, which emptied a 71-card board in one sync. The live sources are

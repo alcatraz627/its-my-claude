@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 25-weekly-usage.test.sh — fires once per 45m when the weekly window is >80%,
+# 25-weekly-usage.test.sh: fires once per 45m when the weekly window is >80%,
 # re-fires on the first prompt after a /clear, and below the threshold leaves
 # no state, no log row, and no output at all.
 set -uo pipefail

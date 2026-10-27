@@ -1,5 +1,5 @@
 #!/bin/bash
-# Agent CLI for the kanban board — thin launcher; all logic lives in cli.ts.
+# Agent CLI for the kanban board: thin launcher; all logic lives in cli.ts.
 # See: bash ~/.claude/scripts/kanban/kanban.sh help
 #
 # Mothballed (owner, 2026-10-14: "we may come back to it in the future, it is

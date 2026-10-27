@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# metabolism.test.sh — checks for the retirement ceremony.
+# metabolism.test.sh: checks for the retirement ceremony.
 # Isolation: METABOLISM_LEDGER + METABOLISM_RULES_DIR redirect off the live tree.
 # Run: bash ~/.claude/scripts/metabolism.test.sh   (exit 0 = pass)
 set -uo pipefail

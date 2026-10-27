@@ -55,7 +55,7 @@ the native undo stack**. Only `newDraft()` (`:199`) restores focus afterwards.
 
 Every path that ends in `render()` therefore drops the caret: `save()`,
 `open()`, and `load()`. `load()` is called by the 15s poll, which is guarded by
-`if (!dirty())` — a guard that holds while you are typing into an existing
+`if (!dirty())`: a guard that holds while you are typing into an existing
 draft, and does not hold on a **new** draft, whose empty buffer reads as clean.
 
 This is the leading candidate for the owner's report that the editor eats

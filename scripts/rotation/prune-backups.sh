@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# prune-backups.sh — trash backup files older than N days.
+# prune-backups.sh: trash backup files older than N days.
 #
 # Scope:
 #   ~/.claude/assets/backups/     (Phase 1+2 settings backups, older upgrade artifacts)
@@ -40,7 +40,7 @@ if [ ! -d "$BACKUPS_DIR" ]; then
   exit 0
 fi
 
-# Find candidates — files and top-level dated directories (e.g. 20260417-phase12-upgrade/)
+# Find candidates: files and top-level dated directories (e.g. 20260417-phase12-upgrade/)
 # older than RETENTION_DAYS.
 candidates=$(find "$BACKUPS_DIR" -mindepth 1 -maxdepth 2 -mtime +"$RETENTION_DAYS" \
              \( -type f -o -type d \) 2>/dev/null | sort)

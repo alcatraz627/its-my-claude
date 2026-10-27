@@ -1,20 +1,20 @@
 # Changelog
 
-## 0.2.0 — 2026-04-17
+## 0.2.0: 2026-04-17
 
 - **Label rename:** `std::claude` → `std::claude::shared` (Phase 1 of Migration 0001, `~/.claude/migrations/0001-namespace-introduction.md`)
 - Library and path unchanged (`~/.claude/skills/shared/`); no code changes, no API changes
 - Updates callsites in `CLAUDE.md`, `skills/GUIDELINES.md`, `skills/banner/SKILL.md`, and the project memory reference
 - Rationale: make room for sibling clusters under `std::claude::` (`::code`, `::scripts`, `::skills`, etc.)
 
-## 0.1.1 — 2026-04-06
+## 0.1.1: 2026-04-06
 
-- Fix `banner.py` `_sep()` overflow for narrow widths (<56 chars) — proportional fill distribution
-- Add `test_std.py` (41 tests) and `test_scripts.sh` (13 tests) — automated test suites
+- Fix `banner.py` `_sep()` overflow for narrow widths (<56 chars): proportional fill distribution
+- Add `test_std.py` (41 tests) and `test_scripts.sh` (13 tests): automated test suites
 - Update `/banner` skill to use canonical package import path
 - Add `## std::claude` section to CLAUDE.md and GUIDELINES.md for discoverability
 
-## 0.1.0 — 2026-04-06
+## 0.1.0: 2026-04-06
 
 Initial formalization of std::claude.
 

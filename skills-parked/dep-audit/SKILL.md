@@ -1,6 +1,6 @@
 ---
 name: dep-audit
-description: Runs npm audit and npm outdated, cross-references key dependencies against known breaking versions, and produces a prioritized upgrade list — separating critical security patches from optional major upgrades. With --fix, applies npm audit fix for patch-level security patches only.
+description: Runs npm audit and npm outdated, cross-references key dependencies against known breaking versions, and produces a prioritized upgrade list, separating critical security patches from optional major upgrades. With --fix, applies npm audit fix for patch-level security patches only.
 allowed-tools: Read, Bash, Glob, Skill
 user-invocable: true
 argument-hint: "[--fix]"
@@ -9,7 +9,7 @@ context: fork
 
 ## Brief
 
-Runs `npm audit --json` and `npm outdated --json`, focuses on key project dependencies (Next.js, React, Drizzle, TanStack Query, NextAuth), and produces a prioritized upgrade report: critical security patches first, then major-version gaps, then optional updates. With `--fix`, applies `npm audit fix` for patch-level security fixes only — never `--force`.
+Runs `npm audit --json` and `npm outdated --json`, focuses on key project dependencies (Next.js, React, Drizzle, TanStack Query, NextAuth), and produces a prioritized upgrade report: critical security patches first, then major-version gaps, then optional updates. With `--fix`, applies `npm audit fix` for patch-level security fixes only: never `--force`.
 
 # Dep Audit
 
@@ -17,9 +17,9 @@ Dependency security and freshness auditor for this Next.js frontend. Knows which
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -38,9 +38,9 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Security Audit
+## Phase 1: Security Audit
 
-### 1.1 — Run npm audit
+### 1.1: Run npm audit
 
 ```bash
 npm audit --json 2>&1
@@ -58,23 +58,23 @@ For each vulnerability, record:
 
 Print: `  npm audit complete — N critical, N high, N moderate, N low.`
 
-### 1.2 — Categorize by fix availability
+### 1.2: Categorize by fix availability
 
 | Category                | Condition                                                                   |
 | ----------------------- | --------------------------------------------------------------------------- |
 | **Must fix now**        | critical or high severity, fix available via `npm audit fix`                |
 | **Needs manual update** | critical or high severity, no automatic fix (likely a major version update) |
-| **Monitor**             | moderate severity — note but don't prioritize                               |
+| **Monitor**             | moderate severity: note but don't prioritize                               |
 
 ---
 
-## Phase 2 — Outdated Key Dependencies
+## Phase 2: Outdated Key Dependencies
 
-### 2.1 — Read current versions
+### 2.1: Read current versions
 
 Read `package.json` to note installed versions of the key dependencies listed below.
 
-### 2.2 — Run npm outdated
+### 2.2: Run npm outdated
 
 ```bash
 npm outdated --json 2>&1
@@ -82,19 +82,19 @@ npm outdated --json 2>&1
 
 Parse the JSON. For each outdated package, record: `current`, `wanted` (semver-compatible), `latest`.
 
-### 2.3 — Check key dependencies
+### 2.3: Check key dependencies
 
-These libraries have high impact when outdated — always flag them explicitly:
+These libraries have high impact when outdated: always flag them explicitly:
 
 | Package                      | Why it matters                                                         |
 | ---------------------------- | ---------------------------------------------------------------------- |
-| `next`                       | Core framework — major updates require App Router compatibility review |
-| `react`, `react-dom`         | UI library — major updates require component compatibility review      |
-| `@tanstack/react-query`      | Server state — major updates may change QueryKeys/mutation API         |
-| `drizzle-orm`, `drizzle-kit` | ORM — migration compatibility must be verified before upgrading        |
-| `next-auth`                  | Auth — major updates may change session/adapter API                    |
-| `@auth/drizzle-adapter`      | Auth adapter — must stay in sync with next-auth                        |
-| `typescript`                 | Type checker — major updates may introduce new strict errors           |
+| `next`                       | Core framework: major updates require App Router compatibility review |
+| `react`, `react-dom`         | UI library: major updates require component compatibility review      |
+| `@tanstack/react-query`      | Server state: major updates may change QueryKeys/mutation API         |
+| `drizzle-orm`, `drizzle-kit` | ORM: migration compatibility must be verified before upgrading        |
+| `next-auth`                  | Auth: major updates may change session/adapter API                    |
+| `@auth/drizzle-adapter`      | Auth adapter: must stay in sync with next-auth                        |
+| `typescript`                 | Type checker: major updates may introduce new strict errors           |
 
 **Flag BREAKING RISK if:** current major version is more than 1 behind latest (e.g., using v4 when v6 is latest).
 
@@ -102,9 +102,9 @@ These libraries have high impact when outdated — always flag them explicitly:
 
 ---
 
-## Phase 3 — Report
+## Phase 3: Report
 
-This skill runs under `context: fork`, so the parent agent reads your returned text, not a terminal. Return a plain-text structured report — do not source `gum-tui.sh` (its escape codes are noise to the parent). Include only sections that have data; omit empty ones.
+This skill runs under `context: fork`, so the parent agent reads your returned text, not a terminal. Return a plain-text structured report: do not source `gum-tui.sh` (its escape codes are noise to the parent). Include only sections that have data; omit empty ones.
 
 ```
 DEP AUDIT — <project>
@@ -131,7 +131,7 @@ If zero issues: return `DEP AUDIT — <project>: no security vulnerabilities or 
 
 ---
 
-## Phase 4 — Fix Mode (if --fix)
+## Phase 4: Fix Mode (if --fix)
 
 If `--fix` was passed and there are patch-level security fixes available:
 
@@ -139,7 +139,7 @@ If `--fix` was passed and there are patch-level security fixes available:
 npm audit fix
 ```
 
-**Never run** `npm audit fix --force` — this can introduce breaking major version changes without warning.
+**Never run** `npm audit fix --force`: this can introduce breaking major version changes without warning.
 
 After running, re-run `npm audit --json` to verify the vulnerability count dropped. Print:
 
@@ -148,11 +148,11 @@ After running, re-run `npm audit --json` to verify the vulnerability count dropp
   Remaining: N (require manual update — see report above)
 ```
 
-### 4.1 — Exercise the app after the fix
+### 4.1: Exercise the app after the fix
 
 A dropped vulnerability count is not proof the app still works. `npm audit fix` mutates
 `node_modules` and `package-lock.json`, and even a patch-level bump can change runtime behavior.
-Re-auditing only re-checks the vulnerability list — it never runs a line of the app. Before
+Re-auditing only re-checks the vulnerability list: it never runs a line of the app. Before
 reporting `--fix` as done, run the app's tests and confirm they still pass:
 
 ```bash
@@ -163,32 +163,32 @@ npm test
 ```
 
 Read the pass/fail line, not just the exit code. If the suite is green, report it. If it goes
-red, the dependency bump broke something — say so explicitly and surface the failing tests rather
+red, the dependency bump broke something: say so explicitly and surface the failing tests rather
 than reporting the fix as clean. If the project has no runnable test suite, say so
 (`UNCONFIRMED — no test suite`) instead of claiming the app still works. This follows
 `rules/exercise-based-verification.md`: a change is done when you have run the affected path and
 read the result, not when the audit count looks right.
 
 > For a builder persona running `--fix` as part of a larger change, a dependency bump is exactly
-> the kind of edit worth a second set of eyes — chain `/skeptical-review` on the lockfile and any
+> the kind of edit worth a second set of eyes: chain `/skeptical-review` on the lockfile and any
 > code that touches the bumped packages before declaring the change done.
 
 ---
 
 ## Notes
 
-- Uses `context: fork` — runs in isolated context.
-- **Never runs `npm audit fix --force`** — this can silently upgrade major versions and break the app.
-- FastAPI backend (`../backend/`) has its own Python dependency audit — this skill covers the frontend only.
-- Next.js major upgrades require App Router compatibility review — see the Next.js upgrade guide.
-- Drizzle `drizzle-orm` and `drizzle-kit` versions must be kept in sync — upgrading one without the other breaks migration generation.
-- `legacy-peer-deps=true` is set in `.npmrc` — this may suppress some peer dependency warnings that are real issues worth investigating.
+- Uses `context: fork`: runs in isolated context.
+- **Never runs `npm audit fix --force`**: this can silently upgrade major versions and break the app.
+- FastAPI backend (`../backend/`) has its own Python dependency audit: this skill covers the frontend only.
+- Next.js major upgrades require App Router compatibility review: see the Next.js upgrade guide.
+- Drizzle `drizzle-orm` and `drizzle-kit` versions must be kept in sync: upgrading one without the other breaks migration generation.
+- `legacy-peer-deps=true` is set in `.npmrc`: this may suppress some peer dependency warnings that are real issues worth investigating.
 
 ## See Also
 
-- `rules/exercise-based-verification.md` — run the affected path and read the result before
+- `rules/exercise-based-verification.md`: run the affected path and read the result before
   calling a change done; the basis for the post-`--fix` test step in Phase 4.1.
-- `/test` — cached per-folder test runner; use it to exercise the app after `--fix` mutates
+- `/test`: cached per-folder test runner; use it to exercise the app after `--fix` mutates
   dependencies.
-- `/skeptical-review` — fresh adversarial review of the changed code; chain it on a dependency
+- `/skeptical-review`: fresh adversarial review of the changed code; chain it on a dependency
   bump when `--fix` is part of a larger change.

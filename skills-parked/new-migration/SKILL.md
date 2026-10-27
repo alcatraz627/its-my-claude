@@ -1,6 +1,6 @@
 ---
 name: new-migration
-description: Generates a Drizzle ORM migration from a plain-English schema change description — updates the schema file and runs db:generate to produce the SQL migration. Project-specific: requires Drizzle ORM setup.
+description: Generates a Drizzle ORM migration from a plain-English schema change description: updates the schema file and runs db:generate to produce the SQL migration. Project-specific: requires Drizzle ORM setup.
 disable-model-invocation: true
 allowed-tools: Read, Edit, Write, Bash, Glob, Grep
 user-invocable: true
@@ -17,9 +17,9 @@ Generates Drizzle ORM schema changes and their corresponding migrations from a p
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -42,7 +42,7 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Parse the Description
+## Phase 1: Parse the Description
 
 Extract from the description:
 - **Operation type:** add column / remove column / rename / add table / add index / modify type
@@ -53,7 +53,7 @@ If the description is ambiguous, ask one clarifying question before proceeding.
 
 ---
 
-## Phase 2 — Find the Schema File
+## Phase 2: Find the Schema File
 
 Read `src/db/schema/index.ts` to see available schema domain files.
 
@@ -70,7 +70,7 @@ Read the relevant schema file to understand:
 
 ---
 
-## Phase 3 — Generate the Schema Change
+## Phase 3: Generate the Schema Change
 
 Apply the change to the schema file using `Edit`. Follow these conventions:
 
@@ -110,7 +110,7 @@ Print: `  ✓ Schema updated: src/db/schema/<file>.ts`
 
 ---
 
-## Phase 4 — Generate Migration
+## Phase 4: Generate Migration
 
 Run the migration generator:
 
@@ -129,7 +129,7 @@ Read the newest file and print its contents for the user to review.
 
 ---
 
-## Phase 5 — Confirm and Advise
+## Phase 5: Confirm and Advise
 
 Source gum-tui.sh and render the summary:
 
@@ -154,6 +154,6 @@ gum_panel "Next Steps" \
 
 ## Notes
 
-- Never applies the migration automatically — `npm run db:migrate` must be run manually after review.
-- Never modifies the NextAuth adapter tables (`users`, `accounts`, `sessions`, `verificationTokens`) without explicit user confirmation — these have external constraints.
-- If `npm run db:generate` produces no new file, it means the schema change matched the current DB state — print a note explaining this.
+- Never applies the migration automatically: `npm run db:migrate` must be run manually after review.
+- Never modifies the NextAuth adapter tables (`users`, `accounts`, `sessions`, `verificationTokens`) without explicit user confirmation: these have external constraints.
+- If `npm run db:generate` produces no new file, it means the schema change matched the current DB state: print a note explaining this.

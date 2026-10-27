@@ -22,7 +22,7 @@ SOFT LAUNCH → LAUNCH → LIVE OPS → SEASONAL → RE-ENGAGEMENT
 ### Key Features
 - **Pre-Orders**: Build anticipation, collect early commitments
 - **App Store Assets**: Game trailers and screenshots that show gameplay
-- **Featuring Nomination**: Submit early — game features are planned months ahead
+- **Featuring Nomination**: Submit early: game features are planned months ahead
 
 ### Game-Specific Pre-Launch Tactics
 1. **App Preview video** is essential for games (show gameplay, not cinematics)
@@ -60,13 +60,13 @@ Create a "Launch Celebration" event:
 ## Stage 3: Live Ops (Ongoing Engagement)
 
 ### Key Features
-- **In-App Events**: The backbone of game marketing — run events constantly
+- **In-App Events**: The backbone of game marketing: run events constantly
 - **Content Updates**: New levels, characters, modes keep the game fresh
 
 ### Event Calendar Template
 | Week | Event Type | Example |
 |------|-----------|---------|
-| 1 | Weekly challenge | "Speed Run Week — best times win rewards" |
+| 1 | Weekly challenge | "Speed Run Week: best times win rewards" |
 | 2 | New content | "New level pack available" |
 | 3 | Community event | "Community goal: 1M total points" |
 | 4 | Themed event | "Month-end tournament" |
@@ -117,7 +117,7 @@ Create a "Launch Celebration" event:
 ## Stage 5: Re-Engagement
 
 ### Key Features
-- **Win-Back Offers**: For subscription games — recover churned players
+- **Win-Back Offers**: For subscription games: recover churned players
 - **In-App Events**: "Return Event" with generous rewards for lapsed players
 - **Offer Codes**: Distribute premium currency/items to lapsed players
 - **Promotional Offers**: Discounted subscription renewal
@@ -139,13 +139,13 @@ Create a "Launch Celebration" event:
 - **Promoted IAP**: Starter pack or best-value currency bundle
 - **Offer Codes**: Premium currency for influencer giveaways
 - **In-App Events**: Events that organically expose premium items
-- First-purchase discount (e.g., "Starter Pack — 5x value!")
+- First-purchase discount (e.g., "Starter Pack: 5x value!")
 
 ### Premium (Paid Upfront)
 - **Price drops**: Timed with seasonal events and In-App Events
 - **App Preview**: Must show actual gameplay (not cinematics)
 - **Featuring**: Premium games get strong editorial consideration
-- No dark patterns needed — premium game buyers are loyal
+- No dark patterns needed: premium game buyers are loyal
 
 ### Subscription (Game Pass / Season Pass)
 - **Introductory Offer**: Free trial of 3-7 days

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/session-notes/diff.sh — Compute a proposed diff between current workspace
+# scripts/session-notes/diff.sh: Compute a proposed diff between current workspace
 # state and synthesized updates from /core-dump, without applying.
 #
 # Inputs come from /core-dump's synthesized Pending Items + Decisions + Notes,

@@ -55,16 +55,16 @@ Ask user via AskUserQuestion:
    - Selected tab (TabView selection)
    - Scroll position (list/scroll view offset)
    - Form data (unsaved drafts and input fields)
-   - All of the above — recommended
+   - All of the above: recommended
 
 2. **Storage method?**
    - @SceneStorage / @AppStorage (simple, per-scene, limited to basic types)
    - UserDefaults (shared across scenes, limited size)
-   - File-based (Codable to JSON file in Application Support — recommended for complex state)
+   - File-based (Codable to JSON file in Application Support: recommended for complex state)
 
 3. **Restore behavior?**
    - Always restore (seamless resume on every launch)
-   - Time-limited (restore only if last session was within N minutes) — recommended
+   - Time-limited (restore only if last session was within N minutes): recommended
    - Ask user (show "Resume where you left off?" prompt)
 
 ## Generation Process
@@ -74,15 +74,15 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `AppState.swift` — Codable struct capturing all restorable state
-2. `StateRestorationManager.swift` — @Observable manager with auto-save and restore
+1. `AppState.swift`: Codable struct capturing all restorable state
+2. `StateRestorationManager.swift`: @Observable manager with auto-save and restore
 
 ### Step 3: Create Feature Files
 Based on configuration:
-3. `NavigationStateModifier.swift` — If navigation path selected
-4. `ScrollRestorationModifier.swift` — If scroll position selected
-5. `TabRestorationModifier.swift` — If tab selection selected
-6. `FormDraftManager.swift` — If form data selected
+3. `NavigationStateModifier.swift`: If navigation path selected
+4. `ScrollRestorationModifier.swift`: If scroll position selected
+5. `TabRestorationModifier.swift`: If tab selection selected
+6. `FormDraftManager.swift`: If form data selected
 
 ### Step 4: Determine File Location
 Check project structure:
@@ -274,15 +274,15 @@ TabView(selection: $stateManager.selectedTab) {
 
 ## Gotchas
 
-- **@SceneStorage only works with simple types** — String, Int, Double, Bool, URL, Data. For complex state like NavigationPath, use `NavigationPath.CodableRepresentation` converted to Data.
-- **NavigationPath Codable limitations** — All types in the path must conform to both Codable and Hashable. If any route type changes between versions, decoding fails silently. Always wrap in try/catch and fall back to empty path.
-- **Background termination vs force quit** — State is saved when the app enters background (via `scenePhase`). Force quit from the app switcher does NOT trigger `scenePhase` change on iOS. Save state on every significant change, not just on backgrounding.
-- **State migration between versions** — When adding new fields to AppState, provide default values so old JSON files decode without error. Consider a `stateVersion` field for breaking changes.
-- **@SceneStorage is per-scene** — On iPad with multiple windows, each scene has its own @SceneStorage. This is usually correct (each window has its own state) but be aware when sharing state across scenes.
-- **Avoid saving sensitive data** — Never persist passwords, tokens, or PII in state restoration files. Use Keychain for sensitive data.
+- **@SceneStorage only works with simple types**: String, Int, Double, Bool, URL, Data. For complex state like NavigationPath, use `NavigationPath.CodableRepresentation` converted to Data.
+- **NavigationPath Codable limitations**: All types in the path must conform to both Codable and Hashable. If any route type changes between versions, decoding fails silently. Always wrap in try/catch and fall back to empty path.
+- **Background termination vs force quit**: State is saved when the app enters background (via `scenePhase`). Force quit from the app switcher does NOT trigger `scenePhase` change on iOS. Save state on every significant change, not just on backgrounding.
+- **State migration between versions**: When adding new fields to AppState, provide default values so old JSON files decode without error. Consider a `stateVersion` field for breaking changes.
+- **@SceneStorage is per-scene**: On iPad with multiple windows, each scene has its own @SceneStorage. This is usually correct (each window has its own state) but be aware when sharing state across scenes.
+- **Avoid saving sensitive data**: Never persist passwords, tokens, or PII in state restoration files. Use Keychain for sensitive data.
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/persistence-setup` — Core Data / SwiftData persistence layer
-- Related: `generators/deep-linking` — URL-based navigation restoration
+- **templates.md**: All production Swift templates
+- Related: `generators/persistence-setup`: Core Data / SwiftData persistence layer
+- Related: `generators/deep-linking`: URL-based navigation restoration

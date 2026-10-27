@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build-efficacy.sh — sourced by atone-consolidate.sh (not executed directly).
+# build-efficacy.sh: sourced by atone-consolidate.sh (not executed directly).
 # Relies on env vars + helpers from atone-common.sh and atone-consolidate/helpers.sh.
 #
 # ─── intervention-efficacy.json (atone T3.1) ──────────────────────────────────
@@ -7,7 +7,7 @@
 # The falsifiability backbone. The atone system keeps shipping rules and hooks to
 # stop recurring mistakes, but until now nothing measured whether any of them
 # actually reduced the recurrence rate. This writes, per slug, the count of
-# occurrences BEFORE vs AFTER its intervention shipped — split by stakes — so the
+# occurrences BEFORE vs AFTER its intervention shipped (split by stakes) so the
 # user can see at a glance which interventions bent the curve and which didn't.
 #
 # The honest caveats, stated in the output so it can't be over-read:

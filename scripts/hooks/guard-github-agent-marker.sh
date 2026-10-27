@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-github-agent-marker.sh — no comment reaches GitHub under the owner's
+# guard-github-agent-marker.sh: no comment reaches GitHub under the owner's
 # account without the owner's attribution marker in its body.
 #
 # Owner ruling 2026-08-24, after two S3s on the same slug

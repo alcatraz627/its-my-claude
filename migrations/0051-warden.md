@@ -10,10 +10,10 @@ Owner-approved warden per `assets/reports/20260820-warden-plan/PLAN-v3.md`
 (trial evidence from vb-fable/gcp-fable's live run folded in; D1-D6 approved
 2026-08-21).
 
-1. `~/.claude/warden/` — the institution: PROMPT.md (standing identity + 10
+1. `~/.claude/warden/`: the institution: PROMPT.md (standing identity + 10
    conduct rules), state/<ward-sid8>.md, ledger.jsonl, insights.md (craft,
    prepend), spend.jsonl, WATCH.md (early-life watch list), warden-beat.sh.
-2. `~/Library/LaunchAgents/com.alcatraz.warden-beat.plist` — StartInterval
+2. `~/Library/LaunchAgents/com.alcatraz.warden-beat.plist`: StartInterval
    2700s, working-hours gate (09-22) inside the script, loaded; calendar
    companion event 8E135425 in Automations.
 3. Beat mechanics: roster = armed goals + opt-ins, liveness cut (24h), swarm

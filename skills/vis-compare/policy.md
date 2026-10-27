@@ -1,67 +1,67 @@
-# vis-compare taste policy (v4 — calibrated 2026-07-13, Phase D + the imagegen loop)
+# vis-compare taste policy (v4: calibrated 2026-07-13, Phase D + the imagegen loop)
 
 > This file is the durable home of "which divergences matter to me." The judge reads
 > it every run. It was drafted from the design's divergence-class ladder; **it is
-> yours to edit** — reorder the ladder, change the floor, pin project-specific rules.
+> yours to edit**: reorder the ladder, change the floor, pin project-specific rules.
 > The judge follows what is written here, not its own taste.
 
 ## The imitation doctrine (why this exists)
 
-The question is never "is B pixel-identical to A?" — it is "does B faithfully imitate
+The question is never "is B pixel-identical to A?": it is "does B faithfully imitate
 A where it matters, and are its departures improvements or losses?" Pixel fidelity is
 NOT the goal. A deliberate, tasteful departure (better spacing, a cleaner control) is a
 **win**, not a divergence to flag. So every difference gets sorted into one of four
 judgments, never a raw pass/fail on distance:
 
-- **looks-worse** — B lost something A had (information, affordance, clarity, hierarchy).
-- **neutral** — a real difference that neither helps nor hurts.
-- **improvement** — B is better here; note it, do not "fix" it back.
-- **not-worth-chasing** — below the floor; real but too small to spend effort on.
+- **looks-worse**: B lost something A had (information, affordance, clarity, hierarchy).
+- **neutral**: a real difference that neither helps nor hurts.
+- **improvement**: B is better here; note it, do not "fix" it back.
+- **not-worth-chasing**: below the floor; real but too small to spend effort on.
 
 ## Divergence classes, ranked by default severity (the ladder)
 
 Higher = matters more. When two findings compete for attention, the higher class wins.
-**Every divergence's `class` field MUST be the canonical slug in `[brackets]`** — the
+**Every divergence's `class` field MUST be the canonical slug in `[brackets]`**: the
 fingerprint and suppression match key on it verbatim, so a prose synonym breaks them.
 
-1. `[info-loss]` **information loss** — a value, label, count, or data point in A is
+1. `[info-loss]` **information loss**: a value, label, count, or data point in A is
    missing or wrong in B. The most serious: it changes what the user *knows*. Never
    not-worth-chasing. **Live-data rule (calibrated, run 1):** on a live surface, a
    changed VALUE whose label and format are intact and whose value is plausible
    (`12 → 47`, a fresher timestamp) is the DATA changing, not the rebuild losing
-   information — judge it `neutral` by default. `[info-loss]` is for a value that is
+   information: judge it `neutral` by default. `[info-loss]` is for a value that is
    missing, garbled, or misformatted.
-2. `[info-add]` **information added** — a value, label, or line in B that A lacks.
-   Changes what the user knows, so it ranks high — but the default judgment is
+2. `[info-add]` **information added**: a value, label, or line in B that A lacks.
+   Changes what the user knows, so it ranks high: but the default judgment is
    context-dependent and often an `improvement` (more context, no hierarchy damage);
    never auto looks-worse. It is looks-worse only when the addition crowds, competes
    with, or contradicts something A said.
-3. `[affordance-loss]` **affordance loss** — a control/action present in A is gone or no
+3. `[affordance-loss]` **affordance loss**: a control/action present in A is gone or no
    longer looks interactive in B. Changes what the user can *do*.
-4. `[hierarchy-shift]` **hierarchy / emphasis shift** — the thing that dominated A no
+4. `[hierarchy-shift]` **hierarchy / emphasis shift**: the thing that dominated A no
    longer dominates B, or a new element competes for the top level. Changes where the
-   eye goes first. (Dominance/emphasis, NOT mere position — a same-weight element that
+   eye goes first. (Dominance/emphasis, NOT mere position: a same-weight element that
    simply moved is `layout-placement`. New content that merely *exists* in B is
    `info-add`; it is a hierarchy shift only when it fights for the top level.)
-5. `[layout-placement]` **layout / placement move** — an existing element sits in a
+5. `[layout-placement]` **layout / placement move**: an existing element sits in a
    different region of B than A, without a change in its dominance or styling (a button
    that moved corner-to-corner, a panel that reflowed). Low-to-mid by default: often
    `neutral` or an `improvement` toward convention; rises only if the new spot hurts
    findability or breaks a scan order.
-6. `[render-fidelity]` **render / resample fidelity** — pixelation, blur, aliasing, or
+6. `[render-fidelity]` **render / resample fidelity**: pixelation, blur, aliasing, or
    downscale blending that softens the mark (calibrated, run 2). Looks-worse when it
    costs legibility or crispness at the asset's actual display size. **Derived-size
    leniency:** judge a pipeline-derived rung against the best achievable AT that size,
-   never the source verbatim — a good 30px render can't keep every edge. Hue gets NO
+   never the source verbatim: a good 30px render can't keep every edge. Hue gets NO
    such leniency: a competent resample keeps color identity, so accent drift still
    files as `brand-color` against the source.
-7. `[brand-color]` **brand / accent color drift** — the accent or a brand-locked color
+7. `[brand-color]` **brand / accent color drift**: the accent or a brand-locked color
    moved (ΔE above the floor). Matters more when a project pins exact brand hexes.
-8. `[spacing-rhythm]` **spacing / rhythm** — padding, gaps, alignment, inter-row rhythm.
+8. `[spacing-rhythm]` **spacing / rhythm**: padding, gaps, alignment, inter-row rhythm.
    Matters when it breaks a grid the design otherwise keeps; small shifts are usually low.
-9. `[micro-type]` **micro-typography** — weight, tracking, size within a step. Rarely
+9. `[micro-type]` **micro-typography**: weight, tracking, size within a step. Rarely
    worth chasing unless it changes legibility or hierarchy (then it graduates up).
-10. `[texture]` **texture / decoration** — shadows, gradients, borders, ornament. Lowest
+10. `[texture]` **texture / decoration**: shadows, gradients, borders, ornament. Lowest
     by default; free-hand territory unless it carries meaning (a shadow that signals
     elevation/state).
 
@@ -83,15 +83,15 @@ one real hierarchy problem. Say so, and rank it by the class it compounds into.
 
 - The judge may NOT assert a color/size/position number that is absent from the
   evidence pack. It may only ADD gestalt observations (things it can see but the
-  extractors don't measure — "the shadow reads as heavier"), each tagged `gestalt`.
-- **`where.grid` is a MEASURED coordinate — it is valid ONLY when copied from a
+  extractors don't measure: "the shadow reads as heavier"), each tagged `gestalt`.
+- **`where.grid` is a MEASURED coordinate: it is valid ONLY when copied from a
   `grid_heat` or `edge_shape` `top_cells` entry.** A `text_diff` divergence
   (removed/added) has NO position in the pack: its `where` is `desc`-only (name the
   region in words if you like, but leave `grid` out). A `text_diff.moved` divergence
   carries `from`/`to` 3×3 LABELS plus measured `from_xy`/`to_xy` normalized centers
-  (and `delta_xy` when the pairing is unambiguous 1-vs-1) — cite those verbatim as
+  (and `delta_xy` when the pairing is unambiguous 1-vs-1): cite those verbatim as
   measured values; a null `delta_xy` means the pairing was ambiguous, not "small".
-  Any other position — a grid cell you inferred, a coordinate you eyeballed — is a
+  Any other position: a grid cell you inferred, a coordinate you eyeballed: is a
   fabrication with `gestalt:false`, the exact thing this layer exists to prevent. If
   you can see a position but no extractor measured it, it is `gestalt:true`.
 - If the pack's extractors report near-zero everywhere (an identical or
@@ -103,24 +103,24 @@ one real hierarchy problem. Say so, and rank it by the class it compounds into.
 
 ## Convergence: read progress from the LEDGER, never from the scores (binding)
 
-This is a **known limitation of the measurement layer, designed around** — not a taste
+This is a **known limitation of the measurement layer, designed around**: not a taste
 call. L1's scores are region/pixel comparisons: they **saturate the moment the two
 frames' composition differs**, so they cannot see identity converging.
 
 Proven live (2026-07-13, imagine loop round 2): a seed-locked refine fixed **three of
-five** divergences — the cat came back the right colour, the right pose, the right
-render style — while the scores went *sideways or backwards* (dhash 28→24, grid-Δ
+five** divergences: the cat came back the right colour, the right pose, the right
+render style: while the scores went *sideways or backwards* (dhash 28→24, grid-Δ
 **93.8% → 100.0%**, palette 25.7→24.5). A loop that stopped on "the scores plateaued"
 would have quit at the exact moment it was working.
 
 **The rules that follow from it:**
 
 1. **Progress = the ledger's `fixed` / `persisting` / `regressed` transitions.** Never a
-   score delta. `stall` means *two rounds with zero `fixed`* — it does not mean "scores
+   score delta. `stall` means *two rounds with zero `fixed`*: it does not mean "scores
    stopped falling".
 2. **Never write a divergence whose only evidence is "the score got worse".** A rising
    `grid_delta_pct` between two rounds is not a finding; it is the metric saturating.
-   (Between A and B in a *single* comparison, scores remain valid evidence — this rule
+   (Between A and B in a *single* comparison, scores remain valid evidence: this rule
    is about comparing ROUNDS, not sides.)
 3. **L1's job in this lane is fabrication-proofing, not measurement.** It still forbids
    you to assert a colour, size, or position the pixels don't support. That is all it is
@@ -128,7 +128,7 @@ would have quit at the exact moment it was working.
 4. The `see diff` scores of an imagegen round are worth recording (the ledger stores
    them) and worth *nothing* as a convergence signal. Record, don't reason from.
 
-Applies to any pair whose composition can move between rounds — imagegen above all, but
+Applies to any pair whose composition can move between rounds: imagegen above all, but
 also a UI rebuild that reflows. When in doubt, ask: *could the two frames' layouts
 differ?* If yes, the scores cannot measure progress.
 

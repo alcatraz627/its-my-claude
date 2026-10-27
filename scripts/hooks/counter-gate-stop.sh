@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# counter-gate-stop.sh — Stop hook, TELEMETRY tier: measure every substantial
+# counter-gate-stop.sh: Stop hook, TELEMETRY tier: measure every substantial
 # reply as numbers; never judge taste (regfric D2, owner-approved 2026-08-20).
 #
 # gcp-fable's evidence: four same-day atones, prose review caught none, counting

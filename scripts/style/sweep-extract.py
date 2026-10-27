@@ -77,7 +77,7 @@ for entry in manifest:
             try: recs.append((i, json.loads(line)))
             except json.JSONDecodeError: continue
     # headless transcripts (claude -p / SDK runs): every "user" row is a
-    # machine prompt (juror dispatches, watcher judgments) — skip the file
+    # machine prompt (juror dispatches, watcher judgments): skip the file
     if any(r.get('entrypoint') == 'sdk-cli' for _, r in recs[:5]):
         continue
     rows = []

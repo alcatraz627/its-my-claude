@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# new-topic.sh — creates a dated topic file from a template
+# new-topic.sh: creates a dated topic file from a template
 # Usage: bash new-topic.sh "<title>" "<category>" "<template-path>" "<topics-dir>"
 #
 # Outputs the path to the created file on stdout.
@@ -34,7 +34,7 @@ FILEPATH="$TOPICS_DIR/$FILENAME"
 
 if [[ -f "$FILEPATH" ]]; then
   echo "File already exists: $FILEPATH" >&2
-  # Return the path anyway — caller can decide to append instead of create
+  # Return the path anyway: caller can decide to append instead of create
   echo "$FILEPATH"
   exit 0
 fi

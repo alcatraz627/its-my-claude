@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# task-table-inject.sh — put the task table in front of the owner without them
+# task-table-inject.sh: put the task table in front of the owner without them
 # having to scroll for it.
 #
 # WHY A HOOK CANNOT JUST PRINT IT. features/hooks-tui-limits.md:36 is explicit:

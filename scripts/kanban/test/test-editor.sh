@@ -1,7 +1,7 @@
 #!/bin/bash
 # The editing core (#13 layer 0), proven outside any page. editor.js touches no
 # DOM until a function is called, so the history can be exercised against a
-# stub element — which is the only way this is testable at all, and the reason
+# stub element: which is the only way this is testable at all, and the reason
 # it is its own file rather than a section of shared.js.
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 pass=0; fail=0

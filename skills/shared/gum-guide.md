@@ -1,8 +1,8 @@
-# Gum Guide — Interactive TUI for Claude Code Skills
+# Gum Guide: Interactive TUI for Claude Code Skills
 
 `gum` is a Charmbracelet CLI tool that provides blocking, styled TUI widgets for
 Bash scripts. Skills use it to replace plain-text prompts with structured pickers,
-confirmations, spinners, and tables — making multi-turn interactions clear and
+confirmations, spinners, and tables: making multi-turn interactions clear and
 reducing user input errors.
 
 Install: `brew install gum`
@@ -26,14 +26,14 @@ command -v gum >/dev/null 2>&1 || {
 ## TTY Compatibility (Claude Code Bash Tool)
 
 Claude Code's Bash tool runs in a sandboxed shell **without a TTY**. Most gum components
-use the Bubble Tea framework which opens `/dev/tty` directly — they will fail with
+use the Bubble Tea framework which opens `/dev/tty` directly: they will fail with
 `"could not open a new TTY: open /dev/tty: device not configured"`.
 
 ### Works without TTY (use freely in Bash tool)
 
 | Component          | Notes                                         |
 | ------------------ | --------------------------------------------- |
-| `gum style`        | Full styling — colors, borders, alignment     |
+| `gum style`        | Full styling: colors, borders, alignment     |
 | `gum format`       | Markdown, code, emoji, template rendering     |
 | `gum log`          | Leveled logging with timestamps               |
 | `gum join`         | Horizontal/vertical layout composition        |
@@ -43,8 +43,8 @@ use the Bubble Tea framework which opens `/dev/tty` directly — they will fail 
 
 | Component     | Workaround                                      |
 | ------------- | ----------------------------------------------- |
-| `gum choose`  | None — use `! gum choose` for user to run live  |
-| `gum confirm` | None — use `! gum confirm` for user to run live |
+| `gum choose`  | None: use `! gum choose` for user to run live  |
+| `gum confirm` | None: use `! gum confirm` for user to run live |
 | `gum input`   | Use shell variables or arguments instead        |
 | `gum write`   | Use heredocs or temp files instead              |
 | `gum filter`  | Use `grep`/`fzf` alternatives                  |
@@ -70,7 +70,7 @@ All functions are zsh-compatible (no bash-only syntax).
 
 ## Component Reference
 
-### `gum choose` — Single or multi-select list
+### `gum choose`: Single or multi-select list
 
 **Single select** (user picks one, result captured in variable):
 
@@ -108,7 +108,7 @@ gum choose --cursor "→ " --selected-prefix "✓ " --unselected-prefix "  " \
 
 ---
 
-### `gum filter` — Fuzzy search over a list
+### `gum filter`: Fuzzy search over a list
 
 Use when the list has more than ~8 items or is dynamic:
 
@@ -123,7 +123,7 @@ FILE=$(find src/ -name "*.ts" | gum filter --placeholder "Search TypeScript file
 
 ---
 
-### `gum input` — Single-line text input
+### `gum input`: Single-line text input
 
 ```bash
 SCOPE=$(gum input \
@@ -146,7 +146,7 @@ done
 
 ---
 
-### `gum write` — Multi-line text input
+### `gum write`: Multi-line text input
 
 For longer free-form input (description, notes, modification prompt):
 
@@ -160,9 +160,9 @@ NOTES=$(gum write \
 
 ---
 
-### `gum confirm` — Yes/no prompt
+### `gum confirm`: Yes/no prompt
 
-Exits 0 for yes, 1 for no — use directly in conditionals:
+Exits 0 for yes, 1 for no: use directly in conditionals:
 
 ```bash
 if gum confirm "Apply all 12 improvements?"; then
@@ -179,7 +179,7 @@ fi
 
 ---
 
-### `gum spin` — Spinner for long operations
+### `gum spin`: Spinner for long operations
 
 Runs a command in the background while showing a spinner. Exits with the
 command's exit code:
@@ -197,7 +197,7 @@ gum spin --spinner globe --title "Formatting files..." -- \
 
 ---
 
-### `gum style` — Styled output
+### `gum style`: Styled output
 
 Use for headers, warnings, and section labels instead of plain `echo`:
 
@@ -228,7 +228,7 @@ gum style --foreground 8 "  (no runtime history for this skill)"
 
 ---
 
-### `gum table` — Tabular data display
+### `gum table`: Tabular data display
 
 Pipe tab-separated data. First row is the header:
 
@@ -257,7 +257,7 @@ choices both broke before the third worked. Worth knowing before you reach for
 2. **Avoid any single char that can appear inside cell values.**
    - **`|` pipe** is the default and looks safe in headers, but breaks if any
      cell holds verbose data like `Year: 2014 | Make: Chevrolet | Model: Impala`
-     or VCdb-style `1986 BUICK RIVIERA | Liter: 3.8 | SubModel: LUXURY` — each
+     or VCdb-style `1986 BUICK RIVIERA | Liter: 3.8 | SubModel: LUXURY`: each
      internal pipe creates a phantom column.
    - **`^` caret** is rarely in human text but appears in regex anchors. Putting
      a literal `^1\d{9}$` inside a "Fix scope" cell breaks the row.
@@ -266,12 +266,12 @@ choices both broke before the third worked. Worth knowing before you reach for
 3. **Field count must exactly match the header.** Trailing extra separators
    silently yield `invalid data provided`. A row like `"a^b^c^"` (4 fields,
    last empty) breaks against a 3-column header. Drop trailing empty cells.
-4. **`gum table --print`** is what `gum_table` uses under the hood — it prints
+4. **`gum table --print`** is what `gum_table` uses under the hood: it prints
    formatted output and exits, no interactive selection. Use that, not bare
    `gum table`, when you want a static rendered table embedded in a script.
 5. **Sanitize cells before passing data with regex / shell metachars**: replace
    inline regex with descriptive text (`reject IDs starting with 1` instead of
-   `^1\d{9}$`). Same for any string containing the chosen separator — escape
+   `^1\d{9}$`). Same for any string containing the chosen separator: escape
    with `sed` first, or pick a separator your data provably doesn't contain.
 6. **Emoji column-width is terminal-dependent.** ✅ (3-cell wide) and 🟡
    (2-cell in some fonts) make Verdict-style columns slightly ragged in Apple
@@ -280,7 +280,7 @@ choices both broke before the third worked. Worth knowing before you reach for
 7. **Preferred separator hierarchy** when building data on the fly:
    `\t` > `^` (if no regex content) > `|` (only if you've sanitized the data) >
    anything else. ASCII Unit Separator `\x1f` is theoretically perfect but
-   awkward to type and inspect — use only for programmatic pipelines.
+   awkward to type and inspect: use only for programmatic pipelines.
 
 #### Defensive pattern
 
@@ -471,7 +471,7 @@ gum style "Runtime history: $ENTRY_COUNT entries"
 
 ---
 
-## Full Skill Example — Interactive Picker Loop
+## Full Skill Example: Interactive Picker Loop
 
 Minimal complete skill that uses gum throughout:
 
@@ -514,9 +514,9 @@ gum style --foreground 2 --bold "✓ Done: $ACTION applied to $SKILL."
 
 ## Tips
 
-- `gum choose` output is the **exact string** of the chosen item — match on substrings with `case *"keyword"*)` if items have extra formatting.
-- All gum components read from stdin for list data and write the selection to stdout — pipe and capture naturally.
-- `gum confirm` exits **0 for yes, 1 for no** — use directly in `if` or `&&`/`||` chains.
+- `gum choose` output is the **exact string** of the chosen item: match on substrings with `case *"keyword"*)` if items have extra formatting.
+- All gum components read from stdin for list data and write the selection to stdout: pipe and capture naturally.
+- `gum confirm` exits **0 for yes, 1 for no**: use directly in `if` or `&&`/`||` chains.
 - For dynamic item lists, build with `printf '%s\n' "${array[@]}"` piped to `gum choose`.
-- `gum spin` captures and suppresses the inner command's stdout — if you need the output, redirect it to a temp file inside the inner command.
+- `gum spin` captures and suppresses the inner command's stdout: if you need the output, redirect it to a temp file inside the inner command.
 - Combine `gum style` with `gum join` for side-by-side layouts (useful for before/after diffs).

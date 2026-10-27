@@ -16,9 +16,9 @@ Converts HTML files to clean, readable markdown by extracting and downloading em
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -42,16 +42,16 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Information Gathering
+## Phase 1: Information Gathering
 
 **Objective:** Collect the HTML source and identify all embedded media and links.
 
-### 1.1 — Parse input arguments
+### 1.1: Parse input arguments
 
 - Extract `<source>` argument
 - Check for `--output <name>` flag; default to source filename if omitted
 
-### 1.2 — Determine source type and retrieve HTML
+### 1.2: Determine source type and retrieve HTML
 
 **If source is a URL:**
 
@@ -68,7 +68,7 @@ If it does not exist yet, continue without it.
 
 Store the raw HTML for later processing.
 
-### 1.3 — Scan HTML for media and links
+### 1.3: Scan HTML for media and links
 
 Parse the HTML and extract:
 
@@ -85,7 +85,7 @@ Parse the HTML and extract:
 
 Store a list of URLs to download.
 
-### 1.4 — Download media
+### 1.4: Download media
 
 For each URL found:
 
@@ -95,11 +95,11 @@ For each URL found:
 
 ---
 
-## Phase 2 — Planning
+## Phase 2: Planning
 
 **Objective:** Decide how to clean the HTML and structure the output.
 
-### 2.1 — Determine output folder name
+### 2.1: Determine output folder name
 
 - If `--output <name>` provided: use `<name>/`
 - Else if source is a file path: use filename without extension
@@ -108,7 +108,7 @@ For each URL found:
   - Example: `https://example.com/blog/post` → `example.com-blog-post/`
 - Else (raw HTML): use a timestamp or counter (e.g., `html-output-001/`)
 
-### 2.2 — Assess HTML complexity
+### 2.2: Assess HTML complexity
 
 Heuristically evaluate if the HTML is:
 
@@ -117,7 +117,7 @@ Heuristically evaluate if the HTML is:
 
 Proceed with script by default; switch to manual cleanup only if needed.
 
-### 2.3 — Plan output structure
+### 2.3: Plan output structure
 
 ```
 <output-folder>/
@@ -132,17 +132,17 @@ Proceed with script by default; switch to manual cleanup only if needed.
 
 ---
 
-## Phase 3 — Execution
+## Phase 3: Execution
 
 **Objective:** Clean the HTML and write output files.
 
-### 3.1 — Create output folder
+### 3.1: Create output folder
 
 ```bash
 mkdir -p <output-folder>/media
 ```
 
-### 3.2 — Clean HTML
+### 3.2: Clean HTML
 
 **If simple HTML:**
 
@@ -163,7 +163,7 @@ mkdir -p <output-folder>/media
   - Convert to markdown structure
   - Output markdown
 
-### 3.3 — Polish the cleaned markdown
+### 3.3: Polish the cleaned markdown
 
 - Remove stray punctuation (orphaned dashes, extra spaces)
 - Remove navbar/footer cruft (navigation menus, "Sign up" buttons, etc.)
@@ -171,12 +171,12 @@ mkdir -p <output-folder>/media
 - Remove repeated whitespace
 - Ensure proper markdown formatting
 
-### 3.4 — Move media to output folder
+### 3.4: Move media to output folder
 
 - Move downloaded files from temp location to `<output-folder>/media/`
 - Update filenames if necessary (remove query params, sanitize names)
 
-### 3.5 — Create metadata.json
+### 3.5: Create metadata.json
 
 ```json
 {
@@ -197,7 +197,7 @@ mkdir -p <output-folder>/media
 }
 ```
 
-### 3.6 — Write output files
+### 3.6: Write output files
 
 ```bash
 # Write markdown
@@ -207,7 +207,7 @@ Write <output-folder>/index.md <cleaned-markdown>
 Write <output-folder>/metadata.json <metadata>
 ```
 
-### 3.7 — Print summary
+### 3.7: Print summary
 
 Print to stdout:
 
@@ -220,11 +220,11 @@ Print to stdout:
 
 ---
 
-## Phase 4 — Verification
+## Phase 4: Verification
 
 **Objective:** Confirm output is valid and complete.
 
-### 4.1 — Verify output folder structure
+### 4.1: Verify output folder structure
 
 ```bash
 ls -la <output-folder>/
@@ -236,7 +236,7 @@ Confirm:
 - `metadata.json` exists and is valid JSON
 - `media/` folder exists
 
-### 4.2 — Spot-check markdown quality
+### 4.2: Spot-check markdown quality
 
 - Read first 20 lines of `index.md` to confirm:
   - Hierarchy is preserved (headings, lists, etc.)
@@ -244,13 +244,13 @@ Confirm:
   - No orphaned punctuation
   - Readable prose
 
-### 4.3 — Confirm media downloads
+### 4.3: Confirm media downloads
 
 - List `media/` folder
 - Compare count to `metadata.json` media_list
 - Report any mismatches
 
-### 4.4 — Print final result
+### 4.4: Print final result
 
 ```
 ─────────────────────────────────────────────────────
@@ -272,9 +272,9 @@ Confirm:
 
 ## Notes
 
-- **Never modifies original HTML source** — read-only access only
+- **Never modifies original HTML source**: read-only access only
 - **All outputs isolated** to a single output folder in the current working directory
-- **clean_html.ts script expected** at `.claude/skills/clean-html/clean_html.ts` — must exist and be executable
+- **clean_html.ts script expected** at `.claude/skills/clean-html/clean_html.ts`: must exist and be executable
 - **Convoluted HTML fallback:** If the HTML is too messy for the script, agent may manually clean instead, but should prefer the script for simpler cases
-- **Media download failures are non-blocking** — if a media link fails, log it and continue; don't block the entire run
+- **Media download failures are non-blocking**: if a media link fails, log it and continue; don't block the entire run
 - **Output folder naming:** Defaults to source filename; user can override with `--output`

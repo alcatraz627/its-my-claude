@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# session-state.sh — make "finished" a fact on disk instead of a sentence in chat.
+# session-state.sh: make "finished" a fact on disk instead of a sentence in chat.
 #
 # A supervisor watching a session cannot tell a clean finish from a death: both
 # are silence. This script lets a session declare working | blocked | finished

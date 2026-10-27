@@ -1,7 +1,7 @@
 # Global Memory Tier
 
 Cross-project memory for Claude Code. Files here are loaded in **every** project session
-via a CLAUDE.md instruction — unlike per-project memory which is scoped to one CWD.
+via a CLAUDE.md instruction: unlike per-project memory which is scoped to one CWD.
 
 ## When to use global vs per-project
 
@@ -28,7 +28,7 @@ type: {{user, feedback, project, reference}}
 
 ## MEMORY.md index
 
-`MEMORY.md` in this directory is the index — one line per entry, under 150 chars:
+`MEMORY.md` in this directory is the index: one line per entry, under 150 chars:
 `- [Title](file.md) — one-line hook`
 
 ## Promoting a per-project memory
@@ -36,13 +36,13 @@ type: {{user, feedback, project, reference}}
 When a memory proves universal:
 
 1. Copy (not move) from `~/.claude/projects/<slug>/memory/<file>.md` to here
-2. Review the content — strip project-specific details
+2. Review the content: strip project-specific details
 3. Add to `MEMORY.md` index
 4. Leave the original in place (per-project memory is never degraded)
 
 ## Precedence
 
-If the same topic appears in both global and per-project memory, **per-project wins** —
+If the same topic appears in both global and per-project memory, **per-project wins**:
 it may have project-specific refinements.
 
 ## History

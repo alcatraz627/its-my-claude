@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# atone-fired-and-ignored-check.sh — Stop hook (side-effect only, via the
-# hook-orchestrator's Stop.tasks; its stdout is discarded, which is fine — this
+# atone-fired-and-ignored-check.sh: Stop hook (side-effect only, via the
+# hook-orchestrator's Stop.tasks; its stdout is discarded, which is fine: this
 # writes a file and decides nothing).
 #
 # Turns the atone loop's central blind spot into an OBJECTIVE counted signal.
 # feedback.jsonl's `fired-and-ignored` was a structural under-count: recording one
-# required the agent to run the full feedback step — the very diligence whose
+# required the agent to run the full feedback step: the very diligence whose
 # absence IS the failure being measured. So the log showed 1 fired-and-ignored
 # against 100+ fired-and-useful, which tells us nothing. This derives the signal
 # mechanically instead, trusting no agent diligence.
@@ -13,13 +13,13 @@
 # Objective rule: a slug recorded >=2x in ONE session (the F1 per-session counter
 # at ~/.claude/.session-atone-slugs/<session>.json). The first atone proves the
 # agent already had the pattern in hand this session; a second same-session
-# occurrence is the trigger having fired and the mistake landing anyway — exactly
+# occurrence is the trigger having fired and the mistake landing anyway: exactly
 # fired-and-ignored. Emits one feedback line per (session, slug) the first time it
 # crosses 2, deduped so it isn't re-counted every turn.
 #
 # Honest under-count (documented, not a bug): only catches recurrences that
 # produced a SECOND atone. A recurrence the agent never atoned for leaves no
-# record and is invisible here — there is no signal for it to read.
+# record and is invisible here: there is no signal for it to read.
 #
 # Side-effect only: writes via `atone.sh feedback`, prints nothing, always exit 0.
 # Mute: touch ~/.claude/atone/.no-fired-ignored-check
@@ -32,7 +32,7 @@ INPUT=$(cat 2>/dev/null || echo "{}")
 sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 # Same key derivation as atone.sh add uses when writing the counter. Stdin's
 # session_id is the reliable source; the env fallback matters only when it is
-# absent, and it must name CLAUDE_CODE_SESSION_ID — CLAUDE_SESSION_ID is never set.
+# absent, and it must name CLAUDE_CODE_SESSION_ID: CLAUDE_SESSION_ID is never set.
 #
 # With no id at all, stop. The chain used to end in a date, which is a key no
 # counter is ever written under (atone.sh keys on the session id) and which every

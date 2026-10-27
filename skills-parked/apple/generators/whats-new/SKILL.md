@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # What's New Generator
 
-Generate a complete "What's New" screen that displays after app updates — highlights new features, changes, and improvements with version tracking to ensure it only shows once per update.
+Generate a complete "What's New" screen that displays after app updates: highlights new features, changes, and improvements with version tracking to ensure it only shows once per update.
 
 ## When This Skill Activates
 
@@ -50,7 +50,7 @@ Use whichever pattern the project already employs. If none found, default to `Bu
 Ask user via AskUserQuestion:
 
 1. **Presentation style?**
-   - Sheet (recommended — `.sheet(item:)` auto-dismiss)
+   - Sheet (recommended: `.sheet(item:)` auto-dismiss)
    - Full-screen cover (`.fullScreenCover`)
    - Inline (embedded in a view hierarchy)
 
@@ -76,19 +76,19 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `WhatsNewFeature.swift` — Model for a single feature (title, description, SF Symbol, tint color)
-2. `WhatsNewRelease.swift` — Groups features by version string with date
-3. `VersionTracker.swift` — Tracks last-shown version in UserDefaults, compares against current bundle version
-4. `WhatsNewProvider.swift` — Protocol + local implementation (optional remote)
+1. `WhatsNewFeature.swift`: Model for a single feature (title, description, SF Symbol, tint color)
+2. `WhatsNewRelease.swift`: Groups features by version string with date
+3. `VersionTracker.swift`: Tracks last-shown version in UserDefaults, compares against current bundle version
+4. `WhatsNewProvider.swift`: Protocol + local implementation (optional remote)
 
 ### Step 3: Create UI Files
-5. `WhatsNewView.swift` — Paged view with TabView(.page) showing features
-6. `WhatsNewSheet.swift` — Wrapper that auto-presents via `.sheet(item:)` when new version detected
+5. `WhatsNewView.swift`: Paged view with TabView(.page) showing features
+6. `WhatsNewSheet.swift`: Wrapper that auto-presents via `.sheet(item:)` when new version detected
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `RemoteWhatsNewProvider.swift` — If remote content source selected
-- `WhatsNewJSON.swift` — If local JSON source selected
+- `RemoteWhatsNewProvider.swift`: If remote content source selected
+- `WhatsNewJSON.swift`: If local JSON source selected
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -291,13 +291,13 @@ let release = try await provider.latestRelease()
 ## Gotchas
 
 ### CFBundleShortVersionString vs CFBundleVersion
-- `CFBundleShortVersionString` = marketing version (e.g., "2.1.0") — use this for What's New
-- `CFBundleVersion` = build number (e.g., "47") — changes every build, NOT suitable for What's New tracking
+- `CFBundleShortVersionString` = marketing version (e.g., "2.1.0"): use this for What's New
+- `CFBundleVersion` = build number (e.g., "47"): changes every build, NOT suitable for What's New tracking
 - Always compare the marketing version, never the build number
 
 ### First Install vs Update Detection
 - On first install, `lastShownVersion` is `nil`
-- Decide whether first-time users should see What's New (usually NO — show onboarding instead)
+- Decide whether first-time users should see What's New (usually NO: show onboarding instead)
 - If `lastShownVersion` is `nil`, either skip What's New or set the current version without showing:
 ```swift
 func shouldShowWhatsNew() -> Bool {
@@ -317,14 +317,14 @@ func shouldShowWhatsNew() -> Bool {
 
 ### Version String Comparison
 - Use `.numeric` option in `String.compare(_:options:)` so "2.0.0" > "1.10.0" (not lexicographic)
-- Never compare version strings with `<` or `>` operators directly — "9.0" would sort after "10.0" lexicographically
+- Never compare version strings with `<` or `>` operators directly: "9.0" would sort after "10.0" lexicographically
 
 ### Accessibility
 - Ensure all feature images have accessibility labels
 - Support Dynamic Type in feature descriptions
-- VoiceOver should read features sequentially — use `.accessibilityElement(children: .combine)` on feature cards
+- VoiceOver should read features sequentially: use `.accessibilityElement(children: .combine)` on feature cards
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/onboarding-generator` — First-launch onboarding (complementary — onboarding for first install, What's New for updates)
+- **templates.md**: All production Swift templates
+- Related: `generators/onboarding-generator` (First-launch onboarding (complementary) onboarding for first install, What's New for updates)

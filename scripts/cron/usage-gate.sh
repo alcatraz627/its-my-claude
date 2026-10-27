@@ -1,5 +1,5 @@
 #!/bin/bash
-# usage-gate.sh — may an autonomous institution spend tokens right now?
+# usage-gate.sh: may an autonomous institution spend tokens right now?
 #
 # Owner ruling 2026-08-21: the warden and the residue-review stand down when
 # either usage window is nearly spent. An institution that eats the owner's
@@ -39,7 +39,7 @@ age=$(( $(date +%s) - $(stat -f %m "$LIMITS" 2>/dev/null || echo 0) ))
 
 # Allow-list shape check per window, the limits-check.sh lesson: state what a
 # reading looks like and reject the rest. An unreadable window is skipped, not
-# treated as 0 — but an unreadable pair is an UNKNOWN pass, never a quiet 0/0.
+# treated as 0: but an unreadable pair is an UNKNOWN pass, never a quiet 0/0.
 read_pct() {
   local p
   p=$(jq -r --arg k "$1" '(.[$k].pct | tonumber? | floor) // empty' "$LIMITS" 2>/dev/null)

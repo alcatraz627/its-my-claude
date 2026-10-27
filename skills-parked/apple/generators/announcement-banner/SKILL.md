@@ -36,7 +36,7 @@ Grep: "AnnouncementBanner" or "InAppBanner" or "ToastView" or "BannerView"
 
 If third-party library found (Firebase In-App Messaging, Braze, Intercom):
 - Ask if user wants to replace or keep it
-- If keeping, don't generate — advise on integration patterns instead
+- If keeping, don't generate: advise on integration patterns instead
 
 ### 3. Deep Linking Detection
 Check for existing deep linking setup:
@@ -51,23 +51,23 @@ If deep linking exists, integrate with it. If not, generate standalone action ha
 Ask user via AskUserQuestion:
 
 1. **Banner position?**
-   - Top (slides in from top) — recommended for alerts
+   - Top (slides in from top): recommended for alerts
    - Bottom (slides in from bottom)
    - Floating (centered overlay with dimmed background)
 
 2. **Content source?**
    - Local only (hardcoded announcements in code)
    - Remote JSON (fetch from server endpoint)
-   - Both (remote with local fallbacks) — recommended
+   - Both (remote with local fallbacks): recommended
 
 3. **Action type?**
    - Deep link (navigate to in-app screen)
    - URL (open in Safari/SFSafariViewController)
    - Dismiss only (informational, no action button)
-   - All of the above — recommended
+   - All of the above: recommended
 
 4. **Include scheduling (start/end dates)?**
-   - Yes (time-limited announcements with date ranges) — recommended
+   - Yes (time-limited announcements with date ranges): recommended
    - No (always-active until dismissed)
 
 ## Generation Process
@@ -77,17 +77,17 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `Announcement.swift` — Model with style, action, priority, scheduling
-2. `AnnouncementManager.swift` — @Observable manager: loads, filters, tracks dismissals
-3. `AnnouncementProvider.swift` — Protocol + local/remote implementations with caching
+1. `Announcement.swift`: Model with style, action, priority, scheduling
+2. `AnnouncementManager.swift`: @Observable manager: loads, filters, tracks dismissals
+3. `AnnouncementProvider.swift`: Protocol + local/remote implementations with caching
 
 ### Step 3: Create UI Files
-4. `AnnouncementBannerView.swift` — SwiftUI banner with style-aware colors and animations
-5. `AnnouncementBannerModifier.swift` — ViewModifier for overlay placement and action routing
+4. `AnnouncementBannerView.swift`: SwiftUI banner with style-aware colors and animations
+5. `AnnouncementBannerModifier.swift`: ViewModifier for overlay placement and action routing
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `AnnouncementScheduler.swift` — If scheduling selected (date range filtering, timezone handling)
+- `AnnouncementScheduler.swift`: If scheduling selected (date range filtering, timezone handling)
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -268,16 +268,16 @@ Announcement(
 
 ## Gotchas
 
-1. **Banner stacking** — Never show multiple banners simultaneously. Use priority to determine which single banner to display. Queue others and show the next one after dismissal.
-2. **Don't cover critical UI** — Ensure the banner doesn't overlap navigation bars, tab bars, or interactive elements. Use safe area insets.
-3. **Respect user dismissal** — Persist dismissed announcement IDs so they don't reappear after app relaunch. Use UserDefaults or a lightweight store.
-4. **Remote config caching** — Cache fetched announcements to avoid network requests on every app launch. Honor cache duration but allow force-refresh.
-5. **Date/timezone handling** — Always use UTC for start/end dates in remote config. Convert to local timezone only for display purposes.
-6. **Accessibility** — Announce banner appearance with `AccessibilityNotification.Announcement`. Ensure dismiss button has proper label.
-7. **Animation interruption** — If a user navigates away mid-animation, ensure the banner state resets properly. Use `.task` tied to view lifecycle.
+1. **Banner stacking**: Never show multiple banners simultaneously. Use priority to determine which single banner to display. Queue others and show the next one after dismissal.
+2. **Don't cover critical UI**: Ensure the banner doesn't overlap navigation bars, tab bars, or interactive elements. Use safe area insets.
+3. **Respect user dismissal**: Persist dismissed announcement IDs so they don't reappear after app relaunch. Use UserDefaults or a lightweight store.
+4. **Remote config caching**: Cache fetched announcements to avoid network requests on every app launch. Honor cache duration but allow force-refresh.
+5. **Date/timezone handling**: Always use UTC for start/end dates in remote config. Convert to local timezone only for display purposes.
+6. **Accessibility**: Announce banner appearance with `AccessibilityNotification.Announcement`. Ensure dismiss button has proper label.
+7. **Animation interruption**: If a user navigates away mid-animation, ensure the banner state resets properly. Use `.task` tied to view lifecycle.
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/deep-linking` — Deep link routing integration
-- Related: `generators/whats-new` — What's new screen for feature highlights
+- **templates.md**: All production Swift templates
+- Related: `generators/deep-linking`: Deep link routing integration
+- Related: `generators/whats-new`: What's new screen for feature highlights

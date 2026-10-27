@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# guard-banned-vocab.sh — PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
+# guard-banned-vocab.sh: PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
 #
 # Blocks an edit/write from ADDING a term a project has explicitly declared
-# off-limits. This exists because a real, repeated user correction — "stop
-# writing <forbidden term> in this doc" (e.g. 'Impersonation') — kept coming
+# off-limits. This exists because a real, repeated user correction: "stop
+# writing <forbidden term> in this doc" (e.g. 'Impersonation'): kept coming
 # back: the agent would re-introduce the banned word a document later, having
 # forgotten the earlier correction. A per-project vocab file makes the ban
 # durable and mechanical instead of relying on the agent's memory.
 #
-# OPT-IN — INERT UNLESS A PROJECT OPTS IN. The gate reads a per-project file at
+# OPT-IN: INERT UNLESS A PROJECT OPTS IN. The gate reads a per-project file at
 # <project-root>/.claude/banned-vocab.txt. If that file does NOT exist anywhere
-# up the tree from the edited file, the gate exits 0 silently — it does nothing.
+# up the tree from the edited file, the gate exits 0 silently: it does nothing.
 # That is why this is a BLOCK and not a nudge: the ban is a rule the USER wrote
 # down for THIS project, so a block is warranted and the false-positive rate is
 # structurally near-zero (a project only opts in when it means it).
@@ -26,7 +26,7 @@
 #   • A line whose first non-space char is '#' is a comment.
 #   • Matching is CASE-INSENSITIVE and WHOLE-WORD: 'Impersonation' matches
 #     "the Impersonation flow" but NOT "ImpersonationService" (camelCase) nor
-#     "impersonation_service" (snake_case) — an identifier is not a prose word.
+#     "impersonation_service" (snake_case): an identifier is not a prose word.
 #   • Multi-word phrases work: `click here => the settings page`.
 #   • Terms shorter than 2 chars are skipped (a 1-char whole-word ban is noise).
 #
@@ -38,7 +38,7 @@
 #       simply
 # ─────────────────────────────────────────────────────────────────────────────
 #
-# SCOPE — text/doc files (.md/.mdx/.markdown/.txt/.rst/.adoc) plus common source
+# SCOPE: text/doc files (.md/.mdx/.markdown/.txt/.rst/.adoc) plus common source
 # files (so a banned term in a code comment or string is caught too). Whole-word
 # matching keeps code identifiers from tripping it. Non-text/data/binary files
 # and the banned-vocab.txt file itself are skipped.
@@ -57,7 +57,7 @@ set -uo pipefail
 # ── Mute (first executable line) ────────────────────────────────────────────
 [ -f "$HOME/.claude/.no-banned-vocab-gate" ] && exit 0
 
-# ── Hard dependencies — silent no-op if missing ─────────────────────────────
+# ── Hard dependencies: silent no-op if missing ─────────────────────────────
 command -v jq >/dev/null 2>&1 || exit 0
 command -v rg >/dev/null 2>&1 || exit 0
 
@@ -74,7 +74,7 @@ file_path=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev
 # Resolve a relative path against the hook's CWD.
 case "$file_path" in /*) : ;; *) file_path="$PWD/$file_path" ;; esac
 
-# Never scan the vocab file itself — it legitimately lists the banned terms.
+# Never scan the vocab file itself: it legitimately lists the banned terms.
 case "$file_path" in */.claude/banned-vocab.txt) exit 0 ;; esac
 
 # Text/doc + reasonable source scope. Data/binary/lock files stay out.

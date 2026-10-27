@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# what-changed.sh — the owner's one morning read: what moved since they last looked,
+# what-changed.sh: the owner's one morning read: what moved since they last looked,
 # in the order they act on it, each line carrying the id that zooms in.
 #
 # SYNC-DESIGN.md step 4 (2026-08-26). Reads the stores that already exist; writes

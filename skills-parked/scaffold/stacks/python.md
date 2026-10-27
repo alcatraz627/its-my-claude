@@ -8,7 +8,7 @@
 - Test command: source .venv/bin/activate && pytest
 
 ## Dependencies
-(none by default — add as needed)
+(none by default: add as needed)
 
 ## Dev Dependencies
 pytest: >=8.3

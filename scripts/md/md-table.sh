@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# md-table.sh — emit WELL-FORMED markdown from row data.
+# md-table.sh: emit WELL-FORMED markdown from row data.
 #
 # The fix for mangled tables (unescaped `|` in cells, paragraph-sized cells):
-# feed structured rows in, get valid markdown out. Auto-escapes `|`. And — the
-# real fix — when cells are code-heavy or oversized, it emits per-row SECTIONS
+# feed structured rows in, get valid markdown out. Auto-escapes `|`. And: the
+# real fix: when cells are code-heavy or oversized, it emits per-row SECTIONS
 # instead of a doomed-wide table (a 5-col table with a 600-char code cell is a
 # misuse of the table primitive; escaping pipes just makes it render, badly).
 #

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# extract-events.sh — claude-audit domain consolidation (i-dream contract §1).
+# extract-events.sh: claude-audit domain consolidation (i-dream contract §1).
 #
 # LEFT-JOIN agent vents (~/.claude/hooks/feedback.jsonl) with telemetry
 # (~/.claude/hooks/warn-events.jsonl) on hook_id, deriving `impact` from `kind`
 # and enriching with `heeded` + `fire_count_14d`. Emits one event per vent to
-# this domain's events.jsonl. Event id = the vent's id (stable across passes —
+# this domain's events.jsonl. Event id = the vent's id (stable across passes:
 # the cursor invariant the contract requires).
 #
 # Run by i-dream before each read (manifest [consolidation].script), or manually.
@@ -90,7 +90,7 @@ for v in vents:
 # speaks when a human gripes. Telemetry itself is the continuous behavioral
 # signal, so emit one aggregate "telemetry-pulse" event per hook per ISO week
 # (last 12 weeks). Ids are deterministic (pulse-<hook>-<week>) and each
-# pulse's ts is its week's MONDAY 00:00Z — fixed, so a pulse can never
+# pulse's ts is its week's MONDAY 00:00Z: fixed, so a pulse can never
 # out-sort a real vent from its own week (see the cursor note below).
 pulse = {}
 for t in tel:
@@ -135,7 +135,7 @@ for (h, week), rec in sorted(pulse.items()):
 # anchors on the stream's LAST id). Appending pulses after vents anchored the
 # cursor on a trailing pulse and shadowed every future vent (validation
 # finding 1, 2026-07-22). The stream is therefore written ts-sorted in one
-# pass, and pulse ts is a fixed past boundary (week Monday) — so the newest
+# pass, and pulse ts is a fixed past boundary (week Monday): so the newest
 # element is always a real vent, or a pulse no same-week vent can sort
 # behind. Known bounded cost: a week-in-progress pulse that updates after
 # the cursor passes its position re-delivers only via the next week's pulse.

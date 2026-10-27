@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tool-counter.test.sh — the auto-checkpoint nudge fires only on a MEASURED context
+# tool-counter.test.sh: the auto-checkpoint nudge fires only on a MEASURED context
 # percentage of 50 or more, never on the tool count alone (owner ruling 2026-08-18).
 set -uo pipefail
 S=/Users/alcatraz627/.claude/scripts/tool-counter.sh; pass=0; fail=0

@@ -143,10 +143,10 @@ struct ExpandableCard: View {
 
 ### Rules
 
-1. **@Namespace** — must declare a namespace with `@Namespace private var animation`
-2. **Same id, same namespace** — both views use the same `id` and `in:` namespace
-3. **Only one view at a time** — at any given moment, only one view with a given id should be in the hierarchy (use `if/else`, not showing both)
-4. **isSource parameter** — when both views exist simultaneously (e.g., overlay), set `isSource: true` on the source and `isSource: false` on the target
+1. **@Namespace**: must declare a namespace with `@Namespace private var animation`
+2. **Same id, same namespace**: both views use the same `id` and `in:` namespace
+3. **Only one view at a time**: at any given moment, only one view with a given id should be in the hierarchy (use `if/else`, not showing both)
+4. **isSource parameter**: when both views exist simultaneously (e.g., overlay), set `isSource: true` on the source and `isSource: false` on the target
 
 ```swift
 // When both views coexist — source dictates geometry
@@ -303,7 +303,7 @@ Opt out of content transitions:
 .contentTransition(.identity)
 ```
 
-## Accessibility — Reduce Motion
+## Accessibility: Reduce Motion
 
 Always provide alternatives for users with reduced motion enabled.
 

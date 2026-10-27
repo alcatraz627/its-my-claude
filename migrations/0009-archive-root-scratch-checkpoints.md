@@ -6,7 +6,7 @@ status: complete
 date: 2026-05-17
 ---
 
-# Migration 0009 — Archive Root Scratch Checkpoints
+# Migration 0009: Archive Root Scratch Checkpoints
 
 ## Why
 
@@ -21,9 +21,9 @@ Audit doc: `~/.claude/assets/docs/20260517-gcc-audit-v1.md` § B.
 
 ## What does NOT change
 
-- `_checkpoint.claude.md` symlink at root (active session pointer) — NOT touched.
-- `_last-checkpoint.json` (legacy, removed in pending 0008→TBD) — NOT touched.
-- `_precompact-checkpoint.claude.md` (latest pre-compact snapshot) — NOT touched.
+- `_checkpoint.claude.md` symlink at root (active session pointer): NOT touched.
+- `_last-checkpoint.json` (legacy, removed in pending 0008→TBD): NOT touched.
+- `_precompact-checkpoint.claude.md` (latest pre-compact snapshot): NOT touched.
 - File names + contents are unchanged; only location moves.
 
 ## Verification
@@ -47,11 +47,11 @@ mv ~/.claude/assets/checkpoints/202604/*.md ~/.claude/
 
 ## Phases
 
-1. **Phase 1** — Write task script ✅
-2. **Phase 2** — Dry-run + live run today ⏳
-3. **Phase 3** — Wired into startup orchestrator (already; it auto-runs `tasks/*.sh` lexically) ✅
+1. **Phase 1**: Write task script ✅
+2. **Phase 2**: Dry-run + live run today ⏳
+3. **Phase 3**: Wired into startup orchestrator (already; it auto-runs `tasks/*.sh` lexically) ✅
 
 ## Notes / followups
 
-- Symlink target `_checkpoint.claude.md` is filtered by the file-glob pattern `_2026*-*.claude.md` (won't match) — safe.
+- Symlink target `_checkpoint.claude.md` is filtered by the file-glob pattern `_2026*-*.claude.md` (won't match): safe.
 - The task is now part of `std::claude::startup`; will fire on next reboot/login automatically.

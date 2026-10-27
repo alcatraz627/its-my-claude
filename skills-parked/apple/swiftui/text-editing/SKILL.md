@@ -58,8 +58,8 @@ What text feature do you need?
 
 | # | Mistake | Fix |
 |---|---------|-----|
-| 1 | Using `.foregroundColor()` on new projects | Use `.foregroundStyle()` — supports gradients and ShapeStyle |
-| 2 | `.animation(.spring())` without `value:` on text | Deprecated in iOS 15 — always pass `value:` parameter |
+| 1 | Using `.foregroundColor()` on new projects | Use `.foregroundStyle()`: supports gradients and ShapeStyle |
+| 2 | `.animation(.spring())` without `value:` on text | Deprecated in iOS 15: always pass `value:` parameter |
 | 3 | Expecting full Markdown in `Text` | Text only supports inline Markdown: **bold**, *italic*, [links]. No lists, tables, code blocks, images |
 | 4 | Creating new AttributedString instances on every body evaluation | Cache complex AttributedString objects in @State or computed properties outside body |
 | 5 | Using `TextEditor(text: $string)` for rich text | Use `TextEditor(text: $attributedString, selection: $selection)` with AttributedString binding (iOS 18+) |
@@ -235,8 +235,8 @@ Text supports only **inline** Markdown:
 ### Text Display
 - [ ] Using `.foregroundStyle()` instead of deprecated `.foregroundColor()`
 - [ ] `.lineLimit()` paired with `.help()` tooltip or `.textSelection(.enabled)` for truncated text
-- [ ] Dynamic Type supported — using system font styles, not hardcoded sizes
-- [ ] Colors adapt to dark mode — using system colors or semantic styles
+- [ ] Dynamic Type supported: using system font styles, not hardcoded sizes
+- [ ] Colors adapt to dark mode: using system colors or semantic styles
 
 ### AttributedString
 - [ ] Complex AttributedString cached in @State, not recreated in body

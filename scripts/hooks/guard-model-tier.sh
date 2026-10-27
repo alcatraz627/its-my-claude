@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# guard-model-tier.sh — PreToolUse hook on Agent/Task: the model-tier routing gate.
+# guard-model-tier.sh: PreToolUse hook on Agent/Task: the model-tier routing gate.
 #
 # Three jobs, in order (rules/model-tier-routing.md · features/model-tier-harness.md):
 #   1. TELEMETRY (always, even when muted): every sub-agent dispatch appends
 #      {ts, session_id, tool, model, prompt_head} to ~/.claude/logs/model-dispatch.jsonl
-#      — the efficacy-review data feed (tier-telemetry-review, Aug-04).
+# : the efficacy-review data feed (tier-telemetry-review, Aug-04).
 #   2. HARD BLOCK (no self-mute): model = fable/mythos-class, unless the owner's
 #      sentinel exists. The original reason was pricing (per-token outside the
 #      subscription cap, user decision 2026-07-07). Anthropic brought fable inside
 #      the subscription on 2026-08-25, so what the block now enforces is that the
 #      lane gets chosen deliberately, not that it costs extra.
-#   3. WARN (muteable): dispatch carries no model pin — an unpinned spawn can inherit
+#   3. WARN (muteable): dispatch carries no model pin: an unpinned spawn can inherit
 #      the session flagship (rules/model-tier-routing.md § sub-agent ceiling).
 #
 # Mute (warn path only): touch ~/.claude/.model-tier-off   One-shot: MODEL_TIER_OFF=1
@@ -29,8 +29,8 @@ case "$TOOL" in Agent | Task) ;; *) exit 0 ;; esac
 MODEL=$(echo "$INPUT" | jq -r '.tool_input.model // empty')
 SID=$(echo "$INPUT" | jq -r '.session_id // "unknown"')
 
-# 1 — telemetry, unconditional (mutes silence nudges, never data). Appends are
-# flock-serialized (best-effort, same pattern as ledger_append) — concurrent
+# 1: telemetry, unconditional (mutes silence nudges, never data). Appends are
+# flock-serialized (best-effort, same pattern as ledger_append): concurrent
 # sessions dispatch agents simultaneously and share this stream.
 mkdir -p "$HOME/.claude/logs"
 DISPATCH_LOG="$HOME/.claude/logs/model-dispatch.jsonl"
@@ -39,7 +39,7 @@ TLINE=$(echo "$INPUT" | jq -c '{ts: (now | todate), session_id: (.session_id // 
   prompt_head: ((.tool_input.prompt // .tool_input.description // "") | .[0:160])}' 2>/dev/null)
 [ -n "$TLINE" ] && ( flock -x 9 2>/dev/null || true; printf '%s\n' "$TLINE" >> "$DISPATCH_LOG" ) 9>>"$DISPATCH_LOG.lock" 2>/dev/null || true
 
-# 2 — the hard block. No agent self-mute, no env override: the human lifts it
+# 2: the hard block. No agent self-mute, no env override: the human lifts it
 # by holding the consent sentinel below, and re-arms it by trashing the file.
 # LIFTED since 2026-07-23 (owner instruction: "lift the fable hard-block
 # altogether"). Telemetry above logs every dispatch either way, so flagship
@@ -64,7 +64,7 @@ if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
   fi
 fi
 
-# 2a — usage-window advisory for a fable seat (owner D5 note, 2026-09-18). Never a
+# 2a: usage-window advisory for a fable seat (owner D5 note, 2026-09-18). Never a
 # block: policy.sh says WARN above 80% and STRONG above 90% of the general week,
 # and the line asks the agent to weigh value, not to skip. Snoozable as
 # model-tier-fable (group: fable).
@@ -79,7 +79,7 @@ if printf '%s' "$MODEL" | grep -qiE 'fable|mythos'; then
   fi
 fi
 
-# 2b — a fable lane may not delegate its OWN work away (hard block, no self-mute).
+# 2b: a fable lane may not delegate its OWN work away (hard block, no self-mute).
 #
 # Owner ruling 2026-09-01. A fable session is the brains lane: it exists to do the
 # involved thinking, and authoring docs IS the involved thinking. Measured over 30
@@ -122,7 +122,7 @@ if [ -n "$TP" ] && [ -f "$TP" ]; then
   esac
 fi
 
-# 3 — the missing-pin warn was retired by owner ruling D6a (2026-09-18): it sat
+# 3: the missing-pin warn was retired by owner ruling D6a (2026-09-18): it sat
 # muted for 37 days because the need had passed and models kept tripping on it.
 # The two hard blocks above are rulings and stay. Usage-window advisories for
 # fable live in the policy layer (see features/usage-policy.md), not here.

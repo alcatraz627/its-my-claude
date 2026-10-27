@@ -91,7 +91,7 @@ def _derive_project(filepath, cwd=None):
     2. Otherwise, find the project folder (direct child of ~/.claude/projects/)
        and derive from that, preferring known path segments.
     """
-    # Prefer CWD — it's the actual working directory, unambiguous
+    # Prefer CWD: it's the actual working directory, unambiguous
     if cwd:
         segments = cwd.rstrip("/").split("/")
         # Skip home dir prefix to get meaningful segments
@@ -128,7 +128,7 @@ def _derive_project(filepath, cwd=None):
             break
 
     meaningful = parts[user_idx:] if user_idx < len(parts) else parts
-    # Join remaining parts — we lose the original hyphen/separator distinction,
+    # Join remaining parts: we lose the original hyphen/separator distinction,
     # but for display purposes this is good enough
     name = "-".join(meaningful) if meaningful else project_folder
     # Take last 2 dash-groups as a rough project label
@@ -251,7 +251,7 @@ def crawl(conn, rescan=False, projects_dir=None, prune_orphans=False):
 
         _index_session(conn, filepath, mtime, size)
 
-    # Prune sessions whose files no longer exist — OPT-IN ONLY. By default the
+    # Prune sessions whose files no longer exist: OPT-IN ONLY. By default the
     # index retains orphaned rows as the permanent archive of history that
     # cleanupPeriodDays has deleted from disk (see the docstring).
     if prune_orphans:

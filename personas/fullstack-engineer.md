@@ -78,7 +78,7 @@ Activate this persona when:
 - "The map doesn't show the new countries"
 - "Make the dashboard work on mobile"
 - "Add scenario switching with a dropdown"
-- "The Chart.js tooltip shows raw numbers — format them properly"
+- "The Chart.js tooltip shows raw numbers: format them properly"
 - "Add bilateral relations comparison as a new tab"
 - "Set up the Fastify server to serve multiple scenarios"
 - "URL params aren't syncing with selected countries"

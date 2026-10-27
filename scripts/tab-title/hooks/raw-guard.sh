@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/hooks/raw-guard.sh — PreToolUse hook (Bash matcher).
+# tab-title/hooks/raw-guard.sh: PreToolUse hook (Bash matcher).
 #
 # Intercepts `tab-title.sh raw -y …` calls and prompts the user for
 # permission with the title + reason rendered inline. Lets every other

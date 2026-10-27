@@ -65,7 +65,7 @@ Ask via AskUserQuestion:
    - Both
 
 2. **Where to add?**
-   - Test target extension (recommended — keeps production code clean)
+   - Test target extension (recommended: keeps production code clean)
    - Shared test helper file
 
 ### Phase 3: Generate Factories
@@ -288,7 +288,7 @@ extension APIResponse where T == [Item] {
 |--------------|-----------------|
 | UUID | `UUID()` (unique per call) |
 | String | Descriptive placeholder (`"Test Item"`) |
-| Date | Fixed timestamp (not `Date()` — causes flaky tests) |
+| Date | Fixed timestamp (not `Date()`: causes flaky tests) |
 | Bool | `false` (opt-in to special states) |
 | Array | Empty `[]` (opt-in to populated) |
 | Optional | `nil` (opt-in to having a value) |
@@ -345,6 +345,6 @@ let item = Item.fixture(isFavorite: true)
 
 ## References
 
-- `generators/test-generator/` — generates tests that use these factories
-- `testing/tdd-feature/` — TDD workflow benefits from low-friction factories
-- `testing/integration-test-scaffold/` — integration tests need realistic data
+- `generators/test-generator/`: generates tests that use these factories
+- `testing/tdd-feature/`: TDD workflow benefits from low-friction factories
+- `testing/integration-test-scaffold/`: integration tests need realistic data

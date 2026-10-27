@@ -1,12 +1,12 @@
 ---
 name: tdd-bug-fix
-description: Fix bugs using red-green-refactor — reproduce the bug as a failing test first, then fix it. Use when fixing bugs to ensure they never regress.
+description: Fix bugs using red-green-refactor, reproduce the bug as a failing test first, then fix it. Use when fixing bugs to ensure they never regress.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
 # TDD Bug Fix
 
-Fix bugs the right way: reproduce first, fix second, verify always. Especially critical when using AI to generate fixes — the test ensures the AI actually solved the problem.
+Fix bugs the right way: reproduce first, fix second, verify always. Especially critical when using AI to generate fixes: the test ensures the AI actually solved the problem.
 
 ## When This Skill Activates
 
@@ -50,7 +50,7 @@ Identify:
 - [ ] The incorrect output/behavior
 - [ ] The correct expected output/behavior
 
-### Phase 2: RED — Write the Failing Test
+### Phase 2: RED: Write the Failing Test
 
 Write a test that **fails because of the bug**. This proves the bug exists.
 
@@ -138,23 +138,23 @@ func reproduceBug() async {
 }
 ```
 
-**Run the test — it MUST fail.** If it passes, you haven't reproduced the bug.
+**Run the test: it MUST fail.** If it passes, you haven't reproduced the bug.
 
 ```bash
 xcodebuild test -scheme YourApp \
   -only-testing "YourAppTests/BugFix_DescriptionTests"
 ```
 
-### Phase 3: GREEN — Fix the Bug
+### Phase 3: GREEN: Fix the Bug
 
-Now fix the code to make the test pass. The fix should be **minimal** — only change what's needed.
+Now fix the code to make the test pass. The fix should be **minimal**: only change what's needed.
 
 #### Fix Guidelines
 
 - **Change as little code as possible** to make the test pass
-- **Don't refactor while fixing** — that's the next step
-- **Don't fix other issues** you notice — file them separately
-- **AI should target the specific test** — give Claude the failing test as context
+- **Don't refactor while fixing**: that's the next step
+- **Don't fix other issues** you notice: file them separately
+- **AI should target the specific test**: give Claude the failing test as context
 
 ```
 Prompt to Claude: "Here's a failing test that reproduces a bug.
@@ -162,7 +162,7 @@ Fix the source code to make this test pass without breaking
 any existing tests."
 ```
 
-**Run the test — it MUST pass now.**
+**Run the test: it MUST pass now.**
 
 ```bash
 # Run the bug fix test
@@ -179,18 +179,18 @@ If the fix introduced duplication or the code could be cleaner:
 
 1. **Refactor only with all tests passing**
 2. **Run tests after each change**
-3. **Keep the bug fix test** — it's now a permanent regression test
+3. **Keep the bug fix test**: it's now a permanent regression test
 
 ### Phase 5: Verify Completeness
 
 Checklist before marking the bug as fixed:
 
 - [ ] Failing test written that reproduces the bug
-- [ ] Fix implemented — test now passes
+- [ ] Fix implemented: test now passes
 - [ ] All existing tests still pass (no regressions)
 - [ ] Edge cases covered (empty, nil, boundary values)
 - [ ] Test is clearly named and documents the bug
-- [ ] Fix is minimal — no unrelated changes
+- [ ] Fix is minimal: no unrelated changes
 
 ## Multiple Related Bugs
 
@@ -271,6 +271,6 @@ This test will catch any future regression of this bug.
 
 ## References
 
-- `testing/tdd-feature/` — for new features (not bug fixes)
-- `testing/characterization-test-generator/` — for capturing existing behavior first
-- `generators/test-generator/` — for general test generation
+- `testing/tdd-feature/`: for new features (not bug fixes)
+- `testing/characterization-test-generator/`: for capturing existing behavior first
+- `generators/test-generator/`: for general test generation

@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# style-watch-worker.sh — detached judgment half of the style watcher.
+# style-watch-worker.sh: detached judgment half of the style watcher.
 #
 # For each candidate file: resolve its enforcement tier (approximating
-# style/scope-map.json — that file stays authoritative for the critic persona),
+# style/scope-map.json: that file stays authoritative for the critic persona),
 # run the free tier-0 screen (regex tells / comment detector), and only on a
 # positive screen spend the tier-2 sonnet judgment, which may cite ONLY active
-# thesaurus entry ids — the watcher enforces the user's ledger, never its own
+# thesaurus entry ids: the watcher enforces the user's ledger, never its own
 # taste. Verdicts land in style/pending-watch-notes.txt for next-turn
 # injection; every fire/skip is telemetry in logs/style-watch.jsonl (tokens +
-# instances — the user's explicit ask).
+# instances: the user's explicit ask).
 #
 # args: <sid8> <cwd> <batch-file with one path per line>
-# env:  STYLE_WATCH_FAKE_JUDGE=1  — skip the LLM, emit a canned finding (tests)
-#       STYLE_WATCH_TIER2_CAP=N  — max sonnet calls per run (default 1)
+# env:  STYLE_WATCH_FAKE_JUDGE=1: skip the LLM, emit a canned finding (tests)
+#       STYLE_WATCH_TIER2_CAP=N: max sonnet calls per run (default 1)
 set -uo pipefail
 
 SID8="${1:-}"; CWD="${2:-}"; BATCH="${3:-}"

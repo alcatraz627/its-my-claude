@@ -107,7 +107,7 @@ function renderCell(block: Block, counter: CellCounter): string {
       ].join("\n");
     }
     default: {
-      // paragraph, blockquote, ul, ol, hr — markdown cells
+      // paragraph, blockquote, ul, ol, hr: markdown cells
       return [
         `<div class="nb-cell nb-cell-markdown" data-cell-type="markdown">`,
         `  <div class="cell-prompt cell-prompt-md"></div>`,

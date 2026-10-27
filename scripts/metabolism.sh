@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# metabolism.sh — the config's retirement ceremony (the first actuator).
+# metabolism.sh: the config's retirement ceremony (the first actuator).
 #
 # The gcc has a rich INTAKE path (propose.sh add, /atone, graduation to a rule) and
 # almost no path OUT: 5 rules ever deleted in the whole history, every one an
-# absorption, zero retired for lack of value. This is the missing counterpart —
+# absorption, zero retired for lack of value. This is the missing counterpart:
 # a way for a rule to LEAVE with a recorded reason, evidence, and a restore path,
 # the same ceremony proposals already have via `propose.sh retire`.
 #
@@ -12,7 +12,7 @@
 # a human can review it and, only if they agree, git rm the file in a normal commit.
 # The ledger entry is the permanent record; the removal is the human-gated step.
 # This is the design's ironclad rule: propose, never auto-act. Unmeasurable is not
-# worthless — a rule with no signal is EXEMPT from value-based retirement.
+# worthless: a rule with no signal is EXEMPT from value-based retirement.
 #
 # The `metabolism.jsonl` schema can hold other pathway events later (promote,
 # compress, distill); only `retire` is implemented, because only it has a real use
@@ -64,7 +64,7 @@ cmd_retire() {
     esac
     shift 2
   done
-  # Evidence and reason are MANDATORY — a retirement without them is a git rm with
+  # Evidence and reason are MANDATORY: a retirement without them is a git rm with
   # extra steps, which is the thing this ceremony exists to prevent.
   [ -n "$disposition" ] || { echo "metabolism retire: --disposition required (absorbed|superseded-by-hook|obsoleted-by-change|retired-no-value)" >&2; exit 2; }
   _valid_disposition "$disposition" || { echo "metabolism retire: invalid disposition '$disposition'" >&2; exit 2; }
@@ -73,7 +73,7 @@ cmd_retire() {
   case "$(printf '%s' "$reason" | tr -d '[:space:]')" in "") echo "metabolism retire: --reason required (why, in plain words)" >&2; exit 2;; esac
   case "$(printf '%s' "$evidence" | tr -d '[:space:]')" in "") echo "metabolism retire: --evidence required (the signal that justifies it)" >&2; exit 2;; esac
 
-  # The rule file should exist (you cannot retire what is not there) — warn, don't block.
+  # The rule file should exist (you cannot retire what is not there): warn, don't block.
   [ -f "$RULES_DIR/$slug.md" ] || echo "metabolism: warning — no rule file $slug.md at $RULES_DIR (recording anyway)" >&2
   # Capture the current HEAD sha so the retired rule is one `git show <sha>:rules/$slug.md` away.
   local sha; sha=$(git -C "$G" rev-parse --short HEAD 2>/dev/null || echo "unknown")

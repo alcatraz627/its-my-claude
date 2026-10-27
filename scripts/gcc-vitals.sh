@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
-# gcc-vitals.sh — the gcc's vital signs. DIRECTION, not defects.
+# gcc-vitals.sh: the gcc's vital signs. DIRECTION, not defects.
 #
 # The gcc-map is an X-ray: a point-in-time scan for what is broken. This is an EKG:
 # a continuous read of which way the living config is MOVING. Each vital prints an
-# arrow (up/down/flat) + magnitude + a healthy-range note — never a pass/fail, because
+# arrow (up/down/flat) + magnitude + a healthy-range note: never a pass/fail, because
 # the number alone never decides whether growth is health or rot. A vital that
 # thresholds into FAIL is a battery check; that is the map's job, not this.
 #
 # READ-ONLY. Computes four families from existing timestamped ledgers:
-#   Learning  — atone mistakes/month, cluster drift
-#   Metabolic — proposal backlog velocity, retirement-blind rule fraction
-#   Growth    — rule count trajectory
-#   Churn     — where edit-attention concentrates
+#   Learning: atone mistakes/month, cluster drift
+#   Metabolic: proposal backlog velocity, retirement-blind rule fraction
+#   Growth: rule count trajectory
+#   Churn: where edit-attention concentrates
 #
 # Usage: gcc-vitals.sh          human EKG
 #        gcc-vitals.sh --json   one machine-readable object (for vitals/timeline.jsonl)
 #
 # Honest bounds: every "per month" figure is a raw count, not seasonally adjusted;
-# a falling mistake rate can mean "learning worked" OR "atone used less" — a vital
+# a falling mistake rate can mean "learning worked" OR "atone used less": a vital
 # raises the question, it does not answer it. Absolutes are approximate; trust the
 # direction, not the third digit.
 set -uo pipefail
@@ -26,7 +26,7 @@ G="$HOME/.claude"
 ATONE="${GCC_VITALS_ATONE:-$G/atone/events.jsonl}"
 JSON=0; [ "${1:-}" = "--json" ] && JSON=1
 # HONEST SCOPE (final-review R5): this dashboard does NOT yet read the two efficacy
-# sensors built this arc — the nudge heed-rate (hooks/warn-events.jsonl, from commit
+# sensors built this arc: the nudge heed-rate (hooks/warn-events.jsonl, from commit
 # e6e75b2) and skill efficacy (skills/usage/events.jsonl, from skill-log.sh). Both are
 # real sensors and both are documented LEARNING vitals, but wiring them in is
 # deliberately deferred: a TREND needs weeks of accumulated lines, and both instruments
@@ -77,7 +77,7 @@ if len(month_keys) >= 2:
 # ---- Metabolic: backlog velocity + retirement-blind fraction ---------------
 def prop_count(status):
     # Count only real proposal rows (their id starts "prop-"), never "lines minus a
-    # guessed header count" — propose.sh list has a 3-line header, and assuming 1
+    # guessed header count": propose.sh list has a 3-line header, and assuming 1
     # over-counted every status by 2 (final-review R1).
     try:
         out = subprocess.run(["bash", f"{G}/scripts/propose.sh", "list", "--status", status],
@@ -146,7 +146,7 @@ print("─"*66)
 
 print("\n▸ LEARNING — is the config getting smarter?")
 if len(last3) >= 2:
-    # The current calendar month is INCOMPLETE — comparing its partial count to a
+    # The current calendar month is INCOMPLETE: comparing its partial count to a
     # full prior month points the arrow the wrong way (final-review R7). Mark it
     # *partial and base the arrow on the two most recent COMPLETE months.
     this_month = datetime.now(timezone.utc).strftime("%Y-%m")

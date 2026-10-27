@@ -20,7 +20,7 @@ EDITS_FILE="/tmp/claude-edits-${sid}"
 if [[ -f "$EDITS_FILE" ]]; then
   while IFS='|' read -r ts fp; do
     age=$(( now - ${ts:-0} ))
-    # If Claude edited this exact file within 5s, it's a self-edit — skip
+    # If Claude edited this exact file within 5s, it's a self-edit: skip
     if [[ "$fp" == "$file_path" ]] && (( age < 5 )); then
       exit 0
     fi
@@ -70,7 +70,7 @@ case "$file_name" in
     ;;
 esac
 
-# ── Output notification on stderr (async hook — stderr shows in terminal) ──
+# ── Output notification on stderr (async hook: stderr shows in terminal) ──
 short_path="${file_path/#$HOME/~}"
 cat >&2 <<EOF
 

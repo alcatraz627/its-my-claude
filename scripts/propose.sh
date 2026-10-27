@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# propose.sh — cross-session improvement backlog.
+# propose.sh: cross-session improvement backlog.
 #
 # Any Claude session (or the human) can file an improvement proposal that
 # persists in ~/.claude/proposals.jsonl and gets surfaced on demand.
@@ -19,20 +19,20 @@
 #   (work-size). project scopes a proposal so a successor agent can focus on it.
 #
 # Subcommands:
-#   add      — file a new proposal (--tier --project --links --effort --category --tags);
+#   add: file a new proposal (--tier --project --links --effort --category --tags);
 #              a repeat of an open need adds evidence to that row instead, auto-stubs
 #              wait for a third sighting, --allow-duplicate forces a new row
 #              (key logic: scripts/propose_intake.py)
-#   list     — query table; filter --status --tier --project --category --since --tag --link
-#   search   — full-text search over title/body/tags
-#   show     — print full detail (incl. updates trail) for one id
-#   update   — append a timestamped note/point to a proposal
-#   tier     — set/change a proposal's tier
-#   retire   — close with a terminal status (--as done|rejected|superseded|deferred|obsolete)
+#   list: query table; filter --status --tier --project --category --since --tag --link
+#   search: full-text search over title/body/tags
+#   show: print full detail (incl. updates trail) for one id
+#   update: append a timestamped note/point to a proposal
+#   tier: set/change a proposal's tier
+#   retire: close with a terminal status (--as done|rejected|superseded|deferred|obsolete)
 #              and a reason; every close (retire, done, reject) refuses an empty one
-#   done     — mark completed (alias for retire --as done)
-#   reject   — mark rejected (alias for retire --as rejected)
-#   help     — show usage
+#   done: mark completed (alias for retire --as done)
+#   reject: mark rejected (alias for retire --as rejected)
+#   help: show usage
 #
 # Example (as used by a Claude session mid-task):
 #   bash ~/.claude/scripts/propose.sh add \
@@ -258,7 +258,7 @@ cmd_list() {
 }
 
 # -----------------------------------------------------------------------------
-# search — full-text over title / body / tags (case-insensitive)
+# search: full-text over title / body / tags (case-insensitive)
 # -----------------------------------------------------------------------------
 cmd_search() {
   local term="${1:-}"
@@ -312,7 +312,7 @@ cmd_show() {
 }
 
 # -----------------------------------------------------------------------------
-# mutations — each rewrites the record with matching id, in place under lock.
+# mutations: each rewrites the record with matching id, in place under lock.
 # -----------------------------------------------------------------------------
 
 # Apply a jq transform to the record whose id matches (the program sees $id plus
@@ -331,7 +331,7 @@ mutate_record() {
   fi
   local tmp rc=0
   tmp=$(mktemp "${STORE}.XXXXXX") || { echo "propose: cannot create a temp file beside $STORE" >&2; exit 1; }
-  # Portable mkdir-lock — there is NO flock on macOS (see ledger-common.sh), so the
+  # Portable mkdir-lock: there is NO flock on macOS (see ledger-common.sh), so the
   # old `flock … || true` idiom silently degraded to no locking and raced concurrent
   # sessions' read-modify-write. Best-effort: give up after ~2s rather than hang.
   local dirlock="${LOCK}.d" i=0 held=0
@@ -353,7 +353,7 @@ mutate_status() {
   local new_status="$1" id="$2" reason="${3:-}" by="${4:-}"
   [ -z "$id" ] && { echo "propose $new_status: <id> required" >&2; exit 2; }
   # A reason that IS a flag means the caller used a syntax this tool lacks
-  # (e.g. --resolution) — the text would be silently dropped. Refuse loudly;
+  # (e.g. --resolution): the text would be silently dropped. Refuse loudly;
   # nine audit-trail entries were lost this way on 2026-07-10.
   case "$reason" in
     --*) echo "propose $new_status: reason looks like a flag ('$reason') — pass it positionally: propose.sh retire <id> --as $new_status \"<reason>\"" >&2; exit 2 ;;
@@ -377,7 +377,7 @@ mutate_status() {
   echo "✓ $id → $new_status${by:+ (superseded by $by)}"
 }
 
-# retire — close with any terminal status; the general form of done/reject.
+# retire: close with any terminal status; the general form of done/reject.
 cmd_retire() {
   local id="${1:-}"; shift || true
   local as="done" reason="" by=""
@@ -413,7 +413,7 @@ cmd_reject() {
   mutate_status "rejected" "$id" "$reason"
 }
 
-# update — append a timestamped note/point (append-only; keeps the original body).
+# update: append a timestamped note/point (append-only; keeps the original body).
 cmd_update() {
   local id="${1:-}"; shift || true
   local note="$*"
@@ -428,7 +428,7 @@ cmd_update() {
   echo "✓ $id + update"
 }
 
-# tier — set/change a proposal's tier (minor|moderate|project).
+# tier: set/change a proposal's tier (minor|moderate|project).
 cmd_tier() {
   local id="${1:-}" tier="${2:-}"
   { [ -z "$id" ] || [ -z "$tier" ]; } && { echo "propose tier: <id> <$VALID_TIERS> required" >&2; exit 2; }

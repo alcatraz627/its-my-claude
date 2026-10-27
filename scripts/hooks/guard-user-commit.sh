@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# guard-user-commit.sh — HARD commit gate for protected repos (PreToolUse:Bash).
+# guard-user-commit.sh: HARD commit gate for protected repos (PreToolUse:Bash).
 #
 # In designated repos, `git commit` is the USER's action, never the agent's. This
 # hook makes any agent-run `git commit` in a protected repo error unconditionally,
 # telling the agent to show the user the staged files + a proposed message and ask
 # THEM to commit. Born from the observation (2026-07-03) that advisory rules bind
-# unevenly across models — the fix is a gate the model cannot talk itself past.
+# unevenly across models: the fix is a gate the model cannot talk itself past.
 #
 # DELIBERATE DEVIATION: this gate has NO mute file. Every other hook offers
 # `touch ~/.claude/.no-*-gate`; a self-liftable mute is exactly the bypass this
@@ -18,7 +18,7 @@
 #     (entries are repo paths; matching by common-dir means every WORKTREE of a
 #     listed repo is covered automatically), OR
 #   - the worktree's toplevel contains .claude/require-user-commit (a tracked
-#     marker file — committed once, shared by all worktrees via git).
+#     marker file: committed once, shared by all worktrees via git).
 #
 # Commands are read through shellparse.py, so a commit inside bash -c, eval or
 # if/then is gated and a commit named in an echo or a heredoc is not. Only a
@@ -36,7 +36,7 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null)
 cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
 [ -n "$cmd" ] || exit 0
 
-# git <flags> commit — as a subcommand, tolerating -C/-c/long flags before it.
+# git <flags> commit: as a subcommand, tolerating -C/-c/long flags before it.
 GIT_COMMIT_RE='(^|[;&|[:space:](])git([[:space:]]+-C[[:space:]]+[^[:space:]]+|[[:space:]]+-c[[:space:]]+[^[:space:]]+|[[:space:]]+--[[:alnum:]-]+(=[^[:space:]]*)?)*[[:space:]]+commit([[:space:]]|$|")'
 [[ "$cmd" == *commit* ]] || exit 0
 # Read the commands the shell would run (shellparse.py), one per line, so a

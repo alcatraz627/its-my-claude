@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gcc-explore.sh — sit down with the gcc and look around.
+# gcc-explore.sh: sit down with the gcc and look around.
 #
 # The map is the X-ray (what is broken). Vitals are the EKG (which way it moves).
 # This is neither: it is the room itself, rendered so a human can FEEL the shape,
@@ -116,8 +116,8 @@ def shape():
         "map_path": MAP, "map_age_days": age_days(MAP), "map_when": when(MAP),
     }
 
-# Freshness: 14 days is the hard line. Between 7 and 14 — or any time a big
-# change landed — a shallow probe says HOW MUCH moved, so "stale" is a magnitude
+# Freshness: 14 days is the hard line. Between 7 and 14: or any time a big
+# change landed: a shallow probe says HOW MUCH moved, so "stale" is a magnitude
 # rather than a boolean. A migration entry or a named subsystem is the
 # big-change signal; ordinary doc edits and asset drops are not, by owner ruling.
 def freshness(shape_d):

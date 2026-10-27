@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 20-large-review-strategy.sh — surfaces the reusable "large review strategy"
+# 20-large-review-strategy.sh: surfaces the reusable "large review strategy"
 # report when a prompt is about reviewing a big / distributed / restructure-y
 # change. Reads prompt from stdin; emits ONE hint line or nothing. <100ms.
 #

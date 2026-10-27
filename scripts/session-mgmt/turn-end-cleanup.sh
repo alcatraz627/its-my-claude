@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# turn-end-cleanup.sh — Stop hook. Clears the in-progress turn-state file for
+# turn-end-cleanup.sh: Stop hook. Clears the in-progress turn-state file for
 # this session so a graceful exit is NOT reported as "incomplete turn" by the
 # stale-session detector on next launch.
 #
@@ -22,7 +22,7 @@ SAFE_SID=$(printf '%s' "$SESSION_ID" | tr -c 'a-zA-Z0-9_-' '_' | head -c 120)
 [ -z "$SAFE_SID" ] && exit 0
 
 rm -f "$STATE_DIR/$SAFE_SID.json" 2>/dev/null || true
-# Also drop the heartbeat counter — it's session-scoped and loses meaning
+# Also drop the heartbeat counter: it's session-scoped and loses meaning
 # across session boundaries. Turn counter is preserved for stats.
 rm -f "$STATE_DIR/heartbeat-$SAFE_SID" 2>/dev/null || true
 exit 0

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# 35-correction-loop.sh — UserPromptSubmit hinter: correction-density breaker.
+# 35-correction-loop.sh: UserPromptSubmit hinter: correction-density breaker.
 #
 # When the user corrects the agent repeatedly in a short span, the best move is
-# usually NOT to keep patching a poisoned context — a fresh session with a better
+# usually NOT to keep patching a poisoned context: a fresh session with a better
 # prompt beats a long one carrying accumulated corrections (Anthropic best-
 # practices §"manage your session"; this account runs a ~22%-correction profile).
 # This detects correction DENSITY (>=3 correction-shaped prompts in the last 6)
-# and once suggests the core-dump -> clear -> restate remedy — which the Resume
+# and once suggests the core-dump -> clear -> restate remedy: which the Resume
 # Contract now makes cheap.
 #
 # It measures density, not same-issue semantics, so it is a cheap additionalContext
@@ -21,7 +21,7 @@
 #
 # State: /tmp/claude-corrloop-<session>  (line 1 = window string of 0/1, last 6;
 #        line 2 = "fired" once armed). Mute: touch ~/.claude/.no-correction-loop
-#        (machine-wide, like every .no-* mute — see features/hook-design.md).
+#        (machine-wide, like every .no-* mute: see features/hook-design.md).
 
 set -uo pipefail
 PROMPT=$(cat 2>/dev/null || echo "")
@@ -60,7 +60,7 @@ if [ -f "$STATE" ]; then
 fi
 win="${win}${cls}"
 # Keep last 6 chars. Positive offset only: bash 3.2's `${v: -6}` returns EMPTY
-# when the string is shorter than 6 (verified) — using it here silently wiped
+# when the string is shorter than 6 (verified): using it here silently wiped
 # the window every turn until it reached length 6.
 len=${#win}
 [ "$len" -gt 6 ] && win="${win:$((len-6))}"

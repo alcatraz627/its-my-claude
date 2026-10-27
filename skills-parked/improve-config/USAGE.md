@@ -1,9 +1,9 @@
-# /improve-config — Usage Guide
+# /improve-config: Usage Guide
 
 ## What it does
 
-Audits the entire `frontend/.claude/` directory — skills, guidelines, personal config, and
-settings — identifies improvements across all files (consolidation, extraction, dead
+Audits the entire `frontend/.claude/` directory: skills, guidelines, personal config, and
+settings: identifies improvements across all files (consolidation, extraction, dead
 instruction removal, guideline promotion), applies user-approved changes, and optionally
 generates a summary HTML report.
 
@@ -39,7 +39,7 @@ what was added and why.
 ```
 
 Runs a deep comparative analysis across all skills, scores each on specificity vs.
-generality, and produces a ranked consolidation plan with rationale — then applies approved
+generality, and produces a ranked consolidation plan with rationale: then applies approved
 merges.
 
 ### Example 3: Global proofread
@@ -63,15 +63,15 @@ capability gaps, and guides the user through building each missing skill interac
 
 ## Caveats
 
-- Changes are never applied without your approval — the skill prints a full categorized
+- Changes are never applied without your approval: the skill prints a full categorized
   change list and asks which items to apply before writing anything.
-- `--dry-run` exits cleanly after the approval step with no file writes — safe to use for
+- `--dry-run` exits cleanly after the approval step with no file writes: safe to use for
   previewing any large or uncertain improvement run.
 - Dead instruction removals are conservative: instructions that handle edge cases not
   covered elsewhere are never removed, even if they appear redundant at first glance.
-- When `skill-extraction` items invoke `/create-skill`, the wizard runs interactively — you
+- When `skill-extraction` items invoke `/create-skill`, the wizard runs interactively: you
   will answer the standard Q&A questions for each new skill.
-- Operates strictly within `frontend/.claude/` — the rest of the project is readable for
+- Operates strictly within `frontend/.claude/`: the rest of the project is readable for
   context but never written to. `../backend/.claude/` is always read-only.
 
 ## Dependencies
@@ -89,7 +89,7 @@ capability gaps, and guides the user through building each missing skill interac
 
 ## Tips
 
-- Use `--dry-run` first on any large run — review the full improvement list before
+- Use `--dry-run` first on any large run: review the full improvement list before
   committing to changes.
 - `--scope` is the fastest way to focus a run: `--scope="reduce verbosity"` or
   `--scope="extract reusable logic"` meaningfully weights the analysis.

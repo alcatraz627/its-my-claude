@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# persona.sh — personas as a dispatch primitive, not a reading assignment.
+# persona.sh: personas as a dispatch primitive, not a reading assignment.
 #
 # The only personas that ever got used on this machine are the ones a script loads
 # onto a data path (juror, skeptical-reviewer: 29 logged dispatches) while file-read

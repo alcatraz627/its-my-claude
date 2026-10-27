@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# guard-cd-relative-path.test.sh — the guard catches the reported shape and stays
+# guard-cd-relative-path.test.sh: the guard catches the reported shape and stays
 # quiet on everything else.
 #
 # The quiet cases carry equal weight here, on purpose. A false block stalls the
@@ -13,14 +13,14 @@ set -uo pipefail
 G="$HOME/.claude/scripts/hooks/guard-cd-relative-path.sh"
 pass=0; fail=0
 
-# fires <label> <command>   — expects a block
+# fires <label> <command>: expects a block
 fires(){
   local out
   out=$(jq -cn --arg c "$2" '{tool_name:"Bash", tool_input:{command:$c}}' | bash "$G" 2>/dev/null)
   if printf '%s' "$out" | rg -q '"decision":"block"'; then pass=$((pass+1));
   else fail=$((fail+1)); echo "  FAIL (should block): $1"; echo "        cmd: $2"; fi
 }
-# quiet <label> <command>   — expects no block
+# quiet <label> <command>: expects no block
 quiet(){
   local out
   out=$(jq -cn --arg c "$2" '{tool_name:"Bash", tool_input:{command:$c}}' | bash "$G" 2>/dev/null)

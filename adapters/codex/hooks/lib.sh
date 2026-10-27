@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# lib.sh — what every codex-side gcc hook needs before it can do anything.
+# lib.sh: what every codex-side gcc hook needs before it can do anything.
 #
 # Codex hooks receive the same JSON on stdin that Claude Code hooks do
 # (session_id, cwd, hook_event_name, tool_name, tool_input...), so most gcc

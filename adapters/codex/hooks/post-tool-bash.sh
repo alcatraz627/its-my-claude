@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# post-tool-bash.sh — codex PostToolUse[Bash], async: land queued gcc calls now,
+# post-tool-bash.sh: codex PostToolUse[Bash], async: land queued gcc calls now,
 # hand the receipts back mid-turn, and tell the seat when its brief changed.
 #
 # Registered with "async": true, so codex does not wait on it. Codex delivers a

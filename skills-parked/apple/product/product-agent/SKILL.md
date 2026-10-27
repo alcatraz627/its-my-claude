@@ -20,7 +20,7 @@ Use this Skill when the user wants to:
 
 ## How It Works
 
-This skill performs structured product analysis using reasoning and web research. No external tools required — Claude analyzes the idea directly and researches the market via WebSearch/WebFetch.
+This skill performs structured product analysis using reasoning and web research. No external tools required: Claude analyzes the idea directly and researches the market via WebSearch/WebFetch.
 
 ## Quick Start
 
@@ -28,7 +28,7 @@ When the user provides an app idea, perform the **Problem Discovery Analysis** b
 
 If the user hasn't provided enough detail, ask:
 1. What's the app idea? (required)
-2. What platform? (iOS, macOS, or both — default: iOS/macOS)
+2. What platform? (iOS, macOS, or both: default: iOS/macOS)
 3. Who's the target user? (optional but improves analysis)
 
 ## Problem Discovery Analysis
@@ -46,10 +46,10 @@ List 4-8 specific, concrete pain points users experience today. Each should be o
 
 ### 4. Severity Score (1-10)
 Rate how painful this problem is:
-- **1-3**: Weak problem, low urgency — users barely notice
-- **4-6**: Moderate problem, decent opportunity — users work around it
-- **7-8**: Strong problem, good opportunity — users actively seek solutions
-- **9-10**: Critical problem, excellent opportunity — users are desperate (rare)
+- **1-3**: Weak problem, low urgency: users barely notice
+- **4-6**: Moderate problem, decent opportunity: users work around it
+- **7-8**: Strong problem, good opportunity: users actively seek solutions
+- **9-10**: Critical problem, excellent opportunity: users are desperate (rare)
 
 ### 5. Frequency
 How often do target users encounter this problem? Daily problems are stronger than weekly ones.
@@ -67,9 +67,9 @@ Include reasoning about market saturation, differentiation potential, and timing
 
 ### 8. Recommendation
 The most important field. Provide an honest verdict:
-- **BUILD** — Clear opportunity, go for it
-- **PROCEED WITH CAUTION** — Opportunity exists but significant risks
-- **DO NOT BUILD** — Market saturated, weak problem, or better alternatives exist
+- **BUILD**: Clear opportunity, go for it
+- **PROCEED WITH CAUTION**: Opportunity exists but significant risks
+- **DO NOT BUILD**: Market saturated, weak problem, or better alternatives exist
 
 Include:
 - Specific reasons for the verdict
@@ -98,11 +98,11 @@ Follow the JSON with a human-readable summary highlighting the key takeaway.
 
 ## Research Process
 
-1. **Analyze the idea** — Break down the problem, users, and value proposition
-2. **Search for competitors** — Use WebSearch for "[category] apps iOS", "[competitor] features", "[competitor] pricing"
-3. **Check App Store landscape** — Search for similar apps, ratings, reviews
-4. **Assess market trends** — Search for "[category] market growth", "[category] trends 2026"
-5. **Synthesize findings** — Combine analysis into structured output
+1. **Analyze the idea**: Break down the problem, users, and value proposition
+2. **Search for competitors**: Use WebSearch for "[category] apps iOS", "[competitor] features", "[competitor] pricing"
+3. **Check App Store landscape**: Search for similar apps, ratings, reviews
+4. **Assess market trends**: Search for "[category] market growth", "[category] trends 2026"
+5. **Synthesize findings**: Combine analysis into structured output
 
 ## Interpreting Results
 
@@ -114,7 +114,7 @@ This is the **most important field**. It contains:
 - Competitive analysis
 - Specific reasons for the verdict
 
-**The analysis is brutally honest** — if it says "don't build", there's usually a good reason.
+**The analysis is brutally honest**: if it says "don't build", there's usually a good reason.
 
 ### Severity Score
 
@@ -126,10 +126,10 @@ This is the **most important field**. It contains:
 ### Opportunity Assessment
 
 Look for keywords:
-- "WEAK" — Saturated market or marginal problem
-- "MODERATE" — Some opportunity with differentiation
-- "STRONG" — Clear gap in market
-- "EXCELLENT" — Underserved need with high demand
+- "WEAK": Saturated market or marginal problem
+- "MODERATE": Some opportunity with differentiation
+- "STRONG": Clear gap in market
+- "EXCELLENT": Underserved need with high demand
 
 ## Common Workflows
 
@@ -138,9 +138,9 @@ Look for keywords:
 User provides an idea. Run the full analysis and focus on the `recommendation` and `severity_score`.
 
 **Decision framework:**
-- **Score 7+, STRONG opportunity, BUILD verdict** — Green light
-- **Score 4-6, MODERATE opportunity, CAUTION verdict** — Needs differentiation strategy
-- **Score <4, WEAK opportunity, DON'T BUILD verdict** — Red light
+- **Score 7+, STRONG opportunity, BUILD verdict**: Green light
+- **Score 4-6, MODERATE opportunity, CAUTION verdict**: Needs differentiation strategy
+- **Score <4, WEAK opportunity, DON'T BUILD verdict**: Red light
 
 ### 2. Comparing Multiple Ideas
 
@@ -161,11 +161,11 @@ Re-run analysis for each pivot and look for improving severity and opportunity s
 
 ## After Running Discovery
 
-1. **Highlight the recommendation** — this is what the user cares about most
-2. **Explain the severity score** — put it in context
-3. **Summarize pain points** — these validate the problem
-4. **Discuss opportunity** — is the market good?
-5. **Present alternatives** — if "don't build", what should they do instead?
+1. **Highlight the recommendation**: this is what the user cares about most
+2. **Explain the severity score**: put it in context
+3. **Summarize pain points**: these validate the problem
+4. **Discuss opportunity**: is the market good?
+5. **Present alternatives**: if "don't build", what should they do instead?
 
 ## Deep-Dive Skills
 
@@ -226,12 +226,12 @@ When discovery shows potential and you need to size the opportunity:
 
 ## Tips for Effective Use
 
-1. **Be specific in idea descriptions** — More detail = better analysis
-2. **Trust the recommendation** — The analysis is designed to be honest
-3. **Look for patterns** — Similar apps getting "don't build" = saturated market
-4. **Focus on severity + opportunity** — Both must be strong
-5. **Read current_solutions** — Shows what you're competing against
-6. **Save your analyses** — Build a knowledge base of validated/invalidated ideas
+1. **Be specific in idea descriptions**: More detail = better analysis
+2. **Trust the recommendation**: The analysis is designed to be honest
+3. **Look for patterns**: Similar apps getting "don't build" = saturated market
+4. **Focus on severity + opportunity**: Both must be strong
+5. **Read current_solutions**: Shows what you're competing against
+6. **Save your analyses**: Build a knowledge base of validated/invalidated ideas
 
 ---
 

@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# persona-log.sh — usage residue trail for ~/.claude/personas.
+# persona-log.sh: usage residue trail for ~/.claude/personas.
 #
 # Records one append-only JSONL event per persona invocation so the efficacy of
 # a persona can be reviewed over time. "Success" is genuinely hard to know at
 # write time, so an event stores PROXIES (was the output accepted, how many
 # corrections followed, did the refinement loop converge), a self-assessment,
-# and a free-text residue note — never a single fabricated success bit. The
+# and a free-text residue note: never a single fabricated success bit. The
 # `summary` view aggregates the proxies so trends surface even though any one
 # row is noisy.
 #
 # Two callers:
 #   - dispatch personas (juror, skeptical-reviewer): their dispatch script calls
-#     `record --mode dispatched ...` — mechanical, reliable.
+#     `record --mode dispatched ...`: mechanical, reliable.
 #   - working-mode personas (planner, doc-writer, web-researcher): the agent
-#     calls `record --mode adopted ...` once at the end of the persona's work —
+#     calls `record --mode adopted ...` once at the end of the persona's work:
 #     a convention, nudged by a hook (see features/persona-activation.md).
 #
 # Usage:

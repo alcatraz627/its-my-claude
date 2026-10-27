@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# ledger-common.sh — the one sanctioned writer for gcc event-ledgers.
+# ledger-common.sh: the one sanctioned writer for gcc event-ledgers.
 #
 # A ledger is a durable, append-only JSONL stream of low-volume, human-meaningful
 # events a subsystem records about its own work (a mistake, an affirmation, a
-# proposal). Until now every ledger CLI re-implemented the same plumbing —
+# proposal). Until now every ledger CLI re-implemented the same plumbing:
 # id-stamping, timestamping, flock-serialized append, idempotent git commit,
-# kernel seal — by copy-paste. This file holds that plumbing once, extracted
+# kernel seal: by copy-paste. This file holds that plumbing once, extracted
 # byte-for-byte from the real callers (atone.sh, affirm.sh, propose.sh), so there
 # is one place to fix it and new ledgers inherit it for free.
 #
@@ -27,7 +27,7 @@ __LEDGER_COMMON_LOADED=1
 # inlined `_ts()` it replaces in atone/affirm/propose.
 ledger_ts() { date -u '+%Y-%m-%dT%H:%M:%SZ'; }
 
-# A new event id of the form  <prefix>-YYYYMMDD-HHMMSS-<2hex>  — prefixed (unique
+# A new event id of the form  <prefix>-YYYYMMDD-HHMMSS-<2hex>: prefixed (unique
 # across a cross-domain union), time-sortable, and citable as a deep-link anchor.
 # `ledger_id mist` reproduces atone's old `_new_id` exactly; the prefix is the
 # only thing that varies between ledgers (mist / aff / prop / puse / pin / alert).
@@ -41,22 +41,22 @@ ledger_id() {
 
 # Append one JSONL line to a store, serialized against concurrent writers.
 #
-# There is NO `flock` on macOS — `command -v flock` fails on this machine — so the
+# There is NO `flock` on macOS: `command -v flock` fails on this machine: so the
 # original `flock -x 9 2>/dev/null || true` idiom silently degraded to a bare
 # unlocked `>>` in every ledger that used it, and in the seven scripts that
 # copy-pasted it. It read as protected and wasn't. With many concurrent sessions
 # and lines longer than PIPE_BUF (a WAL checkpoint row easily is), that risks a
-# genuinely interleaved, corrupt line — the one failure an append-only ledger
+# genuinely interleaved, corrupt line: the one failure an append-only ledger
 # cannot tolerate, because there is no rewrite path to repair it.
 #
 # So the lock is a mkdir (atomic on every POSIX filesystem, no external binary),
-# the shape persona-log.sh already used — the only writer on this machine whose
+# the shape persona-log.sh already used: the only writer on this machine whose
 # locking actually worked. flock is still preferred when present, for the
 # platforms that have it.
 #
 # Still best-effort by design: after ~2s of contention it gives up and writes
 # anyway. A dropped log beats a hung hook, and a hook must never block the agent.
-# Append works even when the store is kernel-sealed with `chflags uappnd` — that
+# Append works even when the store is kernel-sealed with `chflags uappnd`: that
 # is the whole point of the append-only seal.
 #   ledger_append <store-path> <lock-path> <line>
 #
@@ -97,7 +97,7 @@ ledger_append() {
   return 0
 }
 
-# Commit a ledger's files to its repo, but only if something actually changed —
+# Commit a ledger's files to its repo, but only if something actually changed:
 # safe to call after every write without spamming empty commits. Silent on
 # failure (a ledger outside a repo, a detached HEAD) so a write is never blocked
 # by git. Byte-identical to atone/affirm's inlined `_git_commit`.
@@ -125,7 +125,7 @@ ledger_seal_append() {
   done
 }
 
-# Freeze a file completely — immutable + read-only (for finished RCA documents).
+# Freeze a file completely: immutable + read-only (for finished RCA documents).
 #   ledger_seal_immutable <file>...
 ledger_seal_immutable() {
   local f

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # PreCompact hook: comprehensive checkpoint before compaction
-# Shell-equivalent of /core-dump mini — captures all structured state that
+# Shell-equivalent of /core-dump mini: captures all structured state that
 # can be derived without LLM analysis of the conversation.
 #
 # Writes:
-#   _precompact-checkpoint.claude.md  — rich snapshot (this script)
-#   _checkpoint.claude.md             — symlink → above, only when no /core-dump
+#   _precompact-checkpoint.claude.md: rich snapshot (this script)
+#   _checkpoint.claude.md: symlink → above, only when no /core-dump
 #                                       already holds that pointer
-#   .claude/wal.md                    — CHECKPOINT block appended
+#   .claude/wal.md: CHECKPOINT block appended
 #
 # Fires on BOTH auto-compaction and manual /compact
 
@@ -235,7 +235,7 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 {
   cat << HEADER
-# Pre-Compaction Checkpoint — $(date -Iseconds)
+# Pre-Compaction Checkpoint: $(date -Iseconds)
 
 <!-- sessions: ${session_id:+${session_id}@$(date +%Y-%m-%d)} -->
 
@@ -374,7 +374,7 @@ FOOTER
 echo "  Checkpoint written to $dump_file" >&2
 
 # ── 4. Symlink _checkpoint.claude.md → _precompact-checkpoint.claude.md ──────
-# /catchup defaults to _checkpoint.claude.md — this makes it find our file, but
+# /catchup defaults to _checkpoint.claude.md: this makes it find our file, but
 # only when nothing better holds the pointer. A pointer already on a real
 # /core-dump stays there at ANY age: a shell scrape is never the better resume
 # source, and this snapshot is reachable by its own name and its own index

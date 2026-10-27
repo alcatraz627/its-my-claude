@@ -1,4 +1,4 @@
-# PLACEMENT.md — Where Does New Config Go?
+# PLACEMENT.md: Where Does New Config Go?
 
 > **Read this before adding any rule, feature doc, or convention to `~/.claude/`.**
 > This rule is the anchor. CLAUDE.md length will rot without it.
@@ -7,7 +7,7 @@
 
 ## The problem this solves
 
-Frontier LLMs reliably follow ~150–200 instructions. Claude Code burns ~50 on its own system prompt. A CLAUDE.md past ~200 lines degrades adherence — rules in the tail get quietly ignored, not merely loaded at token cost. This rule keeps always-loaded content in the zone the model can actually follow.
+Frontier LLMs reliably follow ~150–200 instructions. Claude Code burns ~50 on its own system prompt. A CLAUDE.md past ~200 lines degrades adherence: rules in the tail get quietly ignored, not merely loaded at token cost. This rule keeps always-loaded content in the zone the model can actually follow.
 
 **Adherence, not token cost, is the forcing function.** Prompt caching makes bloat cheap, but uncached OR not, a 600-line instruction set produces measurably worse rule-following than a 200-line one.
 
@@ -16,14 +16,14 @@ Frontier LLMs reliably follow ~150–200 instructions. Claude Code burns ~50 on 
 ## First: which MECHANISM? (situation → extension)
 
 Before the two-axis rule (which decides *where a doc goes*), decide *what kind of
-thing to build at all*. Each mechanism has a recognizable trigger moment — build it
+thing to build at all*. Each mechanism has a recognizable trigger moment: build it
 when the moment arrives, not preemptively. (Adapted from Anthropic's official
 "build your setup over time" guidance; the enforcement column is this account's
 own doctrine.)
 
 | The moment you notice… | Build a… | Because |
 |---|---|---|
-| Claude got a convention wrong **twice** | CLAUDE.md line / `rules/` entry | Prose is advisory — fine for a preference, but only ~70% adhered |
+| Claude got a convention wrong **twice** | CLAUDE.md line / `rules/` entry | Prose is advisory: fine for a preference, but only ~70% adhered |
 | A rule **must hold every time, zero exceptions** | **hook** (PreToolUse/Stop) | Hooks are deterministic; prose is a request, a hook is a guarantee ([[features/hook-design.md]]) |
 | You typed the same multi-step prompt a **third** time | user-invocable **skill** | Captures the playbook; loads on demand, near-zero always-on cost |
 | A side task floods the conversation with output | **sub-agent** | Isolated context; returns a distilled summary ([[rules/sub-agent-outputs.md]]) |
@@ -39,18 +39,18 @@ Only once you've chosen "a rule/feature/convention doc" do the two axes below ap
 
 Every piece of config answers BOTH axes.
 
-### Axis 1 — Category (what is it?)
+### Axis 1: Category (what is it?)
 
 | Category | Holds | Example |
 |---|---|---|
-| `rules/` | Behavioral/process rules — **what Claude MUST do** | `rules/testing.md`, `rules/git.md` |
-| `features/` | Tool/subsystem/integration docs — **how a thing works** | `features/llm-mini.md`, `features/claudew.md` |
-| `conventions/` | Output/authoring standards — **how artifacts look** | `conventions/html-output.md`, `conventions/cli-help-design.md` |
+| `rules/` | Behavioral/process rules: **what Claude MUST do** | `rules/testing.md`, `rules/git.md` |
+| `features/` | Tool/subsystem/integration docs: **how a thing works** | `features/llm-mini.md`, `features/claudew.md` |
+| `conventions/` | Output/authoring standards: **how artifacts look** | `conventions/html-output.md`, `conventions/cli-help-design.md` |
 | *(root)* | Indices + session-critical state + memory | `LOOKUP.md`, `mistake-patterns.md` (DERIVED, see `features/atone.md`), `compliments.md` (DERIVED), `memory/global/` |
 
 Sub-categorization uses naming only (no deeper directories). E.g. `conventions/html-*` groups all HTML rules.
 
-### Axis 2 — Tier (how often does it apply?)
+### Axis 2: Tier (how often does it apply?)
 
 | Tier | Activation condition | Placement |
 |---|---|---|
@@ -121,7 +121,7 @@ stale_after_days: 90
 | `skill:` | Claude skill name | `skill:create-skill`, `skill:doctor` |
 | `mcp:` | MCP server name | `mcp:mongodb`, `mcp:vercel` |
 
-Triggers are **advisory** — they guide agent self-selection when scanning LOOKUP.md + CLAUDE.md pointers at session start. No hook auto-loads files *based on triggers* today (the `rules/` directory auto-load is a separate native mechanism; see "Loading reality" above); triggers document intent so an upgrade path exists.
+Triggers are **advisory**: they guide agent self-selection when scanning LOOKUP.md + CLAUDE.md pointers at session start. No hook auto-loads files *based on triggers* today (the `rules/` directory auto-load is a separate native mechanism; see "Loading reality" above); triggers document intent so an upgrade path exists.
 
 **Rule:** `brief` must be sufficient on its own for the agent to decide "load or skip." `triggers` are secondary hints for literal/domain matching.
 
@@ -129,11 +129,11 @@ Triggers are **advisory** — they guide agent self-selection when scanning LOOK
 
 - `stale_after_days: 90` default
 - `/doctor` flags sub-files where `updated + stale_after_days < today`
-- A stale flag is a review prompt, not an auto-delete — content may be stable
+- A stale flag is a review prompt, not an auto-delete: content may be stable
 
 ---
 
-## How to decide where new content goes — flowchart
+## How to decide where new content goes: flowchart
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -180,7 +180,7 @@ Triggers are **advisory** — they guide agent self-selection when scanning LOOK
 
 4. **Use un-namespaced triggers.** `triggers: [claudew, github]` is illegal. Must be `tool:claudew`, `topic:github-repos`.
 
-5. **Create sub-categories as nested directories.** No `features/mcp/catalog.md` — use `features/mcp-catalog.md`. The tree stays flat for `grep`-ability.
+5. **Create sub-categories as nested directories.** No `features/mcp/catalog.md`: use `features/mcp-catalog.md`. The tree stays flat for `grep`-ability.
 
 6. **Copy rules across sub-files.** If two sub-files need the same rule, it lives in `rules/*.md` and both use `related:` to link.
 
@@ -192,7 +192,7 @@ Triggers are **advisory** — they guide agent self-selection when scanning LOOK
 
 - **Every addition** follows the flowchart above
 - **Every sub-file** carries full frontmatter (no exceptions)
-- **CLAUDE.md never exceeds 200 lines** — if an edit would push past, something else must move out first
+- **CLAUDE.md never exceeds 200 lines**: if an edit would push past, something else must move out first
 - **Validator:** run `bash ~/.claude/scripts/validate-triggers.sh` after any sub-file add/rename
 - **Rules index:** after adding/renaming/removing a `rules/*.md` file, regenerate the always-on menu with `bash ~/.claude/scripts/rules-index.sh` (it derives from each rule's `brief:`; if a similar rule exists, refine it instead of duplicating)
 - **Folders census:** after creating, renaming, or removing a top-level directory under `~/.claude/`, regenerate the census with `bash ~/.claude/scripts/folders-index.sh` AND add the directory's Intent row to the hand-written table above the marker in `FOLDERS.md`. The census went 51 days without a run once (2026-07-16 to 2026-09-05) and its own heuristic then condemned fourteen live directories as debris. Note the script takes no `-h`: any argument other than `--stdout` regenerates in place

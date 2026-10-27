@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# notify.sh — macOS notification for Claude Code hooks
+# notify.sh: macOS notification for Claude Code hooks
 #
 # Usage: notify.sh <title> <subtitle> <message> [sound] [group]
 #
@@ -40,7 +40,7 @@ if command -v terminal-notifier &>/dev/null; then
       -timeout 30 \
       2>/dev/null
     # terminal-notifier blocks until clicked/dismissed/timeout.
-    # On click it returns the activation bundle ID — focus Ghostty.
+    # On click it returns the activation bundle ID: focus Ghostty.
     osascript -e 'tell application "Ghostty" to activate' 2>/dev/null || true
   ) &
   disown

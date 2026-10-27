@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# zreclaim — recon and safe cleanup of reproducible cache/build data.
+# zreclaim: recon and safe cleanup of reproducible cache/build data.
 #
 # Finds accumulated disposable data (node/python/rust build dirs, tool caches),
 # ranks it biggest-first, and lets you delete a pareto selection. Also reports
@@ -59,7 +59,7 @@ resolve_root() {
 }
 
 # ── candidate discovery ──────────────────────────────────────────────────────
-# raw_candidates ROOT — matched cache/build dirs, pruned (no descent), .git skipped.
+# raw_candidates ROOT: matched cache/build dirs, pruned (no descent), .git skipped.
 raw_candidates() {
   local root=$1
   find "$root" \
@@ -77,7 +77,7 @@ raw_candidates() {
     \) -prune -print 2>/dev/null
 }
 
-# is_candidate_name BASE PARENT — the closed allowlist gate (defense in depth for delete).
+# is_candidate_name BASE PARENT: the closed allowlist gate (defense in depth for delete).
 is_candidate_name() {
   local base=$1 parent=$2
   case "$base" in
@@ -90,7 +90,7 @@ is_candidate_name() {
   esac
 }
 
-# is_tracked PATH — 0 if git tracks it (→ excluded from deletion), 1 otherwise.
+# is_tracked PATH: 0 if git tracks it (→ excluded from deletion), 1 otherwise.
 is_tracked() {
   local p=$1 repo rel
   repo=$(git -C "${p%/*}" rev-parse --show-toplevel 2>/dev/null) || return 1
@@ -99,7 +99,7 @@ is_tracked() {
   [ -n "$(git -C "$repo" ls-files -- "$rel" 2>/dev/null | head -1)" ]
 }
 
-# collect OUT_DEL OUT_TRK ROOTS... — classify every candidate into deletable vs
+# collect OUT_DEL OUT_TRK ROOTS...: classify every candidate into deletable vs
 # excluded-because-tracked. Lines: size_kb<TAB>category<TAB>abspath.
 collect() {
   local out_del=$1 out_trk=$2; shift 2
@@ -124,7 +124,7 @@ EOF
 }
 
 # ── pareto selection ─────────────────────────────────────────────────────────
-# pareto SORTED_DESC_FILE PCT — echo the fewest top lines whose cumulative size
+# pareto SORTED_DESC_FILE PCT: echo the fewest top lines whose cumulative size
 # reaches PCT% of the total. size_kb is field 1.
 pareto() {
   local file=$1 pct=$2 total=0 acc=0 target
@@ -162,7 +162,7 @@ find_repos() {  # abspaths of git repo roots under a root (main repos; .git dir)
   done
 }
 
-# large_loose_files ROOT MIN_MB — files >= MIN_MB that are NOT inside a deletable
+# large_loose_files ROOT MIN_MB: files >= MIN_MB that are NOT inside a deletable
 # cache dir and NOT under .git. These are flagged, never deleted (a stray video,
 # dataset, dump, log, etc. the user should decide about). Emits: bytes<TAB>path.
 large_loose_files() {
@@ -275,7 +275,7 @@ cmd_scan() {
     printf '  %snone over 5M.%s\n' "$D" "$R"
   fi
 
-  # large loose files OUTSIDE deletion scope (report only — you decide)
+  # large loose files OUTSIDE deletion scope (report only: you decide)
   printf '\n%slarge files not auto-deletable (>= %sMB, report only — you decide):%s\n' "$B" "$big" "$R"
   local loose; loose=$(mktemp)
   for r in "${rr[@]}"; do large_loose_files "$r" "$big"; done > "$loose"

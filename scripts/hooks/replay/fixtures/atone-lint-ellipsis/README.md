@@ -8,9 +8,9 @@ is the shared `atone-lint.sh` catalog, invoked live by both
 
 | fixture                            | rule | class | expected                                   |
 |------------------------------------|------|-------|--------------------------------------------|
-| `fp-prose-pipe-ellipsis.md`        | R7   | FP    | silent — `…` in prose / inline-code pipes  |
-| `fp-review-doc-destructive.md`     | R3   | FP    | silent — a doc quoting destructive UI code |
-| `tp-rendered-truncated-table.md`   | R7   | TP    | fires — `…` at fixed-width cell boundaries  |
+| `fp-prose-pipe-ellipsis.md`        | R7   | FP    | silent: `…` in prose / inline-code pipes  |
+| `fp-review-doc-destructive.md`     | R3   | FP    | silent: a doc quoting destructive UI code |
+| `tp-rendered-truncated-table.md`   | R7   | TP    | fires: `…` at fixed-width cell boundaries  |
 
 Run:
 

@@ -62,7 +62,7 @@ attributes.namedLocation = "San Francisco, CA"
 
 ### Small Datasets (< 100 items)
 
-Index all at once — no batching needed:
+Index all at once: no batching needed:
 
 ```swift
 let items = articles.map { $0.toSearchableItem() }
@@ -229,7 +229,7 @@ func cleanupSpotlightIndex() async {
 
 ### NSUserActivity for Eligibility
 
-Core Spotlight indexing makes content findable in Spotlight. NSUserActivity makes content eligible for **Siri Suggestions** — proactive recommendations based on user behavior patterns.
+Core Spotlight indexing makes content findable in Spotlight. NSUserActivity makes content eligible for **Siri Suggestions**: proactive recommendations based on user behavior patterns.
 
 ```swift
 // Create an activity when the user views content
@@ -280,7 +280,7 @@ struct ArticleDetailView: View {
 
 ### relatedUniqueIdentifier: The Key Connection
 
-Setting `relatedUniqueIdentifier` on the NSUserActivity's `contentAttributeSet` links it to the corresponding `CSSearchableItem`. This prevents duplicate results in Spotlight — the system shows one result backed by both the indexed item and the activity.
+Setting `relatedUniqueIdentifier` on the NSUserActivity's `contentAttributeSet` links it to the corresponding `CSSearchableItem`. This prevents duplicate results in Spotlight: the system shows one result backed by both the indexed item and the activity.
 
 ```swift
 // CSSearchableItem with ID "article-123"
@@ -329,11 +329,11 @@ func donateIntent(for article: Article) {
 
 Apple uses several signals to rank results from your app:
 
-1. **Engagement frequency** — Items the user taps on more often rank higher
-2. **Recency** — Recently indexed or viewed items rank higher
-3. **Title match quality** — Exact title matches rank above keyword matches
-4. **Content type relevance** — Matching the user's likely intent
-5. **NSUserActivity signals** — Items with user activity + prediction eligibility get boosted
+1. **Engagement frequency**: Items the user taps on more often rank higher
+2. **Recency**: Recently indexed or viewed items rank higher
+3. **Title match quality**: Exact title matches rank above keyword matches
+4. **Content type relevance**: Matching the user's likely intent
+5. **NSUserActivity signals**: Items with user activity + prediction eligibility get boosted
 
 ### Improving Your Ranking
 

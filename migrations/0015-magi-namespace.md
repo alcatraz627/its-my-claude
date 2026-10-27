@@ -6,7 +6,7 @@ status: complete
 date: 2026-05-17
 ---
 
-# Migration 0015 — std::claude::magi Namespace
+# Migration 0015: std::claude::magi Namespace
 
 ## Why
 
@@ -54,7 +54,7 @@ trash ~/.claude/scripts/magi
 
 ## Phases
 
-1. **Phase 1** — Research doc ✅
-2. **Phase 2** — Design doc ✅
-3. **Phase 3** — MVP build (scripts + skill + register) ✅
-4. **Phase 4** — First-task validation ⏳
+1. **Phase 1**: Research doc ✅
+2. **Phase 2**: Design doc ✅
+3. **Phase 3**: MVP build (scripts + skill + register) ✅
+4. **Phase 4**: First-task validation ⏳

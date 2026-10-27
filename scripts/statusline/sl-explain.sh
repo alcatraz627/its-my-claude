@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# sl-explain.sh — Explain statusline widgets: what they show and when they fire
+# sl-explain.sh: Explain statusline widgets: what they show and when they fire
 # Usage: sl-explain.sh [L1|L2|L3|L4|<widget-name>]
 # Filter examples:
-#   sl-explain.sh L2        — only L2 widgets
-#   sl-explain.sh rate      — only the 'rate' widget
-#   sl-explain.sh (none)    — full reference
+#   sl-explain.sh L2: only L2 widgets
+#   sl-explain.sh rate: only the 'rate' widget
+#   sl-explain.sh (none): full reference
 
 FILTER="${1:-}"
 

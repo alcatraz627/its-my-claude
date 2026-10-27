@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gum-tui.sh — Non-TTY gum wrapper library for Claude Code skills
+# gum-tui.sh: Non-TTY gum wrapper library for Claude Code skills
 #
 # Source this file in any skill script to get styled TUI output that works
 # inside Claude Code's sandboxed Bash tool (no TTY required).
@@ -19,7 +19,7 @@
 # All functions here use ONLY gum components that work without a TTY:
 #   gum style, gum format, gum log, gum join, gum table --print
 
-# NOTE: No `set -euo pipefail` here — this file is meant to be sourced,
+# NOTE: No `set -euo pipefail` here: this file is meant to be sourced,
 # and those options would bleed into the caller's shell, causing silent
 # failures in interactive sessions.
 
@@ -180,7 +180,7 @@ gum_header() {
     "$title"
 }
 
-# Subheader — single border, subdued color
+# Subheader: single border, subdued color
 # Usage: gum_subheader "Section Name"
 gum_subheader() {
   local title="${1:?Usage: gum_subheader TITLE}"
@@ -191,7 +191,7 @@ gum_subheader() {
     "$title"
 }
 
-# Section divider — thin line with label
+# Section divider: thin line with label
 # Usage: gum_divider "Phase 2"
 gum_divider() {
   local label="${1:-}"
@@ -308,7 +308,7 @@ gum_columns() {
     "$(gum style --border rounded --padding '0 1' --width "$width" "$right")"
 }
 
-# Labeled panel — bordered box with a title line
+# Labeled panel: bordered box with a title line
 # Usage: gum_panel "Title" "Content line 1" "Content line 2"
 gum_panel() {
   local title="${1:?Usage: gum_panel TITLE CONTENT...}"
@@ -358,7 +358,7 @@ gum_emoji() {
 
 # ─── Progress & Status ───────────────────────────────────────────────
 
-# Progress counter — "[3/10] Processing: filename"
+# Progress counter: "[3/10] Processing: filename"
 # Usage: gum_progress 3 10 "Processing" "auth-middleware.ts"
 gum_progress() {
   local current="${1:?}" total="${2:?}" verb="${3:-Processing}" item="${4:-}"
@@ -402,7 +402,7 @@ gum_complete() {
 
 # ─── Dashboard ───────────────────────────────────────────────────────
 
-# Multi-panel dashboard — combines panels side by side
+# Multi-panel dashboard: combines panels side by side
 # Usage: gum_dashboard \
 #          "Status|✓ All passing|✓ No warnings" \
 #          "Metrics|Files: 14|Skills: 12|Lines: 2847"

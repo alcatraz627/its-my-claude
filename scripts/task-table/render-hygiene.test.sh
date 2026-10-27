@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# render-hygiene.test.sh — the three ways the table wasted the reader's attention.
+# render-hygiene.test.sh: the three ways the table wasted the reader's attention.
 #
 # All three shipped together on 2026-09-04 after the owner called the output
 # "FUCKING DIFFICULT AND CRYPTIC TO READ VISUALLY". None is a crash; each is a

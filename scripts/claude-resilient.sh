@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-# claude-resilient.sh — DEPRECATED. Does not reliably do what its name claims.
+# claude-resilient.sh: DEPRECATED. Does not reliably do what its name claims.
 #
 # This was meant to auto-retry `claude` through API errors. It does not work for
 # either real use case, verified 2026-06-18 against 48h of transcripts
 # (assets/reports/20260618-api-error-48h-analysis/findings.md):
 #
-#   - INTERACTIVE: a transient 429 surfaces inline and the REPL keeps running —
+#   - INTERACTIVE: a transient 429 surfaces inline and the REPL keeps running:
 #     the process never exits non-zero, so the exit-code-gated retry below can
 #     never fire. Clean quit=0 and Ctrl+C=130 are both non-retryable.
 #   - HEADLESS (`-p`): even here the retry is bare `claude --continue` with no
-#     args, which DROPS the original `-p` prompt — so the one case it could
+#     args, which DROPS the original `-p` prompt: so the one case it could
 #     theoretically serve, it corrupts.
 #
 # Kept only as a record of the approach. Do NOT alias `claude` to this and do
 # NOT rely on it. For the real lessons see the report above; for interactive
 # recovery there is no process-wrapper fix (Claude Code emits no Stop/Notification
-# on an API-error abort) — that path is handled by hooks/api-recovery-nudge.sh.
+# on an API-error abort): that path is handled by hooks/api-recovery-nudge.sh.
 #
 # Env (legacy, only if you knowingly run the deprecated path):
 #   CLAUDE_BIN, CLAUDE_RESILIENT_MAX_RETRIES, CLAUDE_RESILIENT_BASE_SLEEP,
@@ -43,7 +43,7 @@ log() {
 "$CLAUDE_BIN" "$@"
 EXIT=$?
 
-# Success or explicitly disabled — exit now
+# Success or explicitly disabled: exit now
 if [ "$EXIT" -eq 0 ] || [ "$DISABLED" = "1" ]; then
   exit "$EXIT"
 fi

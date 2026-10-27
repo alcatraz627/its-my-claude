@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
-# skill-log.sh — efficacy residue trail for ~/.claude skills.
+# skill-log.sh: efficacy residue trail for ~/.claude skills.
 #
 # Records one append-only JSONL event per skill run so a skill's efficacy can be
 # reviewed over time. Sibling of persona-log.sh: skills are not personas, so they
-# get their own namespace and stream, but the model is identical — "success" is
+# get their own namespace and stream, but the model is identical: "success" is
 # hard to know at write time, so an event stores PROXIES (was the output accepted,
 # did the loop converge, how many correction rounds, how many user corrections
 # followed) plus a free-text residue note and an optional per-skill metrics blob.
 # No single fabricated success bit; the summary view aggregates the noisy proxies.
 #
-# Efficacy is result per unit of the USER's effort counting rework — never speed.
+# Efficacy is result per unit of the USER's effort counting rework: never speed.
 # So the load-bearing proxies are `outcome` (did they keep it) and `corrections`
 # (how much rework followed), not wall-clock.
 #
@@ -39,10 +39,10 @@ mkdir -p "$(dirname "$EVENTS")"
 source "$(dirname "${BASH_SOURCE[0]}")/ledger/ledger-common.sh"
 _now() { ledger_ts; }
 
-# Emit a numeric value for jq --argjson, else `null` — a fat-fingered --corrections
+# Emit a numeric value for jq --argjson, else `null`: a fat-fingered --corrections
 # must not crash the event under set -e (jq --argjson rejects non-JSON).
 _numjson() { case "$1" in ''|*[!0-9]*) printf 'null';; *) printf '%s' "$1";; esac; }
-# Emit valid JSON as-is for --metrics, else `null` — never let a malformed blob
+# Emit valid JSON as-is for --metrics, else `null`: never let a malformed blob
 # (or an empty arg, which jq accepts as empty output, not an error) abort the record.
 _objjson() {
   [ -z "$1" ] && { printf 'null'; return; }

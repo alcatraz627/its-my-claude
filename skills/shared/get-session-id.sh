@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# get-session-id.sh — resolve the current Claude session ID.
+# get-session-id.sh: resolve the current Claude session ID.
 #
 # Usage (source it, then call the function):
 #   source ~/.claude/skills/shared/get-session-id.sh
@@ -10,7 +10,7 @@
 #   2. ~/.claude/.current-session-id file (written by SessionStart hook)
 #   3. Empty string (no session context available)
 #
-# Designed to be fast — no jq, no subshells on the happy path.
+# Designed to be fast: no jq, no subshells on the happy path.
 
 get_session_id() {
     # 1. Explicit env var

@@ -6,7 +6,7 @@ status: in-progress
 date: 2026-05-17
 ---
 
-# Migration 0008 — Symlink-Cleanup for Migration 0007 Leftovers
+# Migration 0008: Symlink-Cleanup for Migration 0007 Leftovers
 
 ## Why
 
@@ -43,8 +43,8 @@ Audit doc: `~/.claude/assets/docs/20260517-gcc-audit-v1.md` § A.
 
 ## What does NOT change
 
-- Subdir copies (`session-mgmt/X.sh`, `wal/X.sh`, `statusline/X.sh`) — they're the canonical originals, unchanged.
-- Settings.json hook commands — already reference subdir paths.
+- Subdir copies (`session-mgmt/X.sh`, `wal/X.sh`, `statusline/X.sh`): they're the canonical originals, unchanged.
+- Settings.json hook commands: already reference subdir paths.
 - All other scripts at `~/.claude/scripts/*.sh` (~85 untouched files).
 
 ## Verification
@@ -63,12 +63,12 @@ for s in <name>; do
 done
 ```
 
-If a symlink is missed by an external script, the symlink approach makes it find-and-load correctly anyway (filesystem-transparent). Rollback is only needed if a script reads its own `$0` to find sibling files via relative path — none of these 15 do.
+If a symlink is missed by an external script, the symlink approach makes it find-and-load correctly anyway (filesystem-transparent). Rollback is only needed if a script reads its own `$0` to find sibling files via relative path: none of these 15 do.
 
 ## Phases
 
-1. **Phase 1 — Convert all 15 to symlinks** (this session) ⏳
-2. **Phase 2 — 3-month review (2026-08-17)** — if no external caller has materialized, trash all 15 symlinks. ⏳
+1. **Phase 1: Convert all 15 to symlinks** (this session) ⏳
+2. **Phase 2: 3-month review (2026-08-17)**: if no external caller has materialized, trash all 15 symlinks. ⏳
 
 ## Notes / followups
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# stakes-tier.sh — resolve a project path to its stakes tier: high | low.
+# stakes-tier.sh: resolve a project path to its stakes tier: high | low.
 #
 # "Stakes" is how much a sloppy mistake there actually costs. high = code the
 # user also works in and/or that ships to production (Versable, ~/.claude); low =
@@ -15,7 +15,7 @@
 #   3. No match, no remote -> "low".
 #
 # Usage:  stakes-tier.sh [PATH]      (PATH defaults to $PWD)
-# Output: one line — high | low
+# Output: one line: high | low
 
 set -uo pipefail
 

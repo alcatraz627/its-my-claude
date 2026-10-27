@@ -9,14 +9,14 @@ This document shows real-world workflows for using the Product Agent skill effec
 **What to do:** Provide the idea and let the skill run its analysis.
 
 **What to Check:**
-1. `severity_score` — Is it 6+?
-2. `opportunity` — Does it say "STRONG" or "MODERATE"?
-3. `recommendation` — Does it say "BUILD" or "PROCEED WITH CAUTION"?
+1. `severity_score`: Is it 6+?
+2. `opportunity`: Does it say "STRONG" or "MODERATE"?
+3. `recommendation`: Does it say "BUILD" or "PROCEED WITH CAUTION"?
 
 **Decision Making:**
-- **Score 7+, STRONG opportunity, BUILD verdict** — Green light
-- **Score 4-6, MODERATE opportunity, CAUTION verdict** — Needs differentiation strategy
-- **Score <4, WEAK opportunity, DON'T BUILD verdict** — Red light
+- **Score 7+, STRONG opportunity, BUILD verdict**: Green light
+- **Score 4-6, MODERATE opportunity, CAUTION verdict**: Needs differentiation strategy
+- **Score <4, WEAK opportunity, DON'T BUILD verdict**: Red light
 
 ---
 
@@ -66,7 +66,7 @@ Winner: Idea A (clear green light)
 **Example flow:**
 
 **Initial idea:** "Note-taking app for quick capture"
-**Result:** "DO NOT BUILD — market saturated"
+**Result:** "DO NOT BUILD: market saturated"
 
 **Pivot attempts:**
 1. "Note-taking app specifically for academic research with citation management" (targeting researchers)
@@ -122,7 +122,7 @@ Winner: Idea A (clear green light)
 
 ### Ignoring "Don't Build" Recommendations
 
-**Bad:** Agent says "DO NOT BUILD — saturated market." You think "But I'll make mine simpler!"
+**Bad:** Agent says "DO NOT BUILD: saturated market." You think "But I'll make mine simpler!"
 
 **Why it fails:** The analysis considered the market. If it says don't build, there's usually a very good reason.
 
@@ -142,7 +142,7 @@ Winner: Idea A (clear green light)
 
 ### Building Despite Weak Validation
 
-**Bad:** Severity 3/10, WEAK opportunity, "DO NOT BUILD" — but you build anyway.
+**Bad:** Severity 3/10, WEAK opportunity, "DO NOT BUILD": but you build anyway.
 
 **Why it fails:** If it's a learning project, fine. But don't expect commercial success.
 

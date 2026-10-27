@@ -1,6 +1,6 @@
 ---
 name: gotchas-update
-description: Appends a new dated entry to gotchas.md after a bug fix, architectural discovery, or lesson learned — keeping the project's developer pitfall log current.
+description: Appends a new dated entry to gotchas.md after a bug fix, architectural discovery, or lesson learned, keeping the project's developer pitfall log current.
 allowed-tools: Read, Edit, Write, Bash
 user-invocable: true
 argument-hint: "[description]"
@@ -8,7 +8,7 @@ argument-hint: "[description]"
 
 ## Brief
 
-Prompts for a short description of a new pitfall or lesson learned, then appends a dated entry to `gotchas.md` — the project's existing developer notes file. Run after fixing an unexpected bug or discovering a non-obvious behavior.
+Prompts for a short description of a new pitfall or lesson learned, then appends a dated entry to `gotchas.md`: the project's existing developer notes file. Run after fixing an unexpected bug or discovering a non-obvious behavior.
 
 # Gotchas Update
 
@@ -16,9 +16,9 @@ Keeps the project's `gotchas.md` file current with dated entries about pitfalls,
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -37,7 +37,7 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Read the Argument
+## Phase 1: Read the Argument
 
 If a `description` argument was provided, use it directly.
 
@@ -52,7 +52,7 @@ Wait for input.
 
 ---
 
-## Phase 2 — Read Existing Gotchas
+## Phase 2: Read Existing Gotchas
 
 Read `gotchas.md` to understand the existing format:
 
@@ -65,7 +65,7 @@ ls gotchas.md 2>/dev/null
 
 ---
 
-## Phase 3 — Format the New Entry
+## Phase 3: Format the New Entry
 
 Format the entry to match the existing file's style, or use this default:
 
@@ -84,7 +84,7 @@ date '+%Y-%m-%d'
 
 ---
 
-## Phase 4 — Append the Entry
+## Phase 4: Append the Entry
 
 Acquire a lock, append the entry, release:
 
@@ -112,7 +112,7 @@ bash ~/.claude/skills/shared/lock-file.sh release "gotchas.md" "gotchas-update"
 
 ---
 
-## Phase 5 — Confirm
+## Phase 5: Confirm
 
 Print:
 
@@ -125,6 +125,6 @@ Print:
 
 ## Notes
 
-- This skill appends only — never modifies or deletes existing entries.
+- This skill appends only: never modifies or deletes existing entries.
 - If the description is vague, ask one clarifying question before writing.
 - The `gotchas.md` file is in the project root (same level as `package.json`).

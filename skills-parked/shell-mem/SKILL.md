@@ -13,7 +13,7 @@ Prefer MCP tools (discoverable, no path memorization). Bash fallbacks are listed
 | Tool | Description |
 |---|---|
 | `shell_tail(n, date)` | Show recent log entries (default: 30 lines, today) |
-| `shell_search(query, scope)` | Search history — scope: `today` \| `week` \| `month` \| `all` |
+| `shell_search(query, scope)` | Search history: scope: `today` \| `week` \| `month` \| `all` |
 | `shell_active(days)` | List active (not done) background processes from last N days |
 | `shell_mark_done(session_id, cmd, date?)` | Mark a BG process as finished |
 | `shell_cleanup()` | Delete logs older than 60 days |
@@ -42,10 +42,10 @@ Prefer MCP tools (discoverable, no path memorization). Bash fallbacks are listed
 ```
 
 ## Log file location
-`~/.claude/shell-logs/YYYY-MM-DD.md` — one file per day. 60-day retention.
+`~/.claude/shell-logs/YYYY-MM-DD.md`: one file per day. 60-day retention.
 
 ## Notes
 - Context auto-injected at `UserPromptSubmit` when active BG entries exist
 - Active BG entries from previous sessions are shown at `SessionStart` as carryover
-- PIDs are verified with `kill -0` — orphaned entries are flagged separately
+- PIDs are verified with `kill -0`: orphaned entries are flagged separately
 - Use `shell_active` first before `shell_tail` when you only care about what's running

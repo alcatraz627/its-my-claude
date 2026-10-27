@@ -103,7 +103,7 @@ Generate:
 5. `ScreenshotProcessor.swift` -- Loads captured images, routes through framing and captioning
 6. `CaptionOverlay.swift` -- Renders localized marketing text onto screenshot images
 
-For macOS-only or lightweight needs, offer `sips-screenshot-process.sh` as an alternative to the Swift processor. Uses macOS's built-in `sips` command — zero dependencies.
+For macOS-only or lightweight needs, offer `sips-screenshot-process.sh` as an alternative to the Swift processor. Uses macOS's built-in `sips` command: zero dependencies.
 
 ### Step 6: Create Export Script
 Generate:

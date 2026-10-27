@@ -59,9 +59,9 @@ Ask user via AskUserQuestion:
    - Attributed text (styled text with font, color, shadow)
 
 2. **Watermark positioning?**
-   - Corner (top-left, top-right, bottom-left, bottom-right) — recommended for branding
-   - Center — recommended for free-tier watermark
-   - Tiled (repeated diagonal pattern) — strongest protection for freemium
+   - Corner (top-left, top-right, bottom-left, bottom-right): recommended for branding
+   - Center: recommended for free-tier watermark
+   - Tiled (repeated diagonal pattern): strongest protection for freemium
 
 3. **Watermark removal trigger?**
    - Subscription (auto-remove while subscription is active)
@@ -69,9 +69,9 @@ Ask user via AskUserQuestion:
    - Never (always present, e.g., branding/attribution)
 
 4. **Opacity level?**
-   - Subtle (0.15–0.25) — light branding
-   - Medium (0.3–0.5) — visible but non-intrusive — recommended
-   - Strong (0.6–0.8) — clear protection for free-tier
+   - Subtle (0.15–0.25): light branding
+   - Medium (0.3–0.5): visible but non-intrusive: recommended
+   - Strong (0.6–0.8): clear protection for free-tier
 
 5. **Platform?**
    - iOS only
@@ -85,18 +85,18 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `WatermarkStyle.swift` — Configuration struct for content, position, opacity, scale, padding
-2. `WatermarkPosition.swift` — Enum with computed CGRect placement relative to image bounds
-3. `WatermarkRenderer.swift` — CoreGraphics-based renderer that composites watermark onto source image
+1. `WatermarkStyle.swift`: Configuration struct for content, position, opacity, scale, padding
+2. `WatermarkPosition.swift`: Enum with computed CGRect placement relative to image bounds
+3. `WatermarkRenderer.swift`: CoreGraphics-based renderer that composites watermark onto source image
 
 ### Step 3: Create UI Files
-4. `WatermarkOverlayView.swift` — SwiftUI overlay view for live preview of watermark on content
+4. `WatermarkOverlayView.swift`: SwiftUI overlay view for live preview of watermark on content
 
 ### Step 4: Create Manager
-5. `WatermarkManager.swift` — @Observable manager that applies/removes watermarks, integrates with subscription status
+5. `WatermarkManager.swift`: @Observable manager that applies/removes watermarks, integrates with subscription status
 
 ### Step 5: Create Modifier
-6. `WatermarkImageModifier.swift` — SwiftUI ViewModifier for declarative watermark application
+6. `WatermarkImageModifier.swift`: SwiftUI ViewModifier for declarative watermark application
 
 ### Step 6: Determine File Location
 Check project structure:
@@ -314,7 +314,7 @@ let context = CIContext(options: [.workingColorSpace: CGColorSpaceCreateDeviceRG
 
 ## References
 
-- **templates.md** — All production Swift templates for the watermark engine
-- Related: `generators/social-export` — Export watermarked images for social sharing
-- Related: `generators/paywall-generator` — Paywall UI that triggers watermark removal
-- Related: `generators/image-loading` — Image pipeline to load and cache watermarked assets
+- **templates.md**: All production Swift templates for the watermark engine
+- Related: `generators/social-export`: Export watermarked images for social sharing
+- Related: `generators/paywall-generator`: Paywall UI that triggers watermark removal
+- Related: `generators/image-loading`: Image pipeline to load and cache watermarked assets

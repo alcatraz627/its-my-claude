@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Appends a shell command entry to today's log file.
 # Usage: shell-log-append.sh <session_id> <command> <is_bg> [pid]
-# Env:   DIYMEN_PORT=<port>  — detected port for server-type BG commands
+# Env:   DIYMEN_PORT=<port>: detected port for server-type BG commands
 # Always exits 0.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

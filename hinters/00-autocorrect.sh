@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 00-autocorrect.sh — Layer 0/1 typo correction hinter.
+# 00-autocorrect.sh: Layer 0/1 typo correction hinter.
 #
 # Reads prompt text from stdin. Emits correction hints to stdout.
 # Exits silently if no corrections found.
@@ -37,7 +37,7 @@ with open(prompt_file, 'r') as f:
 if not prompt:
     sys.exit(0)
 
-# Load custom terms (Layer 0 — known-good words)
+# Load custom terms (Layer 0: known-good words)
 custom_terms = set()
 try:
     with open(custom_file, 'r') as f:
@@ -48,7 +48,7 @@ try:
 except OSError:
     pass
 
-# Load typo map (Layer 1 — deterministic corrections)
+# Load typo map (Layer 1: deterministic corrections)
 typo_map = {}
 try:
     with open(typo_file, 'r') as f:
@@ -134,11 +134,11 @@ for word in words:
     if lower in blacklist:
         continue
 
-    # Layer 0: custom terms — known-good, skip
+    # Layer 0: custom terms: known-good, skip
     if lower in custom_terms:
         continue
 
-    # Layer 1: typo map — deterministic correction
+    # Layer 1: typo map: deterministic correction
     if lower in typo_map:
         corrected = typo_map[lower]
         # Preserve original case pattern

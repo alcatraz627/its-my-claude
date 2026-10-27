@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# hand-rendered-tasks-stop.sh — Stop hook: catch a task list the agent painted
+# hand-rendered-tasks-stop.sh: Stop hook: catch a task list the agent painted
 # by hand instead of running the tool that owns the shape.
 #
 # THE FAILURE. Asked "what's pending" or "show me the tasks", an agent builds a

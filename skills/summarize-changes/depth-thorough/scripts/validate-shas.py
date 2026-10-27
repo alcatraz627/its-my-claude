@@ -39,7 +39,7 @@ def is_known(sha):
 
 # Only treat a token as a SHA candidate when it appears in a commit-citation
 # context (Commits: line, or backtick-wrapped hex). Avoid clobbering hex that is
-# actually a color, hash id, etc. — restrict to 7-12 lowercase hex.
+# actually a color, hash id, etc.: restrict to 7-12 lowercase hex.
 SHA_RE = re.compile(r"\b([0-9a-f]{7,12})\b")
 
 with open(themes_path) as f:
@@ -48,7 +48,7 @@ with open(themes_path) as f:
 fixes = []
 def repl(m):
     sha = m.group(1)
-    # Heuristic: skip pure-decimal (years, counts) — require at least one a-f letter
+    # Heuristic: skip pure-decimal (years, counts): require at least one a-f letter
     if not re.search(r"[a-f]", sha):
         return sha
     if is_known(sha):

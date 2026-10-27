@@ -113,7 +113,7 @@ def splice(lines, tasks):
             return lines, "skip-empty-would-wipe"
         return lines[:b_start] + block + lines[b_end + 1 :], "replaced"
 
-    # No block yet — drop one into the Todos section (creating it if needed).
+    # No block yet: drop one into the Todos section (creating it if needed).
     header = find_todos_header(lines)
     if header is not None:
         insert_at = header + 1
@@ -123,7 +123,7 @@ def splice(lines, tasks):
         spacer = [""] if (insert_at < len(lines) and lines[insert_at].strip()) else []
         return prefix + [""] + block + spacer + suffix, "inserted"
 
-    # No Todos section at all — append one.
+    # No Todos section at all: append one.
     tail = lines[:]
     if tail and tail[-1].strip():
         tail.append("")

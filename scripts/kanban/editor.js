@@ -1,4 +1,4 @@
-// editor.js — the editing core every text surface gets (#13 layer 0).
+// editor.js: the editing core every text surface gets (#13 layer 0).
 //
 // Its own file for the same reason match.js is: nothing here touches the DOM
 // until a function is CALLED, so bun can require it and test the history
@@ -40,8 +40,8 @@ function attachBuffer(el, { id, onChange } = {}) {
   const wantKey = id || el.id || "buffer";
   // A static element reused across surfaces (the note popover, the card
   // composer) reaches here once per surface it shows. A second listener set
-  // would fight the first — each stack's undo dispatches a synthetic input
-  // that re-enters the other's record(), and the net movement is zero — so a
+  // would fight the first: each stack's undo dispatches a synthetic input
+  // that re-enters the other's record(), and the net movement is zero: so a
   // repeat call re-keys the binding it already has instead of attaching again.
   if (el.dataset.buffered === "1") {
     const bound = bufBound.get(el);

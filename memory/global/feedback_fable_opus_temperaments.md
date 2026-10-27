@@ -1,5 +1,5 @@
 ---
-name: Fable vs Opus — two temperaments, floor then strength
+name: Fable vs Opus, two temperaments, floor then strength
 description: Fable is intent-eager (smarter, delivers finished results); Opus is literal and mechanical (reliable, in-lane). Not a quality ranking. Hold each above a floor, then let each work to its type.
 type: feedback
 ---

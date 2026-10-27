@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop hook: show visual session summary (stderr only — no context injection)
+# Stop hook: show visual session summary (stderr only: no context injection)
 set -uo pipefail
 
 input=$(cat)

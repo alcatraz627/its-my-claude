@@ -177,7 +177,7 @@ Searchable combinations:
 
 ## Cross-Field Deduplication
 
-Apple indexes words from **all three fields** for the same locale. A word only needs to appear **once** — putting it in multiple fields wastes characters and provides zero ranking benefit.
+Apple indexes words from **all three fields** for the same locale. A word only needs to appear **once**: putting it in multiple fields wastes characters and provides zero ranking benefit.
 
 ### Priority Cascade
 
@@ -247,7 +247,7 @@ When generating keyword recommendations, always verify:
 | Title word in Keywords? | Remove from Keywords |
 | Subtitle word in Keywords? | Remove from Keywords |
 | Plural/singular variant across fields? | Keep only in highest field |
-| Stop words (a, the, and, for)? | Don't include anywhere — auto-indexed |
+| Stop words (a, the, and, for)? | Don't include anywhere: auto-indexed |
 
 ## Common Mistakes
 
@@ -315,7 +315,7 @@ EXPECTED COMBINATIONS
 
 ### Localization Tips
 
-- Don't just translate—research local search terms
+- Don't just translate: research local search terms
 - Some markets search in English even for local apps
 - Character limits may be tighter in some languages
 - Hire native speakers to verify keywords make sense

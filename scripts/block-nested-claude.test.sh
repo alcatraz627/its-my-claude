@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# block-nested-claude.test.sh — runnable checks for block-nested-claude.sh.
+# block-nested-claude.test.sh: runnable checks for block-nested-claude.sh.
 #
 # The guard exists to stop a WRITE landing in ~/.claude/.claude/. Two things it
 # must get right, and historically got backwards:
@@ -12,7 +12,7 @@
 #      the nested directory must be at least as easy as creating it was.
 #
 # The same relative path is CORRECT in a normal project (a project's .claude/ is
-# a real subdir) and wrong ONLY in the gcc, so cwd decides — never the text.
+# a real subdir) and wrong ONLY in the gcc, so cwd decides: never the text.
 #
 # Run: bash ~/.claude/scripts/block-nested-claude.test.sh   (exit 0 = all pass)
 
@@ -59,7 +59,7 @@ ok "Bash ls the nested dir"               "$(verdict "$(bash_j "$GCC" "ls -la $N
 
 echo "── each fix pinned individually (these fail if ONLY that fix is reverted) ──"
 # Pins quote-blanking: a legit write whose CONTENT mentions the nest. This is what
-# rules/shell.md does — documents the anti-pattern. Without blanking the quoted
+# rules/shell.md does: documents the anti-pattern. Without blanking the quoted
 # span is read as a target and the write is refused.
 ok "write to a normal path, content mentions nest" \
    "$(verdict "$(bash_j "$GCC" "echo 'see $NEST/ for detail' > $GCC/assets/notes.md")")" allow

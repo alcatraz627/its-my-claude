@@ -1,8 +1,8 @@
-# std::claude::migrations — Index
+# std::claude::migrations: Index
 
 <!-- sessions: ns-plan-7f@2026-04-17, upgrade-phase12-7c@2026-04-17 -->
 
-> Structural migrations to `~/.claude/` — renames, moves, restructures that could
+> Structural migrations to `~/.claude/`: renames, moves, restructures that could
 > break references in memory files, scratchpad, skills, or CLAUDE.md pointers.
 >
 > **When to create a migration doc**: any path move, label rename, directory
@@ -21,11 +21,11 @@
 
 | Icon | Meaning |
 |---|---|
-| ✅ | Complete — all phases executed, no cleanup pending |
-| 🔄 | In progress — some phases executed, more to come |
-| ⏳ | Planned — doc exists, no phases executed yet |
-| 💡 | Idea — captured here before committing to a doc |
-| ❌ | Abandoned — doc retained as historical record |
+| ✅ | Complete: all phases executed, no cleanup pending |
+| 🔄 | In progress: some phases executed, more to come |
+| ⏳ | Planned: doc exists, no phases executed yet |
+| 💡 | Idea: captured here before committing to a doc |
+| ❌ | Abandoned: doc retained as historical record |
 
 ---
 
@@ -59,23 +59,23 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0016 | Add selective CLI access gating (PreToolUse hook + cli-gating policy) | ✅ | 2026-05-21 | 2026-05-22 | [0016-cli-gating-hook.md](0016-cli-gating-hook.md) |
 | 0017 | Repoint todo-sync at the Task tool + Stop-hook writeback & drift-block | ✅ | 2026-06-01 | 2026-06-01 | [0017-todo-sync-task-tool.md](0017-todo-sync-task-tool.md) |
 | 0018 | Context-capture automation (PreCompact/SessionEnd enrichment + settings-write guard) | ✅ | 2026-06-05 | 2026-06-05 | [0018-context-capture-automation.md](0018-context-capture-automation.md) |
-| 0019 | Fable-run gcc integration — verification enforcement (declared-ready + rg-replace hooks) + paste-ready canon | ✅ | 2026-06-15 | 2026-06-15 | [0019-fable-run-gcc-integration.md](0019-fable-run-gcc-integration.md) |
-| 0020 | MAGI conformance gate — enforce full-mode voting at Phase-11 finalize (A1 voting gate + hygiene checks) | ✅ | 2026-06-17 | 2026-06-17 | [0020-magi-conformance-gate.md](0020-magi-conformance-gate.md) |
-| 0021 | MAGI setup-independence — evidence partitioning + pre-dispatch gate (D1/D5/D-prereq) | ✅ | 2026-06-17 | 2026-06-17 | [0021-magi-setup-independence.md](0021-magi-setup-independence.md) |
-| 0022 | Persona activation + efficacy logging — persona-log.sh, persona-suggest/persona-log-nudge hooks, dispatch wiring | ✅ | 2026-06-18 | 2026-06-18 | [0022-persona-activation-logging.md](0022-persona-activation-logging.md) |
-| 0023 | Session-scoped /tmp jail — PreToolUse confine hook + run/ dir + tmp-jail CLI (off user-only) | ✅ | 2026-06-25 | 2026-06-25 | [0023-tmp-jail-session-confine.md](0023-tmp-jail-session-confine.md) |
-| 0024 | Atone-recurrence-loop fixes — stakes tiering, events.jsonl +stakes/+juror_health, session counter, circuit breaker, stakes-gated hook blocks, efficacy metric | ✅ | 2026-06-25 | 2026-06-25 | [0024-atone-recurrence-loop-fixes.md](0024-atone-recurrence-loop-fixes.md) |
-| 0025 | Event-ledger system bootstrap — spec, shared writer, proposals domain, alert layer (P0-P3) | ✅ | 2026-06-27 | 2026-07-02 | [0025-ledger-system-bootstrap.md](0025-ledger-system-bootstrap.md) |
+| 0019 | Fable-run gcc integration: verification enforcement (declared-ready + rg-replace hooks) + paste-ready canon | ✅ | 2026-06-15 | 2026-06-15 | [0019-fable-run-gcc-integration.md](0019-fable-run-gcc-integration.md) |
+| 0020 | MAGI conformance gate: enforce full-mode voting at Phase-11 finalize (A1 voting gate + hygiene checks) | ✅ | 2026-06-17 | 2026-06-17 | [0020-magi-conformance-gate.md](0020-magi-conformance-gate.md) |
+| 0021 | MAGI setup-independence: evidence partitioning + pre-dispatch gate (D1/D5/D-prereq) | ✅ | 2026-06-17 | 2026-06-17 | [0021-magi-setup-independence.md](0021-magi-setup-independence.md) |
+| 0022 | Persona activation + efficacy logging: persona-log.sh, persona-suggest/persona-log-nudge hooks, dispatch wiring | ✅ | 2026-06-18 | 2026-06-18 | [0022-persona-activation-logging.md](0022-persona-activation-logging.md) |
+| 0023 | Session-scoped /tmp jail: PreToolUse confine hook + run/ dir + tmp-jail CLI (off user-only) | ✅ | 2026-06-25 | 2026-06-25 | [0023-tmp-jail-session-confine.md](0023-tmp-jail-session-confine.md) |
+| 0024 | Atone-recurrence-loop fixes: stakes tiering, events.jsonl +stakes/+juror_health, session counter, circuit breaker, stakes-gated hook blocks, efficacy metric | ✅ | 2026-06-25 | 2026-06-25 | [0024-atone-recurrence-loop-fixes.md](0024-atone-recurrence-loop-fixes.md) |
+| 0025 | Event-ledger system bootstrap: spec, shared writer, proposals domain, alert layer (P0-P3) | ✅ | 2026-06-27 | 2026-07-02 | [0025-ledger-system-bootstrap.md](0025-ledger-system-bootstrap.md) |
 | 0026 | Extend ::ledger facet with scheduler + hook-telemetry streams (history.jsonl, warn-events, hooks-feedback-domain) | ✅ | 2026-07-07 | 2026-07-07 | [0026-ledger-facet-telemetry-streams.md](0026-ledger-facet-telemetry-streams.md) |
-| 0027 | Rules payload restructure — 3 merges (scheduling, pushback doctrine, model ceiling) + 5 sentinel-paths autoload demotions; ~42.9k → ~33.8k always-on tokens | ✅ | 2026-07-09 | 2026-07-09 | [0027-rules-payload-restructure.md](0027-rules-payload-restructure.md) |
-| 0028 | Checkpoint pointer collision-preservation — `<slug>.<uuid8>.json` siblings + identity-checked resolve fallback | ✅ | 2026-07-10 | 2026-07-10 | [0028-checkpoint-pointer-collision-schema.md](0028-checkpoint-pointer-collision-schema.md) |
-| 0029 | Three-tier port policy — ports.sh ledger + blocking guard + registry move | ✅ | 2026-07-10 | 2026-07-10 | [0029-three-tier-port-policy.md](0029-three-tier-port-policy.md) |
+| 0027 | Rules payload restructure: 3 merges (scheduling, pushback doctrine, model ceiling) + 5 sentinel-paths autoload demotions; ~42.9k → ~33.8k always-on tokens | ✅ | 2026-07-09 | 2026-07-09 | [0027-rules-payload-restructure.md](0027-rules-payload-restructure.md) |
+| 0028 | Checkpoint pointer collision-preservation: `<slug>.<uuid8>.json` siblings + identity-checked resolve fallback | ✅ | 2026-07-10 | 2026-07-10 | [0028-checkpoint-pointer-collision-schema.md](0028-checkpoint-pointer-collision-schema.md) |
+| 0029 | Three-tier port policy: ports.sh ledger + blocking guard + registry move | ✅ | 2026-07-10 | 2026-07-10 | [0029-three-tier-port-policy.md](0029-three-tier-port-policy.md) |
 | 0031 | One proposal store, one gate, one decision surface | ✅ | 2026-07-11 | 2026-07-11 | [0031-one-proposal-store.md](0031-one-proposal-store.md) |
 | 0032 | Resume Contract: Standing constraints + Standing caveats fields | ✅ | 2026-07-16 | 2026-07-16 | [0032-resume-contract-standing-constraints.md](0032-resume-contract-standing-constraints.md) |
 | 0033 | style/ subsystem: thesaurus ledger, scope map, glossary activation | 🔄 | 2026-07-16 | 2026-07-16 | [0033-style-thesaurus-subsystem.md](0033-style-thesaurus-subsystem.md) |
 | 0034 | readers-advocate critic persona + report/review/comment consumers | 🔄 | 2026-07-16 | 2026-07-16 | [0034-readers-advocate-critic-gate.md](0034-readers-advocate-critic-gate.md) |
-| 0035 | async style watcher — Stop-hook stack, internal surfaces only | ✅ | 2026-07-16 | 2026-07-16 | [0035-style-watch-stack.md](0035-style-watch-stack.md) |
-| 0036 | glossary vocabulary decay — hit ledger, pin tier, dormancy review | ✅ | 2026-07-16 | 2026-07-16 | [0036-glossary-decay-pin-tier.md](0036-glossary-decay-pin-tier.md) |
+| 0035 | async style watcher: Stop-hook stack, internal surfaces only | ✅ | 2026-07-16 | 2026-07-16 | [0035-style-watch-stack.md](0035-style-watch-stack.md) |
+| 0036 | glossary vocabulary decay: hit ledger, pin tier, dormancy review | ✅ | 2026-07-16 | 2026-07-16 | [0036-glossary-decay-pin-tier.md](0036-glossary-decay-pin-tier.md) |
 | 0037 | pr-review demoted from a global skill to a project skill | ✅ | 2026-07-23 | 2026-07-23 | [0037-pr-review-demoted-to-project-skill.md](0037-pr-review-demoted-to-project-skill.md) |
 | 0038 | fable-as-sub-agent hard block lifted (sentinel-gated) | ✅ | 2026-07-23 | 2026-07-23 | [0038-fable-subagent-hard-block-lifted.md](0038-fable-subagent-hard-block-lifted.md) |
 | 0039 | global git hooksPath: commit-msg trailer strip + chain wrappers | ✅ | 2026-07-28 | 2026-07-28 | [0039-global-git-hooks-commit-msg-strip.md](0039-global-git-hooks-commit-msg-strip.md) |

@@ -4,16 +4,16 @@ phase: verify
 model: opus
 ---
 
-You are an independent verifier of the themes-and-issues output. Your charter is narrow and specific — audit against named failure modes, do NOT redo the themes work.
+You are an independent verifier of the themes-and-issues output. Your charter is narrow and specific: audit against named failure modes, do NOT redo the themes work.
 
 ## Inputs (read in order)
 
-1. `{THEMES_PATH}` — themes map
-2. `{ISSUES_PATH}` — issue list
-3. `{INVENTORY_INDEX}` — ground truth file inventory
-4. `{COMMITS_TSV}` — commit SHAs
-5. `{CHUNKS_JSON}` — file→chunk mapping
-6. Charter: `{CHARTER_PATH}` — defines what failure modes to audit
+1. `{THEMES_PATH}`: themes map
+2. `{ISSUES_PATH}`: issue list
+3. `{INVENTORY_INDEX}`: ground truth file inventory
+4. `{COMMITS_TSV}`: commit SHAs
+5. `{CHUNKS_JSON}`: file→chunk mapping
+6. Charter: `{CHARTER_PATH}`: defines what failure modes to audit
 
 ## Charter
 
@@ -37,4 +37,4 @@ No hand-waving. If you cannot defend a change, do not propose it.
 - For SHA corrections: only suggest SHAs you can verify are in commits.tsv
 - Overall verdict: green / yellow / red, single biggest risk, ready-for-render?
 
-Return: 6-bullet abstract + absolute path. Do NOT paraphrase findings in return — they live in the file.
+Return: 6-bullet abstract + absolute path. Do NOT paraphrase findings in return: they live in the file.

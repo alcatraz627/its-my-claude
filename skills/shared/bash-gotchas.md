@@ -11,7 +11,7 @@
 
 **Symptom:** A command like `cat ~/.claude/.mcp.json | jq 'keys'` runs as a background task and never completes, even with `2>/dev/null`.
 
-**Root cause:** `jq` reads from stdin via the pipe. If the pipe doesn't close cleanly (e.g. due to operator precedence issues or the shell environment), `jq` blocks waiting for more input. Adding `2>/dev/null` only suppresses stderr — it does not fix stdin blocking.
+**Root cause:** `jq` reads from stdin via the pipe. If the pipe doesn't close cleanly (e.g. due to operator precedence issues or the shell environment), `jq` blocks waiting for more input. Adding `2>/dev/null` only suppresses stderr: it does not fix stdin blocking.
 
 **Fix:** Use the `Read` tool instead of `cat` for any file inspection task. Reserve `Bash` for commands that genuinely need shell execution.
 
@@ -29,9 +29,9 @@ cat ~/.claude/.mcp.json 2>/dev/null | jq 'keys' 2>/dev/null
 
 ## 2. Shell operator precedence with `||` / `&&` / `|`
 
-**Symptom:** A chain like `A || echo "NOT FOUND" && B | C` behaves unexpectedly — `C` may receive stdin from an earlier part of the pipeline rather than just `B`.
+**Symptom:** A chain like `A || echo "NOT FOUND" && B | C` behaves unexpectedly: `C` may receive stdin from an earlier part of the pipeline rather than just `B`.
 
-**Root cause:** In bash, `|` (pipe) has higher precedence than `&&` and `||`. The expression `A || B && C | D` is parsed as `A || B && (C | D)` — not `(A || B) && (C | D)`. Mixed chains are error-prone.
+**Root cause:** In bash, `|` (pipe) has higher precedence than `&&` and `||`. The expression `A || B && C | D` is parsed as `A || B && (C | D)`: not `(A || B) && (C | D)`. Mixed chains are error-prone.
 
 **Fix:** Use explicit subshells or `{ ... }` grouping, or break into separate commands.
 
@@ -61,14 +61,14 @@ Only fall back to `cat` in a Bash command if you need output to pipe into anothe
 
 ---
 
-## 4. Interactive user prompts in shell scripts — the `/dev/tty` pattern
+## 4. Interactive user prompts in shell scripts: the `/dev/tty` pattern
 
 **Use case:** You want a script to ask the user a question (pick a program, confirm an action,
 enter a value) even when it's called from a pipeline, a skill, or another script that may
 have stdin redirected.
 
 **Why it works:** When stdin (`fd 0`) is piped or redirected, `read` silently gets EOF and
-returns an empty string — the prompt never appears and no input is received. Reading
+returns an empty string: the prompt never appears and no input is received. Reading
 explicitly from `/dev/tty` bypasses stdin entirely and connects directly to the controlling
 terminal. This always works as long as a terminal is attached (i.e. the user is present).
 
@@ -114,12 +114,12 @@ prompt_choice() {
 **Companion tips:**
 
 - Add `2>/dev/null` after `read </dev/tty` so non-interactive CI environments don't see
-  "bad file descriptor" errors — they'll just get an empty string and fall through to the
+  "bad file descriptor" errors: they'll just get an empty string and fall through to the
   default case.
-- Detect optional tools at runtime with `command -v <tool> &>/dev/null` — shell aliases
+- Detect optional tools at runtime with `command -v <tool> &>/dev/null`: shell aliases
   (like a `.zprofile` `glow=cat`) are **not** available in `bash` subprocesses. Check for
   the actual binary.
-- Print the file path **before** prompting, not after — that way the path is visible
+- Print the file path **before** prompting, not after: that way the path is visible
   even if the user Ctrl-C's out of the prompt.
 - If you want a `y/n` confirm, same pattern applies:
   ```bash
@@ -128,6 +128,6 @@ prompt_choice() {
   [[ "${yn,,}" == "y" ]] || { echo "Aborted."; exit 0; }
   ```
 
-**Real-world use:** `~/.claude/scripts/statusline/sl-open.sh` — prompts for program choice
+**Real-world use:** `~/.claude/scripts/statusline/sl-open.sh`: prompts for program choice
 (code / nano / google-chrome / glow / open) after resolving a statusline file alias.
 Added 2026-04-14.

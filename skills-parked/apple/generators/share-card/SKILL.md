@@ -51,14 +51,14 @@ Ask user via AskUserQuestion:
    - Statistics (data-heavy with charts/numbers emphasis)
 
 2. **Share destinations?**
-   - Social media (Instagram, Twitter/X — optimized aspect ratios)
+   - Social media (Instagram, Twitter/X: optimized aspect ratios)
    - Messages / General sharing (flexible sizing)
-   - Both — recommended
+   - Both: recommended
 
 3. **Card size preset?**
-   - Square (1080x1080 — Instagram, general purpose)
-   - Story (1080x1920 — Instagram Stories, TikTok)
-   - Wide (1200x630 — Twitter/X, Open Graph)
+   - Square (1080x1080: Instagram, general purpose)
+   - Story (1080x1920: Instagram Stories, TikTok)
+   - Wide (1200x630: Twitter/X, Open Graph)
    - Custom (user-specified dimensions)
 
 4. **Include QR code?**
@@ -78,18 +78,18 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `ShareCardContent.swift` — Protocol and concrete content types (achievement, statistics, quote)
-2. `ShareCardStyle.swift` — Enum with predefined styles, colors, fonts, layout configuration
-3. `ShareCardRenderer.swift` — `@MainActor` renderer using `ImageRenderer` to convert SwiftUI views to images
-4. `ShareCardView.swift` — The SwiftUI view that composes the card layout (background, content, branding)
+1. `ShareCardContent.swift`: Protocol and concrete content types (achievement, statistics, quote)
+2. `ShareCardStyle.swift`: Enum with predefined styles, colors, fonts, layout configuration
+3. `ShareCardRenderer.swift`: `@MainActor` renderer using `ImageRenderer` to convert SwiftUI views to images
+4. `ShareCardView.swift`: The SwiftUI view that composes the card layout (background, content, branding)
 
 ### Step 3: Create UI Files
-5. `ShareCardSheet.swift` — Complete sharing sheet with style picker, live preview, and `ShareLink`
+5. `ShareCardSheet.swift`: Complete sharing sheet with style picker, live preview, and `ShareLink`
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `QRCodeOverlay.swift` — If QR code selected (CoreImage-based QR generator)
-- `ShareCardPreview.swift` — SwiftUI Preview helpers for design iteration
+- `QRCodeOverlay.swift`: If QR code selected (CoreImage-based QR generator)
+- `ShareCardPreview.swift`: SwiftUI Preview helpers for design iteration
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -273,31 +273,31 @@ Best for: reading, journaling, social apps.
 
 ### Memory for Large Renders
 - A 1080x1920 card at `@3x` scale = 3240x5760 pixels = ~75 MB in memory
-- Render at `@2x` maximum for share cards — social platforms compress anyway
+- Render at `@2x` maximum for share cards: social platforms compress anyway
 - Release the rendered image after sharing completes
 - Use `autoreleasepool` if generating multiple cards in sequence
 
 ### ImageRenderer Limitations
-- `ImageRenderer` is `@MainActor` — must be called from the main thread
+- `ImageRenderer` is `@MainActor`: must be called from the main thread
 - Minimum iOS 16 / macOS 13
 - Does not render `Map`, `Camera`, or `WebView` content
-- Animations are not captured — renders a single frame
+- Animations are not captured: renders a single frame
 - `ScrollView` content beyond visible bounds is not rendered
 
 ### Cross-Platform Rendering
 - On macOS, `ImageRenderer` produces `NSImage` via `nsImage` property
 - On iOS, use `uiImage` property
 - Use the `PlatformImage` typealias pattern for shared code
-- `UIGraphicsImageRenderer` is UIKit-only — prefer `ImageRenderer` for SwiftUI cross-platform code
+- `UIGraphicsImageRenderer` is UIKit-only: prefer `ImageRenderer` for SwiftUI cross-platform code
 
 ### ShareLink Gotchas
 - `ShareLink` requires the shared item to conform to `Transferable`
 - `Image` conforms to `Transferable` on iOS 16+ / macOS 13+
 - For custom share items, implement `Transferable` with `DataRepresentation`
-- `ShareLink` renders as a button — style it to match your UI
+- `ShareLink` renders as a button: style it to match your UI
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/image-loading` — Cache rendered share card images
-- Related: `ios/deep-linking` — Generate deep links for QR codes
+- **templates.md**: All production Swift templates
+- Related: `generators/image-loading`: Cache rendered share card images
+- Related: `ios/deep-linking`: Generate deep links for QR codes

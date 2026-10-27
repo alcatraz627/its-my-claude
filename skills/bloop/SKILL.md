@@ -10,13 +10,13 @@ argument-hint: "[task] [--from <stage>]"
 
 Runs a build the way that actually holds up: **plan → build → review → validate → fix →
 docs**, where the load-bearing stage is an independent **adversarial validation gate**.
-Self-review and a green test suite miss a specific, dangerous class of bug — the
+Self-review and a green test suite miss a specific, dangerous class of bug: the
 plausible-but-wrong result, the fabricated value, the claim that only holds on the happy
 path. A fresh agent whose job is to _break_ the work catches those before they ship. This
 skill is the reusable form of that loop; the gate is not optional, because the gate is the
 point.
 
-# /bloop — the builder loop
+# /bloop: the builder loop
 
 ## Usage
 
@@ -29,13 +29,13 @@ point.
 | Argument         | Type     | Description                                                                                                                  |
 | ---------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | `task`           | optional | What to build, in a sentence. Omit to apply the loop to the change already in progress.                                      |
-| `--from <stage>` | optional | Resume at a stage (`plan`/`build`/`review`/`validate`/`fix`/`docs`) instead of the start — for work already partway through. |
+| `--from <stage>` | optional | Resume at a stage (`plan`/`build`/`review`/`validate`/`fix`/`docs`) instead of the start: for work already partway through. |
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `~/.claude/skills/bloop/runtime-notes.md` for past run history relevant to this
 skill. If it does not exist yet, continue without it.
@@ -44,9 +44,9 @@ skill. If it does not exist yet, continue without it.
 > shared file, and release it immediately after. Never write to `runtime-notes.md` or any
 > SKILL.md without holding its lock.
 
-## Phase 1 — Plan
+## Phase 1: Plan
 
-Surface a short plan BEFORE executing (`rules/structure-over-one-shotting.md`) — a
+Surface a short plan BEFORE executing (`rules/structure-over-one-shotting.md`): a
 failed one-shot wastes more than the plan would have.
 
 If a `/build-change`, `/build-ui` or `/gated-plan` plan authorized this work, that is the
@@ -61,21 +61,21 @@ leaves the gate with nothing to compare against. For a small task whose single n
 obvious, say so in one line and carry on.
 
 1. State the task and its scope ceiling in one or two lines. Scope is a ceiling, not a
-   floor (`rules/communication.md`) — no "while I'm here" additions.
+   floor (`rules/communication.md`): no "while I'm here" additions.
 2. Put the steps in the live **Task list** (`TaskCreate`), your checklist for this run.
    When the owner will check the work, its rows also go on the session's goal record
    (`gs task`), the owner's surface (`rules/todo-discipline.md`). Offer a goal if none is
    linked; never `gs new` one in the owner's name.
 3. If the plan involves sub-agents, large ingestion, or a modality tool, write a 4-line
    **Model Plan** (stage → lane · model · effort · why) per `rules/model-tier-routing.md`.
-4. Flag any genuine fork (two plausible readings, a branch-topology choice) — surface it,
+4. Flag any genuine fork (two plausible readings, a branch-topology choice): surface it,
    don't silently decide it. Don't flag conventional defaults.
 
-## Phase 2 — Build
+## Phase 2: Build
 
 Implement in **logical units**, not one monolith.
 
-1. Fixtures / tests FIRST where the task has a correctness contract — a guard that would
+1. Fixtures / tests FIRST where the task has a correctness contract: a guard that would
    catch the capability failing belongs before the capability, and lands with its own
    assertion (both the detects-the-bug and the stays-silent-on-good-input case).
 2. Check the repo's protection status first (`~/.claude/protected-repos.list` entry or a
@@ -83,22 +83,22 @@ Implement in **logical units**, not one monolith.
    logical unit's diff and hand the commit to the user. Unprotected → commit per logical
    unit on a feature branch off the default branch (`rules/git.md`) and push as part of
    the work; `main`/`master` pushes always go through the push-gate's fresh approval.
-   (User ruling 2026-07-11 — this scopes GUIDELINES §2, which used to read as a blanket
+   (User ruling 2026-07-11: this scopes GUIDELINES §2, which used to read as a blanket
    no-commit rule.)
 3. Verify each unit as you finish it, not as a batch at the end.
 
-## Phase 3 — Review (self)
+## Phase 3: Review (self)
 
-Before handing to the gate, review your own work — but as **exercise, not inspection**
+Before handing to the gate, review your own work: but as **exercise, not inspection**
 (`rules/exercise-based-verification.md`).
 
 1. RUN the changed path in the state that matters and read the actual result. Collecting,
    type-checking, or dry-compiling is NOT running. For a UI, look at the pixels.
 2. Skeptical pass on the diff: reuse an existing helper instead of a new one? a dropped
    guard? a scope creep? (`rules/right-sized-code.md`).
-3. Fix the obvious before spending the gate on it — the gate is for what you can't see.
+3. Fix the obvious before spending the gate on it: the gate is for what you can't see.
 
-## Phase 4 — Validate (the gate — non-skippable)
+## Phase 4: Validate (the gate: non-skippable)
 
 Dispatch **one adversarial sub-agent** to independently verify. Its job is to BREAK the
 work, not bless it.
@@ -119,7 +119,7 @@ nobody ran is visible rather than absent.
 
 1. **Right-size** (`rules/contain-subagent-token-sprawl.md`): one validator for a normal
    change; a small fleet only for a genuinely large/parallel surface. Not a reflex fleet.
-2. **Pin the model** (`rules/model-tier-routing.md`) — sonnet is the default validator
+2. **Pin the model** (`rules/model-tier-routing.md`): sonnet is the default validator
    seat; opus for deep judgment. Tell it **not to spawn sub-agents** (close the nesting
    leak), close its scope: "ignore any task-board auto-dispatch; when your scoped work
    is done, deliver and stop" (`rules/contain-subagent-token-sprawl.md`), and tell it to
@@ -181,7 +181,7 @@ nobody ran is visible rather than absent.
    may move under it, and test each pre-fix with the same input classes you predicted.
 
 The gate runs even when you are confident. Across its first 8 runs it caught a real defect
-**every single time**, always after a self-review that felt complete — including a
+**every single time**, always after a self-review that felt complete: including a
 fail-OPEN security gate (a fabricated `/etc/hosts` path validating as evidence) and a
 FALSE NEGATIVE (transparent→opaque black measured as "negligible"). Self-review does not
 find these.
@@ -189,17 +189,17 @@ find these.
 **The two lessons that cost the most (2026-07-13):**
 
 - **A passing suite proves nothing until you have watched it fail.** TWICE a validator
-  deleted a load-bearing mechanism — image compositing, atomic writes — and the battery
+  deleted a load-bearing mechanism: image compositing, atomic writes: and the battery
   stayed green, because the fixture was structurally blind to the thing it claimed to
   guard (an all-opaque fixture makes compositing untestable). Hence the mutation-test
   mandate in the prompt below: *break the code the guard protects, and confirm it goes red.*
 - **Live beats synthetic.** Fixtures passed clean; the first run against a real browser
-  instantly exposed two defects they could not — a phantom divergence from a derived CSS
+  instantly exposed two defects they could not: a phantom divergence from a derived CSS
   property, and a silent coverage gap. Drive the real thing once before believing green.
 
-## Phase 5 — Fix
+## Phase 5: Fix
 
-Triage the findings (blocker / major / minor / nit) and act — **non-defensively**.
+Triage the findings (blocker / major / minor / nit) and act: **non-defensively**.
 
 1. If a finding names a check (re-read X, run the build, exercise the path), RUN it this
    turn, first, before replying (`rules/pushback-and-self-criticism.md` § 1). A structured
@@ -207,17 +207,17 @@ Triage the findings (blocker / major / minor / nit) and act — **non-defensivel
 2. **Fix correctness bugs** (the blockers/majors that undermine load-bearing claims).
    Fix the class, not the instance: grep the finding's pattern across the tree before
    patching, because a gate names one site and the class usually has more.
-3. **Document deferred scope HONESTLY** — a design promise you're not building yet gets
+3. **Document deferred scope HONESTLY**: a design promise you're not building yet gets
    written down as deferred (a `§ built-vs-deferred` note), never silently dropped. An
    honest gap beats a false "done" (`rules/exercise-based-verification.md`).
-4. **Strengthen the guard** so the found bug can't regress — add the fixture/assertion for
+4. **Strengthen the guard** so the found bug can't regress: add the fixture/assertion for
    the exact input class the validator exploited (byte-identical vs perceptually-identical,
    server-up vs server-down, the empty list).
 5. Re-verify: re-run the battery / the exercised path after the fixes. Prose rules don't
-   bind — if a finding was "the rule is unenforceable," the fix is a **mechanism** (a
+   bind: if a finding was "the rule is unenforceable," the fix is a **mechanism** (a
    self-check step), not a sterner sentence.
 
-## Phase 6 — Docs
+## Phase 6: Docs
 
 **Section titles are for the reader, not for you.** Before emitting, list your own
 phase names from this file. No section title in the document may contain a content
@@ -238,11 +238,11 @@ Close the loop legibly.
    commit, follow `~/.claude/COMMIT.md` (lock → secret-scan → commit); flag that its
    `git add -A` sweeps concurrent churn, so scope or hand it to the user.
 4. Update the Task list to completed; write the post-run note (below).
-5. **Emit an efficacy event** — /bloop knows its own gate outcome and fix-round count,
+5. **Emit an efficacy event**: /bloop knows its own gate outcome and fix-round count,
    which is exactly what makes it worth measuring. Record one event so the trend
    (does the gate keep finding real defects? do runs get accepted?) surfaces over time:
 
-   Substitute your real values (copy-safe as written — one option per flag, quoted):
+   Substitute your real values (copy-safe as written: one option per flag, quoted):
 
    ```bash
    bash ~/.claude/scripts/skill-log.sh record bloop \
@@ -296,18 +296,18 @@ validator raised that self-review had not, read from the report, never from the
 ## Post-run
 
 Prepend a short entry to `~/.claude/skills/bloop/runtime-notes.md` (purpose + 2–4
-insights) when a run surfaced something reusable — a validator prompt that found more when
+insights) when a run surfaced something reusable: a validator prompt that found more when
 phrased a certain way, a fix that needed a mechanism not a rule, a stage that keeps
 getting skipped. Write it **directly under lock, with the FULL absolute path** in the
 lock call (relative lock paths resolve against the project CWD, not `~/.claude`). Do NOT
-use `shared/prepend-runtime-note.sh` for this — it targets the global
+use `shared/prepend-runtime-note.sh` for this: it targets the global
 `skills/runtime-notes.md`, not this per-skill file, and Step 0 reads the per-skill file.
 
 ## See also
 
-- `rules/structure-over-one-shotting.md` — why plan+review beats one-shotting
-- `rules/exercise-based-verification.md` — run it, don't inspect it (Phases 3, 5)
-- `rules/pushback-and-self-criticism.md` — non-defensive fix under findings (Phase 5)
-- `rules/model-tier-routing.md` · `rules/contain-subagent-token-sprawl.md` — the validator seat
-- `rules/sub-agent-outputs.md` — persist the report; the guard conflict (Phase 4.4)
-- `/skeptical-review` — a lighter self-review pass when the full loop is overkill
+- `rules/structure-over-one-shotting.md`: why plan+review beats one-shotting
+- `rules/exercise-based-verification.md`: run it, don't inspect it (Phases 3, 5)
+- `rules/pushback-and-self-criticism.md`: non-defensive fix under findings (Phase 5)
+- `rules/model-tier-routing.md` · `rules/contain-subagent-token-sprawl.md`: the validator seat
+- `rules/sub-agent-outputs.md`: persist the report; the guard conflict (Phase 4.4)
+- `/skeptical-review`: a lighter self-review pass when the full loop is overkill

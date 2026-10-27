@@ -2,7 +2,7 @@
 # Did the July 2026 local-model additions actually get USED?
 #
 # Adoption beats correctness here: a capability nobody reaches for is a failure
-# however green its tests are — and schnell in particular cost 31GB of disk on the
+# however green its tests are: and schnell in particular cost 31GB of disk on the
 # promise that the imagegen convergence loop would be worth iterating on. This
 # brief mines the histories (the suite's own API) and says, per capability, used
 # or dead. Dead ones get a recommendation to drop, not to polish.
@@ -15,7 +15,7 @@ OUT="$HOME/.claude/assets/reports/$(date +%Y%m%d)-local-models-review.md"
 mkdir -p "$(dirname "$OUT")"
 
 # Count only usage AFTER the build wave. The session that built these things hammered
-# them (25 compares, 9 schnell renders in one day) — counting that would report "USED"
+# them (25 compares, 9 schnell renders in one day): counting that would report "USED"
 # even if nobody ever touched them again, masking the exact failure this brief exists
 # to catch. Adoption means someone reached for it when they weren't building it.
 BUILD_END_EPOCH=$(date -j -f "%Y-%m-%d" "2026-07-14" +%s 2>/dev/null || date -d "2026-07-14" +%s)
@@ -37,7 +37,7 @@ SCHNELL=$(jq -r --argjson since "$since_epoch" \
   'select(.model == "schnell") | select((.ts | fromdateiso8601? // 0) >= $since) | .ts' \
   "$LM/outputs/imagine-history.jsonl" 2>/dev/null | wc -l | tr -d ' ')
 LOOPS=$(ls -d "$LM"/outputs/see/loops/*/ 2>/dev/null | wc -l | tr -d ' ')
-# rounds added since the wave — a ledger built during the build doesn't prove adoption
+# rounds added since the wave: a ledger built during the build doesn't prove adoption
 ROUNDS=$(cat "$LM"/outputs/see/loops/*/ledger.json 2>/dev/null \
   | jq -s --argjson since "$since_epoch" \
     '[.[].rounds[]? | select((.ts | fromdateiso8601? // 0) >= $since)] | length' 2>/dev/null || echo 0)

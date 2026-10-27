@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# tmp-jail-guard.sh — PreToolUse(Write|Edit|MultiEdit|NotebookEdit|Bash).
+# tmp-jail-guard.sh: PreToolUse(Write|Edit|MultiEdit|NotebookEdit|Bash).
 #
 # A session-scoped "/tmp jail": when the CURRENT session has a marker at
 # ~/.claude/run/tmpjail/<session_id>, writes are confined to /tmp (and its macOS
 # real path /private/tmp). Reads are never touched. Other running sessions are
-# unaffected — the marker is keyed by the session_id from the hook payload, so the
+# unaffected: the marker is keyed by the session_id from the hook payload, so the
 # global registration enforces per-session.
 #
-# Off-switch — HONEST SCOPE: this is a guardrail, not a security boundary. A hook
+# Off-switch: HONEST SCOPE: this is a guardrail, not a security boundary. A hook
 # cannot mechanically jail a Bash-enabled agent against its will. The agent is
 # INSTRUCTED to ask the user to lift the jail (`tmp-jail off <session_id>`), and
 # this gate blocks the common self-lift paths (the off command, marker delete via
 # rm/trash/unlink/truncate/find-delete, settings edits). But a determined agent
-# can still escape — via an interpreter write (`python -c open(...,'w')`), or a
-# verb/vector not enumerated here — exactly like the Bash write leak below. The
+# can still escape: via an interpreter write (`python -c open(...,'w')`), or a
+# verb/vector not enumerated here: exactly like the Bash write leak below. The
 # only airtight jail is an OS sandbox (sandbox-exec / container). No mute file
 # (deliberate) so there is no single silent escape file.
 #
@@ -22,7 +22,7 @@
 # FAIL-CLOSED on the jailed Bash path when rg is missing (can't verify → block).
 #
 # Reliability note: the Write/Edit/* gate is exact (resolve + normalize file_path).
-# The Bash gate is BEST-EFFORT — see the scope note above.
+# The Bash gate is BEST-EFFORT: see the scope note above.
 
 set -uo pipefail
 
@@ -124,9 +124,9 @@ case "$tool" in
     # 3. in-place edit (sed -i / perl -i) naming a non-/tmp path
     printf '%s' "$scan" | rg -qP "\b(sed|perl)\b[^|;&]*[[:space:]]-i\b[^|;&]*$NONTMP" 2>/dev/null && block "in-place edit outside /tmp: $cmd"
     # 4. write VERBS naming a non-/tmp path (coarse: a non-/tmp READ source also
-    #    trips this — conservative; a false block just sends the agent to ask).
+    #    trips this: conservative; a false block just sends the agent to ask).
     printf '%s' "$scan" | rg -qP "\b($WVERB)\b[^|;&]*[[:space:]]$NONTMP" 2>/dev/null && block "write command naming a non-/tmp path: $cmd"
-    # 5. find ... -delete / -exec rm — a marker-removal / out-of-tree delete vector
+    # 5. find ... -delete / -exec rm: a marker-removal / out-of-tree delete vector
     printf '%s' "$scan" | rg -qP "\bfind\b[^|;&]*(-delete|-exec[^|;&]*\b(rm|trash|unlink)\b)" 2>/dev/null && block "find delete/exec while jailed: $cmd"
     # 6. relative-path redirect when cwd is NOT under /tmp (escapes via cwd)
     if [ -n "$cwd" ] && ! is_tmp "$cwd"; then

@@ -390,8 +390,8 @@ struct TerrainView: View {
 
 ## References
 
-- [Swift Charts — Chart3D](https://developer.apple.com/documentation/Charts/Chart3D)
-- [Swift Charts — SurfacePlot](https://developer.apple.com/documentation/Charts/SurfacePlot)
-- [Swift Charts — Chart3DPose](https://developer.apple.com/documentation/Charts/Chart3DPose)
-- [Swift Charts — Chart3DCameraProjection](https://developer.apple.com/documentation/Charts/Chart3DCameraProjection)
-- [Swift Charts — Chart3DSurfaceStyle](https://developer.apple.com/documentation/Charts/Chart3DSurfaceStyle)
+- [Swift Charts: Chart3D](https://developer.apple.com/documentation/Charts/Chart3D)
+- [Swift Charts: SurfacePlot](https://developer.apple.com/documentation/Charts/SurfacePlot)
+- [Swift Charts: Chart3DPose](https://developer.apple.com/documentation/Charts/Chart3DPose)
+- [Swift Charts: Chart3DCameraProjection](https://developer.apple.com/documentation/Charts/Chart3DCameraProjection)
+- [Swift Charts: Chart3DSurfaceStyle](https://developer.apple.com/documentation/Charts/Chart3DSurfaceStyle)

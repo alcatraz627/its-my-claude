@@ -1,6 +1,6 @@
 ---
 name: context-prime
-description: Loads project index, gotchas, recent git log, and open issues into context at the start of a session — bootstrapping Claude's awareness without any manual prompting.
+description: Loads project index, gotchas, recent git log, and open issues into context at the start of a session, bootstrapping Claude's awareness without any manual prompting.
 allowed-tools: Read, Bash, Glob
 user-invocable: true
 argument-hint: ""
@@ -13,13 +13,13 @@ Run at the start of a new work session to instantly load project structure, know
 
 # Context Prime
 
-Bootstraps Claude's awareness for a new session by loading the project index, gotchas.md, and recent git activity — giving Claude immediate, accurate context about what you're working on and how the project is structured.
+Bootstraps Claude's awareness for a new session by loading the project index, gotchas.md, and recent git activity: giving Claude immediate, accurate context about what you're working on and how the project is structured.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -38,7 +38,7 @@ No arguments. Typically the first command in a new session.
 
 ---
 
-## Phase 1 — Load Project Index
+## Phase 1: Load Project Index
 
 Check for the project index and read it:
 
@@ -56,7 +56,7 @@ ls .claude/project-index.md 2>/dev/null
 
 ---
 
-## Phase 2 — Load Gotchas
+## Phase 2: Load Gotchas
 
 Read `gotchas.md` from the project root:
 
@@ -69,7 +69,7 @@ ls gotchas.md 2>/dev/null
 
 ---
 
-## Phase 3 — Load Recent Git Activity
+## Phase 3: Load Recent Git Activity
 
 ```bash
 git log --oneline -15
@@ -88,7 +88,7 @@ git status --short
 
 ---
 
-## Phase 4 — Print Session Summary
+## Phase 4: Print Session Summary
 
 Print a concise session briefing:
 
@@ -121,6 +121,6 @@ Print a concise session briefing:
 
 ## Notes
 
-- This skill uses `disable-model-invocation: true` — Claude will never auto-trigger it. Only run when you explicitly type `/context-prime`.
-- The session summary is printed to terminal only — no files are written.
+- This skill uses `disable-model-invocation: true`: Claude will never auto-trigger it. Only run when you explicitly type `/context-prime`.
+- The session summary is printed to terminal only: no files are written.
 - Subsequent messages in the session benefit from Claude having already processed the index and gotchas.

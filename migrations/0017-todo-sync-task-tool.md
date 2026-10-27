@@ -6,20 +6,20 @@ status: complete
 date: 2026-06-01
 ---
 
-# Migration 0017 — Todo-sync onto the Task tool (live writeback + drift enforcement)
+# Migration 0017: Todo-sync onto the Task tool (live writeback + drift enforcement)
 
 ## Why
 
 The `sync-todos` Phase-1 system (`prop-20260518-093153-58`, built 2026-05-19) was
 **inert and mis-targeted**:
 
-- Its `sync-wal.jsonl` was 0 bytes since build day — it had **never fired once**.
+- Its `sync-wal.jsonl` was 0 bytes since build day: it had **never fired once**.
 - It pulled *into* `TodoWrite`, which this environment no longer uses: across 50
   recent transcripts `TodoWrite` = 0 calls, the harness **Task tool**
   (`TaskCreate/TaskUpdate/TaskList`) = 1566. The TUI todo list is now the Task
   tool, persisted at `~/.claude/tasks/<session-id>/<id>.json`.
 - The canonical "written notes" surface (`_active.md` from `/workspace`) had
-  **zero adoption** — no `_active.md` existed anywhere — so the pull always
+  **zero adoption**: no `_active.md` existed anywhere: so the pull always
   no-op'd silently.
 
 User ask ("keep todos fresh as priorities move; enforce a tri-surface sync,
@@ -54,11 +54,11 @@ killed the original "additive text-matched writeback + advisory nudge" approach.
   `<!-- sync:auto:start -->` / `<!-- sync:auto:end -->` is regenerated each turn,
   keyed by stable Task `id` (never subject text). This delivers reorder / remove
   / reprioritise (the headline ask) and keeps the writeback off the human-authored
-  area — so `/core-dump`'s confirmed writes and the hook's silent writes never
+  area: so `/core-dump`'s confirmed writes and the hook's silent writes never
   race (disjoint regions). Rejects the magi doc's text-keyed approach.
 - **SID from stdin only.** `~/.claude/.current-session-id` is a single global
   slot the most recent session clobbers (observed pointing at a different session
-  than the live one) — every new-path script reads `session_id` from the hook
+  than the live one): every new-path script reads `session_id` from the hook
   event stdin instead.
 - **Enforcement honesty.** The *sync* is mechanically enforced (writeback just
   happens). The *liveness* leg can only be agent-driven (hooks can't call
@@ -66,14 +66,14 @@ killed the original "additive text-matched writeback + advisory nudge" approach.
   ≥8 stale turns, ≥5 edits), with a `stop_hook_active` escape so a turn is never
   trapped. User chose this over advisory-only. Trivial sessions never block.
 - **Revival empty-guard.** `reconcile.py` refuses to regenerate the block from an
-  empty task list while the block still holds items — a freshly-revived session
+  empty task list while the block still holds items: a freshly-revived session
   can't wipe real pending work before pull rehydrates it.
 
 ## What does NOT change
 
 - `_lib.sh`, `wal.sh`, `sync-cli.sh` (`/sync status|reset|disable`) keep working.
 - `pull.sh`'s SessionStart wiring (`hook-orchestrator/SessionStart.tasks:39`) is
-  unchanged — only its extraction (strip `(#id)` + placeholder) and the hint
+  unchanged: only its extraction (strip `(#id)` + placeholder) and the hint
   wording were touched.
 - `/workspace`, `create.sh`, `apply.sh`, `diff.sh` unchanged. `_active.md` stays
   a relative symlink (reconcile follows it via `realpath`, never replaces it).
@@ -117,7 +117,7 @@ for just the hinters.
   lock prevents interleave, not divergence). Genuine concurrent edit of one
   project's `_active.md` from two sessions is out of scope (magi rejected CRDT).
 
-## Addendum 2026-06-03 — source switched from task-dir to transcript
+## Addendum 2026-06-03: source switched from task-dir to transcript
 
 The original build read the live task list from `~/.claude/tasks/<sid>/*.json`.
 **That dir is a volatile runtime cache** and is the wrong source: it lags within
@@ -126,7 +126,7 @@ on resume. Observed directly: completing tasks #8/#9 removed their json files, s
 the notes block froze showing them as `[ ]`.
 
 Fix: `writeback.sh` and `stop-sync.sh` now reconstruct the task list by replaying
-the **session transcript** (`replay_tasks.py`) — the durable, complete,
+the **session transcript** (`replay_tasks.py`): the durable, complete,
 append-only record of every `TaskCreate` (id+subject from the result) and
 `TaskUpdate` (status/subject/delete from the input). The Stop hook receives
 `transcript_path` on stdin, so identity is unambiguous. The task-dir read remains
@@ -134,11 +134,11 @@ only as a fallback for manual invocations without a transcript path. Verified: t
 block now renders all completed tasks as `[x]`, survives resume, and tracks
 status changes that the dir lost.
 
-New: `~/.claude/hinters/47-todo-heartbeat.sh` — a per-prompt nudge (reuses the
+New: `~/.claude/hinters/47-todo-heartbeat.sh`: a per-prompt nudge (reuses the
 Stop hook's drift state) that fires when the list lags ≥2 turns, so focus-shifts
 get reconciled continuously rather than only at the coarse Stop-block threshold or
 at `/catchup` (which the user noted is too rare/late to be the sync mechanism).
 
 Still agent-bound by design: a hook cannot call `TaskCreate`/`TaskUpdate`, so the
 visible list can only be *pressured* fresh and *rehydrated-with-agent-help* on
-resume — never populated by a hook. The notes file is the durable backbone.
+resume: never populated by a hook. The notes file is the durable backbone.

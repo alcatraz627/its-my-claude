@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-common.sh — shared helpers for the atone script suite.
+# atone-common.sh: shared helpers for the atone script suite.
 #
 # Provides:
 #   - gum-tui sourcing (with plain-text shim fallback)
@@ -16,7 +16,7 @@
 [ "${__ATONE_COMMON_LOADED:-0}" = "1" ] && return 0
 __ATONE_COMMON_LOADED=1
 
-# Ledger primitives (id/ts/append/commit/seal) — the shared writer for atone,
+# Ledger primitives (id/ts/append/commit/seal): the shared writer for atone,
 # affirm, and propose. Sourced here so anything sourcing atone-common.sh inherits
 # them with no extra wiring.
 # shellcheck disable=SC1091

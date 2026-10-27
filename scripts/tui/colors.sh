@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# colors.sh — the one TTY-gated ANSI palette for std::claude::tui shell tools.
+# colors.sh: the one TTY-gated ANSI palette for std::claude::tui shell tools.
 #
 # Source it, call `tui_colors_init`, then use the exported vars. Every var is the
 # empty string when output is not a real terminal (or NO_COLOR is set), so call
-# sites never branch — `printf '%sX%s' "$C" "$R"` is correct in a pipe and in a
+# sites never branch: `printf '%sX%s' "$C" "$R"` is correct in a pipe and in a
 # terminal alike.
 #
 # Exports BOTH naming dialects the existing tools already use, so adoption is one
@@ -19,7 +19,7 @@
 #
 # Pure sourced library: prints nothing, returns 0, idempotent (re-init recomputes).
 
-# tui_colors_init — set (or blank) the palette vars per the both-fd TTY gate. Call once after sourcing.
+# tui_colors_init: set (or blank) the palette vars per the both-fd TTY gate. Call once after sourcing.
 tui_colors_init() {
   if [ -t 1 ] && [ -t 2 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
     B=$'\033[1m';  Y=$'\033[1;33m'; C=$'\033[36m'; D=$'\033[2m'; R=$'\033[0m'

@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 250" role="img" aria-labelledby="t d" shape-rendering="crispEdges">
+<title id="t">How a mistake becomes a guardrail</title>
+<desc id="d">A factory conveyor belt. A person says not like that and hands over a red crate marked with an exclamation point. A clerk at the atone desk stamps it and writes it in a ledger, a press turns it into a rules scroll, and a worker at the hook forge hammers it into a green shield. A lift carries the shield up to join a rack of others.</desc>
+<style>
+:root { --bg:#faf6ef; --panel:#efe6d6; --ink:#2a2438; --muted:#8a8197; --line:#d9cdb8; --dim:#d9cdb8;
+        --accent:#c2603f; --amber:#b9821f; --cream:#5a4e6e; --ok:#3f8a55; --bad:#c2414b; --wood:#9b6b43;
+        --skin:#e8b04a; --night:#2a2640; --star:#f0e6d8; --orange:#e0872e; --orangeD:#b4601a; --skyline:#3d3858; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#1e1b2e; --panel:#2a2640; --ink:#f0e6d8; --muted:#8f86a8; --line:#3b3557; --dim:#3b3557;
+          --accent:#d97757; --amber:#e8b04a; --cream:#f0e6d8; --ok:#7fb685; --bad:#e06c75; --wood:#7a5236;
+          --skin:#e8b04a; --night:#14111f; --star:#f0e6d8; --orange:#f2a14e; --orangeD:#cf7a2a; --skyline:#251f3a; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation-play-state: paused !important; animation-delay: -2.5s !important; } }
+text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: var(--ink); white-space: pre; }
+.bg { fill: var(--bg); } .panel { fill: var(--panel); } .muted { fill: var(--muted); } .ink { fill: var(--ink); }
+.accent { fill: var(--accent); } .amber { fill: var(--amber); } .ok { fill: var(--ok); } .bad { fill: var(--bad); }
+.cream { fill: var(--cream); } .wood { fill: var(--wood); } .skin { fill: var(--skin); } .night { fill: var(--night); }
+.star { fill: var(--star); } .dim { fill: var(--dim); } .line { stroke: var(--line); }
+.orange { fill: var(--orange); } .orangeD { fill: var(--orangeD); } .skyline { fill: var(--skyline); }
+.lbl { font-size: 12px; font-weight: 700; text-anchor: middle; }
+.sub { font-size: 11px; text-anchor: middle; fill: var(--muted); }
+
+.belt { stroke: var(--muted); stroke-width: 3; stroke-dasharray: 10 10; animation: belt .6s linear infinite; }
+@keyframes belt { to { stroke-dashoffset: -20; } }
+.roll { fill: none; stroke: var(--muted); stroke-width: 3; stroke-dasharray: 4 4; animation: roll .8s linear infinite; }
+@keyframes roll { to { stroke-dashoffset: -8; } }
+.blink { transform-box: fill-box; transform-origin: center; animation: blink 4s steps(1) infinite; }
+@keyframes blink { 0%,95% { transform: scaleY(1); } 96%,100% { transform: scaleY(.15); } }
+.wheel { transform-box: view-box; animation: wheel linear infinite; }
+@keyframes wheel { to { transform: rotate(360deg); } }
+.lamp { transform-box: fill-box; transform-origin: 50% 0%; animation: lampsw 4.2s ease-in-out infinite; }
+.lp2 { animation-duration: 5.1s; } .lp3 { animation-duration: 4.7s; } .lp4 { animation-duration: 5.8s; }
+@keyframes lampsw { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.pulse { animation: pipe 8s linear infinite; } .pl2 { animation-duration: 11s; } .pl3 { animation-duration: 13s; }
+@keyframes pipe { from { transform: translateX(0); } to { transform: translateX(560px); } }
+.puff { animation: puff 2.6s linear infinite; } .pf2 { animation-duration: 3.2s; } .pf3 { animation-duration: 2.9s; }
+@keyframes puff { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .7; } 100% { opacity: 0; transform: translateY(-16px); } }
+.smoke { animation: smoke 3s linear infinite; } .sm2 { animation-duration: 3.7s; } .sm3 { animation-duration: 4.4s; }
+@keyframes smoke { 0% { opacity: 0; transform: translate(0,0); } 20% { opacity: .6; } 100% { opacity: 0; transform: translate(6px,-30px); } }
+.flame { transform-box: fill-box; transform-origin: 50% 100%; animation: flame .5s steps(1) infinite; } .fl2 { animation-duration: .7s; } .fl3 { animation-duration: .6s; }
+@keyframes flame { 0% { transform: scaleY(1); } 50% { transform: scaleY(.6); } }
+.glow { animation: glowp 1.4s ease-in-out infinite; }
+@keyframes glowp { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+
+.armW, .armP { transform-box: fill-box; transform-origin: 50% 0%; }
+.bub { transform-box: fill-box; transform-origin: 9% 100%; }
+
+@keyframes armW { 0% { transform:rotate(0deg) } 1% { transform:rotate(150deg) } 3.8% { transform:rotate(110deg) } 6.6% { transform:rotate(150deg) } 9.4% { transform:rotate(110deg) } 12.2% { transform:rotate(150deg) } 15% { transform:rotate(110deg) } 17.8% { transform:rotate(150deg) } 20.6% { transform:rotate(110deg) } 24% { transform:rotate(0deg) } 100% { transform:rotate(0deg) } }
+.armW { animation: armW 12s ease-in-out infinite; }
+
+@keyframes armP { 0% { transform:rotate(-85deg) } 6% { transform:rotate(-85deg) } 9% { transform:rotate(0deg) } 100% { transform:rotate(0deg) } }
+.armP { animation: armP 12s ease-in-out infinite; }
+
+@keyframes bub { 0% { transform:scale(.3);opacity:0 } 1% { transform:scale(1.08);opacity:1 } 2% { transform:scale(1);opacity:1 } 22% { transform:scale(1);opacity:1 } 24% { transform:scale(.3);opacity:0 } 100% { transform:scale(.3);opacity:0 } }
+.bub { animation: bub 12s ease-out infinite; }
+
+.armS { transform-box: fill-box; transform-origin: 50% 0%; }
+.ink3 { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes armS { 0% { transform:rotate(140deg) } 26% { transform:rotate(140deg) } 30% { transform:rotate(50deg) } 32% { transform:rotate(50deg) } 36% { transform:rotate(140deg) } 100% { transform:rotate(140deg) } }
+.armS { animation: armS 12s ease-in-out infinite; }
+
+@keyframes armR { 0% { transform:translateY(0px) } 33% { transform:translateY(0px) } 34% { transform:translateY(3px) } 35% { transform:translateY(0px) } 36% { transform:translateY(3px) } 37% { transform:translateY(0px) } 100% { transform:translateY(0px) } }
+.armR { animation: armR 12s steps(1) infinite; }
+
+.armR { }
+
+@keyframes ink3 { 0% { transform:scaleX(0) } 31% { transform:scaleX(0) } 36% { transform:scaleX(1) } 97% { transform:scaleX(1) } 97.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.ink3 { animation: ink3 12s steps(6) infinite; }
+
+@keyframes dust { 0% { opacity:0;transform:translateY(0) } 30% { opacity:0;transform:translateY(0) } 30.5% { opacity:1;transform:translateY(0) } 35% { opacity:0;transform:translateY(-7px) } 100% { opacity:0;transform:translateY(-7px) } }
+.dust { animation: dust 12s linear infinite; }
+
+@keyframes press { 0% { transform:translateY(0) } 53% { transform:translateY(0) } 56% { transform:translateY(26px) } 59% { transform:translateY(26px) } 62% { transform:translateY(0) } 100% { transform:translateY(0) } }
+.press { animation: press 12s ease-in infinite; }
+
+.newline { transform-box: fill-box; transform-origin: 0% 50%; }
+
+@keyframes newline { 0% { transform:scaleX(0) } 58% { transform:scaleX(0) } 61% { transform:scaleX(1) } 96% { transform:scaleX(1) } 96.1% { transform:scaleX(0) } 100% { transform:scaleX(0) } }
+.newline { animation: newline 12s steps(5) infinite; }
+
+.armH { transform-box: fill-box; transform-origin: 50% 0%; }
+
+@keyframes armH { 0% { transform:rotate(150deg) } 76% { transform:rotate(150deg) } 78.5% { transform:rotate(40deg) } 79.5% { transform:rotate(40deg) } 80.5% { transform:rotate(130deg) } 82% { transform:rotate(40deg) } 83% { transform:rotate(40deg) } 85% { transform:rotate(150deg) } 100% { transform:rotate(150deg) } }
+.armH { animation: armH 12s ease-in-out infinite; }
+
+@keyframes hot { 0% { opacity:0 } 66% { opacity:1 } 86% { opacity:0 } 100% { opacity:0 } }
+.hot { animation: hot 12s step-end infinite; }
+
+@keyframes sp0 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(-10px,-18px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(-10px,-18px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp0 { animation: sp0 12s linear infinite; }
+
+@keyframes sp1 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(6px,-24px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(6px,-24px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp1 { animation: sp1 12s linear infinite; }
+
+@keyframes sp2 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(14px,-12px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(14px,-12px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp2 { animation: sp2 12s linear infinite; }
+
+@keyframes sp3 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(-18px,-8px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(-18px,-8px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp3 { animation: sp3 12s linear infinite; }
+
+@keyframes sp4 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(2px,-30px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(2px,-30px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp4 { animation: sp4 12s linear infinite; }
+
+@keyframes sp5 { 0% { opacity:0;transform:translate(0px,0px) } 79.4% { opacity:0;transform:translate(0px,0px) } 79.5% { opacity:1;transform:translate(0px,0px) } 81.5% { opacity:0;transform:translate(20px,-20px) } 82.4% { opacity:0;transform:translate(0px,0px) } 82.5% { opacity:1;transform:translate(0px,0px) } 84.5% { opacity:0;transform:translate(20px,-20px) } 100% { opacity:0;transform:translate(0px,0px) } }
+.sp5 { animation: sp5 12s linear infinite; }
+
+@keyframes rackNew { 0% { opacity:1 } 2% { opacity:0 } 97.5% { opacity:1 } 100% { opacity:1 } }
+.rackNew { animation: rackNew 12s step-end infinite; }
+
+.itemS { transform-box: fill-box; transform-origin: 50% 100%; }
+
+@keyframes item { 0% { transform:translate(-34px,-34px) } 3% { transform:translate(-34px,-34px) } 5% { transform:translate(-34px,0px) } 12% { transform:translate(0px,0px) } 14% { transform:translate(0px,0px) } 24% { transform:translate(220px,0px) } 38% { transform:translate(220px,0px) } 50% { transform:translate(440px,0px) } 64% { transform:translate(440px,0px) } 76% { transform:translate(660px,0px) } 86% { transform:translate(660px,0px) } 91% { transform:translate(791px,0px) } 95% { transform:translate(791px,-97px) } 97.5% { transform:translate(766px,-97px) } 100% { transform:translate(766px,-97px) } }
+.item { animation: item 12s ease-in-out infinite; }
+
+@keyframes itemS { 0% { transform:scale(.25) } 3% { transform:scale(1) } 95% { transform:scale(1) } 97.5% { transform:scale(.75) } 100% { transform:scale(.75) } }
+.itemS { animation: itemS 12s ease-in-out infinite; }
+
+@keyframes itemV { 0% { opacity:1 } 98.8% { opacity:0 } 100% { opacity:0 } }
+.itemV { animation: itemV 12s step-end infinite; }
+
+@keyframes f0 { 0% { opacity:1 } 31% { opacity:0 } 100% { opacity:0 } }
+.f0 { animation: f0 12s step-end infinite; }
+
+@keyframes f1 { 0% { opacity:0 } 31% { opacity:1 } 58% { opacity:0 } 100% { opacity:0 } }
+.f1 { animation: f1 12s step-end infinite; }
+
+@keyframes f2 { 0% { opacity:0 } 58% { opacity:1 } 82% { opacity:0 } 100% { opacity:0 } }
+.f2 { animation: f2 12s step-end infinite; }
+
+@keyframes f3 { 0% { opacity:0 } 82% { opacity:1 } 98.8% { opacity:0 } 100% { opacity:0 } }
+.f3 { animation: f3 12s step-end infinite; }
+</style>
+<rect class="bg" width="960" height="250" rx="12"/>
+<text x="28" y="32" class="" font-size="14" style="fill:var(--muted)">how a mistake becomes a guardrail</text>
+<rect x="330" y="44" width="550" height="4" class="muted" />
+<g class="pulse" ><rect x="330" y="43" width="10" height="6" class="amber" /></g>
+<g class="pulse pl2" ><rect x="390" y="43" width="10" height="6" class="ok" /></g>
+<g class="pulse pl3" ><rect x="450" y="43" width="10" height="6" class="accent" /></g>
+<rect x="452" y="36" width="2" height="8" class="muted" /><rect x="446" y="34" width="14" height="3" class="accent" />
+<rect x="642" y="36" width="2" height="8" class="muted" /><rect x="636" y="34" width="14" height="3" class="accent" />
+<rect x="782" y="36" width="2" height="8" class="muted" /><rect x="776" y="34" width="14" height="3" class="accent" />
+<g class="lamp lp1" ><rect x="350" y="0" width="2" height="24" class="muted" /><path d="M342 34 L360 34 L356 24 L346 24 Z" class="amber"/></g>
+<g class="lamp lp2" ><rect x="480" y="0" width="2" height="24" class="muted" /><path d="M472 34 L490 34 L486 24 L476 24 Z" class="amber"/></g>
+<g class="lamp lp3" ><rect x="720" y="0" width="2" height="24" class="muted" /><path d="M712 34 L730 34 L726 24 L716 24 Z" class="amber"/></g>
+<g class="lamp lp4" ><rect x="820" y="0" width="2" height="24" class="muted" /><path d="M812 34 L830 34 L826 24 L816 24 Z" class="amber"/></g>
+<g class="wheel" style="transform-origin:930px 34px;animation-duration:20s;animation-direction:normal"><circle cx="930" cy="34" r="17" class="muted"/><circle cx="930" cy="34" r="6" class="bg"/><rect x="946" y="32" width="5" height="5" class="muted" /><rect x="943" y="43" width="5" height="5" class="muted" /><rect x="934" y="49" width="5" height="5" class="muted" /><rect x="922" y="49" width="5" height="5" class="muted" /><rect x="913" y="43" width="5" height="5" class="muted" /><rect x="910" y="32" width="5" height="5" class="muted" /><rect x="913" y="21" width="5" height="5" class="muted" /><rect x="922" y="15" width="5" height="5" class="muted" /><rect x="934" y="15" width="5" height="5" class="muted" /><rect x="943" y="21" width="5" height="5" class="muted" /></g><g class="wheel" style="transform-origin:896px 24px;animation-duration:12s;animation-direction:reverse"><circle cx="896" cy="24" r="10" class="dim"/><circle cx="896" cy="24" r="3" class="bg"/><rect x="905" y="22" width="5" height="5" class="dim" /><rect x="900" y="32" width="5" height="5" class="dim" /><rect x="888" y="32" width="5" height="5" class="dim" /><rect x="883" y="22" width="5" height="5" class="dim" /><rect x="888" y="12" width="5" height="5" class="dim" /><rect x="900" y="12" width="5" height="5" class="dim" /></g>
+<rect x="40" y="178" width="912" height="16" class="ink" rx="8"/>
+<line class="belt" x1="48" y1="186" x2="944" y2="186"/>
+<circle cx="60" cy="200" r="5" class="roll"/>
+<circle cx="100" cy="200" r="5" class="roll"/>
+<circle cx="140" cy="200" r="5" class="roll"/>
+<circle cx="180" cy="200" r="5" class="roll"/>
+<circle cx="220" cy="200" r="5" class="roll"/>
+<circle cx="260" cy="200" r="5" class="roll"/>
+<circle cx="300" cy="200" r="5" class="roll"/>
+<circle cx="340" cy="200" r="5" class="roll"/>
+<circle cx="380" cy="200" r="5" class="roll"/>
+<circle cx="420" cy="200" r="5" class="roll"/>
+<circle cx="460" cy="200" r="5" class="roll"/>
+<circle cx="500" cy="200" r="5" class="roll"/>
+<circle cx="540" cy="200" r="5" class="roll"/>
+<circle cx="580" cy="200" r="5" class="roll"/>
+<circle cx="620" cy="200" r="5" class="roll"/>
+<circle cx="660" cy="200" r="5" class="roll"/>
+<circle cx="700" cy="200" r="5" class="roll"/>
+<circle cx="740" cy="200" r="5" class="roll"/>
+<circle cx="780" cy="200" r="5" class="roll"/>
+<circle cx="820" cy="200" r="5" class="roll"/>
+<circle cx="860" cy="200" r="5" class="roll"/>
+<circle cx="900" cy="200" r="5" class="roll"/>
+<circle cx="940" cy="200" r="5" class="roll"/>
+<rect x="68" y="104" width="16" height="4" class="ink" /><rect x="68" y="108" width="16" height="14" class="skin" /><g class="blink"><rect x="71" y="113" width="3" height="3" class="ink" /><rect x="78" y="113" width="3" height="3" class="ink" /></g><rect x="64" y="122" width="24" height="26" class="amber" /><rect x="66" y="148" width="8" height="28" class="ink" /><rect x="78" y="148" width="8" height="28" class="ink" />
+<g class="armW" ><rect x="60" y="124" width="4" height="18" class="amber" /></g><g class="armP" ><rect x="88" y="124" width="4" height="18" class="amber" /><rect x="88" y="140" width="4" height="4" class="skin" /></g>
+<g class="bub" ><rect x="98" y="56" width="140" height="30" class="panel" rx="8" stroke="var(--line)" stroke-width="1.5"/><rect x="110" y="84" width="10" height="8" class="panel" /><text x="168" y="76" class="" font-size="13" text-anchor="middle" font-weight="700">not like that</text></g>
+<rect x="412" y="106" width="16" height="4" class="ink" /><rect x="412" y="110" width="16" height="14" class="skin" /><g class="blink"><rect x="415" y="115" width="3" height="3" class="ink" /><rect x="422" y="115" width="3" height="3" class="ink" /></g><rect x="408" y="124" width="24" height="26" class="cream" /><rect x="410" y="150" width="8" height="28" class="ink" /><rect x="422" y="150" width="8" height="28" class="ink" />
+<g class="armS" ><rect x="404" y="126" width="4" height="38" class="cream" /><rect x="399" y="162" width="14" height="6" class="accent" /></g>
+<g class="armR" ><rect x="432" y="126" width="4" height="18" class="cream" /></g>
+<rect x="462" y="150" width="4" height="28" class="wood" /><rect x="452" y="176" width="24" height="3" class="wood" /><rect x="446" y="140" width="36" height="14" class="star" stroke="var(--wood)" stroke-width="2"/>
+<rect x="450" y="143" width="22" height="2" class="muted" /><rect x="450" y="147" width="16" height="2" class="muted" /><g class="ink3" ><rect x="450" y="151" width="26" height="2" class="accent" /></g>
+<g class="dust" opacity="0"><rect x="363" y="150" width="3" height="3" class="muted" /><rect x="377" y="152" width="3" height="3" class="muted" /><rect x="370" y="146" width="3" height="3" class="muted" /></g>
+<g class="press" ><rect x="580" y="62" width="6" height="14" class="muted" /><rect x="594" y="62" width="6" height="14" class="muted" /><rect x="574" y="76" width="32" height="20" class="ink" /><rect x="566" y="96" width="48" height="12" class="cream" /></g>
+<rect x="546" y="70" width="8" height="108" class="wood" /><rect x="626" y="70" width="8" height="108" class="wood" /><rect x="546" y="64" width="88" height="12" class="wood" />
+<g class="puff" ><rect x="548" y="58" width="4" height="4" class="muted" /></g><g class="puff pf2" ><rect x="552" y="56" width="4" height="4" class="muted" /></g><g class="puff pf3" ><rect x="628" y="58" width="4" height="4" class="muted" /></g>
+<circle cx="514" cy="120" r="14" fill="none" class="line" stroke-width="3"/>
+<g class="wheel" style="transform-origin:514px 120px;animation-duration:3s"><rect x="500" y="119" width="28" height="2" class="muted" /><rect x="513" y="106" width="2" height="28" class="muted" /><rect x="510" y="116" width="8" height="8" class="accent" /></g>
+<rect x="640" y="96" width="44" height="82" class="panel" /><rect x="646" y="104" width="32" height="4" class="muted" /><rect x="646" y="114" width="26" height="4" class="muted" /><rect x="646" y="124" width="30" height="4" class="muted" /><g class="newline" ><rect x="646" y="134" width="30" height="4" class="accent" /></g>
+<rect x="694" y="150" width="68" height="4" class="wood" /><rect x="700" y="108" width="56" height="42" class="wood" /><rect x="736" y="64" width="12" height="44" class="wood" /><rect x="710" y="122" width="36" height="22" class="night" />
+<g class="glow" ><rect x="712" y="138" width="32" height="6" class="accent" opacity=".7"/></g>
+<g class="flame" ><rect x="714" y="128" width="8" height="14" class="accent" /></g><g class="flame fl2" ><rect x="724" y="124" width="8" height="18" class="amber" /></g><g class="flame fl3" ><rect x="734" y="130" width="8" height="12" class="accent" /></g>
+<g class="smoke" ><rect x="740" y="58" width="6" height="6" class="muted" /></g><g class="smoke sm2" ><rect x="742" y="56" width="6" height="6" class="muted" /></g><g class="smoke sm3" ><rect x="738" y="56" width="5" height="5" class="muted" /></g>
+<rect x="780" y="160" width="56" height="10" class="ink" /><rect x="794" y="170" width="28" height="8" class="ink" />
+<g class="hot" opacity="0"><rect x="800" y="152" width="22" height="8" class="amber" /><rect x="806" y="148" width="10" height="4" class="accent" /></g>
+<rect x="854" y="106" width="16" height="4" class="ink" /><rect x="854" y="110" width="16" height="14" class="skin" /><g class="blink"><rect x="857" y="115" width="3" height="3" class="ink" /><rect x="864" y="115" width="3" height="3" class="ink" /></g><rect x="850" y="124" width="24" height="26" class="ok" /><rect x="852" y="150" width="8" height="28" class="ink" /><rect x="864" y="150" width="8" height="28" class="ink" />
+<rect x="874" y="126" width="4" height="18" class="ok" />
+<g class="armH" ><rect x="846" y="126" width="4" height="22" class="ok" /><rect x="846" y="146" width="4" height="18" class="wood" /><rect x="838" y="160" width="20" height="8" class="muted" /></g>
+<g class="sp0" opacity="0"><rect x="812" y="152" width="3" height="3" class="amber" /></g>
+<g class="sp1" opacity="0"><rect x="812" y="152" width="3" height="3" class="accent" /></g>
+<g class="sp2" opacity="0"><rect x="812" y="152" width="3" height="3" class="amber" /></g>
+<g class="sp3" opacity="0"><rect x="812" y="152" width="3" height="3" class="accent" /></g>
+<g class="sp4" opacity="0"><rect x="812" y="152" width="3" height="3" class="star" /></g>
+<g class="sp5" opacity="0"><rect x="812" y="152" width="3" height="3" class="amber" /></g>
+<text x="150" y="224" class="lbl" font-size="13" >correction</text>
+<text x="150" y="240" class="sub" >the owner says no</text>
+<text x="370" y="224" class="lbl" font-size="13" >/atone</text>
+<text x="370" y="240" class="sub" >logged to events.jsonl</text>
+<text x="590" y="224" class="lbl" font-size="13" >rules/</text>
+<text x="590" y="240" class="sub" >written down · 67</text>
+<text x="810" y="224" class="lbl" font-size="13" >hooks</text>
+<text x="810" y="240" class="sub" >enforced · 198</text>
+<rect x="884" y="81" width="44" height="3" class="wood" />
+<rect x="884" y="111" width="44" height="3" class="wood" />
+<rect x="884" y="141" width="44" height="3" class="wood" />
+<path d="M888 120 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="ok"/>
+<path d="M908 120 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="ok"/>
+<path d="M888 90 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="ok"/>
+<path d="M908 90 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="ok"/>
+<path d="M888 60 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="dim"/><g class="slot" ><path d="M908 60 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="dim"/></g>
+<g class="rackNew" opacity="0"><path d="M908 60 h16 v10 q0 8 -8 11 q-8 -3 -8 -11 z" class="ok"/><rect x="902" y="56" width="3" height="3" class="amber" /><rect x="924" y="56" width="3" height="3" class="amber" /><rect x="914" y="52" width="3" height="3" class="star" /></g>
+<rect x="926" y="52" width="2" height="126" class="muted" /><rect x="956" y="52" width="2" height="126" class="muted" />
+<g class="itemV" ><g class="item" ><g class="itemS" ><g class="f0" ><rect x="134" y="156" width="32" height="22" class="bad" /><text x="150" y="172" class="" font-size="14" text-anchor="middle" font-weight="700" style="fill:#fff">!</text></g><g class="f1" opacity="0"><rect x="134" y="156" width="32" height="22" class="amber" /><text x="150" y="171" class="" font-size="13" text-anchor="middle" font-weight="700" style="fill:#fff">✓</text></g><g class="f2" opacity="0"><rect x="132" y="160" width="36" height="16" class="cream" /><rect x="128" y="158" width="6" height="20" class="wood" /><rect x="166" y="158" width="6" height="20" class="wood" /></g><g class="f3" opacity="0"><path d="M136 154 H164 V168 Q164 178 150 182 Q136 178 136 168 Z" class="ok"/></g></g></g></g>
+</svg>

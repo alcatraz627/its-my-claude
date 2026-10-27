@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
-# guard-git-push.sh — HARD push gate for main/master + protected repos (PreToolUse:Bash).
+# guard-git-push.sh: HARD push gate for main/master + protected repos (PreToolUse:Bash).
 #
-# Pushing to a shared branch is a fresh-approval action every single time — "one
+# Pushing to a shared branch is a fresh-approval action every single time: "one
 # approval is not blanket." The problem this closes: a context compaction silently
 # strips the "not yet approved to push" state while preserving task momentum, so a
 # resumed session pushes to main believing it was cleared. Advisory rules don't
 # survive that; a gate does. Sibling of guard-user-commit.sh (which gates commit
-# creation — push was deliberately left untouched there; this fills that gap).
+# creation: push was deliberately left untouched there; this fills that gap).
 #
 # WHAT IS GATED (any one):
 #   - the push targets main / master (explicit refspec token, --all/--mirror, or the
 #     current checkout is main/master), OR
 #   - the repo is protected (same surface as guard-user-commit: a git-common-dir in
 #     ~/.claude/protected-repos.list, or a tracked .claude/require-user-commit marker).
-# Feature-branch pushes in unprotected repos pass freely — no friction on normal work.
+# Feature-branch pushes in unprotected repos pass freely: no friction on normal work.
 #
 # APPROVAL has three user-owned channels, all single-use per push:
 #   1. Typed line: the block prints a nonce; the owner types "approve push
@@ -28,7 +28,7 @@
 #      (2026-09-08), so the block text no longer recommends it.
 #   3. Sentinel fallback (the owner's own terminal shell): ~/.claude/.push-approved-<session_id>
 # The block message prints the exact command. It MUST be run by the user with the
-# `! ` prefix (which runs in the user's own shell and bypasses PreToolUse hooks) —
+# `! ` prefix (which runs in the user's own shell and bypasses PreToolUse hooks):
 # NOT by the agent. The gate consumes (deletes) the sentinel on the allowed push,
 # so every gated push needs a fresh approval. That single-use property is also what
 # makes it survive compaction correctly: a stale approval can authorise at most one
@@ -39,7 +39,7 @@
 # `touch ~/.claude/.no-*-gate` a would let the very agent this gate exists to stop
 # lift it. To disable, the USER removes the repo from the protected list / stops
 # pushing to main. This hook ALSO blocks the agent from creating the sentinel itself
-# (anti-self-lift) — only the user's out-of-band `! touch` can.
+# (anti-self-lift): only the user's out-of-band `! touch` can.
 set -uo pipefail
 
 command -v jq >/dev/null 2>&1 || exit 0
@@ -58,13 +58,13 @@ SENTINEL="$HOME/.claude/.push-approved-${sid_safe}"
 blockjson() { jq -cn --arg r "$1" '{decision:"block", reason:$r}' 2>/dev/null || true; exit 0; }
 
 # No anti-self-lift string-scan. An earlier version blocked any command that
-# merely NAMED the sentinel path alongside "touch"/">"/"tee" — which false-fired
+# merely NAMED the sentinel path alongside "touch"/">"/"tee": which false-fired
 # on existence checks and on any command that just DISPLAYS the approval
 # instructions (they contain "touch <sentinel>"). Raw-string scanning of the
 # command can't tell a write from a mention (see command-scanning-guards-state),
 # and by the hook-design cost-of-false-fire test that guard was a bad bet: high
 # FP cost, low marginal benefit. The real protection is the push gate below plus
-# the block message telling the agent not to self-approve — the same trust model
+# the block message telling the agent not to self-approve: the same trust model
 # guard-user-commit.sh uses for its protection config.
 
 # ── Reduce the command to the pushes it would actually run ──────────────────
@@ -116,7 +116,7 @@ tgt_common=$(common_dir_of "$target")
 # ── Decide whether this push is gated ────────────────────────────────────────
 gated=0; why=""
 
-# (1) protected repo — same detection as guard-user-commit
+# (1) protected repo: same detection as guard-user-commit
 if [ -f "$HOME/.claude/protected-repos.list" ]; then
   while IFS= read -r entry; do
     entry="${entry%%#*}"; entry=$(printf '%s' "$entry" | sed -E 's/^[[:space:]]+|[[:space:]]+$//g')
@@ -136,7 +136,7 @@ fi
 # only consulted when the push names no ref at all (a bare `git push`), because a
 # bare push goes to the current branch's upstream. Judging by HEAD alone blocked
 # `push origin --delete canary` from main and killed compound calls whose push
-# targeted a feature branch (automation-d8ff1149, 2026-08-20 — eight spent canary
+# targeted a feature branch (automation-d8ff1149, 2026-08-20: eight spent canary
 # branches stranded on the remote).
 if [ "$gated" = 0 ]; then
   # Non-flag tokens after `push`: first is the remote, the rest are refspecs.
@@ -211,16 +211,16 @@ fi
 #   button returned:Approve this push, gave up:false
 # WITHOUT the dialog ever being drawn for a human. Something in the automation
 # layer answers it. The gate read that as "the user approved" and let the push
-# through — twice, on real pushes to main, silently.
+# through: twice, on real pushes to main, silently.
 #
 # Why the tests missed it: every branch was exercised against a STUBBED osascript
 # on PATH. The stub behaved as documented; the real binary does not. A security
-# gate must be exercised against the real dependency, never a stub — the stub can
+# gate must be exercised against the real dependency, never a stub: the stub can
 # only confirm the logic you already believe.
 #
 # The invariant this violated: an approval channel must be one the AGENT CANNOT
 # ACTUATE. A dialog the agent's own process can cause to return "approved" is not
-# an approval — it is a rubber stamp the agent holds. The sentinel below is safe
+# an approval: it is a rubber stamp the agent holds. The sentinel below is safe
 # precisely because the user must create it out-of-band with `! touch`, in their
 # own shell, where PreToolUse hooks do not run.
 #
@@ -228,7 +228,7 @@ fi
 # that an UNCLICKED dialog burns its full `giving up after N` timeout and returns
 # `gave up:true`. If it returns instantly, it is being auto-answered and cannot
 # carry authority. (`PUSHGATE_DIALOG_NOTIFY=1` may be added later for a
-# notify-only dialog that grants nothing — but it must never gate the exit.)
+# notify-only dialog that grants nothing: but it must never gate the exit.)
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook push-gate --action block --heeded unknown >/dev/null 2>&1 || true
 # A refused call runs nothing, so a commit chained before the push never landed

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# identity.test.sh — adversarial tests for the /tasks project-identity contract
+# identity.test.sh: adversarial tests for the /tasks project-identity contract
 # (~/.claude/assets/reports/20260922-tasks-identity-fix/contract.md, I1-I6).
 #
 # RED-FIRST BY DESIGN. task.sh has no --project flag and task-table.sh has no
@@ -40,7 +40,7 @@ newrepo(){ mkdir -p "$1" && git -C "$1" init -q; }               # newrepo <dir>
 # resolve-store.sh's own fallback (rung "the one populated store stamped with
 # this project") means a SECOND session whose first write happens to share an
 # earlier session's CWD gets silently redirected into that earlier session's
-# store instead of getting its own — the exact identity-lying behaviour this
+# store instead of getting its own: the exact identity-lying behaviour this
 # contract is about. Reusing a repo path across two "first write" scenarios in
 # this suite would corrupt the suite's own isolation, not just be untidy. Any
 # CWD used to establish a store's FIRST row must come from here.

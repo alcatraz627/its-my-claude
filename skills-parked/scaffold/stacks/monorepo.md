@@ -1,4 +1,4 @@
-# Turborepo Monorepo — Next.js App + Shared UI Package
+# Turborepo Monorepo: Next.js App + Shared UI Package
 
 ## Meta
 - Runtime: node

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# atone-unsafe-unlock.sh — ESCAPE HATCH. Clears kernel protection on raw atone
+# atone-unsafe-unlock.sh: ESCAPE HATCH. Clears kernel protection on raw atone
 # data so a human operator can recover from corruption or run admin repair.
 #
 # Phrase-gated to prevent any agent from satisfying the prompt.
-# Confirmation phrase is hard-coded literal text — no env override, no flag.
+# Confirmation phrase is hard-coded literal text: no env override, no flag.
 # Logs every unlock to ~/.claude/atone-snapshots/_unlock-log.txt (uappnd-flagged).
 
 set -uo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# hook-feedback.sh — the agent vent channel for ~/.claude hooks.
+# hook-feedback.sh: the agent vent channel for ~/.claude hooks.
 #
 # When a hook blocks or nudges you and you think it's wrong/obstructive (or
 # genuinely useful), record one line here INSTEAD of routing around the guard.

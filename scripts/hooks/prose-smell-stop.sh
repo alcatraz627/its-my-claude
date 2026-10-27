@@ -3,7 +3,7 @@
 # instrument: self (clean re-emit)
 # review-by: 2026-10-16
 # retire-if: heed-rate < 40% over 200 fires
-# prose-smell-stop.sh — Stop hook: flag default-LLM "AI-smell" register in the
+# prose-smell-stop.sh: Stop hook: flag default-LLM "AI-smell" register in the
 # final assistant message before it ends the turn.
 #
 # The user reads reply tone as a UI surface and has S3'd this twice (atone
@@ -16,18 +16,18 @@
 #               ≥3 "**Label**: fragment" rows · >5 bold spans ·
 #               praise-without-evidence opener
 #   warn-tier:  ★ insight boxes (NOTE: the Explanatory output style legitimately
-#               produces one per message — hence warn, never block) ·
+#               produces one per message: hence warn, never block) ·
 #               option-menu closer (legitimate forks exist)
 #
-# Consequence (features/hook-design.md — matched to cost-of-false-fire):
+# Consequence (features/hook-design.md: matched to cost-of-false-fire):
 #   ≥2 block-tier categories → a WOULD-BLOCK systemMessage by default; a real
 #     decision:block only when PROSE_SMELL_ENFORCE=1. Measure-first rollout:
 #     both source RCAs asked to "flag", cost-of-miss is one LLM-voiced message
 #     (recoverable), and the active Explanatory output style produces em-dashes
-#     legitimately. NOTE: enforcement WAS promoted — settings.json sets
+#     legitimately. NOTE: enforcement WAS promoted: settings.json sets
 #     PROSE_SMELL_ENFORCE=1, so decision:block is live. The paragraph below
 #     describes the original measure-first rollout, kept for provenance.
-#     legitimately — so blocking waits for fire-rate telemetry (review verdict
+#     legitimately: so blocking waits for fire-rate telemetry (review verdict
 #     2026-07-10, assets/reports/20260710-queue-reviews/1.5a-prose-smell.md).
 #   any tells at all → systemMessage note (non-blocking, visible)
 # Loop-safe like filename-dot-stop.sh: identical message never re-fires.
@@ -70,7 +70,7 @@ text=$(hook_last_assistant_text "$input" "$tp")
 
 # Prose = text minus fenced code blocks, inline code spans, blockquotes, and
 # markdown table rows (a table with a bolded first column is a legitimate doc
-# shape, not bold-spam — confirmed FP in review).
+# shape, not bold-spam: confirmed FP in review).
 prose=$(printf '%s\n' "$text" \
   | awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; next} !f{print}' \
   | sed -e 's/`[^`]*`//g' -e '/^[[:space:]]*>/d' -e '/^[[:space:]]*|/d')
@@ -96,7 +96,7 @@ if [ "${label_n:-0}" -ge 3 ] 2>/dev/null; then
   block_hits=$((block_hits + 1))
 fi
 
-# 4 · bold-spam (>5 bold spans — if everything is emphasized, nothing is).
+# 4 · bold-spam (>5 bold spans: if everything is emphasized, nothing is).
 bold_n=$(printf '%s' "$prose" | rg -o '\*\*[^*]+\*\*' 2>/dev/null | wc -l | tr -d ' ')
 if [ "${bold_n:-0}" -gt 5 ] 2>/dev/null; then
   tells="${tells}\n- bold spans ×${bold_n} (cap emphasis near one phrase per message)"
@@ -131,7 +131,7 @@ if [ "${contra_n:-0}" -ge 1 ] 2>/dev/null; then
   block_hits=$((block_hits + 1))
 fi
 
-# 6 · ★ insight boxes (warn-tier only — Explanatory style produces one legitimately).
+# 6 · ★ insight boxes (warn-tier only: Explanatory style produces one legitimately).
 star_n=$(printf '%s' "$prose" | rg -c '★' 2>/dev/null || true)
 if [ "${star_n:-0}" -ge 1 ] 2>/dev/null; then
   tells="${tells}\n- ★ decoration ×${star_n} (warn-tier: fine under the Explanatory output style, decoration otherwise)"
@@ -150,7 +150,7 @@ fi
 # long lists, and replies that DO lead with the answer). Adding the opener test
 # drops it to 0.35% and 3 of 4 hits are real: `**Task: Root-folder census**`,
 # `**Formulating Central Config Design**`, `**Identifying Model-Specific
-# Capabilities**` — two of which are thinking-block titles that leaked into prose.
+# Capabilities**`: two of which are thinking-block titles that leaked into prose.
 #
 # The fourth was `**Six done, one in flight, two untouched.**`, which IS the answer
 # wearing bold. A header is a noun phrase; that is a sentence. Trailing sentence
@@ -190,7 +190,7 @@ if [ -n "$last_user" ] \
   fi
 fi
 
-# 7 · option-menu closer (warn-tier — genuine forks are legitimate).
+# 7 · option-menu closer (warn-tier: genuine forks are legitimate).
 closer=$(printf '%s\n' "$prose" | rg '\S' 2>/dev/null | tail -3)
 if printf '%s' "$closer" | rg -qi '(would you like me to|do you want me to|shall i|want me to) .+ or .+\?' 2>/dev/null; then
   tells="${tells}\n- option-menu closer — if the task is done, report and stop; offer forks only at genuine decision points"
@@ -199,7 +199,7 @@ fi
 MARK="/tmp/claude-prose-smell-${sid8}"
 
 # Fully-clean message: the best outcome. A lingering marker means a prior fire
-# was heeded — record that BEFORE exiting (review C1: the original ordering made
+# was heeded: record that BEFORE exiting (review C1: the original ordering made
 # exactly this case invisible to the heed metric and left the marker stale).
 if [ -z "$tells" ]; then
   if [ -f "$MARK" ]; then
@@ -214,7 +214,7 @@ sig=$(printf '%s' "$prose" | shasum 2>/dev/null | awk '{print $1}')
 if [ "$block_hits" -ge 2 ]; then
   prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
   if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
-    # Already fired on this exact message once — step aside with a visible note.
+    # Already fired on this exact message once: step aside with a visible note.
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prose-smell --heed-of "prose-smell:$sid8" --heeded false >/dev/null 2>&1 || true
     jq -cn --arg t "$(printf '⚠ prose-smell (not re-firing): tells remain:%b\nMute: touch ~/.claude/.no-prose-smell-gate' "$tells")" '{systemMessage:$t}' 2>/dev/null || true
     exit 0
@@ -240,7 +240,7 @@ if [ "$block_hits" -ge 2 ]; then
 fi
 
 # Single-category (or warn-tier-only) fire: visible note. A partially-cleaned
-# message after a prior fire still counts as heeded — record + clear.
+# message after a prior fire still counts as heeded: record + clear.
 if [ -f "$MARK" ]; then
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prose-smell --heed-of "prose-smell:$sid8" --heeded true >/dev/null 2>&1 || true
   rm -f "$MARK" 2>/dev/null || true

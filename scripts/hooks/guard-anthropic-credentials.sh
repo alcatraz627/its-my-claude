@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# guard-anthropic-credentials.sh — PreToolUse hard-stop on ANY attempt to SET
+# guard-anthropic-credentials.sh: PreToolUse hard-stop on ANY attempt to SET
 # the Anthropic API key or a global-blast-radius credential.
 #
 # Why a hard block: a bad/changed key crashes EVERY Claude instance at once, and
-# the agent that did it dies with them — only the human can recover. So the
+# the agent that did it dies with them: only the human can recover. So the
 # correct action is always "ask the user." (Incident 2026-05-24.)
 #
-# Distinguishes SETTING (blocked) from MENTIONING (allowed) — a grep/regex/echo
+# Distinguishes SETTING (blocked) from MENTIONING (allowed): a grep/regex/echo
 # that merely contains "ANTHROPIC_API_KEY" (e.g. the secret-scan guards) passes.
 #
 # Mute (almost never): touch ~/.claude/.allow-cred-write
@@ -14,7 +14,7 @@
 set -uo pipefail
 
 # Mute is applied AFTER detection (inside block()), not at the top: a muted run that
-# WOULD have fired is logged action:"muted" — the "muted under pressure" signal — so
+# WOULD have fired is logged action:"muted": the "muted under pressure" signal: so
 # the silence is dated and visible rather than an early exit that leaves no trace.
 input=$(cat 2>/dev/null)
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)

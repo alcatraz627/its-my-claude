@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# block-curl-post-auth.sh — PreToolUse[Bash] HARD BLOCK.
+# block-curl-post-auth.sh: PreToolUse[Bash] HARD BLOCK.
 # Blocks `curl -X POST` (or similar mutating method) with Authorization header.
 # These leave no audit trail; use mcp__file-tools__http_request instead.
 #
 # Allows: plain GET curl, curl without auth, curl piping local files (-T <file> for upload
-# is still flagged; that's intentional — uploads need audit too).
+# is still flagged; that's intentional: uploads need audit too).
 #
-# Mute: touch ~/.claude/.no-curl-auth-block (use with care — this is a
+# Mute: touch ~/.claude/.no-curl-auth-block (use with care: this is a
 # security/auditability guardrail, not a convenience nudge).
 
 set -uo pipefail

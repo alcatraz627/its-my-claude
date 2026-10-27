@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 41-wake-fence.sh — UserPromptSubmit hinter: a cron wake while the owner is
+# 41-wake-fence.sh: UserPromptSubmit hinter: a cron wake while the owner is
 # mid-conversation picks nothing.
 #
 # The wake skill's step-2 fence (2026-09-08) says exactly this, as prose inside

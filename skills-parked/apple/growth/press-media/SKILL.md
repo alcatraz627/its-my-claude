@@ -87,11 +87,11 @@ WHAT MAKES IT DIFFERENT:
 
 ### Step 3: Finding Relevant Journalists and Outlets
 
-Build a targeted list of 20-30 contacts. Quality over quantity — 20 personalized pitches outperform 200 generic ones.
+Build a targeted list of 20-30 contacts. Quality over quantity: 20 personalized pitches outperform 200 generic ones.
 
 #### Apple-Focused Outlets
 
-**Tier 1 — Major Coverage (hardest to get, biggest impact)**
+**Tier 1: Major Coverage (hardest to get, biggest impact)**
 | Outlet | Focus | Best For |
 |--------|-------|----------|
 | MacStories | In-depth iOS/Mac app reviews | Thoughtful, well-designed apps |
@@ -100,7 +100,7 @@ Build a targeted list of 20-30 contacts. Quality over quantity — 20 personaliz
 | TechCrunch | Startup and tech news | Apps with a business/funding angle |
 | Daring Fireball | Apple commentary | Apps John Gruber would personally use |
 
-**Tier 2 — Focused Coverage (more accessible, strong reach)**
+**Tier 2: Focused Coverage (more accessible, strong reach)**
 | Outlet | Focus | Best For |
 |--------|-------|----------|
 | iMore | Apple ecosystem guides | How-to and practical apps |
@@ -109,7 +109,7 @@ Build a targeted list of 20-30 contacts. Quality over quantity — 20 personaliz
 | TUAW / Cult of Mac | Apple enthusiast coverage | Consumer-friendly apps |
 | Indie App Santa | Indie app promotion | Well-designed indie apps |
 
-**Tier 3 — Niche and Community (most accessible, targeted reach)**
+**Tier 3: Niche and Community (most accessible, targeted reach)**
 | Outlet | Focus | Best For |
 |--------|-------|----------|
 | SwiftUI Weekly / iOS Dev Weekly | Developer newsletters | Developer tools and technical apps |
@@ -158,7 +158,7 @@ Search for "best iOS apps" or "best Mac apps" on YouTube. Look for:
 - Send initial pitch
 - Wait 5-7 business days
 - Send ONE follow-up (add new info or angle, don't just repeat)
-- If no response after follow-up, move on — do NOT keep emailing
+- If no response after follow-up, move on: do NOT keep emailing
 - Never guilt-trip or get frustrated in follow-ups
 
 ### Step 5: Embargo Strategy
@@ -180,13 +180,13 @@ Embargoes let you give journalists early access in exchange for coordinated cove
 
 #### Rules of Embargoes
 - Always put embargo date/time in writing
-- Honor the exclusive — don't give the same story to competitors
+- Honor the exclusive: don't give the same story to competitors
 - If someone breaks embargo, never work with them again
 - Be understanding if a small outlet publishes early by accident
 
 ### Step 6: Story Angles That Get Coverage
 
-Journalists don't write about apps — they write about stories. Frame your pitch around a story, not a feature list.
+Journalists don't write about apps: they write about stories. Frame your pitch around a story, not a feature list.
 
 #### Story Angles That Work for Indie Developers
 
@@ -198,7 +198,7 @@ Journalists don't write about apps — they write about stories. Frame your pitc
 
 **Scratching Your Own Itch**
 - "I couldn't find a [category] app that [specific need], so I built one"
-- "As a [profession], I needed [specific tool] — it didn't exist"
+- "As a [profession], I needed [specific tool]: it didn't exist"
 - Why it works: authentic, relatable, shows deep domain knowledge
 
 **Innovative Apple Technology Use**
@@ -223,11 +223,11 @@ Journalists don't write about apps — they write about stories. Frame your pitc
 - Why it works: Apple-focused outlets value design deeply
 
 #### Story Angles That Do NOT Work
-- "My app is better than [competitor]" — sounds petty
-- "My app has 50 features" — feature lists are boring
-- "My app is the best [category] app" — let reviewers decide
-- "I need coverage to grow" — journalists are not your marketing team
-- "Check out my app" (no angle at all) — gives them nothing to write about
+- "My app is better than [competitor]": sounds petty
+- "My app has 50 features": feature lists are boring
+- "My app is the best [category] app": let reviewers decide
+- "I need coverage to grow": journalists are not your marketing team
+- "Check out my app" (no angle at all): gives them nothing to write about
 
 ### Step 7: After Coverage
 
@@ -236,13 +236,13 @@ Journalists don't write about apps — they write about stories. Frame your pitc
 2. Share the article on all your channels
 3. Add "As featured in..." to your App Store description and website
 4. Screenshot the coverage for future press kit
-5. Note which angle worked — use it for future pitches
+5. Note which angle worked: use it for future pitches
 
 #### When You Don't Get Coverage
 - Do NOT send angry or disappointed emails
 - Evaluate: was the pitch personalized? Was the timing right? Was the angle strong?
 - Try a different angle next time (update, milestone, seasonal)
-- Build the relationship anyway — comment on their articles, engage on social media
+- Build the relationship anyway: comment on their articles, engage on social media
 - Remember: most pitches don't get responses. A 10-20% response rate is normal.
 
 ## Reference Files
@@ -305,6 +305,6 @@ Present outreach plan as:
 
 ## References
 
-- **pitch-templates.md** — Email templates for all pitch types
-- **community-building/** — For organic promotion via social media
-- **app-store/** — For optimizing the product page journalists will link to
+- **pitch-templates.md**: Email templates for all pitch types
+- **community-building/**: For organic promotion via social media
+- **app-store/**: For optimizing the product page journalists will link to

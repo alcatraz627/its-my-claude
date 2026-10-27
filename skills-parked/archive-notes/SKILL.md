@@ -15,9 +15,9 @@ Reads a project's `runtime-notes.md`, counts entries, and archives entries beyon
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `~/.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -39,7 +39,7 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Validate Input
+## Phase 1: Validate Input
 
 1. Parse arguments: extract `project-path` and optional `--keep N` (default 50).
 2. Resolve the project path to an absolute path.
@@ -55,7 +55,7 @@ If it does not exist yet, continue without it.
   Keep:      N most recent entries
 ```
 
-## Phase 2 — Count & Split
+## Phase 2: Count & Split
 
 1. Read the entire `runtime-notes.md` file.
 2. Parse entries. Each entry starts with `## ` (h2 heading). The file header (lines before the first `## `) is preserved separately.
@@ -74,7 +74,7 @@ Print the split plan:
   Archiving:     Y (oldest)
 ```
 
-## Phase 3 — Write Archive
+## Phase 3: Write Archive
 
 1. Determine the archive filename:
    - Format: `runtime-notes-archive-YYYY-QN.md` where Q is the current quarter
@@ -95,14 +95,14 @@ Archived entries from <project-name>. Original file: runtime-notes.md
 
 3. Acquire lock, write the archive file, release lock.
 
-## Phase 4 — Truncate Active Notes
+## Phase 4: Truncate Active Notes
 
 1. Rebuild `runtime-notes.md` with:
    - The original file header (title line + description)
    - Only the N most recent entries
 2. Acquire lock, write the truncated file, release lock.
 
-## Phase 5 — Verify
+## Phase 5: Verify
 
 1. Read back both files to confirm:
    - Archive file exists and contains the archived entries
@@ -123,7 +123,7 @@ Archived entries from <project-name>. Original file: runtime-notes.md
 ─────────────────────────────────────────────────────
 ```
 
-## Phase 6 — Post-Run
+## Phase 6: Post-Run
 
 Write a runtime note via:
 
@@ -138,7 +138,7 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "archive-notes" /tmp/runtim
 - Entries are identified by `## ` (h2 heading) markers. Content between headings belongs to the preceding entry.
 - The `---` separator between entries is part of the entry, not a separate element.
 - Always preserve the file header (everything before the first `## `).
-- Never delete the original `runtime-notes.md` — always truncate in place.
+- Never delete the original `runtime-notes.md`: always truncate in place.
 - The archive filename uses quarters (Q1=Jan-Mar, Q2=Apr-Jun, Q3=Jul-Sep, Q4=Oct-Dec) to group by period.
-- If an archive for the current quarter already exists, append — don't overwrite. This allows multiple archival runs per quarter.
+- If an archive for the current quarter already exists, append: don't overwrite. This allows multiple archival runs per quarter.
 - The `--keep` default of 50 matches the GUIDELINES.md rotation policy threshold.

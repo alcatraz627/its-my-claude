@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-rca-lint.sh — validates an RCA file BEFORE atone.sh add locks it.
+# atone-rca-lint.sh: validates an RCA file BEFORE atone.sh add locks it.
 #
 # Called automatically from atone.sh add when --rca-content or --rca-file is
 # present. Fails fast with specific reasons; agent must fix and retry.
@@ -7,7 +7,7 @@
 # Checks (each one a separate exit point with clear message):
 #   1. Has YAML frontmatter (--- ... --- block at top)
 #   2. H1 is on a single line (no mid-line break before the next line of body)
-#   3. No ellipsis characters (…) in table cells — signal of pre-rendered output
+#   3. No ellipsis characters (…) in table cells: signal of pre-rendered output
 #   4. No row of every-line-2-space-indent (signal of TTY-render-saved-as-source)
 #   5. Procedure section has at most ONE numbered check (template specifies "single")
 #   6. Has required sections: TL;DR, Symptom progression OR What happened, Procedure

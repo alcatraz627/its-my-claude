@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# block-nested-claude.sh — reject tool calls that would WRITE into ~/.claude/.claude/.
+# block-nested-claude.sh: reject tool calls that would WRITE into ~/.claude/.claude/.
 #
 # The nesting happens one way: when cwd is ~/.claude itself, a relative path like
 # ".claude/output/..." resolves to ~/.claude/.claude/output/... rather than to
@@ -21,7 +21,7 @@
 #   project (its .claude/ is a real subdir) and wrong only when cwd is the gcc.
 #
 # Scope, stated plainly: this catches accidental writes via the common shell verbs
-# and redirects. It is not a sandbox — a write buried in `python3 -c "open(...)"`
+# and redirects. It is not a sandbox: a write buried in `python3 -c "open(...)"`
 # is not detected, and is not the accident this guard exists for.
 #
 # Tests: bash ~/.claude/scripts/block-nested-claude.test.sh
@@ -39,7 +39,7 @@ GCC="$HOME/.claude"
 offender=""
 why=""
 
-# 1. Write/Edit/NotebookEdit declare their target outright — check it directly.
+# 1. Write/Edit/NotebookEdit declare their target outright: check it directly.
 for p in "$file_path" "$notebook_path"; do
   [ -n "$p" ] || continue
   case "$p" in
@@ -50,7 +50,7 @@ for p in "$file_path" "$notebook_path"; do
   esac
 done
 
-# 2. Bash names no target, so infer one — but only for commands that can WRITE.
+# 2. Bash names no target, so infer one: but only for commands that can WRITE.
 if [ -z "$offender" ] && [ -n "$command_str" ]; then
   # A quoted span is data, not a target: `rg '/.claude/.claude/'` is a search.
   blanked=$(printf '%s' "$command_str" | sed "s/'[^']*'/''/g; s/\"[^\"]*\"/\"\"/g")

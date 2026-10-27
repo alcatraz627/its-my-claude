@@ -28,7 +28,7 @@ _input_hash() {
 }
 
 # Compute weight per slug. severity: S3=3 S2=2 S1=1; recency: exp(-days/14); count: log(n+1)
-# All in awk for portability — no python dep here.
+# All in awk for portability: no python dep here.
 _score_for() {
   # args: severity_max(int) days_since_latest(int) count(int)
   awk -v sev="$1" -v days="$2" -v cnt="$3" \
@@ -88,7 +88,7 @@ cluster_slug() {
   cluster_name "$1" | tr ' ' '-' | tr '[:upper:]' '[:lower:]'
 }
 
-# Slugs that have ANY existing prevention proposal — open, done, OR rejected.
+# Slugs that have ANY existing prevention proposal: open, done, OR rejected.
 # Rejected slugs intentionally do NOT auto-re-draft (the user explicitly
 # said no). To re-enable proposing for a slug, re-open the prior proposal
 # manually via propose.sh (no auto-resurrection).
@@ -98,7 +98,7 @@ cluster_slug() {
 # those into the link: form (so they could corroborate in the backlog gate) and
 # did not update this reader. The function then matched nothing, reported "no
 # slug has ever been proposed", and the next consolidation re-drafted ~20 slugs
-# a human had just rejected — the exact auto-resurrection the docstring above
+# a human had just rejected: the exact auto-resurrection the docstring above
 # promises never happens. The legacy marker is still honored for any store that
 # predates the migration.
 already_proposed_slugs() {
@@ -125,7 +125,7 @@ already_proposed_slugs() {
 # True when a shipped rule, hook, or CLAUDE.md already cites this slug by name.
 #
 # The drafter proposes "create rules/<slug>.md" for every recurring pattern but
-# never checked whether that rule already exists — so a pattern that HAS been
+# never checked whether that rule already exists: so a pattern that HAS been
 # fixed keeps getting re-proposed, and its recurrence count (the thing that makes
 # it look urgent) keeps climbing precisely BECAUSE the fix works and events are
 # still being logged against it. Rules and hooks cite their originating atone slug

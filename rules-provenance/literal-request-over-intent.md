@@ -140,7 +140,7 @@ the literal **is** the intent. Implement it as given.
 - Not licence to substitute your judgment silently. When the literal wording and
   the visible intent diverge, say so in one sentence, then build the intent.
 - Not a reason to interrogate clear requests. Most requests mean what they say.
-- A halt under this rule needs a genuinely missing thing — information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
+- A halt under this rule needs a genuinely missing thing: information no derivation supplies, or authority not yet granted. Holding both, the rule does not apply: act (`never-halt-on-authority-you-hold.md`).
 
 ## Diagnostic signal
 

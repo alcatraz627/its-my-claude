@@ -6,7 +6,7 @@
 # It stayed dead for two days while looking completely alive: the registration was
 # present, its callers were arming markers, markers were appearing on disk. The
 # only artifact that disagreed was a mode bit, and nothing reads mode bits. Its
-# entire tier — the heed instrument for advisory nudges — recorded nothing, and
+# entire tier: the heed instrument for advisory nudges: recorded nothing, and
 # the silence was then read as "advisories do not convert".
 #
 # /doctor Step 3 already checks this and would have caught it. It only runs when a
@@ -15,8 +15,8 @@
 #
 # THE DISTINCTION THAT MATTERS. A command's first token decides whether the mode
 # bit is load-bearing:
-#     ~/.claude/scripts/hooks/x.sh          bare path — MUST be executable
-#     bash ~/.claude/scripts/hooks/x.sh     interpreter reads it — mode is irrelevant
+#     ~/.claude/scripts/hooks/x.sh          bare path: MUST be executable
+#     bash ~/.claude/scripts/hooks/x.sh     interpreter reads it: mode is irrelevant
 # Checking every .sh mentioned anywhere in the command conflates the two and warns
 # about files that are working fine, which is how a real warning gets skimmed past.
 
@@ -91,6 +91,35 @@ echo "== every ~/.claude/hinters/*.sh is executable (the injector skips 644 sile
 badh=$(for h in "$HOME"/.claude/hinters/*.sh; do [[ "$h" == *.test.sh ]] && continue; [ -x "$h" ] || echo "notexec $h"; done)
 [ -z "$badh" ] && ok "all hinters carry the x bit" || { bad "non-executable hinters:"; printf '       %s\n' $badh; }
 
+# ── the prose gates must stay bound to their events ──────────────────────────
+# features/prose-and-voice.md maps these. A settings edit that drops one leaves no
+# error anywhere: the reply or file simply stops being checked.
+PROSE_GATES="Stop:format-gate-stop.sh Stop:bare-id-cluster-stop.sh Stop:named-next-work-stop.sh
+Stop:owner-ask-content-stop.py Stop:doc-voice-gate.py PostToolUse:doc-voice-gate.py
+PreToolUse:guard-prose-quality.sh PreToolUse:guard-gh-prose.py PreToolUse:guard-commit-signature.sh
+PreToolUse:guard-ai-signature.sh UserPromptSubmit:format-reminder-ups.sh"
+
+# Prints "unbound <event>:<script>" for each required gate absent from that event.
+unbound() {
+  python3 - "$1" $PROSE_GATES <<'PY'
+import json, sys
+try:
+    hooks = json.load(open(sys.argv[1])).get("hooks", {})
+except Exception:
+    print("unparseable"); sys.exit(0)
+for pair in sys.argv[2:]:
+    event, script = pair.split(":", 1)
+    cmds = [h.get("command", "") for g in hooks.get(event, []) for h in g.get("hooks", [])]
+    if not any(script in c for c in cmds):
+        print(f"unbound {pair}")
+PY
+}
+
+echo "== every prose gate is still bound to its event in the real settings.json =="
+miss=$(unbound "$SETTINGS")
+[ -z "$miss" ] && ok "all $(echo $PROSE_GATES | wc -w | tr -d ' ') prose gates registered" \
+  || { bad "prose gates missing from settings.json:"; printf '       %s\n' $miss; }
+
 # ── fixtures: prove the checker can fail, and does not over-fire ─────────────
 fixture() {
   local dir="$1" cmd="$2"
@@ -155,6 +184,12 @@ case "$(audit "$T/broken.json")" in
   unparseable*) ok "an unreadable settings file is reported, never silently green" ;;
   *)            bad "a corrupt settings.json produced no finding" ;;
 esac
+
+echo "== a prose gate dropped from settings is caught =="
+jq 'del(.hooks.Stop[] | select(any(.hooks[]?; .command | test("format-gate-stop"))))' "$SETTINGS" > "$T/noformat.json"
+[ "$(unbound "$T/noformat.json")" = "unbound Stop:format-gate-stop.sh" ] \
+  && ok "removing format-gate from Stop is reported, and nothing else is" \
+  || bad "dropped format-gate not reported exactly, got: $(unbound "$T/noformat.json")"
 
 rm -rf "$T"
 echo "---"; echo "pass=$pass fail=$fail"

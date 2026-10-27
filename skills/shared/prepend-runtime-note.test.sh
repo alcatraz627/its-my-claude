@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# prepend-runtime-note.test.sh — runnable checks for notes-file resolution.
+# prepend-runtime-note.test.sh: runnable checks for notes-file resolution.
 #
 # The helper used to derive its target from where THIS SCRIPT lives, so it always
 # wrote the global notes file even when the caller sat in a project holding its

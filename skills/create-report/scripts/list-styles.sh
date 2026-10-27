@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# list-styles.sh — List all available report styles
+# list-styles.sh: List all available report styles
 # Usage: bash .claude/skills/create-report/scripts/list-styles.sh
 
 set -euo pipefail

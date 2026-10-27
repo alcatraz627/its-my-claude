@@ -1,9 +1,9 @@
-# /describe — Usage Guide
+# /describe: Usage Guide
 
 ## What it does
 
-Deep-analyzes any Claude Code extension by name — skills, MCP servers, plugins, or custom
-features — and produces a terminal-themed HTML report with architecture diagrams, workflow
+Deep-analyzes any Claude Code extension by name: skills, MCP servers, plugins, or custom
+features: and produces a terminal-themed HTML report with architecture diagrams, workflow
 breakdowns, tool maps, examples, and operational insights gathered from runtime notes.
 
 ## Usage
@@ -75,17 +75,17 @@ Analyzes the shell memory (diy-mem) system:
 
 ## Caveats
 
-- **Read-only** — never modifies the target's source files
-- **Does not execute** the target — only reads and documents it
-- **Runs in a forked context** (`context: fork`) — keeps the main conversation clean but
+- **Read-only**: never modifies the target's source files
+- **Does not execute** the target: only reads and documents it
+- **Runs in a forked context** (`context: fork`): keeps the main conversation clean but
   means it cannot reference prior conversation history
-- **Report generation depends on `/create-report`** — if that skill has issues, the HTML
+- **Report generation depends on `/create-report`**: if that skill has issues, the HTML
   output step will fail (the markdown intermediate file at `/tmp/describe-<name>.md` will
   still be available)
-- **MCP tool schemas** — for MCP servers, the analysis quality depends on whether the server
+- **MCP tool schemas**: for MCP servers, the analysis quality depends on whether the server
   is currently connected and exposing tool schemas. Disconnected servers can still be
   analyzed from config alone, but with less detail.
-- **Maximum 2 clarifying questions** — the skill may ask the user for context via
+- **Maximum 2 clarifying questions**: the skill may ask the user for context via
   `AskUserQuestion` but limits itself to avoid being chatty
 
 ## Dependencies
@@ -102,12 +102,12 @@ Analyzes the shell memory (diy-mem) system:
 
 ## Tips
 
-- **Combine with `/improve-skill`** — run `/describe <skill>` first to understand it fully,
+- **Combine with `/improve-skill`**: run `/describe <skill>` first to understand it fully,
   then `/improve-skill <skill>` to fix any issues the analysis reveals
-- **Use for onboarding** — when joining a project with many custom skills, run `/describe`
+- **Use for onboarding**: when joining a project with many custom skills, run `/describe`
   on each one to build a quick understanding of the tooling landscape
-- **MCP discovery** — if you're unsure what MCP servers are available, check `.mcp.json`
+- **MCP discovery**: if you're unsure what MCP servers are available, check `.mcp.json`
   first, then use `/describe` on each server name to understand their capabilities
-- **The terminal style** is chosen for consistency with the CLI environment — if you prefer
+- **The terminal style** is chosen for consistency with the CLI environment: if you prefer
   a different look, the intermediate markdown at `/tmp/describe-<name>.md` can be re-rendered
   with any `/create-report` style

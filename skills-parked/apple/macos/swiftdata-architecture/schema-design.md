@@ -340,12 +340,12 @@ enum TaskMigrationPlan: SchemaMigrationPlan {
 - Use optional for truly optional data
 - Add unique constraints for natural keys (email, slug, etc.)
 - Use cascade delete for owned children
-- Keep models focused — avoid god objects
+- Keep models focused: avoid god objects
 
 ### Don't
 
 - Don't store computed values that can be derived from other properties
 - Don't use @Model for value-type data (use Codable structs instead)
 - Don't create circular cascade deletes
-- Don't store large binary data inline — use `@Attribute(.externalStorage)`
-- Don't add business logic to @Model classes — keep them pure data
+- Don't store large binary data inline: use `@Attribute(.externalStorage)`
+- Don't add business logic to @Model classes: keep them pure data

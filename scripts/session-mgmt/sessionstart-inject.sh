@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# sessionstart-inject.sh — the synchronous SessionStart injection lane.
+# sessionstart-inject.sh: the synchronous SessionStart injection lane.
 #
 # Context-injecting hooks must be SYNCHRONOUS (their whole purpose is stdout that
 # Claude Code reads into the session) and must speak SessionStart's schema. The
 # individual injectors below were registered inside the async hook-orchestrator,
 # whose run.sh sends every task's stdout to /dev/null AND which is itself marked
-# async — so their injections were silently dropped (dream insights, pending
+# async: so their injections were silently dropped (dream insights, pending
 # proposals, the post-crash /catchup hint, health/settings warnings all went
 # nowhere). On top of that they emit the legacy top-level {"additionalContext"}
 # shape, not SessionStart's {"hookSpecificOutput":{...}}.
@@ -29,7 +29,7 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 
 # The session id rides to injectors as INJECT_SID: dream-insights stamps its
 # ledger records with it, so the first-prompt lane can dedupe against what
-# THIS session was shown — not whatever session happened to inject last
+# THIS session was shown: not whatever session happened to inject last
 # (item-15 gate finding 1, 2026-07-14).
 INJECT_SID=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 export INJECT_SID
@@ -61,6 +61,8 @@ INJECTORS=(
   "$HOME/.claude/scripts/hooks/backlog-surface.sh"
   # What the owner's policy allows and blocks, and that allowed means no approval ask.
   "$HOME/.claude/scripts/pol/policy-inject.sh"
+  # Inside a versable-git clone only: its staging and release branches and GCP project.
+  "$HOME/.claude/scripts/versable/envs-inject.sh"
 )
 
 # Per-injector cap so one slow/hung script can't freeze session start. Use
@@ -80,7 +82,7 @@ for inj in "${INJECTORS[@]}"; do
   pids+=($!)
   i=$((i + 1))
 done
-# ${pids[@]+…} — macOS bash 3.2 treats an empty array as unset under set -u
+# ${pids[@]+…}: macOS bash 3.2 treats an empty array as unset under set -u
 # (latent here: only if every injector file were missing).
 for p in ${pids[@]+"${pids[@]}"}; do wait "$p" 2>/dev/null; done
 

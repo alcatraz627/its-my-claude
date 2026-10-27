@@ -3,12 +3,12 @@
 # instrument: none-yet
 # review-by: 2026-10-16
 # retire-if: no instrument by review-by: retire or instrument
-# guard-duplicate-symbol.sh — PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
+# guard-duplicate-symbol.sh: PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
 #
 # The mechanical `infra-before-grep` / reinvent-the-wheel killer. When an edit
 # introduces an exported function (JS/TS) or a module-level def/class (Python)
 # whose name ALREADY has a definition elsewhere in the project tree, it blocks
-# with the existing file:line — so the duplicate is never written.
+# with the existing file:line: so the duplicate is never written.
 #
 # Deliberately conservative to avoid false positives:
 #   - exported functions only (component-internal handlers aren't exported);
@@ -69,7 +69,7 @@ is_generic() {
 }
 
 # Framework route files export a fixed contract (loader/action/meta/…) in EVERY
-# route by design — those are not reinvented duplicates. This pair skips them,
+# route by design: those are not reinvented duplicates. This pair skips them,
 # but ONLY for route-convention paths, so a `loader` helper elsewhere in the tree
 # is still checked. Without it the guard blocks every new React Router route and
 # gets bypassed via a bash-heredoc that skips ALL Write-path hooks.
@@ -112,10 +112,10 @@ is_build_output() {
 }
 
 # Extract newly-introduced symbol names by language.
-# JS/TS: exported FUNCTIONS in all three common forms — `export function`,
+# JS/TS: exported FUNCTIONS in all three common forms: `export function`,
 # `export default function`, and `export const NAME = (…) =>` / `= function`
 # (the dominant modern style). Plain non-function `export const` (Props,
-# Next.js `metadata`, config objects) is deliberately NOT matched — those
+# Next.js `metadata`, config objects) is deliberately NOT matched: those
 # legitimately recur per-file. One regex, one capture per branch; `-r '$1$2$3'`
 # yields whichever branch matched (the others are empty).
 if [ "$lang" = js ]; then
@@ -148,11 +148,11 @@ while IFS= read -r name; do
     def_re="^\s*(async\s+)?(def|class)\s+${name}\b"
   fi
   # Existing definitions anywhere in the tree EXCEPT the file being edited.
-  # Exclude the file being edited by EXACT path prefix (awk, not regex) — a path
+  # Exclude the file being edited by EXACT path prefix (awk, not regex): a path
   # with regex-meta chars like ( | [ would make an `rg -v "^path:"` anchor miss
   # and the file would flag itself as its own duplicate.
   raw=$(rg -n --no-heading "${globs[@]}" "$def_re" "$root" 2>/dev/null | awk -v p="${file_path}:" 'substr($0,1,length(p)) != p')
-  # Drop matches that live in build artifacts — a compiled twin is not a real
+  # Drop matches that live in build artifacts: a compiled twin is not a real
   # duplicate. Filtering here can only remove false collisions, never add one.
   found=""
   while IFS= read -r line; do

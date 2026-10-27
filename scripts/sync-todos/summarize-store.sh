@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# summarize-store.sh <task-dir> — one line describing a task store's real totals.
+# summarize-store.sh <task-dir>: one line describing a task store's real totals.
 #
 #   "1 in-progress, 6 pending, 45 done | active: <up to three subjects>"
 #

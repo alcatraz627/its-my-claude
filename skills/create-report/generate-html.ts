@@ -349,7 +349,7 @@ export function validate(raw: unknown): ReportData {
   (d.sections as unknown[]).forEach((sec, i) =>
     validateSection(sec, `sections[${i}]`),
   );
-  // Safe after structural validation — all required fields checked above
+  // Safe after structural validation: all required fields checked above
   return d as ReportData;
 }
 
@@ -1109,7 +1109,7 @@ function renderFloatingToolbar(
     });
   }
 
-  // ── Print button — delegates to __RPT_TOOLBAR.print() if registered ──────
+  // ── Print button: delegates to __RPT_TOOLBAR.print() if registered ──────
   var printBtn = document.getElementById('ftb-print-btn');
   if (printBtn) {
     printBtn.addEventListener('click', function() {
@@ -1536,7 +1536,7 @@ async function main(): Promise<void> {
         styles,
         reportRootDir,
       );
-      // Single self-contained HTML file — CSS and JS inlined
+      // Single self-contained HTML file: CSS and JS inlined
       writeFileSync(
         join(styleOutDir, "index.html"),
         inlineAssets(html, css, js),
@@ -1554,7 +1554,7 @@ async function main(): Promise<void> {
       `  bash ~/.claude/skills/create-report/restyle-report.sh ${baseDir} terminal`,
     );
   } else {
-    // Single style — self-contained HTML with CSS/JS inlined
+    // Single style: self-contained HTML with CSS/JS inlined
     const { html, css, js } = await renderStyle(
       data,
       styleName,

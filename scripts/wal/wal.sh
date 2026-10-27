@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wal.sh — write a JSONL line to .claude/wal.jsonl (or ~/.claude/wal.jsonl for
+# wal.sh: write a JSONL line to .claude/wal.jsonl (or ~/.claude/wal.jsonl for
 # cross-project work). Wraps jq -cn so escaping is always correct.
 #
 # Usage:
@@ -15,7 +15,7 @@
 #   wal.sh checkpoint fix-auth-3b "Add guard" "Read route.ts|Wrote mw|Tests pass" "Wiring mw" "Run suite" "" "Zod inference saved the custom type"
 #
 # Environment:
-#   WAL_FILE     — path to target file (default: ./.claude/wal.jsonl or $HOME/.claude/wal.jsonl if ~/.claude is CWD)
+#   WAL_FILE: path to target file (default: ./.claude/wal.jsonl or $HOME/.claude/wal.jsonl if ~/.claude is CWD)
 #
 # Exits 0 on write-path failures (silent, never blocks an agent). Malformed
 # calls are the exception: unknown kinds and blob-in-session_id checkpoints
@@ -120,10 +120,10 @@ esac
 
 [ -z "$LINE" ] && exit 0
 
-# Concurrent sessions in one project share this file — serialize appends with a
+# Concurrent sessions in one project share this file: serialize appends with a
 # best-effort flock (no flock binary → plain O_APPEND, as before). Long lines
 # (checkpoint kind) can exceed PIPE_BUF, where bare >> may interleave. The lock
-# object is the SIDECAR "$TARGET.lock", matching rotate-wal.sh — so appends also
+# object is the SIDECAR "$TARGET.lock", matching rotate-wal.sh: so appends also
 # serialize against rotation's gzip-then-truncate window, not just each other.
 ( flock -x 9 2>/dev/null || true; printf '%s\n' "$LINE" >> "$TARGET" ) 9>>"$TARGET.lock" 2>/dev/null || true
 exit 0

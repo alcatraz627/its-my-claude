@@ -67,7 +67,7 @@ deep-dive any item. Don't start fixing unless the user picks items to fix.
 **Dispositions close the loop:** record the user's verdict per finding (fixed /
 deferred-with-owner / rejected-with-reason) in the report's Dispositions table.
 Findings left undispositioned are debt. Their count rides the Resume
-Contract's Standing caveats until zero (`conventions/report-writing.md`; the
+Contract's Standing caveats until zero (`conventions/doc-writing.md` §16; the
 claude-ipc sprint left ~50 of 54 findings unactioned, including the one that
 predicted the fire).
 

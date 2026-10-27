@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# rotate-events.sh — archive events.jsonl when it grows large.
+# rotate-events.sh: archive events.jsonl when it grows large.
 #
 # Wired as a Stop hook (async, fire-and-forget). Behavior:
 #   - If events.jsonl does not exist, exit 0.
@@ -27,7 +27,7 @@ size=$(stat -f%z "$LOG" 2>/dev/null || stat -c%s "$LOG" 2>/dev/null || echo 0)
 mkdir -p "$ARCHIVE_DIR"
 
 (
-  # flock is not on macOS stock — attempt, proceed regardless (same pattern as emit-event.sh).
+  # flock is not on macOS stock: attempt, proceed regardless (same pattern as emit-event.sh).
   # Rotations run infrequently (~monthly); worst case is one concurrent emit lost.
   flock -x 9 2>/dev/null || true
 

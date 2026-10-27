@@ -2,7 +2,7 @@
 
 ## The Complete Nomination Form
 
-Submit via: [Apple Developer — Promote Your App](https://developer.apple.com/contact/app-store/promote/)
+Submit via: [Apple Developer: Promote Your App](https://developer.apple.com/contact/app-store/promote/)
 
 ### Required Fields
 
@@ -83,7 +83,7 @@ Best for: Apps with strong accessibility features or serving underserved communi
 
 > "[App Name] makes [activity] accessible to [underserved group] through [specific feature]. With [accessibility feature], users who [challenge] can now [empowered action]."
 
-Apple strongly values accessibility — this is always a relevant angle.
+Apple strongly values accessibility: this is always a relevant angle.
 
 **5. Developer Story**
 Best for: Indie developers with a compelling personal narrative
@@ -93,7 +93,7 @@ Best for: Indie developers with a compelling personal narrative
 **6. User Impact**
 Best for: Apps with measurable positive outcomes
 
-> "Users of [App Name] have [specific measurable outcome] — [X metric]. [Testimonial or user story that illustrates impact]."
+> "Users of [App Name] have [specific measurable outcome]: [X metric]. [Testimonial or user story that illustrates impact]."
 
 **7. Major Update**
 Best for: Significant new versions with substantial improvements
@@ -116,13 +116,13 @@ Apple editors review hundreds of nominations. Your pitch must communicate value 
 ### Example Pitches
 
 **Speech Therapy App:**
-> "Blow Quest transforms speech therapy into a game that kids actually want to play — using the iPhone microphone to detect breath patterns and guide children through therapeutic exercises. With over 5,000 families using it daily and endorsements from pediatric SLPs, it's making professional-grade therapy accessible to anyone with an iPhone. Our latest update adds Apple Watch integration for parents to track daily practice streaks. We'd love to be featured during Better Hearing & Speech Month (May)."
+> "Blow Quest transforms speech therapy into a game that kids actually want to play: using the iPhone microphone to detect breath patterns and guide children through therapeutic exercises. With over 5,000 families using it daily and endorsements from pediatric SLPs, it's making professional-grade therapy accessible to anyone with an iPhone. Our latest update adds Apple Watch integration for parents to track daily practice streaks. We'd love to be featured during Better Hearing & Speech Month (May)."
 
 **Meditation Watch App:**
-> "ChantFlow brings ancient chanting meditation to the modern wrist — the only Apple Watch app that uses haptic guidance to lead users through timed mantra sessions without looking at a screen. Built entirely with SwiftUI and using the new WidgetKit complications for meditation streak tracking, it showcases what focused Apple Watch design can achieve. Perfect for a mindfulness feature around Mental Health Awareness Month."
+> "ChantFlow brings ancient chanting meditation to the modern wrist: the only Apple Watch app that uses haptic guidance to lead users through timed mantra sessions without looking at a screen. Built entirely with SwiftUI and using the new WidgetKit complications for meditation streak tracking, it showcases what focused Apple Watch design can achieve. Perfect for a mindfulness feature around Mental Health Awareness Month."
 
 **Productivity App:**
-> "TaskFlow reimagines task management for neurodivergent users — with time-blindness compensation, dopamine-friendly completion animations, and adaptive due dates that learn your actual completion patterns. Built with Core ML for on-device pattern recognition and supporting Apple Intelligence for smart task suggestions, it's productivity software that works with your brain, not against it. Ideal for a back-to-school feature highlighting inclusive design."
+> "TaskFlow reimagines task management for neurodivergent users: with time-blindness compensation, dopamine-friendly completion animations, and adaptive due dates that learn your actual completion patterns. Built with Core ML for on-device pattern recognition and supporting Apple Intelligence for smart task suggestions, it's productivity software that works with your brain, not against it. Ideal for a back-to-school feature highlighting inclusive design."
 
 ---
 

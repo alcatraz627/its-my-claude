@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# review-scope.sh — list the files changed in the current work session.
+# review-scope.sh: list the files changed in the current work session.
 #
 # Union of two sources so nothing slips through:
 #   1. git diff against HEAD (tracked changes) + untracked files, within the

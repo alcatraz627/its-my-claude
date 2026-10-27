@@ -76,7 +76,7 @@ check("Item fields", item.prefix == "├-" and item.text == "hello")
 sec = Section(symbol="◆", title="TEST", items=[item])
 check("Section fields", sec.symbol == "◆" and sec.title == "TEST" and len(sec.items) == 1)
 
-# ── Banner.render() — all themes ────────────────────────────────
+# ── Banner.render(): all themes ────────────────────────────────
 
 for theme_name in THEMES:
     b = Banner(
@@ -92,7 +92,7 @@ for theme_name in THEMES:
     lines = rendered.split("\n")
     check(f"banner '{theme_name}' renders", len(lines) > 5, f"only {len(lines)} lines")
 
-# ── Banner.verify() — alignment check ───────────────────────────
+# ── Banner.verify(): alignment check ───────────────────────────
 
 for theme_name in THEMES:
     b = Banner(

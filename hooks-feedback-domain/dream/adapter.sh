@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# adapter.sh — claude-audit domain return channel (i-dream contract §5).
+# adapter.sh: claude-audit domain return channel (i-dream contract §5).
 #
 # i-dream pipes the DreamOutput JSON to stdin after each dream pass. We turn
 # actionable insights into proposals in the shared backlog:

@@ -1,5 +1,5 @@
 #!/bin/bash
-# deployq worker — drains the spool one ticket at a time.
+# deployq worker: drains the spool one ticket at a time.
 #
 # Serialised on purpose: two applies to one Cloud Run service interleave badly
 # and the loser is silent. FIFO removes that class of bug for free.
@@ -43,7 +43,7 @@ run_ticket() {
   ref=$(jq -r '.ref // ""' "$f"); notify_to=$(jq -r '.notify // ""' "$f")
   local rpt="$Q/reports/$id.md"
   # Mark it RUNNING on disk. It used to sit in pending/ for the whole deploy, so
-  # `status` said "queued" while a Cloud Build was in flight — I misread that
+  # `status` said "queued" while a Cloud Build was in flight: I misread that
   # myself, and gcp-fable hit it too. The running/ directory existed and was
   # never used.
   jq '. + {state:"running"}' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
@@ -165,7 +165,7 @@ collapse_batch() {
   return 0
 }
 
-# A ticket found in running/ at startup was INTERRUPTED — this worker died or was
+# A ticket found in running/ at startup was INTERRUPTED: this worker died or was
 # restarted mid-deploy. Its state is genuinely UNKNOWN: the wrapper may have
 # submitted a build that is still landing server-side. Re-running it blindly
 # races two deploys onto one service, which is the exact failure this queue

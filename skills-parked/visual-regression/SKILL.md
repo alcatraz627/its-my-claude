@@ -1,6 +1,6 @@
 ---
 name: visual-regression
-description: Captures baseline screenshots via Playwright MCP and compares against later snapshots to detect visual regressions — pixel-diff reports with highlighted change regions.
+description: Captures baseline screenshots via Playwright MCP and compares against later snapshots to detect visual regressions, pixel-diff reports with highlighted change regions.
 allowed-tools: Read, Write, Bash, Glob, Grep
 user-invocable: true
 argument-hint: "<baseline | compare | report> <url | path>"
@@ -14,9 +14,9 @@ with highlighted change regions and a summary report.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -45,7 +45,7 @@ If it does not exist yet, continue without it.
 | ------ | ------- | ----------- |
 | `--name <label>` | URL slug | Label for this test (groups baselines + comparisons) |
 | `--viewports` | `1280,768,375` | Comma-separated viewport widths to capture |
-| `--threshold` | `0.1` | Pixel difference threshold (%) — below this is considered passing |
+| `--threshold` | `0.1` | Pixel difference threshold (%): below this is considered passing |
 
 ---
 
@@ -77,7 +77,7 @@ All screenshots are stored in a project-local directory:
 
 ## Subcommand: `baseline`
 
-### Phase 1 — Capture
+### Phase 1: Capture
 
 For each viewport width:
 
@@ -95,7 +95,7 @@ For each viewport width:
 
 3. Save to `.claude/visual-regression/<name>/baseline/<width>.png`
 
-### Phase 2 — Record Metadata
+### Phase 2: Record Metadata
 
 Write `meta.json`:
 ```json
@@ -107,7 +107,7 @@ Write `meta.json`:
 }
 ```
 
-### Phase 3 — Report
+### Phase 3: Report
 
 ```
   ✓ Baseline captured: <name>
@@ -120,16 +120,16 @@ Write `meta.json`:
 
 ## Subcommand: `compare`
 
-### Phase 1 — Validate
+### Phase 1: Validate
 
 1. Check that a baseline exists for the given name
 2. If not: print error and suggest running `baseline` first
 
-### Phase 2 — Capture Current State
+### Phase 2: Capture Current State
 
 Same process as baseline, but save to `compare/` directory.
 
-### Phase 3 — Generate Diffs
+### Phase 3: Generate Diffs
 
 For each viewport, compare baseline and current screenshots pixel-by-pixel.
 
@@ -173,7 +173,7 @@ print(json.dumps({'width': <width>, 'diff_pct': round(pct, 3)}))
 "
 ```
 
-### Phase 4 — Report
+### Phase 4: Report
 
 Write `diff/report.json`:
 ```json
@@ -223,8 +223,8 @@ has been run, print the baseline metadata instead.
 
 - This skill requires Playwright MCP tools to be available (check with `browser_snapshot` test call)
 - If Playwright MCP is not connected, fall back to the Python/Pillow approach for diff generation (but cannot capture screenshots)
-- The `compare` subcommand is the core value — always capture a baseline first
-- Threshold of 0.1% is strict — increase to 0.5% for pages with dynamic content (timestamps, avatars)
-- Screenshots are stored locally in `.claude/visual-regression/` — add this to `.gitignore`
-- Pairs with `/web-design review` for manual critique — this skill handles automated diffing
+- The `compare` subcommand is the core value: always capture a baseline first
+- Threshold of 0.1% is strict: increase to 0.5% for pages with dynamic content (timestamps, avatars)
+- Screenshots are stored locally in `.claude/visual-regression/`: add this to `.gitignore`
+- Pairs with `/web-design review` for manual critique: this skill handles automated diffing
 - For CI integration, the JSON report format enables programmatic pass/fail checking

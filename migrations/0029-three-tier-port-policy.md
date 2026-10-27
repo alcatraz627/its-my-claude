@@ -1,6 +1,6 @@
 ---
 number: 0029
-title: Three-tier port policy — ports.sh ledger + blocking guard + registry move
+title: Three-tier port policy, ports.sh ledger + blocking guard + registry move
 slug: three-tier-port-policy
 status: complete
 date: 2026-07-10
@@ -14,7 +14,7 @@ affected_paths:
   - settings.json
 ---
 
-# Migration 0029 — Three-tier port policy
+# Migration 0029: Three-tier port policy
 
 ## Summary
 
@@ -44,7 +44,7 @@ since April), and Vite's auto-increment masked every collision. User decision
 ## Executed cleanup (2026-07-10)
 
 Killed 5 fastfetch-explorer Vite orphans (5174-5178) + the versable-builder
-playground next-server (:3000) — both recorded as revivable reaps (6200/6201).
+playground next-server (:3000): both recorded as revivable reaps (6200/6201).
 Re-homed pm2 `walmart-fe` 5173→5100 and `speedway-fe` 5174→5101 (`--strictPort`,
 `pm2 save`, smoke-tested 200/302). Pinned user tier-1 ports 3003/3006/8001.
 Grandfathered tier-2 claims: decision-pages 5197, review-feedback 5199,
@@ -72,8 +72,8 @@ architecture doc.
 
 ## Cross-references
 
-- `features/dev-servers.md` — the rewritten convention (the user-facing doc)
-- `assets/docs/port-system-architecture.md` — internals, invariants, known
+- `features/dev-servers.md`: the rewritten convention (the user-facing doc)
+- `assets/docs/port-system-architecture.md`: internals, invariants, known
   edges, upgrade + testing guidance (read before modifying the system)
-- `features/hook-design.md` — block-tier justification (cost-of-miss = the
+- `features/hook-design.md`: block-tier justification (cost-of-miss = the
   user's named top pain; false-fire escape = `PORTS_OK=1`)

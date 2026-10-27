@@ -1,5 +1,5 @@
 ---
-name: Own meta-questions and framings — ask proactively, save, re-ask when forgotten
+name: Own meta-questions and framings, ask proactively, save, re-ask when forgotten
 description: User explicitly endorses asking and re-asking. Take initiative on inferring or asking questions about scope, project ceiling, user-stories, safety nets. The asks are calibration investments that pay off across sessions.
 type: feedback
 ---
@@ -34,7 +34,7 @@ When starting non-trivial work in any project:
 ## How to apply
 
 - Re-asking is fine. Even if I asked last session, ask again if I
-  forgot — user has explicitly endorsed this.
+  forgot: user has explicitly endorsed this.
 - Surface initiative-questions even when not asked. User will correct
   over-reach; the surfacing itself is the value.
 - After getting answers, save them to project or global memory so they
@@ -44,7 +44,7 @@ When starting non-trivial work in any project:
 
 ## Cross-references
 
-- `~/.claude/CLAUDE.md` — Tier 0 rules
+- `~/.claude/CLAUDE.md`: Tier 0 rules
 - Project-level: `feedback_proactive_ownership.md` (in any project memory)
 - Pairs with: `feedback_propose_safety_nets.md`,
   `feedback_ambitious_vs_maximalist.md`

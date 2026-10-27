@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 37-goal.sh — UserPromptSubmit hinter: the one voice for a session's goal.
+# 37-goal.sh: UserPromptSubmit hinter: the one voice for a session's goal.
 #
 # A goal can be in three states, and each gets one kind of line:
 #   - armed with the built-in /goal: lint it once per distinct text and warn only

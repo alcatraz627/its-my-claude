@@ -1,4 +1,4 @@
-# Migration 0006 — CLAUDE.md Restructure
+# Migration 0006: CLAUDE.md Restructure
 
 **Status:** ✅ Complete (Phase A + Phase B executed 2026-04-24)
 **Session:** `impr-cfg-7a`
@@ -10,17 +10,17 @@ Split 634-line `~/.claude/CLAUDE.md` into a 122-line thin-router + 27 sub-files 
 
 ## Why
 
-CLAUDE.md had drifted past the adherence ceiling — frontier LLMs reliably follow ~150–200 instructions, and Claude Code's own system prompt burns ~50. A 634-line CLAUDE.md meant the tail ⅓ of rules were being silently ignored. Prompt caching makes cost a weak argument, but **adherence** is a real, measurable ceiling.
+CLAUDE.md had drifted past the adherence ceiling: frontier LLMs reliably follow ~150–200 instructions, and Claude Code's own system prompt burns ~50. A 634-line CLAUDE.md meant the tail ⅓ of rules were being silently ignored. Prompt caching makes cost a weak argument, but **adherence** is a real, measurable ceiling.
 
 See `~/.claude/assets/research/20260424-agent-instructions-best-practices.md` (web research) and `~/.claude/assets/reports/20260424-claude-md-restructure/review.md` (local-consolidation review) for the full rationale.
 
 ## Scope
 
-Operates strictly within `~/.claude/`. No per-project config touched. The shared library (`~/.claude/skills/shared/`) is left untouched — new sub-files under `features/` and `conventions/` link to canonical shared docs rather than duplicating.
+Operates strictly within `~/.claude/`. No per-project config touched. The shared library (`~/.claude/skills/shared/`) is left untouched: new sub-files under `features/` and `conventions/` link to canonical shared docs rather than duplicating.
 
 ## Label changes
 
-None — no `std::claude::*` labels renamed. Four new clusters added to NAMESPACE.md:
+None: no `std::claude::*` labels renamed. Four new clusters added to NAMESPACE.md:
 
 - `std::claude::rules` → `~/.claude/rules/`
 - `std::claude::features` → `~/.claude/features/`
@@ -49,15 +49,15 @@ None — no `std::claude::*` labels renamed. Four new clusters added to NAMESPAC
 - `~/.claude/scripts/validate-triggers.sh` + `.py`
 
 ### Modified
-- `~/.claude/CLAUDE.md` — rewritten to 122-line router (from 634)
-- `~/.claude/LOOKUP.md` — added 3 new category tables + PLACEMENT.md row
-- `~/.claude/NAMESPACE.md` — added 4 new cluster definitions + session tag
+- `~/.claude/CLAUDE.md`: rewritten to 122-line router (from 634)
+- `~/.claude/LOOKUP.md`: added 3 new category tables + PLACEMENT.md row
+- `~/.claude/NAMESPACE.md`: added 4 new cluster definitions + session tag
 
 ### Symlinked
 - `~/.claude/doc-writing-guidelines.md` → `conventions/doc-writing.md`
 
 ### Unchanged (canonical)
-- `~/.claude/skills/shared/*.md` — still authoritative; new sub-files link to them
+- `~/.claude/skills/shared/*.md`: still authoritative; new sub-files link to them
 
 ## Phases
 
@@ -70,7 +70,7 @@ None — no `std::claude::*` labels renamed. Four new clusters added to NAMESPAC
 
 If a reference to one of the extracted sections no longer resolves:
 
-1. Check `~/.claude/LOOKUP.md` — find the sub-file under `rules/`, `features/`, or `conventions/`
+1. Check `~/.claude/LOOKUP.md`: find the sub-file under `rules/`, `features/`, or `conventions/`
 2. Update the reference in place
 3. For content that linked to specific CLAUDE.md line numbers: those are gone; link to the named section in the new sub-file instead
 
@@ -90,24 +90,24 @@ Backup MD5: `ac024bbd83d561875660a47645240e5d`.
 
 Additional edits based on your review on 2026-04-24:
 
-### Git split (per user decision — 2b option)
-- New file: `~/.claude/features/git-commands.md` (Tier 2 — load when user is working with git)
+### Git split (per user decision: 2b option)
+- New file: `~/.claude/features/git-commands.md` (Tier 2: load when user is working with git)
 - Trimmed: `~/.claude/rules/git.md` to keep rules + dangerous-command list + skill refs only
 
 ### Other surgical edits
-- `rules/communication.md` — added escape-hatch criteria
-- `rules/shell.md` — added script-preference rule, Glob/Grep/Read preference, anti-pattern reminder
-- `rules/testing.md` — added topic-tagged rules from mistake-patterns.md
-- `conventions/asset-management.md` — promoted `~/.claude/.claude/` anti-pattern
-- `conventions/cli-help-design.md` — added man-pages + stdio note
-- `conventions/doc-writing.md` — prepended overview section
-- `conventions/ascii-diagrams.md` — added 3 gum-tui examples + link to gum-rendering-examples.md
-- `conventions/scratch-files.md` — added lookup commands + scratchpad link
-- `conventions/html-output.md` — expanded with tailwind/daisyui + promotion workflow + TODO
+- `rules/communication.md`: added escape-hatch criteria
+- `rules/shell.md`: added script-preference rule, Glob/Grep/Read preference, anti-pattern reminder
+- `rules/testing.md`: added topic-tagged rules from mistake-patterns.md
+- `conventions/asset-management.md`: promoted `~/.claude/.claude/` anti-pattern
+- `conventions/cli-help-design.md`: added man-pages + stdio note
+- `conventions/doc-writing.md`: prepended overview section
+- `conventions/ascii-diagrams.md`: added 3 gum-tui examples + link to gum-rendering-examples.md
+- `conventions/scratch-files.md`: added lookup commands + scratchpad link
+- `conventions/html-output.md`: expanded with tailwind/daisyui + promotion workflow + TODO
 
 ## Cross-references
 
-- **Post-migration watchpoints:** `~/.claude/assets/reports/20260424-claude-md-restructure/post-migration-watchpoints.md` — **check during the 2-week transition window**
+- **Post-migration watchpoints:** `~/.claude/assets/reports/20260424-claude-md-restructure/post-migration-watchpoints.md`: **check during the 2-week transition window**
 - **Plan v3:** `~/.claude/assets/reports/20260424-claude-md-restructure/plan-v3.md`
 - **Review (Agent B):** `./review.md` (same dir)
 - **Web research (Agent A):** `~/.claude/assets/research/20260424-agent-instructions-best-practices.md`
@@ -119,5 +119,5 @@ Additional edits based on your review on 2026-04-24:
 
 ## Related migrations
 
-- **0001** — Namespace introduction (this builds on `::rules / ::features / ::conventions` as new clusters)
-- **0007** (planned) — Scripts folder cleanup; gated on user greenlight
+- **0001**: Namespace introduction (this builds on `::rules / ::features / ::conventions` as new clusters)
+- **0007** (planned): Scripts folder cleanup; gated on user greenlight

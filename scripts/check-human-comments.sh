@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# check-human-comments.sh — PreToolUse hook for Edit/Write
+# check-human-comments.sh: PreToolUse hook for Edit/Write
 # Warns (non-blocking) when the target file contains human-authored comments
 # near the edit location. Scans for NOTE(by human), HACK, IMPORTANT, MANUAL,
 # DO NOT CHANGE, INTENTIONAL, and similar markers.
 #
 # Input: JSON on stdin with tool_input.file_path and tool_input.old_string
-# Output: Warning message to stderr (non-blocking — exits 0 always)
+# Output: Warning message to stderr (non-blocking: exits 0 always)
 
 set -euo pipefail
 
@@ -32,7 +32,7 @@ if [ -n "$MATCHES" ]; then
   # Count how many markers
   COUNT=$(echo "$MATCHES" | wc -l | tr -d ' ')
 
-  # Format warning — goes to stderr so it appears in the hook output
+  # Format warning: goes to stderr so it appears in the hook output
   gum_warn "HUMAN-COMMENTED VALUES DETECTED in $(basename "$FILE_PATH")"
   gum_warn "   Found $COUNT marker(s):"
   echo "$MATCHES" | head -5 | while read -r line; do
@@ -44,5 +44,5 @@ if [ -n "$MATCHES" ]; then
   gum_warn "   Rule: Ask before overriding. Verify after changing."
 fi
 
-# Always exit 0 — this is a warning, not a blocker
+# Always exit 0: this is a warning, not a blocker
 exit 0

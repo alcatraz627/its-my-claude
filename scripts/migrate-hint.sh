@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/migrate-hint.sh — PreToolUse hook on Bash.
+# scripts/migrate-hint.sh: PreToolUse hook on Bash.
 #
 # Detects structural commands targeting ~/.claude/ that should be accompanied
 # by a migration entry, and injects a hint suggesting /migrate.
@@ -7,7 +7,7 @@
 # Triggers on: mv, ln, rmdir, rename, mkdir of a NEW top-level dir under
 # ~/.claude/, or trash of a script referenced by settings.json.
 #
-# Does NOT block — just nudges. Mute with: touch ~/.claude/.no-migrate-hint
+# Does NOT block: just nudges. Mute with: touch ~/.claude/.no-migrate-hint
 #
 # Output: empty (silent) OR a hint to stdout (Claude Code surfaces hooks'
 # stdout as additionalContext for the next turn).

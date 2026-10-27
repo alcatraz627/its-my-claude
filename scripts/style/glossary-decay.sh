@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Dormancy report for the injected steering vocabulary — the decay half of
+# Dormancy report for the injected steering vocabulary: the decay half of
 # "vocabulary is not grow-only." Reads the hinter's usage ledger and the hints
 # table, and names the terms that earned no injections in the window so the
 # weekly review can retire or pin them. Reports only; a human retires.
 #
 # Usage: glossary-decay.sh [--window-days 28]
-# Data:  style/glossary-hit-log.tsv  (ts<TAB>term<TAB>session — hinter-appended)
+# Data:  style/glossary-hit-log.tsv  (ts<TAB>term<TAB>session: hinter-appended)
 #        style/glossary-hints.tsv    (col 4 "pin" exempts a term from dormancy)
 # Wired into: thesaurus.sh review (weekly style triage).
 
@@ -23,7 +23,7 @@ if [ ! -s "$HITLOG" ]; then
     exit 0
 fi
 
-# ISO-8601 UTC timestamps compare lexicographically — no date parsing needed.
+# ISO-8601 UTC timestamps compare lexicographically: no date parsing needed.
 CUTOFF=$(date -u -v-"${WINDOW}"d +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
       || date -u -d "${WINDOW} days ago" +%Y-%m-%dT%H:%M:%SZ)
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)

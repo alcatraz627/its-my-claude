@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Variable Rewards Generator
 
-Generate a variable reward system — randomized rewards (daily spins, mystery boxes, bonus points) that leverage variable-ratio reinforcement to increase engagement. Implements ethical engagement patterns with daily/weekly caps, transparent probability disclosure, and no pay-to-play mechanics.
+Generate a variable reward system: randomized rewards (daily spins, mystery boxes, bonus points) that leverage variable-ratio reinforcement to increase engagement. Implements ethical engagement patterns with daily/weekly caps, transparent probability disclosure, and no pay-to-play mechanics.
 
 ## When This Skill Activates
 
@@ -59,8 +59,8 @@ Ask user via AskUserQuestion:
    - Multiple (daily spin + random bonus) -- recommended
 
 3. **Include daily/weekly caps and cooldowns?**
-   - Yes — enforce max rewards per day and per week with cooldown timers (recommended, ethical design)
-   - No — unlimited claims (not recommended)
+   - Yes: enforce max rewards per day and per week with cooldown timers (recommended, ethical design)
+   - No: unlimited claims (not recommended)
 
 4. **Visual presentation?**
    - Wheel spin (rotating wheel with segments)
@@ -75,15 +75,15 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `Reward.swift` — Model for reward type, value, rarity, display metadata
-2. `RewardPool.swift` — Weighted probability distribution with seeded random for testability
-3. `RewardManager.swift` — @Observable class managing claims, daily resets, caps, history via SwiftData
+1. `Reward.swift`: Model for reward type, value, rarity, display metadata
+2. `RewardPool.swift`: Weighted probability distribution with seeded random for testability
+3. `RewardManager.swift`: @Observable class managing claims, daily resets, caps, history via SwiftData
 
 ### Step 3: Create UI Files
-4. `DailySpinView.swift` — Animated spin wheel with disabled state when already claimed
-5. `MysteryBoxView.swift` — Card-flip / chest-open animation with matchedGeometryEffect
-6. `RewardHistoryView.swift` — List of past rewards grouped by day
-7. `RewardNotificationView.swift` — Toast/banner overlay for reward availability
+4. `DailySpinView.swift`: Animated spin wheel with disabled state when already claimed
+5. `MysteryBoxView.swift`: Card-flip / chest-open animation with matchedGeometryEffect
+6. `RewardHistoryView.swift`: List of past rewards grouped by day
+7. `RewardNotificationView.swift`: Toast/banner overlay for reward availability
 
 ### Step 4: Determine File Location
 Check project structure:
@@ -328,13 +328,13 @@ let weekCount = rewardManager.weeklyClaimCount    // Claims made this week
 ### Ethical Design: Caps, Transparency, No Pay-to-Play
 Variable-ratio reinforcement is a powerful engagement mechanic. The templates enforce ethical boundaries:
 - **Daily and weekly caps** prevent compulsive over-engagement. Default: 1 daily spin + 2 random bonuses per day, 10 total per week.
-- **Probability transparency** — `RewardPool` exposes its rarity weights so you can display them in a "Reward Rates" info sheet (required by some App Store regions).
-- **No pay-to-play** — the templates do not gate rewards behind purchases. If you add premium reward tiers, keep a generous free tier and clearly label paid content.
+- **Probability transparency**: `RewardPool` exposes its rarity weights so you can display them in a "Reward Rates" info sheet (required by some App Store regions).
+- **No pay-to-play**: the templates do not gate rewards behind purchases. If you add premium reward tiers, keep a generous free tier and clearly label paid content.
 - **Cooldown timers** show users exactly when the next reward is available rather than encouraging constant app-checking.
 
 ### Server Time vs Device Time for Daily Resets
 Users can change their device clock to claim extra rewards. Mitigations:
-- For local-only apps, use `Date()` with `Calendar.current.startOfDay(for:)` — accept that determined users can game it.
+- For local-only apps, use `Date()` with `Calendar.current.startOfDay(for:)`: accept that determined users can game it.
 - For server-synced apps, fetch the current time from your server on each claim and validate server-side. The templates include a `timeProvider` protocol for injecting server time.
 - Store raw `Date` timestamps alongside normalized day values so you can detect anomalies (claims with `createdAt` before a previously recorded claim).
 
@@ -370,7 +370,7 @@ If a user claims a reward at 11:59:59 PM and the daily reset fires at midnight, 
 
 ## References
 
-- **templates.md** — All production Swift templates for variable rewards
-- Related: `generators/milestone-celebration` — Celebrate reward milestones with animations
-- Related: `generators/streak-tracker` — Combine streaks with daily rewards for compounding engagement
-- Related: `generators/tipkit-generator` — Coach marks to introduce the reward system to new users
+- **templates.md**: All production Swift templates for variable rewards
+- Related: `generators/milestone-celebration`: Celebrate reward milestones with animations
+- Related: `generators/streak-tracker`: Combine streaks with daily rewards for compounding engagement
+- Related: `generators/tipkit-generator`: Coach marks to introduce the reward system to new users

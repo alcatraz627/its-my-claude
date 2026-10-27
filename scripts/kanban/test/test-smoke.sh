@@ -75,7 +75,7 @@ else
   # The guard's FIRST version read `!body?.replace`, which is truthiness, so
   # replace:"false" and replace:[] both sailed through and destroyed the ruling
   # with a 200. This suite was green throughout, because it only ever sent the
-  # field ABSENT — the one input that happened to work. That is
+  # field ABSENT: the one input that happened to work. That is
   # [real-input-distribution]: the fixture was chosen by whoever wrote the check,
   # so it exercised the branch they had in mind. Every truthy-but-not-true shape
   # is sent now, and each is a separate row so a partial regression is legible.
@@ -102,7 +102,7 @@ PY
 grep -q '"milestones"' "$(dirname "$0")/../kinds.js" && ok "milestones is in the kind registry" \
   || no "milestones is in the kind registry" "kinds.js has no milestones entry"
 # The myopia check the owner asked for: no literal kind array outside the
-# registry. Comments are stripped first — the fix for this very bug QUOTES the
+# registry. Comments are stripped first: the fix for this very bug QUOTES the
 # array it removed, so a naive grep matches the explanation and reports the bug
 # as still present. A checker that reads its own prose as evidence is the
 # wrong-moment failure this whole round was about.

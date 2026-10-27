@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# propose-config-from-insights.sh — turn a high-confidence dream insight into a
+# propose-config-from-insights.sh: turn a high-confidence dream insight into a
 # proposal on the ONE improvement backlog, where it competes for attention and
 # gets decided like every other proposal. Never auto-applies.
 #
@@ -74,7 +74,7 @@ if os.path.exists(claude_md_file):
 
 # Read the canonical backlog: skip insights already filed (by their link:dream:
 # edge, which is the stable identity), and stop staging while unreviewed dream
-# proposals are still open — a dream that nobody has judged is not a mandate to
+# proposals are still open: a dream that nobody has judged is not a mandate to
 # queue five more.
 existing_dream_ids = set()
 existing_hashes = set()
@@ -92,7 +92,7 @@ if os.path.exists(proposals_file):
             tags = obj.get('tags') or []
             # Identify our own rows by the src tag, which is ALWAYS written.
             # (Keying on link:dream: instead would skip every insight that has no
-            # parseable insight-id — and then miss its rulehash, so the next run
+            # parseable insight-id: and then miss its rulehash, so the next run
             # would re-file it as a duplicate. That bug shipped for exactly one
             # test run.)
             if 'src:dream-consolidation' not in tags:
@@ -131,7 +131,7 @@ for block in blocks:
     # Insight identity.
     #
     # This used to read a `_Patterns: <uuid>, …_` line, but insights.md now emits
-    # `_Pattern_: "<quoted text>"` — so the regex silently matched nothing and
+    # `_Pattern_: "<quoted text>"`: so the regex silently matched nothing and
     # every insight got an empty id (no link: edge, no dedup). Rather than chase
     # a format that drifts, key on the rule TEXT: same rule -> same hash, across
     # runs and across format changes. The old uuid form is still honoured if a
@@ -151,7 +151,7 @@ for block in blocks:
     if rule_sig in claude_md:
         continue
 
-    # Skip if already on the backlog — by insight id (stable) or rule text.
+    # Skip if already on the backlog: by insight id (stable) or rule text.
     if rule_hash in existing_hashes:
         continue
     if insight_id and insight_id in existing_dream_ids:
@@ -176,7 +176,7 @@ if not candidates:
     print("propose-config: no new proposals above threshold.", file=sys.stderr)
     sys.exit(0)
 
-# File each onto the canonical backlog via propose.sh — the only writer. A
+# File each onto the canonical backlog via propose.sh: the only writer. A
 # thumbs-up insight carries `corroborated:human-upvote`, so the gate can see that
 # a human already endorsed the underlying insight; that is a genuine second
 # stream, not the dream agreeing with itself.

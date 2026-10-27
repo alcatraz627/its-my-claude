@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wal-convert.sh — convert a legacy .claude/wal.md to .claude/wal.jsonl.
+# wal-convert.sh: convert a legacy .claude/wal.md to .claude/wal.jsonl.
 #
 # Usage:
 #   wal-convert.sh <input.md> [--output <path>] [--dry-run]
@@ -11,9 +11,9 @@
 #
 # Real-world wal.md files deviate from the strict spec in skills/shared/wal-format.md.
 # This converter is deliberately tolerant of observed patterns:
-#   - Session header variations (id—date OR date—description OR date alone)
+#   - Session header variations (id: date OR date: description OR date alone)
 #   - **Goal:** markdown instead of > Intent:
-#   - Bullet actions (- Read foo.ts — outcome) without timestamps
+#   - Bullet actions (- Read foo.ts: outcome) without timestamps
 #   - Free-form [HH:MM] text lines (no strict VERB keyword)
 #   - Checkpoint terminators: both `===` and `=== END CHECKPOINT ===`
 
@@ -62,7 +62,7 @@ session = {"id": None, "date": None}
 
 # Strict spec format: ## Session: YYYY-MM-DD HH:MM [id]
 re_session_strict = re.compile(r"^##\s*Session:\s*(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})\s*(?:\[([^\]]+)\])?")
-# Real format: ## Session: <id> — YYYY-MM-DD  OR  ## Session: YYYY-MM-DD (desc)  OR  ## Session: YYYY-MM-DD
+# Real format: ## Session: <id>: YYYY-MM-DD  OR  ## Session: YYYY-MM-DD (desc)  OR  ## Session: YYYY-MM-DD
 re_session_loose = re.compile(r"^##\s*Session:\s*(.+?)\s*$")
 re_date = re.compile(r"(\d{4}-\d{2}-\d{2})")
 re_session_id_token = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)+$")
@@ -72,11 +72,11 @@ re_meta_intent = re.compile(r"^>\s*Intent:\s*(.*)")
 re_md_goal = re.compile(r"^\*\*Goal:\*\*\s*(.*)")
 re_md_intent = re.compile(r"^\*\*Intent:\*\*\s*(.*)")
 
-# Strict action: [HH:MM] VERB target — outcome
+# Strict action: [HH:MM] VERB target: outcome
 re_action_strict = re.compile(r"^\[(\d{2}:\d{2})\]\s+(READ|WRITE|EDIT|BASH|GLOB|GREP|COMMIT)\s+(.*)")
 # Loose timestamped: [HH:MM] freeform
 re_action_timed_loose = re.compile(r"^\[(\d{2}:\d{2})\]\s+(.*)")
-# Bullet action: - Text or - VERB target — outcome
+# Bullet action: - Text or - VERB target: outcome
 re_action_bullet = re.compile(r"^-\s+(.*)")
 
 re_agent_start = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*AGENT\(([^)]+)\)\s+\"?([^\"]*?)\"?\s*(?:—\s*(.*))?$")
@@ -129,7 +129,7 @@ def parse_session_loose(body: str):
     if date_match:
         remainder = (body[:date_match.start()] + body[date_match.end():]).strip(" —-–\t")
     # Try to find a session-id-like token. Only split on whitespace, em/en-dash,
-    # parens — NOT on regular hyphen, since hyphens are part of session IDs.
+    # parens: NOT on regular hyphen, since hyphens are part of session IDs.
     sid = None
     for tok in re.split(r"[\s\u2014\u2013()]+", remainder):
         tok = tok.strip().strip("-")

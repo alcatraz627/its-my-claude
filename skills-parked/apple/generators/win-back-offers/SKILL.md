@@ -1,6 +1,6 @@
 ---
 name: win-back-offers
-description: Generates the complete win-back offer flow for churned subscribers — StoreKit Message API handling, eligibility verification, offer sheet presentation, and analytics. Use when implementing win-back campaigns or re-engagement for lapsed subscribers.
+description: Generates the complete win-back offer flow for churned subscribers, StoreKit Message API handling, eligibility verification, offer sheet presentation, and analytics. Use when implementing win-back campaigns or re-engagement for lapsed subscribers.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 ---
 
@@ -24,7 +24,7 @@ Win-back offers involve meaningful engineering and ASC configuration. Check thes
 
 | Churned Subscribers | Recommendation |
 |----|---|
-| **Under 50** | Not worth the setup effort. Use personal email outreach instead — write individual messages to churned users. Focus energy on preventing churn (improve onboarding, engagement). |
+| **Under 50** | Not worth the setup effort. Use personal email outreach instead: write individual messages to churned users. Focus energy on preventing churn (improve onboarding, engagement). |
 | **50-500** | Implement basic win-back via promotional offers (simpler than full win-back flow). Use offer codes distributed via email. |
 | **500+** | Full win-back implementation justified. Native iOS 18+ win-back offers, Message API handling, automated pipeline. |
 
@@ -37,7 +37,7 @@ Win-back offers involve meaningful engineering and ASC configuration. Check thes
 - [ ] Check deployment target (iOS 18+ for native win-back, iOS 16+ for promotional offer fallback)
 - [ ] Look for existing subscription management code
 - [ ] Check if `subscription-offers` skill was already used
-- [ ] **Check churn volume** — is the number of churned subscribers worth automating?
+- [ ] **Check churn volume**: is the number of churned subscribers worth automating?
 
 ### 2. Conflict Detection
 ```
@@ -71,15 +71,15 @@ Read `templates.md` for all win-back implementation code.
 
 ### Step 2: Create Core Files
 
-1. **WinBackOfferManager.swift** — Win-back offer detection, eligibility, and presentation
-2. **WinBackMessageHandler.swift** — StoreKit Message API integration for in-app offer display
-3. **WinBackEligibility.swift** — Churn detection and eligibility logic
-4. **WinBackOfferView.swift** — Custom win-back offer presentation UI
+1. **WinBackOfferManager.swift**: Win-back offer detection, eligibility, and presentation
+2. **WinBackMessageHandler.swift**: StoreKit Message API integration for in-app offer display
+3. **WinBackEligibility.swift**: Churn detection and eligibility logic
+4. **WinBackOfferView.swift**: Custom win-back offer presentation UI
 
 ### Step 3: Create Optional Files
 
-5. **WinBackAnalytics.swift** — Track win-back funnel metrics
-6. **WinBackFallback.swift** — Promotional offer fallback for iOS < 18
+5. **WinBackAnalytics.swift**: Track win-back funnel metrics
+6. **WinBackFallback.swift**: Promotional offer fallback for iOS < 18
 
 ### Step 4: Determine File Location
 ```
@@ -103,7 +103,7 @@ Store/WinBack/
 
 ### Integration Steps
 
-**App Entry Point — Message Handling:**
+**App Entry Point: Message Handling:**
 ```swift
 @main
 struct MyApp: App {
@@ -157,7 +157,7 @@ SubscriptionStoreView(groupID: groupID)
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/subscription-offers` — All offer types including win-back
-- Related: `generators/paywall-generator` — Full paywall implementation
-- Related: `app-store/marketing-strategy` — Win-back campaign planning
+- **templates.md**: All production Swift templates
+- Related: `generators/subscription-offers`: All offer types including win-back
+- Related: `generators/paywall-generator`: Full paywall implementation
+- Related: `app-store/marketing-strategy`: Win-back campaign planning

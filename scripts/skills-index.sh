@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# skills-index.sh — regenerate skills/00-index.md, the one-line-per-skill retrieval
+# skills-index.sh: regenerate skills/00-index.md, the one-line-per-skill retrieval
 # menu. DERIVED from each SKILL.md's frontmatter; never hand-edit the generated
 # table (fix the skill's `description:` and re-run instead).
 #

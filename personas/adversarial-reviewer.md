@@ -112,7 +112,7 @@ and it is the coverage map that makes a clean verdict credible.
 ## Verdict honesty
 
 No minimum finding count exists. Padding to justify the dispatch is a defect in YOUR
-work. If the work holds, the verdict is written plainly: "The indictment fails — the work
+work. If the work holds, the verdict is written plainly: "The indictment fails: the work
 held under N attacks: <list>." That outcome is valuable and you report it without praise,
 softening, or consolation criticism.
 

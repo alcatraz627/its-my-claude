@@ -8,8 +8,8 @@ argument-hint: "[--scope=<focus-area>] [--skip=<skill,...>] [--dry-run] [notes..
 
 ## Brief
 
-Audits the project's `.claude/` directory (or `~/.claude/` for global config) — skills,
-guidelines, personal config, and settings — catalogues all instructions and patterns,
+Audits the project's `.claude/` directory (or `~/.claude/` for global config): skills,
+guidelines, personal config, and settings: catalogues all instructions and patterns,
 generates a prioritized improvement list (consolidation, skill extraction, dead-instruction
 removal, guideline promotion), applies user-approved changes, and optionally produces a
 summary HTML report via `/create-report`.
@@ -30,7 +30,7 @@ across all files, and helps you evolve it as a coherent system.
 
 **Scope:**
 
-- **Operates within:** `.claude/` only — never writes elsewhere
+- **Operates within:** `.claude/` only: never writes elsewhere
 - **Can read:** anywhere in the project and `../backend/` for context
 - **Never modifies:** `../backend/.claude/` (read-only) or anything outside `.claude/`
 
@@ -38,9 +38,9 @@ across all files, and helps you evolve it as a coherent system.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `.claude/skills/GUIDELINES.md`. Apply all rules — forbidden paths, retry logic,
+Read `.claude/skills/GUIDELINES.md`. Apply all rules: forbidden paths, retry logic,
 tool preferences, verbosity, timeouts, post-run insights, and the **file lock protocol**
-— for the entire duration of this skill run before proceeding.
+for the entire duration of this skill run before proceeding.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -65,9 +65,9 @@ If it does not exist yet, continue without it.
 
 ---
 
-## Phase 1 — Information Gathering
+## Phase 1: Information Gathering
 
-### 1.1 — Parse arguments
+### 1.1: Parse arguments
 
 Extract from the invocation string:
 
@@ -85,11 +85,11 @@ Print parsed values:
   Notes:    "<value or (none)>"
 ```
 
-### 1.2 — Load codebase context from existing index
+### 1.2: Load codebase context from existing index
 
 Print: `  Loading codebase context ...`
 
-**Do not run `/project-index`** — it does a full filesystem scan and HTML report generation, which is too heavy for a config audit.
+**Do not run `/project-index`**: it does a full filesystem scan and HTML report generation, which is too heavy for a config audit.
 
 Instead:
 
@@ -98,7 +98,7 @@ Instead:
    ls .claude/project-index.md 2>/dev/null
    ```
 2. **If it exists and is recent (within 7 days):** Read it in full. Use it as codebase context.
-3. **If it does not exist or is stale:** Print a note — `"No recent project index found. Run /project-index first for richer context. Proceeding with limited codebase knowledge."` — then continue without it.
+3. **If it does not exist or is stale:** Print a note: `"No recent project index found. Run /project-index first for richer context. Proceeding with limited codebase knowledge."`: then continue without it.
 
 Extract and note (from the index or from known project structure):
 
@@ -106,7 +106,7 @@ Extract and note (from the index or from known project structure):
 - Folder structure and major feature areas
 - Any backend/frontend split relevant to `.claude/` scope
 
-### 1.3 — Run /user-config for Claude config overview
+### 1.3: Run /user-config for Claude config overview
 
 Invoke `/user-config` to get a structured view of all Claude configuration:
 skills, guidelines, personal settings, and permissions.
@@ -120,13 +120,13 @@ Extract and note:
 - What personal.md contains
 - Permissions in settings files
 
-### 1.4 — Read all .claude/ files directly
+### 1.4: Read all .claude/ files directly
 
 Reading everything directly is more reliable than relying solely on /user-config output.
 
 For each file in `.claude/`:
 
-- `Glob(".claude/**/*")` — list all files
+- `Glob(".claude/**/*")`: list all files
 - Exclude: anything in `SKIP_LIST`, `node_modules/`, lock files in `shared/locks/`
 - For each file found: Read it in full, note its purpose and content summary
 
@@ -138,7 +138,7 @@ Print each file as it is read:
   ...
 ```
 
-### 1.5 — Build the catalogue
+### 1.5: Build the catalogue
 
 For each file, record:
 
@@ -162,18 +162,18 @@ Weight all findings by `SCOPE` if provided, and exclude `SKIP_LIST` entries thro
 
 ---
 
-## Phase 2 — Analysis & Planning
+## Phase 2: Analysis & Planning
 
 **Do not write any files in this phase.**
 
-### 2.1 — Generate improvement list
+### 2.1: Generate improvement list
 
 Produce a categorized list of proposed improvements. For each item include:
 
 - **Category** (see below)
-- **Title** — one-line description
-- **Rationale** — why this matters and what it fixes
-- **Risk** — `low` / `medium` / `high` (high = significant rewrites or deletions)
+- **Title**: one-line description
+- **Rationale**: why this matters and what it fixes
+- **Risk**: `low` / `medium` / `high` (high = significant rewrites or deletions)
 - **Files affected**
 
 **Categories:**
@@ -190,28 +190,28 @@ Produce a categorized list of proposed improvements. For each item include:
 Dead instruction removals must be justified: cite which GUIDELINES rule or other file
 already covers it. Never remove an instruction that handles an edge case not covered elsewhere.
 
-### 2.1a — Consult the placement indices before any structural move
+### 2.1a: Consult the placement indices before any structural move
 
 Before proposing any `skill-extraction` or any item that **relocates** a rule, feature,
 convention, or script, consult the canonical "where does config go" indices. This is the same
 discipline `~/.claude/PLACEMENT.md` mandates for adding config by hand.
 
-- `~/.claude/PLACEMENT.md` — the category × tier rule for where new config belongs. Read this
+- `~/.claude/PLACEMENT.md`: the category × tier rule for where new config belongs. Read this
   before extracting a skill or moving an instruction; it decides whether the thing is a rule, a
   feature, a convention, a skill, or inline.
-- `~/.claude/NAMESPACE.md` — the `std::claude::*` cluster the thing belongs to.
-- `~/.claude/FOLDERS.md` — the per-folder owner/purpose map; confirms the destination folder
+- `~/.claude/NAMESPACE.md`: the `std::claude::*` cluster the thing belongs to.
+- `~/.claude/FOLDERS.md`: the per-folder owner/purpose map; confirms the destination folder
   accepts this kind of file.
 
-For any item that **moves a canonical path** — renames a script others reference, relocates a
-skill, changes a top-level directory — file a `/migrate` entry. Note the planned `/migrate` call
+For any item that **moves a canonical path**: renames a script others reference, relocates a
+skill, changes a top-level directory: file a `/migrate` entry. Note the planned `/migrate` call
 in the improvement item's rationale so the user sees it before approving.
 
 If the indices say a proposed extraction belongs somewhere other than a new skill (e.g. it's a
 rule or a convention), reclassify the item and say so in its rationale rather than extracting a
 skill anyway.
 
-### 2.2 — Print analysis summary
+### 2.2: Print analysis summary
 
 ```
 ─────────────────────────────────────────────────────
@@ -238,11 +238,11 @@ skill anyway.
 ─────────────────────────────────────────────────────
 ```
 
-### 2.3 — Collect user input
+### 2.3: Collect user input
 
 Ask two questions sequentially.
 
-**Question A — which items to apply:**
+**Question A: which items to apply:**
 
 ```
 Which improvements should I apply?
@@ -252,7 +252,7 @@ Which improvements should I apply?
 
 Wait for input.
 
-**Question B — modification prompt:**
+**Question B: modification prompt:**
 
 ```
 Any modifications to how I apply these? (free-form, or press enter to skip)
@@ -274,7 +274,7 @@ Then exit.
 
 ---
 
-## Phase 3 — Execution
+## Phase 3: Execution
 
 Apply all approved improvements. Process them in this order to minimize conflicts:
 
@@ -283,18 +283,18 @@ Apply all approved improvements. Process them in this order to minimize conflict
 3. `per-skill` improvements
 4. `cross-cutting` changes (apply to each affected file sequentially)
 5. `consolidation` merges
-6. `skill-extraction` — first confirm placement against `PLACEMENT.md` / `NAMESPACE.md` /
+6. `skill-extraction`: first confirm placement against `PLACEMENT.md` / `NAMESPACE.md` /
    `FOLDERS.md` (per 2.1a), file a `/migrate` entry if the extraction moves a canonical path,
    then invoke `/create-skill` interactively for each new skill
 
 When an approved improvement **rewrites a skill's SKILL.md** (its prose, structure, or output
 contract), apply the Claude-consumption house rules in
-`~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md` — behavior over
+`~/.claude/assets/reports/20260618-persona-dogfood/claude-consumption-spec.md`: behavior over
 flavor, plain declaratives over ALL-CAPS/MUST, explicit scope, a load-bearing output contract,
 action-oriented frontmatter. A SKILL.md is system-prompt material consumed by Claude, not a
 human doc.
 
-### 3.1 — File lock protocol
+### 3.1: File lock protocol
 
 For every file write, follow the lock protocol from GUIDELINES.md:
 
@@ -306,9 +306,9 @@ bash ~/.claude/skills/shared/lock-file.sh release "<relative-path>" "improve-con
 
 If acquire exits 1 (file locked): print the owner, skip this file, note it in the final summary.
 
-### 3.2 — Per-change narration
+### 3.2: Per-change narration
 
-Narrate each applied improvement in one block — title, files, the section touched, and the
+Narrate each applied improvement in one block: title, files, the section touched, and the
 result. The lock acquire/release happens per 3.1; you don't need to narrate each lock step.
 
 ```
@@ -316,7 +316,7 @@ result. The lock acquire/release happens per 3.1; you don't need to narrate each
   [+] Extracting skill <name> — invoking /create-skill ...
 ```
 
-### 3.3 — Respect modification prompt
+### 3.3: Respect modification prompt
 
 Apply `NOTES` and Question B input as a consistent lens across all edits:
 e.g. if the user said "keep all edge case handling", never remove instructions
@@ -324,9 +324,9 @@ that exist specifically to handle edge cases even if flagged as dead.
 
 ---
 
-## Phase 4 — Verification & Reporting
+## Phase 4: Verification & Reporting
 
-### 4.1 — Read back all modified files
+### 4.1: Read back all modified files
 
 For each file that was edited or written during Phase 3:
 
@@ -334,7 +334,7 @@ For each file that was edited or written during Phase 3:
 - Confirm the change is present and the file is non-empty
 - Print: `  ✓ <path> verified`
 
-### 4.2 — Print terminal summary
+### 4.2: Print terminal summary
 
 ```
 ─────────────────────────────────────────────────────
@@ -358,7 +358,7 @@ For each file that was edited or written during Phase 3:
 ─────────────────────────────────────────────────────
 ```
 
-### 4.3 — Offer HTML report
+### 4.3: Offer HTML report
 
 ```
 Generate an HTML report of this run? (yes / no)
@@ -372,7 +372,7 @@ If yes:
 3. Invoke `/create-report` with the summary file as input
 4. Open the generated HTML
 
-### 4.4 — Update runtime-notes.md
+### 4.4: Update runtime-notes.md
 
 Write the entry to a temp file and call `prepend-runtime-note.sh`:
 
@@ -396,11 +396,11 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "improve-config" /tmp/runti
 ## Notes
 
 - No additional constraints beyond GUIDELINES.md defaults.
-- Operates strictly within `.claude/` — the rest of the project is readable for
+- Operates strictly within `.claude/`: the rest of the project is readable for
   context but never written to.
 - `../backend/.claude/` is read-only; never modified under any circumstances.
 - `--dry-run` exits cleanly after Phase 2 with no file writes.
-- When `/create-skill` is invoked for skill-extraction items, the wizard runs interactively —
+- When `/create-skill` is invoked for skill-extraction items, the wizard runs interactively:
   the user will be asked the standard Q&A questions for each new skill.
 - Dead instruction removals are conservative: if an instruction handles an edge case not
   covered elsewhere, it is flagged as "informational" not removed.

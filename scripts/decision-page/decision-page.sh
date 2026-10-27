@@ -1,5 +1,5 @@
 #!/bin/bash
-# decision-page.sh — interactive decision/feedback pages for a human, driven by agents.
+# decision-page.sh: interactive decision/feedback pages for a human, driven by agents.
 #
 # An agent that needs structured human feedback on many items (design reviews,
 # migration plans, per-screen verdicts) creates a page instead of asking N
@@ -9,7 +9,7 @@
 # Registry: ~/.claude/assets/decision-pages/<slug>/ (config.json + any images).
 # Served by the KANBAN server (:5106) since 2026-08-25: every page renders at
 # /dp/<slug>/ from ONE dynamic template, and the kanban Decisions view is the
-# hub. Pages are temporary — prune freely. (The old :5197 server is retired.)
+# hub. Pages are temporary: prune freely. (The old :5197 server is retired.)
 #
 # Agent contract: `new` scaffolds and prints the TODO; `check <slug>` is the one
 # verification call (config parses, schema sane, images exist, page renders) and
@@ -36,7 +36,7 @@ BASE="http://localhost:$PORT/dp"
 VIEW="?view=bfb"
 HUB="http://localhost:$PORT/?view=decisions"
 
-# TTY-gated palette (std::claude::tui) — vars are empty when piped, so callsites never branch.
+# TTY-gated palette (std::claude::tui): vars are empty when piped, so callsites never branch.
 if [ -f "$HOME/.claude/scripts/tui/colors.sh" ]; then
   # shellcheck source=/dev/null
   . "$HOME/.claude/scripts/tui/colors.sh" && tui_colors_init
@@ -48,7 +48,7 @@ die() { printf '%serror:%s %s\n' "$RED" "$R" "$1" >&2; [ -n "${2:-}" ] && printf
 
 # ── manifest + hub ──────────────────────────────────────────────────────────
 # pages.json is what the hub renders; regenerated on every mutating op so the
-# hub is never stale. Atomic write (tmp+mv) — the server may be reading it.
+# hub is never stale. Atomic write (tmp+mv): the server may be reading it.
 regen_manifest() {
   mkdir -p "$REG"
   python3 - "$REG" <<'PY'
@@ -160,7 +160,7 @@ cmd_new() {
   mkdir -p "$dir"
   # no index.html copy: the kanban server renders every page from config.json
   # with ONE template, so a template fix reaches every page ever made
-  # NB: no ${title:-…} here — bash honors quotes INSIDE ${…} even under double
+  # NB: no ${title:-…} here: bash honors quotes INSIDE ${…} even under double
   # quotes, so an apostrophe in the default text breaks the parse of the file.
   [ -n "$title" ] || title="TITLE — every answer drafted; flip what needs changing"
   # the board whose root IS this directory, so the common case needs no flag
@@ -410,7 +410,7 @@ cmd_prune() {
 }
 
 # ── pending ledger ──────────────────────────────────────────────────────────
-# "handed off, awaiting the human's answer" — the answered/unanswered state
+# "handed off, awaiting the human's answer": the answered/unanswered state
 # lives in the human's browser localStorage, which a shell can't read, so the
 # agent maintains this ledger explicitly: `pending add <slug>` on handoff,
 # `pending clear <slug>` once the answer is pasted back. The statusline reads
@@ -463,7 +463,7 @@ cmd_band() {
 # ── answer (submit-to-wake) ──────────────────────────────────────────────────
 # The server writes <slug>/.answer.json when the human clicks Submit. After
 # handoff the agent watches for that file (Monitor tool or a poll of this command)
-# and reads the answer here — no copy-paste needed. Exits non-zero until submitted.
+# and reads the answer here: no copy-paste needed. Exits non-zero until submitted.
 cmd_answer() {
   local slug="${1:?usage: decision-page.sh answer <slug> [--consume] [--notify]}"; shift 2>/dev/null || true
   local consume=0 notify=0
@@ -495,7 +495,7 @@ try:
 except OSError:
     pass
 # macOS notification: title = originating session, subtitle = "answers read",
-# body = the page topic. Built-in osascript banner — temporary, auto-dismisses.
+# body = the page topic. Built-in osascript banner: temporary, auto-dismisses.
 if notify and platform.system() == "Darwin" and shutil.which("osascript"):
     origin = {}
     try:

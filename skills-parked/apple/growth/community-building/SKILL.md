@@ -78,7 +78,7 @@ Choose 1-2 platforms to focus on. Spreading across 5 platforms with weak presenc
 - Growth speed: Moderate (riding platform growth)
 
 **Blog / Newsletter (Owned Platform)**
-- Audience: Subscribers who opted in — highest intent
+- Audience: Subscribers who opted in: highest intent
 - Strengths: You own the audience, SEO benefits, long-form depth, email is reliable
 - Weaknesses: Slow to build, requires consistent writing, higher effort per post
 - Best for: Every app (this should be your long-term play, even if secondary)
@@ -140,7 +140,7 @@ Choose your comfort level:
 | Fully transparent | Revenue, downloads, expenses, decisions | "March: $3,200 MRR, 847 subscribers, $400 in expenses" |
 | Mostly transparent | Growth trends, decisions, learnings | "Crossed 800 subscribers this month, up 15% from February" |
 | Selectively transparent | Progress, design, features | "Shipped the new dashboard this week, here's how it looks" |
-| Journey-focused | Process, challenges, milestones | "Working on search — here's my approach to full-text indexing" |
+| Journey-focused | Process, challenges, milestones | "Working on search: here's my approach to full-text indexing" |
 
 All levels work. Pick what you are genuinely comfortable with and stay consistent.
 
@@ -331,6 +331,6 @@ Present community strategy as:
 
 ## References
 
-- **press-media/** — For media outreach beyond community
-- **app-store/review-response-writer/** — For responding to App Store reviews
-- **indie-business/** — For business context around community investment
+- **press-media/**: For media outreach beyond community
+- **app-store/review-response-writer/**: For responding to App Store reviews
+- **indie-business/**: For business context around community investment

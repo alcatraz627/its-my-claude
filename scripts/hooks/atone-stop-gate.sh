@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# atone-stop-gate.sh — the teeth behind an explicit /atone.
+# atone-stop-gate.sh: the teeth behind an explicit /atone.
 #
 # A Stop hook that REFUSES turn-end (decision:block) when the user explicitly
-# invoked /atone but no event was recorded — forcing the agent to actually log
+# invoked /atone but no event was recorded: forcing the agent to actually log
 # the mistake before it can stop. This is the enforcement the rest of the atone
 # pipeline lacked: a user-typed /atone was advisory, and the existing Stop check
 # lives inside the hook-orchestrator (run.sh:57 runs each task `>/dev/null 2>&1`),
@@ -10,10 +10,10 @@
 # settings.json Stop precisely so its stdout reaches Claude Code.
 #
 # Two independent block conditions:
-#   1. EXPLICIT /atone unaddressed — a .pending-atone marker with explicit:true
+#   1. EXPLICIT /atone unaddressed: a .pending-atone marker with explicit:true
 #      (armed by hinters/30-atone-nudge.sh Part 0) and NO event in events.jsonl
 #      since the marker was armed.
-#   2. Last `atone.sh add` FAILED — a .atone-add-failed marker (written by the
+#   2. Last `atone.sh add` FAILED: a .atone-add-failed marker (written by the
 #      cmd_add EXIT trap in atone.sh) meaning the agent tried to record but the
 #      write bounced (commonly: RCA missing YAML frontmatter). The mistake is
 #      still unrecorded, so the agent must fix and retry.
@@ -24,7 +24,7 @@
 # feedback). A freshness window drops stale markers so a cross-day/cross-session
 # leftover can't block a fresh turn.
 #
-# Mute (session): touch ~/.claude/atone/.gate-off  (the gate's OWN mute — distinct
+# Mute (session): touch ~/.claude/atone/.gate-off  (the gate's OWN mute: distinct
 #   from the heuristic-nudge mute .nudge-off, which does NOT silence this gate).
 #
 # Block contract (verified from review-gate-stop.sh on this machine):
@@ -47,7 +47,7 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 # sidechain → CLAUDE_CODE_CHILD_SESSION=1) or the atone juror's own headless
 # `claude -p` (ATONE_JUROR_SESSION=1, exported by atone-juror-dispatch.sh) reads
 # the SAME date-keyed marker (SESSION_KEY falls back to a date, below) yet cannot
-# run `atone.sh add` — so a block there is always a false positive, and it loops
+# run `atone.sh add`: so a block there is always a false positive, and it loops
 # (identical block re-fires every forced continuation). Suppress outright.
 # ATONE_JUROR_SESSION is the guaranteed-correct signal (set only for the juror);
 # CHILD_SESSION is the broader catch for Agent-tool juror sub-agents. The .gate-off
@@ -62,7 +62,7 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 
 # Marker key: stdin session_id first (the authoritative per-session identity a
 # hook receives), then the env ids, then the legacy UTC-date key. Sanitized to a
-# filename-safe token and capped — a polluted env var once produced a marker
+# filename-safe token and capped: a polluted env var once produced a marker
 # literally named after an error message. Derivation is MIRRORED in
 # atone-stop-check.sh and atone.sh:_add_exit_trap; all writers/readers must
 # agree. Session-keying fixes the cross-session collision (two same-day sessions
@@ -93,7 +93,7 @@ _ts_epoch()  { date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$1" '+%s' 2>/dev/null \
 # be unable to run atone.sh at all; this gives it a comply path other than the
 # block re-firing until MAX_BLOCKS. The gate cannot detect that scoping from a
 # Stop hook, so it offers the escape unconditionally rather than trap the turn.
-# The mute-file pointer lives ONCE at each block's tail — a scoped-out session
+# The mute-file pointer lives ONCE at each block's tail: a scoped-out session
 # cannot touch ~/.claude itself, so here we ask the USER to run (or mute) instead.
 HANDOFF="If you cannot run atone.sh here (shell scoped to a subdir / no access to ~/.claude), tell the user and ask them to run the add — or to mute the gate — for you; do not just re-stop."
 
@@ -122,10 +122,10 @@ if [ -f "$FMARK" ]; then
     # not an unrecorded mistake: a duplicate / near-duplicate rejection, or a
     # same-session-repeat bump that exits nonzero AFTER the original event
     # committed, still fires the EXIT trap and arms this marker. If an event with
-    # this slug landed within the freshness window, the obligation is satisfied —
+    # this slug landed within the freshness window, the obligation is satisfied:
     # drop the marker instead of forcing a fix for an add that already succeeded.
-    # (Degrades safely: a marker with no .slug — e.g. a genuine first-attempt RCA
-    # lint failure, which never reached a slug-bearing write — still blocks below.)
+    # (Degrades safely: a marker with no .slug: e.g. a genuine first-attempt RCA
+    # lint failure, which never reached a slug-bearing write: still blocks below.)
     FSLUG=$(jq -r '.slug // empty' "$FMARK" 2>/dev/null)
     if [ -n "$FSLUG" ]; then
       FCUT=$(( $(_now_epoch) - FRESH_SECONDS ))

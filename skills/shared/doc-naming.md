@@ -81,7 +81,7 @@ Embed session provenance in documents via HTML comments with timestamps.
 <!-- sessions: fix-auth-3b@2026-03-31, add-chart-f1@2026-03-29 -->
 ```
 
-Each entry is `session-id@YYYY-MM-DD` — the date is when that session last touched the file.
+Each entry is `session-id@YYYY-MM-DD`: the date is when that session last touched the file.
 
 ### Rules
 
@@ -90,9 +90,9 @@ Each entry is `session-id@YYYY-MM-DD` — the date is when that session last tou
 | **New document** | Add `<!-- sessions: [id]@[today] -->` on the second line (after title or frontmatter) |
 | **Existing doc, same session** | Update the timestamp if >1 day old: `fix-auth-3b@2026-03-30` → `fix-auth-3b@2026-03-31` |
 | **Existing doc, new session** | Append: `<!-- sessions: fix-auth-3b@2026-03-31, add-chart-f1@2026-03-29 -->` |
-| **Cleanup stale entries** | Remove entries where the timestamp is >3 days old. Do this when touching the file for any other reason — don't make a special pass. |
-| **WAL** | Session encoded in `## Session: YYYY-MM-DD HH:MM [session-id]` header — no separate tag |
-| **Runtime notes** | Session ID in `## session: [desc] [session-id] — YYYY-MM-DD` heading — no separate tag |
+| **Cleanup stale entries** | Remove entries where the timestamp is >3 days old. Do this when touching the file for any other reason: don't make a special pass. |
+| **WAL** | Session encoded in `## Session: YYYY-MM-DD HH:MM [session-id]` header: no separate tag |
+| **Runtime notes** | Session ID in `## session: [desc] [session-id] — YYYY-MM-DD` heading: no separate tag |
 | **Source code** | Never add session tags to `.ts`, `.js`, `.py`, etc. |
 
 ### Lifecycle example
@@ -129,7 +129,7 @@ Skills and tools that create documents MUST consult this file:
 | Skill/System | How it uses this reference |
 |--------------|---------------------------|
 | `/core-dump` | Checkpoint filename: `_YYYYMMDD-<session-id>.claude.md` + symlink `_checkpoint.claude.md` |
-| `/catchup` | Globs `_*.claude.md`, follows symlinks — datestamped names are compatible |
+| `/catchup` | Globs `_*.claude.md`, follows symlinks: datestamped names are compatible |
 | `/cogitate` | Topic files in `~/Documents/Claude/Topics/` get `YYYYMMDD-` prefix |
 | WAL system | Session header includes `[session-id]` per `wal-format.md` |
 | Runtime notes | Session heading includes `[session-id]` |

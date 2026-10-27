@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# pre-tool-bash.sh — codex PreToolUse[Bash]: run the gcc guards that matter after
+# pre-tool-bash.sh: codex PreToolUse[Bash]: run the gcc guards that matter after
 # the fact, unchanged, against codex's shell commands.
 #
 # Codex sends the same payload Claude Code does ({tool_name:"Bash",

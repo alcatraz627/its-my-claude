@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# memory-domain — extract events from ~/.claude/projects/*/memory/*.md and
+# memory-domain: extract events from ~/.claude/projects/*/memory/*.md and
 # ~/.claude/memory/global/*.md into events.jsonl.
 #
 # Idempotent: only emits events for files whose mtime advanced past

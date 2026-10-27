@@ -1,9 +1,9 @@
-# Migration 0002 — Phase 1+2 upgrade (retrofit)
+# Migration 0002: Phase 1+2 upgrade (retrofit)
 
 <!-- sessions: upgrade-phase12-7c@2026-04-17, ns-plan-7f@2026-04-17 -->
 
-**Status:** ✅ Applied — retrofit doc written 2026-04-17; underlying changes landed 2026-04-17 by session `upgrade-phase12-7c`.
-**Type:** Retrospective / backfill — documents a structural change that occurred before the migration log existed.
+**Status:** ✅ Applied: retrofit doc written 2026-04-17; underlying changes landed 2026-04-17 by session `upgrade-phase12-7c`.
+**Type:** Retrospective / backfill: documents a structural change that occurred before the migration log existed.
 **Opened:** 2026-04-17
 **Last updated:** 2026-04-17
 
@@ -11,7 +11,7 @@
 
 ## Summary
 
-Back-fill a migration doc for the Phase 1+2 global config upgrade that landed on 2026-04-17 via session `upgrade-phase12-7c` (session ID: `867071c7-fbda-4044-aef3-fe69f068ef16`). The upgrade introduced global observability, new hooks, new skills, WAL JSONL canonicalization, and a named-backup convention — all of which need to be locatable in the namespace tree.
+Back-fill a migration doc for the Phase 1+2 global config upgrade that landed on 2026-04-17 via session `upgrade-phase12-7c` (session ID: `867071c7-fbda-4044-aef3-fe69f068ef16`). The upgrade introduced global observability, new hooks, new skills, WAL JSONL canonicalization, and a named-backup convention: all of which need to be locatable in the namespace tree.
 
 ---
 
@@ -25,7 +25,7 @@ Back-fill a migration doc for the Phase 1+2 global config upgrade that landed on
 
 ## Scope
 
-**Retrofit only — no new files created by this migration.** Everything below already exists on disk.
+**Retrofit only: no new files created by this migration.** Everything below already exists on disk.
 
 ---
 
@@ -50,22 +50,22 @@ Back-fill a migration doc for the Phase 1+2 global config upgrade that landed on
 |---|---|
 | `scripts/emit-event.sh` | Appends JSONL line per hook firing; flock-guarded, async, fails soft |
 | `scripts/find-events-log.sh` | Resolver so skills don't hardcode `events.jsonl` path |
-| `scripts/block-nested-claude.sh` | PreToolUse hook — blocks `/.claude/.claude/` paths |
-| `scripts/rotate-events.sh` | Stop hook — archives events.jsonl at 50MB (override via `EVENTS_ROTATE_THRESHOLD`) |
-| `scripts/rotate-wal.sh` | Stop hook — archives wal.jsonl at 5MB (override via `WAL_ROTATE_THRESHOLD`) |
-| `scripts/prune-backups.sh` | CLI/weekly — trashes `assets/backups/` items >180 days old |
-| `scripts/validate-memory.sh` | CLI/CI — scans memory files for stale path refs |
-| `scripts/test-hooks.sh` | CLI/CI — 16 tests against hook scripts, `HOME`-override isolation |
-| `scripts/wal.sh` | CLI helper — appends JSONL lines to WAL via `jq -cn` |
-| `scripts/wal-convert.sh` | One-shot — `wal.md` → `wal.jsonl` via python3 state machine |
-| `scripts/propose.sh` | CLI — cross-session improvement backlog (`add`/`list`/`show`/`done`/`reject`) |
+| `scripts/block-nested-claude.sh` | PreToolUse hook: blocks `/.claude/.claude/` paths |
+| `scripts/rotate-events.sh` | Stop hook: archives events.jsonl at 50MB (override via `EVENTS_ROTATE_THRESHOLD`) |
+| `scripts/rotate-wal.sh` | Stop hook: archives wal.jsonl at 5MB (override via `WAL_ROTATE_THRESHOLD`) |
+| `scripts/prune-backups.sh` | CLI/weekly: trashes `assets/backups/` items >180 days old |
+| `scripts/validate-memory.sh` | CLI/CI: scans memory files for stale path refs |
+| `scripts/test-hooks.sh` | CLI/CI: 16 tests against hook scripts, `HOME`-override isolation |
+| `scripts/wal.sh` | CLI helper: appends JSONL lines to WAL via `jq -cn` |
+| `scripts/wal-convert.sh` | One-shot: `wal.md` → `wal.jsonl` via python3 state machine |
+| `scripts/propose.sh` | CLI: cross-session improvement backlog (`add`/`list`/`show`/`done`/`reject`) |
 
 ### New skills (all under `::skills`)
 
 | Skill | Purpose |
 |---|---|
-| `skills/doctor/SKILL.md` | `/doctor` — env health check (worktrees, pm2, disk, WAL staleness, git dirty, event log, hook integrity, MCP validity) |
-| `skills/past-sessions/SKILL.md` | `/past-sessions` — browse/search/summarize JSONL transcripts under `~/.claude/projects/` |
+| `skills/doctor/SKILL.md` | `/doctor`: env health check (worktrees, pm2, disk, WAL staleness, git dirty, event log, hook integrity, MCP validity) |
+| `skills/past-sessions/SKILL.md` | `/past-sessions`: browse/search/summarize JSONL transcripts under `~/.claude/projects/` |
 
 ### New self-correction artifacts (`::improvement`)
 
@@ -101,7 +101,7 @@ If you encounter:
 
 - **`~/.claude/wal.md`** (a reference expecting the markdown WAL): it still works as a fallback for `/catchup`. For new writes, use `wal.jsonl` + `wal.sh` helper.
 - **A hook not firing that used to**: check whether it flipped async. Async hooks don't block but emit via `emit-event.sh`. Grep `events.jsonl` for the event.
-- **`improvement-ideas.md` referenced as `code/ideas/ROADMAP.md`**: the original Phase 1 plan of Migration 0001 included that move. It was dropped in favor of relabelling (`::improvement::ideas` — file stays at root). See Migration 0001 "Revisions" section.
+- **`improvement-ideas.md` referenced as `code/ideas/ROADMAP.md`**: the original Phase 1 plan of Migration 0001 included that move. It was dropped in favor of relabelling (`::improvement::ideas`: file stays at root). See Migration 0001 "Revisions" section.
 - **A path under `~/.claude/subconscious/`** that looks orphaned: it's part of `::improvement::dreams`. See NAMESPACE.md.
 
 ---
@@ -130,5 +130,5 @@ Key reverts available:
 
 ## Notes
 
-- This doc is deliberately descriptive rather than prescriptive — the changes already shipped. Its job is to make them findable via the migration index.
+- This doc is deliberately descriptive rather than prescriptive: the changes already shipped. Its job is to make them findable via the migration index.
 - Future structural changes should open a migration *before* executing, not after. This retrofit exists only because the `::migrations` cluster didn't exist when Phase 1+2 landed.

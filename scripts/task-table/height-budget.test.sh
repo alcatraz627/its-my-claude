@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# height-budget.test.sh — a large GATES band must not starve the work rows.
+# height-budget.test.sh: a large GATES band must not starve the work rows.
 #
 # On 2026-09-04 session f04ae843 carried 16 owner-gate rows at two lines each.
 # GATES renders first and had no ceiling, so the band alone exceeded the 44-line

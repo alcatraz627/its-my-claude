@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# relpath-stop.sh — Stop hook: notice when the final message hands the user a
+# relpath-stop.sh: Stop hook: notice when the final message hands the user a
 # deliverable by a path that will not resolve for them.
 #
 # Why. The agent holds a working directory; the reader does not. `assets/reports/

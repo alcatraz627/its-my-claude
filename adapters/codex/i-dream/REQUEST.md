@@ -1,4 +1,4 @@
-# i-dream Integration Request — codex-sessions
+# i-dream Integration Request: codex-sessions
 
 Per `i-dream contract` §8, a system's first integration is a report for the
 owner, not a self-registration. Everything below is staged in

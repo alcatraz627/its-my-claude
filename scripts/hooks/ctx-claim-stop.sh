@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ctx-claim-stop.sh — Stop hook: catch a context-capacity claim that no
+# ctx-claim-stop.sh: Stop hook: catch a context-capacity claim that no
 # measurement supports, and answer it with the number.
 #
 # Why. rules/communication.md § "Context-load claims need the instrument, not a

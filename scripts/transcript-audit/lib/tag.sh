@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ta tag — bookmark one (transcript, turn) into the bookmarks ledger.
+# ta tag: bookmark one (transcript, turn) into the bookmarks ledger.
 #
 # The accumulation layer of the transcript-audit tool: an audit marks the turns
 # it found worth remembering, so the next audit builds on those marks instead of

@@ -10,7 +10,7 @@
 # terminal narrows, and low-value ones go first (see the show_* thresholds).
 
 set -uo pipefail
-# Note: set -e intentionally omitted — (( expr )) returns exit 1 when false,
+# Note: set -e intentionally omitted: (( expr )) returns exit 1 when false,
 # which kills the script under set -e. A statusline should never abort early.
 shopt -s extglob  # enables *([0-9;]) patterns in ${var//} substitutions (used by _vlen)
 
@@ -43,7 +43,7 @@ _bar10() {
   printf '%s' "$bar"
 }
 
-# Pure-bash ANSI-stripping length — 0 subprocess forks (extglob enabled at top)
+# Pure-bash ANSI-stripping length: 0 subprocess forks (extglob enabled at top)
 # Strips \e[Nm / \e[N;Mm color codes only. OSC 8 links: pass visible length explicitly.
 # Result stored in _VLEN (global) to avoid subshell overhead.
 _VLEN=0
@@ -75,15 +75,15 @@ seg_subagents=auto
 seg_timeline=auto
 # New segments
 seg_mem=auto; seg_disk=auto; seg_tok_speed=auto; seg_git_stash=auto; seg_uptime=auto
-# Batch 2 — analytics / contextual
+# Batch 2: analytics / contextual
 seg_edit_ratio=auto; seg_branch_age=auto; seg_cost_vel=auto; seg_focus_file=auto; seg_test_status=auto
-# Batch 3 — new widgets
+# Batch 3: new widgets
 seg_cache_hit=auto; seg_merge_conflicts=auto; seg_cloud=auto
-# Batch 4 — token analytics + runtime versions + session file ops + security
+# Batch 4: token analytics + runtime versions + session file ops + security
 seg_cache_write=auto; seg_out_ratio=auto; seg_runtime_ver=auto; seg_files_touched=auto; seg_sudo=auto
-# Batch 5 — environment context + tool telemetry
+# Batch 5: environment context + tool telemetry
 seg_tmux=auto; seg_docker=auto; seg_exit_code=auto; seg_latency=auto
-# Batch 6 — decision-wizard: pages handed to the user, awaiting an answer
+# Batch 6: decision-wizard: pages handed to the user, awaiting an answer
 seg_decwait=auto
 
 # Parse config
@@ -142,7 +142,7 @@ if (( use_icons )); then
   ic_cache=" "   # nf-fa-database (U+F1C0) — cache hit ratio
   ic_cloud=" "   # nf-fa-cloud (U+F0C2) — cloud profile
 else
-  # ASCII fallbacks — short labels as icon stand-ins
+  # ASCII fallbacks: short labels as icon stand-ins
   ic_git="git:"
   ic_model=""
   ic_cost="$ "
@@ -236,7 +236,7 @@ if [[ "${STATUSLINE_RATELIMIT_DEBUG:-0}" == "1" ]]; then
 fi
 
 # ── Terminal Width Detection ──
-# Hook runs in a non-TTY subprocess — tput falls back to 80. Priority:
+# Hook runs in a non-TTY subprocess: tput falls back to 80. Priority:
 #   1. STATUSLINE_COLS: explicit override (render server / testing)
 #   2. _P9K_TTY: real terminal device stored by Powerlevel10k
 #   3. COLUMNS: shell env var (if > 0)
@@ -278,12 +278,12 @@ else
   fi
   # Only scale down truly ultra-wide displays (monitors > 240 cols)
   if (( cols > 240 )); then cols=$(( cols * 90 / 100 )); fi
-  # No cap below 160 — standard terminals use full width
+  # No cap below 160: standard terminals use full width
 fi
 [[ "${cols:-0}" -lt 60 ]] && cols=60
 
 # Opt-in width-detection debug log. Enable with STATUSLINE_WIDTH_DEBUG=1 to
-# diagnose wrap/scrollback-corruption issues — captures EVERY candidate width
+# diagnose wrap/scrollback-corruption issues: captures EVERY candidate width
 # source so a stale COLUMNS or mismatched _P9K_TTY shows up immediately. Off
 # by default (zero cost). Log: ~/.claude/logs/statusline-width.log
 if [[ "${STATUSLINE_WIDTH_DEBUG:-0}" == "1" ]]; then
@@ -307,7 +307,7 @@ done
 
 # ── Start daemon if needed (single-daemon-per-PPID guard) ──
 # Prior bug: concurrent statusline renders (rapid turns, streaming updates)
-# both saw !STATS_FILE and both spawned a daemon — over a long session this
+# both saw !STATS_FILE and both spawned a daemon: over a long session this
 # accumulated 5+ daemons per claude PID. The pgrep gate closes the race by
 # checking against the kernel-side process table (atomic enough that the
 # window shrinks from ms-scale file-stat to µs-scale syscall). The trailing
@@ -497,12 +497,12 @@ session_phase="early"
 # Mechanism: ~/.claude/widgets/.limits.json is already written by every
 # statusline render (a few lines below). Read it FIRST and pick whichever
 # of (own stdin, cached file) has a later `resets_at` timestamp. Since the
-# 5h/7d windows are rolling, a fresher fetch produces a later resets_at —
+# 5h/7d windows are rolling, a fresher fetch produces a later resets_at:
 # so resets_at is a free freshness proxy without needing a separate
 # fetched_at timestamp.
 #
 # Net effect: the moment any session has fresh data, every other session
-# picks it up on its next render. Architecture unchanged — same file,
+# picks it up on its next render. Architecture unchanged: same file,
 # same daemon, same display segments. Only adds one file read per render.
 _limits_file="$HOME/.claude/widgets/.limits.json"
 _cached_r5=""; _cached_r5_resets=""; _cached_r7=""; _cached_r7_resets=""; _cached_r5_src=0; _cached_r7_src=0
@@ -529,7 +529,7 @@ _RL_CONFIRM_S=1200
 # Returns 0 for "unknown", and a reset date more than ~14 days out counts as
 # unknown: Claude Code sends 9999999999 when it does not know the reset time, and
 # that is a sentinel, not a timestamp. Taken literally it parses to the year 2286
-# — the largest epoch in play — so it always wins the "later resets_at is fresher"
+# : the largest epoch in play: so it always wins the "later resets_at is fresher"
 # merge below, and a stale local value can override a genuinely fresher cached one
 # indefinitely. Same 14-day plausibility bound the countdown guard uses.
 _rl_to_epoch() {
@@ -578,7 +578,7 @@ if [[ -n "$_cached_r7" ]]; then
   fi
 fi
 # 5h merge: same shape. The 5h window is much shorter (5 hours) so
-# window-rolls are more frequent and resets_at moves more often — but
+# window-rolls are more frequent and resets_at moves more often: but
 # the value-comparison fallback handles same-window staleness regardless.
 _own_r5_ep=$(_rl_to_epoch "${rate_5h_resets:-}")
 _cached_r5_ep=$(_rl_to_epoch "$_cached_r5_resets")
@@ -615,7 +615,7 @@ if (( has_rate )); then
   [[ $_r7_int -gt 0 ]] && _limits_json+=",\"week\":{\"pct\":${_r7_int},\"used\":0,\"cap\":0,\"src_at\":${_r7_src:-0}}"
   # Persist resets_at timestamps if available (ISO string or epoch).
   # `resets_at` is the 5h-window reset (existing); `resets_at_weekly` is the
-  # 7d-window reset (new — read by claude-instances-bar's 7d countdown).
+  # 7d-window reset (new: read by claude-instances-bar's 7d countdown).
   if [[ -n "${rate_5h_resets:-}" && "$rate_5h_resets" != "null" ]]; then
     _limits_json+=",\"resets_at\":\"${rate_5h_resets}\""
   fi
@@ -670,7 +670,7 @@ has_disk=0; [[ ${disk_free_gb:-0} -gt 0 && ${disk_free_gb:-0} -lt 20 ]] && has_d
 has_stash=0; [[ $git_stash -gt 0 ]] && has_stash=1
 has_tok_speed=0; [[ $tok_speed -gt 50 ]] && has_tok_speed=1
 has_uptime=0; [[ -n "${duration_ms:-}" && "$duration_ms" != "null" && "$duration_ms" != "0" ]] && has_uptime=1
-# Efficiency metrics — only meaningful after enough data accumulates
+# Efficiency metrics: only meaningful after enough data accumulates
 has_edit_ratio=0
 [[ $total_lines_changed -gt 10 && $total_tok -gt 5000 && "$session_phase" != "early" ]] && has_edit_ratio=1
 has_branch_age=0; [[ $branch_age_days -gt 1 || $branch_behind -gt 0 ]] && has_branch_age=1
@@ -732,7 +732,7 @@ has_cloud=0; [[ -n "$cloud_provider" ]] && has_cloud=1
 has_sudo=0; [[ "${sudo_active:-0}" == "1" ]] && has_sudo=1
 
 # ── Runtime version detection (reads .nvmrc / .python-version from project root) ──
-# No subprocess forks — pure bash file reads. Checks cwd first, then walks up 2 levels.
+# No subprocess forks: pure bash file reads. Checks cwd first, then walks up 2 levels.
 node_ver=""; python_ver=""
 _vcheck_dir="$cwd"
 for _vd in "$_vcheck_dir" "${_vcheck_dir%/*}" "${_vcheck_dir%/*/*}"; do
@@ -748,7 +748,7 @@ if [[ "${tmux_sessions:-0}" =~ ^[0-9]+$ && "${tmux_sessions:-0}" -gt 0 ]]; then
   tmux_count="$tmux_sessions"; has_tmux=1
 fi
 
-# ── Docker running containers — daemon-guarded to avoid slow timeout ──
+# ── Docker running containers: daemon-guarded to avoid slow timeout ──
 # Only run docker ps if the Unix socket exists (confirms daemon is up).
 # docker ps hangs ~10s if daemon is unreachable; socket check is instant.
 # timeout 2 prevents hangs if socket exists but daemon is stalled.

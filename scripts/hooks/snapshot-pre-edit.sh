@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# snapshot-pre-edit.sh — keep one copy of each file as it looked before this
+# snapshot-pre-edit.sh: keep one copy of each file as it looked before this
 # session first touched it.
 #
 # review-gate-stop's Gate 2 asks "what did this change add?", and until now it

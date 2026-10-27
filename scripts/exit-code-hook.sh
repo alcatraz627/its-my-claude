@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PostToolUse hook for Bash — captures exit code into /tmp/claude-last-exit-$PPID
+# PostToolUse hook for Bash: captures exit code into /tmp/claude-last-exit-$PPID
 # so the statusline can show exit:N when the last command failed.
 # Always exits 0 to avoid blocking the main agent.
 

@@ -37,7 +37,7 @@ Grep: "ATTrackingManager" or "ConsentManager" or "trackingAuthorizationStatus"
 
 If third-party library found (OneTrust, Usercentrics, CookieBot):
 - Ask if user wants to replace or keep it
-- If keeping, don't generate — advise on integration best practices instead
+- If keeping, don't generate: advise on integration best practices instead
 
 ### 3. ATT Framework Availability
 Check for App Tracking Transparency framework:
@@ -56,9 +56,9 @@ Determine if generating for iOS (primary ATT target) or macOS (ATT not applicabl
 Ask user via AskUserQuestion:
 
 1. **Target regulations?**
-   - GDPR only (EU — opt-in model)
-   - CCPA only (California — opt-out model)
-   - DPDP only (India — consent-based)
+   - GDPR only (EU: opt-in model)
+   - CCPA only (California: opt-out model)
+   - DPDP only (India: consent-based)
    - All regulations (recommended for global apps)
 
 2. **Consent categories?** (multi-select)
@@ -69,8 +69,8 @@ Ask user via AskUserQuestion:
    - Functional (preferences, saved settings beyond essential)
 
 3. **Include ATT integration?**
-   - Yes — request ATT permission before any tracking (recommended for iOS)
-   - No — handle consent without ATT (macOS, or no IDFA usage)
+   - Yes: request ATT permission before any tracking (recommended for iOS)
+   - No: handle consent without ATT (macOS, or no IDFA usage)
 
 4. **Consent UI style?**
    - Bottom banner with manage preferences (recommended)
@@ -86,19 +86,19 @@ Read `patterns.md` for compliance rules, regulation differences, and UX guidance
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `ConsentCategory.swift` — Enum of consent categories with metadata
-2. `ConsentDecision.swift` — Per-category consent state with timestamp
-3. `ConsentManager.swift` — @Observable manager with persistence and ATT integration
-4. `ConsentAuditLog.swift` — Compliance audit trail with JSON export
+1. `ConsentCategory.swift`: Enum of consent categories with metadata
+2. `ConsentDecision.swift`: Per-category consent state with timestamp
+3. `ConsentManager.swift`: @Observable manager with persistence and ATT integration
+4. `ConsentAuditLog.swift`: Compliance audit trail with JSON export
 
 ### Step 3: Create UI Files
-5. `ConsentBannerView.swift` — Animated slide-up consent banner
-6. `ConsentPreferencesView.swift` — Detailed toggle list for each category
+5. `ConsentBannerView.swift`: Animated slide-up consent banner
+6. `ConsentPreferencesView.swift`: Detailed toggle list for each category
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `ConsentRegulationConfig.swift` — If multiple regulations selected
-- `ConsentATTBridge.swift` — If ATT integration selected (extracted for testability)
+- `ConsentRegulationConfig.swift`: If multiple regulations selected
+- `ConsentATTBridge.swift`: If ATT integration selected (extracted for testability)
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -275,7 +275,7 @@ Apple rejects apps that access IDFA before calling `ATTrackingManager.requestTra
 Under GDPR, all non-essential tracking requires explicit opt-in consent. Pre-checked boxes or implied consent are not valid. The default state for all non-essential categories must be `.notDetermined`, not `.granted`.
 
 ### Consent Must Be As Easy to Withdraw As to Grant
-GDPR Article 7(3): "It shall be as easy to withdraw as to give consent." If consent is granted with one tap on a banner, it must be revocable with equal ease — not buried 5 screens deep in settings.
+GDPR Article 7(3): "It shall be as easy to withdraw as to give consent." If consent is granted with one tap on a banner, it must be revocable with equal ease: not buried 5 screens deep in settings.
 
 ### Different Regulations Have Different Age Thresholds
 - GDPR: 16 years (member states can lower to 13)
@@ -288,12 +288,12 @@ If your app serves minors, you need age verification before consent collection.
 `ATTrackingManager.requestTrackingAuthorization` is async and shows a system dialog. Never call it during app launch or in a way that blocks the main UI. Show your own consent banner first, then request ATT as a secondary step.
 
 ### Consent State Must Survive App Reinstall (GDPR)
-For GDPR compliance, consider syncing consent state to a server. UserDefaults is deleted on app uninstall. If a user reinstalls, you must re-request consent — never assume prior consent.
+For GDPR compliance, consider syncing consent state to a server. UserDefaults is deleted on app uninstall. If a user reinstalls, you must re-request consent: never assume prior consent.
 
 ## References
 
-- **templates.md** — All production Swift templates for consent flow
-- **patterns.md** — Regulation comparison, ATT details, UX best practices, anti-patterns
-- Related: `generators/permission-priming` — Pre-permission UI patterns (ATT priming)
-- Related: `generators/analytics-setup` — Analytics that respects consent state
-- Related: `generators/settings-screen` — Embedding consent preferences in settings
+- **templates.md**: All production Swift templates for consent flow
+- **patterns.md**: Regulation comparison, ATT details, UX best practices, anti-patterns
+- Related: `generators/permission-priming`: Pre-permission UI patterns (ATT priming)
+- Related: `generators/analytics-setup`: Analytics that respects consent state
+- Related: `generators/settings-screen`: Embedding consent preferences in settings

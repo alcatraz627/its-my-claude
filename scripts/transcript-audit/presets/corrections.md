@@ -1,18 +1,18 @@
 ## Mining question: corrections
 
-You are auditing real Claude Code transcripts for **user corrections** — moments
+You are auditing real Claude Code transcripts for **user corrections**: moments
 where the user pushed back on something the agent did, so the account can learn
 from them (the `/atone` pipeline, mistake-patterns, new rules). For each turn you
 are given, decide whether it contains a correction, and if so, extract it:
 
-- **Direct correction** — "no", "that's wrong", "revert that", "why did you do
+- **Direct correction**: "no", "that's wrong", "revert that", "why did you do
   X", "stop doing Y", "I didn't ask for that".
-- **Preference assertion** — the user stating how they want things done, in a way
+- **Preference assertion**: the user stating how they want things done, in a way
   that implies the agent got it wrong ("I prefer…", "always…", "never…", "use X
   not Y").
-- **Rework demand** — the user asking the agent to redo work it thought was done
+- **Rework demand**: the user asking the agent to redo work it thought was done
   ("that's not what I meant", "start over", "you missed…").
-- **Frustration signal** — exasperation, all-caps, repeated re-explaining of the
+- **Frustration signal**: exasperation, all-caps, repeated re-explaining of the
   same point.
 
 Classify each by the underlying **pattern class** (the reusable category, not the

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# stop.sh — codex Stop: land the queue, heartbeat the fabric, nudge on owed asks.
+# stop.sh: codex Stop: land the queue, heartbeat the fabric, nudge on owed asks.
 #
 # Drains the gcc outbox synchronously (a queued send must not wait for the
 # next turn when there may be none), then hands the payload to claude-ipc's

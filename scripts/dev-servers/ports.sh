@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# ports.sh — the port ledger for every dev server an agent (or the human) runs.
+# ports.sh: the port ledger for every dev server an agent (or the human) runs.
 #
 # Three tiers, three postures (features/dev-servers.md):
-#   1 mature   — user-owned ports, declared with `pin`; nothing may squat them.
-#   2 local    — persistent local services (pm2 lane); allocated from 5100-5399.
-#   3 one-off  — ephemeral demos/dashboards; allocated from 6200-6499 with a TTL
+#   1 mature: user-owned ports, declared with `pin`; nothing may squat them.
+#   2 local: persistent local services (pm2 lane); allocated from 5100-5399.
+#   3 one-off: ephemeral demos/dashboards; allocated from 6200-6499 with a TTL
 #                (default 24h). Expired one-offs are killed by `reap`, which
 #                records the exact revive command; `revive` brings one back and
 #                a second revival auto-flags the claim as mis-tiered.
@@ -15,7 +15,7 @@
 # regenerates at ~/.claude/dev-servers/port-registry.md (migration 0029).
 #
 # Commands:
-#   scan               live listeners vs claims — the "what is where" table
+#   scan               live listeners vs claims: the "what is where" table
 #   list               folded claim/pin state (no lsof)
 #   claim <name> --tier 2|3 [--port N] [--ttl-h H] [--note S]   allocate + record
 #   pin <port> <name> [--note S]                                 tier-1 declaration
@@ -49,12 +49,12 @@ emit() { # emit <json-line>  (append is O_APPEND-atomic for these line sizes)
   printf '%s\n' "$1" >> "$EVENTS"
 }
 
-# Allocation mutex — macOS has no flock, and the race is check-then-act anyway
+# Allocation mutex: macOS has no flock, and the race is check-then-act anyway
 # (read `next`, THEN append), so the whole compute+emit must be one critical
 # section. mkdir is the portable atomic primitive. Skeptical-review finding 1
 # proved the unprotected version hands the SAME port to concurrent claimers
 # (8/8 collisions). skills/shared/lock-file.sh exists but carries a per-skill
-# ownership registry — too heavy for a sub-second CLI hot path; this local
+# ownership registry: too heavy for a sub-second CLI hot path; this local
 # 8-liner is the deliberate right-size (documented in the architecture doc).
 MUTEX="$DIR/.claim.mutex"
 lock_alloc() {
@@ -354,7 +354,7 @@ case "$cmd" in
     ;;
   pin)
     port="${1:-}"; name="${2:-}"; shift 2 || true
-    # cwd defaults to where the pin is made from — an unscoped pin blocks even
+    # cwd defaults to where the pin is made from: an unscoped pin blocks even
     # its own owner (dead exemption, review finding 2). Pass --cwd "" only if
     # you deliberately want an owner-less reservation.
     note=""; cwd="$PWD"
@@ -410,7 +410,7 @@ case "$cmd" in
     ttl="$TTL_DEFAULT_H"
     lock_alloc || exit 1
     if [ "$occupied" = "true" ]; then
-      # The old port found a new tenant while this claim was dead — revival
+      # The old port found a new tenant while this claim was dead: revival
       # gets a fresh band port instead of evicting anyone.
       newport=$(py next "$tier")
       [ -n "$newport" ] || { unlock_alloc; echo "revive: band exhausted" >&2; exit 1; }

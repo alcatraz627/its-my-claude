@@ -1,6 +1,6 @@
 ---
 name: apple
-description: Router for Apple platform development skills — iOS, macOS, watchOS, visionOS, SwiftUI, Swift, App Store, design (Liquid Glass), generators, testing, and more. Dispatches to 23 specialized sub-skill categories.
+description: Router for Apple platform development skills, iOS, macOS, watchOS, visionOS, SwiftUI, Swift, App Store, design (Liquid Glass), generators, testing, and more. Dispatches to 23 specialized sub-skill categories.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, WebFetch
 user-invocable: true
 argument-hint: "<category> [sub-skill] [options] | list | search <query>"
@@ -15,9 +15,9 @@ user's request.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules — forbidden paths,
+Read `~/.claude/skills/GUIDELINES.md` before proceeding. Apply all rules: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the file lock
-protocol — for the entire duration of this skill run.
+protocol: for the entire duration of this skill run.
 
 Also read `~/.claude/skills/runtime-notes.md` for past run history relevant to this skill.
 If it does not exist yet, continue without it.
@@ -104,7 +104,7 @@ Print the full index in a readable format.
 ## Subcommand: `<category>` (no sub-skill)
 
 1. Read `~/.claude/skills/apple/<category>/SKILL.md`
-2. Follow that SKILL.md's instructions — it acts as a router within its domain
+2. Follow that SKILL.md's instructions: it acts as a router within its domain
 3. If the category has sub-skills listed, present them to the user
 
 ---
@@ -148,8 +148,8 @@ To update: re-copy from source after pulling upstream changes.
 
 ## Notes
 
-- All sub-skills were originally designed for standalone use — each has its own SKILL.md with full instructions
+- All sub-skills were originally designed for standalone use: each has its own SKILL.md with full instructions
 - The `shared/` subdirectory contains Apple-specific shared utilities (not to be confused with `~/.claude/skills/shared/` which is the global std::claude shared library)
-- Sub-skills may reference `skills/` paths relative to the Apple skills root — mentally prefix with `~/.claude/skills/apple/`
-- Some generators produce complete, production-ready code files — review before adding to a project
-- The SKILLS_INDEX.md file is a comprehensive lookup table organized by task type — read it for the fastest path to the right skill
+- Sub-skills may reference `skills/` paths relative to the Apple skills root: mentally prefix with `~/.claude/skills/apple/`
+- Some generators produce complete, production-ready code files: review before adding to a project
+- The SKILLS_INDEX.md file is a comprehensive lookup table organized by task type: read it for the fastest path to the right skill

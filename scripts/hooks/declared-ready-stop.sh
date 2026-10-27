@@ -3,7 +3,7 @@
 # instrument: self (run observed after block)
 # review-by: 2026-10-16
 # retire-if: block rate rises while atone count does not fall
-# declared-ready-stop.sh — Stop hook that catches a success claim ("done / works /
+# declared-ready-stop.sh: Stop hook that catches a success claim ("done / works /
 # fixed / passing / verified") the agent makes about edited source WITHOUT having
 # exercised the path it changed this turn.
 #
@@ -12,7 +12,7 @@
 # and models). Advisory text never bound it; only a Stop hook sees the completed
 # turn and can refuse a premature "done".
 #
-# v2 — run-SUFFICIENCY, not run-EXISTENCE. Where v1 asked "did ANY allow-listed
+# v2: run-SUFFICIENCY, not run-EXISTENCE. Where v1 asked "did ANY allow-listed
 # command appear", v2 runs a precedence pipeline that separates the honest hedge
 # (self-disclosed gap → reinforce) from the silent over-claim (nothing exercised
 # the change → block), and stops blocking cases that had nothing to exercise
@@ -32,16 +32,16 @@
 #   W  a project-CLI / non-inspection command produced real output → SOFT
 #   E/none  nothing exercised the change → BLOCK (RSC-specific reason for tsx-in-Next)
 #
-# DESIGN NOTE — hard-block recall on the *historical* true-positive set is LOW BY
+# DESIGN NOTE: hard-block recall on the *historical* true-positive set is LOW BY
 # DESIGN, not a gap. The empirical corpus TPs all self-disclosed their gap ("verified
 # X but NOT Y", "compile-only", "bash -n clean"), and a self-disclosed gap is the
-# agent doing the RIGHT thing — Stage A demotes those to a reinforcement SOFT note,
+# agent doing the RIGHT thing: Stage A demotes those to a reinforcement SOFT note,
 # not a block. BLOCK is reserved for the UN-disclosed over-claim (e.g. "Done.
 # Type-checks clean." on an interaction component, with no scoping clause). The count
 # of *hard blocks* drops; the count of *correct* hard blocks (silent over-claims)
 # stays. That is precision, not coverage loss.
 #
-# Contract (mirrors review-gate-stop.sh — a DIRECT settings.json Stop hook, NOT
+# Contract (mirrors review-gate-stop.sh: a DIRECT settings.json Stop hook, NOT
 # via the hook-orchestrator whose task stdout → /dev/null can't carry a decision):
 #   - block:    {"decision":"block","reason":…}  → reason fed to agent, turn stays open
 #   - surface:  {"systemMessage":…}              → non-blocking note
@@ -209,7 +209,7 @@ $(printf '%s' "$repo_prose" | rg -oP '[^.!?\n]+[.!?]?' 2>/dev/null)
 EOF
   if [ "$repo_claim" = 1 ]; then
     # Evidence: any state-READING git/gh command this turn. A write (commit, push,
-    # add) is not evidence — it changes state without reporting what is there, which
+    # add) is not evidence: it changes state without reporting what is there, which
     # is how the original event happened: the work was done, the tree was never read.
     turn_bash=$(printf '%s\n' "$turn_json" \
       | jq -r 'select(.type=="assistant") | .message.content[]?
@@ -268,7 +268,7 @@ Loop-safe: won't re-fire for this URL set. Mute: touch ~/.claude/.no-declared-re
     [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready-url:$sid8" --heeded false >/dev/null 2>&1 || true
   fi
   # Weak-credit nudge (audit 2026-07-12 #4): every advertised port WAS touched,
-  # but token-presence is weak evidence — the 2026-07-10 miss was a passing IPv4
+  # but token-presence is weak evidence: the 2026-07-10 miss was a passing IPv4
   # curl while the user's browser hit an IPv6 squatter on the same port. If the
   # turn shows neither lsof nor a browser navigation, nudge once (soft). Gated on
   # NO success words so a real over-claim still reaches the block pipeline below
@@ -290,11 +290,11 @@ printf '%s' "$claim_text" | rg -qiP "$SUCCESS_RE" 2>/dev/null || exit 0
 printf '%s' "$claim_text" | rg -qiP "$SUBJECT_RE" 2>/dev/null || exit 0
 
 # Co-location filter (mitigation 5, 2-sentence window): success+subject must
-# co-occur in the same OR an adjacent sentence — this rejects the audit-list FP
-# where "## 1. X — done" is a per-item marker and the subject lives paragraphs away.
+# co-occur in the same OR an adjacent sentence: this rejects the audit-list FP
+# where "## 1. X \u2014 done" is a per-item marker and the subject lives paragraphs away.
 # Recovered exception: a message that OPENS with a terse success declaration
 # ("Done. Type-checks clean.") is a completion claim even without a co-located
-# subject word — the canonical un-disclosed over-claim.
+# subject word: the canonical un-disclosed over-claim.
 sentences_file=$(mktemp 2>/dev/null) || sentences_file="/tmp/dr-sent-$$"
 printf '%s' "$claim_text" | rg -oP '[^.!?\n]+[.!?]?' 2>/dev/null > "$sentences_file" || true
 colocated=0
@@ -354,7 +354,7 @@ RUN_RE='(pytest|python3?[[:space:]]+[^|]*\.py|go[[:space:]]+test|cargo[[:space:]
 if [ -n "$stripped_cmds" ] && printf '%s\n' "$stripped_cmds" | rg -qiP "$RUN_RE" 2>/dev/null; then
   ran=1
 fi
-# A real pass/fail run-signal in tool outputs (machine output — ✓/✗ kept here, in
+# A real pass/fail run-signal in tool outputs (machine output: ✓/✗ kept here, in
 # tool_result scope only; assistant-text ✓ is deliberately NOT a run signal).
 passfail=0
 if [ -n "$tool_results" ] && printf '%s' "$tool_results" | rg -qiP \
@@ -374,13 +374,13 @@ fi
 
 # ── signal: a non-inspection command produced real output (Stage W widening) ──
 # A command counts as "ran something" when a top-level segment leads with a token
-# that is NOT pure inspection/navigation/compile — this catches project CLIs
+# that is NOT pure inspection/navigation/compile: this catches project CLIs
 # (i-dream, a ./script, an installed binary, a "$VAR" invocation) the static run
 # allow-list misses. Paired with real observed output → soft note, never silent.
 HARMLESS_RE='^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*=|\(|\{|cd|ls|ll|la|pwd|echo|printf|cat|bat|head|tail|wc|rg|grep|egrep|fgrep|ag|find|fd|mkdir|rmdir|trash|rm|cp|mv|ln|touch|chmod|chown|which|type|whereis|command|git|gh|jq|yq|sed|awk|sort|uniq|cut|tr|paste|tee|sleep|pgrep|pkill|kill|killall|export|unset|set|shift|read|wait|hash|source|\.|:|true|false|date|env|dirname|basename|realpath|readlink|stat|diff|comm|open|test|clear|tput|column|less|more|xargs|du|df|uname|hostname|whoami|id|groups|ps|defaults|osascript|tsc|ruff|mypy|eslint|prettier|flake8|swiftc|gcc|cc|clang|g\+\+)([[:space:]]|$|/)'
 has_nonharmless=0
 if [ -n "$stripped_cmds" ]; then
-  # Split every command on compound separators (&&, ||, ;) and newlines — NOT a lone
+  # Split every command on compound separators (&&, ||, ;) and newlines: NOT a lone
   # `&` (so `2>&1` never becomes a bogus segment) and NOT a lone `|` (so a `|` inside
   # a quoted rg/grep pattern doesn't split the string; the run command is always the
   # leading token of a pipe segment anyway). Then test each segment's leading token.
@@ -425,9 +425,9 @@ fi
 
 # ── signal: comment/docs-only diff (Stage B) ─────────────────────────────────
 # comment markers per design + amendment 3: //  #  /*  */  --  <!--  ;
-# (bare * and quote markers dropped — a C `*ptr = x;` deref must never read as a
+# (bare * and quote markers dropped: a C `*ptr = x;` deref must never read as a
 # comment). Empty-diff guard: if the reconstruction yielded NOTHING but Gate0 says
-# source was edited (sub-agent edits / boundary miss), SKIP the shield — never
+# source was edited (sub-agent edits / boundary miss), SKIP the shield: never
 # vacuously silence.
 comment_only=0
 if [ -n "$added_nonblank" ]; then
@@ -436,7 +436,7 @@ if [ -n "$added_nonblank" ]; then
   fi
 fi
 
-# ── opportunistic diff-coverage (Stage C) — minimal, almost never engages here ─
+# ── opportunistic diff-coverage (Stage C): minimal, almost never engages here ─
 # Engages ONLY when a FRESH coverage artifact already exists near the edited file
 # AND diff-cover is installed. On this machine diff-cover is absent, so this always
 # falls through. No hand-rolled coverage parsing (per design §7).
@@ -462,7 +462,7 @@ if [ -n "$first_src" ] && command -v diff-cover >/dev/null 2>&1; then
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PRECEDENCE PIPELINE — the first branch that matches decides.
+# PRECEDENCE PIPELINE: the first branch that matches decides.
 # ─────────────────────────────────────────────────────────────────────────────
 
 # B) comment/docs-only diff → nothing executable changed → SILENT.
@@ -481,7 +481,7 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
   # Multi-state surfaces (audit 2026-07-12 #4): a run existed, but run-existence
   # says nothing about STATE coverage. Both July theme misses (2026-07-02 ribbon,
   # 2026-07-07 v3 dashboard) were Swift surfaces that took exactly this silent
-  # exit — the dark-AND-light reminder below only fires for tsx-in-Next. If the
+  # exit: the dark-AND-light reminder below only fires for tsx-in-Next. If the
   # edit touched a UI surface and the claim doesn't scope a state, remind once
   # per session (soft, never a block).
   if rg -qi '\.(swift|tsx|jsx|css|scss|vue|svelte)$' "$EDITED" 2>/dev/null \
@@ -493,7 +493,7 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
     fi
   fi
   # Mutation-test reminder (jegs 2026-07-15): a test RAN green, but a green test
-  # never shown it CAN fail proves nothing — four such tests shipped as decoration
+  # never shown it CAN fail proves nothing: four such tests shipped as decoration
   # that session. Fires only when a TEST FILE was edited this session and the agent
   # didn't already say it mutation-tested; soft, once per session, never a block.
   if rg -qiP '(\.test\.|\.spec\.|_test\.|(^|/)test_)' "$EDITED" 2>/dev/null \
@@ -542,7 +542,7 @@ prev=""; [ -f "$MARK" ] && prev=$(cat "$MARK" 2>/dev/null)
 if [ "$sig" = "$prev" ] && [ -n "$sig" ]; then
   # Same claim signature came back after a block → the prior block was not heeded.
   [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --heed-of "declared-ready:$sid8" --heeded false >/dev/null 2>&1 || true
-  # Already blocked for this exact claim last Stop — the agent saw it and chose to
+  # Already blocked for this exact claim last Stop: the agent saw it and chose to
   # proceed, or it's a false positive. Step aside (visible, non-blocking).
   soft_note "⚠ declared-ready (not re-blocking): you edited source/test files and declared success, but I saw nothing exercise the changed path this turn. If you verified out-of-band or this is a false positive, carry on. Mute: touch ~/.claude/.no-declared-ready-gate"
 fi

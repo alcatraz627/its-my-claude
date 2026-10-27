@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tab-title/hooks/pre-tool.sh — PreToolUse hook (async).
+# tab-title/hooks/pre-tool.sh: PreToolUse hook (async).
 # Sets a TRANSIENT_FOCUS that shows what tool is running so a tab parked while
 # something long is in flight self-documents. Cleared by post-tool.sh on return.
 # Manual focus set via set-focus.sh is preserved underneath (transient wins
@@ -40,7 +40,7 @@ TRANSIENT_DEPTH=$(( ${TRANSIENT_DEPTH:-0} + 1 ))
 
 # Auto-derive MODE from the tool + its inputs. Manual `tab-title.sh mode <x>`
 # is set sticky until the next auto-derivation, so explicit overrides last
-# only until the next tool call (per intended UX — auto-mode tracks reality).
+# only until the next tool call (per intended UX: auto-mode tracks reality).
 auto_mode=""
 case "$tool" in
   Read)               auto_mode="read" ;;

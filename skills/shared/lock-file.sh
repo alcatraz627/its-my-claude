@@ -3,17 +3,17 @@
 #
 # Write-priority file-lock for Claude Code skill agents.
 #
-#   READS  are NEVER blocked — `read` always exits 0 immediately.
+#   READS  are NEVER blocked: `read` always exits 0 immediately.
 #   WRITES block other writes. If the file is already write-locked,
 #          the script sleeps WAIT_SECONDS and retries up to MAX_RETRIES times.
 #          On exhaustion it prints the lock owner and continuation instructions.
 #
 # Actions:
-#   acquire <filepath> [skill-name]  — acquire write lock (retries on contention)
-#   read    <filepath> [skill-name]  — declare read intent; always succeeds
-#   release <filepath> [skill-name]  — release write lock
-#   check   <filepath>               — print write lock status
-#   cleanup                          — remove ALL stale locks (no filepath needed)
+#   acquire <filepath> [skill-name]: acquire write lock (retries on contention)
+#   read    <filepath> [skill-name]: declare read intent; always succeeds
+#   release <filepath> [skill-name]: release write lock
+#   check   <filepath>: print write lock status
+#   cleanup: remove ALL stale locks (no filepath needed)
 #
 # Exit codes:
 #   acquire → 0 acquired | 1 failed after all retries | 2 bad usage
@@ -50,7 +50,7 @@ fi
 # unrelated projects against each other). Callers that cd between acquire and
 # release must pass an absolute path so both calls compute the same key.
 # Keys are NOT path-canonicalized: "./x", "x", and "dir/../x" yield different
-# keys for the same file — a caller protecting a fixed/global file must pass one
+# keys for the same file: a caller protecting a fixed/global file must pass one
 # canonical absolute path everywhere (see prepend-runtime-note.sh).
 if [[ "$ACTION" != "cleanup" && "${FILE_PATH:0:1}" != "/" ]]; then
   FILE_PATH="$PWD/$FILE_PATH"
@@ -109,7 +109,7 @@ case "$ACTION" in
       # Auto-clear stale lock if present
       _clear_if_stale || true
 
-      # Atomic mkdir — only one process can win this race
+      # Atomic mkdir: only one process can win this race
       if [[ ! -d "$LOCK_DIR" ]]; then
         if mkdir "$LOCK_DIR" 2>/dev/null; then
           echo "$SKILL_NAME | PID:$$ | $(date '+%Y-%m-%d %H:%M:%S')" > "$LOCK_DIR/info"
@@ -117,7 +117,7 @@ case "$ACTION" in
           echo "ACQUIRED: write lock on '$FILE_PATH' by [$SKILL_NAME]"
           exit 0
         fi
-        # Race: another process won mkdir simultaneously — fall through to retry
+        # Race: another process won mkdir simultaneously: fall through to retry
       fi
 
       # Active lock is held by another agent

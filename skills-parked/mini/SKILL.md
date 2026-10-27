@@ -1,6 +1,6 @@
 ---
 name: mini
-description: Fast mini-model query (<1s) using local Ollama or cloud Haiku — for quick lookups, titles, summaries, and command composition
+description: Fast mini-model query (<1s) using local Ollama or cloud Haiku, for quick lookups, titles, summaries, and command composition
 invocation: /mini
 arguments: "[--quality] [--local] [--template T] [--max-tokens N] [--context FILE] [--list] <prompt>"
 ---
@@ -61,7 +61,7 @@ Capture both stdout (the result) and stderr (any errors). If the command fails:
 
 ## Step 3: Present Result
 
-Print the mini-model's response directly. No reformatting — the output is already concise.
+Print the mini-model's response directly. No reformatting: the output is already concise.
 
 If the response is empty or an error, explain what went wrong and suggest alternatives.
 
@@ -96,7 +96,7 @@ as the single backend dispatcher. Templates live in `~/.claude/assets/mini-promp
 
 ## Notes
 
-- **MCP server**: Also available as MCP tool `mini.ask` — Claude can call it directly without the slash command
+- **MCP server**: Also available as MCP tool `mini.ask`: Claude can call it directly without the slash command
 - **Hook callable**: `source ~/.claude/scripts/mini-hook.sh` provides `mini_quick()` for hooks
 - **Python shim**: `from shared import mini` for Python scripts
 - **Templates**: Stored in `~/.claude/assets/mini-prompts/*.prompt`. Use `{{input}}` placeholder.

@@ -97,7 +97,7 @@ out from under the pointer using it is the failure that placement avoids.
 **Progress 2026-08-24.** The resize half of the primitive exists:
 `shared.js:wireGrip` carries pointer capture, arrow keys and an edge argument,
 and the three copies that had grown separately (lane columns, right drawer,
-left sidebar) all run through it. The left tag sidebar reached drawer parity —
+left sidebar) all run through it. The left tag sidebar reached drawer parity:
 a head that names it, a collapse control, a grip, and a width kept per board,
 which is what `#74` asked for. It was a fixed 186px, which is why its labels
 read "aug22-kar" and "open not do…"; at any width the owner picks, nothing
@@ -113,20 +113,20 @@ Two defects surfaced by exercising it, both older than this change. `setColWidth
 resolved `lane-<id>`, so writing the asks column's width stored a key and then
 looked for an element that does not exist. And a remembered width was written
 inline, which beat the folded class, so folding a widened lane reclaimed nothing
-— the one thing folding is for. Both fixed for every column, and a folded column
+the one thing folding is for. Both fixed for every column, and a folded column
 now keeps its unfold control lit, because the way back should not be the thing
 that hides until hover.
 
 **The left sidebar, designed rather than patched, 2026-08-24.** The owner listed
 seven things and they were one thing: it had accreted, never been designed. The
-grip could not be grabbed at all — an overflow:auto box clips what reaches past
+grip could not be grabbed at all: an overflow:auto box clips what reaches past
 its padding, so the handle sat 16px inside the edge under the content, and the
 earlier round had verified `setSideWidth()` the function instead of dragging it.
 The panel is built like the drawer now: a shell that does not scroll, a head
 that stays put, a body that does, and the grip on the shell.
 
 Its two heading levels were 11.5px and 10.5px, both weight 600, both uppercase
-— one pixel apart, which is no hierarchy. A section is a sentence-case heading
+one pixel apart, which is no hierarchy. A section is a sentence-case heading
 that folds, remembers whether it is folded, and keeps its count while folded;
 a kind stays small caps and steps back. Folding Tags reclaims 449px, which is
 what put Pinned and Here now 404px below the fold.
@@ -135,8 +135,8 @@ A find box narrows both lists and drops sections that no longer have anything
 in them. It keeps focus and the caret across the re-render, which the first
 attempt did not: only the first character survived.
 
-`window.prompt` is gone from this page. Both callers — renaming a tag and naming
-a view — now use the popover the lanes already own, which can show what the tag
+`window.prompt` is gone from this page. Both callers: renaming a tag and naming
+a view: now use the popover the lanes already own, which can show what the tag
 is on and what the filter says, neither of which an OS dialog can do. The two
 row verbs became one handle, so pointing at a row costs it 20px, never its name.
 
@@ -302,7 +302,7 @@ at 0 after scrolling 400px. A previous round fixed it; this one checked.
 
 **Vertical room.** 172px of chrome stood above the first card on a 1000px
 screen, and 43px of that was the three gaps between the bar, the summary row
-and the first lane — more air than the summary row is tall, with the lanes'
+and the first lane: more air than the summary row is tall, with the lanes'
 own top padding a second helping of it. Now 152px. The row keeps its own
 height; only the space around it was spent more carefully.
 

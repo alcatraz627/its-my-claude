@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# goal-closure.test.sh — the header reports goal progress, and never calls a goal
+# goal-closure.test.sh: the header reports goal progress, and never calls a goal
 # met while a milestone under it still holds an open row.
 #
 # Owner ruling 2026-09-04, verbatim: "I CARE ABOUT GOALS BEING DONE AGAINST THEIR

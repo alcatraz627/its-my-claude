@@ -19,7 +19,7 @@
     // ── Copy buttons ──────────────────────────────────────────────────────
     R.initCopyButtons(".copy-btn");
 
-    // ── Width picker — use feed-container, default to "lg" ────────────────
+    // ── Width picker: use feed-container, default to "lg" ────────────────
     R.initWidthPicker(".feed-container", "feed-width");
 
     // ── Math rendering ────────────────────────────────────────────────────

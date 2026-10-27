@@ -1,4 +1,4 @@
-// kinds.js — what KINDS of thing this app has, in one place.
+// kinds.js: what KINDS of thing this app has, in one place.
 //
 // The app addresses things at two levels, a KIND and an INSTANCE within it, and
 // the kinds used to be written out by hand in every consumer: the navbar's map,
@@ -37,8 +37,8 @@ const KINDS = [
     hue: "--blue",                   // the kind's accelerator tint, on top of grouping
     tip: "Every project an agent is working on",
     // Where this kind's instances come from, and how to read them out of the
-    // response. Everything that asks "what is there, of this kind" — the tab's
-    // count, the palette, the board's search — goes through this one pair, so
+    // response. Everything that asks "what is there, of this kind": the tab's
+    // count, the palette, the board's search: goes through this one pair, so
     // the count and the list can never disagree about what counts.
     api: "/api/boards",
     listOf: (j) => j.boards ?? [],

@@ -71,7 +71,9 @@ Scan a draft for a human and cut these tells before sending:
 - **Decoration as rigor.** No star insight boxes, traffic-light or section emoji to
   perform thoroughness. (The Explanatory output style's ★ blocks are exempt when
   they carry something not already in the reply or a file written this turn,
-  the same boundary `dense-briefing-direct-answer.md` draws.) See [[pushback-and-self-criticism]].
+  the same boundary `dense-briefing-direct-answer.md` draws. The emitter emoji in a
+  `conventions/callout-boxes.md` box is part of that box's anatomy, not decoration.)
+  See [[pushback-and-self-criticism]].
 - **Distrust after a settled decision.** If the user explicitly confirmed a call, do
   not re-file it as a "blocker" or "confirm this". Say it once if a doc needs the
   update, then drop it.
@@ -114,7 +116,9 @@ notice. So for any non-trivial human-facing prose (a PR description, a doc, a
 changelog), after your own edit, route the final voice pass to a fresh reviewer
 that did not write it (a sub-agent, or `personas/doc-writer.md`). Trust your
 self-review for facts; route it for style. This is the "You cannot see your own
-voice" rule in `conventions/doc-writing.md`.
+voice" rule in `conventions/doc-writing.md`. Exception (owner, 2026-08-18): decks
+and Word docs pass on their own `lint.py` loop, with no second reviewer unless the
+owner asks.
 
 Two cheap gates come first, but neither replaces the fresh read:
 
@@ -126,22 +130,14 @@ Two cheap gates come first, but neither replaces the fresh read:
   bold-phrase-colon bullet armies, over-bolding, precision theater, defensive
   meta-framing) is the detailed version of the checklist above; read it for docs.
 
-## Enforcement (mechanical, since 2026-07-10, measure-first dry-run)
+## Enforcement
 
-`scripts/hooks/prose-smell-stop.sh` (Stop hook) scans the final assistant message
-(fenced code, inline code, blockquotes, and table rows stripped; <200-char
-messages skipped). Two or more high-signal tells co-occurring (em-dash,
-decoration-emoji headers, ≥3 Label:fragment rows, >5 bold spans, praise opener)
-raise a visible WOULD-BLOCK note and a `block-dry` telemetry record; a real
-`decision:block` fires only with `PROSE_SMELL_ENFORCE=1`. Both source RCAs asked
-to "flag", and hook-design doctrine reserves blocking for high cost-of-miss, so
-promotion to enforcement waits on fire-rate telemetry (review:
-`assets/reports/20260710-queue-reviews/1.5a-prose-smell.md`). Single tells get a
-plain note; ★ boxes and option-menu closers are warn-tier only (the Explanatory
-output style and genuine forks are legitimate). Loop-safe and heed-tracked: an
-identical message never re-fires, and a cleaned message records `heeded:true`.
-Mute: `PROSE_SMELL_OFF=1` (process) · `touch ~/.claude/.no-prose-smell-gate`
-(machine-wide until removed).
+Chat replies: `scripts/hooks/format-gate-stop.sh` (Stop) blocks any em-dash on its
+own, and blocks on two or more prose-smell tells (decoration-emoji headers, 3+
+Label:fragment rows, more than 5 bold spans, a praise opener) while policy
+`gates.prose_smell` is `enforce`, the live value. Single tells, ★ boxes and
+option-menu closers only get a note. Files, commits and GitHub text have their own
+gates. The full map, with mutes: `features/prose-and-voice.md`.
 
 ## The data half of this doctrine lives next door
 

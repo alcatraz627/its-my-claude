@@ -54,5 +54,5 @@ ${y}💡 Recovery:${z} If a file was already deleted, check:
   exit 0
 fi
 
-# Not a deletion — allow through
+# Not a deletion: allow through
 exit 0

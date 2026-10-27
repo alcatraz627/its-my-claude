@@ -395,8 +395,8 @@ ML/
 
 ## References
 
-- **patterns.md** — Architecture patterns, model manager, Vision pipeline, camera + ML, testing
-- **templates.md** — Production-ready Swift code templates for all ML capabilities
+- **patterns.md**: Architecture patterns, model manager, Vision pipeline, camera + ML, testing
+- **templates.md**: Production-ready Swift code templates for all ML capabilities
 - Apple Docs: [Core ML Documentation](https://developer.apple.com/documentation/coreml)
 - Apple Docs: [Vision Documentation](https://developer.apple.com/documentation/vision)
 - Apple Docs: [NaturalLanguage Documentation](https://developer.apple.com/documentation/naturallanguage)

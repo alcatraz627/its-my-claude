@@ -70,8 +70,8 @@ MyApp/
 **Cons**: Related files scattered across folders, doesn't scale as well
 
 ### Recommendation
-- **Small apps (< 15 files)**: Group by layer — simpler, less folder nesting
-- **Medium+ apps (15+ files)**: Group by feature — better discoverability and modularity
+- **Small apps (< 15 files)**: Group by layer: simpler, less folder nesting
+- **Medium+ apps (15+ files)**: Group by feature: better discoverability and modularity
 
 ## Swift Package Manager Modularization
 
@@ -141,11 +141,11 @@ let package = Package(
 
 ### Dependency Graph Rules
 
-1. **Core** depends on nothing — shared models, protocols, utilities
+1. **Core** depends on nothing: shared models, protocols, utilities
 2. **Service layers** (Persistence, Networking) depend on Core only
 3. **Feature modules** depend on Core and relevant service layers
 4. **App target** depends on all feature modules and wires them together
-5. **No circular dependencies** — if two modules need each other, extract the shared part into Core
+5. **No circular dependencies**: if two modules need each other, extract the shared part into Core
 
 ```
 App → DocumentFeature → Persistence → Core
@@ -279,7 +279,7 @@ struct Contact: Searchable {
 | Tests require the full app to compile | Extract testable code into packages |
 | Hard to find files | Reorganize by feature |
 
-**Don't modularize prematurely** — start with feature folders in the app target and extract to packages when there's a concrete benefit.
+**Don't modularize prematurely**: start with feature folders in the app target and extract to packages when there's a concrete benefit.
 
 ## Testing Across Modules
 

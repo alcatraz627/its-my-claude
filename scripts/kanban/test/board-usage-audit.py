@@ -113,7 +113,7 @@ def main():
     n_cards = sum(1 for cid in notes if cid in ids)
     say(f"\n9. NOTES      {n_cards} card(s) carry a note")
 
-    # 10 plan churn — a board that shows only the original plan lied
+    # 10 plan churn: a board that shows only the original plan lied
     say(f"\n10. CHURN     done:{lanes.get('done',0)} stale:{lanes.get('stale',0)}"
         f" blocked:{lanes.get('blocked',0)}")
     say("   (compare against plan-changes.md by hand: a cut item should be visible)")

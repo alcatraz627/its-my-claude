@@ -79,7 +79,7 @@
 ### Billing Retry Period
 
 - **Duration:** Up to 60 days after grace period (or after initial failure if no grace period)
-- **Configuration:** Automatic — Apple retries on their own schedule
+- **Configuration:** Automatic: Apple retries on their own schedule
 - **Apple behavior:** Apple sends push notifications about failed payment
 - **User access:** Your decision. Recommended: grant access to reduce involuntary churn.
 - **Detection:** `Product.SubscriptionInfo.Status.state == .inBillingRetryPeriod`
@@ -177,9 +177,9 @@ let isEligible = await product.subscription?.isEligibleForIntroOffer ?? false
 ### Promotional Offers
 
 - **What:** Discounts for existing or lapsed subscribers
-- **Eligibility:** You control — determine on your server who should see offers
+- **Eligibility:** You control: determine on your server who should see offers
 - **Configuration:** App Store Connect per product + server-side signing
-- **Signing required:** Yes — generate signature with your App Store Connect API key
+- **Signing required:** Yes: generate signature with your App Store Connect API key
 - **Use cases:** Retention (about to churn), win-back (already churned), loyalty (long-time subscriber)
 
 ```swift
@@ -357,7 +357,7 @@ Header.Payload.Signature
 
 ### StoreKit Testing in Xcode (Recommended for Development)
 
-- Fully local — no App Store Connect required
+- Fully local: no App Store Connect required
 - Configurable renewal rates
 - Transaction Manager for simulating states
 - Can simulate: failed transactions, ask-to-buy, interrupted purchases
@@ -501,12 +501,12 @@ case .expired:
 1. **Enable grace period** in App Store Connect (16 days recommended)
 2. **Grant access during billing retry** to keep users engaged
 3. **Show in-app payment warning** with clear "Fix Now" action
-4. **Don't block features** — a blocked user is more likely to churn permanently
+4. **Don't block features**: a blocked user is more likely to churn permanently
 
 ### Voluntary Churn (User Cancels)
 
 1. **Detect auto-renew disabled** via `renewalInfo.willAutoRenew == false`
-2. **Show value reminder** — highlight features they'll lose
+2. **Show value reminder**: highlight features they'll lose
 3. **Offer downgrade** instead of cancellation
 4. **Win-back offer** after expiration (iOS 18+)
 

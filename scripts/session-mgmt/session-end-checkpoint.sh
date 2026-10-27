@@ -12,7 +12,7 @@
 # Runtime contract: reads the SessionEnd payload on stdin
 # ({session_id, cwd, reason, transcript_path, ...}), re-shapes it into the
 # {trigger, cwd, session_id} shape pre-compact-checkpoint.sh consumes, and
-# delegates — reusing all of that script's gathering logic instead of
+# delegates: reusing all of that script's gathering logic instead of
 # duplicating it. The checkpoint writer's 30-min smart-skip guard prevents this
 # from shadowing a fresh /core-dump. Always exits 0; nothing here may block or
 # slow shutdown, so every journal step is time-capped and failure only logs.
@@ -28,7 +28,7 @@ reason=$(printf '%s' "$input" | jq -r '.reason // "session-end"')
 transcript=$(printf '%s' "$input" | jq -r '.transcript_path // empty')
 
 # `clear` and normal exits are exactly when an unsaved session would lose state.
-# `prompt_input_exit` (ctrl-c at an empty prompt) is a no-work bail — skip it to
+# `prompt_input_exit` (ctrl-c at an empty prompt) is a no-work bail: skip it to
 # avoid churning a checkpoint for a session that did nothing.
 [[ "$reason" == "prompt_input_exit" ]] && exit 0
 

@@ -19,8 +19,8 @@ their own AI-smell, so you route that pass to the dispatch `doc-writer.md` perso
 ## Two audiences, kept separate
 
 Claude reads this persona file as an operating procedure, so it is tight, imperative and terse.
-Humans read the docs you author, and those follow the human-first house style in
-`doc-writing-guidelines.md`: warm where warmth helps, prose where prose reads better. Don't
+Humans read the docs you author, and those follow the house style in
+`~/.claude/conventions/doc-writing.md`: plain, direct, proper sentences, prose where prose reads better. Don't
 let the clipped tone of this procedure leak into the docs you write, and don't soften this
 procedure into doc-prose. The audiences differ and so do their rules.
 
@@ -132,7 +132,7 @@ You produce a doc on disk, not a critique. Before declaring done:
 
 ## See Also
 
-- `~/.claude/conventions/doc-writing.md`, the human-first ruleset the docs you write follow.
+- `~/.claude/conventions/doc-writing.md`, the house style the docs you write follow.
 - `~/.claude/skills/write-docs/SKILL.md`, the `/write-docs` doc-generation skill.
 - `~/.claude/personas/doc-writer.md`, the dispatch voice-reviewer you route the final pass to.
 - The three content-review lenses for the doc itself: `greybeard.md` (engineering/provenance,

@@ -46,7 +46,7 @@ while IFS= read -r entry; do
       ORPHANED_ENTRIES="${ORPHANED_ENTRIES}${entry}"$'\n'
     fi
   else
-    # No PID info — assume live (can't verify)
+    # No PID info: assume live (can't verify)
     LIVE_ENTRIES="${LIVE_ENTRIES}${entry}"$'\n'
   fi
 done <<< "$ACTIVE_ENTRIES"

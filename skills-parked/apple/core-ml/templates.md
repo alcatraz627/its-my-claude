@@ -2,7 +2,7 @@
 
 Production-ready Swift templates for Core ML, Vision, and NaturalLanguage integration. All code uses modern Swift patterns: actors, async/await, structured concurrency, and protocol-based architecture.
 
-## 1. MLModelManager.swift — Central Model Management
+## 1. MLModelManager.swift: Central Model Management
 
 ```swift
 import CoreML
@@ -127,7 +127,7 @@ enum MLModelManagerError: Error, LocalizedError {
 }
 ```
 
-## 2. ImageClassifier.swift — Vision-Based Image Classification
+## 2. ImageClassifier.swift: Vision-Based Image Classification
 
 ```swift
 import Vision
@@ -282,7 +282,7 @@ extension CGImagePropertyOrientation {
 }
 ```
 
-## 3. TextAnalyzer.swift — NaturalLanguage Framework Wrapper
+## 3. TextAnalyzer.swift: NaturalLanguage Framework Wrapper
 
 ```swift
 import NaturalLanguage
@@ -478,7 +478,7 @@ struct TextAnalyzer {
 }
 ```
 
-## 4. ModelConfiguration.swift — Configuration and Compute Unit Selection
+## 4. ModelConfiguration.swift: Configuration and Compute Unit Selection
 
 ```swift
 import CoreML
@@ -532,7 +532,7 @@ struct ModelConfig {
 }
 ```
 
-## 5. VisionService.swift — Vision Request Pipeline
+## 5. VisionService.swift: Vision Request Pipeline
 
 ```swift
 import Vision

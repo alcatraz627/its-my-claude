@@ -4,20 +4,20 @@ You are auditing real Claude Code transcripts for signal about how the account's
 **hooks** are landing with the user. For each turn you are given, decide whether
 it contains any of the following, and extract it:
 
-- **Pushback on a hook fire** — the user objecting to, overriding, or expressing
+- **Pushback on a hook fire**: the user objecting to, overriding, or expressing
   annoyance at a hook nudge / block / autocorrect (e.g. "why did it block that",
   "that hook is wrong here", "stop nagging me about X").
-- **A muted / bypassed nudge** — the user or agent muting a gate (`touch
+- **A muted / bypassed nudge**: the user or agent muting a gate (`touch
   ~/.claude/.no-*-gate`, `--no-verify`, `.comment-hygiene-off`, etc.), or the
   agent silently ignoring a surfaced nudge.
-- **A false positive** — a hook fired on something it should not have (the nudge
+- **A false positive**: a hook fired on something it should not have (the nudge
   did not apply, the "smell" was intentional, the block was wrong).
-- **A missing gate** — a mistake the user had to catch by hand that a hook could
+- **A missing gate**: a mistake the user had to catch by hand that a hook could
   have prevented (a candidate for a NEW hook).
-- **A hook that worked** — the user or agent crediting a hook with catching a
+- **A hook that worked**: the user or agent crediting a hook with catching a
   real problem (keep these; they justify the hook).
 
-Ignore turns with no hook signal. Do not invent findings — quote the evidence.
+Ignore turns with no hook signal. Do not invent findings: quote the evidence.
 
 ## Output schema
 

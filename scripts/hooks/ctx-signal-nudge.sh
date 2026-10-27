@@ -12,7 +12,7 @@
 # ({session_id, cwd, prompt, ...}); prints a single {additionalContext} JSON
 # object when a boundary signal fires, nothing otherwise. State lives in
 # /tmp/claude-ctxsig-<sid> (last turn's timestamp + cwd + last-nudge time).
-# Always exits 0 — an advisory hook must never block a prompt.
+# Always exits 0: an advisory hook must never block a prompt.
 
 set -uo pipefail
 

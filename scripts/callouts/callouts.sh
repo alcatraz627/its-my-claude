@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# callouts.sh — the owner's review findings, persisted until the owner retires them.
+# callouts.sh: the owner's review findings, persisted until the owner retires them.
 #
 # A call-out from a review round used to die with the round, so the next "done"
 # was verified against the agent's criteria instead of the owner's accumulated

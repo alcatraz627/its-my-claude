@@ -56,7 +56,7 @@ struct DocumentSearch {
 
 ### When to Bend SRP
 - **Tiny apps**: A single ViewModel handling fetch + display is fine for 1-2 screens
-- **Data models**: `@Model` classes naturally combine data + persistence — that's SwiftData's design
+- **Data models**: `@Model` classes naturally combine data + persistence: that's SwiftData's design
 - **Value types**: Small structs with 2-3 responsibilities are often clearer than over-split types
 
 ## Open/Closed Principle (OCP)
@@ -308,6 +308,6 @@ SOLID principles are guidelines, not laws. Apply them proportionally:
 **Rules of thumb:**
 - If a class is under 100 lines, SRP violations are probably fine
 - If you'll never extend a type, OCP is unnecessary overhead
-- LSP should always be followed — it prevents bugs
+- LSP should always be followed: it prevents bugs
 - ISP matters most at module boundaries
 - DIP matters most for testability and swappable implementations

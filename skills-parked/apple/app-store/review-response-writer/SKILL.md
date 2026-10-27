@@ -319,9 +319,9 @@ If a review contains legal threats:
 - **Never:** Wall of text
 
 ### Sign-off Options
-- "— The [App] Team"
-- "— [Name], [App] Support"
-- "— [Name], Founder of [App]"
+- ": The [App] Team"
+- ": [Name], [App] Support"
+- ": [Name], Founder of [App]"
 
 ### Contact Options to Offer
 - support@yourapp.com

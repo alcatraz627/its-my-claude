@@ -26,7 +26,7 @@ VERDICT_OPENER = re.compile(
 META_ID = re.compile(r"\b(?:thes|mist|aff|pin)-\d{8}")
 # connective dashes only; digit ranges (L15-L36, 2024-2026) never count
 DASH = re.compile(r"\s[—–]\s|(?<=[A-Za-z])[—–](?=[A-Za-z])")
-# two high-precision forms only; bare "not X —" catches plain negation (validated 2026-07-27)
+# two high-precision forms only; bare "not X \u2014" catches plain negation (validated 2026-07-27)
 CONTRASTIVE = re.compile(r"\bnot\s+[^.;,]{2,40},?\s+but\s+|[—–]\s*it'?s\b", re.I)
 
 # Named tells reported but not yet scored (weight 0), so existing gates keep

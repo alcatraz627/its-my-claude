@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# rules-index.sh — regenerate rules/00-index.md, the compact always-on menu of
+# rules-index.sh: regenerate rules/00-index.md, the compact always-on menu of
 # behavioral rules. DERIVED from each rule's `brief:` frontmatter; never hand-edit
 # the generated table (fix a rule's `brief:` and re-run instead).
 #

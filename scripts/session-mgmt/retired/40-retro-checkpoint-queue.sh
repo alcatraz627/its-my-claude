@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# 40-retro-checkpoint-queue.sh — SessionStart hook.
+# 40-retro-checkpoint-queue.sh: SessionStart hook.
 #
 # When a new Claude session starts in a project, check if the PREVIOUS sessions
 # in this CWD ended without a /core-dump (i.e., their UUID is not in
 # checkpoints/index.jsonl). If yes, enqueue them for retroactive dump.
 #
-# Doesn't run the dump here — just enqueues. The startup task
+# Doesn't run the dump here: just enqueues. The startup task
 # 30-retro-checkpoint-flush.sh actually processes the queue.
 #
 # Mute: touch ~/.claude/.retro-queue-off

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 36-repeated-ask.test.sh — fires only when the user says they already asked AND the
+# 36-repeated-ask.test.sh: fires only when the user says they already asked AND the
 # prompt links to a recent one; quiet on plain follow-ups and unrelated escalations.
 set -uo pipefail
 H=/Users/alcatraz627/.claude/hinters/36-repeated-ask.sh; pass=0; fail=0

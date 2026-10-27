@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# inject-dream-insights.sh — extract HIGH CONFIDENCE dream insights and inject
+# inject-dream-insights.sh: extract HIGH CONFIDENCE dream insights and inject
 # them into ~/.claude/skills/runtime-notes.md under an "## i-dream auto-insights"
 # section.
 #

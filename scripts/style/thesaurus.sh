@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# thesaurus.sh — CLI for the style thesaurus: the user's accumulated verdicts on
+# thesaurus.sh: CLI for the style thesaurus: the user's accumulated verdicts on
 # how Claude writes (word choice, comments, prose, report structure). One JSONL
 # entry per verdict; consumers (critic persona, watcher) read the capped derived
 # digests, never this raw ledger, so accumulation can't drown a model's context.
@@ -15,7 +15,7 @@
 #   thesaurus.sh review            weekly triage: hits, candidates, prune hints
 #
 # Rules encoded here (not just documented):
-#   - non-user sources are FORCED to status=candidate — agents propose, the
+#   - non-user sources are FORCED to status=candidate: agents propose, the
 #     weekly review promotes; taste enters the active set only via the human.
 #   - digest caps at $DIGEST_CAP entries per class, hits desc then newest first.
 set -uo pipefail

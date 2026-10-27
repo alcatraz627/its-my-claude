@@ -71,7 +71,7 @@ SAFE TO CHANGE:
 - [ ] Update screenshot captions with keywords
 - [ ] Create 1-2 In-App Events
 
-These don't affect existing rankings — they only ADD opportunities.
+These don't affect existing rankings: they only ADD opportunities.
 
 ### Phase 2: Monitor & Measure (Week 3-4)
 
@@ -134,9 +134,9 @@ Why Safe:
 
 ### Protect These Keywords
 
-1. **Top 10 Rankings** — Don't touch if Pop >15
-2. **Branded Terms** — Your app name/company
-3. **Core Category Terms** — If you're a "timer app", keep "timer"
+1. **Top 10 Rankings**: Don't touch if Pop >15
+2. **Branded Terms**: Your app name/company
+3. **Core Category Terms**: If you're a "timer app", keep "timer"
 
 ### Red Flags
 
@@ -169,7 +169,7 @@ If rankings drop after changes:
 ### Immediate (Day 1-3)
 - Document what changed
 - Check if rankings are actually down or just fluctuating
-- Don't panic — rankings fluctuate naturally
+- Don't panic: rankings fluctuate naturally
 
 ### Short-Term (Week 1)
 - If significant drop, consider reverting changes
@@ -194,9 +194,9 @@ If rankings drop after changes:
 **App:** Expense Split (7 downloads/day)
 
 **Current Rankings:**
-- "settle up" — #4, Pop 29 → PROTECT
-- "settle" — #18, Pop 21 → PROTECT
-- "split bill" — #211, Pop 21 → SAFE TO TARGET
+- "settle up": #4, Pop 29 → PROTECT
+- "settle": #18, Pop 21 → PROTECT
+- "split bill": #211, Pop 21 → SAFE TO TARGET
 
 **Phase 1 Plan:**
 1. Add Spanish (MX) with: roommate,apartment,utilities,dinner,trip,vacation

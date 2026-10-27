@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# user-prompt-submit.sh — codex UserPromptSubmit: mail in, receipts in.
+# user-prompt-submit.sh: codex UserPromptSubmit: mail in, receipts in.
 #
 # Drains this session's gcc outbox (so anything queued last turn has landed),
 # injects pending claude-ipc messages via claude-ipc's own hook binary, then

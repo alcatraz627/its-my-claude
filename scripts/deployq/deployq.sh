@@ -1,5 +1,5 @@
 #!/bin/bash
-# deployq — a non-blocking deploy queue for any agent with a GCP dependency.
+# deployq: a non-blocking deploy queue for any agent with a GCP dependency.
 #
 # The caller submits a spec and gets a ticket id back immediately. One worker
 # drains the spool in order, runs the named pre-checks, the named target, and
@@ -62,7 +62,7 @@ cmd_submit() {
 
   # THE CONTENDED RESOURCE IS THE SERVICE, NOT THE CALLER'S STRING.
   # gcp-fable registered a second target deploying a branch worktree to the SAME
-  # url as the main one, which is legitimate — but batch_key is caller-declared,
+  # url as the main one, which is legitimate: but batch_key is caller-declared,
   # so two targets on one service could race and the last write would win in
   # silence. Default the batch key to the probe-url so the queue treats one
   # service as one resource whatever the caller called it.

@@ -4,12 +4,12 @@
 # This is the "within a session, the live Task list is the truth" half of the
 # todo-sync: whatever the agent's task list currently says is projected, as a
 # side effect, into <project>/.claude/session-notes/_active.md (a machine-owned
-# block — see reconcile.py) and into the project's memory "current focus"
+# block: see reconcile.py) and into the project's memory "current focus"
 # pointer. It never blocks, never prompts, and never touches the human-authored
 # parts of the notes file.
 #
 # Input  : the hook event JSON on stdin (needs .session_id and .cwd). The
-#          session id is taken from stdin ONLY — the ~/.claude/.current-session-id
+#          session id is taken from stdin ONLY: the ~/.claude/.current-session-id
 #          file is a single global slot that the most recent session clobbers,
 #          so trusting it here would mirror the wrong session's tasks.
 # Output : nothing on success (silent). One-line warning to stderr on trouble.
@@ -34,7 +34,7 @@ TX=$(printf '%s' "$INPUT" | jq -r '.transcript_path // ""' 2>/dev/null)
 TASK_DIR="$HOME/.claude/tasks/$SID"
 
 # Write the per-SESSION doc, never the shared _active.md symlink (concurrent
-# same-dir sessions would otherwise collide on one realpath'd target — F1).
+# same-dir sessions would otherwise collide on one realpath'd target: F1).
 NOTES_DIR=$(sync_notes_dir "$CWD")
 WORKSPACE=$(sync_session_doc_path "$CWD" "$SID")
 
@@ -70,7 +70,7 @@ TASK_COUNT=$(printf '%s' "$TASKS" | jq 'length' 2>/dev/null || echo 0)
 POINTER=$(printf '%s' "$TASKS" | jq -r '([.[] | select(.status=="in_progress")][0].subject) // ([.[] | select(.status=="pending")][0].subject) // ""' 2>/dev/null || echo '')
 
 # Auto-init the workspace doc when the session has crossed the "more than a
-# couple of things to track" bar — but only inside a real claude project (a dir
+# couple of things to track" bar: but only inside a real claude project (a dir
 # that already has a .claude/, or ~/.claude itself). Never create a .claude tree
 # in an arbitrary directory just because tasks exist.
 if [ ! -f "$WORKSPACE" ]; then
@@ -84,7 +84,7 @@ fi
 [ -f "$WORKSPACE" ] || exit 0
 
 # Per-SESSION lock (mkdir is atomic). Targets are per-session docs now, so this
-# only guards one session's own overlapping writebacks (Stop + a manual call) —
+# only guards one session's own overlapping writebacks (Stop + a manual call):
 # concurrent sessions write different files and never contend.
 LOCK="$NOTES_DIR/.sync-$SID.lock"
 # Reap a stale lock from a crashed writer: a sync takes well under a second, so a
@@ -99,7 +99,7 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
   sleep 0.1
 done
 if [ "$acquired" != 1 ]; then
-  # Don't no-op silently — leave a breadcrumb (the user's recurring burn).
+  # Don't no-op silently \u2014 leave a breadcrumb (the user's recurring burn).
   mkdir -p "$HOME/.claude/logs" 2>/dev/null
   printf '{"ts":"%s","sid":"%s","event":"lock-contention-skip","proj":"%s"}\n' \
     "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$SID" "$CWD" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
@@ -120,7 +120,7 @@ printf '{"ts":"%s","sid":"%s","event":"mirror %s"}\n' \
 # Memory "current focus" pointer (one-way derived; never authoritative).
 # Session-keyed in a hidden memory/.sync/ subdir: the bare current-focus.md is
 # project-scoped, so concurrent sessions would clobber it AND race on a shared
-# .tmp (torn writes — F2). The .sync/ subdir also keeps these out of the memory
+# .tmp (torn writes: F2). The .sync/ subdir also keeps these out of the memory
 # index. Project-key encoding replaces BOTH '/' and '.' with '-'.
 if [ -n "$POINTER" ]; then
   PROJECT_KEY=$(printf '%s' "$CWD" | sed 's|^/||;s|[/.]|-|g')

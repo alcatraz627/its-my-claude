@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# task.test.sh — task.sh writes the same store shape the Task tool writes, and
+# task.test.sh: task.sh writes the same store shape the Task tool writes, and
 # task-table.sh reads it back.
 set -uo pipefail
 T=/Users/alcatraz627/.claude/scripts/task-table/task.sh; TT=/Users/alcatraz627/.claude/scripts/task-table/task-table.sh

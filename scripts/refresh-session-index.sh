@@ -5,7 +5,7 @@
 # (~/.claude/assets/scan-sessions/index.db) that powers cross-session usage
 # aggregates/stats. Incremental (skips unchanged files) and NEVER prunes
 # historical rows (prune_orphans defaults False in crawl.py), so the index keeps
-# sessions whose JSONL Claude Code has since deleted — it's the durable archive.
+# sessions whose JSONL Claude Code has since deleted: it's the durable archive.
 #
 # Schedule: daily (see the Automations calendar companion / launchd plist).
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sl-audit.sh — Audit statusline configuration for known issues
+# sl-audit.sh: Audit statusline configuration for known issues
 # Usage: sl-audit.sh [--claude] [--profile <name>] [--fix <check>]
 # Exit code: 0 = clean, 1 = warnings, 2 = critical failures
 

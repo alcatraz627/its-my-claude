@@ -26,21 +26,21 @@ Use this skill when the user:
 ### 1. Developer Profile Elicitation
 
 Gathers context about the developer to personalize ideas:
-- **Technical skills** — Languages, frameworks, platforms (Swift, SwiftUI, UIKit, CloudKit, etc.)
-- **Domain interests** — Health, finance, productivity, education, creativity, etc.
-- **Platform preference** — iOS, macOS, iPadOS, watchOS, visionOS, or multi-platform
-- **Time availability** — Side project (5-10 hrs/week), full-time, weekend hack
-- **Constraints** — Budget, backend experience, design skills, existing audience
+- **Technical skills**: Languages, frameworks, platforms (Swift, SwiftUI, UIKit, CloudKit, etc.)
+- **Domain interests**: Health, finance, productivity, education, creativity, etc.
+- **Platform preference**: iOS, macOS, iPadOS, watchOS, visionOS, or multi-platform
+- **Time availability**: Side project (5-10 hrs/week), full-time, weekend hack
+- **Constraints**: Budget, backend experience, design skills, existing audience
 
 ### 2. Five Brainstorming Lenses
 
 Each lens generates 5-8 raw ideas. Lenses are applied in order:
 
-1. **Skills & Interests** — What can you uniquely build given what you know?
-2. **Problem-First** — What took 30 seconds today that should take 5? What's annoying?
-3. **Technology-First** — Which Apple frameworks have few indie apps? (Foundation Models, ActivityKit, WidgetKit, VisionKit, WeatherKit, MapKit)
-4. **Market Gap** — Where are App Store categories underserved, stale, or overpriced?
-5. **Trend-Based** — What macro trends create new app opportunities? (AI-native, privacy-first, health/wellness, single-use utilities, Apple Silicon productivity)
+1. **Skills & Interests**: What can you uniquely build given what you know?
+2. **Problem-First**: What took 30 seconds today that should take 5? What's annoying?
+3. **Technology-First**: Which Apple frameworks have few indie apps? (Foundation Models, ActivityKit, WidgetKit, VisionKit, WeatherKit, MapKit)
+4. **Market Gap**: Where are App Store categories underserved, stale, or overpriced?
+5. **Trend-Based**: What macro trends create new app opportunities? (AI-native, privacy-first, health/wellness, single-use utilities, Apple Silicon productivity)
 
 ### 3. Feasibility Filtering
 
@@ -222,18 +222,18 @@ Find real problems worth solving.
 Identify Apple frameworks with few quality indie apps.
 
 **High-opportunity frameworks (2026):**
-- **Foundation Models** — On-device LLM, few indie apps yet
-- **ActivityKit / Live Activities** — Sports, cooking, transit, workout tracking
-- **WidgetKit** — Glanceable info apps (many categories underserved)
-- **VisionKit** — Document scanning, text recognition, visual lookup
-- **WeatherKit** — Hyper-local weather for niche use cases
-- **SensorKit / Core Motion** — Movement, posture, activity detection
-- **DeviceActivity / Screen Time API** — Digital wellness, parental controls
+- **Foundation Models**: On-device LLM, few indie apps yet
+- **ActivityKit / Live Activities**: Sports, cooking, transit, workout tracking
+- **WidgetKit**: Glanceable info apps (many categories underserved)
+- **VisionKit**: Document scanning, text recognition, visual lookup
+- **WeatherKit**: Hyper-local weather for niche use cases
+- **SensorKit / Core Motion**: Movement, posture, activity detection
+- **DeviceActivity / Screen Time API**: Digital wellness, parental controls
 
 **Process:**
 1. Pick 2-3 frameworks matching the developer's platform preference
 2. Search App Store for apps using that framework
-3. Identify gaps — what should exist but doesn't?
+3. Identify gaps: what should exist but doesn't?
 
 ### Step 5: Apply Market Gap Lens
 
@@ -258,13 +258,13 @@ Use WebSearch to find underserved App Store categories.
 Identify macro trends creating new app opportunities.
 
 **Current trends (2026):**
-- **AI-native apps** — Apps that couldn't exist without on-device AI
-- **Privacy-first** — Apps that explicitly don't collect data (selling point)
-- **Health & wellness** — Mental health, sleep, nutrition, fitness
-- **Single-use utilities** — Do one thing exceptionally well
-- **Apple Silicon productivity** — Pro tools for Mac (M-series GPU, Neural Engine)
-- **Aging population** — Accessibility, health monitoring, simplified tech
-- **Creator economy** — Tools for content creators, freelancers
+- **AI-native apps**: Apps that couldn't exist without on-device AI
+- **Privacy-first**: Apps that explicitly don't collect data (selling point)
+- **Health & wellness**: Mental health, sleep, nutrition, fitness
+- **Single-use utilities**: Do one thing exceptionally well
+- **Apple Silicon productivity**: Pro tools for Mac (M-series GPU, Neural Engine)
+- **Aging population**: Accessibility, health monitoring, simplified tech
+- **Creator economy**: Tools for content creators, freelancers
 
 **Process:**
 1. Pick 2-3 trends relevant to the developer's interests
@@ -334,11 +334,11 @@ The `next_step` field in each shortlist entry describes what to feed into the pr
 
 ## When NOT to Use This Skill
 
-- **Already has a specific idea** — Go directly to the product-agent skill
-- **Already validated an idea** — Go to `market-research` or `competitive-analysis`
-- **Wants code generation** — Use the `generators/` skills
-- **Building to learn only** — Skip feasibility filtering; just pick what's fun
-- **Hard deadline** — Skip brainstorming; go straight to the product-agent skill with whatever idea you have
+- **Already has a specific idea**: Go directly to the product-agent skill
+- **Already validated an idea**: Go to `market-research` or `competitive-analysis`
+- **Wants code generation**: Use the `generators/` skills
+- **Building to learn only**: Skip feasibility filtering; just pick what's fun
+- **Hard deadline**: Skip brainstorming; go straight to the product-agent skill with whatever idea you have
 
 ## Deliverables
 
@@ -364,4 +364,4 @@ Save results to:
 
 ---
 
-**Generate fast, filter ruthlessly, validate before committing.** The best app idea is the one that matches your skills, solves a real problem, and can ship in weeks — not months.
+**Generate fast, filter ruthlessly, validate before committing.** The best app idea is the one that matches your skills, solves a real problem, and can ship in weeks: not months.

@@ -54,12 +54,12 @@ Ask user via AskUserQuestion:
    - UserDefaults (lightweight, no model container needed)
 
 3. **Include streak freeze/protection?**
-   - Yes — users get limited freeze passes to preserve streaks on missed days
-   - No — strict consecutive tracking only
+   - Yes: users get limited freeze passes to preserve streaks on missed days
+   - No: strict consecutive tracking only
 
 4. **Streak-at-risk notifications?**
-   - Yes — schedule a local notification (e.g., 8 PM) if no activity recorded today
-   - No — no notifications
+   - Yes: schedule a local notification (e.g., 8 PM) if no activity recorded today
+   - No: no notifications
 
 5. **Additional features?** (multi-select)
    - Calendar heat map view (visual grid of activity days)
@@ -73,18 +73,18 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `StreakRecord.swift` — SwiftData @Model for activity records
-2. `StreakManager.swift` — @Observable class: record activity, calculate streaks, manage freezes
-3. `StreakError.swift` — Error types for streak operations
+1. `StreakRecord.swift`: SwiftData @Model for activity records
+2. `StreakManager.swift`: @Observable class: record activity, calculate streaks, manage freezes
+3. `StreakError.swift`: Error types for streak operations
 
 ### Step 3: Create UI Files
-4. `StreakCalendarView.swift` — Grid showing days with/without activity
-5. `StreakBadgeView.swift` — Compact badge with streak count and animation
+4. `StreakCalendarView.swift`: Grid showing days with/without activity
+5. `StreakBadgeView.swift`: Compact badge with streak count and animation
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `StreakFreeze.swift` — If streak freeze selected
-- `StreakNotificationScheduler.swift` — If notifications selected
+- `StreakFreeze.swift`: If streak freeze selected
+- `StreakNotificationScheduler.swift`: If notifications selected
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -307,7 +307,7 @@ let success = streakManager.useStreakFreeze()
 ## Gotchas & Edge Cases
 
 ### Timezone and Day Boundary Handling
-Always use `Calendar.current.startOfDay(for:)` to normalize dates. Never compare raw `Date` values for "same day" checks — a user active at 11:59 PM and 12:01 AM has activity on two different calendar days but should not get a gap. The `StreakManager` uses the user's local calendar for all day boundary calculations.
+Always use `Calendar.current.startOfDay(for:)` to normalize dates. Never compare raw `Date` values for "same day" checks: a user active at 11:59 PM and 12:01 AM has activity on two different calendar days but should not get a gap. The `StreakManager` uses the user's local calendar for all day boundary calculations.
 
 ### Midnight Edge Cases
 If a user completes an activity exactly at midnight, `startOfDay(for:)` may place it on the new day. The templates handle this by recording the timestamp as well as the normalized date, so the raw data is preserved for debugging.
@@ -316,7 +316,7 @@ If a user completes an activity exactly at midnight, `startOfDay(for:)` may plac
 Users can change their device clock to fake streak activity. Mitigations:
 - Store `createdAt` timestamps alongside `activityDate` and flag anomalies (e.g., `createdAt` is before a previously recorded `createdAt`)
 - For server-synced apps, validate streaks server-side
-- For local-only apps, accept that determined users can game it — focus on honest users
+- For local-only apps, accept that determined users can game it: focus on honest users
 
 ### Calendar vs Gregorian Day Changes
 Different calendars (Islamic, Hebrew, Japanese) have different day boundaries and week structures. The templates use `Calendar.current` which respects the user's locale. If your app requires a fixed calendar (e.g., Gregorian for global leaderboards), pass an explicit `Calendar(identifier: .gregorian)` to `StreakManager`.
@@ -329,6 +329,6 @@ SwiftData stores persist across app updates but are lost on reinstall. For criti
 
 ## References
 
-- **templates.md** — All production Swift templates for streak tracking
-- Related: `generators/push-notifications` — Push notification setup for streak reminders
-- Related: `generators/milestone-celebration` — Celebrate streak milestones with animations
+- **templates.md**: All production Swift templates for streak tracking
+- Related: `generators/push-notifications`: Push notification setup for streak reminders
+- Related: `generators/milestone-celebration`: Celebrate streak milestones with animations

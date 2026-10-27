@@ -171,7 +171,7 @@ with EVENTS_FILE.open("a") as out:
         seen[session_id] = True
         new_count += 1
 
-# Always rewrite _seen.json — touching it is the lane-health liveness signal.
+# Always rewrite _seen.json: touching it is the lane-health liveness signal.
 SEEN_FILE.write_text(json.dumps(seen))
 
 print(f"sessions-domain: {new_count} new session(s) extracted ({len(seen)} total seen)")

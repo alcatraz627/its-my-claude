@@ -19,7 +19,7 @@ const FIXTURE = join(__dirname, "fixture.json");
 
 // Styles to run full checks on (subset for speed; extend as needed)
 const SPOT_CHECK_STYLES = ["default", "notion", "minimal", "slide", "neon"];
-// All 13 styles — used for the "all-styles generates all dirs" test
+// All 13 styles: used for the "all-styles generates all dirs" test
 const ALL_STYLES = [
   "academic", "corporate", "dashboard", "data-table", "default",
   "feed", "jupyter", "magazine", "minimal", "neon", "notion", "slide", "terminal",
@@ -91,7 +91,7 @@ describe.each(SPOT_CHECK_STYLES)("style: %s", (style) => {
   describe("light mode", () => {
     it("html element starts with class 'light'", () => {
       // The initTheme IIFE in every style.js or report.js adds html.light on load.
-      // In the static HTML, the <html> tag itself doesn't carry the class — it's
+      // In the static HTML, the <html> tag itself doesn't carry the class \u2014 it's
       // added by JS. But the script that sets it should reference 'rpt-theme'.
       expect(html).toMatch(/rpt-theme/);
     });
@@ -142,7 +142,7 @@ describe.each(SPOT_CHECK_STYLES)("style: %s", (style) => {
   describe("default row2 HTML", () => {
     it("sets window.__RPT_DEFAULT_ROW2_HTML before the code that reads it", () => {
       // Only the default template injects the row2 HTML assignment.
-      // Other templates contain the reading code but not the assignment — skip.
+      // Other templates contain the reading code but not the assignment: skip.
       const assignIdx = html.indexOf("window.__RPT_DEFAULT_ROW2_HTML =");
       if (assignIdx === -1) return;
       // The code that reads the variable must appear after the assignment
@@ -176,7 +176,7 @@ describe.each(SPOT_CHECK_STYLES)("style: %s", (style) => {
   // ── Self-contained HTML ──────────────────────────────────
   describe("self-contained", () => {
     it("has no external stylesheet links (everything is inlined)", () => {
-      // CDN links (KaTeX, fonts) are OK — check no local .css references
+      // CDN links (KaTeX, fonts) are OK: check no local .css references
       const localCss = html.match(/<link[^>]+href="(?!https?:\/\/)([^"]+\.css)/g);
       expect(localCss ?? [], "found non-inlined local CSS links").toHaveLength(0);
     });

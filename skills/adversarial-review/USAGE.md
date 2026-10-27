@@ -1,4 +1,4 @@
-# /adversarial-review — Usage Guide
+# /adversarial-review: Usage Guide
 
 ## What it does
 
@@ -50,7 +50,7 @@ original ask verbatim.
 ```
 
 If the work holds, the honest output is "held under N attacks" plus the failed-attacks
-log — not manufactured findings. That verdict is the point, and it is trustworthy
+log: not manufactured findings. That verdict is the point, and it is trustworthy
 precisely because the lane is structured to want the opposite.
 
 ## Caveats
@@ -62,7 +62,7 @@ precisely because the lane is structured to want the opposite.
   want a confidence gate, use a precision reviewer instead.
 - **Findings can sting on purpose**, including on work you approved. The relevance gate
   is the contract that each one is worth the sting; dismiss any that fail it and record
-  the dismissal in dispositions — that feedback tunes the gate.
+  the dismissal in dispositions: that feedback tunes the gate.
 - Expects a "done" claim to attack. Prosecuting half-built work just indicts known
   scaffolding.
 
@@ -80,6 +80,6 @@ precisely because the lane is structured to want the opposite.
 ## Tips
 
 - Run /skeptical-review first on big changes; let this lane hunt what survived it.
-- Feed dispositions back honestly (rejected-with-reason especially) — the rejection
+- Feed dispositions back honestly (rejected-with-reason especially): the rejection
   reasons are exactly what future relevance gates mine.
 - Pair with /decision-wizard when the indictment lands ≥5 findings needing verdicts.

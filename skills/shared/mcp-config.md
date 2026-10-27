@@ -1,12 +1,12 @@
 # MCP Configuration Reference
 
-## File locations — read this first
+## File locations: read this first
 
 | File | Purpose | Scope |
 |---|---|---|
-| `~/.claude/.mcp.json` | **Active global MCP servers** — Claude Code reads this | All sessions |
-| `<project>/.mcp.json` | Active project-level MCP servers — merged with global | That project only |
-| `~/.claude/mcp-catalog.json` | Pre-configured definitions for `/add-mcp` skill | Reference only — NOT read by Claude Code directly |
+| `~/.claude/.mcp.json` | **Active global MCP servers**: Claude Code reads this | All sessions |
+| `<project>/.mcp.json` | Active project-level MCP servers: merged with global | That project only |
+| `~/.claude/mcp-catalog.json` | Pre-configured definitions for `/add-mcp` skill | Reference only: NOT read by Claude Code directly |
 
 ## ⚠ Common mistake: wrong filename
 
@@ -23,7 +23,7 @@ cat ~/.claude/.mcp.json | jq '.mcpServers | keys'
 
 ## Adding a new global MCP server
 
-Edit `~/.claude/.mcp.json` — add to the `mcpServers` object:
+Edit `~/.claude/.mcp.json`: add to the `mcpServers` object:
 ```json
 "my-server": {
   "type": "stdio",

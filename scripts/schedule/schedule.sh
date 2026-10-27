@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gcc-schedule — manage user-level launchd schedules with Calendar companion.
+# gcc-schedule: manage user-level launchd schedules with Calendar companion.
 #
 # Why this exists: every one-shot we build needs a launchd plist + a shell
 # script + a date-guard + self-unload + a Calendar event with retirement
@@ -39,7 +39,7 @@ is_timed() { case "$1" in daily|weekly|monthly|one-shot) return 0 ;; *) return 1
 mkdir -p "$SCHED_HOME" "$LOG_HOME"
 [[ -f "$REGISTRY" ]] || echo '{}' > "$REGISTRY"
 
-# ── Colors / output — std::claude::tui shared palette (both-fd TTY-gated) ────
+# ── Colors / output: std::claude::tui shared palette (both-fd TTY-gated) ────
 # Sourcing colors.sh gives the BOTH-fd gate: every color var is blank whenever
 # stdout OR stderr is not a real terminal (a pipe, a log, Claude's headless
 # call), so no ANSI ever leaks into a captured stream. The fallback keeps the
@@ -159,7 +159,7 @@ HELP
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 jq_inplace() {
-  # jq_inplace <file> <filter>  — atomic in-place jq update
+  # jq_inplace <file> <filter>: atomic in-place jq update
   local f="$1" filter="$2" tmp="${1}.tmp.$$"
   jq "$filter" "$f" > "$tmp" && mv "$tmp" "$f"
 }
@@ -168,7 +168,7 @@ jq_inplace() {
 # One JSON line per event in $HIST. Two small closed enums + open metadata:
 #   ev      ∈ added | modified | removed | run
 #   outcome ∈ ok | failed | unknown | missed   (only on `run` records)
-# Everything else (reason, stage, exit, detail, cause) is free-form metadata —
+# Everything else (reason, stage, exit, detail, cause) is free-form metadata:
 # a new failure cause is a new reason STRING, never a schema change. Plain JSONL
 # so a human or Claude can rg / jq / Read it directly. Never pruned.
 ledger_append() {
@@ -187,7 +187,7 @@ ledger_append() {
 # Record one scheduled occurrence. Called by the generated script.sh after the
 # user command runs. The outcome derives from the exit code, but a command may
 # override it (and add reason/stage/detail) by writing `key=value` lines to the
-# file named in $GCC_SCHED_META — that's how a window launcher reports
+# file named in $GCC_SCHED_META: that's how a window launcher reports
 # claude_missing (failed) or post_handoff (unknown) that a bare exit code can't.
 cmd__record_run() {
   local name="$1" rc="${2:-0}" meta="${3:-}"
@@ -212,7 +212,7 @@ cmd__record_run() {
 }
 
 # Full self-retire after a one-shot fires: log the removal, then tear down every
-# surface EXCEPT the launchd bootout — the generated script issues that itself,
+# surface EXCEPT the launchd bootout: the generated script issues that itself,
 # last, because booting out the still-running job may terminate this process.
 # Safe to delete our own sched_dir: the generated script wraps its body in
 # main(), so the whole script is already in memory.
@@ -235,7 +235,7 @@ cmd__retire_self() {
   return 0
 }
 
-# Detect one-shots that should have fired but left no `run` record — the
+# Detect one-shots that should have fired but left no `run` record: the
 # machine-was-off / launchd-gap class that cannot self-report (their script
 # never ran). For each past-due one-shot with no run line: log outcome=missed
 # and retire it. Recurring schedules are skipped (no single fire_at to be past).
@@ -264,7 +264,7 @@ validate_name() {
 }
 
 # parse_at "<YYYY-MM-DDTHH:MM>" → sets PARSED_Y PARSED_MO PARSED_D PARSED_H PARSED_M.
-# Global-var pattern (same reasoning as parse_hhmm — fail() must reach caller's shell).
+# Global-var pattern (same reasoning as parse_hhmm: fail() must reach caller's shell).
 parse_at() {
   local at="$1"
   [[ "$at" =~ ^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})$ ]] || \
@@ -285,7 +285,7 @@ parse_at() {
   (( epoch > now - 60 )) || fail "--at $at is in the past"
 }
 
-# xml_escape <string> — escape &, <, > for safe embedding in a plist <string>.
+# xml_escape <string>: escape &, <, > for safe embedding in a plist <string>.
 # Apostrophes and double-quotes don't need escaping inside the XML body, only
 # inside attribute values (which we don't produce). Keeps the body readable.
 xml_escape() {
@@ -304,7 +304,7 @@ month_name() {
 
 # parse_hhmm "HH:MM" → sets PARSED_H + PARSED_M (no leading zeros).
 # Global-var pattern (sister to _vlen → _VLEN) so fail() runs in the caller's
-# shell, not a subshell — process-substitution capture would silently lose
+# shell, not a subshell: process-substitution capture would silently lose
 # fail()'s exit and produce empty values downstream.
 parse_hhmm() {
   local hhmm="$1"
@@ -316,7 +316,7 @@ parse_hhmm() {
 }
 
 # parse_dow <mon|tue|...|sun> → sets PARSED_DOW (0=Sun..6=Sat) + PARSED_BYDAY (SU/MO/...).
-# Uses `tr` for lowercase rather than ${var,,} — macOS bash is 3.2, which
+# Uses `tr` for lowercase rather than ${var,,}: macOS bash is 3.2, which
 # lacks bash-4 case-modification parameter expansion (per CLAUDE.md).
 parse_dow() {
   local in_low
@@ -333,7 +333,7 @@ parse_dow() {
   esac
 }
 
-# next_daily_start <H> <M> → echoes "Y MO D H MI" — the first future occurrence
+# next_daily_start <H> <M> → echoes "Y MO D H MI": the first future occurrence
 next_daily_start() {
   local h="$1" m="$2"
   local now_sod target_sod days=0
@@ -358,7 +358,7 @@ next_weekly_start() {
   echo "$y $((10#$mo)) $((10#$d)) $h $m"
 }
 
-# next_monthly_start <day-of-month> <H> <M> → echoes "Y MO D H MI" — the first
+# next_monthly_start <day-of-month> <H> <M> → echoes "Y MO D H MI": the first
 # future occurrence on that day-of-month. Recurrence is carried by the plist's
 # StartCalendarInterval Day key + the Calendar RRULE; this only seeds the first
 # Calendar event.
@@ -379,7 +379,7 @@ next_monthly_start() {
 # ── Calendar event ─────────────────────────────────────────────────────────
 calendar_create() {
   # calendar_create <year> <month> <day> <hour> <minute> <summary> <notes> <alert_minutes> [rrule]
-  # rrule (optional) — e.g. "FREQ=DAILY" or "FREQ=WEEKLY;BYDAY=MO". When empty,
+  # rrule (optional): e.g. "FREQ=DAILY" or "FREQ=WEEKLY;BYDAY=MO". When empty,
   # creates a single non-recurring event (one-shot).
   local y="$1" mo="$2" d="$3" h="$4" mi="$5" sum="$6" notes="$7" alert="$8" rrule="${9:-}"
   local mname; mname=$(month_name "$mo")
@@ -438,18 +438,18 @@ write_oneshot_script() {
 #!/usr/bin/env bash
 # Generated by gcc-schedule on $(date '+%F %T %Z').
 # One-shot launchd target: fires once on $fire_date local time, records the
-# outcome to history.jsonl, then fully retires itself — no dead entry left.
+# outcome to history.jsonl, then fully retires itself: no dead entry left.
 set -uo pipefail
 
 # The body is wrapped in main() so bash reads the whole script into memory
-# before running it — that makes deleting our own sched_dir during self-retire
+# before running it: that makes deleting our own sched_dir during self-retire
 # safe (the file can vanish mid-run without breaking the remaining lines).
 main() {
   local LABEL="$label" NAME="$name" FIRE_DATE="$fire_date" USER_UID=$USER_UID
   local SCHED="\$HOME/.claude/scripts/schedule/schedule.sh"
 
   # Date guard: StartCalendarInterval has no Year key, so without this the plist
-  # re-fires every year on the same date. A non-matching day is not a fire — no
+  # re-fires every year on the same date. A non-matching day is not a fire: no
   # history record, no retire.
   local today; today=\$(date '+%Y-%m-%d')
   if [[ "\$today" != "\$FIRE_DATE" ]]; then
@@ -483,7 +483,7 @@ SCRIPT
 
 write_plist() {
   # write_plist <path> <label> <script_path> <month> <day> <hour> <minute> <out_log> <err_log> [extra_xml]
-  # extra_xml — optional pre-built XML chunk for EnvironmentVariables / WorkingDirectory.
+  # extra_xml: optional pre-built XML chunk for EnvironmentVariables / WorkingDirectory.
   local plist="$1" label="$2" script="$3" mo="$4" d="$5" h="$6" mi="$7" outlog="$8" errlog="$9" extra="${10:-}"
   cat > "$plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -514,7 +514,7 @@ PLIST
 }
 
 # ── v0.3: recurring schedules (daily / weekly) ────────────────────────────
-# Recurring scripts do NOT carry a date guard and do NOT self-unload — the
+# Recurring scripts do NOT carry a date guard and do NOT self-unload: the
 # whole point of recurring is "fire every time". The launchd plist's
 # StartCalendarInterval carries the schedule (Hour+Minute for daily;
 # Weekday+Hour+Minute for weekly).
@@ -524,7 +524,7 @@ write_recurring_script() {
   cat > "$out" <<SCRIPT
 #!/usr/bin/env bash
 # Generated by gcc-schedule on $(date '+%F %T %Z').
-# Recurring launchd target — kind=$kind, when=$when. Records each fire to
+# Recurring launchd target: kind=$kind, when=$when. Records each fire to
 # history.jsonl; never self-retires (recurring fires until rm / disable).
 set -uo pipefail
 NAME="$name"
@@ -670,7 +670,7 @@ cmd_add() {
     fi
   fi
 
-  # ── Per-kind PARSE-ONLY block — set computed vars; no side effects ─────────
+  # ── Per-kind PARSE-ONLY block: set computed vars; no side effects ─────────
   # All file creation deferred until AFTER the PLANNED block prints, so Claude
   # and the user get a chance to read the resolved spec before launchd takes
   # the plist.
@@ -733,7 +733,7 @@ cmd_add() {
       ;;
   esac
 
-  # cal_notes shape is the same across kinds — keep it DRY here.
+  # cal_notes shape is the same across kinds: keep it DRY here.
   cal_notes="label: $label
 runs: $script
 plist: $plist
@@ -745,7 +745,7 @@ retire: '$PROG rm $name' or 'launchctl bootout gui/$USER_UID/$label' + delete th
 
 $desc}"
 
-  # ── PLANNED block — print BEFORE any state mutation ───────────────────────
+  # ── PLANNED block: print BEFORE any state mutation ───────────────────────
   # Always prints (default-on). Claude can self-check the resolved spec; user
   # can read. --dry-run exits here, leaving zero artifacts.
   local plan_calendar="(skipped — --no-calendar)"
@@ -784,7 +784,7 @@ $desc}"
     write_plist "$plist" "$label" "$script" "$mo" "$d" "$h" "$mi" "$outlog" "$errlog" "$extra_xml"
   else
     # 2nd arg to write_recurring_script is the human label embedded as a
-    # comment — first word of $when_human ("DAILY"/"WEEKLY") plus time.
+    # comment: first word of $when_human ("DAILY"/"WEEKLY") plus time.
     local when_short; when_short=$(printf '%s' "$when_human" | awk '{print tolower($1) " " $3}')
     write_recurring_script "$script" "$kind" "$when_short" "$cmd_str" "$name"
     write_plist_recurring "$plist" "$label" "$script" "$sci_xml" "$outlog" "$errlog" "$extra_xml"
@@ -957,7 +957,7 @@ cmd_run() {
   entry=$(_get_entry "$name")
   cmd_str=$(jq -r '.command' <<<"$entry")
   if [[ -z "$cmd_str" || "$cmd_str" == "null" ]]; then
-    # Adopted entries don't carry the command — point the user at the script.
+    # Adopted entries don't carry the command: point the user at the script.
     script_path=$(jq -r '.script' <<<"$entry")
     fail "no inline command for adopted entry '$name'. Test-fire its external script directly: bash '$script_path'"
   fi
@@ -972,7 +972,7 @@ cmd_run() {
 # ── logs ───────────────────────────────────────────────────────────────────
 cmd_logs() {
   local lines=50 follow=1 name=""
-  # Walk ALL args; pull flags wherever they appear (order-insensitive — supports
+  # Walk ALL args; pull flags wherever they appear (order-insensitive: supports
   # 'logs NAME --no-follow' AND 'logs --no-follow NAME'). v0.2 bug-fix: the
   # break-on-positional parser silently dropped flags placed after the name.
   while (( $# )); do
@@ -1001,7 +1001,7 @@ cmd_logs() {
   fi
   say "${BLD}logs for '$name'${RST} ${DIM}(out=$outlog err=$errlog)${RST}"
   # Use a sed-prefixed tail so the user can tell which stream a line came from.
-  # `tail -F` retries on missing files — safe even if only one log exists yet.
+  # `tail -F` retries on missing files: safe even if only one log exists yet.
   if (( follow )); then
     tail -n "$lines" -F "$outlog" 2>/dev/null | sed -u 's/^/[out] /' &
     local tpid_out=$!
@@ -1043,7 +1043,7 @@ cmd_show() {
     fi
   fi
 
-  # Next-fire time relative-to-now — format depends on kind.
+  # Next-fire time relative-to-now: format depends on kind.
   # one-shot: ISO datetime, compute exact countdown.
   # daily/weekly: fire_at is a synthetic tag (daily@HH:MM, weekly@dow@HH:MM);
   # show the schedule descriptively rather than a countdown.
@@ -1058,7 +1058,7 @@ cmd_show() {
       next_rel="every $dow at $tm"
       ;;
     adopted-one-shot@*)
-      # fire_at is "adopted-one-shot@MM-DD HH:MM" (no year — `register` couldn't
+      # fire_at is "adopted-one-shot@MM-DD HH:MM" (no year: `register` couldn't
       # know what year the original author intended). Infer the next future
       # occurrence: this year if still ahead, else next year. Reports the
       # year so the user can sanity-check.
@@ -1072,7 +1072,7 @@ cmd_show() {
         epoch_try=$(date -j -f '%Y-%m-%dT%H:%M' \
           "$(printf '%d-%02d-%02dT%02d:%02d' "$cur_y" "$fmo" "$fd" "$fh" "$fm")" +%s 2>/dev/null || echo 0)
         if (( epoch_try > 0 && epoch_try < epoch_now - 60 )); then
-          # Past for this year — roll to next.
+          # Past for this year: roll to next.
           cur_y=$((cur_y + 1))
           epoch_try=$(date -j -f '%Y-%m-%dT%H:%M' \
             "$(printf '%d-%02d-%02dT%02d:%02d' "$cur_y" "$fmo" "$fd" "$fh" "$fm")" +%s 2>/dev/null || echo 0)
@@ -1127,7 +1127,7 @@ cmd_show() {
   if [[ -n "$desc" && "$desc" != "null" ]]; then
     printf '  %-12s %s\n' "description:" "$desc"
   fi
-  # Optional v0.3 fields — `// empty` so absence is silent rather than "null"
+  # Optional v0.3 fields: `// empty` so absence is silent rather than "null"
   local wd; wd=$(jq -r '.working_dir // empty' <<<"$entry")
   if [[ -n "$wd" ]]; then
     printf '  %-12s %s\n' "workdir:" "$wd"
@@ -1194,7 +1194,7 @@ cmd_disable() {
 # registry / filesystem (sched_dir + script + plist) / launchd / Calendar.
 # Drift commonly appears after a one-shot self-unloads (plist gone, registry
 # still listing the entry as loaded) or when the user manually deletes a
-# Calendar event. Default: skip the Calendar check (slow osascript hop) —
+# Calendar event. Default: skip the Calendar check (slow osascript hop):
 # pass --check-calendar to include it.
 cmd_doctor() {
   local check_cal=0
@@ -1341,7 +1341,7 @@ cmd_inventory() {
 
 # ── duplicate (v0.4) ───────────────────────────────────────────────────────
 # Copy an existing schedule with optional overrides. Inherits command, kind,
-# fire_at, env_vars, working_dir, description from the source — anything you
+# fire_at, env_vars, working_dir, description from the source: anything you
 # pass as an override replaces the inherited value. If you override the mode
 # (--at / --daily-at / --weekly), the source's mode is dropped so we don't
 # trip the mode_count==1 check in cmd_add.
@@ -1350,7 +1350,7 @@ cmd_duplicate() {
   local src="$1" new="$2"; shift 2
   local entry; entry=$(_get_entry "$src")
 
-  # Adopted entries have command=null — we can't duplicate what we don't know.
+  # Adopted entries have command=null: we can't duplicate what we don't know.
   local src_cmd; src_cmd=$(jq -r '.command' <<<"$entry")
   [[ "$src_cmd" == "null" ]] && fail "cannot duplicate adopted entry '$src' — its command lives in an external script we don't track. Re-create from scratch with '$PROG add'."
 
@@ -1394,7 +1394,7 @@ cmd_duplicate() {
   [[ -n "$src_desc" && "$src_desc" != "(adopted from existing plist on"* ]] && desc_args=(--description "$src_desc")
 
   say "${DIM}duplicating '$src' → '$new' (inherited: $src_kind, $((${#env_args[@]}/2)) env, workdir=${src_workdir:-none})${RST}"
-  # Overrides ("$@") come AFTER the inherited args — cmd_add's parser
+  # Overrides ("$@") come AFTER the inherited args: cmd_add's parser
   # last-wins for scalar flags, so an override --command/--alert/etc. wins.
   cmd_add --name "$new" \
     "${mode_args[@]+${mode_args[@]}}" \
@@ -1407,7 +1407,7 @@ cmd_duplicate() {
 
 # ── register (v0.3 Cluster D) ──────────────────────────────────────────────
 # Adopt an existing user LaunchAgent plist into gcc-schedule's registry. Does
-# NOT rewrite the plist — adopted schedules behave however the original
+# NOT rewrite the plist: adopted schedules behave however the original
 # script behaves (no auto-injected date guard, no self-unload, command=null
 # because we don't know the user's intent). 'rm' of an adopted entry deletes
 # the plist + sched_dir but warns about external scripts/Calendar events we
@@ -1434,7 +1434,7 @@ cmd_register() {
   jq -e --arg n "$name" '.[$n]' "$REGISTRY" >/dev/null 2>&1 && \
     fail "already in registry: '$name'. Use '$PROG show $name' or '$PROG rm $name' first."
 
-  # Pull SCI keys — present/absent distinguishes kind
+  # Pull SCI keys: present/absent distinguishes kind
   local sci_month sci_day sci_weekday sci_hour sci_minute
   sci_month=$(_plutil_get   "$plist" StartCalendarInterval.Month)
   sci_day=$(_plutil_get     "$plist" StartCalendarInterval.Day)
@@ -1459,14 +1459,14 @@ cmd_register() {
     fire_at_meta="custom-schedule"
   fi
 
-  # External paths (script, logs) — we record but don't touch
+  # External paths (script, logs): we record but don't touch
   local ext_script ext_outlog ext_errlog ext_workdir
   ext_script=$(plutil -extract ProgramArguments.0 raw -o - "$plist" 2>/dev/null || echo "")
   ext_outlog=$(_plutil_get "$plist" StandardOutPath)
   ext_errlog=$(_plutil_get "$plist" StandardErrorPath)
   ext_workdir=$(_plutil_get "$plist" WorkingDirectory)
 
-  # Sched dir + meta — we DO create these for the adopted entry so show/rm work
+  # Sched dir + meta: we DO create these for the adopted entry so show/rm work
   local sched_dir="$SCHED_HOME/$name"
   local meta="$sched_dir/meta.json"
   mkdir -p "$sched_dir"
@@ -1509,7 +1509,7 @@ cmd_reconcile() {
   fi
 }
 
-# Read the append-only ledger. Plain JSONL underneath — this is sugar; you can
+# Read the append-only ledger. Plain JSONL underneath: this is sugar; you can
 # always `rg`/`jq`/Read $HIST directly.
 cmd_history() {
   local name="" outcome="" ev="" limit=20
@@ -1561,7 +1561,7 @@ cmd_status() {
 
 # ═══ Interactive mode (gcc-schedule -i) ══════════════════════════════════════
 # A colored, fuzzy front-end to EVERY subcommand, for a human at a terminal.
-# Design contract: this layer only PICKS and PROMPTS — every action routes back
+# Design contract: this layer only PICKS and PROMPTS: every action routes back
 # through the same cmd_* functions the text CLI uses, so the interactive path can
 # never drift from the scripted one. The logic-bearing helpers (_i_schedule_rows,
 # _i_do_action, _i_compose_add_args) are pure and unit-tested headless; the tty
@@ -1574,13 +1574,13 @@ _i_source_tui() {
   . "$d/tty.sh"; . "$d/require.sh"; . "$d/pick.sh"
 }
 
-# _i_recent_outcomes <name> — last 3 run outcomes from the ledger ("ok ok missed").
+# _i_recent_outcomes <name>: last 3 run outcomes from the ledger ("ok ok missed").
 _i_recent_outcomes() {
   jq -r --arg n "$1" 'select(.name==$n and .ev=="run") | .outcome // "?"' "$HIST" 2>/dev/null \
     | tail -3 | tr '\n' ' ' | sed 's/[[:space:]]*$//'
 }
 
-# _i_outcomes_colored <name> — recent outcomes, each token semantically colored
+# _i_outcomes_colored <name>: recent outcomes, each token semantically colored
 # (ok green · missed yellow · failed red). Blank of color when piped (both-fd gate).
 _i_outcomes_colored() {
   local o out=""
@@ -1595,7 +1595,7 @@ _i_outcomes_colored() {
   printf '%s' "${out% }"
 }
 
-# _i_schedule_rows — one row per schedule as `name<TAB>colored aligned display`,
+# _i_schedule_rows: one row per schedule as `name<TAB>colored aligned display`,
 # for tui_pick_key (shows the colored display, returns the clean name). Name cyan,
 # kind dim, recent outcomes semantically colored. Pure: registry + ledger, no tty.
 # Manual %-*s padding (not `column -t`) so ANSI codes don't skew the alignment.
@@ -1610,7 +1610,7 @@ _i_schedule_rows() {
   done < <(jq -r 'to_entries[] | "\(.key)\t\(.value.kind)\t\(.value.fire_at)"' "$REGISTRY" 2>/dev/null)
 }
 
-# _i_actions — per-schedule actions as `verb<TAB>colored display` for tui_pick_key.
+# _i_actions: per-schedule actions as `verb<TAB>colored display` for tui_pick_key.
 # Field 1 (the verb) is the clean key _i_do_action routes on; field 2 is the
 # colored label shown. Verb color carries meaning (rm red, disable yellow).
 _i_actions() {
@@ -1624,7 +1624,7 @@ _i_actions() {
   printf '%s\t%sback%s\n'                                  back      "$DIM" "$RST"
 }
 
-# _i_do_action <name> <label> — route a chosen action to the SAME cmd_* the text
+# _i_do_action <name> <label>: route a chosen action to the SAME cmd_* the text
 # CLI uses. Returns 2 for "back". ACTION_DRYRUN=1 prints the route and runs
 # nothing, so routing is unit-testable headless.
 _i_do_action() {
@@ -1651,7 +1651,7 @@ _i_do_action() {
   esac
 }
 
-# _i_compose_add_args — PURE. Emit the argv for cmd_add (one per line, NO leading
+# _i_compose_add_args: PURE. Emit the argv for cmd_add (one per line, NO leading
 # 'add'), so an interactively-built schedule is identical to a hand-typed one.
 #   $1 name  $2 mode(at|daily|weekly|monthly)  $3 when  $4 dow/day  $5 command  $6 desc  $7 nocal(1|"")
 _i_compose_add_args() {
@@ -1751,7 +1751,7 @@ _i_status_menu() {
   _i_pause
 }
 
-# _i_plist_rows — existing com.alcatraz.*.plist under LaunchAgents as
+# _i_plist_rows: existing com.alcatraz.*.plist under LaunchAgents as
 # `fullpath<TAB>colored basename`, to seed the register picker. Pure (glob only).
 _i_plist_rows() {
   local f
@@ -1763,7 +1763,7 @@ _i_plist_rows() {
 
 _i_register_flow() {
   local p="" rows=""
-  # tui_pick_or_add lets you arrow-pick a seeded plist OR type a brand-new path —
+  # tui_pick_or_add lets you arrow-pick a seeded plist OR type a brand-new path:
   # the typed query is returned when it matches nothing.
   rows=$(_i_plist_rows)
   if [ -n "$rows" ]; then
@@ -1775,7 +1775,7 @@ _i_register_flow() {
   _i_pause
 }
 
-# _i_main_menu — top-level options as `key<TAB>colored display`; every subcommand
+# _i_main_menu: top-level options as `key<TAB>colored display`; every subcommand
 # family is reachable from here. tui_pick_key returns the clean key.
 _i_main_menu() {
   printf '%s\t%sBrowse%s & act on schedules\n'                  browse "$CYN" "$RST"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# sl-playground.sh — Start or open the statusline playground
+# sl-playground.sh: Start or open the statusline playground
 # Usage: sl-playground.sh [--start | --stop | --status | --open]
 
 SERVER_MJS="${HOME}/.claude/assets/static/statusline-server.mjs"

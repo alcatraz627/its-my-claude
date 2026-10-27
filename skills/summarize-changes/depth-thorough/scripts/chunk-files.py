@@ -17,7 +17,7 @@ Output: 04-chunks.json with [{id, files, total_bytes, index}, ...]
 import sys, os, json, argparse
 from collections import defaultdict
 
-# Binary / asset extensions — inventoried as a single summary line, not file-by-file.
+# Binary / asset extensions: inventoried as a single summary line, not file-by-file.
 BINARY_EXTS = {
     ".png", ".jpg", ".jpeg", ".gif", ".webp", ".ico", ".bmp", ".tiff",
     ".pdf", ".woff", ".woff2", ".ttf", ".otf", ".eot",

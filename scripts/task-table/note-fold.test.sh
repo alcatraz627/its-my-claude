@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# note-fold.test.sh — a note rides the trait row when it fits there.
+# note-fold.test.sh: a note rides the trait row when it fits there.
 #
 # Owner ruling 2026-09-05: "stick the notes line (third line) in the second line
 # itself if it can fit because this is making the height explode". A three-line

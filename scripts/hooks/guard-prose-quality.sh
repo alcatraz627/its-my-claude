@@ -7,7 +7,7 @@
 # (atone ai-smell-prose-against-stored-voice): prose written INTO files.
 #
 # Scoring engine: scripts/style/prose-lint.py (strips code fences, inline
-# code, blockquotes, and table rows first — quoted defect examples never
+# code, blockquotes, and table rows first: quoted defect examples never
 # count). Style-system paths that quote banned material by design are exempt.
 # Mute (owner only): touch ~/.claude/.no-prose-quality-gate  ·  migration 0041
 set -uo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# close.sh — the lede block: the renderer that owns position 1 of an
+# close.sh: the lede block: the renderer that owns position 1 of an
 # owner-facing reply (regfric build D1, owner-approved 2026-08-20).
 #
 # The sweep behind it: a question buried in prose gets answered 1 time in 19;

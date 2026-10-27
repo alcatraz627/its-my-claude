@@ -6,7 +6,7 @@ import {
   computeStats,
 } from "../../generate-html.ts";
 
-// Minimal text-lines icon — matches the ultra-clean aesthetic
+// Minimal text-lines icon: matches the ultra-clean aesthetic
 const FAVICON =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23f8fafc' stroke='%23e2e8f0' stroke-width='2'/%3E%3Crect x='8' y='9' width='16' height='1.5' rx='.75' fill='%2394a3b8'/%3E%3Crect x='8' y='14' width='12' height='1.5' rx='.75' fill='%23cbd5e1'/%3E%3Crect x='8' y='19' width='14' height='1.5' rx='.75' fill='%23cbd5e1'/%3E%3Crect x='8' y='24' width='10' height='1.5' rx='.75' fill='%23e2e8f0'/%3E%3C/svg%3E";
 
@@ -29,7 +29,7 @@ export function buildHtml(data: ReportData): string {
     })
     .join("\n        ");
 
-  // Build sections — no card wrapper, just flowing content
+  // Build sections: no card wrapper, just flowing content
   const sectionBlocks = data.sections
     .map((section) => renderSection(section))
     .join("\n\n  ");

@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# backlog-surface.sh — SessionStart hook. Closes the improvement loop by pulling
+# backlog-surface.sh: SessionStart hook. Closes the improvement loop by pulling
 # the human back to the triaged backlog, so the triage file does not become a new
 # graveyard (the failure that befell preference-harvest's candidate files).
 #
 # When the weekly backlog-consolidate has produced PROMOTE candidates, this injects
 # ONE terse line at session start naming the count + top items and pointing at
 # /backlog-triage. It surfaces ONLY the triaged PROMOTE set (never the raw 50-item
-# backlog — that would be noise), only when fresh, and at most once every few days
+# backlog: that would be noise), only when fresh, and at most once every few days
 # so it never nags.
 #
 # Registered DIRECTLY in settings.json SessionStart (NOT via the orchestrator,
-# whose run.sh sends every task's stdout to /dev/null — which would drop this
+# whose run.sh sends every task's stdout to /dev/null: which would drop this
 # injection, the same latent bug that currently dark-holes dream-insights and
 # pending-proposals).
 #

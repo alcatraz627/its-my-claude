@@ -6,7 +6,7 @@
 # resets_at, so a sentinel taken literally (year 2286) wins every merge forever
 # and pins a stale local value over a fresher cached one. Unknown must read as 0.
 #
-# Extracts the function from statusline.sh and exercises it directly — the script
+# Extracts the function from statusline.sh and exercises it directly: the script
 # itself expects a full Claude Code stdin payload and can't be run bare.
 
 set -uo pipefail

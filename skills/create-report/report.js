@@ -78,7 +78,7 @@
     );
   }
 
-  // Apply saved accent on load (CSS var only — buttons injected later in row2Init)
+  // Apply saved accent on load (CSS var only: buttons injected later in row2Init)
   applyAccent(store.getItem('rpt-accent') || 'indigo');
 
   // ── Font picker ──────────────────────────────────────────────────────────────
@@ -243,7 +243,7 @@
   }));
 
   function clearMarks(el) {
-    // Unwrap every mark first, then normalize once — per-mark normalize corrupts
+    // Unwrap every mark first, then normalize once: per-mark normalize corrupts
     // the sibling list when multiple marks share the same parent element.
     el.querySelectorAll('mark').forEach((m) => {
       const parent = m.parentNode;
@@ -390,7 +390,7 @@
     const expandBtn = wrap.querySelector('.code-expand');
     if (expandBtn) expandBtn.addEventListener('click', (e) => { e.stopPropagation(); openDialog(wrap); });
 
-    // Pre click removed — only expand button opens the dialog
+    // Pre click removed: only expand button opens the dialog
   });
 
   function closeDialog() {
@@ -419,7 +419,7 @@
   // ── Inline code path:line-no coloring ────────────────────────────────────────
   // Detects inline <code> elements whose text matches "path/file.ext:123" and
   // re-renders them with separate spans for the file path and line number parts.
-  // Only runs on inline code (inside p, li, td) — not on pre>code blocks.
+  // Only runs on inline code (inside p, li, td): not on pre>code blocks.
   (function colorCodePaths() {
     // Matches: anything ending in .ext:digits, e.g. "src/foo.ts:42" or "foo.tsx:123"
     const PATH_RE = /^(.+\.[a-z0-9]+):(\d+)$/i;
@@ -436,5 +436,5 @@
 
   // __RPT features (style picker, progress bar, scroll-to-top, copy-for menu,
   // text size) are all initialised by the floating toolbar's DOMContentLoaded
-  // handler in generate-html.ts — no duplicate calls needed here.
+  // handler in generate-html.ts: no duplicate calls needed here.
 })();

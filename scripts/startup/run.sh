@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# std::claude::startup — Login-time maintenance orchestrator.
+# std::claude::startup: Login-time maintenance orchestrator.
 #
 # Fires once per user-login session via the LaunchAgent at
 # ~/Library/LaunchAgents/dev.claude-startup.plist (RunAtLoad=true).
 # On this single-user macOS box the user restarts ~weekly without logging
-# out, so "per login" effectively means "per reboot" — which is the right
+# out, so "per login" effectively means "per reboot": which is the right
 # cadence for the maintenance tasks below.
 #
 # Each task is a separate script under tasks/<name>.sh. Tasks must:
@@ -23,7 +23,7 @@
 set -uo pipefail
 
 # launchd runs LaunchAgents with the bare default PATH (/usr/bin:/bin:/usr/sbin:/sbin).
-# The claude binary lives in ~/.local/bin and homebrew tools in /opt/homebrew/bin —
+# The claude binary lives in ~/.local/bin and homebrew tools in /opt/homebrew/bin:
 # without this, task 30's retro-dump spawns a bare `claude` and dies command-not-found.
 # (Manual shell runs mask this: the interactive PATH already carries both dirs.)
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
@@ -70,7 +70,7 @@ run_task() {
   printf '\n--- task: %s ---\n' "$name" | tee -a "$LOG"
   local args=()
   (( DRY_RUN )) && args+=(--dry-run)
-  # ${args[@]+...} — macOS bash 3.2 treats an empty array as unset under set -u,
+  # ${args[@]+...}: macOS bash 3.2 treats an empty array as unset under set -u,
   # so a bare "${args[@]}" aborts every live (non-dry-run) task.
   if bash "$task_file" ${args[@]+"${args[@]}"} 2>&1 | tee -a "$LOG"; then
     printf '[OK]  %s\n' "$name" | tee -a "$LOG"

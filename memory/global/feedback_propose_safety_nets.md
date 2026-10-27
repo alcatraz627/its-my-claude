@@ -1,6 +1,6 @@
 ---
-name: Proactively propose safety nets — over-suggesting is fine, missing is regrettable
-description: When a project lacks safety nets that would prevent regrettable damage (idempotency, dry-runs, diff previews, undo, commit rules), surface ASAP — even on existing projects. User explicitly tolerates over-reach in this domain.
+name: Proactively propose safety nets, over-suggesting is fine, missing is regrettable
+description: When a project lacks safety nets that would prevent regrettable damage (idempotency, dry-runs, diff previews, undo, commit rules), surface ASAP, even on existing projects. User explicitly tolerates over-reach in this domain.
 type: feedback
 ---
 
@@ -23,14 +23,14 @@ When working in any project:
 2. Compare against the project's risk profile (see
    `feedback_proactive_question_ownership.md` for project-ceiling check).
 3. If a relevant safety net is missing, surface it explicitly. Examples:
-   - "I notice this script edits files in-place — should it have a dry-run flag?"
+   - "I notice this script edits files in-place: should it have a dry-run flag?"
    - "This refactor touches 40 files; want me to gate behind a feature flag?"
    - "We're running mutations against shared data; want me to add an
      idempotency check so re-runs are no-ops?"
-   - "There's no commit rule documented for this project — should I avoid
+   - "There's no commit rule documented for this project: should I avoid
      committing without explicit per-change approval?"
 4. Ask whether to add it. User may say "skip", "add later", or "yes now".
-   All fine — surfacing is the value.
+   All fine: surfacing is the value.
 5. Save the user's response to project memory so future sessions inherit
    the preferences.
 
@@ -43,7 +43,7 @@ When working in any project:
 - **One-off sync script with machine-generated output** (e.g., notion-sync):
   - Desired: idempotency, pull-sync (auto-revert), confirmation prompt,
     diff preview before push
-  - "YOLO with built-in safety" — high freedom, high reversibility
+  - "YOLO with built-in safety": high freedom, high reversibility
 - **Production data-handling tool** (e.g., logger-crab-class):
   - Required: input validation, structured logging, error boundaries,
     rollback path
@@ -53,6 +53,6 @@ When working in any project:
 
 ## Cross-references
 
-- `feedback_proactive_question_ownership.md` (global) — pair with this
+- `feedback_proactive_question_ownership.md` (global): pair with this
 - Project-level: `feedback_propose_safety_nets.md` (in project memory)
 - Pairs with: `feedback_ambitious_vs_maximalist.md`

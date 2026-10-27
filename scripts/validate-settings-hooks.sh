@@ -4,7 +4,7 @@
 # regression: installers append a bare {command, type} object instead of
 # wrapping it in {hooks: [{type, command}]}, which /doctor flags as
 # "Expected array, but received undefined".
-# Non-blocking — surfaces a warning via SessionStart additionalContext when
+# Non-blocking: surfaces a warning via SessionStart additionalContext when
 # drift is detected, and stays silent when settings are clean.
 
 set -u

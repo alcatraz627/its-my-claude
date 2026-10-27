@@ -1,30 +1,30 @@
 #!/usr/bin/env bash
-# ctx-pressure-nudge.sh — warn the agent before the context window gets dangerous.
+# ctx-pressure-nudge.sh: warn the agent before the context window gets dangerous.
 #
 # The statusline already knows how full the context is and writes the real,
 # tier-aware "% remaining" to /tmp/claude-ctx-<claude-pid> every render, but no
-# hook reads it — so every context-boundary nudge until now used proxies (idle,
+# hook reads it: so every context-boundary nudge until now used proxies (idle,
 # cwd). This hook reads the real number and speaks up once the window enters the
-# rate-limit danger zone (>=80% full — plus a gentler notes-hygiene band at 70%,
+# rate-limit danger zone (>=80% full: plus a gentler notes-hygiene band at 70%,
 # added 2026-07-09: update workspace notes / Resume Contract while synthesis is
 # cheap), where the large majority of this account's
 # transient 429 errors occur. It matters most on the 1M-token tier, which has
 # NO early autocompact at all (verified: sessions sit at 92-99% full for many
-# turns there) — so this nudge is the only early-checkpoint signal on that tier.
+# turns there): so this nudge is the only early-checkpoint signal on that tier.
 #
 # Two halves, so it is not advisory-only:
 #   1. a graded {additionalContext} nudge (the agent can act on it), and
 #   2. at a higher bar, a MECHANICAL enqueue of a retro core-dump via the
-#      existing opt-in auto-coredump queue — so a reasoning checkpoint survives
+#      existing opt-in auto-coredump queue: so a reasoning checkpoint survives
 #      even if the agent ignores the nudge. The enqueue is a no-op unless the
 #      user has opted in (~/.claude/.auto-coredump-enabled), so it never spends
 #      tokens behind their back.
 #
 # Runtime contract: UserPromptSubmit hook, registered DIRECTLY in settings.json
-# (not via the orchestrator — the orchestrator discards stdout, which would drop
+# (not via the orchestrator: the orchestrator discards stdout, which would drop
 # the injection, and $PPID must resolve to the claude process to find the ctx
 # file). Reads the hook payload on stdin; prints one {additionalContext} object
-# when it fires, nothing otherwise. Always exits 0 — a UserPromptSubmit hook
+# when it fires, nothing otherwise. Always exits 0: a UserPromptSubmit hook
 # must never block the prompt. Rate-limited per session so it never nags.
 
 set -uo pipefail
@@ -75,7 +75,7 @@ band=70
 
 # Mechanical half (opt-in): at >=85% full, enqueue a retro core-dump so a
 # reasoning checkpoint survives regardless of agent compliance. Runs BEFORE the
-# nudge rate-limit below — otherwise an 80-band nudge at 80-84% suppresses the
+# nudge rate-limit below: otherwise an 80-band nudge at 80-84% suppresses the
 # first 85-89% prompt and the backstop silently slips to the 90 band. The
 # enqueue script is a no-op unless the user opted in; touch is idempotent.
 enq=""

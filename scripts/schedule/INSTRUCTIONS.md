@@ -1,10 +1,10 @@
-# gcc-schedule — usage contract for Claude
+# gcc-schedule: usage contract for Claude
 
 > Read this before invoking `~/.claude/scripts/schedule/schedule.sh` (alias: `gcc-schedule`). The CLI is the entrypoint; this file is the contract that makes it safe to use without trial and error.
 
 ## When to use this tool
 
-Use `gcc-schedule` to **schedule local commands on this Mac** via launchd LaunchAgents — one-shot reminders, recurring jobs, automation. Examples:
+Use `gcc-schedule` to **schedule local commands on this Mac** via launchd LaunchAgents: one-shot reminders, recurring jobs, automation. Examples:
 
 - "Open Ghostty and resume a claude session at 3pm tomorrow"
 - "Run a digest script every morning at 9"
@@ -12,13 +12,13 @@ Use `gcc-schedule` to **schedule local commands on this Mac** via launchd Launch
 - "Fire a Calendar alert + run a sync at the same time"
 
 **Don't use it for:**
-- Background daemons that should restart on exit (`KeepAlive`-style) — different mental model; use a hand-built plist.
-- Remote scheduling (Claude API agents on a schedule) — use the `/schedule` skill / `CronCreate` harness tool instead.
-- Triggering Claude prompts on a schedule — also `/schedule`, not this.
+- Background daemons that should restart on exit (`KeepAlive`-style): different mental model; use a hand-built plist.
+- Remote scheduling (Claude API agents on a schedule): use the `/schedule` skill / `CronCreate` harness tool instead.
+- Triggering Claude prompts on a schedule: also `/schedule`, not this.
 
 ## The three scheduling modes (and why `--cron` doesn't exist)
 
-The tool supports exactly three modes. **Pick one — they're mutually exclusive.**
+The tool supports exactly three modes. **Pick one: they're mutually exclusive.**
 
 | Flag | Meaning | Example |
 |---|---|---|
@@ -28,9 +28,9 @@ The tool supports exactly three modes. **Pick one — they're mutually exclusive
 
 `dow` is one of `mon|tue|wed|thu|fri|sat|sun` (case-insensitive).
 
-**Why no `--cron`?** Cron's syntax (`*/5`, `1-5`, `0 9 * * 1-5`) doesn't map cleanly to launchd's `StartCalendarInterval` (point-events) without a substantial translator. The three focused flags above cover virtually all real use cases. If you need a pattern that doesn't fit (weekdays-only, every-N-minutes, specific day-of-month), tell the human — adding a focused flag (`--weekdays-at`, `--every`, `--monthly`) is preferred over a general cron parser. `--cron` will be **rejected with a helpful error** so you can't accidentally use it.
+**Why no `--cron`?** Cron's syntax (`*/5`, `1-5`, `0 9 * * 1-5`) doesn't map cleanly to launchd's `StartCalendarInterval` (point-events) without a substantial translator. The three focused flags above cover virtually all real use cases. If you need a pattern that doesn't fit (weekdays-only, every-N-minutes, specific day-of-month), tell the human: adding a focused flag (`--weekdays-at`, `--every`, `--monthly`) is preferred over a general cron parser. `--cron` will be **rejected with a helpful error** so you can't accidentally use it.
 
-## The PLANNED block — self-check before committing
+## The PLANNED block: self-check before committing
 
 Every `add` prints a `PLANNED:` block **before** any file is created. Read it. If anything looks wrong, abort with Ctrl-C or pass `--dry-run`.
 
@@ -69,7 +69,7 @@ If you're uncertain about how the human's intent will be parsed (timezone, DOW, 
 | `rm <name>` (alias: `remove`, `retire`) | Retire fully: bootout, delete plist, delete sched_dir, delete Calendar event, unregister. Logs `removed cause=user`. For adopted entries: warns about external scripts we don't delete. |
 | `history [--name N] [--outcome ...] [--ev ...] [--limit N]` | Read the append-only ledger (`history.jsonl`). Filter by name / outcome / event kind. |
 | `status` | One-glance: live schedule count + all-time fire outcome tallies + recent fires. |
-| `reconcile` | Sweep one-shots whose `fire_at` has passed with no run record (machine was off / launchd gap) — log `outcome=missed` and retire them. Also runs inside `doctor`. |
+| `reconcile` | Sweep one-shots whose `fire_at` has passed with no run record (machine was off / launchd gap): log `outcome=missed` and retire them. Also runs inside `doctor`. |
 
 ## Add flags (full)
 
@@ -96,7 +96,7 @@ gcc-schedule add --name resume-session-x --at 2026-06-02T15:00 \
   --description "Resume session X to check log"
 ```
 
-> **Always route a scheduled `claude --resume` through `launch-claude-resume.sh`** —
+> **Always route a scheduled `claude --resume` through `launch-claude-resume.sh`**:
 > do NOT inline `open -na Ghostty.app --args -e zsh -lc "... claude ..."`. Under
 > launchd the PATH is bare and a login shell skips `~/.zshrc` (the only place
 > `~/.local/bin`, where the `claude` binary lives, is added to PATH), so the
@@ -142,41 +142,41 @@ gcc-schedule resume morning-digest
 | Pass `--cron "0 9 * * 1-5"` | Intentionally rejected | Use `--weekly` once per day, or ask the human about adding a `--weekdays-at` flag |
 | Skip `--description` for crons that fire weeks/months later | Future-you won't remember what it was for; Calendar event notes are searchable | Always include `--description` for delayed/recurring schedules |
 | Use `--no-calendar` without a good reason | Breaks the calendar-companion contract (`rules/scheduling-discipline.md`) that every cron gets a companion Calendar event for visibility | Only pass `--no-calendar` for transient test schedules |
-| Edit the registry JSON directly | Bypasses gcc-schedule's atomicity — can leave plist/sched_dir/registry out of sync | Always go through `add` / `rm` / `register` |
+| Edit the registry JSON directly | Bypasses gcc-schedule's atomicity: can leave plist/sched_dir/registry out of sync | Always go through `add` / `rm` / `register` |
 | Run `add` to "fix" an existing schedule | `add` refuses if name exists (unless `--force`); even with `--force` you lose the Calendar event UID linkage | Use `rm` + `add`, or `disable` + edit script directly + `enable` |
 
 ## When to halt and ask the human
 
-- **Schedule mode is ambiguous** ("schedule X every week") — clarify which day, what time.
-- **Command contains secrets** (API keys, tokens) — those go via `--env` or via a wrapper script that reads from keychain; never inline in `--command`. Also note: the `guard-anthropic-credentials.sh` hook blocks Anthropic-key writes to settings.json/shell-profiles but not to plists, so you must be vigilant.
-- **Schedule replaces an existing one** — confirm name + intent; `--force` is destructive.
-- **Working directory doesn't exist** — gcc-schedule warns but allows; clarify whether the human wants the directory created or the schedule pointed elsewhere.
+- **Schedule mode is ambiguous** ("schedule X every week"): clarify which day, what time.
+- **Command contains secrets** (API keys, tokens): those go via `--env` or via a wrapper script that reads from keychain; never inline in `--command`. Also note: the `guard-anthropic-credentials.sh` hook blocks Anthropic-key writes to settings.json/shell-profiles but not to plists, so you must be vigilant.
+- **Schedule replaces an existing one**: confirm name + intent; `--force` is destructive.
+- **Working directory doesn't exist**: gcc-schedule warns but allows; clarify whether the human wants the directory created or the schedule pointed elsewhere.
 
 ## History ledger & cleanup
 
-The live registry holds **only active schedules** — a one-shot that fires (or a
+The live registry holds **only active schedules**: a one-shot that fires (or a
 schedule you `rm`) leaves it, so `list` never shows dead entries. Everything that
 ever happened is preserved in an append-only ledger, `~/.claude/scheduled/history.jsonl`
-(plain JSONL — `rg`/`jq`/Read it directly; it's never pruned).
+(plain JSONL: `rg`/`jq`/Read it directly; it's never pruned).
 
 **Two small enums + open metadata** (the shape of every ledger line):
 
-- `ev` ∈ `added | modified | removed | run` — what the record is.
-- `outcome` ∈ `ok | failed | unknown | missed` — on `run` records only — how the fire went.
+- `ev` ∈ `added | modified | removed | run`: what the record is.
+- `outcome` ∈ `ok | failed | unknown | missed`: on `run` records only: how the fire went.
 - metadata (free-form, never an enum): `reason` (e.g. `claude_missing`, `ghostty_missing`, `cmd_error`, `post_handoff`, `machine_off_or_stale`), `stage` (`preflight|open|cmd|handoff`), `exit`, `detail`, `cause` (`fired-complete|user|missed-sweep`).
 
-A new failure cause is a new `reason` **string**, not a schema change — so don't add outcome states for edge cases; add a reason.
+A new failure cause is a new `reason` **string**, not a schema change: so don't add outcome states for edge cases; add a reason.
 
 **What counts as success vs failure** (the scheduler can only log what it observes):
 
-- `ok` — the task launched and the launch is confirmed (headless command exited 0).
-- `failed` — the scheduler tried but the launch failed: Ghostty/claude missing, bad path, command exited non-zero. This is the scheduler's fault to surface.
-- `unknown` — fired and handed off (a Ghostty window opened) but the outcome past `exec` isn't observable (claude may boot, crash, or be closed). Honest, not a failure.
-- `missed` — never ran at all (machine off/asleep, launchd gap). The script never executed, so it can't self-report — only `reconcile`/`doctor` detect it by the absence of a `run` line past `fire_at`.
+- `ok`: the task launched and the launch is confirmed (headless command exited 0).
+- `failed`: the scheduler tried but the launch failed: Ghostty/claude missing, bad path, command exited non-zero. This is the scheduler's fault to surface.
+- `unknown`: fired and handed off (a Ghostty window opened) but the outcome past `exec` isn't observable (claude may boot, crash, or be closed). Honest, not a failure.
+- `missed`: never ran at all (machine off/asleep, launchd gap). The script never executed, so it can't self-report: only `reconcile`/`doctor` detect it by the absence of a `run` line past `fire_at`.
 
-Anything that happens *inside* the launched task (Anthropic down, subscription over, you closing the window) is **not** a schedule error — the fire already succeeded.
+Anything that happens *inside* the launched task (Anthropic down, subscription over, you closing the window) is **not** a schedule error: the fire already succeeded.
 
-**Cleanup of one-time tasks** is automatic on the happy path: a fired one-shot records its `run` outcome, then self-retires (bootout + plist + sched_dir + registry key + Calendar). A **failed** one-shot is *also* retired — the failure is preserved in history as `outcome=failed`, so it leaves `list` but `status`/`history` still surface it. The only class that can't self-clean is `missed` (its script never ran); `gcc-schedule reconcile` (and every `doctor`) sweeps those. Commands a window launcher (e.g. `launch-claude-resume.sh`) can refine their own outcome by writing `key=value` lines to `$GCC_SCHED_META`.
+**Cleanup of one-time tasks** is automatic on the happy path: a fired one-shot records its `run` outcome, then self-retires (bootout + plist + sched_dir + registry key + Calendar). A **failed** one-shot is *also* retired: the failure is preserved in history as `outcome=failed`, so it leaves `list` but `status`/`history` still surface it. The only class that can't self-clean is `missed` (its script never ran); `gcc-schedule reconcile` (and every `doctor`) sweeps those. Commands a window launcher (e.g. `launch-claude-resume.sh`) can refine their own outcome by writing `key=value` lines to `$GCC_SCHED_META`.
 
 ## Where things live
 
@@ -194,6 +194,6 @@ Calendar.app "Automations" calendar            companion events
 
 ## See also
 
-- `rules/scheduling-discipline.md` — cross-tool discipline, incl. the every-cron-gets-a-Calendar-event contract
-- `LOOKUP.md` § Hook Scripts — schedule.sh entry with use-case triggers
-- `NAMESPACE.md` § std::claude::scripts — conceptual home
+- `rules/scheduling-discipline.md`: cross-tool discipline, incl. the every-cron-gets-a-Calendar-event contract
+- `LOOKUP.md` § Hook Scripts: schedule.sh entry with use-case triggers
+- `NAMESPACE.md` § std::claude::scripts: conceptual home

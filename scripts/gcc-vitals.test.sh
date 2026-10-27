@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# gcc-vitals.test.sh — checks for the vitals reader (added in final-review R6:
+# gcc-vitals.test.sh: checks for the vitals reader (added in final-review R6:
 # the one script whose numbers were wrong shipped with no tests).
 # Isolation: GCC_VITALS_ATONE points the atone family at a fixture. The proposals/
 # rules/churn families read the live tree (isolating them needs env hooks into
-# propose.sh/git — deferred); the tests here cover atone math, JSON validity, the
+# propose.sh/git: deferred); the tests here cover atone math, JSON validity, the
 # empty/missing-ledger guards, and the partial-month arrow.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"

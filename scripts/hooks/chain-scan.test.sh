@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# chain-scan.test.sh — the false-fire cases matter more than the true ones.
+# chain-scan.test.sh: the false-fire cases matter more than the true ones.
 #
 # This guard blocks. The failure mode that makes a blocking guard worse than no
 # guard is firing on a correct command, so most of these cases are commands that

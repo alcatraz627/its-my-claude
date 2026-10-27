@@ -1,4 +1,4 @@
-# Pre-Compaction Checkpoint — 2026-05-17T23:01:29+05:30
+# Pre-Compaction Checkpoint: 2026-05-17T23:01:29+05:30
 
 <!-- sessions: 2edcbebe-2a46-4b88-a456-8bb80359eeeb@2026-05-17 -->
 
@@ -19,7 +19,7 @@
 
 ## User Goals
 
-**From WAL:** Improve statusline script — MCP display, line splitting, priority layout, research docs
+**From WAL:** Improve statusline script: MCP display, line splitting, priority layout, research docs
 **From previous checkpoint:** _(no prior checkpoint goal found)_
 
 > If these differ, the user likely pivoted mid-session. Resume the most recent goal.
@@ -30,7 +30,7 @@
 
 ## Recovery Sequence
 
-After compaction, run `/catchup` — it will:
+After compaction, run `/catchup`: it will:
 1. Check WAL for the last CHECKPOINT block (fast path)
 2. Fall back to this file for structured state
 3. Load targeted file context from pending items
@@ -40,7 +40,7 @@ After compaction, run `/catchup` — it will:
 
 ## Recently Modified Files
 
-- _(no git changes detected — check WAL for file references)_
+- _(no git changes detected: check WAL for file references)_
 ## Last WAL Checkpoint
 
 ```
@@ -123,8 +123,8 @@ Learnings: Compaction fired (auto) — if auto, consider delegating heavy subtas
 
 ## Additional Context Sources
 
-- **WAL:** `.claude/wal.md` — full action log with checkpoints
-- **Scratchpad:** `.claude/scratchpad/` — in-progress plans and learnings
+- **WAL:** `.claude/wal.md`: full action log with checkpoints
+- **Scratchpad:** `.claude/scratchpad/`: in-progress plans and learnings
 - **Tasks:** run `TaskList` for pending agent tasks
 
 ---

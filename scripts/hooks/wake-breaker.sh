@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# wake-breaker.sh — skips a scheduled wake when nothing has changed since the last one.
+# wake-breaker.sh: skips a scheduled wake when nothing has changed since the last one.
 #
 # An agent's own recurring wake kept firing every 30 minutes for six hours while
 # it was blocked on the owner, each time re-reading its whole context to say the

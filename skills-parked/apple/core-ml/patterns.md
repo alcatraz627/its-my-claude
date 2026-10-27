@@ -257,11 +257,11 @@ final class CameraMLPipeline: NSObject, AVCaptureVideoDataOutputSampleBufferDele
 ```
 
 ### Key Rules for Camera + ML
-1. **Throttle predictions** — not every frame. Every 5th frame or 500ms minimum
-2. **Use `.alwaysDiscardsLateVideoFrames = true`** — prevents buffer queue buildup
-3. **Process on background queue** — never block the camera pipeline
-4. **Use `MLComputeUnits.all`** — let the system choose the fastest hardware
-5. **Update UI on main thread** — always dispatch results back to `@MainActor`
+1. **Throttle predictions**: not every frame. Every 5th frame or 500ms minimum
+2. **Use `.alwaysDiscardsLateVideoFrames = true`**: prevents buffer queue buildup
+3. **Process on background queue**: never block the camera pipeline
+4. **Use `MLComputeUnits.all`**: let the system choose the fastest hardware
+5. **Update UI on main thread**: always dispatch results back to `@MainActor`
 
 ## Model Versioning Pattern
 

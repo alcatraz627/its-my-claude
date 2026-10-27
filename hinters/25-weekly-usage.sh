@@ -3,7 +3,7 @@
 # instrument: self (owner go within 45m)
 # review-by: 2026-10-16
 # retire-if: owner overrides every fire for two weeks
-# 25-weekly-usage.sh — UserPromptSubmit hinter: cost-confirm big actions when
+# 25-weekly-usage.sh: UserPromptSubmit hinter: cost-confirm big actions when
 # the WEEKLY usage window runs hot (owner ruling 2026-08-21).
 #
 # Arms at week > 80% (statusline telemetry). Fires at most once per 45 minutes

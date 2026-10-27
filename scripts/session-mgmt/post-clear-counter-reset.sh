@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# post-clear-counter-reset.sh — SessionStart injector, side-effect only, source=="clear".
+# post-clear-counter-reset.sh: SessionStart injector, side-effect only, source=="clear".
 #
 # What it fixes, in human terms: after a /clear the counters that drive the
 # auto-checkpoint "tool count N", the ctx-pressure "% full", and the
 # todo-discipline "N edits" nudges keep their PRE-clear values, so a brand-new
 # session gets nagged as if it were 800 tools deep. Those counters are keyed by
-# the Claude process id, and /clear does not restart the process — so the /tmp
+# the Claude process id, and /clear does not restart the process: so the /tmp
 # files persist.
 #
 # This injector cannot reset them directly: it runs under the SessionStart
@@ -34,7 +34,7 @@ sid=$(printf '%s' "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 sid8="${sid:0:8}"; [ -n "$sid8" ] || sid8="nosid"
 
 # Touch the sentinel (create or bump mtime to now). Readers reset a counter whose
-# mtime predates this. Prints nothing — pure side effect.
+# mtime predates this. Prints nothing: pure side effect.
 : > "/tmp/claude-clear-reset-${sid8}" 2>/dev/null || true
 
 # A cleared context has forgotten what the once-per-session injectors said

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# state-matrix.test.sh — render /tasks across a GRID of store shapes, and across
+# state-matrix.test.sh: render /tasks across a GRID of store shapes, and across
 # every REAL store on this machine, asserting invariants that must hold in every
 # cell.
 #
@@ -47,7 +47,7 @@ check_cell() {  # check_cell <label> <output> <store_dir>
   legend=$(printf '%s\n' "$out" | rg '^legend:' || true)
   body=$(printf '%s\n' "$out" | rg -v '^legend:' || true)
 
-  # I1 — no internal placeholder or sentinel ever reaches the reader. Matched on
+  # I1: no internal placeholder or sentinel ever reaches the reader. Matched on
   # WORD BOUNDARIES, and usage-hint lines are exempt. A plain substring test was
   # tried first and flagged 'nan' inside the real task subject "Rezonant" and
   # '<sid8>' inside a legitimate "run: task-table.sh --session <sid8>" hint. A
@@ -64,10 +64,10 @@ for l in sys.stdin:
 ' 2>/dev/null || true)
   [ -z "$leak" ] || { ko "$label: output leaks the internal value '$leak'"; bad=1; }
 
-  # I2 — the owner's height law. Wider is fine, taller is not.
+  # I2: the owner's height law. Wider is fine, taller is not.
   [ "$n" -le 44 ] || { ko "$label: $n lines, over the 44-line law"; bad=1; }
 
-  # I3 — a band header must have at least one row before the next rule.
+  # I3: a band header must have at least one row before the next rule.
   printf '%s\n' "$out" | python3 -c '
 import sys, re
 L=[l.rstrip() for l in sys.stdin]
@@ -84,7 +84,7 @@ for i,l in enumerate(L):
         print(l.strip()[:40]); sys.exit(1)
 ' >/dev/null 2>&1 || { ko "$label: a band header renders with zero rows under it"; bad=1; }
 
-  # I8 — a DONE band must be titled by a real grouping key, never by an actor
+  # I8: a DONE band must be titled by a real grouping key, never by an actor
   # bucket. With nothing live, auto-grouping used to probe the empty live list and
   # fall through to "actor", titling a finished store's bands "DONE · AGENT-READY"
   # while every row carried a goal. No invariant read band TITLES, which is why
@@ -94,7 +94,7 @@ for i,l in enumerate(L):
       ko "$label: a DONE band is titled with an actor bucket"; bad=1 ;;
   esac
 
-  # I4 — the legend may only advertise glyphs the render actually used.
+  # I4: the legend may only advertise glyphs the render actually used.
   if [ -n "$legend" ]; then
     local pair gl name
     for pair in $GLYPHS_LEGEND; do
@@ -104,7 +104,7 @@ for i,l in enumerate(L):
     done
   fi
 
-  # I5 — a non-empty store must put at least one SUBJECT on screen. A table whose
+  # I5: a non-empty store must put at least one SUBJECT on screen. A table whose
   # entire content is a row of bare ids tells an out-of-context reader nothing,
   # which is the skill's own 2026-08-15 ruling applied to its own output.
   if [ -n "$dir" ] && [ "$(ls "$dir"/*.json 2>/dev/null | wc -l | tr -d ' ')" -gt 0 ]; then
@@ -132,7 +132,7 @@ PY
     fi
   fi
 
-  # I6 — if rows were dropped, the COUNT it claims must match the ids it names.
+  # I6: if rows were dropped, the COUNT it claims must match the ids it names.
   # The first cut only asked whether a "#" appeared anywhere in the whole output,
   # which is true of every table that renders a single row, so it could not fail.
   case "$out" in

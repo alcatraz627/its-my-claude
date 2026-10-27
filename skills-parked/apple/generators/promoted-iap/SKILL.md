@@ -70,9 +70,9 @@ Read `templates.md` for promoted IAP implementation code.
 
 ### Step 2: Create Core Files
 
-1. **PromotedPurchaseHandler.swift** — Handle purchases initiated from App Store
-2. **PromotedProductConfiguration.swift** — Product definitions and promotional images specs
-3. **PromotedPurchaseFlowView.swift** — UI for completing promoted purchases in-app
+1. **PromotedPurchaseHandler.swift**: Handle purchases initiated from App Store
+2. **PromotedProductConfiguration.swift**: Product definitions and promotional images specs
+3. **PromotedPurchaseFlowView.swift**: UI for completing promoted purchases in-app
 
 ### Step 3: Determine File Location
 ```
@@ -133,7 +133,7 @@ struct MyApp: App {
 - **Size**: 1024 x 1024 pixels
 - **Format**: PNG or JPEG, no transparency
 - **Content**: Feature the product value, not just the app icon
-- **Text**: Minimal — the product name appears separately
+- **Text**: Minimal: the product name appears separately
 - **Style**: Match your app's visual identity
 
 ### Testing Instructions
@@ -145,7 +145,7 @@ struct MyApp: App {
 
 ## References
 
-- **templates.md** — Production Swift templates
-- Related: `generators/paywall-generator` — Full paywall for purchase completion
-- Related: `generators/subscription-offers` — Offer types for promoted subscriptions
-- Related: `app-store/marketing-strategy` — Strategic product promotion planning
+- **templates.md**: Production Swift templates
+- Related: `generators/paywall-generator`: Full paywall for purchase completion
+- Related: `generators/subscription-offers`: Offer types for promoted subscriptions
+- Related: `app-store/marketing-strategy`: Strategic product promotion planning

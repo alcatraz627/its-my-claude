@@ -44,7 +44,7 @@ The default push/pop slide animation:
 .navigationTransition(.slide)
 ```
 
-This is the system default — you only need to specify it explicitly if overriding a different transition.
+This is the system default: you only need to specify it explicitly if overriding a different transition.
 
 ## Namespace Best Practices
 

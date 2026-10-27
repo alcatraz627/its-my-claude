@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 30-retro-checkpoint-flush.sh — std::claude::startup task.
+# 30-retro-checkpoint-flush.sh: std::claude::startup task.
 #
 # Sweeps the retro-dump queue at login time. Also does a broad rescan to catch
 # long-tail sessions that SessionStart hook never saw (because the user hasn't
@@ -8,7 +8,7 @@
 # REVIVAL:
 #   This task is opt-in via env var. To disable: set DISABLE_RETRO_FLUSH=1 in
 #   settings.json env block. Failed retro-dumps are preserved in
-#   ~/.claude/checkpoints/retro-queue/failed/ for manual inspection — they're
+#   ~/.claude/checkpoints/retro-queue/failed/ for manual inspection: they're
 #   NOT auto-retried.
 #
 # Cost: each retro-dump is an LLM call. Capped at MAX_PER_RUN=3 by default.

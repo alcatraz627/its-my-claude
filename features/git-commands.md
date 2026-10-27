@@ -1,5 +1,5 @@
 ---
-brief: git + gh command cheatsheet for common operations, PR workflows, recovery — load when actively using git
+brief: git + gh command cheatsheet for common operations, PR workflows, recovery, load when actively using git
 triggers:
   - tool:git
   - tool:gh
@@ -100,7 +100,7 @@ git cherry-pick <sha>                           # apply a single commit to curre
 
 **For dangerous recovery** (`reset --hard`, `clean -f`, `branch -D`, `push --force`), see the dangerous-command table in [`rules/git.md`](../rules/git.md). Always confirm first.
 
-## Rebase (local only — see rules for public-history caveat)
+## Rebase (local only: see rules for public-history caveat)
 
 ```bash
 git fetch origin
@@ -111,7 +111,7 @@ git rebase --abort                              # give up, restore pre-rebase st
 
 Do NOT rebase branches others have pulled unless you've coordinated.
 
-## `gh` — GitHub CLI patterns
+## `gh`: GitHub CLI patterns
 
 ### PRs
 

@@ -185,7 +185,7 @@ class Banner:
         inner = self.width - 2
         orn_cost = len(orn) * 2
         if inner <= orn_cost + 4:
-            # Too narrow for ornaments — plain fill
+            # Too narrow for ornaments: plain fill
             return t["sep_left"] + t["h_fill"] * inner + t["sep_right"]
         # Distribute fill proportionally: ~25% left, ~65% middle, rest right
         available = inner - orn_cost

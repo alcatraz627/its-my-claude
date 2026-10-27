@@ -6,7 +6,7 @@ Rules engine that maps app attributes to recommended App Store promotional featu
 
 1. Identify the app's monetization model, lifecycle stage, and category
 2. Look up each dimension in the tables below
-3. Combine recommendations — features appearing in multiple dimensions get higher priority
+3. Combine recommendations: features appearing in multiple dimensions get higher priority
 4. Apply the priority scoring at the bottom
 
 ---
@@ -30,7 +30,7 @@ Rules engine that maps app attributes to recommended App Store promotional featu
 ### Paid Upfront Apps
 | Feature | Relevance | Rationale |
 |---------|-----------|-----------|
-| Product Page Optimization | **Essential** | Every visitor must convert — optimize the page |
+| Product Page Optimization | **Essential** | Every visitor must convert: optimize the page |
 | Custom Product Pages | **High** | Tailor messaging to different ad campaigns |
 | Featuring Nomination | **High** | Paid apps benefit enormously from editorial features |
 | In-App Events | **Medium** | Content updates give reasons to buy |
@@ -46,7 +46,7 @@ Rules engine that maps app attributes to recommended App Store promotional featu
 | Product Page Optimization | **Essential** | Optimize for download (first conversion) |
 | Custom Product Pages | **High** | Different pages for different user types |
 | In-App Events | **High** | Events drive engagement → IAP conversion |
-| Featuring Nomination | **Medium** | Volume-based — more downloads = more IAP |
+| Featuring Nomination | **Medium** | Volume-based: more downloads = more IAP |
 | Offer Codes | **Medium** | Premium feature trials for hesitant users |
 | App Store Assets | **Medium** | Showcase premium features in screenshots |
 | Pre-Orders | **Low** | Only for major launches |
@@ -225,7 +225,7 @@ If the app serves multiple distinct audiences, recommend Custom Product Pages.
 
 | Feature | Minimum Threshold | Below Threshold | Alternative |
 |---------|-------------------|-----------------|-------------|
-| **Product Page Optimization** | ~1,000 impressions/week | Tests never reach statistical significance; you'll wait months for inconclusive results | Make qualitative improvements directly — follow screenshot best practices, don't A/B test |
+| **Product Page Optimization** | ~1,000 impressions/week | Tests never reach statistical significance; you'll wait months for inconclusive results | Make qualitative improvements directly: follow screenshot best practices, don't A/B test |
 | **Custom Product Pages** | ~5,000 impressions/month | Not enough traffic per page to measure effectiveness; splits your already-thin traffic further | Optimize your single default page first; only create CPPs when you have volume to split |
 | **Product Page Optimization + CPP combo** | ~10,000 impressions/month | Can't run PPO tests on individual CPPs meaningfully | Focus on PPO for default page only, add CPPs later |
 
@@ -305,9 +305,9 @@ After evaluating all dimensions, score each feature:
 
 | Score | Criteria | Priority |
 |-------|----------|----------|
-| 4-5 | Appears as Essential/High in 3+ dimensions | 🔴 High — implement first |
-| 2-3 | Appears as Essential/High in 1-2 dimensions | 🟠 Medium — implement second |
-| 0-1 | Appears as Medium/Low or N/A in most dimensions | 🟢 Nice to Have — implement if time permits |
+| 4-5 | Appears as Essential/High in 3+ dimensions | 🔴 High: implement first |
+| 2-3 | Appears as Essential/High in 1-2 dimensions | 🟠 Medium: implement second |
+| 0-1 | Appears as Medium/Low or N/A in most dimensions | 🟢 Nice to Have: implement if time permits |
 
 ### Tiebreakers
 When two features score equally:

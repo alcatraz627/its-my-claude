@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bare-id-cluster-stop.sh — Stop hook: stop a closing reply that lists ids with
+# bare-id-cluster-stop.sh: Stop hook: stop a closing reply that lists ids with
 # no words saying what they are, once per message.
 #
 # THE FAILURE. Asked "show me what is pending on me", an agent replies with

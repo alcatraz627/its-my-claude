@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# archive-runtime-notes.sh — keep a runtime-notes.md lean by moving its oldest
+# archive-runtime-notes.sh: keep a runtime-notes.md lean by moving its oldest
 # entries into a quarterly archive file that lives next to it.
 #
 # Mechanical twin of the /archive-notes skill (same split rules, same archive

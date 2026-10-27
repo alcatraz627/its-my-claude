@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# guard-system-dir-writes.sh — PreToolUse(Bash): block DESTRUCTIVE WRITES to
+# guard-system-dir-writes.sh: PreToolUse(Bash): block DESTRUCTIVE WRITES to
 # system directories while allowing reads, arguments, and user-writable paths.
 #
 # Replaces 13 over-broad permissions.deny substring rules (Bash(* /etc*) etc.)
-# that denied ANY command merely naming a system path — reads, flag values,
+# that denied ANY command merely naming a system path: reads, flag values,
 # even an echo comment. This matches only write FORMS (redirect / tee / dd /
 # rm / chmod|chown -R) aimed at a protected root, so `cat /etc/hosts` and
 # `foo --tty /dev/ttys010` pass, while `echo x > /etc/hosts` is blocked.
@@ -11,7 +11,7 @@
 # Protected roots: classic system dirs that should never take an agent write.
 # Deliberately NOT protected (legit writes happen there): /usr/local, /tmp,
 # /private, /Volumes, /dev, and anything under $HOME. macOS SIP already blocks
-# writes to /System, /bin, /usr/bin regardless — this is the human-error net.
+# writes to /System, /bin, /usr/bin regardless: this is the human-error net.
 #
 # Override (rare): touch ~/.claude/.allow-system-writes
 
@@ -53,7 +53,7 @@ if norm=$(printf '%s' "$cmd" | python3 "$HOME/.claude/scripts/hooks/shellparse.p
 fi
 
 # Protected system roots (regex alternation). Each followed by / or word-end so
-# "/etcetera" or "/booth" do NOT match — only the real dir.
+# "/etcetera" or "/booth" do NOT match: only the real dir.
 ROOTS='etc|System|Library|bin|sbin|boot|root|sys|proc'
 END='(/|[[:space:]]|$)'
 
@@ -81,7 +81,7 @@ touch ~/.claude/.allow-system-writes" \
   exit 0
 }
 
-# 1. redirect (>, >>, 2>, &>) into a protected root — zero-or-more spaces after op
+# 1. redirect (>, >>, 2>, &>) into a protected root: zero-or-more spaces after op
 printf '%s' "$scan" | rg -q "${A}>>?[[:space:]]*/($ROOTS)$END" \
   && block "redirect into a system dir: $cmd"
 # 2. tee (any flags) writing a protected root

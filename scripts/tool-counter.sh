@@ -30,7 +30,7 @@ esac
 COUNTER_FILE="/tmp/claude-tools-${PPID}"
 
 # Drop the tally if a /clear happened this process. /clear does not restart the
-# process, so PPID (hence this file) persists — a source==clear SessionStart
+# process, so PPID (hence this file) persists: a source==clear SessionStart
 # injector leaves a session-keyed sentinel that hook_clear_reset acts on here,
 # where the correct PPID is known. Idempotent (the rewrite below beats it).
 _hc="$HOME/.claude/scripts/hooks/hook-common.sh"
@@ -48,7 +48,7 @@ _unlock() { rmdir "$LOCK_DIR" 2>/dev/null || true; }
 trap _unlock EXIT
 
 if ! _lock; then
-  # Failed to acquire lock after retries — skip this increment rather than block
+  # Failed to acquire lock after retries: skip this increment rather than block
   exit 0
 fi
 
@@ -79,10 +79,10 @@ mv -f "$tmp" "$COUNTER_FILE"
 
 _unlock
 
-# Auto-checkpoint nudges — recurring every 30 tools (30, 60, 90, …), not a
+# Auto-checkpoint nudges: recurring every 30 tools (30, 60, 90, …), not a
 # one-shot, and suppressed right after a checkpoint so a fresh /core-dump doesn't
 # get nagged. The mkdir lock above serializes increments, so the total passes
-# through each exact multiple of 30 — modulo never skips one.
+# through each exact multiple of 30: modulo never skips one.
 new_total=$(grep '^_total=' "$COUNTER_FILE" 2>/dev/null | cut -d= -f2)
 new_total=${new_total:-0}
 

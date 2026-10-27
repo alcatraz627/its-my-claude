@@ -70,11 +70,11 @@ Read the user's code or error messages to determine:
 ### 2. Load Relevant Reference Files
 
 Based on the problem, read from this directory:
-- `swift62-concurrency.md` — Swift 6.2 approachable concurrency features
-- `structured-concurrency.md` — async let, TaskGroup, .task modifier lifecycle
-- `actors-and-isolation.md` — Actor patterns, reentrancy, @MainActor, Sendable
-- `continuations-bridging.md` — withCheckedContinuation, AsyncStream, legacy bridging
-- `migration-guide.md` — Incremental Swift 6 strict concurrency adoption
+- `swift62-concurrency.md`: Swift 6.2 approachable concurrency features
+- `structured-concurrency.md`: async let, TaskGroup, .task modifier lifecycle
+- `actors-and-isolation.md`: Actor patterns, reentrancy, @MainActor, Sendable
+- `continuations-bridging.md`: withCheckedContinuation, AsyncStream, legacy bridging
+- `migration-guide.md`: Incremental Swift 6 strict concurrency adoption
 
 ### 3. Review Checklist
 

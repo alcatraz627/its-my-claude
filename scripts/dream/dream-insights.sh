@@ -12,7 +12,7 @@
 #
 # The dream half is OFF BY DEFAULT. It was ~1800 chars every session
 # at a measured ~0 of ~922 promoted insights ever becoming a gcc change, it cannot
-# be conversion-measured (acting on it leaves no machine residue — see
+# be conversion-measured (acting on it leaves no machine residue: see
 # ledger/acted.toml, which excludes it for exactly this reason), and it is now
 # redundant: migration 0031 routes high-confidence dream insights onto the
 # improvement backlog, where they get a real decision at /backlog-triage.
@@ -31,7 +31,7 @@ DREAM_ON_FLAG="$SUBCON/.inject-on"
 
 DREAM_ENABLED=0
 [ -f "$DREAM_ON_FLAG" ] && DREAM_ENABLED=1
-# Test/preview override — lets acceptance runs exercise the dream half
+# Test/preview override: lets acceptance runs exercise the dream half
 # without flipping the machine-wide flag.
 [ "${INJECT_DREAM:-}" = "1" ] && DREAM_ENABLED=1
 
@@ -47,12 +47,12 @@ part_mode = sys.argv[4] if len(sys.argv) > 4 else 'all'
 
 parts = []
 
-# Parts 1 & 2 (the dream half) are gated OFF by default — see the header. The
+# Parts 1 & 2 (the dream half) are gated OFF by default: see the header. The
 # atone TL;DR (Part 3) below always runs. When the dream half is disabled we skip
 # straight to it, so a session pays for the mistake-pattern reminder and nothing
 # more.
 
-# Part 1: Digest summary — dieted to ~2 sentences + pointer (B4 subtraction
+# Part 1: Digest summary: dieted to ~2 sentences + pointer (B4 subtraction
 # experiment, owner ruling; A3 curves measure the expectation of no degradation).
 if dream_enabled and part_mode != 'ranked' and os.path.isfile(digest_path):
     try:
@@ -91,7 +91,7 @@ if dream_enabled and part_mode != 'ranked' and os.path.isfile(digest_path):
 # five things into every session at measured ~0 efficacy; this ranks by
 # importance × recency × relevance to THIS session's query (cwd path tokens
 # + optional INJECT_QUERY, which a future first-prompt hook can supply).
-# Deliberately no vector DB, no embeddings — keyword/path overlap only.
+# Deliberately no vector DB, no embeddings: keyword/path overlap only.
 if dream_enabled:
     try:
         view_path = os.path.expanduser(
@@ -103,7 +103,7 @@ if dream_enabled:
                 view = json.load(f)
             # Accept both the ViewFile wrapper and a bare list. (The old
             # one-liner called .get() on a list and the fallback was dead
-            # code — validation 2026-07-13 finding 4.)
+            # code: validation 2026-07-13 finding 4.)
             if isinstance(view, list):
                 view_items = view
             elif isinstance(view, dict):
@@ -114,8 +114,8 @@ if dream_enabled:
         # the future prompt-conditioned lane.
         raw_query = os.environ.get('INJECT_QUERY', '')
         # A byte-capped env value can arrive with a torn multibyte character
-        # (surrogateescape); normalize now so no later strict re-encode —
-        # logging, JSON round-trip — can ever throw on it.
+        # (surrogateescape); normalize now so no later strict re-encode:
+        # logging, JSON round-trip: can ever throw on it.
         raw_query = raw_query.encode('utf-8', 'replace').decode('utf-8', 'replace')
         cwd = os.environ.get('INJECT_CWD') or os.environ.get('PWD', '')
         query_tokens = set()
@@ -151,7 +151,7 @@ if dream_enabled:
 
         # Score per item under its own guard, so one corrupt item costs only
         # itself instead of blanking the whole section (validation 2026-07-13
-        # finding 5 — the item-14 tolerant-reader principle, applied here).
+        # finding 5: the item-14 tolerant-reader principle, applied here).
         scored = []
         for it in view_items:
             if not isinstance(it, dict) or not it.get('is_representative', True):
@@ -166,12 +166,12 @@ if dream_enabled:
         ranked = [it for (_s, it) in scored[:top_n]]
         # The prompt lane only speaks when it has something NEW: if the
         # re-ranked top-5 matches the last dream injection (either lane), it
-        # stays silent — SessionStart already delivered exactly this set.
+        # stays silent: SessionStart already delivered exactly this set.
         # Tolerant per-line read: a malformed ledger line costs only itself.
         ranked_ids = [it.get('stable_id', '') for it in ranked]
         if ranked and part_mode == 'ranked':
             try:
-                # Dedupe against what THIS session was shown — records are
+                # Dedupe against what THIS session was shown: records are
                 # matched by sid, never globally: the last global entry may
                 # belong to a different concurrent session, and matching it
                 # would silently starve this one (gate finding 1, 2026-07-14).
@@ -192,7 +192,7 @@ if dream_enabled:
                                     and obj.get('sid') == my_sid):
                                 last_ids = obj.get('ids')
                 # Speak only when something is NEW vs the last injection this
-                # session saw — a subset re-delivery is noise (gate MAJOR-2:
+                # session saw: a subset re-delivery is noise (gate MAJOR-2:
                 # exact-match dedupe died when session/prompt lane sizes split).
                 if last_ids and not [i for i in ranked_ids if i not in last_ids]:
                     ranked = []
@@ -318,7 +318,7 @@ header = (
     "patterns from the atone system. Behavioral directives — read once per session._\n\n"
 )
 
-# The prompt lane emits only its own section — the SessionStart block already
+# The prompt lane emits only its own section: the SessionStart block already
 # delivered the header and the atone TL;DR.
 # Without the dream half the long header only repeats what the section title says.
 content = ("\n\n".join(parts) if part_mode == 'ranked' or not dream_enabled

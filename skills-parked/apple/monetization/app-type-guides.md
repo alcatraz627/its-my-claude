@@ -25,7 +25,7 @@ Basic themes                Custom themes + icons
                             Reminders + notifications
 ```
 
-**Key insight:** The sync paywall is powerful — users want their data everywhere. But make sure the free tier is genuinely useful on a single device.
+**Key insight:** The sync paywall is powerful: users want their data everywhere. But make sure the free tier is genuinely useful on a single device.
 
 **Pricing range:** $3.99-6.99/mo or $29.99-49.99/yr or $29.99-79.99 lifetime
 
@@ -54,10 +54,10 @@ Basic mood tracking         Advanced insights + trends
 ```
 
 **Key insights:**
-- **Free trial is essential** (14 days minimum) — users need time to feel the benefit
+- **Free trial is essential** (14 days minimum): users need time to feel the benefit
 - **Don't gate crisis/safety features** behind paywall (ethical + legal risk)
 - **Show progress** during trial ("You've meditated 8 days in a row")
-- Wellness users are sensitive to "paying for mental health" — frame as investment, not transaction
+- Wellness users are sensitive to "paying for mental health": frame as investment, not transaction
 - Consider **annual-only** pricing to encourage long-term commitment
 
 **Pricing range:** $5.99-12.99/mo or $39.99-79.99/yr
@@ -102,12 +102,12 @@ Core features               Activity packs
 ```
 
 **Key insights:**
-- **COPPA compliance is mandatory** — no behavioral advertising for under-13
-- **Family Sharing is expected** — parents don't want to pay per device
-- **No ads in kids apps** — Apple explicitly prohibits third-party ads in kids category
+- **COPPA compliance is mandatory**: no behavioral advertising for under-13
+- **Family Sharing is expected**: parents don't want to pay per device
+- **No ads in kids apps**: Apple explicitly prohibits third-party ads in kids category
 - Parents prefer **annual subscriptions** or **one-time purchases** over monthly
 - **Show learning outcomes** to parents to justify price
-- **Gift-ability matters** — grandparents buy educational apps
+- **Gift-ability matters**: grandparents buy educational apps
 
 **Pricing range:** $4.99-9.99/mo family or $2.99-4.99 per content pack
 
@@ -183,9 +183,9 @@ Standard media uploads      Higher upload limits
 - **Never paywall core social features** (posting, messaging, following)
 - Cosmetic upgrades (badges, themes) are high-margin, low-controversy
 - Power users (moderators, content creators) will pay for tools
-- Social apps live or die on engagement — free tier must be excellent
+- Social apps live or die on engagement: free tier must be excellent
 
-**Pricing range:** $1.99-4.99/mo (keep low — social users are price-sensitive)
+**Pricing range:** $1.99-4.99/mo (keep low: social users are price-sensitive)
 
 ---
 
@@ -219,7 +219,7 @@ Community support           Priority support
 ```
 
 **Key insights:**
-- **Developers respect paid software** — don't race to the bottom
+- **Developers respect paid software**: don't race to the bottom
 - SetApp distribution can supplement App Store revenue
 - Consider **education discount** (student/teacher)
 - **License key + direct distribution** as alternative to App Store (keep 100%)
@@ -252,9 +252,9 @@ Monthly summary             Trends, insights, projections
 
 **Key insights:**
 - **"This app saves you $X/month"** is the strongest conversion argument
-- Bank sync (Plaid) is expensive — subscription justifies the per-user cost
+- Bank sync (Plaid) is expensive: subscription justifies the per-user cost
 - Users trust paid apps more with financial data (paradoxically)
-- Annual pricing works well — aligns with yearly financial planning
+- Annual pricing works well: aligns with yearly financial planning
 - **Free tier should prove value first** (manual entry → show insights → upgrade for sync)
 
 **Pricing range:** $4.99-12.99/mo or $39.99-99.99/yr
@@ -281,7 +281,7 @@ Standard theme              All themes
 ```
 
 **Key insights:**
-- **Keep it cheap** — utilities are commodity products
+- **Keep it cheap**: utilities are commodity products
 - Widgets and Watch complications are strong upsell features
 - One-time purchase feels right for utilities (no ongoing relationship)
 - Consider **tip jar** as alternative if app is simple but beloved
@@ -314,9 +314,9 @@ EXTRA CREDITS: 100 for $1.99, 500 for $7.99
 
 **Key insights:**
 - **Usage limits on free tier must feel generous** enough to hook users
-- Transparently communicate what costs money (API calls) — builds trust
-- Consider **daily reset** for free credits (not monthly — daily feels more generous)
+- Transparently communicate what costs money (API calls): builds trust
+- Consider **daily reset** for free credits (not monthly: daily feels more generous)
 - **Model quality** as upsell is well-accepted (GPT-3.5 free, GPT-4 paid)
-- Monitor per-user cost carefully — heavy users can be unprofitable
+- Monitor per-user cost carefully: heavy users can be unprofitable
 
 **Pricing range:** $6.99-19.99/mo (must cover API costs + margin)

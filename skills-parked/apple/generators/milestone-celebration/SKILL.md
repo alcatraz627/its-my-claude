@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Milestone Celebration Generator
 
-Generate a production milestone celebration system with confetti particle animations via `CAEmitterLayer`, achievement badge views with locked/unlocked states, a celebration overlay with spring animations, haptic feedback, and optional shareable achievement cards — all triggered automatically when users hit key thresholds.
+Generate a production milestone celebration system with confetti particle animations via `CAEmitterLayer`, achievement badge views with locked/unlocked states, a celebration overlay with spring animations, haptic feedback, and optional shareable achievement cards: all triggered automatically when users hit key thresholds.
 
 ## When This Skill Activates
 
@@ -23,7 +23,7 @@ Use this skill when the user:
 ### 1. Project Context Detection
 - [ ] Check Swift version (requires Swift 5.9+)
 - [ ] Check deployment target (iOS 17+ / macOS 14+ for `@Observable`, spring animations, `sensoryFeedback`)
-- [ ] Check for `UIKit` availability (iOS — `CAEmitterLayer` for confetti, haptics)
+- [ ] Check for `UIKit` availability (iOS: `CAEmitterLayer` for confetti, haptics)
 - [ ] Identify source file locations
 
 ### 2. Conflict Detection
@@ -51,16 +51,16 @@ Ask user via AskUserQuestion:
    - Custom (user defines their own celebration style)
 
 2. **Haptic feedback?**
-   - Yes — success haptic on celebration trigger (recommended)
-   - No — silent celebrations only
+   - Yes: success haptic on celebration trigger (recommended)
+   - No: silent celebrations only
 
 3. **Shareable achievement card?**
-   - Yes — render achievement as image for social sharing via `ShareLink`
-   - No — in-app celebration only
+   - Yes: render achievement as image for social sharing via `ShareLink`
+   - No: in-app celebration only
 
 4. **Sound effects?**
-   - Yes — play system sound or bundled audio on celebration
-   - No — visual only
+   - Yes: play system sound or bundled audio on celebration
+   - No: visual only
 
 ## Generation Process
 
@@ -69,19 +69,19 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `Milestone.swift` — Model with id, title, description, threshold, icon, unlock state. `Codable` + `Sendable`.
-2. `MilestoneTracker.swift` — `@Observable` class tracking progress toward milestones, checking thresholds, triggering celebrations. Persists unlock state via `UserDefaults` or file storage.
-3. `ConfettiView.swift` — `UIViewRepresentable` wrapping `CAEmitterLayer` for confetti particle animation. Configurable colors, duration, density. Respects Reduce Motion.
+1. `Milestone.swift`: Model with id, title, description, threshold, icon, unlock state. `Codable` + `Sendable`.
+2. `MilestoneTracker.swift`: `@Observable` class tracking progress toward milestones, checking thresholds, triggering celebrations. Persists unlock state via `UserDefaults` or file storage.
+3. `ConfettiView.swift`: `UIViewRepresentable` wrapping `CAEmitterLayer` for confetti particle animation. Configurable colors, duration, density. Respects Reduce Motion.
 
 ### Step 3: Create UI Files
-4. `CelebrationOverlay.swift` — Full-screen overlay combining confetti + badge reveal + congratulations message. Auto-dismisses after configurable duration. Uses `withAnimation(.spring)`.
-5. `MilestoneBadgeView.swift` — Individual badge view with locked/unlocked states, SF Symbol icon, progress ring for partial progress.
-6. `MilestoneCollectionView.swift` — Grid layout of all milestones showing locked/unlocked state with progress indicators.
+4. `CelebrationOverlay.swift`: Full-screen overlay combining confetti + badge reveal + congratulations message. Auto-dismisses after configurable duration. Uses `withAnimation(.spring)`.
+5. `MilestoneBadgeView.swift`: Individual badge view with locked/unlocked states, SF Symbol icon, progress ring for partial progress.
+6. `MilestoneCollectionView.swift`: Grid layout of all milestones showing locked/unlocked state with progress indicators.
 
 ### Step 4: Create Optional Files
 Based on configuration:
-- `HapticManager.swift` — If haptic feedback selected (thin wrapper around `UINotificationFeedbackGenerator` / `UIImpactFeedbackGenerator`)
-- `ShareableMilestoneCard.swift` — If shareable selected (renders milestone as image via `ImageRenderer` + `ShareLink`)
+- `HapticManager.swift`: If haptic feedback selected (thin wrapper around `UINotificationFeedbackGenerator` / `UIImpactFeedbackGenerator`)
+- `ShareableMilestoneCard.swift`: If shareable selected (renders milestone as image via `ImageRenderer` + `ShareLink`)
 
 ### Step 5: Determine File Location
 Check project structure:
@@ -241,7 +241,7 @@ func celebrationOverlayAutoDismisses() async throws {
 Best for: fitness, learning, productivity apps.
 - Define milestones with numeric thresholds (10 workouts, 100 pages read, 7-day streak)
 - `MilestoneTracker` checks values against registered milestones
-- Celebration fires only on the first crossing — subsequent calls are no-ops
+- Celebration fires only on the first crossing: subsequent calls are no-ops
 - Persist unlock state so celebrations do not repeat
 
 ### Badge Collection View
@@ -264,24 +264,24 @@ Best for: social apps, fitness, competitions.
 - Confetti with many particles (200+) can drop frames on A11 and older chips
 - Cap `birthRate` at 50-80 for smooth 60fps on most devices
 - Use `emitterCells` with only 3-5 distinct shapes to reduce GPU draw calls
-- Stop emission after burst duration — do not leave the emitter running indefinitely
+- Stop emission after burst duration: do not leave the emitter running indefinitely
 - Profile with Instruments (Core Animation template) if users report frame drops
 
 ### Reduce Motion Accessibility
 - Always check `UIAccessibility.isReduceMotionEnabled` before starting particle animations
 - When Reduce Motion is on: skip confetti, show a static badge reveal or a simple fade-in instead
 - Use `@Environment(\.accessibilityReduceMotion)` in SwiftUI for reactive updates
-- Provide an equally rewarding experience without animation — the badge reveal and message still appear
+- Provide an equally rewarding experience without animation: the badge reveal and message still appear
 
 ### Haptic Feedback on Non-Supporting Devices
 - `UINotificationFeedbackGenerator` is a no-op on devices without a Taptic Engine (e.g., iPod touch, iPad)
 - Always guard with `CHHapticEngine.capabilitiesForHardware().supportsHaptics` before preparing generators
-- On macOS, haptics are not available — gate with `#if canImport(UIKit)` and `#if os(iOS)`
+- On macOS, haptics are not available: gate with `#if canImport(UIKit)` and `#if os(iOS)`
 - Use `.sensoryFeedback(.success, trigger:)` modifier on iOS 17+ for a simpler SwiftUI-native approach
 
 ### Sound Effect Considerations
 - Use `AudioServicesPlaySystemSound` for lightweight celebration sounds (no audio session needed)
-- Respect the device silent/mute switch — `AudioServicesPlaySystemSound` honors it automatically
+- Respect the device silent/mute switch: `AudioServicesPlaySystemSound` honors it automatically
 - For custom sounds, keep files under 30 seconds and use CAF or WAV format
 - Do not play sounds when Reduce Motion is enabled (some users enable it for sensory reasons)
 
@@ -293,7 +293,7 @@ Best for: social apps, fitness, competitions.
 
 ## References
 
-- **templates.md** — All production Swift templates
-- Related: `generators/streak-tracker` — Streak tracking pairs naturally with milestone celebrations
-- Related: `generators/share-card` — Shareable achievement card rendering and social sharing
-- Related: `generators/variable-rewards` — Variable reward schedules for deeper engagement
+- **templates.md**: All production Swift templates
+- Related: `generators/streak-tracker`: Streak tracking pairs naturally with milestone celebrations
+- Related: `generators/share-card`: Shareable achievement card rendering and social sharing
+- Related: `generators/variable-rewards`: Variable reward schedules for deeper engagement

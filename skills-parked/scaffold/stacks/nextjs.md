@@ -1,4 +1,4 @@
-# Next.js 15 — App Router + TypeScript + Tailwind
+# Next.js 15: App Router + TypeScript + Tailwind
 
 ## Meta
 - Runtime: node

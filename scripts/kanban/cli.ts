@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-// Agent-facing CLI behind kanban.sh — mutates only board.json/ack.json (never
+// Agent-facing CLI behind kanban.sh: mutates only board.json/ack.json (never
 // notes.json, the server's), emits digest-sized deltas, refusals propose fixes.
 
 import * as fs from "node:fs";
@@ -692,7 +692,7 @@ switch (verb) {
       const m = findMilestone(plan, name);
       if (!m) die(`no milestone ${name} on ${slug}`, "kanban.sh milestone list");
       // Ruling D6c: warn on a state mismatch rather than papering over it. The
-      // blocked card is the one that matters — `done` sweeps open cards into
+      // blocked card is the one that matters: `done` sweeps open cards into
       // done, and sweeping a BLOCKED card discards a real signal about why it
       // could not finish.
       if (sub === "done") {
@@ -924,7 +924,7 @@ switch (verb) {
     break;
   }
   // The owner's pending writing. Reads items.json without the server, so a
-  // sweep works when the board is down — the same reason ack is a CLI verb.
+  // sweep works when the board is down: the same reason ack is a CLI verb.
   case "items": {
     const { items, landings } = itemStore();
     // Sweep landings whose ask is gone. The CLI owns this file, so the delete
@@ -1494,7 +1494,7 @@ switch (verb) {
     // A bare `kanban.sh` is a help request and exits 0. An UNKNOWN verb is a
     // mistake and exits 1: it used to print help and succeed, so a typo inside a
     // batch reported "ok" and the run looked clean while doing nothing. Anything
-    // driving this by exit code — batch, a shell script, CI — was being told a
+    // driving this by exit code: batch, a shell script, CI: was being told a
     // typo had worked.
     if (verb !== "help" && verb !== "--help" && verb !== "-h" && args.length) {
       process.exitCode = 1;

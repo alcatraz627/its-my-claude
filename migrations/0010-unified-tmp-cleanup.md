@@ -6,7 +6,7 @@ status: complete
 date: 2026-05-17
 ---
 
-# Migration 0010 — Unified /tmp/claude-* Cleanup
+# Migration 0010: Unified /tmp/claude-* Cleanup
 
 ## Why
 
@@ -38,7 +38,7 @@ The new script iterates a list of known prefixes (tab, turns, tools, edits, time
 
 - Cleanup cadence (once per startup, login-triggered LaunchAgent)
 - Default retention (7 days)
-- Source-of-truth scripts that WRITE the files — unchanged; cleanup is independent
+- Source-of-truth scripts that WRITE the files: unchanged; cleanup is independent
 - Other startup tasks (`20-prune-transcripts.sh`, `30-retro-checkpoint-flush.sh`, `40-archive-scratch-checkpoints.sh`)
 
 ## Verification
@@ -60,6 +60,6 @@ mv ~/.claude/scripts/startup/tasks/10-cleanup-tmp-state.sh \
 
 ## Phases
 
-1. **Phase 1** — Write new unified script ✅
-2. **Phase 2** — Dry-run validation ⏳
-3. **Phase 3** — Trash old `10-cleanup-tab-state.sh` ⏳
+1. **Phase 1**: Write new unified script ✅
+2. **Phase 2**: Dry-run validation ⏳
+3. **Phase 3**: Trash old `10-cleanup-tab-state.sh` ⏳

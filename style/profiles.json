@@ -1,0 +1,178 @@
+{
+  "_about": "How each prose surface treats each writing tell. Tell ids come from ~/.claude/assets/reports/20261027-prose-capability-scour/p0-tells.md; the patterns themselves live in style/thesaurus.jsonl and scripts/style/prose-lint.py. Owner rulings 2026-10-27 (decision page prose-consolidation-p1): D1a this file, D2a verdict opener blocks in files and commits and advises in chat, D3a sentence caps, D4a zero em-dash budget everywhere, D5c doc-writing.md governs every human-facing doc. A tell no ruling covers records today's behaviour unchanged.",
+  "actions": {
+    "block": "the gate refuses the reply, write or commit",
+    "block-pair": "counts toward a block when two or more block-pair tells appear together (chat only)",
+    "warn": "a note to the agent; nothing is refused",
+    "score": "adds its weight to the prose-lint score; a score above lint_score_block blocks",
+    "off": "not checked on this surface"
+  },
+  "surfaces": {
+    "chat": "the agent's final reply (format-gate-stop.sh)",
+    "doc": "markdown, html and txt written by Edit or Write (guard-prose-quality.sh, doc-voice-gate.py)",
+    "commit": "lines a commit adds to gcc docs (git-prose-gate.py)",
+    "github": "text bound for GitHub (guard-gh-prose.py)",
+    "deck": "slides (scripts/deck/lint.py)",
+    "word": "Word docs (scripts/word-doc/lint.py)",
+    "comment": "code comments (guard-comment-hygiene.sh, cleanup-comments)",
+    "ui_string": "user-facing string literals in code (code-copy-lint.py)"
+  },
+  "caps": {
+    "sentence_words": {
+      "doc": 25,
+      "deck": 25,
+      "word": 30,
+      "procedure": 20,
+      "chat": null
+    },
+    "lint_score_block": 8,
+    "chat_prose_chars": {
+      "warn": 1500,
+      "block": 2600
+    }
+  },
+  "tells": {
+    "em-dash": {
+      "pattern": "any U+2014, irrespective of usage (D4a)",
+      "chat": "block",
+      "doc": "block",
+      "commit": "block",
+      "github": "block",
+      "deck": "block",
+      "word": "block",
+      "comment": "warn",
+      "ui_string": "block"
+    },
+    "verdict-opener": {
+      "chat": "warn",
+      "doc": "block",
+      "commit": "block",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "praise-opener": {
+      "chat": "block-pair",
+      "doc": "off",
+      "commit": "off",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "label-fragment": {
+      "chat": "block-pair",
+      "doc": "off",
+      "commit": "off",
+      "github": "off",
+      "deck": "off",
+      "word": "warn",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "bold-spam": {
+      "chat": "block-pair",
+      "doc": "off",
+      "commit": "off",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "decoration-emoji": {
+      "chat": "block-pair",
+      "doc": "off",
+      "commit": "off",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "warn",
+      "ui_string": "off"
+    },
+    "contrastive-scaffold": {
+      "chat": "warn",
+      "doc": "score",
+      "commit": "score",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "contrast-list": {
+      "chat": "off",
+      "doc": "score",
+      "commit": "block",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "sentence-length": {
+      "chat": "off",
+      "doc": "score",
+      "commit": "score",
+      "github": "off",
+      "deck": "warn",
+      "word": "warn",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "lint-score-block": {
+      "chat": "off",
+      "doc": "block",
+      "commit": "block",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "jargon-marketing": {
+      "chat": "off",
+      "doc": "score",
+      "commit": "score",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "block"
+    },
+    "unverified-claim": {
+      "chat": "off",
+      "doc": "score",
+      "commit": "score",
+      "github": "off",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "block"
+    },
+    "dense-block": {
+      "chat": "off",
+      "doc": "warn",
+      "commit": "off",
+      "github": "block",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    },
+    "spliced-line": {
+      "chat": "off",
+      "doc": "warn",
+      "commit": "off",
+      "github": "block",
+      "deck": "off",
+      "word": "off",
+      "comment": "off",
+      "ui_string": "off"
+    }
+  },
+  "open": "Tells not listed here keep their current single-detector behaviour until P2 moves them into the engine; p0-tells.md lists all 70."
+}

@@ -1,6 +1,6 @@
 ---
 name: project-index
-description: Scans the project structure, key files, dependencies, and architectural patterns — generates a comprehensive index markdown and optional HTML report. Runs in an isolated forked context to avoid polluting main conversation with hundreds of file reads.
+description: Scans the project structure, key files, dependencies, and architectural patterns, generates a comprehensive index markdown and optional HTML report. Runs in an isolated forked context to avoid polluting main conversation with hundreds of file reads.
 allowed-tools: Read, Write, Glob, Grep, Bash, Skill
 user-invocable: true
 argument-hint: "[latest | output_path]"
@@ -9,8 +9,8 @@ context: fork
 
 ## Brief
 
-Scans the project and writes a comprehensive index — directory structure, key files,
-dependencies, architectural patterns, key exports, and representative code snippets — to a
+Scans the project and writes a comprehensive index: directory structure, key files,
+dependencies, architectural patterns, key exports, and representative code snippets: to a
 markdown file, then optionally renders it as an HTML report. Runs in an isolated forked
 context so hundreds of file reads don't pollute the main conversation; the parent gets a short
 structured summary back, not the file dumps.
@@ -19,7 +19,7 @@ structured summary back, not the file dumps.
 
 This skill builds a navigable index of a project's structure so a reader (or a future skill
 run, or `/arch-qa`) can answer questions about the codebase without re-reading it. The body
-below is stack-agnostic — it detects the project's own conventions and indexes what it finds.
+below is stack-agnostic: it detects the project's own conventions and indexes what it finds.
 A worked example for one concrete stack lives in the appendix at the bottom.
 
 ## Usage
@@ -30,19 +30,19 @@ A worked example for one concrete stack lives in the appendix at the bottom.
 
 **Arguments:**
 
-- `latest` — Skip scanning. Regenerate the HTML report from the last saved index and open it.
+- `latest`: Skip scanning. Regenerate the HTML report from the last saved index and open it.
   If no previous index exists, say so and ask whether to run a fresh scan.
-- `output_path` (optional) — Where to save the index. Defaults to `.claude/project-index.md`.
+- `output_path` (optional): Where to save the index. Defaults to `.claude/project-index.md`.
 
 **Files this skill maintains:**
 
-- `.claude/project-index.md` — the generated index (overwritten each run)
-- `.claude/indexing-notes.md` — append-only run log; each entry dated, summarizing what changed
-- `.claude/output/<datetime>-project-index/` — timestamped HTML report folder from `/create-report`
+- `.claude/project-index.md`: the generated index (overwritten each run)
+- `.claude/indexing-notes.md`: append-only run log; each entry dated, summarizing what changed
+- `.claude/output/<datetime>-project-index/`: timestamped HTML report folder from `/create-report`
 
 ## Step 0: Load guidelines and prior context
 
-Read `.claude/skills/GUIDELINES.md` and apply its rules for the whole run — forbidden paths,
+Read `.claude/skills/GUIDELINES.md` and apply its rules for the whole run: forbidden paths,
 retry logic, tool preferences, verbosity, timeouts, post-run insights, and the **file lock
 protocol**. Acquire a lock via `lock-file.sh acquire` before any Edit/Write and release it
 immediately after.
@@ -50,10 +50,10 @@ immediately after.
 Read `.claude/skills/runtime-notes.md` for past run history relevant to this skill (continue
 without it if absent).
 
-If `.claude/project-index.md` already exists, read it in full and use it as a baseline — don't
+If `.claude/project-index.md` already exists, read it in full and use it as a baseline: don't
 re-discover what's confirmed unchanged. Concentrate scanning effort on what's most likely to
 have drifted: new directories, changed dependencies, new routes, new schema files. If
-`.claude/indexing-notes.md` exists, read it too — it records what has changed historically and
+`.claude/indexing-notes.md` exists, read it too: it records what has changed historically and
 which areas churn.
 
 ## Argument handling
@@ -70,7 +70,7 @@ Check the argument before doing anything else.
    ```
 3. If the file exists, run `/create-report .claude/project-index.md` (it renders a timestamped
    HTML report under `.claude/output/` and opens it), print `✓ Regenerated HTML report`, and
-   stop — run no scan steps.
+   stop: run no scan steps.
 
 **Otherwise**, continue to the scan workflow.
 
@@ -83,20 +83,20 @@ Check the argument before doing anything else.
 Identify the project's shape before scanning its contents. Look for the manifests and lockfiles
 that mark the ecosystem, and infer:
 
-- **Package/build manifest** — `package.json`, `pyproject.toml`/`requirements.txt`, `Cargo.toml`,
+- **Package/build manifest**: `package.json`, `pyproject.toml`/`requirements.txt`, `Cargo.toml`,
   `go.mod`, `pom.xml`/`build.gradle`, `Gemfile`, `composer.json`, etc.
-- **Package manager / toolchain** — read the lockfile (`package-lock.json`, `pnpm-lock.yaml`,
+- **Package manager / toolchain**: read the lockfile (`package-lock.json`, `pnpm-lock.yaml`,
   `yarn.lock`, `poetry.lock`, `Cargo.lock`, `go.sum`) and any `packageManager` / engines field.
-- **Monorepo markers** — `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, `turbo.json`,
+- **Monorepo markers**: `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, `turbo.json`,
   workspace globs in the manifest, or a top-level `packages/` / `apps/` split.
-- **Primary framework** — from the dependencies and entry-point files, not from assumption.
+- **Primary framework**: from the dependencies and entry-point files, not from assumption.
 
 Record the ecosystem you detected; it determines which patterns the later steps look for.
 
 ### Step 2: Map directory structure
 
 Use Glob to discover the directory tree, then describe each top-level (and important
-second-level) directory by what it actually contains — read a few files if a folder's purpose
+second-level) directory by what it actually contains: read a few files if a folder's purpose
 isn't obvious from its name. Capture the project's naming conventions as you go (kebab vs camel
 filenames, `*.server.ts` / `*.client.ts` style suffixes, route-group folders, etc.). Don't
 force a generic taxonomy onto the tree; describe the structure the project actually has.
@@ -111,7 +111,7 @@ Glob for the files a new reader would open first:
 **/.env*                       **/README*            **/Dockerfile*
 ```
 
-For each, note its purpose and any non-default settings. Identify the entry points — the file
+For each, note its purpose and any non-default settings. Identify the entry points: the file
 the runtime starts from, the root layout/app file, the server bootstrap, the CLI main.
 
 ### Step 4: Analyze dependencies
@@ -127,7 +127,7 @@ For each dependency, resolve a canonical link and write it as `[name](url) (vers
    `@tanstack/react-query`).
 2. **PyPI** → `https://pypi.org/project/<name>/`; **crates.io** → `https://crates.io/crates/<name>`;
    **Go** → `https://pkg.go.dev/<module>`.
-3. **Well-known GitHub-first packages** — prefer the canonical repo URL when you know it.
+3. **Well-known GitHub-first packages**: prefer the canonical repo URL when you know it.
 
 Example:
 
@@ -136,9 +136,9 @@ Example:
 - [fastapi](https://pypi.org/project/fastapi/) (^0.115) — async web framework
 ```
 
-### Step 5: Identify architectural patterns — detect the project's own pattern
+### Step 5: Identify architectural patterns: detect the project's own pattern
 
-The goal is to name how *this* project does state, data access, API calls, and styling — using
+The goal is to name how *this* project does state, data access, API calls, and styling: using
 evidence from its own files, not a fixed checklist. The method:
 
 1. **From the dependencies (Step 4), form a hypothesis.** A `jotai` dep suggests atom-based
@@ -154,7 +154,7 @@ evidence from its own files, not a fixed checklist. The method:
    enumerating every call site.
 
 Document, for each axis the project has: **state management**, **API/data communication**,
-**database/ORM**, **component organization**, and **styling** — one short paragraph each,
+**database/ORM**, **component organization**, and **styling**: one short paragraph each,
 grounded in a named example file. Omit an axis the project doesn't have (a CLI tool has no
 component layer; a pure library may have no styling).
 
@@ -163,17 +163,17 @@ component layer; a pure library may have no styling).
 A file-level index tells you `use-q.ts` exists but not that it exports `useQ`. This step adds a
 symbol-level reference table for the modules a consumer imports from most.
 
-1. **Pick the export-heavy modules** — utility/helper dirs, hooks, context factories, public
+1. **Pick the export-heavy modules**: utility/helper dirs, hooks, context factories, public
    API surfaces, shared type modules. These are where cross-cutting symbols live.
 2. **Grep for top-level named exports** using the construct for the project's language. Adapt
-   the pattern to what you see in the tree — a few examples:
+   the pattern to what you see in the tree: a few examples:
    - TypeScript/JS: `^export (function|const|class|type|interface|enum)` and
      `^export default`
    - Python: `^def `, `^class `, plus names listed in `__all__`
    - Rust: `^pub (fn|struct|enum|trait|const|type)`
    - Go: top-level identifiers with a capitalized first letter
 3. For each match capture **symbol**, **file** (relative, trim a common prefix for brevity), and
-   a one-line **description** — inferred from the name, or from the first doc-comment above it.
+   a one-line **description**: inferred from the name, or from the first doc-comment above it.
 
 **Include:** exported functions/hooks with meaningful names; exported enums/constants that act
 as reference tables (route maps, query-key factories, param-name enums); factory functions;
@@ -181,18 +181,18 @@ broadly-used type aliases. **Skip:** file-internal helpers, re-exports (they bel
 source module's row), trivially-named or boilerplate exports.
 
 Emit a `## Key Exports` markdown table (`Symbol | File | Description`). Prioritize the
-most-imported modules; aim for ~15–35 rows — a useful lookup table, not an exhaustive dump.
+most-imported modules; aim for ~15–35 rows: a useful lookup table, not an exhaustive dump.
 
 ### Step 6: Document component / module structure
 
 For projects with a UI layer, map the component hierarchy by directory (layout / common /
 feature folders, or whatever grouping the project uses). For non-UI projects, map the analogous
-unit — packages in a monorepo, services in a backend, command modules in a CLI. Use Glob to
+unit: packages in a monorepo, services in a backend, command modules in a CLI. Use Glob to
 enumerate, then group by directory.
 
 ### Step 6.5: Collect key code snippets
 
-Extract 6–10 short, representative snippets from the most architecturally significant files —
+Extract 6–10 short, representative snippets from the most architecturally significant files:
 the ones that show the project's core patterns, not boilerplate. Good candidates: the root
 provider/bootstrap, the data-model/schema definition, the data-access or query-client setup, a
 context/factory, one non-trivial example of the dominant pattern (a hook, an atom, a service),
@@ -249,7 +249,7 @@ run"), dependencies added/removed, notable architectural changes.
 
 ### Step 9: Append to indexing-notes.md
 
-After saving the index, append a dated entry to `.claude/indexing-notes.md` (append-only —
+After saving the index, append a dated entry to `.claude/indexing-notes.md` (append-only:
 never overwrite). Read the file first; create it with the header below if absent, else append.
 
 ```markdown
@@ -280,7 +280,7 @@ Append-only log of every `/project-index` run. Newest entries at the bottom.
 
 Feed the saved index to `/create-report .claude/project-index.md`. It reads the markdown,
 writes a timestamped HTML report to `.claude/output/<datetime>-project-index/` (three files:
-`index.html`, `styles.css`, `report.js`), and opens it. Don't run a separate `open` command —
+`index.html`, `styles.css`, `report.js`), and opens it. Don't run a separate `open` command:
 `create-report` handles it.
 
 If `/create-report` is unavailable, skip this step and tell the user:
@@ -311,7 +311,7 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "project-index" /tmp/runtim
 
 ## Return contract (parent-facing)
 
-This skill runs in a forked context, so the parent agent never sees the file reads — only what
+This skill runs in a forked context, so the parent agent never sees the file reads: only what
 you return. Return a short structured summary, not the index itself:
 
 ```
@@ -329,7 +329,7 @@ The file on disk is the artifact; this summary is the pointer. Keep it under ~12
 
 - Listing a dependency as a "pattern in use" without confirming a source file imports it.
 - Forcing a generic taxonomy onto the tree instead of describing the structure that's there.
-- Dumping every export or every call site — the tables are lookup aids, not exhaustive logs.
+- Dumping every export or every call site: the tables are lookup aids, not exhaustive logs.
 - Returning the whole index to the parent instead of the structured summary above.
 
 ## Use cases
@@ -345,7 +345,7 @@ refactor) to keep the index current.
 
 A concrete run on the `enhancement-product` repo, kept as a reference for what a filled-in index
 looks like. The body above is stack-agnostic; the patterns below are this one project's, not
-defaults — verify every path against the tree before reusing.
+defaults: verify every path against the tree before reusing.
 
 **Detected stack:** Next.js 16 (App Router), React 19, TypeScript · Python FastAPI backend ·
 Jotai (global atoms) + React Context (`createKeyedContext`) + TanStack Query (server state) ·
@@ -367,7 +367,7 @@ pitfalls.
 
 | Symbol               | File                                   | Description                                                        |
 | -------------------- | -------------------------------------- | ------------------------------------------------------------------ |
-| `useQ`               | `src/utils/hooks/use-q.ts`             | Shorthand `useQuery` wrapper — preferred over raw TanStack import  |
+| `useQ`               | `src/utils/hooks/use-q.ts`             | Shorthand `useQuery` wrapper: preferred over raw TanStack import  |
 | `useM`               | `src/utils/hooks/use-m.ts`             | Shorthand `useMutation` wrapper with built-in toast feedback       |
 | `useData`            | `src/utils/hooks/use-data.ts`          | Generic typed data fetch hook                                      |
 | `useLoadingState`    | `src/utils/hooks/use-loading-state.ts` | 4-state loading machine (idle/pending/success/error)               |
@@ -376,7 +376,7 @@ pitfalls.
 | `getQueryClient`     | `src/utils/react-query.ts`             | Singleton accessor for the TanStack Query client                   |
 | `Routes`             | `src/utils/routing.ts`                 | Enum of all app route path strings                                 |
 | `QueryParams`        | `src/utils/url.ts`                     | Enum of URL search parameter name strings                          |
-| `withServer`         | `src/utils/with-server.ts`             | Server-only module guard — throws if imported client-side          |
+| `withServer`         | `src/utils/with-server.ts`             | Server-only module guard: throws if imported client-side          |
 | `createKeyedContext` | `src/core/context/global-context.tsx`  | Generic typed React Context factory                                |
 | `resolveGetter`      | `src/utils/iter.ts`                    | Polymorphic value resolver (value / function / function-with-args) |
 | `listToMap`          | `src/utils/iter.ts`                    | Converts an array to a keyed Map                                   |

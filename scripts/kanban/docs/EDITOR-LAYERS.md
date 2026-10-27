@@ -136,7 +136,7 @@ path resolved the way `/doc` resolves links, behind the same size guard.
 > registry is indistinguishable from their real work.
 >
 > **Step 5, and the plan was half stale.** It says tables first, then images.
-> Tables ALREADY rendered — GFM pipes, thead and tbody, verified through
+> Tables ALREADY rendered: GFM pipes, thead and tbody, verified through
 > /api/mdpreview before touching anything. Only images were missing, and they
 > came out as literal text.
 >

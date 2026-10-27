@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 40-context-watch.sh — UserPromptSubmit hinter.
+# 40-context-watch.sh: UserPromptSubmit hinter.
 #
 # Estimates current context usage from the transcript file size and emits a
 # graduated nudge at 70/80/90%. Pairs with CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=92
@@ -7,7 +7,7 @@
 #
 # Why this is a heuristic, not a measurement:
 #   Claude Code does not expose live token-usage to hooks. The transcript
-#   JSONL file size correlates with conversation tokens — enough for a
+#   JSONL file size correlates with conversation tokens: enough for a
 #   threshold-crossing alarm, not enough for precision. Tune CTX_CAP_BYTES
 #   if the alarms fire too early/late in YOUR sessions.
 #
@@ -15,7 +15,7 @@
 # Throttle: state file at /tmp/claude-ctxwatch-<session-id> tracks
 #           highest-threshold fired-this-session (so 70% fires once, not
 #           on every prompt while sitting at 71-79%).
-# Tune:    ~/.claude/.context-watch.conf — KEY=VALUE pairs override defaults.
+# Tune:    ~/.claude/.context-watch.conf: KEY=VALUE pairs override defaults.
 
 set -uo pipefail
 
@@ -23,7 +23,7 @@ set -uo pipefail
 
 # Source optional config overrides.
 CONF="$HOME/.claude/.context-watch.conf"
-# Defaults — bytes corresponding to ~200K-token context window.
+# Defaults: bytes corresponding to ~200K-token context window.
 # Claude 4 context = 200K tokens; transcript ≈ 5 bytes/token average.
 CTX_CAP_BYTES=1000000   # 1 MB ≈ 200K tokens (rough)
 THRESH_GENTLE=70

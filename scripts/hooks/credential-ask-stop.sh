@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# credential-ask-stop.sh — Stop hook: no asking the owner to mint a credential
+# credential-ask-stop.sh: Stop hook: no asking the owner to mint a credential
 # the machine already holds.
 #
 # The owner, 2026-09-08, after a third lane in a week told him to generate a

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 20-prune-transcripts.sh — Compress + age out Claude Code session transcripts.
+# 20-prune-transcripts.sh: Compress + age out Claude Code session transcripts.
 #
 # Policy:
 #   - jsonl >6 months old  → gzip in place (typical ~10× reduction)
@@ -9,10 +9,10 @@
 # 6 more months as compressed archives, then delete. Total max age = 12 mo.
 #
 # REVIVAL:
-#   Gzipped transcripts decompress with `gunzip <file>.jsonl.gz` — the
+#   Gzipped transcripts decompress with `gunzip <file>.jsonl.gz`: the
 #   original is restored byte-for-byte. The past-sessions skill should
 #   transparently read both .jsonl and .jsonl.gz (verify before relying).
-#   Deletion at 12 months is hard — the data is gone. Bump --delete-days
+#   Deletion at 12 months is hard: the data is gone. Bump --delete-days
 #   higher if you want longer retention.
 #
 # Files live under ~/.claude/projects/<encoded-project-path>/<session-uuid>.jsonl

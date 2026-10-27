@@ -1,6 +1,6 @@
 ---
 name: diagram
-description: Renders terminal diagrams — flowcharts, sequence diagrams, trees, tables, state machines, and architecture layouts — using gum-tui.sh for box-accurate rendering. Use when explaining spatial or hierarchical structures visually.
+description: Renders terminal diagrams, flowcharts, sequence diagrams, trees, tables, state machines, and architecture layouts, using gum-tui.sh for box-accurate rendering. Use when explaining spatial or hierarchical structures visually.
 allowed-tools: Bash
 user-invocable: true
 argument-hint: "<description of what to diagram>"
@@ -10,7 +10,7 @@ argument-hint: "<description of what to diagram>"
 
 Renders rich terminal diagrams by generating and executing bash scripts via `gum-tui.sh`.
 Supports 6 diagram types, auto-detected from the input description. Uses `gum style`,
-`gum table`, and `gum join` for all box/table rendering — never outputs raw Unicode art
+`gum table`, and `gum join` for all box/table rendering: never outputs raw Unicode art
 as inline text, which produces misaligned borders.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
@@ -63,7 +63,7 @@ If ambiguous, default to **flowchart**.
 ## Rendering Execution Model
 
 **Always render by generating a bash script and executing it via the Bash tool.** Do NOT
-output raw Unicode art as inline text — character-width alignment issues cause broken
+output raw Unicode art as inline text: character-width alignment issues cause broken
 borders when Claude generates text directly.
 
 The workflow for every diagram:
@@ -89,19 +89,19 @@ source ~/.claude/skills/shared/gum-tui.sh
 | Tree | Hand-crafted Unicode tree chars (gum not used) |
 | State machine | `gum style --border` for states + hand-crafted arrows |
 
-**Arrows and connectors** are still hand-crafted Unicode — gum handles boxes, not routing.
+**Arrows and connectors** are still hand-crafted Unicode: gum handles boxes, not routing.
 Use the character palette below for all arrow/connector work.
 
 ## Rendering Rules
 
 ### Universal constraints
 - Maximum width: 78 characters (fits in 80-col terminal with 1-char margin)
-- Boxes MUST use gum commands — never hand-draw a box with raw Unicode
+- Boxes MUST use gum commands: never hand-draw a box with raw Unicode
 - Arrows/connectors/lifelines use the hand-crafted palette below
-- No emoji — use ASCII/Unicode box-drawing only for connectors
+- No emoji: use ASCII/Unicode box-drawing only for connectors
 - Labels inside boxes: pass as arguments to `gum style`, gum handles centering
 
-### Character palette (connectors and arrows only — boxes use gum)
+### Character palette (connectors and arrows only: boxes use gum)
 ```
 Arrows:   ──▶  ◀──  │▼  ▲│  ── ▷  ◁ ──
 Dashed:   ╌╌╌▶  ┆  ╎    (optional/async flows)
@@ -178,7 +178,7 @@ echo "$(gum style --border normal --padding '0 2' 'Alt Path')"
 
 ### 4. Table / Comparison
 
-Always use `gum table --print` — never hand-draw table borders:
+Always use `gum table --print`: never hand-draw table borders:
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh
@@ -188,7 +188,7 @@ gum_table "Feature,REST,GraphQL,gRPC" \
   "Caching,Native,Manual,None"
 ```
 
-- First row is the header — gum handles separator rendering automatically
+- First row is the header: gum handles separator rendering automatically
 - Column widths auto-fit to content
 - Use `gum_table --sep $'\t'` if cell values contain commas
 
@@ -265,7 +265,7 @@ When Claude is explaining architecture, data flows, state machines, request life
 
 1. Come BEFORE the text explanation (visual first, then details)
 2. Be executed via the Bash tool (not output as inline text) so gum renders it properly
-3. For inline explanations where Bash isn't appropriate: use a markdown code block with hand-crafted Unicode connectors and tree chars only — no boxes
+3. For inline explanations where Bash isn't appropriate: use a markdown code block with hand-crafted Unicode connectors and tree chars only: no boxes
 4. Include a brief title line above the diagram
 
 Do NOT use diagrams for:

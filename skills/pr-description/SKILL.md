@@ -150,7 +150,7 @@ neither, because they solve different problems:
 | Component | What it does | Why it exists |
 |---|---|---|
 | **feedback** | a mechanical register pass, `/ste-writing` flavored mode | fixes wording, density, sentence shape |
-| **reviewer** | a fresh reader that did not write the text (sub-agent, or `personas/doc-writer.md`) | `rules/audience-aware-writing.md:73-77`: you cannot see your own voice, so a rule set applied by the author cannot catch what the author cannot see |
+| **reviewer** | a fresh reader that did not write the text (sub-agent, or `personas/doc-writer.md`) | `rules/audience-aware-writing.md` §"You cannot see your own AI-smell": you cannot see your own voice, so a rule set applied by the author cannot catch what the author cannot see |
 
 **The accepted corpus outranks both.** When `/ste-writing` or a reviewer wants
 a change the merged corpus contradicts, the corpus wins and you say so in one

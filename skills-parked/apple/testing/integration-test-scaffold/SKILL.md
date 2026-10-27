@@ -6,7 +6,7 @@ allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion]
 
 # Integration Test Scaffold
 
-Generate test infrastructure for testing multiple modules working together — networking + persistence + business logic — without hitting real servers or databases.
+Generate test infrastructure for testing multiple modules working together (networking + persistence + business logic) without hitting real servers or databases.
 
 ## When This Skill Activates
 
@@ -441,7 +441,7 @@ Tests/
 
 ## References
 
-- `testing/test-data-factory/` — factories used in integration tests
-- `testing/test-contract/` — protocol contracts tested at integration level
-- `generators/networking-layer/` — networking code being tested
-- `generators/persistence-setup/` — persistence code being tested
+- `testing/test-data-factory/`: factories used in integration tests
+- `testing/test-contract/`: protocol contracts tested at integration level
+- `generators/networking-layer/`: networking code being tested
+- `generators/persistence-setup/`: persistence code being tested

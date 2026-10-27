@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# emit-event.sh — append ONE JSON line to ~/.claude/events.jsonl
+# emit-event.sh: append ONE JSON line to ~/.claude/events.jsonl
 # Invoked by hooks. Reads hook-input JSON from stdin. Never blocks: always exits 0.
 #
 # Usage (in settings.json):
@@ -19,7 +19,7 @@
 # Design notes:
 # - Global log at ~/.claude/events.jsonl; project field lets you filter later
 # - flock prevents interleaved writes when multiple async hooks fire at once
-# - Any failure (missing jq, malformed stdin, disk full) is swallowed — we never
+# - Any failure (missing jq, malformed stdin, disk full) is swallowed: we never
 #   want a log emitter to disrupt the hook chain
 # - Duration uses a tiny timestamp file per tool_use_id in ~/.claude/.tool-timers/
 #   written at PreToolUse, read+unlinked at PostToolUse. Leaks are self-limiting
@@ -36,7 +36,7 @@ TIMER_DIR="$HOME/.claude/.tool-timers"
 mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
 touch "$LOG" 2>/dev/null || exit 0
 
-# Expire stale tool-timer files (>1h) — orphans from crashed sessions.
+# Expire stale tool-timer files (>1h): orphans from crashed sessions.
 # Runs every invocation; scanning a flat dir of tiny files is near-zero cost.
 if [ -d "$TIMER_DIR" ]; then
   find "$TIMER_DIR" -maxdepth 1 -type f -mmin +60 -delete 2>/dev/null || true
@@ -73,7 +73,7 @@ SESSION_ID_FILE="$HOME/.claude/.current-session-id"
 case "$EVENT" in
   SessionStart)
     # Persist session_id to file so non-hook scripts can read it as a fallback.
-    # "Last session wins" — acceptable since multi-session hooks get IDs via stdin.
+    # "Last session wins": acceptable since multi-session hooks get IDs via stdin.
     if [ -n "$SESSION_ID" ]; then
       printf '%s' "$SESSION_ID" > "$SESSION_ID_FILE" 2>/dev/null || true
     fi
@@ -82,7 +82,7 @@ case "$EVENT" in
   PreToolUse)
     if [ -n "$TOOL_USE_ID" ]; then
       mkdir -p "$TIMER_DIR" 2>/dev/null || true
-      # Sanitize tool_use_id for use as a filename (defensive — IDs are usually
+      # Sanitize tool_use_id for use as a filename (defensive: IDs are usually
       # alnum + underscore already).
       SAFE_ID=$(printf '%s' "$TOOL_USE_ID" | tr -c 'a-zA-Z0-9_-' '_' | head -c 120)
       [ -n "$SAFE_ID" ] && printf '%s' "$NOW_MS" > "$TIMER_DIR/$SAFE_ID" 2>/dev/null || true
@@ -116,7 +116,7 @@ case "$EVENT" in
 
   Stop|SubagentStop)
     # Pull cost delta if the harness provides it. Different versions have used
-    # different field names — check several.
+    # different field names: check several.
     COST_DELTA=$(echo "$INPUT" | jq -r '
       .cost_delta_usd // .cost_delta // .total_cost_usd // .cost_usd // empty
     ' 2>/dev/null || echo "")

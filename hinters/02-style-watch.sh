@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 02-style-watch.sh — delivers the style watcher's pending verdicts.
+# 02-style-watch.sh: delivers the style watcher's pending verdicts.
 #
 # The watcher's worker (style-watch-worker.sh) runs detached after a turn ends
 # and drops verdicts into style/pending-watch-notes.txt; this hinter injects

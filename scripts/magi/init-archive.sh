@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/magi/init-archive.sh — Initialize the per-task archive directory.
+# scripts/magi/init-archive.sh: Initialize the per-task archive directory.
 #
 # Per ~/.claude/assets/docs/20260518-magi-design.md § 10.
 # Creates the standard tree + initial 00-task.md from the user prompt.
@@ -42,7 +42,7 @@ mkdir -p "$ROOT"/{02-voter-prompts,03-voter-proposals,04-voting}
 
 # 00-task.md
 cat > "$ROOT/00-task.md" <<EOF
-# MAGI task — $SLUG
+# MAGI task: $SLUG
 
 **Session:** $(echo "${CLAUDE_CODE_SESSION_ID:-unknown}" | head -c 8)
 **Started:** $(date -Iseconds)
@@ -65,7 +65,7 @@ if params_json:
     try:
         params = json.loads(params_json)
     except Exception as e:
-        # Don't fail archive creation on a bad params blob — record the error so
+        # Don't fail archive creation on a bad params blob: record the error so
         # the Phase-2 conformance check still flags the miss.
         params = {"_params_parse_error": str(e)}
 meta = {

@@ -1,4 +1,4 @@
-# Dream-pass prompt — codex-sessions domain
+# Dream-pass prompt: codex-sessions domain
 
 You are dreaming over the session log of Codex, a second coding agent that
 runs on this machine beside Claude Code. Each event is one Codex session:

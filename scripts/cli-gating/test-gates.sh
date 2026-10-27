@@ -43,14 +43,14 @@ check ALLOW "command -v gh >/dev/null 2>&1 && echo ok"
 check ALLOW "command -V render"
 check ALLOW "gh auth status"
 check ALLOW "gh auth status 2>&1"
-# 2026-07-13: workflow/extension read verbs — blocked as FPs on 06-12, 07-06
+# 2026-07-13: workflow/extension read verbs: blocked as FPs on 06-12, 07-06
 # (gh workflow list twice) and 05-23 (extension list); hooks-feedback events.
 check ALLOW "gh workflow list --all 2>&1"
 check ALLOW "gh workflow view deploy.yml"
 check ALLOW "gh extension list"
 check BLOCK "gh workflow run deploy.yml"
 check BLOCK "gh extension install foo/bar"
-# but `command <cli>` WITHOUT -v actually RUNS it — a write must still gate:
+# but `command <cli>` WITHOUT -v actually RUNS it: a write must still gate:
 check BLOCK "command gh pr merge 123"
 
 echo "=== EVERY WRITE GATED (gate_all_writes — even dev/preview writes BLOCK) ==="
@@ -113,7 +113,7 @@ check BLOCK 'bash -c "aws s3 sync . s3://b"'
 check BLOCK "/usr/local/bin/aws rds delete-db-instance"
 check BLOCK "aws ec2 describe-instances && aws s3 rm s3://b/k"
 # Global flag BEFORE the service must NOT launder a write into a read
-# (skeptical-review finding A — a leading --region/--profile/--output bypassed).
+# (skeptical-review finding A: a leading --region/--profile/--output bypassed).
 check BLOCK "aws --region us-east-1 s3 rm s3://b/k"
 check BLOCK "aws --profile prod s3 rm s3://b/k"
 check BLOCK "aws --output json ec2 terminate-instances --instance-ids i-1"
@@ -175,17 +175,17 @@ check ALLOW "gh api /user"
 check ALLOW "gh api /repos/o/r/pulls"
 
 echo "=== REAL INCIDENT REGRESSIONS (last-2-day transcripts — all expect ALLOW) ==="
-# FP-1: gh reads with --jq/--json (shlex-breaking) — were wrongly blocked
+# FP-1: gh reads with --jq/--json (shlex-breaking): were wrongly blocked
 check ALLOW "gh run view 26197629560 --json status,conclusion,jobs --jq '{s: .status}'"
 check ALLOW "gh run list --branch gh-pages-cleanup/aakarsh --limit 7 --json status"
 check ALLOW "gh pr view 180 --json labels --jq '[.labels[].name] | join(\",\")'"
-# FP-2: 'render' as a substring of a script name — was wrongly blocked
+# FP-2: 'render' as a substring of a script name: was wrongly blocked
 check ALLOW "/bin/bash ~/.claude/skills/core-dump/render-visual.sh /tmp/x.json"
 check ALLOW "bash render-visual.sh"
-# FP-3: heredoc / big script with NO gated CLI — was wrongly blocked by >50-cap
+# FP-3: heredoc / big script with NO gated CLI: was wrongly blocked by >50-cap
 check ALLOW "cat > /tmp/out.md"
 check ALLOW "SID=x; F=/tmp/f.json; test -f \"\$F\" && trash \"\$F\"; cat > \"\$F\""
-# FP-4: gh read inside command substitution — was wrongly blocked
+# FP-4: gh read inside command substitution: was wrongly blocked
 check ALLOW "RID=\$(gh run list --branch x --json databaseId --jq '.[0]')"
 check ALLOW "cd \"\$(git rev-parse --show-toplevel)\" && gh pr view 180 --json labels"
 # bash -c wrapping a READ should now pass (recursion), not block
@@ -243,7 +243,7 @@ _fbw=$(python3 "$PY" "aws s3 rm s3://b/k" "$_fbpol" 2>/dev/null)
 if [ "${_fbw%%	*}" = "BLOCK" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback aws write not blocked: %s\n' "$_fbw"; fi
 _fbr=$(python3 "$PY" "aws s3 ls" "$_fbpol" 2>/dev/null)
 if [ "${_fbr%%	*}" = "ALLOW" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback aws read not allowed: %s\n' "$_fbr"; fi
-# render/vercel fallback must keep gate_all_writes (skeptical-review finding D —
+# render/vercel fallback must keep gate_all_writes (skeptical-review finding D:
 # a broken JSON silently downgraded them to dev-allowed).
 _fbv=$(python3 "$PY" "vercel deploy" "$_fbpol" 2>/dev/null)
 if [ "${_fbv%%	*}" = "BLOCK" ]; then pass=$((pass+1)); else fail=$((fail+1)); printf '  FAIL fallback vercel write not blocked: %s\n' "$_fbv"; fi

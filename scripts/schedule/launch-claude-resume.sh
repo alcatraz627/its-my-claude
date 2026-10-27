@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Open a Ghostty window that resumes a Claude Code session — safely, from a
+# Open a Ghostty window that resumes a Claude Code session: safely, from a
 # scheduled (launchd) context.
 #
 # Why this wrapper exists: a scheduled launch goes through `open … zsh -lc`, whose
 # login shell sources ~/.zprofile (brew shellenv + ~/.local/bin → the full PATH).
 # We still exec claude by ABSOLUTE PATH (never relying on a PATH lookup) with
-# permissions pre-skipped (an unattended window has nobody to answer a prompt) — so
+# permissions pre-skipped (an unattended window has nobody to answer a prompt): so
 # any cron can launch a resume by calling this one audited script instead of
 # re-inventing the quoting. The ~/.local/bin/env source is defensive; the Ghostty
 # login shell is what actually restores PATH (launchd's own env is bare).
@@ -43,7 +43,7 @@ fi
 # exec claude by absolute path. printf %q keeps every argument a single token
 # when zsh re-parses the string.
 # exec -a claude: force argv[0]="claude" even though we exec the ABSOLUTE binary
-# path — so tools that key on argv[0] (e.g. the claude-instances widget scanner)
+# path: so tools that key on argv[0] (e.g. the claude-instances widget scanner)
 # recognise a scheduled session the same as a hand-launched `claude`.
 inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && exec -a claude $(printf %q "$CLAUDE") --dangerously-skip-permissions --resume $(printf %q "$UUID")"
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
@@ -54,7 +54,7 @@ if [[ -n "${DRYRUN:-}" ]]; then
 fi
 
 # Preflight passed: the launch attempt is good, but past this `open` the
-# scheduler is blind (claude may boot, crash, or be closed) — so `unknown`.
+# scheduler is blind (claude may boot, crash, or be closed): so `unknown`.
 write_meta "outcome=unknown" "reason=post_handoff" "stage=handoff"
 if open -na 'Ghostty.app' --args -e zsh -lc "$inner"; then
   exit 0

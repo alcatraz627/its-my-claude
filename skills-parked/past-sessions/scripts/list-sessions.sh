@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# list-sessions.sh — Emit one row per past transcript for a given project dir.
+# list-sessions.sh: Emit one row per past transcript for a given project dir.
 #
 # Usage:
 #   list-sessions.sh                                  # current project (based on $PWD)

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# friction-audit.sh — the weekly register-friction audit (regfric D4,
+# friction-audit.sh: the weekly register-friction audit (regfric D4,
 # owner-approved 2026-08-20). Reruns the proven sweep pipeline on the trailing
 # 7 days: extract (agent-output, owner-reply) pairs, classify on the gemini
 # lane, and append one summary row to ~/.claude/style/friction-ledger.jsonl.

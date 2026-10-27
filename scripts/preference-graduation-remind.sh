@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# preference-graduation-remind.sh — the monthly nudge to run the graduation pass.
+# preference-graduation-remind.sh: the monthly nudge to run the graduation pass.
 #
 # Preference graduation has two halves: surfacing candidate signals (automatable)
 # and deciding which to bake into GLOSSARY / memory / rules (needs human judgment,

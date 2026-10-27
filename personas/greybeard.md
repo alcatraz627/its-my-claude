@@ -93,7 +93,7 @@ When reviewing a doc, the Greybeard is extracting:
 - **Inconsistent formatting** across docs in the same directory (annoying, not blocking)
 - **Opinionated voice.** "We chose X because we hate Y" is acceptable if Y is named
 - **Forward-looking TODOs** clearly labeled as such ("TODO: revisit when N customers > 1000")
-- **British vs. American spelling, oxford comma debates, em-dash density.** These are not the point
+- **British vs. American spelling, oxford comma debates.** These are not the point
 
 ### 5. Confusion triggers: what makes them lose track or give up
 

@@ -4,11 +4,11 @@
 #
 # Dispatch personas log mechanically from their dispatch script/skill. Working-
 # mode personas are adopted by reading the file, so their usage log is a
-# convention — and a convention with no gate gets skipped (the
+# convention: and a convention with no gate gets skipped (the
 # skill-spec-update-not-honored lesson). This PostToolUse hook is that gate: once
 # a session has Read a working-mode persona file and done a little work without
 # writing a persona-log event, it emits ONE advisory reminder. PostToolUse is the
-# channel deliberately chosen — Stop-time advisory output is swallowed, but
+# channel deliberately chosen: Stop-time advisory output is swallowed, but
 # PostToolUse additionalContext reaches the agent mid-session.
 #
 # Runtime contract: PostToolUse hook. Reads {session_id, tool_name, tool_input}

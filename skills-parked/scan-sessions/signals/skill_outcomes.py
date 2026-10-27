@@ -17,7 +17,7 @@ Outcome heuristics:
 import json
 import re
 
-# Words that signal rejection — must be near the start or standalone
+# Words that signal rejection: must be near the start or standalone
 _REJECTION_PATTERNS = [
     re.compile(p, re.IGNORECASE)
     for p in [
@@ -137,7 +137,7 @@ def extract_skill_outcomes(conn, session_id):
                 continue
             nt = turn_map[next_idx]
 
-            # Track errors — but don't break yet, user response matters more
+            # Track errors: but don't break yet, user response matters more
             if nt["is_error"] and not saw_error:
                 saw_error = True
                 evidence = (nt["tool_result_text"] or nt["content_text"] or "")[:200]

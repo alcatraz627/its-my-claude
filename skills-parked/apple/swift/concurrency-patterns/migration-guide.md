@@ -247,7 +247,7 @@ for await notification in NotificationCenter.default.notifications(named: .someN
 }
 ```
 
-## nonisolated(unsafe) — Last Resort
+## nonisolated(unsafe): Last Resort
 
 For code that you know is safe but can't prove to the compiler:
 

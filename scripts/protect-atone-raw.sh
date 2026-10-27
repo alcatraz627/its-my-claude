@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# protect-atone-raw.sh — PreToolUse hook.
+# protect-atone-raw.sh: PreToolUse hook.
 #
 # Blocks modifications to ~/.claude/atone/events.jsonl and
 # ~/.claude/atone/rca/*.md unless invoked via a whitelisted atone script.
@@ -15,8 +15,8 @@
 #     Whitelisted scripts can do anything.
 #
 # Exit codes:
-#   0 — allow
-#   2 — block (Claude Code prints stderr to user)
+#   0: allow
+#   2: block (Claude Code prints stderr to user)
 
 set -uo pipefail
 
@@ -59,7 +59,7 @@ EOF
   Bash)
     CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
-    # Empty command — allow
+    # Empty command: allow
     [ -z "$CMD" ] && exit 0
 
     # If command doesn't mention any raw path, allow
@@ -103,7 +103,7 @@ EOF
     # Strip .draft references and re-check
     STRIPPED=$(echo "$CMD" | sed 's|atone/events\.jsonl\.draft|<DRAFT>|g; s|atone/judgments\.jsonl\.draft|<DRAFT>|g')
     if ! echo "$STRIPPED" | grep -qE 'atone/(events|judgments)\.jsonl|atone/rca/'; then
-      # Only .draft mentioned — allow
+      # Only .draft mentioned: allow
       exit 0
     fi
 
@@ -119,7 +119,7 @@ EOF
       fi
     fi
 
-    # Otherwise — block
+    # Otherwise: block
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook protect-atone-raw --action block --heeded unknown >/dev/null 2>&1 || true
     cat >&2 <<EOF
 [protect-atone-raw] BLOCKED — Bash command targets raw atone path
@@ -137,7 +137,7 @@ EOF
     exit 2
     ;;
   *)
-    # Not a tool we filter — allow
+    # Not a tool we filter: allow
     exit 0
     ;;
 esac

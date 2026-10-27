@@ -1,4 +1,4 @@
-# /generate-pdf — Usage Guide
+# /generate-pdf: Usage Guide
 
 ## What it does
 
@@ -44,8 +44,8 @@ Produces a compact notes PDF ready to print or share with an interviewer.
 
 ## Caveats
 
-- Requires Node.js and `npx`. First run downloads Chromium (~200MB) via `md-to-pdf` — this is a one-time cost.
-- Output path is always `<same-dir>/<same-stem>.pdf` — not configurable by design.
+- Requires Node.js and `npx`. First run downloads Chromium (~200MB) via `md-to-pdf`: this is a one-time cost.
+- Output path is always `<same-dir>/<same-stem>.pdf`: not configurable by design.
 - Very long code blocks may cause visual gaps near page boundaries (page-break-inside: avoid is set).
 - LinkedIn and GitHub URLs appear as styled blue text but may not be clickable in all PDF readers.
 
@@ -62,8 +62,8 @@ Produces a compact notes PDF ready to print or share with an interviewer.
 Edit the `CSS` constant in `~/.claude/skills/generate-pdf/generate_pdf.py`.
 
 Key variables to tweak:
-- `@page { margin }` — page margins
-- `body { font-size }` — base font size
-- `h1, h2` — heading styles and accent color (`#3b82f6` is the current blue)
-- `pre { background }` — code block background (`#0f172a` = dark navy)
+- `@page { margin }`: page margins
+- `body { font-size }`: base font size
+- `h1, h2`: heading styles and accent color (`#3b82f6` is the current blue)
+- `pre { background }`: code block background (`#0f172a` = dark navy)
 - Font family in `code:not(pre code)` and `pre code`

@@ -26,7 +26,7 @@ setup() {
   printf '%s' "$t"
 }
 armed() { TMPDIR="$1/" HOME="$1/home" bash heed-writeback.sh arm no-task-nudge task-store-nonempty "$2" "$2"; }
-# stop <root> <sid> — a Stop feeds the real payload shape, because resolve reads
+# stop <root> <sid>: a Stop feeds the real payload shape, because resolve reads
 # .session_id from it to decide whose markers it may judge. Passing a bare newline
 # here (the first cut) makes every case exercise the no-session branch, which is
 # not a shape production ever sees.
@@ -96,7 +96,7 @@ stop "$T" "$S"
   || bad "armed against a stale path; the real store was never seen"
 
 echo "== persona-adopted: the second check kind (task #31) =="
-# armp <root> <persona> — arms against the fake HOME's persona usage log
+# armp <root> <persona>: arms against the fake HOME's persona usage log
 armp() {
   mkdir -p "$1/home/.claude/personas/usage"
   touch "$1/home/.claude/personas/usage/events.jsonl"
@@ -129,7 +129,7 @@ for _ in 1 2 3; do stop "$T" sk333333; done
 #
 # The log MUST grow after arming for this row to test anything. A first draft
 # left it static, and the check's line-count-equality early exit answered "no"
-# before the offset was ever used — so the row passed with the offset mutated
+# before the offset was ever used: so the row passed with the offset mutated
 # away. Growing it with a DIFFERENT persona forces the comparison to run: the
 # correct code reads only the new line and says no, while an offset-blind version
 # finds the old matching line and says yes.
@@ -208,7 +208,7 @@ for _ in 1 2 3 4; do stop "$T" "$MINE"; done
 
 echo "== a marker whose session never returns is reaped, not scored =="
 # Runs PAST the grace window on purpose. One Stop would leave the no-ledger-line
-# assertion vacuously true — it would also pass with reaping deleted entirely,
+# assertion vacuously true: it would also pass with reaping deleted entirely,
 # because nothing reaches MAX_STOPS in a single Stop. Four Stops make the negative
 # assertion able to fail: without the reap, this marker scores heeded=false.
 T=$(setup); S=rrr33333
@@ -235,7 +235,7 @@ armed "$T" "$S"; stop "$T" "$S"
 echo "== a half-written marker is left alone, not deleted =="
 # arm() is not atomic in the naive form, so another session's Stop can glob a
 # marker mid-write. The first cut deleted anything that failed to parse, BEFORE
-# checking whose it was — destroying a live session's instrumentation with no
+# checking whose it was: destroying a live session's instrumentation with no
 # ledger trace and no way to notice.
 T=$(setup)
 printf 'hook=no-task-nudge\nsid=other111\n' > "$T/claude-heed-no-task-nudge-other111"
@@ -266,7 +266,7 @@ stop "$T" "$S"
 echo "== a rotated persona log reads unknown, never a miss =="
 # The shrunk-log guard had zero coverage: mutating it away left all 23 rows green.
 # Without it, tail past the end of a truncated file prints nothing and the check
-# says "no" — a fabricated miss, which is the exact corruption this file exists
+# says "no": a fabricated miss, which is the exact corruption this file exists
 # to prevent.
 T=$(setup)
 mkdir -p "$T/home/.claude/personas/usage"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# llm-mini — CLI wrapper around llm-mini-core.sh.
+# llm-mini: CLI wrapper around llm-mini-core.sh.
 #
 # Install:
 #   ln -sf ~/.claude/scripts/llm-mini/llm-mini.sh ~/.local/bin/llm-mini

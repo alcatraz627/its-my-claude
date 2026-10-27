@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# preference-harvest.sh — surface CANDIDATE user-preference / vocabulary signals
+# preference-harvest.sh: surface CANDIDATE user-preference / vocabulary signals
 # from the post-insight streams (atone, affirm, i-dream, runtime-notes, checkpoints)
-# for HUMAN review. It NEVER writes to GLOSSARY / memory / rules — those require
+# for HUMAN review. It NEVER writes to GLOSSARY / memory / rules: those require
 # judgment (see conventions/preference-graduation.md). Output is a dated candidate
 # list the human triages via the manual graduation pass.
 #

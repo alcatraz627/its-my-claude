@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# atone-promote-draft.sh — Promotes ~/.claude/atone/events.jsonl.draft to
+# atone-promote-draft.sh: Promotes ~/.claude/atone/events.jsonl.draft to
 # ~/.claude/atone/events.jsonl as the final step of Stage 2 migration.
 #
 # Idempotent: refuses to overwrite an existing events.jsonl unless --force,

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 36-repeated-ask.sh — UserPromptSubmit hinter: the user says they already asked.
+# 36-repeated-ask.sh: UserPromptSubmit hinter: the user says they already asked.
 #
 # Shape 7 of rules/literal-request-over-intent.md: "a repeated or escalating ask
 # means the last answer missed." When a request comes back louder, the signal is not
@@ -31,7 +31,7 @@
 # window and says so in its own header ("not same-issue semantics"); it suggests a
 # fresh session. This fires on one explicit escalation and says re-read the ask.
 #
-# State: /tmp/claude-repeatask-<sid8> — one normalized prompt per line, last 8.
+# State: /tmp/claude-repeatask-<sid8>: one normalized prompt per line, last 8.
 # Mute: touch ~/.claude/.no-repeated-ask (machine-wide, like every .no-* mute).
 
 set -uo pipefail

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# hint-injector.sh — UserPromptSubmit hook that runs all hinters and aggregates
+# hint-injector.sh: UserPromptSubmit hook that runs all hinters and aggregates
 # their output into a single additionalContext injection.
 #
 # Hinters live in ~/.claude/hinters/ and are executed in sort order (00-, 10-, etc).
@@ -42,7 +42,7 @@ _cap_hinter() {
         "$TIMEOUT_BIN" 2 bash "$1" 2>/dev/null
     else
         # No `timeout` on macOS. Fork the hinter into its OWN process group and
-        # kill the whole group on alarm — a plain alarm+exec only kills the
+        # kill the whole group on alarm: a plain alarm+exec only kills the
         # shell, leaving a hung child holding the output pipe open past the cap
         # (verified: it didn't time out at all). This kills children too.
         perl -e 'my $p=fork; if($p==0){setpgrp(0,0); exec(@ARGV) or exit 127} local $SIG{ALRM}=sub{kill "KILL",-$p}; alarm 2; waitpid($p,0)' bash "$1" 2>/dev/null

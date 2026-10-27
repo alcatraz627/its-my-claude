@@ -1,9 +1,9 @@
-# /bloop — Usage Guide
+# /bloop: Usage Guide
 
 ## What it does
 
-Drives a non-trivial build through six stages — **plan → build → review → validate → fix
-→ docs** — with an adversarial sub-agent validation gate that independently tries to break
+Drives a non-trivial build through six stages: **plan → build → review → validate → fix
+→ docs**: with an adversarial sub-agent validation gate that independently tries to break
 the work. Produces the change, a persisted validation report, and updated docs.
 
 ## Usage
@@ -27,7 +27,7 @@ the work. Produces the change, a persisted validation report, and updated docs.
 
 Plans it (surfacing any fork), builds in committed units tests-first, self-reviews by
 exercising the limiter under real load, dispatches an adversarial validator (which tries
-to break it — burst traffic, clock skew, the empty-config path), fixes what it finds and
+to break it: burst traffic, clock skew, the empty-config path), fixes what it finds and
 adds a regression test for it, then updates the docs and commits.
 
 ### Example 2: validate an in-flight change
@@ -36,7 +36,7 @@ adds a regression test for it, then updates the docs and commits.
 /bloop --from validate
 ```
 
-Skips planning/building — runs the adversarial gate on the diff you already have, then
+Skips planning/building: runs the adversarial gate on the diff you already have, then
 fix → docs. Use when you've built something and want the rigorous check before shipping.
 
 ### Example 3: no-arg, current change
@@ -50,7 +50,7 @@ branch), inferring the task from the change.
 
 ## Caveats
 
-- **The validate gate is not skippable** — it is the point of the skill. A change trivial
+- **The validate gate is not skippable**: it is the point of the skill. A change trivial
   enough to skip validation should not go through /bloop; just make it.
 - **Not a fleet.** /bloop is structured single-threaded build with ONE adversarial
   validator (right-sized per `contain-subagent-token-sprawl`), not parallel fan-out.
@@ -59,7 +59,7 @@ branch), inferring the task from the change.
   writing report files, so the validator returns findings inline and /bloop writes them to
   `.claude/output/`. Verify the file exists before relying on it.
 - **Needs a runnable surface to review/validate.** For pure-docs or config changes with no
-  runtime path, the review/validate stages degrade to a read-through — say so.
+  runtime path, the review/validate stages degrade to a read-through: say so.
 
 ## Dependencies
 
@@ -76,10 +76,10 @@ branch), inferring the task from the change.
 
 ## Tips
 
-- The validator earns its cost most when you feel done — that's exactly when the
+- The validator earns its cost most when you feel done: that's exactly when the
   plausible-but-wrong bug hides. Don't skip it because self-review looked clean.
 - Give the validator the load-bearing CLAIMS to attack ("the guard holds for identical
-  input", "the $0 layer is model-independent"), not just "review this" — targeted
+  input", "the $0 layer is model-independent"), not just "review this": targeted
   adversarial prompts find real bugs; vague ones rubber-stamp.
 - When a finding is "the rule is unenforceable prose," the fix is a **mechanism** (a
   checkable step), not a firmer sentence. Prose doesn't bind a model.

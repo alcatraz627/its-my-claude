@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# policy-ask-prompt.sh — the owner answers an "ask" policy by typing one line.
+# policy-ask-prompt.sh: the owner answers an "ask" policy by typing one line.
 #
 # guard-policy.sh blocks a call whose policy is "ask" and records a token for
 # this session and key in ~/.claude/.policy-ask/. The owner then types, as an

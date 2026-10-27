@@ -1,5 +1,5 @@
 #!/bin/bash
-# dream-metrics-context.sh — SessionStart hook that injects a compact summary
+# dream-metrics-context.sh: SessionStart hook that injects a compact summary
 # of dream-extracted session metrics into Claude's context.
 #
 # Output: JSON {"additionalContext": "..."} to stdout if metrics exist, else silent exit.
@@ -23,7 +23,7 @@ try:
 except (OSError, json.JSONDecodeError):
     sys.exit(0)
 
-# Build compact context — just the actionable parts, not raw data
+# Build compact context: just the actionable parts, not raw data
 lines = ["## Session Analytics (Dream-Extracted)"]
 
 # Quality summary

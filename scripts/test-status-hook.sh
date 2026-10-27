@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# PostToolUse hook for BashOutput — detects test commands and writes
+# PostToolUse hook for BashOutput: detects test commands and writes
 # pass/fail results to /tmp/claude-test-$PPID for the statusline.
 # Always exits 0 to avoid blocking the main agent.
 
@@ -67,7 +67,7 @@ else
 fi
 
 # Write marker file for statusline to read
-# In hook context, PPID is Claude Code's PID — matches statusline's $PPID
+# In hook context, PPID is Claude Code's PID \u2014 matches statusline's $PPID
 MARKER="/tmp/claude-test-${PPID}"
 printf '%s\n' "test_status=$status" "test_total=$total" "test_failed=$failed" > "$MARKER" 2>/dev/null || true
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# plugs.sh — the session-plug status reader. Answers "what's plugged into my
+# plugs.sh: the session-plug status reader. Answers "what's plugged into my
 # session, what's silenced, and what's the current state" by reading existing
 # artifacts only (no new telemetry). The static catalog lives in
 # features/session-plugs.md; this shows the LIVE picture on demand.
 #
-# Deliberately out of the hot context: this is run when asked, never injected —
+# Deliberately out of the hot context: this is run when asked, never injected:
 # a catalog of plugs injected every session would be the exact noise it measures.
 #
 # Usage: plugs.sh            full status
@@ -19,7 +19,7 @@ have_jq=$(command -v jq >/dev/null 2>&1 && echo 1 || echo 0)
 hr() { printf '─%.0s' $(seq 1 64); printf '\n'; }
 
 # ── Active mutes ─────────────────────────────────────────────────────────────
-# Muted plugs/guards silently linger (a known failure mode) — surface them first.
+# Muted plugs/guards silently linger (a known failure mode): surface them first.
 show_mutes() {
   echo "▸ Active mute files (silenced plugs/guards)"
   local found=0
@@ -88,7 +88,7 @@ if [ -f "$GCC/.backlog-consolidate-last-run" ]; then
   printf '    last consolidate:    %s\n' "$(head -1 "$GCC/.backlog-consolidate-last-run" 2>/dev/null)"
 fi
 
-# Dream last injection (the blanket injector — its volume is the noise watch).
+# Dream last injection (the blanket injector: its volume is the noise watch).
 if [ -f "$GCC/i-dream/injections.jsonl" ] && [ "$have_jq" = 1 ]; then
   last=$(tail -1 "$GCC/i-dream/injections.jsonl" 2>/dev/null | jq -r '.ts // empty' 2>/dev/null)
   cnt=$(wc -l < "$GCC/i-dream/injections.jsonl" 2>/dev/null | tr -d ' ')
@@ -96,7 +96,7 @@ if [ -f "$GCC/i-dream/injections.jsonl" ] && [ "$have_jq" = 1 ]; then
 fi
 hr
 
-# ── Plug firings (the plug-events ledger — the FIRED side of efficacy) ───────
+# ── Plug firings (the plug-events ledger: the FIRED side of efficacy) ───────
 PE="${LEDGER_DIR:-$GCC/ledger}/plug-events.jsonl"
 sidf="${CLAUDE_CODE_SESSION_ID:-}"
 echo "▸ Plug firings  (ledger/plug-events.jsonl — frequency + token cost, ranked)"

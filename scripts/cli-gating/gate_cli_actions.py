@@ -43,7 +43,7 @@ NONREAD_HTTP = re.compile(r"\b(POST|PUT|PATCH|DELETE)\b", re.IGNORECASE)
 ENV_ASSIGN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
 # Mutating action sub-verbs. If any appears as a token, the command is a WRITE
 # even when it sits under a read namespace (`render services delete`,
-# `render env-vars set`, `render deploys cancel`) — a read-verb prefix must NOT
+# `render env-vars set`, `render deploys cancel`): a read-verb prefix must NOT
 # launder a write subcommand.
 MUTATING_SUBCMD = frozenset({
     "delete", "rm", "remove", "destroy", "drop", "set", "unset", "create",
@@ -191,10 +191,10 @@ def _resolve_command(tokens):
     while i < len(tokens) and guard < 12:
         guard += 1
         if _base(tokens[i]) in RE_EXEC:
-            # `command -v|-V gh` only LOOKS UP gh — it does not execute it (unlike
+            # `command -v|-V gh` only LOOKS UP gh: it does not execute it (unlike
             # plain `command gh …`, which does run it). Without this carve-out the
             # gated CLI name is read as the command and whatever follows (a
-            # `>/dev/null` redirect, a `-flag`) becomes a bogus "write verb" — the
+            # `>/dev/null` redirect, a `-flag`) becomes a bogus "write verb": the
             # false positive that blocked `command -v gh >/dev/null && …`.
             if _base(tokens[i]) == "command" and i + 1 < len(tokens) and tokens[i + 1] in ("-v", "-V"):
                 return len(tokens)
@@ -220,7 +220,7 @@ def _gh_api_verdict(rest, rest_str, segment):
 # (`aws --region us-east-1 s3 rm …`). Their value must be skipped so the service
 # and operation are read from the right positions, not from a flag's argument.
 # A leading global flag previously made the gate misread the flag as the service
-# and wave the whole command through as a read — a destructive-write bypass.
+# and wave the whole command through as a read: a destructive-write bypass.
 AWS_GLOBAL_VALUE_FLAGS = frozenset({
     "--region", "--profile", "--output", "--endpoint-url", "--color",
     "--ca-bundle", "--cli-read-timeout", "--cli-connect-timeout",
@@ -305,7 +305,7 @@ def _classify_gated(cmd, rest, parse_ok, policy, segment):
 
     # AWS: read iff the operation name matches a read prefix/exact; every other
     # operation is a mutation and is approval-gated (any account/env). Env label
-    # is best-effort from --profile and is cosmetic — the gate blocks regardless.
+    # is best-effort from --profile and is cosmetic: the gate blocks regardless.
     if cmd == "aws":
         _, op = _aws_service_op(rest)
         sensitive = _aws_is_sensitive_read(op, rest, g)
@@ -319,11 +319,11 @@ def _classify_gated(cmd, rest, parse_ok, policy, segment):
             return ("block", f"aws sensitive read [{envlbl}] - reads a live secret/credential (op={op}); approval-gated: `{segment}`")
         return ("block", f"aws write [{envlbl}] - every AWS mutation is approval-gated (op={op or '∅'}): `{segment}`")
 
-    # A mutating sub-verb anywhere means this is a WRITE — a read-namespace
+    # A mutating sub-verb anywhere means this is a WRITE: a read-namespace
     # prefix (services/env-vars/deploys) must not launder it.
     has_mutating = any(_base(t) in MUTATING_SUBCMD for t in rest)
 
-    # READ allowlist — checked first, and the ONLY thing that matters when the
+    # READ allowlist: checked first, and the ONLY thing that matters when the
     # segment failed to parse (a read with a --jq filter must still pass).
     # Skipped when a mutating sub-verb is present.
     if not has_mutating:
@@ -340,7 +340,7 @@ def _classify_gated(cmd, rest, parse_ok, policy, segment):
             return ("allow", None)
 
     # If we could not parse the segment AND the verb isn't a known read, we don't
-    # have enough to confidently call it a write of a specific shape — but an
+    # have enough to confidently call it a write of a specific shape: but an
     # unknown gated verb is exactly the conservative-gate case. However, to avoid
     # the read-with-weird-args false positive, require the FIRST token to look
     # like a subcommand (not a flag) before gating an unparseable segment.
@@ -405,7 +405,7 @@ def classify_segment(segment, policy, _depth=0):
     # is a read, `bash -c "render deploy --prod"` is a write).
     if cmd in SHELL_C:
         inner = None
-        # Match -c AND combined short flags ending in c (-lc, -xc, -ic) — the
+        # Match -c AND combined short flags ending in c (-lc, -xc, -ic): the
         # command string is the next token.
         for k, t in enumerate(rest):
             if (t == "-c" or re.match(r"^-[a-zA-Z]*c$", t)) and k + 1 < len(rest):
@@ -413,10 +413,10 @@ def classify_segment(segment, policy, _depth=0):
                 break
         if inner is not None:
             return classify_segment(inner, policy, _depth + 1)
-        # no -c arg (interactive shell etc.) — nothing to verify
+        # no -c arg (interactive shell etc.): nothing to verify
         return ("allow", None)
 
-    # eval runs its joined args as a command — recurse into that content
+    # eval runs its joined args as a command: recurse into that content
     # (`eval "render deploy --prod"` is a write; `eval "echo hi"` is not).
     if cmd in EVALISH:
         return classify_segment(" ".join(rest), policy, _depth + 1)
@@ -442,7 +442,7 @@ def main():
     policy = load_policy(policy_path) if policy_path else _fallback_policy()
 
     # Classify inside command/process substitutions by their CONTENT (a gated
-    # read in $(...) is still a read — don't blanket-block).
+    # read in $(...) is still a read: don't blanket-block).
     for inner in _substitution_inners(command):
         for sub in _split_segments(inner or ""):
             v, r = classify_segment(sub, policy, _depth=1)
@@ -453,7 +453,7 @@ def main():
     segments = _split_segments(command)
 
     # The >50-segment defensive cap applies ONLY when a gated command is actually
-    # present — a long heredoc/script with no gated CLI must not be blocked.
+    # present: a long heredoc/script with no gated CLI must not be blocked.
     if len(segments) > 50:
         any_gated = any(
             classify_segment(s, policy)[0] == "block" or _base(_tokenize(s)[0][0] if _tokenize(s)[0] else "") in GATED_SET

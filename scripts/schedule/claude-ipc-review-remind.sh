@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fired by the one-shot 'claude-ipc-review' (2026-07-28). Reminds the user that
-# the deferred wake-arc review findings are due — the BRIEF carries the agenda.
+# the deferred wake-arc review findings are due: the BRIEF carries the agenda.
 # Never fails.
 set -uo pipefail
 BRIEF="$HOME/.claude/assets/reports/20260728-claude-ipc-review/BRIEF.md"

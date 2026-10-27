@@ -26,7 +26,7 @@ Use this skill when the user:
 Capture current behavior of existing code before refactoring. Generates tests that document what code actually does (not what it should do), giving you a safety net for AI-assisted refactoring.
 
 **tdd-bug-fix/**
-Reproduce-first bug fix workflow. Write a failing test that demonstrates the bug, then fix it. Ensures the bug never regresses — critical when AI generates fixes.
+Reproduce-first bug fix workflow. Write a failing test that demonstrates the bug, then fix it. Ensures the bug never regresses: critical when AI generates fixes.
 
 **tdd-refactor-guard/**
 Pre-refactor safety checklist. Verifies test coverage exists before allowing AI to touch existing code. Prevents the "refactor without a safety net" problem.
@@ -60,7 +60,7 @@ Cross-module test harness with mock servers, in-memory stores, and test configur
 
 ## Relationship to test-generator
 
-The `generators/test-generator/` skill generates test boilerplate (unit, integration, UI tests). These testing skills are complementary — they focus on **workflows and methodology** (TDD cycle, characterization testing, contracts) rather than just test file generation.
+The `generators/test-generator/` skill generates test boilerplate (unit, integration, UI tests). These testing skills are complementary: they focus on **workflows and methodology** (TDD cycle, characterization testing, contracts) rather than just test file generation.
 
 Cross-reference:
 - Use `test-generator` for "add tests to this class"

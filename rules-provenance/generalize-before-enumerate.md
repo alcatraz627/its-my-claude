@@ -1,5 +1,5 @@
 ---
-brief: Before writing a helper/abstraction that handles "all cases", enumerate the actual cases first — if you can't list them, you don't understand the domain well enough to abstract
+brief: Before writing a helper/abstraction that handles "all cases", enumerate the actual cases first, if you can't list them, you don't understand the domain well enough to abstract
 triggers:
   - topic:abstraction
   - topic:generalization
@@ -28,7 +28,7 @@ covers categories you have not grepped for in the codebase.
 
 ## Boundary with the sibling rule
 
-This rule is about **premature generalization** — abstracting over cases you
+This rule is about **premature generalization**: abstracting over cases you
 haven't enumerated. [[speculative-abstractions-without-a-load-bearing-caller]]
 is about **abstracting with no caller at all**. Related failure modes:
 generalize-before-enumerate fires when you have one real callsite but invent

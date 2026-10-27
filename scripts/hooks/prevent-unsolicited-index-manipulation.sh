@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# prevent-unsolicited-index-manipulation.sh — PreToolUse hook on Bash.
+# prevent-unsolicited-index-manipulation.sh: PreToolUse hook on Bash.
 #
 # Graduated from atone pattern: unsolicited-index-manipulation (S3, 2026-05-14).
 # The incident: agent shipped `git reset HEAD frontend/` as part of a staging
@@ -47,7 +47,7 @@ else
   EXEC_ONLY="$CMD"
 fi
 
-# Patterns that modify the user's curated index — DESTRUCTIVE to in-flight work
+# Patterns that modify the user's curated index: DESTRUCTIVE to in-flight work
 if echo "$EXEC_ONLY" | grep -qE '(^|[;&|(]|&&|\|\|)\s*git\s+(reset(\s+HEAD|\s+--mixed|\s+--soft)?\s+[^-]|restore\s+--staged\b|rm\s+--cached\b|stash(\s+(push|save|pop|apply|drop|clear|store)\b|\s*$))'; then
 
   # Record a feedback event so we can measure hook effectiveness

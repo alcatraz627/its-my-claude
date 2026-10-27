@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# sl-open.sh — Open statusline-related files, prompting for program choice
+# sl-open.sh: Open statusline-related files, prompting for program choice
 # Usage: sl-open.sh [target]
 # Targets: sh, conf, skill, playground, dev-guide, widget-ref, server, audit, cli
 
-# Shared TUI libs — TTY-gated palette + hardened terminal read. Degrade quietly
+# Shared TUI libs: TTY-gated palette + hardened terminal read. Degrade quietly
 # if a lib is absent (no color, safe default) rather than hard-fail.
 for _lib in colors tty; do . "${HOME}/.claude/scripts/tui/${_lib}.sh" 2>/dev/null || true; done
 command -v tui_colors_init >/dev/null 2>&1 && tui_colors_init

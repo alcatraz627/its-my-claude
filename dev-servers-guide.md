@@ -1,4 +1,4 @@
-# Dev Servers — pm2 and Ports
+# Dev Servers: pm2 and Ports
 
 Full reference for running agent apps with pm2.
 
@@ -7,15 +7,15 @@ Full reference for running agent apps with pm2.
 - Frontend: `30xx`, Backend: `50xx`
 - Last 2 digits of port must match across frontend/backend pair
 - Pick an unused suffix (10–99): `ls ~/.claude/scratchpad/global/port-registry.md`
-- **Never use port 3000 or 5000** — reserved by AirPlay/macOS system services
+- **Never use port 3000 or 5000**: reserved by AirPlay/macOS system services
 
 ## Port Registry
 
-`~/.claude/scratchpad/global/port-registry.md` — update this when adding a new server.
+`~/.claude/scratchpad/global/port-registry.md`: update this when adding a new server.
 
-## Persistence — One-Time Machine Setup
+## Persistence: One-Time Machine Setup
 
-**Both steps required** — `pm2 save` alone is not enough to survive a reboot.
+**Both steps required**: `pm2 save` alone is not enough to survive a reboot.
 
 ```bash
 pm2 startup          # prints a sudo command — run it to register the LaunchAgent
@@ -28,7 +28,7 @@ unexpectedly and processes are missing, run `pm2 resurrect` to restore from the 
 
 > **Gotcha (2026-04-08):** After a system event cleared the pm2 daemon, only scaffold-server
 > survived because it was started manually. The 10 other saved processes in dump.pm2 were not
-> restored — `pm2 startup` had not been configured. Always verify with `pm2 startup` after
+> restored: `pm2 startup` had not been configured. Always verify with `pm2 startup` after
 > setting up a new machine.
 
 ## Registering a New App (Standard Workflow)
@@ -97,7 +97,7 @@ bash ~/.claude/scripts/dev-servers/gen-nginx-conf.sh && sudo nginx -t && sudo ng
 
 ## One-off HTML
 
-Use the scaffold server at `localhost:5080` — no pm2 needed.
+Use the scaffold server at `localhost:5080`: no pm2 needed.
 
 ## Full Infrastructure Templates
 

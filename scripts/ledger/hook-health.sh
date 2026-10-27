@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# hook-health.sh — the human lens on how every hook-gate is landing.
+# hook-health.sh: the human lens on how every hook-gate is landing.
 #
 # Turns the accumulating hook-fire telemetry (~/.claude/hooks/warn-events.jsonl)
 # into an at-a-glance per-hook health view: how often each gate fires, in what
 # proportion of block/nudge/soft/muted, whether its nudges are being heeded, which
 # project trips it most, how fresh the last fire is, and whether it is muted while
-# still firing. This is what a human — or a scheduled review session three weeks
-# out — runs to answer "which gates are noisy / effective?" as a query, not a dig.
+# still firing. This is what a human: or a scheduled review session three weeks
+# out: runs to answer "which gates are noisy / effective?" as a query, not a dig.
 #
 # READ-ONLY. Sibling of ledger/efficacy.sh (the slug→gate recurrence lens); this is
 # the raw-firing lens. It never writes to the warn stream, never mutates state.
@@ -15,13 +15,13 @@
 #   fire:  {id?, ts, kind:"warn"?, hook_id, action:"block|nudge|soft|muted"?,
 #           heeded, sid, cwd?, project?, target?, detail?}
 #   heed:  {id, ts, kind:"heed", hook_id, ref, sid, cwd?}
-#   The cwd/project/target/detail fields are NEW + OPTIONAL — a sibling is enriching
+#   The cwd/project/target/detail fields are NEW + OPTIONAL: a sibling is enriching
 #   warn-log now, so most existing lines lack them. Absent → shown as "-". Legacy
 #   lines (predating the `kind` field) carry no kind/action; they ARE fires and are
 #   counted, with action bucketed as "?". Only kind:"heed" is excluded from fires.
 #
 # Heed model: heed-rate is computed from kind:"heed" lines joined to fires (per the
-# telemetry contract), NOT from the fire's own write-time `heeded` field — that
+# telemetry contract), NOT from the fire's own write-time `heeded` field: that
 # field is a placeholder default at fire time ("unknown" new, "false" legacy), a
 # real heed OUTCOME only arrives as a later kind:"heed" line. So heed-rate reads "-"
 # until heed lines accumulate, then gets real automatically.
@@ -102,7 +102,7 @@ MUTE_MAP = {
     "guard-env-access":          ".env-access-off",
     "guard-subagent-output":     ".subagent-output-off",
     "guard-comment-verbosity":   ".no-comment-verbosity-gate",
-    # hard gates — no per-session mute file:
+    # hard gates: no per-session mute file:
     "cli-gating":     None, "prefer-ripgrep": None, "safe-delete": None,
     "protect-atone-raw": None, "telemetry-selftest": None,
 }

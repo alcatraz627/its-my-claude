@@ -1,4 +1,4 @@
-# Pre-Compaction Checkpoint — 2026-04-09T00:37:00+05:30
+# Pre-Compaction Checkpoint: 2026-04-09T00:37:00+05:30
 
 <!-- sessions: 6b3a756f-734f-4e3c-ab00-b6db2cd34220@2026-04-09 -->
 
@@ -23,7 +23,7 @@
 
 ## Recovery Sequence
 
-After compaction, run `/catchup` — it will:
+After compaction, run `/catchup`: it will:
 1. Check WAL for the last CHECKPOINT block (fast path)
 2. Fall back to this file for structured state
 3. Load targeted file context from pending items
@@ -33,7 +33,7 @@ After compaction, run `/catchup` — it will:
 
 ## Recently Modified Files
 
-- _(no git changes detected — check WAL for file references)_
+- _(no git changes detected: check WAL for file references)_
 ## Last WAL Checkpoint
 
 ```
@@ -117,8 +117,8 @@ Newest entries appear at the top. Each entry is prepended by the agent after the
 
 ## Additional Context Sources
 
-- **WAL:** `.claude/wal.md` — full action log with checkpoints
-- **Scratchpad:** `.claude/scratchpad/` — in-progress plans and learnings
+- **WAL:** `.claude/wal.md`: full action log with checkpoints
+- **Scratchpad:** `.claude/scratchpad/`: in-progress plans and learnings
 - **Tasks:** run `TaskList` for pending agent tasks
 
 ---

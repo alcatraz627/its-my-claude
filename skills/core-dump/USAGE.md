@@ -1,4 +1,4 @@
-# /core-dump — Usage Guide
+# /core-dump: Usage Guide
 
 ## What it does
 
@@ -18,7 +18,7 @@ Designed as the hand-off artifact for `/catchup` after `/clear`.
 
 | Argument       | Type     | Description                                                                                                       |
 | -------------- | -------- | ----------------------------------------------------------------------------------------------------------------- |
-| `mini`         | optional | If the first token is `mini`, run in abbreviated mode — just done/not-done/next-steps/goal. Ignores instructions. |
+| `mini`         | optional | If the first token is `mini`, run in abbreviated mode: just done/not-done/next-steps/goal. Ignores instructions. |
 | `filename`     | optional | Output filename. Must end in `.md`. Defaults to `_YYYYMMDD-<session-id>.claude.md`.                               |
 | `instructions` | optional | Style/format instructions for the dump (e.g. "focus on design decisions only", "be terse", "decisions").          |
 
@@ -54,7 +54,7 @@ it (owner ruling 2026-10-13).
 ```
 
 Writes `_decisions.claude.md` containing only the architectural and design decisions made
-during the session — procedural steps and tool calls are collapsed or omitted.
+during the session: procedural steps and tool calls are collapsed or omitted.
 
 ### Example 4: Mid-debug snapshot
 
@@ -100,18 +100,18 @@ Plus a CPU-dump visual summary printed to terminal (not in the file).
 
 The PreCompact hook (`~/.claude/scripts/pre-compact-checkpoint.sh`) runs automatically before
 ALL compaction events (auto and manual `/compact`). It writes a lightweight
-`_precompact-checkpoint.claude.md` — the shell-level counterpart to `/core-dump mini`. The
+`_precompact-checkpoint.claude.md`: the shell-level counterpart to `/core-dump mini`. The
 hook is faster (no skill invocation) but captures less detail since it doesn't have access to
 the full conversation context.
 
 ## Caveats
 
-- Always **overwrites** — never appends. Each `/core-dump` is a full point-in-time snapshot.
-- Does not reproduce large data blocks (file reads, API results, code) verbatim — references them by path or description only.
+- Always **overwrites**: never appends. Each `/core-dump` is a full point-in-time snapshot.
+- Does not reproduce large data blocks (file reads, API results, code) verbatim: references them by path or description only.
 - If run immediately after `/clear` with no work done, writes a minimal "session was empty" checkpoint rather than failing.
 - Requires `/catchup` to be available to resume from the checkpoint; this skill does not implement the resume itself.
 - All generated context files follow the `_*.claude.md` naming convention.
-- Sub-agents **cannot** be used for core-dump — they lack parent conversation context.
+- Sub-agents **cannot** be used for core-dump: they lack parent conversation context.
 - Full mode updates `~/.claude/improvement-ideas.md` with broadly applicable insights.
 
 ## Dependencies
@@ -126,6 +126,6 @@ the full conversation context.
 ## Tips
 
 - Run `/core-dump` just before `/clear` to preserve session context across a clean restart. It runs only when the owner asks, or on keep-warm's last wake; agents never run it on their own.
-- Use the `instructions` arg to tailor the dump for specific use cases — "decisions only" is useful when handing off architectural work to another session.
+- Use the `instructions` arg to tailor the dump for specific use cases: "decisions only" is useful when handing off architectural work to another session.
 - Keep the default filename so `/catchup` can find it without arguments.
-- If you need to preserve multiple snapshots, use named files (`_before-refactor.claude.md`, `_after-auth-fix.claude.md`) — each run overwrites its own file independently.
+- If you need to preserve multiple snapshots, use named files (`_before-refactor.claude.md`, `_after-auth-fix.claude.md`): each run overwrites its own file independently.

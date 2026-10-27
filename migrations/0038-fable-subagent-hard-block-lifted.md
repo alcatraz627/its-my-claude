@@ -1,4 +1,4 @@
-# 0038 — fable-as-sub-agent hard block lifted (sentinel-gated)
+# 0038: fable-as-sub-agent hard block lifted (sentinel-gated)
 
 ## Summary
 
@@ -12,7 +12,7 @@ unchanged: every dispatch still lands in `~/.claude/logs/model-dispatch.jsonl`.
 ## Why
 
 Owner instruction 2026-07-23 (versable-builder session catch-vb-3f): "Okay
-let's lift the fable hard-block altogether" — first use: fable seats on the
+let's lift the fable hard-block altogether": first use: fable seats on the
 CPRD functional-gap review. Sentinel-gated rather than deleted so the block's
 machinery, message, and telemetry survive and re-arming needs no code change.
 
@@ -30,10 +30,10 @@ None. New file: `~/.claude/.allow-fable-subagents` (untracked machine state).
 
 ## Files affected
 
-- `scripts/hooks/guard-model-tier.sh` — sentinel gate replaces promo branch
-- `rules/model-tier-routing.md` — lanes table, ceiling, escape hatches, diagnostic
-- `CLAUDE.md` — Tier-0 model-routing brief
-- `features/model-tier-harness.md` — job-2 description
+- `scripts/hooks/guard-model-tier.sh`: sentinel gate replaces promo branch
+- `rules/model-tier-routing.md`: lanes table, ceiling, escape hatches, diagnostic
+- `CLAUDE.md`: Tier-0 model-routing brief
+- `features/model-tier-harness.md`: job-2 description
 
 ## Phases
 

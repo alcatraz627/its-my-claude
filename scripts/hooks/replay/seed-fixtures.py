@@ -124,7 +124,7 @@ def main():
 
     # auto-select up to 2 SILENT negative controls from the same transcripts:
     # source edited + a success word in the final message, yet the hook stayed
-    # silent (a run was detected) — the case a redesign must NOT start blocking.
+    # silent (a run was detected): the case a redesign must NOT start blocking.
     controls = 0
     success_words = ("done", "works", "fixed", "passing", "passes", "verified", "complete")
     for tid in sorted(used_transcripts):

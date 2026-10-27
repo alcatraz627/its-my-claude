@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# checkpoint/list-transcripts.sh — Cross-reference transcripts with checkpoints.
+# checkpoint/list-transcripts.sh: Cross-reference transcripts with checkpoints.
 #
 # For a given project CWD (or all projects), find Claude Code session transcripts
 # under ~/.claude/projects/<encoded>/ and join them with checkpoints/index.jsonl

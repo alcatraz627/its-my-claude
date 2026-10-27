@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 10-cleanup-tmp-state.sh — Remove stale /tmp/claude-* state files across ALL
+# 10-cleanup-tmp-state.sh: Remove stale /tmp/claude-* state files across ALL
 # prefixes (tab, turns, tools, edits, timeline, net, fchg, statusline, last, ctxwatch, …).
 #
 # REVIVAL:
@@ -7,7 +7,7 @@
 #   owning hooks/scripts. Only files older than RETAIN_DAYS are dropped, so
 #   any active session's state (touched recently) is safe.
 #
-# Renamed 2026-05-17 from 10-cleanup-tab-state.sh — now covers all /tmp/claude-*
+# Renamed 2026-05-17 from 10-cleanup-tab-state.sh: now covers all /tmp/claude-*
 # prefixes uniformly, not just tab-state. See migration 0010.
 
 set -uo pipefail

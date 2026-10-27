@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# policy-approve-ask.sh — the owner approves a policy change by answering a question.
+# policy-approve-ask.sh: the owner approves a policy change by answering a question.
 #
 # An agent cannot change the owner's policy, by design. It can ask: `pol.sh request
 # <key> <value>` records the change under a one-use code and prints the option to

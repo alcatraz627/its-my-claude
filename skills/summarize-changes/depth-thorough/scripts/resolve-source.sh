@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# resolve-source.sh — turn a source spec into commits.tsv + files.txt
+# resolve-source.sh: turn a source spec into commits.tsv + files.txt
 #
 # Usage:
 #   resolve-source.sh pr <N> [--include-worktree]
@@ -9,8 +9,8 @@
 #   resolve-source.sh worktree
 #
 # Outputs to current dir:
-#   01-commits.tsv  — tab-separated: short-sha<TAB>subject
-#   02-files.txt    — one path per line, deduped, sorted
+#   01-commits.tsv: tab-separated: short-sha<TAB>subject
+#   02-files.txt: one path per line, deduped, sorted
 #
 # Notes:
 # - Uses /usr/bin/git explicitly (avoids shell-wrapper interception).

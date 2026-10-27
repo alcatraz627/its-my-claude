@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# harness-usage.sh — did the 2026-08-26 harness get used? One report, four counters,
+# harness-usage.sh: did the 2026-08-26 harness get used? One report, four counters,
 # each from an instrument, none from memory. Scheduled 3 days after the build and at
 # the next two weekly reviews (owner, 2026-08-27). Writes a dated report and prints it.
 #   lanes  : revive / ipc-wake verdict lines in warden/beat.log since the arm date

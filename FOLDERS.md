@@ -1,8 +1,8 @@
-# FOLDERS.md — Top-level folder index for `~/.claude/`
+# FOLDERS.md: Top-level folder index for `~/.claude/`
 
 > Generated index of every top-level directory under `~/.claude/`. Companion to `LOOKUP.md` (address book), `NAMESPACE.md` (logical clusters), `PLACEMENT.md` (placement rules), `GLOSSARY.md` (terms).
 >
-> **Regenerate:** `bash ~/.claude/scripts/folders-index.sh` (rewrites in place; preserves the policy section above the marker; add `--stdout` to preview). Never redirect with `> FOLDERS.md` — the shell truncates the file before the script reads it, destroying the policy section.
+> **Regenerate:** `bash ~/.claude/scripts/folders-index.sh` (rewrites in place; preserves the policy section above the marker; add `--stdout` to preview). Never redirect with `> FOLDERS.md`: the shell truncates the file before the script reads it, destroying the policy section.
 >
 > **Last regenerated:** 2026-07-04 (session tag-skill; census + rules count refreshed)
 
@@ -10,13 +10,13 @@
 
 ## How to use this doc
 
-1. **Adding a new file to `~/.claude/`?** Find the right folder below. If nothing fits, see `PLACEMENT.md` — likely a new sub-file under `rules/`/`features/`/`conventions/` rather than a new top-level folder.
-2. **Cleaning up?** Anthropic-managed folders are off-limits — leave them alone. User folders have intent notes; respect them.
+1. **Adding a new file to `~/.claude/`?** Find the right folder below. If nothing fits, see `PLACEMENT.md`: likely a new sub-file under `rules/`/`features/`/`conventions/` rather than a new top-level folder.
+2. **Cleaning up?** Anthropic-managed folders are off-limits: leave them alone. User folders have intent notes; respect them.
 3. **Folder unfamiliar?** Check the **Intent** column. If empty, it's likely orphaned debris (file an entry in `improvement-ideas.md` rather than touching).
 
 ---
 
-## Anthropic-managed (Claude Code runtime — DO NOT TOUCH)
+## Anthropic-managed (Claude Code runtime: DO NOT TOUCH)
 
 These folders are created and maintained by Claude Code itself. Touching them risks corrupting session state, file-history snapshots, or telemetry.
 
@@ -25,9 +25,9 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 | `agents/` | Agent definitions/state | Single file, rarely touched |
 | `file-history/` | Per-session file snapshots (UUID-keyed) | Drives undo/external-edit detection. Large (~123 MB at 6 mo) but normal |
 | `ide/` | Claude Code IDE integration state | |
-| `plugins/` | Installed plugin marketplace data | ~1 GB — biggest single dir, normal |
-| `projects/` | Per-session conversation transcripts (UUID-keyed jsonl) | ~790 MB — pruned by `std::claude::startup` (gzip at 6 mo, delete at 12 mo) |
-| `session-env/` | Per-session env captures (UUID subdirs) | 880 subdirs, mostly empty — Anthropic cleanup expected |
+| `plugins/` | Installed plugin marketplace data | ~1 GB: biggest single dir, normal |
+| `projects/` | Per-session conversation transcripts (UUID-keyed jsonl) | ~790 MB: pruned by `std::claude::startup` (gzip at 6 mo, delete at 12 mo) |
+| `session-env/` | Per-session env captures (UUID subdirs) | 880 subdirs, mostly empty: Anthropic cleanup expected |
 | `sessions/` | Session metadata | |
 | `tasks/` | TaskCreate/TaskList persistence (UUID-keyed) | |
 | `teams/` | Agent-team state | |
@@ -39,13 +39,13 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 
 ---
 
-## User-created — POLICY-BEARING (where new config lives)
+## User-created: POLICY-BEARING (where new config lives)
 
 These are placement targets governed by `PLACEMENT.md`. Each has its own `README.md` (or `CLAUDE.md`) for policy detail.
 
 | Folder | Purpose | Add here when | Don't add when |
 |---|---|---|---|
-| `rules/` | Behavioral rules — what Claude MUST do | Process rule, mandate, hard guardrail | It's how a thing works (→ `features/`), or how output looks (→ `conventions/`) |
+| `rules/` | Behavioral rules: what Claude MUST do | Process rule, mandate, hard guardrail | It's how a thing works (→ `features/`), or how output looks (→ `conventions/`) |
 | `features/` | Tool/subsystem/integration docs | Documenting a script, MCP, hook system, integration | It's a rule about behavior (→ `rules/`) |
 | `conventions/` | Output/authoring standards | HTML format, CLI help shape, file-naming | It's a behavioral rule (→ `rules/`) |
 | `scripts/` | Executable shell/Python/JS scripts | Reusable script that >1 skill or human invokes | One-off (→ `/tmp`), or prototype only (→ `scratchpad/`) |
@@ -55,7 +55,7 @@ These are placement targets governed by `PLACEMENT.md`. Each has its own `README
 
 ---
 
-## User-created — DATA / RUNTIME
+## User-created: DATA / RUNTIME
 
 Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 
@@ -79,10 +79,10 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `paste-cache/` | clipboard paste hook | Cached pastes from user prompts |
 | `personas/` | `/persona` skill | Working-mode persona prompts (40 files) plus `usage/` adoption log. Activation: `features/persona-activation.md` |
 | `plans/` | misc | Multi-session plan files (`/core-dump` scratchpads, etc.) |
-| `scratchpad/` | scratchpad MCP + global | **Prototype** scratch space — see `reference_scratchpad_system.md` memory entry |
+| `scratchpad/` | scratchpad MCP + global | **Prototype** scratch space: see `reference_scratchpad_system.md` memory entry |
 | `shell-logs/` | shell-mem MCP | Bash command history (DIY mem system) |
 | `shell-snapshots/` | shell-mem MCP | Periodic snapshots of shell history |
-| `subconscious/` | (custom system) | 101 MB; under review — leave alone |
+| `subconscious/` | (custom system) | 101 MB; under review: leave alone |
 | `tools/` | misc | 14 MB single subdir; check before touching |
 | `topics/` | `/cogitate` skill | Topic-themed long-form notes |
 | `widgets/` | statusline widget system | Widget definitions for the statusline (`features/tab-title.md` adjacent) |
@@ -131,7 +131,7 @@ A common decision when writing files inside `~/.claude/`:
 
 ---
 
-<!-- AUTO-GENERATED BELOW — regenerated by scripts/folders-index.sh; do not hand-edit -->
+<!-- AUTO-GENERATED BELOW: regenerated by scripts/folders-index.sh; do not hand-edit -->
 
 ## Census (auto-generated 2026-09-05 13:44)
 

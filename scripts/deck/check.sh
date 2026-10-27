@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# check.sh — measure a rendered deck the way the room will see it: headless Chrome
+# check.sh: measure a rendered deck the way the room will see it: headless Chrome
 # opens deck.html?check=1, the page measures every slide's real overflow and writes
 # the report into the DOM, and this prints it. Then one screenshot per theme of the
 # first over-budget slide (or slide 1) lands beside the deck for the agent to LOOK at.

@@ -49,7 +49,7 @@ Ask user via AskUserQuestion:
 
 1. **Cache storage sizes?**
    - Small (10 MB memory / 50 MB disk)
-   - Medium (25 MB memory / 100 MB disk) — recommended
+   - Medium (25 MB memory / 100 MB disk): recommended
    - Large (50 MB memory / 250 MB disk)
 
 2. **Caching strategy?**
@@ -58,8 +58,8 @@ Ask user via AskUserQuestion:
    - Manual per-endpoint policies
 
 3. **Offline support?**
-   - Yes — serve stale cache when network unavailable
-   - No — only cache while online
+   - Yes: serve stale cache when network unavailable
+   - No: only cache while online
 
 4. **Integration style?**
    - Decorator wrapping existing APIClient (recommended if networking-layer exists)
@@ -73,16 +73,16 @@ Read `templates.md` for production Swift code.
 
 ### Step 2: Create Core Files
 Generate these files:
-1. `HTTPCacheConfiguration.swift` — Memory/disk sizes, default policy
-2. `CachePolicy.swift` — Per-endpoint enum (default, noCache, forceCache, cacheFirst)
-3. `CacheControlHeader.swift` — Cache-Control header parser
-4. `ConditionalRequestHandler.swift` — ETag/Last-Modified/304 handling
-5. `HTTPResponseCache.swift` — Protocol + disk-backed response store
+1. `HTTPCacheConfiguration.swift`: Memory/disk sizes, default policy
+2. `CachePolicy.swift`: Per-endpoint enum (default, noCache, forceCache, cacheFirst)
+3. `CacheControlHeader.swift`: Cache-Control header parser
+4. `ConditionalRequestHandler.swift`: ETag/Last-Modified/304 handling
+5. `HTTPResponseCache.swift`: Protocol + disk-backed response store
 
 ### Step 3: Create Integration Files
 Based on configuration:
-- `CachingAPIClient.swift` — Decorator wrapping existing APIClient (if decorator style)
-- `NetworkReachability.swift` — NWPathMonitor wrapper (if offline support selected)
+- `CachingAPIClient.swift`: Decorator wrapping existing APIClient (if decorator style)
+- `NetworkReachability.swift`: NWPathMonitor wrapper (if offline support selected)
 
 ### Step 4: Determine File Location
 Check project structure:
@@ -174,6 +174,6 @@ func cachedResponseReturnedOnSecondRequest() async throws {
 
 ## References
 
-- **http-cache-patterns.md** — Cache-Control directives, ETag flow, stale-while-revalidate
-- **templates.md** — All production Swift templates
-- Related: `generators/networking-layer` — Base networking layer this decorates
+- **http-cache-patterns.md**: Cache-Control directives, ETag flow, stale-while-revalidate
+- **templates.md**: All production Swift templates
+- Related: `generators/networking-layer`: Base networking layer this decorates

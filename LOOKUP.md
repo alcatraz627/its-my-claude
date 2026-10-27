@@ -11,9 +11,9 @@
 
 ## How to use this index
 
-1. **Session start** — CLAUDE.md is auto-loaded. It contains compact rules + pointers here.
-2. **Need details?** — Scan the trigger column below. Read only the file(s) relevant to your task.
-3. **Creating new config?** — Write a dedicated file, add a row to this index, reference it from CLAUDE.md if it's always-on.
+1. **Session start**: CLAUDE.md is auto-loaded. It contains compact rules + pointers here.
+2. **Need details?**: Scan the trigger column below. Read only the file(s) relevant to your task.
+3. **Creating new config?**: Write a dedicated file, add a row to this index, reference it from CLAUDE.md if it's always-on.
 
 ---
 
@@ -22,14 +22,14 @@
 | File | Brief | Read when... |
 |------|-------|-------------|
 | `~/.claude/CLAUDE.md` | Core always-on rules (testing, git, shell, session ID, WAL, context) | Every session (auto-loaded) |
-| `~/.claude/LOOKUP.md` | This index — address book for all config files | Need to find where a rule lives, or adding new config |
+| `~/.claude/LOOKUP.md` | This index: address book for all config files | Need to find where a rule lives, or adding new config |
 | `~/.claude/PLACEMENT.md` | **Two-axis placement rule (category × tier) + trigger taxonomy + anti-patterns.** Determines where new rules/features/conventions go. [impr-cfg-7a@2026-04-24] | Adding any new config file; reviewing an existing file's placement; Phase B migration |
-| `~/.claude/GLOSSARY.md` | Terminology reference for the GCC — abbreviations, namespace labels, concepts, file conventions | Encountering unfamiliar shorthand; adding new terms the user introduces |
-| `~/.claude/FOLDERS.md` | **Per-folder index** — every top-level dir under `~/.claude/`, owner (Anthropic vs user), purpose, what-goes-here / what-doesn't. Auto-regen via `scripts/folders-index.sh`. | Adding a new top-level folder, cleaning up unknown dirs, deciding where data goes |
+| `~/.claude/GLOSSARY.md` | Terminology reference for the GCC: abbreviations, namespace labels, concepts, file conventions | Encountering unfamiliar shorthand; adding new terms the user introduces |
+| `~/.claude/FOLDERS.md` | **Per-folder index**: every top-level dir under `~/.claude/`, owner (Anthropic vs user), purpose, what-goes-here / what-doesn't. Auto-regen via `scripts/folders-index.sh`. | Adding a new top-level folder, cleaning up unknown dirs, deciding where data goes |
 | `~/.claude/rules/00-index.md` | **Rules menu**: one line per behavioral rule (name + load-mode + gist), DERIVED from each rule's `brief:` via `scripts/rules-index.sh`; `scoped` rules are not autoloaded, Read them when they apply | Deciding which behavioral rule applies; finding a rule by name; after adding/removing a rule |
 | `*-domain/` + `i-dream/` `ledger/` `pinned/` `scheduled/` | **i-dream event-domain subsystem**: per-domain event capture (`events.jsonl`) to derived session-start hinters (`_tldr.txt` / `triggers.json`) to a weekly dream pass. Engine source `~/Code/Claude/i-dream`; per-dir owners in `FOLDERS.md`; `scheduled/registry.json` runs the passes | Understanding session-start insight injection, the dream cycle, or where feedback events go |
 | `~/.claude/memory/global/MEMORY.md` | Cross-project global memory tier index (24 feedback/user memories). **Not auto-loaded**: no hook or harness path reads it (`features/memory.md` §Tiers; verified gcc-map v3 and v4). Read it on demand alongside the auto-loaded per-project MEMORY.md | Any session that wants the cross-project defaults; per-project memory overrides it on conflict |
-| `~/.claude/assets/reports/20260905-gcc-structure-map/MAP.md` | **Living GCC structure map** (v4, `/gcc-map --deep`, 2026-09-05): how content reaches an agent, the doc graph, ranked empirical-vs-claimed divergences, a critic's audit of the audit in `lenses/critic.md`, and a ten-sheet visual companion `map.html`. Its TL;DR carries the open high-severity findings — they are live items, not archive. v3 (2026-07-04) is the baseline it diffs against | Any structural question about `~/.claude`; before restructuring config; checking what the map already flagged |
+| `~/.claude/assets/reports/20260905-gcc-structure-map/MAP.md` | **Living GCC structure map** (v4, `/gcc-map --deep`, 2026-09-05): how content reaches an agent, the doc graph, ranked empirical-vs-claimed divergences, a critic's audit of the audit in `lenses/critic.md`, and a ten-sheet visual companion `map.html`. Its TL;DR carries the open high-severity findings: they are live items, not archive. v3 (2026-07-04) is the baseline it diffs against | Any structural question about `~/.claude`; before restructuring config; checking what the map already flagged |
 | `~/.claude/assets/reports/20260930-repo-census/README.md` | **Repo census, dated 2026-09-30**: every repo in the versable-git org (47) and the alcatraz627 account (90) classified from commit, author and deploy evidence into product, client build, platform / internal service, internal tool, personal tool, MVP / POC, dormant and archived, with usage level, a one-line description and flagged judgment calls. `gather.py <owner>` refreshes it into a new dated folder | Any task that surveys, picks from, or describes the owner's repos; before re-gathering repo facts; check the date and refresh if it is stale |
 | `~/.claude/settings.json` | Permissions, hooks, plugins, env vars, UI settings | Modifying hooks, permissions, or plugin config |
 | `~/.claude/settings.local.json` | Local permission overrides (npm, git, skills, etc.) | Adding tool permissions for local dev |
@@ -38,23 +38,27 @@
 
 > Split out from `CLAUDE.md` in session `impr-cfg-7a@2026-04-24` (634-line → 122-line router). Every file carries YAML frontmatter with `brief`, `triggers` (prefixed `tool:`/`topic:`/`phrase:`/`skill:`/`mcp:`), `related`, `tier`, `category`, `updated`, `stale_after_days`. See `~/.claude/PLACEMENT.md` for the two-axis rule. Validate with `bash ~/.claude/scripts/validate-triggers.sh`.
 
-### `rules/` — behavioral/process rules
+### `rules/`: behavioral/process rules
 
 | File | Brief | Primary triggers |
 |------|-------|------------------|
 | `rules/communication.md` | Terse protocol, scope control, state verification | `topic:terse-responses`, `topic:scope-control` |
+| `rules/audience-aware-writing.md` | **scoped** (md/txt/README globs). Name the reader, meaning first, zero em-dashes, no Label:fragment rows or bold-spam, fresh reviewer for the final voice pass | `topic:docs-work`, `topic:voice`, `topic:ai-smell` |
+| `rules/dense-briefing-direct-answer.md` | First line of a reply is the one thing the owner must decide or do; no "what I did" opener | `topic:status-report`, `topic:terse-responses` |
+| `rules/absolute-paths-at-the-reader-boundary.md` | Paths in a reply are absolute on first mention | `topic:paths`, `topic:replies` |
 | `rules/testing.md` | Test every non-trivial change; clean-slate; verify each change | `topic:testing`, `topic:verification` |
 | `rules/shell.md` | Project-root-first grep, `trash` not `rm`, non-interactive flags | `topic:shell`, `tool:trash` |
 | `rules/git.md` | Frequent commits, public by default, gitignore, no main push | `topic:git-commits`, `topic:github-repos` |
 | `rules/machine-token-where-human-words-belong.md` | **scoped** (`paths:` UI/template globs). A machine value reaching a person's screen untranslated: a code, a raw scalar, a value's type, a sentinel shown as a name. The tell is a surface formatting SOME fields and passing the rest through | `topic:ui`, `topic:rendering`, `phrase:"object Object"` |
 | `rules/corrections.md` | After-correction ritual: state mistake → invoke /atone → fix | `topic:user-corrections`, `phrase:"revert this"` |
-| `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm, AND the calendar-companion contract (every cron gets an `Automations` event; retire both together — absorbed cron-calendar-companion.md 2026-07-09) | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:CronCreate`, `tool:gcc-schedule` |
+| `rules/scheduling-discipline.md` | Cross-tool scheduling practice (`std::claude::schedule`): which scheduler for which job, --description required, naming, retire-after-fire, no-secrets-in-command, audit cadence, pause-vs-rm, AND the calendar-companion contract (every cron gets an `Automations` event; retire both together: absorbed cron-calendar-companion.md 2026-07-09) | `topic:scheduling`, `topic:cron`, `topic:launchd`, `tool:CronCreate`, `tool:gcc-schedule` |
 
-### `features/` — tool/subsystem/integration docs
+### `features/`: tool/subsystem/integration docs
 
 | File | Brief | Primary triggers |
 |------|-------|------------------|
 | `features/wal.md` | Write-ahead log format, kinds, checkpoint cadence | `tool:wal`, `skill:catchup` |
+| `features/versable-envs.md` | versable-git only: each repo's staging and release branch, GCP project, deploy triggers and preview grants. Script: `scripts/versable/envs.py` | `topic:versable-envs`, `phrase:"staging env"`, `phrase:"preview env"` |
 | `features/memory.md` | Per-project + global memory, cascade rules | `topic:memory`, `phrase:"remember that"` |
 | `features/context-retention.md` | Session ID, core-dump/catchup, scratchpad, archive cadence | `skill:core-dump`, `skill:catchup`, `topic:session-id` |
 | `features/proposals.md` | Improvement backlog + self-feedback → canon lifecycle | `tool:propose.sh`, `topic:improvements` |
@@ -89,7 +93,7 @@
 | `features/declared-ready-stop-hook.md` | Stop-hook that blocks a premature done/works/shipped claim when nothing ran | `topic:declared-ready`, `topic:stop-hook` |
 | `features/env-access-convention-hook.md` | Env-access convention hook (DESIGN, not built): cache a project's env convention, nudge accesses | `tool:guard-env-access`, `topic:env-access` |
 
-### `conventions/` — output/authoring standards
+### `conventions/`: output/authoring standards
 
 | File | Brief | Primary triggers |
 |------|-------|------------------|
@@ -99,8 +103,10 @@
 | `conventions/pages.md` | Which surface to show something on, plus the shared page kit and page check | `topic:html-output`, `topic:reports`, `topic:artifacts`, `skill:page` |
 | `conventions/html-output.md` | Older HTML guidance: the colour system the kit uses, complexity tiers, snippets | `topic:html-output` |
 | `conventions/ascii-diagrams.md` | Proactive box-drawing diagrams; /diagram for complex | `skill:diagram`, `topic:diagrams` |
-| `conventions/doc-writing.md` | Technical doc guidelines + anti-patterns (migrated from root) | `skill:write-docs`, `topic:docs-work` |
-| `conventions/report-writing.md` | Genre contract for reports, RCAs, changelogs, review outputs: per finding symptom, impact, path, detail; caveats carry verbatim; critic gate before delivery | `topic:reports`, `topic:rca`, `topic:changelog` |
+| `features/prose-and-voice.md` | Map of every prose, voice and anti-slop capability (rules, personas, skills, hooks, lints, style data) by surface, with overlaps, contradictions and consolidation options; read before adding a writing rule or prose gate | `topic:prose-quality`, `topic:voice`, `topic:ai-smell`, `phrase:"prose gate"` |
+| `conventions/doc-writing.md` | The standard for every human-facing doc: common rules plus tiers for reference docs, READMEs, changelogs, reports and RCAs (§16 genre contract), PR and commit text. Technical doc guidelines + anti-patterns | `skill:write-docs`, `topic:docs-work`, `topic:reports`, `topic:rca`, `topic:changelog` |
+| `conventions/language-quality.md` | Ratified prose defect taxonomy (structure, verdict-first, contrast scaffolds, bare ids, option menus, overclaims) and which gate covers which surface | `topic:prose-quality`, `topic:ai-smell` |
+| `conventions/rca-template.md` | Incident report section order in plain, neutral statements | `topic:rca` |
 | `conventions/readme-template.md` | The standard README structure for this account's projects (banner, what is this, architecture, quick start, by-what-you-came-to-do table, repo structure) | `skill:readme`, `topic:readme` |
 | `conventions/absence-run-checklist.md` | Checklist for any run the owner leaves unattended: every lane names its store, row filter and authority; each agent writes its state to disk before it stops | `topic:absence-run`, `topic:overnight`, `phrase:"keep going while I'm away"` |
 | `conventions/scratch-files.md` | `_*.claude.md` hygiene + monthly archive to assets/checkpoints | `topic:scratch-files`, `topic:checkpoints` |
@@ -131,7 +137,7 @@
 | Skill | Invocation | Brief | Use when... |
 |-------|-----------|-------|-------------|
 | `designer-reviewer/SKILL.md` | `/designer-reviewer [screenshot-path]` | Reviews UI screenshots against terminal-dashboard aesthetic fingerprints (FP-1–FP-6). Scores 5 dimensions, generates findings + CSS fixes. Calibrated for pm2-manage, visualize-claude, and developer tool UIs | Reviewing any dark-mode dashboard or tool UI for visual consistency against the established design system |
-| `doctor/SKILL.md` | `/doctor` | On-demand environment health check — worktrees, pm2 status, disk, WAL staleness, git dirty count, event log health, hook integrity, MCP config validity. Wraps `scripts/health-check.sh` | Running a quick env audit mid-session, or after seeing unexpected hook behavior |
+| `doctor/SKILL.md` | `/doctor` | On-demand environment health check: worktrees, pm2 status, disk, WAL staleness, git dirty count, event log health, hook integrity, MCP config validity. Wraps `scripts/health-check.sh` | Running a quick env audit mid-session, or after seeing unexpected hook behavior |
 | `autocorrect/SKILL.md` | `/autocorrect [subcommand]` | Manage typo correction dictionaries: list, add, teach, ignore, log, undo, test, stats. Data in `assets/autocorrect/`, log at `.autocorrect-log.jsonl` | Managing autocorrect dictionaries, reviewing correction history, teaching new mappings |
 | `mini/SKILL.md` | `/mini <prompt>` | Fast mini-model query (<1s) using local Ollama or cloud Haiku. Templates: session-title, doc-lookup, cmd-compose, summarize. All surfaces share `llm-mini-core.sh`. CLI: `llm-mini`. Engine: `llm-mini engine [start\|stop\|status]` | Quick lookups, session titles, command composition, short summaries |
 | `skills-parked/past-sessions/SKILL.md` | (parked, mig 0048; not invocable) | Browse, search, summarize past Claude Code transcripts in `~/.claude/projects/`. Parked 2026-08-21; the live equivalents are `/revive` (full rehydration) and `/catchup` (checkpoint briefing) | Recalling past conversation content; use `/revive` or `/catchup` today |
@@ -149,9 +155,9 @@
 | `shared/asset-management.md` | Asset registry: register, find, expire, cleanup via `asset.sh` | Creating screenshots, reports, PDFs, or any non-source file |
 | `shared/wal-format.md` | WAL session header, action log, and checkpoint format | Writing WAL entries or parsing WAL for `/catchup` |
 | `shared/gum-guide.md` | Interactive TUI patterns with `gum` (choose, filter, spin) | Building skill UIs with terminal prompts |
-| `assets/docs/gum-rendering-examples.md` | Visual output gallery: tables, boxes, architecture diagrams, flowcharts, dashboards, color reference — all TTY-safe | Writing `gum_table`/`gum style`/`gum join` output; styling terminal results; composing diagram layouts |
+| `assets/docs/gum-rendering-examples.md` | Visual output gallery: tables, boxes, architecture diagrams, flowcharts, dashboards, color reference: all TTY-safe | Writing `gum_table`/`gum style`/`gum join` output; styling terminal results; composing diagram layouts |
 | `assets/docs/port-system-architecture.md` | Port-discipline internals: event-log fold semantics, allocation mutex, owner-boundary rules, fail-open rationale, known edges, sandbox test recipe | UPGRADING ports.sh or guard-dev-server-port.sh (everyday use needs only features/dev-servers.md) |
-| `shared/desktop-automation.md` | macOS GUI automation v1: screencapture, osascript, cliclick patterns, usage examples, Phase 2 upgrade spec | Any desktop automation task — screenshots, clicks, window management, Space switching |
+| `shared/desktop-automation.md` | macOS GUI automation v1: screencapture, osascript, cliclick patterns, usage examples, Phase 2 upgrade spec | Any desktop automation task: screenshots, clicks, window management, Space switching |
 | `shared/bash-gotchas.md` | Bash pitfalls: `cat\|jq` pipe hangs, `\|\|`/`&&`/`\|` precedence, when to use Read vs Bash | Before writing any multi-step shell pipeline or file inspection command |
 | `shared/lock-file.sh` | File lock acquire/release/check for parallel agent safety | Before any write to shared files (runtime-notes, SKILL.md) |
 | `shared/check-path.sh` | Validates path is not in forbidden list | Before any write operation |
@@ -164,7 +170,7 @@
 |------|-------|-------------|
 | `scripts/desktop.sh` | macOS desktop automation helper: screenshot, windows, click, type, key, space, focus subcommands | Running desktop automation tasks without constructing raw screencapture/osascript/cliclick commands |
 | `scripts/tui/file-preview.sh` | Reusable rich `fzf --preview` module: jq/bat/xlsx-sheets, degrades to head, always exits 0 | Building any fzf-based picker that needs a file preview pane (plug-and-play; std::claude::tui) |
-| `scripts/tui/{colors,tty,require,pick}.sh` | std::claude::tui input library: TTY-gated palette · honest tty probe + bounded read · dep preflight · fzf→gum→read pick ladder (`tui_pick_one`/`pick_many`/`choose`/`confirm`) | Building a shell TUI — source these instead of re-rolling color/tty/pick/confirm |
+| `scripts/tui/{colors,tty,require,pick}.sh` | std::claude::tui input library: TTY-gated palette · honest tty probe + bounded read · dep preflight · fzf→gum→read pick ladder (`tui_pick_one`/`pick_many`/`choose`/`confirm`) | Building a shell TUI: source these instead of re-rolling color/tty/pick/confirm |
 | `scripts/tui/list.sh` | Live catalog of the tui/ primitives, scanned from the module doc-headers (auto-current) | Run `bash ~/.claude/scripts/tui/list.sh` to see what tui primitives exist before building a TUI |
 | `conventions/mods-handbook.md` | What gcc draws inside Claude Code (statusline and gcc-mods): which surface for what, band-row presets S1/S2/S3, chip, color and link rules, where borrowed community-mod ideas go | Before adding or restyling anything in the statusline, the band, or a mod pane |
 | `conventions/tui-handbook.md` | How to build a TUI here: the `--__` fzf-app blueprint, features catalog, the trap→fix failure-mode table, testing-without-a-tty, destructive-tool rules, library reference | Before building or auditing any terminal UI (fzf/gum/read) |
@@ -178,7 +184,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 
 | Command | Brief | Use when... |
 |---------|-------|-------------|
-| `zconvert` | Convert tabular data between csv/tsv/xlsx/json, any direction; refuses structurally-broken output, preserves long IDs; `zconvert --capabilities`/`-h` for support | Changing a data file's format — prefer over a throwaway pandas/csv/openpyxl script |
+| `zconvert` | Convert tabular data between csv/tsv/xlsx/json, any direction; refuses structurally-broken output, preserves long IDs; `zconvert --capabilities`/`-h` for support | Changing a data file's format: prefer over a throwaway pandas/csv/openpyxl script |
 | `zap` | Hunt + kill a specific process surgically (fzf picker, signal/scope menu, tree view, htop-style `^K`/`^X`) | Killing the right process by port/name/args without nuking everything |
 | `memhog` | Rank processes by a memory type (macOS), zero deps | "what's eating my RAM" |
 
@@ -187,7 +193,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | File | Hook type | Brief | Read when... |
 |------|-----------|-------|-------------|
 | `scripts/safe-delete.sh` | PreToolUse (Bash) | Blocks `rm`, suggests `trash` with yellow warning | Debugging blocked `rm` commands |
-| `scripts/block-nested-claude.sh` | PreToolUse (Write\|Edit\|MultiEdit\|NotebookEdit\|Bash) | Blocks a **write** that would land in `~/.claude/.claude/` — a declared nested target, or a relative `.claude/…` write judged against CWD. Reads/greps/tests of that path are allowed; the directory itself is legitimate project-scoped config. Tests: `scripts/block-nested-claude.test.sh` | Debugging a blocked nested-path rejection; writing skills that default to `.claude/output/...` |
+| `scripts/block-nested-claude.sh` | PreToolUse (Write\|Edit\|MultiEdit\|NotebookEdit\|Bash) | Blocks a **write** that would land in `~/.claude/.claude/`: a declared nested target, or a relative `.claude/…` write judged against CWD. Reads/greps/tests of that path are allowed; the directory itself is legitimate project-scoped config. Tests: `scripts/block-nested-claude.test.sh` | Debugging a blocked nested-path rejection; writing skills that default to `.claude/output/...` |
 | `scripts/emit-event.sh` | Multiple hooks (SessionStart, Stop, UserPromptSubmit, PostToolUse, PreCompact, PostCompact) | Appends one JSONL line per hook firing to `~/.claude/events.jsonl`; flock-guarded, async, fails soft | Debugging event log gaps; querying `events.jsonl` for cross-project activity |
 | `scripts/find-events-log.sh` | Utility | Resolves path to the global `events.jsonl` so skills don't hardcode | Writing a skill that reads the event log |
 | `assets/asset.sh` | CLI tool | Register, find, expire, cleanup managed assets | Creating or finding non-source files |
@@ -212,17 +218,17 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `scripts/session-mgmt/detect-stale-session.sh` | SessionStart (NOT async) | Scans `~/.claude/.turn-state/` for orphan turn files (<48h) and `~/.claude/wal.jsonl` for dangling `session_start` without matching `session_end` (<24h); emits `additionalContext` prompting `/catchup` if either signal fires | Debugging why a session did/didn't see the catchup prompt on startup |
 | `scripts/session-mgmt/heartbeat.sh` | PostToolUse (catchall) | Increments `heartbeat-<sid>` counter; every Nth call (default 10, `CLAUDE_HEARTBEAT_INTERVAL` overrides) writes a WAL `heartbeat` action. Gives /catchup a tight bound on last-known-good state in long sessions | Tuning heartbeat frequency; debugging missing heartbeats in WAL |
 | `scripts/wal/bash-wal.sh` | PreToolUse + PostToolUse (matcher=Bash) | Writes `bash_intent` (Pre) and `bash_closed` (Post) WAL actions with cmd preview, `uid=<short>`, and `status=ok\|error\|interrupted`. Lets /catchup see which shell command was in flight if a session crashed mid-Bash | Reconstructing crashed session's last shell command; tuning cmd preview length |
-| `scripts/claude-resilient.sh` | **DEPRECATED** — do not use | Exit-code-gated retry wrapper that works for neither case: interactive never exits non-zero on a transient 429 (so retry can't fire); headless `-p` retry is bare `claude --continue` which drops the prompt. Verified 2026-06-18 (`assets/reports/20260618-api-error-48h-analysis`). | Nothing — kept as a record. Interactive recovery → `scripts/hooks/api-recovery-nudge.sh`; fleet recovery → `scripts/fleet-triage.py`. Do NOT alias `claude` to it. |
+| `scripts/claude-resilient.sh` | **DEPRECATED**: do not use | Exit-code-gated retry wrapper that works for neither case: interactive never exits non-zero on a transient 429 (so retry can't fire); headless `-p` retry is bare `claude --continue` which drops the prompt. Verified 2026-06-18 (`assets/reports/20260618-api-error-48h-analysis`). | Nothing: kept as a record. Interactive recovery → `scripts/hooks/api-recovery-nudge.sh`; fleet recovery → `scripts/fleet-triage.py`. Do NOT alias `claude` to it. |
 | `scripts/session-mgmt/post-compact-recovery.sh` | PostCompact | Restores critical context after compaction | Debugging post-compact state |
-| `scripts/shell-mem/` (was `diy-mem/`) + dispatcher `scripts/shell-mem.sh` | Multiple hooks | Shell memory system (init, track, inject, mark-done) — invoke via `shell-mem.sh <subcommand>` | Debugging shell history tracking |
+| `scripts/shell-mem/` (was `diy-mem/`) + dispatcher `scripts/shell-mem.sh` | Multiple hooks | Shell memory system (init, track, inject, mark-done): invoke via `shell-mem.sh <subcommand>` | Debugging shell history tracking |
 | `scripts/rotation/rotate-events.sh` | Stop (async) | Archives `events.jsonl` when it exceeds 50MB (gzip → `assets/backups/events-archive/`); fails soft | Debugging event log rotation; adjusting threshold via `EVENTS_ROTATE_THRESHOLD` |
 | `scripts/rotation/rotate-wal.sh` | Stop (async) | Archives `wal.jsonl` (both global `~/.claude/wal.jsonl` AND project-local `$CWD/.claude/wal.jsonl`) when it exceeds 5MB. Label in archive name distinguishes `global` vs project | Adjusting threshold via `WAL_ROTATE_THRESHOLD`; debugging missing WAL after rotation |
 | `scripts/rotation/prune-backups.sh` | CLI / weekly | Trashes items in `~/.claude/assets/backups/` older than 180 days (override via `BACKUP_RETENTION_DAYS`). `--preview` / `--apply`; uses `trash` for recoverable deletion | Reclaiming disk; checking what's about to expire |
-| `scripts/schedule/schedule.sh` | CLI tool (`std::claude::schedule`) | gcc-schedule v0.5: `add` (one-shot via `--at`, recurring via `--daily-at` / `--weekly <dow>`) / `list [--all]` / `inventory` / `doctor [--check-calendar]` / `show` / `run` / `logs` / `enable` (alias `resume`) / `disable` (alias `pause`) / `duplicate` / `register` / `rm`. Always prints a `PLANNED:` block before mutating; `--dry-run` exits after that block. `--cron` is intentionally rejected — focused flags only. Supports `--env KEY=VAL` (repeatable), `--working-dir <path>`. Per-name dir at `~/.claude/scheduled/<name>/`. Registry at `~/.claude/scheduled/registry.json`. Aliased to `gcc-schedule` in `~/.zshrc` | Scheduling any launchd job (Ghostty wake, daily digest, weekly review, deferred command); adopting an existing manually-built plist; auditing what's loaded via `inventory`; checking drift via `doctor` |
+| `scripts/schedule/schedule.sh` | CLI tool (`std::claude::schedule`) | gcc-schedule v0.5: `add` (one-shot via `--at`, recurring via `--daily-at` / `--weekly <dow>`) / `list [--all]` / `inventory` / `doctor [--check-calendar]` / `show` / `run` / `logs` / `enable` (alias `resume`) / `disable` (alias `pause`) / `duplicate` / `register` / `rm`. Always prints a `PLANNED:` block before mutating; `--dry-run` exits after that block. `--cron` is intentionally rejected: focused flags only. Supports `--env KEY=VAL` (repeatable), `--working-dir <path>`. Per-name dir at `~/.claude/scheduled/<name>/`. Registry at `~/.claude/scheduled/registry.json`. Aliased to `gcc-schedule` in `~/.zshrc` | Scheduling any launchd job (Ghostty wake, daily digest, weekly review, deferred command); adopting an existing manually-built plist; auditing what's loaded via `inventory`; checking drift via `doctor` |
 | `scripts/schedule/INSTRUCTIONS.md` | Doc (`std::claude::schedule`) | Claude-facing usage contract for gcc-schedule. Covers the three scheduling modes (one-shot, daily, weekly), the PLANNED-block self-check discipline, why `--cron` is absent, common patterns, what NOT to do, and when to halt + ask the human. Linked from `help` and from this row. | Before invoking `gcc-schedule add` for the first time in a session; deciding which scheduling mode fits an ambiguous request |
 | `scripts/validate-memory.sh` | CLI / CI | Scans `~/.claude/projects/*/memory/*.md` for file-path references and flags ones that no longer exist. Placeholder patterns (`/path/to/`, `<foo>`, `YYYY`) are filtered out. Exit code 1 on stale refs | Auditing memory system for rot; wiring into CI or a /doctor deep-check |
 | `scripts/test-hooks.sh` | CLI / CI | 16 tests covering block-nested-claude, safe-delete, emit-event (duration/error flags), rotate-events, rotate-wal, validate-memory. Uses `HOME`-override for isolation. `--filter <substr>` narrows scope. Exit 1 on any failure | Verifying hook behavior before registering new entries; regression-testing after edits to hook scripts |
-| `scripts/wal/wal.sh` | CLI helper | Appends JSONL lines to `.claude/wal.jsonl` (or `~/.claude/wal.jsonl`). Wraps `jq -cn` for safe escaping. Kinds: session_start/action/decision/agent_start/agent_done/checkpoint/session_end | Writing WAL entries safely — never hand-compose JSONL |
+| `scripts/wal/wal.sh` | CLI helper | Appends JSONL lines to `.claude/wal.jsonl` (or `~/.claude/wal.jsonl`). Wraps `jq -cn` for safe escaping. Kinds: session_start/action/decision/agent_start/agent_done/checkpoint/session_end | Writing WAL entries safely: never hand-compose JSONL |
 | `scripts/wal/wal-convert.sh` | CLI one-shot | Converts legacy `wal.md` → `wal.jsonl` via python3 state machine. Tolerant of real-world format variance (id-date headers, `**Goal:**`, bullet actions). `--dry-run`, `--output <path>` | Migrating an old markdown WAL to the JSONL format |
 | `scripts/hint-injector.sh` | UserPromptSubmit | Runs all hinters from `~/.claude/hinters/` in sort order, aggregates hints into single additionalContext injection | Debugging hint pipeline, adding new hinters |
 | `hinters/00-autocorrect.sh` | Hinter (via hint-injector) | Layer 0/1 typo correction: custom-terms whitelist + known-typo map. Logs to `.autocorrect-log.jsonl`. ~34ms | Debugging autocorrect behavior, false positives |
@@ -232,16 +238,16 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `scripts/llm-mini/llm-mini-engine.sh` | Engine manager | Ollama lifecycle: start/stop/status/switch/stats/models + cold-start ensure + idle watchdog | Managing Ollama runtime, model switching, auto-start/stop |
 | `scripts/llm-mini/llm-mini-hook.sh` | Hook callable | Sourceable `mini_quick()` for hooks; enforces 3s timeout, prefers local backend | Using mini inside hook scripts (session titles, summaries) |
 | `llm-mini.conf` | Config | Persistent settings: backend, model, timeouts, auto-start, idle shutdown | Customizing llm-mini behavior |
-| `assets/mini-prompts/` | Templates | 4 prompt templates: `session-title`, `doc-lookup`, `cmd-compose`, `summarize` — `{{input}}` placeholder | Adding or modifying mini-model prompt templates |
+| `assets/mini-prompts/` | Templates | 4 prompt templates: `session-title`, `doc-lookup`, `cmd-compose`, `summarize`: `{{input}}` placeholder | Adding or modifying mini-model prompt templates |
 
 ## Blueprint & Design Surfaces (`~/.claude/code/`)
 
 | File | Brief | Read when... |
 |------|-------|-------------|
 | `~/.claude/code/README.md` | `std::claude::code` cluster: reference material for things to build (roadmaps, design sketches, templates) vs. `::scripts` (runtime) vs. `::improvement` (backlog) | Navigating design docs; deciding where a new proposal / roadmap / template belongs |
-| `~/.claude/code/ideas/` | `std::claude::code::ideas` — design sketches and roadmaps you intend to build (vs. `::improvement::ideas` which is ungraduated backlog) | Starting a concrete design doc for a new feature |
-| `~/.claude/code/templates/` | `std::claude::code::templates` — reusable file skeletons (SKILL.md, script, migration doc templates) | Scaffolding a new skill / script / migration from a template |
-| `~/.claude/code/templates/spinner-demo.ts` | Drop-in pulsing terminal spinner — braille + pulse-dot styles, time-based animation, exports `startSpinner({style, label})`. Run `bun spinner-demo.ts` to preview. [notion-sync@2026-04-30] | Adding a CLI loading indicator that pulses like Claude Code or npm |
+| `~/.claude/code/ideas/` | `std::claude::code::ideas`: design sketches and roadmaps you intend to build (vs. `::improvement::ideas` which is ungraduated backlog) | Starting a concrete design doc for a new feature |
+| `~/.claude/code/templates/` | `std::claude::code::templates`: reusable file skeletons (SKILL.md, script, migration doc templates) | Scaffolding a new skill / script / migration from a template |
+| `~/.claude/code/templates/spinner-demo.ts` | Drop-in pulsing terminal spinner: braille + pulse-dot styles, time-based animation, exports `startSpinner({style, label})`. Run `bun spinner-demo.ts` to preview. [notion-sync@2026-04-30] | Adding a CLI loading indicator that pulses like Claude Code or npm |
 | `~/.claude/code/terminal-tooling-notion-sync.md` | Reusable CLI tooling patterns from notion-sync: gum wizards, env validation, progress bar+ETA, osascript notifications, defaults file, adaptive rate limit, retry passes, content-addressed cache, crash-safe partial save, run-logs JSONL. Each section has code snippets + commit references. [notion-sync@2026-05-01] | Building any Bash+bun/node CLI that needs polished interactive UX |
 
 ## Scratchpad & Working Memory
@@ -259,9 +265,9 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `~/.claude/projects/.../memory/MEMORY.md` | Per-project memory index (auto-memory system) | Recalling user preferences, past decisions |
 | `~/.claude/weekly-todos.md` | Weekly task list reviewed Mon/Wed/Sat | Planning work, checking pending items, weekly review |
 | `~/.claude/scripts/weekly-todo.sh` | CLI for weekly todos: `add`, `done`, `rm`, `list`, `ensure`, `archive` | Managing weekly todos from shell or agent scripts |
-| `~/.claude/.mcp.json` | **Active global MCP servers** — dot-prefixed, this is what Claude Code reads | Adding/removing global MCP servers. ⚠ Never create `mcp.json` (no dot) — it is silently ignored |
-| `~/.claude/mcp-catalog.json` | Pre-configured MCP server definitions for `/add-mcp` | Adding MCP servers to a project — NOT the active server list |
-| `shared/mcp-config.md` | Full MCP file reference, gotcha notes, server inventory | Any MCP config work — read this before touching MCP files |
+| `~/.claude/.mcp.json` | **Active global MCP servers**: dot-prefixed, this is what Claude Code reads | Adding/removing global MCP servers. ⚠ Never create `mcp.json` (no dot): it is silently ignored |
+| `~/.claude/mcp-catalog.json` | Pre-configured MCP server definitions for `/add-mcp` | Adding MCP servers to a project: NOT the active server list |
+| `shared/mcp-config.md` | Full MCP file reference, gotcha notes, server inventory | Any MCP config work: read this before touching MCP files |
 | `~/.claude/disabled-plugins.json` | Registry of disabled plugins with reasons | Re-enabling plugins for specific projects |
 
 ## Agents & Personas
@@ -282,7 +288,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 
 | Path | Brief | Read when... |
 |------|-------|-------------|
-| `~/.claude/assets/reports/20260621-large-review-strategy/REPORT.md` | **Large Review Strategy** — reusable calibrated playbook for reviewing a big / distributed change (large PR, restructure, bulk sweep, many files): review by transformation-TYPE not file order, trust green CI, stakes-order, cheap agent pre-flag greps. Backed by a 6-discipline MAGI panel (code / peer-review / wiki / editorial / large-diff + jester) in `magi-panel/`. Auto-surfaced by hinter `20-large-review-strategy.sh`. | Designing how to review any large or distributed contribution; "how much effort does this review deserve"; "the diff is enormous, where do I look" |
+| `~/.claude/assets/reports/20260621-large-review-strategy/REPORT.md` | **Large Review Strategy**: reusable calibrated playbook for reviewing a big / distributed change (large PR, restructure, bulk sweep, many files): review by transformation-TYPE not file order, trust green CI, stakes-order, cheap agent pre-flag greps. Backed by a 6-discipline MAGI panel (code / peer-review / wiki / editorial / large-diff + jester) in `magi-panel/`. Auto-surfaced by hinter `20-large-review-strategy.sh`. | Designing how to review any large or distributed contribution; "how much effort does this review deserve"; "the diff is enormous, where do I look" |
 | `~/.claude/assets/reports/20260417-0144-phase12-complete/index.html` | Phase 1+2 upgrade final report (minimal style). Covers async-flip audit, global event log, /doctor + /past-sessions skills, WAL JSONL migration, backup + revert paths | Reviewing what Phase 1+2 changed; deciding what to revert; grepping for "why did we touch X" |
 | `~/.claude/assets/reports/20260417-phase12-complete.md` | Source markdown for the above report (reusable with `/create-report --style <other>` via `data.json`) | Restyling the upgrade report, citing sections in other docs |
 | `~/.claude/assets/backups/20260417-phase12-upgrade/` | Pristine settings.json backup + 130-line RESTORE.md with symptom→cause table for Phase 1+2 reverts | Reverting a specific Phase 1+2 change, or diagnosing hook misbehavior introduced after 2026-04-17 |

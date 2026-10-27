@@ -4,7 +4,7 @@ Efficient use of @Query, FetchDescriptor, predicates, and sorting for optimal pe
 
 ## @Query in SwiftUI Views
 
-The `@Query` property wrapper fetches data reactively — the view updates automatically when data changes.
+The `@Query` property wrapper fetches data reactively: the view updates automatically when data changes.
 
 ### Basic Usage
 

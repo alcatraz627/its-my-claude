@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test-banned-vocab.sh — synthetic-tree acceptance suite for guard-banned-vocab.sh.
+# test-banned-vocab.sh: synthetic-tree acceptance suite for guard-banned-vocab.sh.
 # Builds throwaway project trees (some with a .claude/banned-vocab.txt, some
 # without), synthesizes PreToolUse payloads, runs the REAL hook, and asserts
 # block/silence behavior. Non-zero exit on any FAIL.

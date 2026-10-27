@@ -37,11 +37,11 @@ Track memory growth over repeated operations:
 3. Perform an operation (open screen, load data, etc.)
 4. Click **Mark Generation** again
 5. Repeat the same operation
-6. Compare generations — growth between identical operations = leak or unbounded cache
+6. Compare generations: growth between identical operations = leak or unbounded cache
 
 **What to look for:**
 - Stable: Each generation has similar Live Bytes
-- Leaking: Each generation grows — objects from previous generations persist
+- Leaking: Each generation grows: objects from previous generations persist
 - Caching: Growth that plateaus after a few generations (may be intentional)
 
 ### Common Memory Issues
@@ -107,7 +107,7 @@ func downsample(imageAt url: URL, to pointSize: CGSize, scale: CGFloat) -> UIIma
 
 ### How Leaks Detection Works
 - Scans heap at intervals for objects with no root references
-- Detects **unreachable** memory — allocated but no path from stack/globals
+- Detects **unreachable** memory: allocated but no path from stack/globals
 - Does NOT detect **logical leaks** (reachable but never used, like unbounded caches)
 
 ### Common Retain Cycle Patterns
@@ -213,11 +213,11 @@ let token = NotificationCenter.default.addObserver(
 - **Left sidebar**: List of all live objects grouped by type
 - **Purple exclamation marks**: Xcode-detected leaks / retain cycles
 - **Center canvas**: Visual graph of object references
-- Click an object to see its retain graph — who holds a strong reference to it
+- Click an object to see its retain graph: who holds a strong reference to it
 
 ### Debugging Tips
 - Filter by your module name to ignore system objects
-- Look for **cycles** — two objects pointing at each other
+- Look for **cycles**: two objects pointing at each other
 - Check **backtrace** in the right sidebar to see where the object was allocated
 - Export the graph: **File > Export Memory Graph** for sharing
 
@@ -280,8 +280,8 @@ func logMemoryFootprint() {
 ```
 
 ## Quick Diagnosis Checklist
-- [ ] Run Allocations with Generation Analysis — does memory grow across identical operations?
-- [ ] Run Leaks instrument — any detected leaks?
+- [ ] Run Allocations with Generation Analysis: does memory grow across identical operations?
+- [ ] Run Leaks instrument: any detected leaks?
 - [ ] Check Memory Graph Debugger for retain cycles (purple warnings)
 - [ ] Search for `self` in closures without `[weak self]` or `[unowned self]`
 - [ ] Verify delegates are declared `weak`

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# atone-session-key.test.sh — the atone fleet keys its state on the SESSION, not the day.
+# atone-session-key.test.sh: the atone fleet keys its state on the SESSION, not the day.
 #
 # What this protects, in human terms: every part of the atone system keeps a little
-# state per session — "a correction is pending", "this slug already fired". If two
+# state per session: "a correction is pending", "this slug already fired". If two
 # sessions running on the same day share one state file, one session's business
 # leaks into another's. That is not hypothetical: on 2026-05-24 an escalation
 # quoted a memory-consolidation fragment from an unrelated session back at an agent
@@ -10,7 +10,7 @@
 # (fb-20260524-025127-7810-5c3707b2).
 #
 # The mechanism was a variable name. CLAUDE_SESSION_ID is never set by the harness
-# — the real one is CLAUDE_CODE_SESSION_ID — so `${CLAUDE_SESSION_ID:-$(date ...)}`
+# : the real one is CLAUDE_CODE_SESSION_ID: so `${CLAUDE_SESSION_ID:-$(date ...)}`
 # always silently landed on the date. atone.sh, atone-stop-check.sh and
 # atone-stop-gate.sh were corrected; the two hinters and this check were missed and
 # kept writing/reading date-keyed state for weeks.
@@ -91,7 +91,7 @@ echo
 echo "== circuit breaker reads the key atone.sh writes =="
 # atone.sh records each atone to .session-atone-slugs/<session_id>.json. The
 # breaker exits quietly when it finds no counter, so reading the wrong key does not
-# fail loudly — it just never fires. Seed a counter and assert the breaker looks
+# fail loudly: it just never fires. Seed a counter and assert the breaker looks
 # for it under the same name.
 T=$(mktemp -d)
 mkdir -p "$T/.claude/.session-atone-slugs" "$T/.claude/atone/derived"
@@ -112,7 +112,7 @@ echo
 echo "== with no session id at all, every reader does nothing =="
 # The old chain ended in `date +%Y-%m-%d`. That is not a fallback, it is the bug:
 # a key every session running that day shares. All three readers now exit instead.
-# Nothing here asserts the date key "works" — the point is that it is gone.
+# Nothing here asserts the date key "works": the point is that it is gone.
 T=$(mktemp -d); mkdir -p "$T/.claude/atone" "$T/.claude/.session-atone-slugs"
 noenv() { env -u CLAUDE_CODE_SESSION_ID -u CLAUDE_SESSION_ID HOME="$T" "$@"; }
 

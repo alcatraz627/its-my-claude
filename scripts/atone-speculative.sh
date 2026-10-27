@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# atone-speculative.sh — the speculative half of the atone system.
+# atone-speculative.sh: the speculative half of the atone system.
 #
 # The nightly residue review nominates atone-worthy moments it saw in a session's
 # transcript. A nomination is NOT an atone: it lands here, in its own ledger, and
-# the audited session MUST resolve it one of two ways — confirm (file the real
+# the audited session MUST resolve it one of two ways: confirm (file the real
 # /atone and link it) or refute (cite evidence). The hinter re-injects unresolved
 # rows every turn, so silence is not one of the options; that asymmetry is the
 # owner's design ("if it doesn't make the atone system bother the agent it will

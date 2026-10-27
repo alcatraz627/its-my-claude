@@ -95,7 +95,7 @@ When in doubt, write it.
    the dispatch (it runs after PARENT-persist too)? If not, add it.
 5. Is the output a REPORT (findings, audit, RCA, analysis for a reader)? Then
    the dispatch prompt also carries one line: "Follow
-   `~/.claude/conventions/report-writing.md`: per finding symptom → impact →
+   `~/.claude/conventions/doc-writing.md` §16: per finding symptom → impact →
    path → detail; caveats carry verbatim." Reports inherit the genre contract
    at birth and not at review time.
 

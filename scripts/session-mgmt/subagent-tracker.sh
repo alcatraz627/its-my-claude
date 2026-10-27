@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SubagentStart/SubagentStop hook: track active subagents in a temp file
 # Used by statusline.sh to show active subagent count + names
-# Handles both events — dispatches on hook_event_name
+# Handles both events: dispatches on hook_event_name
 set -uo pipefail
 
 input=$(cat)

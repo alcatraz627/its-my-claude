@@ -31,19 +31,19 @@ If no server names are given, show the catalog and ask which to add.
 
 ---
 
-## Step 1 — Read the catalog
+## Step 1: Read the catalog
 
 ```bash
 cat ~/.claude/mcp-catalog.json
 ```
 
 Parse `catalog` object. Each entry has:
-- `description` — one-line summary
-- `tags` — categories (database, cloud, hosting, etc.)
-- `requiresEnv` — env var names that must exist in the shell (from `~/.zshrc` or env)
-- `templateVars` — keys with default values that the user can override at inject time
-- `when` — guidance on when to use this MCP
-- `config` — the actual `mcpServers` entry to inject
+- `description`: one-line summary
+- `tags`: categories (database, cloud, hosting, etc.)
+- `requiresEnv`: env var names that must exist in the shell (from `~/.zshrc` or env)
+- `templateVars`: keys with default values that the user can override at inject time
+- `when`: guidance on when to use this MCP
+- `config`: the actual `mcpServers` entry to inject
 
 If `--list`, print a table and exit:
 ```
@@ -65,7 +65,7 @@ Available MCP servers in catalog:
 
 ---
 
-## Step 2 — Resolve which servers to add
+## Step 2: Resolve which servers to add
 
 If server names were passed as arguments, use those.
 
@@ -78,7 +78,7 @@ Validate all names against the catalog. For any unknown name, print an error and
 
 ---
 
-## Step 3 — Read or initialize project .mcp.json
+## Step 3: Read or initialize project .mcp.json
 
 Check for `.mcp.json` in the current working directory:
 
@@ -95,7 +95,7 @@ For each requested server that **already exists** in the project's `.mcp.json`:
 
 ---
 
-## Step 4 — Resolve template variables
+## Step 4: Resolve template variables
 
 For each server being added, check `templateVars`:
 
@@ -117,7 +117,7 @@ For `requiresEnv` keys: check if they exist in the environment. If missing, warn
 
 ---
 
-## Step 5 — Merge and write
+## Step 5: Merge and write
 
 Deep-merge the resolved `config` entries into the existing `.mcp.json` under `mcpServers`.
 
@@ -140,7 +140,7 @@ Or write directly with the Write tool if python isn't available.
 
 ---
 
-## Step 6 — Confirm
+## Step 6: Confirm
 
 Print a summary:
 ```
@@ -161,5 +161,5 @@ Remind the user that `.mcp.json` changes require a Claude Code restart to connec
 
 - Never print secret values from `requiresEnv` entries.
 - The catalog is at `~/.claude/mcp-catalog.json`. Add new entries there to make them available everywhere.
-- To add a new entry to the catalog, edit `~/.claude/mcp-catalog.json` directly — it's plain JSON.
+- To add a new entry to the catalog, edit `~/.claude/mcp-catalog.json` directly: it's plain JSON.
 - Plugin-provided MCPs (Chrome DevTools, Playwright, Sentry, Slack) are managed by their plugin and do NOT need entries here.

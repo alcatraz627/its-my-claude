@@ -1,15 +1,22 @@
 ---
-brief: Technical doc guidelines: anti-pattern catalog, STUB/PARTIAL/PLANNED annotations, audience modes
+brief: The writing standard for every human-facing document, as common rules plus per-surface tiers (reference docs, READMEs, changelogs, reports and RCAs, PR and commit text). Anti-pattern catalog, find-and-flag list, report genre contract, annotations, audience modes
 triggers:
   - skill:write-docs
   - topic:docs-work
   - topic:technical-writing
+  - topic:reports
+  - topic:rca
+  - topic:changelog
+  - skill:skeptical-review
+  - skill:summarize-changes
+  - skill:magi
   - phrase:"write docs"
   - phrase:"document this"
-related: []
-tier: 2
+  - phrase:"write a report"
+related: [rules/audience-aware-writing.md, conventions/rca-template.md, conventions/readme-template.md, features/prose-and-voice.md, style/profiles.json]
+tier: 1
 category: conventions
-updated: 2026-04-24
+updated: 2026-10-27
 stale_after_days: 90
 ---
 
@@ -17,7 +24,18 @@ stale_after_days: 90
 
 ## Overview
 
-Technical docs under `docs/` or `*/docs/` (excluding READMEs, CLAUDE.md files, changelogs, scratchpad). The checklist at a glance:
+This file governs every document a person reads (owner ruling D5c, 2026-10-27): some rules hold everywhere, and each kind of document adds its own tier on top.
+
+| Tier | Applies to | Sections |
+| --- | --- | --- |
+| Common | every human-facing document | §3 voice catalog, §4 find-and-flag, §15 fresh-reviewer voice pass, zero em-dashes, sentence caps from `style/profiles.json`, caveats carried verbatim and numbers grounded (§16) |
+| Reference | technical docs under `docs/` or `*/docs/`, guides, ADRs | Common, plus §2 and §5 to §14 |
+| README | repo READMEs | Common, plus the shape in `conventions/readme-template.md` |
+| Changelog | changelogs and release notes | Common, plus §16's context-before-enumeration and caveat rules |
+| Report | reports, RCAs, incident docs, audits, review findings | Common, plus §16 in full; RCAs for non-engineers also use `conventions/rca-template.md` |
+| PR and commit | PR bodies and commit messages | Common, plus `rules/git.md` and the `/pr-description` skill |
+
+Agent-facing files (CLAUDE.md, rules, skills, personas, checkpoints, scratch) are outside this file; `rules/audience-aware-writing.md` covers their register. The reference-tier checklist at a glance:
 
 1. **Audience assumption**: the reader is unfamiliar with the system. Support two reading modes: linear (tutorial-style, read top-to-bottom) and lookup (drop-in on any heading and find your answer).
 2. **Voice**: direct, specific, no marketing. Avoid a 19-item anti-pattern list: "deceptively," "transactional dance," "hunt for," "and beyond," "seamless," "robust," hedging modifiers ("relatively," "fairly"), meta-commentary ("let's explore," "as we'll see").
@@ -43,13 +61,9 @@ Ruleset for technical documentation authored by Claude. Built from a 2026-04-23 
 
 ## 1. When this file applies
 
-Load and apply the rules in this file when any of the following is true:
+Load and apply the rules in this file whenever the agent writes something a person will read as a document: a doc, README, changelog, release note, report, RCA, review output, PR body or commit message. Pick the tier from the table in the Overview. The common rules apply in every tier.
 
-- A task touches a file under `docs/`, `*/docs/`, or any `.md` path outside `.claude/`, `node_modules/`, `_*.claude.md` scratch files, or a repo-root `README.md`.
-- The user's request contains any of: "write docs," "document," "rewrite this doc," "technical writing," "reference doc," "product doc," "update the create-\* doc."
-- A skill with a `/doc-*` or `/write-docs` name is invoked.
-
-Do not apply these rules to: repo-root `README.md` (different template conventions), `CLAUDE.md` files (agent instructions), scratchpad/checkpoint files, changelogs, release notes, or marketing copy.
+Do not apply these rules to agent-facing files: `CLAUDE.md` files, rules, skills, personas, scratchpad and checkpoint files.
 
 ## 2. Audience assumption
 
@@ -219,7 +233,7 @@ After: "Submit calls `useCreateJobMutation` → `POST /api/jobs/create`."
 
 **Fails because:** persuasive-essay rhetoric.
 
-Before: "The column map is not just a mapping — it's a contract."
+Before: "The column map is not just a mapping: it's a contract."
 After: "The column map is the schema contract between the frontend and downstream modules."
 
 ### 3.18 Explaining what the doc is about to do
@@ -242,7 +256,7 @@ Entries 3.1–3.19 cover prose tics. The entries below are the broader structura
 
 #### 3.20 Em dashes as connective tissue `[observed]`
 
-The single strongest tell. LLMs splice clauses with em dashes where a human writer would end the sentence or use a colon. One per page is fine; one per paragraph is a fingerprint. Restructure: period, colon, comma, or parenthesis. (Legitimate uses survive: heading separators, ranges, true parentheticals used sparingly.)
+The single strongest tell. LLMs splice clauses with em dashes where a human writer would end the sentence or use a colon. The budget is zero (the owner's thesaurus verdict, also enforced by the prose gates). Restructure: period, colon, comma, or parenthesis. A range takes an en-dash or "to"; a heading separator takes a colon.
 
 #### 3.21 Rule-of-three triads
 
@@ -250,7 +264,7 @@ The single strongest tell. LLMs splice clauses with em dashes where a human writ
 
 #### 3.22 Contrastive antithesis framing
 
-"It's not X — it's Y." "This isn't about A; it's about B." Persuasive-essay rhetoric (sibling of 3.17). State what the thing is.
+`It's not X: it's Y.` `This isn't about A; it's about B.` Persuasive-essay rhetoric (sibling of 3.17). State what the thing is.
 
 #### 3.23 Uniform rhythm `[observed]`
 
@@ -296,7 +310,7 @@ Bolding **key phrases** every sentence trains the reader to ignore bold. Reserve
 
 Narrating the doc's own carefulness ("two things are both true here, and the doc states both so neither is mistaken", "this is subtle", "note that these are not in conflict", "to be clear") tells a casually-exploring reader they've wandered into a place of doubt and confusion, exactly where trust drops. State the facts neutrally and let them stand; do not editorialize that you are handling a tricky point or that two facts coexist. (It is fine to discuss the subtlety with a human in chat; the doc stays neutral.)
 
-Before: "Two things are both true here, and the doc states both so neither is mistaken: the system supports multiple currencies, and only USD is enabled. So these are not in conflict — the first is the design, the second the current config."
+Before: "Two things are both true here, and the doc states both so neither is mistaken: the system supports multiple currencies, and only USD is enabled. So these are not in conflict: the first is the design, the second the current config."
 After: "Each plan carries a `currency` field; the `currencyEnum` currently holds a single value, USD, so every plan is USD. Adding a currency is a one-value enum change." (Both facts, stated flat, no framing.)
 
 **Calibration note.** This list is a detector, not a banlist to regex-replace. A doc can pass every entry and still read generated if the rhythm is off, and a doc can contain one triad and read fine. The test that matters: would a reader who distrusts AI-written docs take this page seriously?
@@ -494,7 +508,7 @@ Pause and ask the user rather than guessing, if:
 - A backend or external-system behavior is load-bearing to the doc and you have not read that system.
 - A section reads flat no matter how you phrase it. The underlying content may be wrong, and the voice may be fine.
 
-## 7. You cannot see your own voice: route the voice pass to a fresh agent
+## 15. You cannot see your own voice: route the voice pass to a fresh agent
 
 The single most reliable finding about AI-smell is that **the author is blind to
 their own.** An agent auditing documents for the §3 tells will, in the same
@@ -519,6 +533,69 @@ fixes voice and rarely cuts; for a `heavy`-tier doc, follow it with
 
 This is the doc-writing instance of the general rule that fresh-context
 adversarial review beats in-context self-review (cf. `/skeptical-review`).
+
+## 16. Reports, RCAs and review output
+
+This section is the report tier (it absorbed `conventions/report-writing.md` on
+2026-10-27). It covers reports, RCAs, incident docs, changelogs, audit outputs
+and review findings wherever they live, including `assets/reports/**`: any
+document whose reader asks "what happened and what should I do about it".
+
+### The reader
+
+A **semi-informed principal**: they know the system's shape, they did not watch
+the work, and their time is the scarce resource. Unlike the unfamiliar reader of
+§2, they need each finding connected to the system they already hold, without
+tutorial context and without naked mechanism. An RCA for readers outside
+engineering uses the section order in `conventions/rca-template.md`; this
+section still governs its voice.
+
+### Per finding: the chain, in order
+
+1. **Symptom in system terms.** What breaks or is wrong, named at the level the
+   reader experiences it.
+2. **Impact.** Why it matters, what happens if unfixed, and who or what hits it.
+3. **Path.** How the symptom connects to the mechanism (the route from the
+   visible thing to the buried thing).
+4. **Detail.** The mechanism itself: file:line, the arg-length mismatch, the
+   flag. Detail is the end of a finding and never the whole of it.
+
+"Arg length mismatch in a buried function caused ledger overflow" is a 4-only
+finding. It is a true fact with the chain amputated, and it fails this tier.
+
+### Report level
+
+- Context comes before enumeration: say what was examined, why, and what the
+  reader should do differently for knowing the result, before any finding list.
+- **Caveats are content** (a common rule, every tier). A shorter rendering of a
+  claim (summary, abstract, recap, commit message) keeps the claim's qualifiers
+  or does not make the claim. `UNCONFIRMED`, "not independently reviewed" and
+  "true for fresh-register only" carry verbatim. Provenance: the claude-ipc
+  away-recaps that compressed caveated prose into nine unqualified
+  "hardened/tested/deployed" claims.
+- Ground every number and incident to a chaseable source (file, commit, event
+  id), also a common rule. An ungrounded ratio is the same defect as the 4-only
+  finding.
+- **Review findings end with a Dispositions table**: `finding → fixed |
+  deferred (owner) | rejected (reason)`. Undispositioned findings are debt, and
+  the count rides the Resume Contract's Standing caveats until it reaches zero
+  (about 50 of 54 findings sat unactioned in the claude-ipc hardening sprint,
+  including the one that predicted the fire).
+
+### The gate
+
+Before a `heavy`-tier report (per `style/scope-map.json`) reaches the owner or is
+filed as a main artifact, dispatch the **readers-advocate** persona
+(`personas/readers-advocate.md`, sonnet) against it and apply or consciously
+reject its findings. The author cannot see its own noise at any model tier,
+reviewers' own reports included. The dispatcher logs the pass via
+`scripts/style/style-log.sh`, which also writes the voice-passed marker.
+
+### Sub-agent reports inherit this at birth
+
+Dispatch prompts for report-producing sub-agents include one line: "Follow
+`~/.claude/conventions/doc-writing.md` §16: per finding symptom → impact → path →
+detail; caveats carry verbatim." (See `rules/sub-agent-outputs.md`.)
 
 ---
 

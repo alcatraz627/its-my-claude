@@ -9,7 +9,7 @@ Two fundamentally different approaches to offline support:
 | Default state | Online; offline is an edge case | Offline; online is a sync opportunity |
 | Reads | Always from server | Always from local store |
 | Writes | Fail or queue when offline | Always write locally, sync later |
-| Complexity | Lower — queue and retry | Higher — full local data layer + sync |
+| Complexity | Lower: queue and retry | Higher: full local data layer + sync |
 | User experience | "Retry when online" banners | App works seamlessly, syncs in background |
 | Best for | Form submissions, mutations | Note apps, todo apps, field apps |
 
@@ -216,11 +216,11 @@ struct ConflictResolutionView: View {
 
 | App Type | Recommended Strategy |
 |----------|---------------------|
-| Social media (posts, comments) | Server-wins — other users' context matters |
-| Note-taking / personal data | Client-wins — user's changes are sacred |
-| Collaborative editing | Manual merge — both versions matter |
-| E-commerce (orders) | Idempotency — conflicts shouldn't happen |
-| Analytics / logging | Last-write-wins — order doesn't matter |
+| Social media (posts, comments) | Server-wins: other users' context matters |
+| Note-taking / personal data | Client-wins: user's changes are sacred |
+| Collaborative editing | Manual merge: both versions matter |
+| E-commerce (orders) | Idempotency: conflicts shouldn't happen |
+| Analytics / logging | Last-write-wins: order doesn't matter |
 
 ## Operation Dependencies
 
@@ -558,9 +558,9 @@ actor MockOperationExecutor: OfflineOperationExecuting {
 For manual testing on device or simulator:
 
 1. **On device:** Settings > Developer > Network Link Conditioner
-   - "100% Loss" — simulates complete offline
-   - "Very Bad Network" — simulates intermittent connectivity
-   - "Edge" — simulates slow cellular
+   - "100% Loss": simulates complete offline
+   - "Very Bad Network": simulates intermittent connectivity
+   - "Edge": simulates slow cellular
 
 2. **On Mac (for simulator):** Install "Network Link Conditioner" from Additional Tools for Xcode
    - System Settings > Network Link Conditioner

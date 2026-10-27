@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Tests for guard-git-push.sh's GATING DECISION: which pushes reach the approval
 # machinery and which pass silently. The approval machinery itself (sentinel,
-# dialog) is NOT stubbed-and-trusted here — the 2026-07-13 incident showed a
-# stubbed osascript can hide a fail-open — so these tests only assert gate-reached
+# dialog) is NOT stubbed-and-trusted here: the 2026-07-13 incident showed a
+# stubbed osascript can hide a fail-open: so these tests only assert gate-reached
 # (the hook emits its block/ask output) versus not-gated (silent exit 0), with
 # osascript stubbed to DENY so a gated case can never pop UI or approve itself.
 set -uo pipefail

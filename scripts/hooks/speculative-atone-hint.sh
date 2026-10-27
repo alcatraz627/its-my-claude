@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# speculative-atone-hint.sh — UserPromptSubmit: the "MUST address" half of the
+# speculative-atone-hint.sh: UserPromptSubmit: the "MUST address" half of the
 # residue review. Injects this session's unresolved speculative atones every turn
 # until each is confirmed (real /atone filed and linked) or refuted (evidence
 # logged). The repetition is the design: given a choice, an agent picks the easier

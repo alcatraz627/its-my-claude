@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dense-shapes-readout.sh — the pre-registered readout for dense-briefing-shapes-stop.sh.
+# dense-shapes-readout.sh: the pre-registered readout for dense-briefing-shapes-stop.sh.
 #
 # The decision rule lives in ~/Code/Claude/i-dream/.claude/output/20260918-3wk-review/next-tracks.md
 # (track 2) and was fixed before the first fire, so the number cannot argue for

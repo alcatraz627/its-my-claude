@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# slice-diffs.sh — produce per-chunk diff files from a git range + chunks.json
+# slice-diffs.sh: produce per-chunk diff files from a git range + chunks.json
 #
 # Usage:
 #   slice-diffs.sh <range> [--include-worktree]

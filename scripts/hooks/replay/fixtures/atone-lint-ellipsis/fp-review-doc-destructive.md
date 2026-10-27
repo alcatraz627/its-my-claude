@@ -1,7 +1,7 @@
-# FP fixture (R3) — a review doc that quotes destructive UI code
+# FP fixture (R3): a review doc that quotes destructive UI code
 
 Path contains "review" (matches the R3 glob) and the body quotes `onClick` plus
-destructive verbs (delete/remove/revert). Expected: atone-lint fires NOTHING —
+destructive verbs (delete/remove/revert). Expected: atone-lint fires NOTHING:
 a markdown findings report describes UI code without being an interactive
 surface. The R3 destructive-action nudge must be scoped off `.md`/`.txt`/`.mdx`.
 

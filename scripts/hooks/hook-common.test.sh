@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# hook-common.test.sh — runnable checks for hook-common.sh.
+# hook-common.test.sh: runnable checks for hook-common.sh.
 #
 # Covers what the replay fixture corpus structurally cannot: the replay gate uses
 # a FRESH synthetic session id per fixture and cleans up after each, so it only
-# ever exercises a hook's FIRST fire — never the repeat/loop-safety path that
+# ever exercises a hook's FIRST fire: never the repeat/loop-safety path that
 # hook_loop_check owns. This test drives that path end-to-end (block once, then
 # step aside on the identical message) plus the unit behaviour of both helpers.
 #
@@ -32,7 +32,7 @@ hook_loop_check "$M" "claim TWO"; ok "changed = new"             "$?" "0"
 hook_loop_check "$M" "claim TWO"; ok "repeat after change"       "$?" "1"
 ok "marker holds latest sig" "$(cat "$M")" "$(printf '%s' 'claim TWO' | shasum | awk '{print $1}')"
 rm -f "$M"
-# adversarial content must not be evaluated — only hashed
+# adversarial content must not be evaluated: only hashed
 M2="$(mktemp -u "${TMPDIR:-/tmp}/hcm2-XXXXXX")"; rm -f "$M2"
 CANARY="$(mktemp -u "${TMPDIR:-/tmp}/hccanary-XXXXXX")"
 hook_loop_check "$M2" 'x`touch '"$CANARY"'`; $(touch '"$CANARY"') & end'
@@ -50,7 +50,7 @@ hook_clear_reset "hcrtest0" "$CR"; [ -f "$CR" ] && r=kept || r=reset; ok "clear_
 rm -f "$CR" "$SENT"
 
 # ── injector integration: post-clear-counter-reset.sh source-gating ──────────
-# Exercises the script that reads a real .source payload + derives sid8 — the gap
+# Exercises the script that reads a real .source payload + derives sid8: the gap
 # the skeptical review flagged (only the primitive was covered). Note: this proves
 # the injector's LOGIC given source=="clear"; that the harness actually SENDS
 # "clear" on /clear is a separate, harness-level fact (see the script header).
@@ -98,7 +98,7 @@ printf '%s' "$B" | tail -1 | grep -q '^└─';       ok "box: bottom rule close
 
 # Regression: printf-built bodies usually end WITHOUT a newline, and a bare
 # `read` loop drops that final line. Caught by running the real hook, never by
-# reading it — the reason arrived one line short with no error anywhere.
+# reading it: the reason arrived one line short with no error anywhere.
 NL="$(printf 'first\nLASTLINE' | hook_box 'NO TRAILING NEWLINE')"
 printf '%s' "$NL" | grep -q 'LASTLINE'; ok "box: final line without newline survives" "$?" "0"
 
@@ -141,7 +141,7 @@ if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&
   PT="$(mktemp "${TMPDIR:-/tmp}/hc-prose-XXXXXX")"
   # Trips em-dash + bold-spam + Label:fragment = 3 block-tier categories.
   jq -cn '{type:"assistant",message:{content:[{type:"text",text:"Here is the summary — it covers everything.\n\n**One**: the loader resolves correctly and returns the parsed value now.\n**Two**: the cache was invalidated on every write which caused the stall.\n**Three**: the retry path is bounded so a failure cannot spin forever.\n**Four**: logging moved behind a flag to keep the hot path quiet here.\n**Five**: the tests cover the empty and the overflow case end to end.\n**Six**: documentation was regenerated to match the reference exactly.\n"}]}}' > "$PT"
-  # 9 chars, so sid8 truncates to a known 8 — a sid of exactly 8 makes the
+  # 9 chars, so sid8 truncates to a known 8: a sid of exactly 8 makes the
   # marker path the whole string and a hand-written cleanup path silently misses.
   PSID="hcbox001x"; rm -f "/tmp/claude-prose-smell-hcbox001"
   PIN="$(jq -cn --arg s "$PSID" --arg tp "$PT" '{session_id:$s, transcript_path:$tp}')"

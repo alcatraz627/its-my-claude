@@ -1610,7 +1610,7 @@ extension EnvironmentValues {
 
 ## sips-screenshot-process.sh
 
-A lightweight post-processing script using macOS's built-in `sips` command. Zero external dependencies — no Swift compilation, no fastlane, no ImageMagick. Best for macOS app screenshots where you just need to resize and crop to App Store dimensions.
+A lightweight post-processing script using macOS's built-in `sips` command. Zero external dependencies: no Swift compilation, no fastlane, no ImageMagick. Best for macOS app screenshots where you just need to resize and crop to App Store dimensions.
 
 ```bash
 #!/bin/bash
@@ -1732,7 +1732,7 @@ ls -la "$OUTPUT_DIR"/
 
 ## macos-screenshot-env.sh
 
-Prepares the macOS desktop environment for clean screenshot capture. Sets clock time, hides desktop icons, configures wallpaper, and hides the dock. Uses `trap` to restore everything on exit — even if the script fails or is interrupted.
+Prepares the macOS desktop environment for clean screenshot capture. Sets clock time, hides desktop icons, configures wallpaper, and hides the dock. Uses `trap` to restore everything on exit: even if the script fails or is interrupted.
 
 ```bash
 #!/bin/bash

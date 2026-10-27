@@ -1,6 +1,6 @@
 ---
 number: 0022
-title: Persona activation + efficacy logging — persona-log.sh, two hooks, dispatch wiring
+title: Persona activation + efficacy logging, persona-log.sh, two hooks, dispatch wiring
 slug: persona-activation-logging
 status: complete
 date: 2026-06-18
@@ -16,7 +16,7 @@ affected_paths:
   - personas/README.md
 ---
 
-# Migration 0022 — Persona activation + efficacy logging
+# Migration 0022: Persona activation + efficacy logging
 
 ## Summary
 
@@ -32,7 +32,7 @@ rewrites (in-place, not part of this migration's structural surface).
 ## Why
 
 `rg "personas/" skills/ scripts/ hooks/` returned only `atone-juror-dispatch.sh`
-and `magi/SKILL.md` — i.e. working-mode personas had **no activation event at
+and `magi/SKILL.md`: i.e. working-mode personas had **no activation event at
 all**. With no activation point, there was nowhere to hang a usage log, and no
 proactive trigger beyond the agent reading a file when told to. That made both
 "improve the trigger" and "log every usage" impossible without first building
@@ -52,14 +52,14 @@ the activation substrate. Design + rationale: `features/persona-activation.md`.
 
 One JSON object per invocation; empty fields omitted:
 `{id, ts, persona, session, mode(adopted|dispatched), depth, task, outcome(accepted|revised|discarded|unknown), loop(converged|partial|skipped), iterations, corrections, cost_tokens, note}`.
-Additive only — no consumer parses it yet except `persona-log.sh summary`.
+Additive only: no consumer parses it yet except `persona-log.sh summary`.
 
 ## Backward compatibility
 
 Fully additive. The hooks are advisory (never block) and muteable
 (`personas/usage/.suggest-off`, `personas/usage/.nudge-off`). The juror logging
 is best-effort and cannot affect the verdict (output forced off stdout, errors
-swallowed) — the dispatch contract is unchanged (verified against
+swallowed): the dispatch contract is unchanged (verified against
 `atone-juror-dispatch.sh`: JSON keys, pure-function framing, `$PERSONA` path all
 intact). Removing any piece leaves the rest working.
 
@@ -71,7 +71,7 @@ intact). Removing any piece leaves the rest working.
   nudge fires on the 5th call after a working-mode read and excludes dispatch personas).
 - `settings.json` re-validated as JSON after registration.
 - **Not exercised end-to-end:** a live `claude -p` juror dispatch and a real
-  session firing the hooks in the harness — both verified by isolated simulation
+  session firing the hooks in the harness: both verified by isolated simulation
   only (UNCONFIRMED in-harness; the added code paths are individually tested).
 
 ## Recovery / revert
@@ -85,4 +85,4 @@ inert if unread.
 ## Cross-references
 - Design: `features/persona-activation.md`
 - Grounding: `assets/reports/20260618-persona-dogfood/` (research, spec, skeptical-review)
-- `rules/skill-spec-update-not-honored-by-running-session.md` — why the nudge hook (data-path gate), not just the README convention, is the binding part
+- `rules/skill-spec-update-not-honored-by-running-session.md`: why the nudge hook (data-path gate), not just the README convention, is the binding part
