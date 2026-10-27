@@ -34,7 +34,9 @@ The idea that ties it together is a feedback loop. When the agent gets something
 ## Agent prompt
 
 ```text
-Clone https://github.com/alcatraz627/its-my-claude to a temp folder. Follow its ADOPT.md to suggest additions to my agent config. Change nothing I have not picked.
+Clone https://github.com/alcatraz627/its-my-claude to a temp folder.
+Follow its ADOPT.md to suggest additions to my agent config.
+Change nothing I have not picked.
 ```
 
 ## Architecture
