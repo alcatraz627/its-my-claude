@@ -134,7 +134,7 @@ PY
 # ── commands ────────────────────────────────────────────────────────────────
 cmd_new() {
   local slug="${1:-}"; shift || true
-  local title="" topic="" sess="" board="" card="" goal="" milestone=""
+  local title="" topic="" sess="" board="" card="" goal="" milestone="" row=""
   while [ $# -gt 0 ]; do case "$1" in
     --title)   title="${2:?--title needs a value}"; shift 2 ;;
     --topic)   topic="${2:?--topic needs a value}"; shift 2 ;;
@@ -145,8 +145,9 @@ cmd_new() {
     --board)   board="${2:?--board needs a value}"; shift 2 ;;
     --card)    card="${2:?--card needs a value}"; shift 2 ;;
     --goal)    goal="${2:?--goal needs a value}"; shift 2 ;;
+    --row)     row="${2:?--row needs a goal row number}"; shift 2 ;;
     --milestone) milestone="${2:?--milestone needs a value}"; shift 2 ;;
-    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"] [--topic \"…\"] [--session <id>] [--board <slug>] [--card <id>] [--goal \"…\"] [--milestone \"…\"]" ;;
+    *) die "unknown flag for new: $1" "decision-page.sh new <slug> [--title \"…\"] [--topic \"…\"] [--session <id>] [--board <slug>] [--card <id>] [--goal \"…\"] [--row <n>] [--milestone \"…\"]" ;;
   esac; done
   [ -n "$slug" ] || die "new needs a slug" "decision-page.sh new <slug> [--title \"…\"]"
   printf '%s' "$slug" | grep -qE '^[a-z0-9][a-z0-9._-]*$' \
@@ -166,7 +167,7 @@ cmd_new() {
   [ -n "$board" ] || board="$(board_here)"
   T="$title" SLUG="$slug" TOPIC="$topic" SESS="${sess:-${CLAUDE_SESSION_ID:-}}" \
   PROJ="${PWD/#$HOME/~}" CREATED="$(date +%Y-%m-%d)" \
-  BOARD="$board" CARD="$card" GOAL="$goal" MILESTONE="$milestone" \
+  BOARD="$board" CARD="$card" GOAL="$goal" ROW="$row" MILESTONE="$milestone" \
   python3 - "$dir/config.json" <<'PY'
 import json, os, sys
 # origin: what this page came out of and what it belongs to. Shown on the page,
@@ -175,7 +176,7 @@ origin = {k: v for k, v in {
   "session": os.environ.get("SESS", ""), "project": os.environ.get("PROJ", ""),
   "topic": os.environ.get("TOPIC", ""), "created": os.environ.get("CREATED", ""),
   "board": os.environ.get("BOARD", ""), "card": os.environ.get("CARD", ""),
-  "goal": os.environ.get("GOAL", ""), "milestone": os.environ.get("MILESTONE", ""),
+  "goal": os.environ.get("GOAL", ""), "row": os.environ.get("ROW", ""), "milestone": os.environ.get("MILESTONE", ""),
 }.items() if v}
 cfg = {
   "title": os.environ["T"], "storageKey": os.environ["SLUG"],
@@ -211,7 +212,7 @@ cmd_check() {
   local fails=0
   # 1. config parses + schema-lite, with fix-proposing messages
   python3 - "$dir/config.json" <<'PY' || fails=1
-import json, os, sys
+import json, os, re, sys
 p = sys.argv[1]
 try:
     c = json.load(open(p))
@@ -227,14 +228,16 @@ if "notes" in c and not isinstance(c["notes"], bool):
 if "accent" in c and not isinstance(c["accent"], str):
     probs.append("'accent' must be a CSS color string, e.g. \"#7c3aed\"")
 if "origin" in c and not isinstance(c["origin"], dict):
-    probs.append("'origin' must be an object {session,project,topic,created,board,card,goal,milestone}")
+    probs.append("'origin' must be an object {session,project,topic,created,board,card,goal,row,milestone}")
 elif isinstance(c.get("origin"), dict):
-    known = {"session", "project", "topic", "created", "board", "card", "goal", "milestone"}
+    known = {"session", "project", "topic", "created", "board", "card", "goal", "row", "milestone"}
     for k in sorted(set(c["origin"]) - known):
         probs.append(f"origin.{k} is not a known key; drop it or use one of {sorted(known)}")
-    for k in ("board", "card", "goal", "milestone", "session", "topic"):
+    for k in ("board", "card", "goal", "row", "milestone", "session", "topic"):
         if k in c["origin"] and not isinstance(c["origin"][k], str):
             probs.append(f"origin.{k} must be a string")
+    if c["origin"].get("row") and not re.fullmatch(r"[0-9a-f]{12}", str(c["origin"].get("goal", ""))):
+        probs.append("origin.row without a goal id in origin.goal: the ruling has no goal to land on")
     if c["origin"].get("card") and not c["origin"].get("board"):
         probs.append("origin.card without origin.board: a card id is per board, so the link cannot resolve")
 if "groups" in c and not isinstance(c["groups"], dict):
@@ -418,6 +421,7 @@ cmd_pending() {
   case "$sub" in
     add)   local slug="${1:?usage: decision-page.sh pending add <slug>}"
            grep -qxF "$slug" "$PEND" || printf '%s\n' "$slug" >> "$PEND"
+           rm -f "$REG/$slug/.cleared"
            printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug"
            printf '  ARM THE WAKE IN THIS TURN — run this exact Bash call with run_in_background: true\n'
            printf '    until [ -f "%s/%s/.answer.json" ]; do sleep 5; done; echo "decision page %s answered"\n' "$REG" "$slug" "$slug"
@@ -426,6 +430,8 @@ cmd_pending() {
     clear) local slug="${1:?usage: decision-page.sh pending clear <slug>}"
            local tmp="$PEND.$$.tmp"
            grep -vxF "$slug" "$PEND" > "$tmp" 2>/dev/null; mv -f "$tmp" "$PEND"
+           # bfb reads this marker to file the page as handled rather than still waiting.
+           [ -d "$REG/$slug" ] && : > "$REG/$slug/.cleared"
            printf 'cleared: %s\n' "$slug" ;;
     list)  grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null || printf 'no pages awaiting an answer\n' ;;
     count) local n; n=$(grep -cv '^[[:space:]]*$' "$PEND" 2>/dev/null); printf '%s\n' "${n:-0}" ;;

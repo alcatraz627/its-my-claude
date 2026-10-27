@@ -82,7 +82,9 @@ already carries its own legend keeps that legend; this is the default for a new 
    what waits on other people.
 6. One section per direction. Each opens with when and one sentence of what it is
    for, then one sub-section per goal with its accepted-when line and a
-   `id | state | task` table. A gap nobody owns gets a gap line under its goal;
+   `id | state | task` table. The accepted-when line names the bars that apply,
+   in these words so bfb can show them as a checklist: code complete, exercised
+   (by the agent), reviewed, tested, deployed. A gap nobody owns gets a gap line under its goal;
    parked rows go on one closing line.
 7. **Done lately** (optional): at most six bullets, one outcome each, under 160
    characters, with the row ids. History older than two weeks leaves the file.

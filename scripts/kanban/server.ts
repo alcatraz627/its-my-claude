@@ -19,6 +19,7 @@ import {
   type Item, type Pin, type Draft,
 } from "./lib.ts";
 import { wakeOrigin } from "./dp-wake.ts";
+import { recordRuling } from "./dp-ruling.ts";
 import { IPC_DB, seenAgoByAlias, reachOf } from "./ipc-reach.ts";
 import { startTailnetListener } from "./tailnet.ts";
 import { compose as dpCompose, parse as dpParse, configOf as dpConfigOf } from "../decision-page/dp-core.ts";
@@ -1549,6 +1550,9 @@ const server = Bun.serve({
       fs.writeFileSync(tmp, JSON.stringify(rec, null, 1), "utf8");
       fs.renameSync(tmp, path.join(dir, ".answer.json"));
       dpNotifyOrigin(slug, dir);
+      // The ruling also lands on the goal row the page names (origin.goal and
+      // origin.row), and .ruling.json says whether it did.
+      recordRuling({ slug, dir, answer: rec.answer }).catch((e) => console.error(`dp-ruling ${slug}:`, e));
       // A page built over a board's recorded decisions has to write its rulings
       // ONTO those decisions. Without this the owner answers six questions, the
       // answer sits in .answer.json, and the board goes on saying NEEDS YOU for
