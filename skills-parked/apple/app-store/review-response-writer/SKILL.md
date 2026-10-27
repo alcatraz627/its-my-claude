@@ -74,7 +74,7 @@ T - Thank them and invite continued feedback
 ```
 Hi [Name],
 
-I'm really sorry about the export crashes — that's frustrating,
+I'm really sorry about the export crashes: that's frustrating,
 especially when you're trying to get work done.
 
 We identified this issue and it's fixed in version X.X, which is
@@ -83,7 +83,7 @@ reach out to support@yourapp.com and we'll help you directly.
 
 Thank you for taking the time to report this. It helps us improve.
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ### Negative Review: Missing Feature
@@ -94,7 +94,7 @@ Thank you for taking the time to report this. It helps us improve.
 ```
 Hi there,
 
-You're absolutely right — dark mode is important, and we hear you.
+You're absolutely right: dark mode is important, and we hear you.
 
 Good news: dark mode is in active development and planned for our
 next major update. If you'd like to be notified when it's ready,
@@ -102,7 +102,7 @@ drop us a note at support@yourapp.com.
 
 Thanks for the feedback. We hope to welcome you back soon!
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ### Negative Review: User Error (Diplomatic)
@@ -114,7 +114,7 @@ Thanks for the feedback. We hope to welcome you back soon!
 Hi [Name],
 
 Thanks for reaching out. I can see how [X] might not be obvious
-at first — we could definitely make it clearer.
+at first: we could definitely make it clearer.
 
 Quick tip: you can access [X] by [simple instructions]. We're also
 adding an in-app tutorial in our next update to help with this.
@@ -122,7 +122,7 @@ adding an in-app tutorial in our next update to help with this.
 If you're still stuck, email us at support@yourapp.com and we'll
 walk you through it.
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ### Negative Review: Pricing Complaint
@@ -133,18 +133,18 @@ walk you through it.
 ```
 Hi [Name],
 
-Thanks for sharing your thoughts on pricing. I understand — value
+Thanks for sharing your thoughts on pricing. I understand: value
 is important.
 
 A few things that might help:
 • We offer a free trial so you can test before committing
 • The subscription includes [key benefits]
-• We regularly run promotions — follow us @handle for updates
+• We regularly run promotions: follow us @handle for updates
 
 We're always working to add more value. If there's a specific
 feature you'd find worth the price, we'd love to hear about it.
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ### Negative Review: Generic/Vague
@@ -165,7 +165,7 @@ Could you email us at support@yourapp.com with:
 
 We respond quickly and will do our best to get you sorted.
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ### Positive Review: With Feature Request
@@ -176,14 +176,14 @@ We respond quickly and will do our best to get you sorted.
 ```
 Thank you so much for the kind words! 🙏
 
-Great suggestion on [X] — you're not the first to ask, and it's
+Great suggestion on [X]: you're not the first to ask, and it's
 on our roadmap. Can't promise exact timing, but it's coming.
 
 If you have other ideas, we're all ears at feedback@yourapp.com.
 
 Thanks for being a [App] user!
 
-— [Your Name]
+: [Your Name]
 ```
 
 ### Positive Review: Simple Thanks
@@ -195,7 +195,7 @@ Thanks for being a [App] user!
 Thank you! Reviews like this make our day. We're glad [App] is
 helping you. If you ever need anything, we're here!
 
-— The [App] Team
+: The [App] Team
 ```
 
 ### After Fixing a Bug
@@ -209,13 +209,13 @@ Hi [Name],
 Quick update: the [issue] you reported has been fixed in version
 X.X, now available in the App Store.
 
-Thank you again for letting us know — you helped us make [App]
+Thank you again for letting us know: you helped us make [App]
 better for everyone.
 
 If you get a chance to try the update, we'd love to know if it
 resolved things for you.
 
-— [Your Name], [App] Team
+: [Your Name], [App] Team
 ```
 
 ## Tone Guidelines

@@ -83,7 +83,7 @@ def unk(why):
 
 
 def is_none(v):
-    return v is None or re.sub(r"[\s`*.]", "", v).lower() in ("", "none", "-", "—", "n/a")
+    return v is None or re.sub(r"[\s`*.]", "", v).lower() in ("", "none", "-", "\u2014", "n/a")
 
 
 def sig_words(s):

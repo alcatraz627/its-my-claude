@@ -126,7 +126,7 @@ This skill runs under `context: fork`, so its output is read by the **parent age
 Order findings by severity (ERROR, then WARN, then UNSURE, then PASS), and within a severity by confidence (high first). Emit every section that has entries; omit empty ones.
 
 ```
-ROUTE AUDIT — <path or "src/app/**">
+ROUTE AUDIT: <path or "src/app/**">
 Files scanned: N | Handlers examined: N | Skipped (framework): N
 
 ERRORS (auth gap on a mutation)
@@ -143,7 +143,7 @@ UNSURE (could not fully trace)
 
 PASS
 - src/app/api/users/route.ts:9     POST    auth ✓ (:11 getServerSession)  validation ✓ (:15 z.object)  response ✓
-- src/app/api/auth/[...nextauth]/route.ts  —  skipped (NextAuth framework route)
+- src/app/api/auth/[...nextauth]/route.ts: skipped (NextAuth framework route)
 
 SUMMARY
 Errors=N  Warnings=N  Unsure=N  Pass=N  Total handlers=N

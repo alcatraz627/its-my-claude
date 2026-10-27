@@ -100,7 +100,7 @@ comments (delete unless they hold a non-obvious constraint) by reading the
 changed files.
 
 ```
-// resolve at call time — per-customer scoping  ->  // resolve at call time (per-customer scoping)
+// resolve at call time: per-customer scoping  ->  // resolve at call time (per-customer scoping)
 // 🚀 fast path for warm cache                  ->  // fast path for warm cache
 ```
 

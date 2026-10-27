@@ -43,7 +43,7 @@ Add a Run Script build phase to warn when approaching the limit:
 APP_CLIP_SIZE=$(stat -f%z "${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}")
 LIMIT=$((8 * 1024 * 1024))
 if [ "$APP_CLIP_SIZE" -gt "$LIMIT" ]; then
-    echo "warning: App Clip binary is $(($APP_CLIP_SIZE / 1024 / 1024)) MB — approaching 10 MB limit"
+    echo "warning: App Clip binary is $(($APP_CLIP_SIZE / 1024 / 1024)) MB: approaching 10 MB limit"
 fi
 ```
 
@@ -110,10 +110,10 @@ Only App Group data persists (for full app migration)
 ### Data Persistence Strategy
 
 ```swift
-// ❌ Wrong — data will be lost after 8 hours
+// ❌ Wrong: data will be lost after 8 hours
 UserDefaults.standard.set(orderID, forKey: "lastOrder")
 
-// ✅ Right — persist in App Group for full app to access
+// ✅ Right: persist in App Group for full app to access
 let shared = UserDefaults(suiteName: "group.com.yourapp")
 shared?.set(orderID, forKey: "lastOrder")
 ```
@@ -556,7 +556,7 @@ Image(systemName: "fork.knife.circle.fill")
 // ❌ Adding Alamofire, SDWebImage, etc. bloats the binary
 // Each SPM dependency can add 0.5-2 MB
 
-// ✅ Use URLSession directly — it's already available
+// ✅ Use URLSession directly: it's already available
 let (data, response) = try await URLSession.shared.data(from: url)
 ```
 
@@ -571,7 +571,7 @@ SharedDataManager.shared.save(token, forKey: "authToken")
 
 ### Don't Ignore the Size Budget During Development
 ```swift
-// ❌ "We'll optimize later" — then you're 15 MB at submission
+// ❌ "We'll optimize later": then you're 15 MB at submission
 
 // ✅ Check size on every PR
 // Add a CI step that builds the App Clip and checks the thinned size

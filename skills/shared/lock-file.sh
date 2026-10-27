@@ -85,7 +85,7 @@ _clear_if_stale() {
   if [[ -d "$LOCK_DIR" ]] && _is_stale; then
     local owner
     owner="$(_read_lock_info)"
-    echo "STALE_LOCK: '$FILE_PATH' was locked by [$owner] — removing stale lock." >&2
+    echo "STALE_LOCK: '$FILE_PATH' was locked by [$owner]: removing stale lock." >&2
     rm -rf "$LOCK_DIR"
     return 0
   fi
@@ -97,7 +97,7 @@ case "$ACTION" in
   # ── READ ────────────────────────────────────────────────────────────────────
   # Reads are never blocked by write locks. This action always succeeds.
   read)
-    echo "READ_OK: '$FILE_PATH' — reads are never blocked."
+    echo "READ_OK: '$FILE_PATH': reads are never blocked."
     exit 0
     ;;
 
@@ -190,7 +190,7 @@ case "$ACTION" in
 
     if _is_stale; then
       stale_owner="$(_read_lock_info)"
-      echo "FREE (stale): '$FILE_PATH' lock has expired — auto-clears on next acquire"
+      echo "FREE (stale): '$FILE_PATH' lock has expired: auto-clears on next acquire"
       echo "  Stale owner: $stale_owner"
       exit 0
     fi

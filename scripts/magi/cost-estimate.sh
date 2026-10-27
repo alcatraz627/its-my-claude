@@ -40,7 +40,7 @@ META="$ARCHIVE/meta.json"
 
 case "$IO_SPLIT_RAW" in
   [0-9]*/[0-9]*) ;;
-  *) printf 'bad --io-split %s — want two numbers like 70/30\n' "$IO_SPLIT_RAW" >&2; exit 2 ;;
+  *) printf 'bad --io-split %s: want two numbers like 70/30\n' "$IO_SPLIT_RAW" >&2; exit 2 ;;
 esac
 IFS='/' read -r IO_IN IO_OUT <<<"$IO_SPLIT_RAW"
 
@@ -104,9 +104,9 @@ measured = n_voters - n_unmeasured
 if n_unmeasured == 0:
   coverage = "complete"
 elif measured == 0:
-  coverage = "none — every voter unmeasured; the cost below is NOT a real number"
+  coverage = "none: every voter unmeasured; the cost below is NOT a real number"
 else:
-  coverage = f"partial — {measured}/{n_voters} voters measured; cost is a floor"
+  coverage = f"partial: {measured}/{n_voters} voters measured; cost is a floor"
 
 meta.setdefault("totals", {})
 meta["totals"].update({
@@ -133,7 +133,7 @@ print(json.dumps({
 }, indent=2))
 
 if n_unmeasured:
-  print(f"\n!! {n_unmeasured}/{n_voters} voters reported no usage — the cost above "
+  print(f"\n!! {n_unmeasured}/{n_voters} voters reported no usage: the cost above "
         f"is a floor, not the bill.", file=sys.stderr)
   if measured == 0:
     print("!! Every voter went unmeasured, so this run priced itself at $0.00. It was "
@@ -154,4 +154,4 @@ if [ -x "$CHK" ]; then
   bash "$CHK" "$ARCHIVE"; conf_rc=$?
   [ "${conf_rc:-0}" -ge 2 ] && exit "$conf_rc"
 fi
-exit 0   # clean/warn finalize succeeds — without this the trailing test would leak exit 1
+exit 0   # clean/warn finalize succeeds: without this the trailing test would leak exit 1

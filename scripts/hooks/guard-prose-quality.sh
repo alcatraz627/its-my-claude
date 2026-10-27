@@ -88,7 +88,7 @@ CODE = re.compile(r"[{}]|=>|var\(--|^\s*[.#@][\w-]+[\s,{]|^\s*:root|[\w-]+\s*:\s
 # A dash is the owner zero-budget tell, and a UI string carrying one IS prose,
 # so no shape rule may strip that line. Without this, prose ending in ";"
 # escapes scoring entirely.
-KEEP = re.compile(r"[–—]")
+KEEP = re.compile(r"[–\u2014]")
 sys.stdout.write("\n".join(l for l in s.split("\n") if KEEP.search(l) or not CODE.search(l)))' 2>/dev/null)
       # A pure code/markup edit leaves no prose worth judging.
       words=$(printf '%s' "$content" | tr -cs "[:alpha:]" " " | wc -w | tr -d " ")
@@ -101,7 +101,7 @@ if [ "$mode" = "code" ]; then
   findings=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/code-copy-lint.py" --json - 2>/dev/null | jq -r '.findings[:3] | map("  [" + (.tells|join("|")) + "] " + .text) | join("\n")' 2>/dev/null)
   if [ -n "$findings" ]; then
     blocked
-    jq -n --arg r "COPY BLOCKED for $fp — user-facing string literals carry banned language tells:
+    jq -n --arg r "COPY BLOCKED for $fp: user-facing string literals carry banned language tells:
 $findings
 UI copy follows the same rules as prose (conventions/language-quality.md): no connective dashes, no unverified claims, no marketing words. Reword the strings and retry. Placeholder glyphs and comments are not counted." '{decision:"block", reason:$r}'
   else
@@ -124,7 +124,7 @@ over=$(python3 -c "print(1 if float('${score:-0}' or 0) > 8 else 0)" 2>/dev/null
 if [ -n "$fail" ]; then
   blocked
   spans=$(printf '%s' "$report" | jq -r '[.spans.two_split_dash[]?, .spans.verdict_first_opener[]?] | .[:3] | map("  > " + .) | join("\n")' 2>/dev/null)
-  jq -n --arg r "PROSE BLOCKED for $fp —$fail
+  jq -n --arg r "PROSE BLOCKED for $fp:$fail
 $spans
 Rewrite per conventions/language-quality.md (short sentences, no two-split chains, facts first), then retry. Check any draft: python3 ~/.claude/scripts/style/prose-lint.py" '{decision:"block", reason:$r}'
   exit 0

@@ -35,7 +35,7 @@ Use when: the state change comes from somewhere else (parent view, environment, 
 ### Deprecated: .animation Without value:
 
 ```swift
-// ❌ Deprecated in iOS 15 — animates ALL state changes, causes unexpected behavior
+// ❌ Deprecated in iOS 15: animates ALL state changes, causes unexpected behavior
 Circle()
     .animation(.spring())
 
@@ -88,10 +88,10 @@ Simpler API. **Use this for new code targeting iOS 17+.**
 Use these instead of manual configuration when possible:
 
 ```swift
-.spring            // Default spring — slight bounce, natural feel
-.bouncy            // .spring(duration: 0.5, bounce: 0.3) — playful
-.snappy            // .spring(duration: 0.3, bounce: 0.15) — quick, subtle bounce
-.smooth            // .spring(duration: 0.5, bounce: 0.0) — no bounce, gentle settle
+.spring            // Default spring: slight bounce, natural feel
+.bouncy            // .spring(duration: 0.5, bounce: 0.3): playful
+.snappy            // .spring(duration: 0.3, bounce: 0.15): quick, subtle bounce
+.smooth            // .spring(duration: 0.5, bounce: 0.0): no bounce, gentle settle
 ```
 
 ### Migration Table
@@ -198,7 +198,7 @@ withTransaction(transaction) {
     resetPosition()
 }
 
-// Or use withAnimation(.none) — simpler for one-off cases (iOS 17+)
+// Or use withAnimation(.none): simpler for one-off cases (iOS 17+)
 withAnimation(.none) {
     resetPosition()
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  data-dashboard.html — reusable self-contained data dashboard template.
+  data-dashboard.html: reusable self-contained data dashboard template.
 
   Pattern: summary cards + live text filter + click-to-expand rows, each row drilling
   into nested sub-entities and a detail table. Single file, no external deps, dark/light
@@ -9,7 +9,7 @@
 
   To reuse:
     1. Replace the ROWS array in the data <script> (or inject via a generator at the
-       __DATA__ / __SUMMARY__ / __SRC__ sentinels — keep the template plain, replace by
+       __DATA__ / __SUMMARY__ / __SRC__ sentinels: keep the template plain, replace by
        string substitution, NOT f-strings, so CSS/JS braces survive).
     2. Adapt the three render functions to your shape: cards() (summary tiles),
        row()/summary line, and the detail render (sub-entity cards + detail table).
@@ -62,7 +62,7 @@
 <body>
 <header>
   <h1>Data Dashboard</h1>
-  <span class="src">__SRC__ (sample data — replace ROWS or inject at sentinels)</span>
+  <span class="src">__SRC__ (sample data: replace ROWS or inject at sentinels)</span>
   <button class="toggle" onclick="toggleTheme()">◐ theme</button>
 </header>
 <div class="cards" id="cards"></div>
@@ -93,13 +93,13 @@ function cards(){
   document.getElementById('cards').innerHTML=c.map(([l,n])=>`<div class="card"><div class="n">${esc(n)}</div><div class="l">${esc(l)}</div></div>`).join('');
 }
 function fitRow(f){
-  const cell=v=>{v=(v==null||v==='')?'—':v; const na=(v==='N/A'||v==='—'); return `<td class="${na?'na':''}">${esc(v)}</td>`;};
+  const cell=v=>{v=(v==null||v==='')?'-':v; const na=(v==='N/A'||v==='-'); return `<td class="${na?'na':''}">${esc(v)}</td>`;};
   return `<tr>${cell(f.make)}${cell(f.model)}${cell(f.sub_model)}${cell(f.years)}${cell(f.engine)}${cell(f.body)}</tr>`;
 }
 function product(p){
   const fits=(p.fitments||[]);
   const tbl=fits.length?`<table><thead><tr><th>Make</th><th>Model</th><th>Sub</th><th>Years</th><th>Engine</th><th>Body</th></tr></thead><tbody>${fits.map(fitRow).join('')}</tbody></table>`:`<div class="empty">no detail</div>`;
-  return `<div class="prod"><h4>${esc(p.brand)} <span class="mpn">${esc(p.part_number||'—')}</span> — ${esc(p.name||'')}</h4>${tbl}</div>`;
+  return `<div class="prod"><h4>${esc(p.brand)} <span class="mpn">${esc(p.part_number||'-')}</span>: ${esc(p.name||'')}</h4>${tbl}</div>`;
 }
 function row(r){
   const fc=r.fitment_count, pc=r.product_count;
@@ -109,13 +109,13 @@ function row(r){
   return `<details><summary>
       <span class="pt">${esc(r.part_type)}</span>
       <span class="cat">${esc(r.category)}${r.sub_category?' · '+esc(r.sub_category):''}</span>
-      <span class="cat">conf ${esc(r.confidence||'—')}</span>
+      <span class="cat">conf ${esc(r.confidence||'-')}</span>
       <span class="pill ${pcls}">${pc} prod</span>
       <span class="pill ${fcls}">${fc} fit</span>
     </summary>
     <div class="body">
-      <div class="meta"><b>Description:</b> ${esc(r.description)||'—'}</div>
-      <div class="meta"><b>Aliases:</b> ${esc(r.aliases)||'—'}</div>
+      <div class="meta"><b>Description:</b> ${esc(r.description)||'-'}</div>
+      <div class="meta"><b>Aliases:</b> ${esc(r.aliases)||'-'}</div>
       ${detail}
     </div></details>`;
 }

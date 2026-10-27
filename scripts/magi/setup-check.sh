@@ -43,7 +43,7 @@ if breadth is None: breadth = n_vote >= 5
 crit, warn, ok = [], [], []
 
 if not manifest:
-    warn.append("NO evidence manifest (params.voter_evidence empty) — setup "
+    warn.append("NO evidence manifest (params.voter_evidence empty): setup "
                 "independence is UNVERIFIABLE, which is echo-prone by default. "
                 "Assign each voter a DISTINCT primary evidence slice (D1) and record "
                 "it via `init-archive.sh --params` (the voter_evidence list). Without "
@@ -56,7 +56,7 @@ else:
     # CRITICAL: every voter shares one evidence base → convergence by construction
     if uniq_slices <= 1 and len(slices) > 1:
         crit.append(f"ALL {len(slices)} voters share ONE evidence slice "
-                    f"({slices[0] or 'unspecified'!r}) — convergence is manufactured, "
+                    f"({slices[0] or 'unspecified'!r}): convergence is manufactured, "
                     "not discovered. Partition the evidence (distinct primary slice "
                     "per voter) before dispatching.")
     # CRITICAL: a supervisor-authored digest is the shared substrate (D2)
@@ -66,16 +66,16 @@ else:
                  ("baseline", "digest", "sweep"))]
     if len(digestish) > 1:
         crit.append(f"{len(digestish)} voters are assigned a supervisor-authored "
-                    "interpretive base (baseline/digest/sweep) as their slice — that "
+                    "interpretive base (baseline/digest/sweep) as their slice: that "
                     "propagates the supervisor's frame to the panel (D2). A shared "
                     "*factual* base is fine; a shared *interpretive* one is the echo.")
     # WARN: weak partitioning
     if crit == [] and uniq_slices < math.ceil(len(slices) / 2):
         warn.append(f"weak partitioning: only {uniq_slices} distinct slices across "
-                    f"{len(slices)} voters — most share a base.")
+                    f"{len(slices)} voters: most share a base.")
     # WARN: no different-model contrarian (prior-independence lever)
     if len(set(m for m in models if m)) <= 1:
-        warn.append("no different-model voter — the one lever proven to produce real "
+        warn.append("no different-model voter: the one lever proven to produce real "
                     "divergence (a contrarian on a different model) is absent.")
     else:
         ok.append("a different-model voter is present (prior-independence)")
@@ -84,7 +84,7 @@ else:
 
 # research mode vs breadth
 if research == "minimal" and breadth:
-    warn.append("research:minimal on a breadth/generalize task — voters can't reach "
+    warn.append("research:minimal on a breadth/generalize task: voters can't reach "
                 "beyond the shared frame, so any agreement is echo (D3). Require "
                 "independent external/raw-source research per voter for breadth asks.")
 elif research and research != "minimal":

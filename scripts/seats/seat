@@ -93,7 +93,7 @@ def lines_of(s):
 
 
 def parse_input(line):
-    m = re.match(r"^(\S+?)(?::(\d+)-(\d+))?(?:\s+[-:—]?\s*(.*))?$", line)
+    m = re.match(r"^(\S+?)(?::(\d+)-(\d+))?(?:\s+[-:\u2014]?\s*(.*))?$", line)
     if not m:
         return None
     return {"path": os.path.expanduser(m.group(1).rstrip(",")), "start": m.group(2), "end": m.group(3),

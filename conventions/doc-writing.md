@@ -423,7 +423,7 @@ Jotai atom `<atomName>` in `<path>`, persisted in `<sessionStorage | URL | none>
 Mark unfinished or deprecated features with a grep-friendly tag. Pattern:
 
 ```markdown
-[STUB — re-verify YYYY-MM-DD] One-sentence current state. Tracking: <ref>. Re-check: <concrete question>.
+[STUB: re-verify YYYY-MM-DD] One-sentence current state. Tracking: <ref>. Re-check: <concrete question>.
 ```
 
 **Tag variants (one of four, nothing else):**
@@ -446,7 +446,7 @@ Mark unfinished or deprecated features with a grep-friendly tag. Pattern:
 When writing a claim you're not sure of (because you didn't read the code authoritatively), flag it inline:
 
 ```markdown
-Items are inserted unordered so a single failing document does not abort the batch. [VERIFY — grep `ordered` in `backend/lib/jobs/__init__.py`.]
+Items are inserted unordered so a single failing document does not abort the batch. [VERIFY: grep `ordered` in `backend/lib/jobs/__init__.py`.]
 ```
 
 Every `[VERIFY]` should name the concrete check a future session can run. Do not use vague markers like `TODO: check`.

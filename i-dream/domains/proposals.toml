@@ -41,7 +41,7 @@ weight        = 0.8
 # Deliberately below the active-signal domains (atone/affirm/claude-audit ~1.0,
 # pinned 1.5): a backlog must not evict an active-mistake signal from the top-5
 # session-start hinter. proposals contributes a union line but defers; its value
-# surfaces on PULL — the daily digest, /backlog-triage, and querying dream/insights.
+# surfaces on PULL: the daily digest, /backlog-triage, and querying dream/insights.
 # Verified 2026-06-27 it DOES reach the union at higher weight; the dial is here.
 
 [permissions]

@@ -165,10 +165,10 @@ Stop [pain point]. Start [desired outcome].
 
 ✨ KEY FEATURES
 
-• [Feature 1] — [Benefit in user terms]
-• [Feature 2] — [Benefit in user terms]
-• [Feature 3] — [Benefit in user terms]
-• [Feature 4] — [Benefit in user terms]
+• [Feature 1]: [Benefit in user terms]
+• [Feature 2]: [Benefit in user terms]
+• [Feature 3]: [Benefit in user terms]
+• [Feature 4]: [Benefit in user terms]
 
 💡 HOW IT WORKS
 
@@ -227,7 +227,7 @@ Thanks for using [App Name]! Here's what's new in version X.X:
 🔧 FIXED
 • [Bug fix users complained about]
 
-Love [App Name]? Leave us a review — it helps more than you know! 💙
+Love [App Name]? Leave us a review: it helps more than you know! 💙
 
 Feedback? [support email]
 ```

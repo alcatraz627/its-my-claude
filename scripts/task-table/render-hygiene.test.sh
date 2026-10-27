@@ -253,7 +253,7 @@ HOME="$ROOT" bash "$MUT" --session hygie001 > "$ROOT/mut.txt" 2>&1
 if [ "$(rg -c 'P2 P2' "$ROOT/mut.txt" 2>/dev/null || echo 0)" -ge 1 ]; then
   pass=$((pass+1)); echo "  ok    reverting subject_of brings the doubled prefix back"
 else
-  fail=$((fail+1)); echo "  FAIL: reverting subject_of changed nothing — the test is blind"
+  fail=$((fail+1)); echo "  FAIL: reverting subject_of changed nothing: the test is blind"
 fi
 
 echo

@@ -125,7 +125,7 @@ gh pr view <num> --web                          # open in browser
 gh pr checks <num>                              # CI status
 gh pr diff <num>                                # diff in terminal
 gh pr merge <num> --squash                      # merge with squash (also --merge, --rebase)
-gh pr close <num>                               # CONFIRM — visible to collaborators
+gh pr close <num>                               # CONFIRM: visible to collaborators
 ```
 
 **PR body via HEREDOC:**

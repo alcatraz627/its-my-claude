@@ -52,7 +52,7 @@ prose=$(printf '%s\n' "$text" \
 LOG="$HOME/.claude/scripts/hooks/warn-log.sh"
 MARK="/tmp/claude-emdash-${sid8}"   # "<signature> <consecutive blocks>"
 
-n=$(printf '%s' "$prose" | rg -o '—' 2>/dev/null | wc -l | tr -d ' ')
+n=$(printf '%s' "$prose" | rg -o $'\xe2\x80\x94' 2>/dev/null | wc -l | tr -d ' ')
 if [ "${n:-0}" -lt 1 ]; then
   # A lingering marker means the reply that was blocked has since been fixed.
   if [ -f "$MARK" ]; then
@@ -79,7 +79,7 @@ if [ "$prev_n" -ge 3 ]; then
 fi
 
 printf '%s %s' "$sig" $((prev_n + 1)) > "$MARK" 2>/dev/null || true
-first=$(printf '%s\n' "$prose" | rg -m1 '—' 2>/dev/null | cut -c1-90)
+first=$(printf '%s\n' "$prose" | rg -m1 $'\xe2\x80\x94' 2>/dev/null | cut -c1-90)
 bash "$LOG" --hook emdash --action block --heeded unknown --detail "${n} em-dash" >/dev/null 2>&1 || true
 reason="emdash: the reply has ${n} em-dash(es) in prose, and the owner's budget is zero. First one: \"${first}\". Re-emit the same reply with commas, periods, parentheses or 'and' instead; code, inline code and blockquotes may keep the character. Mute: touch ~/.claude/.no-emdash-gate (machine-wide) or EMDASH_OFF=1 (this process)."
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true

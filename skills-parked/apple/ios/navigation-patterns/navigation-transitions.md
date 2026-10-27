@@ -154,7 +154,7 @@ Apply different transitions based on content:
             .navigationTransition(.zoom(sourceID: photo.id, in: namespace))
     case .settings:
         SettingsView()
-            // No custom transition — uses default slide
+            // No custom transition: uses default slide
     }
 }
 ```
@@ -164,7 +164,7 @@ Apply different transitions based on content:
 ### Mismatched IDs
 
 ```swift
-// ❌ Source and destination use different IDs — no animation
+// ❌ Source and destination use different IDs: no animation
 .matchedTransitionSource(id: item.id, in: namespace)
 // ...
 .navigationTransition(.zoom(sourceID: "item-\(item.id)", in: namespace))
@@ -195,7 +195,7 @@ Apply different transitions based on content:
 ### Namespace Declared in Wrong Scope
 
 ```swift
-// ❌ Namespace in child view — destroyed when child is popped
+// ❌ Namespace in child view: destroyed when child is popped
 struct ChildView: View {
     @Namespace private var namespace  // Dies with this view
 

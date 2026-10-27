@@ -222,14 +222,14 @@ TabView {
 ### Too Many Tabs
 
 ```swift
-// ❌ More than 5 tabs on iPhone — cluttered, tiny targets
+// ❌ More than 5 tabs on iPhone: cluttered, tiny targets
 TabView {
     Tab("Home", ...) { }
     Tab("Search", ...) { }
     Tab("Favorites", ...) { }
     Tab("Messages", ...) { }
     Tab("Profile", ...) { }
-    Tab("Settings", ...) { }  // 6th tab — bad on iPhone
+    Tab("Settings", ...) { }  // 6th tab: bad on iPhone
 }
 
 // ✅ Use TabSection with sidebarAdaptable for many sections

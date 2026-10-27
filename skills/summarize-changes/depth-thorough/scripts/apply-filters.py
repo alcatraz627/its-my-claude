@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""apply-filters.py — filter 02-files.txt to 03-files-relevant.txt.
+"""apply-filters.py: filter 02-files.txt to 03-files-relevant.txt.
 
-Default excludes (per FINAL-PLAN.md C6 fix — no docs):
+Default excludes (per FINAL-PLAN.md C6 fix: no docs):
   .claude/, *.lock, package-lock.json, uv.lock, node_modules/,
   dist/, .next/, .turbo/, *.svg, *.min.js, *.min.css
 

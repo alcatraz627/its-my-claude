@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-annotate-screenshot.py — Overlay a coordinate grid on a screenshot.
+annotate-screenshot.py: Overlay a coordinate grid on a screenshot.
 
 Usage:
     python3 annotate-screenshot.py INPUT.png OUTPUT.png [--grid N] [--marks "X1,Y1 X2,Y2 ..."]

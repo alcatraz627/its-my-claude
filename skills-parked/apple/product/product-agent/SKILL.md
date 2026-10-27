@@ -89,7 +89,7 @@ Present results as structured JSON for easy consumption by other skills:
   "severity_score": "N/10",
   "frequency": "How often users encounter this",
   "current_solutions": ["Existing alternatives and their limitations"],
-  "opportunity": "WEAK|MODERATE|STRONG|EXCELLENT — reasoning",
+  "opportunity": "WEAK|MODERATE|STRONG|EXCELLENT: reasoning",
   "recommendation": "Honest verdict with detailed reasoning"
 }
 ```

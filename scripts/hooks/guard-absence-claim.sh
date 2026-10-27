@@ -255,10 +255,10 @@ if ! printf '%s' "$text" | rg -qiP "$META_RX" 2>/dev/null; then
       body="your message says the skill or command '${n}' is not installed or does not exist, but it is on disk at ${found}. The session's skill listing is truncated, so absence from it proves nothing. Read that SKILL.md and run it. Mute: touch ~/.claude/.no-absence-claim-gate"
       MARK="/tmp/claude-absence-claim-${sid8}"
       if hook_loop_check "$MARK" "skill:$n:$skill_cand"; then
-        jq -cn --arg r "⛔ absence-claim (skill) — $body" '{decision:"block", reason:$r}' 2>/dev/null || true
+        jq -cn --arg r "⛔ absence-claim (skill): $body" '{decision:"block", reason:$r}' 2>/dev/null || true
         [ -x "$WARN" ] && bash "$WARN" --hook absence-claim --action block --heeded unknown >/dev/null 2>&1 || true
       else
-        jq -cn --arg m "⚠ absence-claim (skill) — $body" '{systemMessage:$m}' 2>/dev/null || true
+        jq -cn --arg m "⚠ absence-claim (skill): $body" '{systemMessage:$m}' 2>/dev/null || true
       fi
       exit 0
     done <<EOF
@@ -304,11 +304,11 @@ stakes=$(bash "$HOME/.claude/scripts/stakes-tier.sh" "$cwd" 2>/dev/null || echo 
 [ "$stakes" = "high" ] && base="block" || base="soft"
 
 subj_disp="${subject:0:60}"
-body="your message asserts '${subj_disp}' does not exist / never fired, but this turn ran no ignore-transparent search of it (rg/fd --no-ignore / -u / -uu) and no direct existence probe (test -f / ls / stat). A default rg/fd — or fd -H — silently skips .gitignored + hidden files, which is exactly how this absence claim recurs (infra-before-grep). Re-probe: rg --no-ignore --hidden '${subj_disp}' <root>  OR  test -f <path>. Already confirmed absent out-of-band, or this is a non-file claim? Say so — this won't re-block the same sentence. Mute: touch ~/.claude/.no-absence-claim-gate"
+body="your message asserts '${subj_disp}' does not exist / never fired, but this turn ran no ignore-transparent search of it (rg/fd --no-ignore / -u / -uu) and no direct existence probe (test -f / ls / stat). A default rg/fd (or fd -H) silently skips .gitignored + hidden files, which is exactly how this absence claim recurs (infra-before-grep). Re-probe: rg --no-ignore --hidden '${subj_disp}' <root>  OR  test -f <path>. Already confirmed absent out-of-band, or this is a non-file claim? Say so: this won't re-block the same sentence. Mute: touch ~/.claude/.no-absence-claim-gate"
 
-emit_soft() { jq -cn --arg m "⚠ absence-claim (grounding gate) — $body" '{systemMessage:$m}' 2>/dev/null || true
+emit_soft() { jq -cn --arg m "⚠ absence-claim (grounding gate): $body" '{systemMessage:$m}' 2>/dev/null || true
   [ -x "$WARN" ] && bash "$WARN" --hook absence-claim --action soft --heeded unknown >/dev/null 2>&1 || true; }
-emit_block() { jq -cn --arg r "⛔ absence-claim (grounding gate) — $body" '{decision:"block", reason:$r}' 2>/dev/null || true
+emit_block() { jq -cn --arg r "⛔ absence-claim (grounding gate): $body" '{decision:"block", reason:$r}' 2>/dev/null || true
   [ -x "$WARN" ] && bash "$WARN" --hook absence-claim --action block --heeded unknown >/dev/null 2>&1 || true; }
 
 MARK="/tmp/claude-absence-claim-${sid8}"

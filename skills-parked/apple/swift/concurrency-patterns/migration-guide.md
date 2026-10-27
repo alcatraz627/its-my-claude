@@ -116,7 +116,7 @@ final class AppConfig: Sendable {
     let apiKey: String = "..."  // Must be let, not var
 }
 
-// Option 4: nonisolated(unsafe) — last resort
+// Option 4: nonisolated(unsafe): last resort
 nonisolated(unsafe) static var shared = AppConfig()
 ```
 

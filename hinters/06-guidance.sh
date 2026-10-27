@@ -31,4 +31,4 @@ while IFS= read -r line; do
 done <<< "$matched"
 [ -n "$out" ] || exit 0
 
-printf '[guidance] standing user directives relevant to this turn — internalize, weigh in your choices:\n%s' "${out%$'\n'}"
+printf '[guidance] standing user directives relevant to this turn: internalize, weigh in your choices:\n%s' "${out%$'\n'}"

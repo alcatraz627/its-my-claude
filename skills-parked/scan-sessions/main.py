@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-main.py — Entry point for scan-sessions skill.
+main.py: Entry point for scan-sessions skill.
 
 Usage:
     python3 main.py                          # scan last 7 days

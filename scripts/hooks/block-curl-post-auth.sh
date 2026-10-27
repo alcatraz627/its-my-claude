@@ -71,7 +71,7 @@ Use the file-tools MCP instead:
     "body": {...}
   }
 Wins: audited, structured response, consistent error handling.
-For a quick GET (no auth), curl is still fine — this only blocks
+For a quick GET (no auth), curl is still fine: this only blocks
 mutating + authenticated.
 Override (use with caution): touch ~/.claude/.no-curl-auth-block
 EOF

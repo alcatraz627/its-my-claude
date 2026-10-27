@@ -8,7 +8,7 @@
 <style>
 /* One neutral-slate hue family, depth by lightness (bg < surface < surface-2),
    a single blue accent. Dark and light share hues; light just raises L, lowers C.
-   Borders are intentionally faint — depth comes from the surface steps, not lines. */
+   Borders are intentionally faint: depth comes from the surface steps, not lines. */
 :root, :root[data-theme="dark"] {
   --bg: #0f1216; --surface: #171b21; --surface-2: #1e232b; --text: #e6eaf0;
   --dim: #97a1ad; --border: #232830; --accent: #62a0e4; --ok: #52bd8a;
@@ -44,7 +44,7 @@ main { max-width: 1060px; margin: 0 auto; padding: 20px 22px 140px; }
   border-radius: 10px; }
 .intro kbd { color: var(--text); }
 a.evidence { color: var(--accent, #7cb7ff); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
-/* provenance line — which session/project/topic created this page */
+/* provenance line: which session/project/topic created this page */
 .origin { font-size: 12.5px; color: var(--dim); margin: 0 0 12px; padding: 2px 2px;
   display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .origin .badge { background: var(--surface-2); border: 1px solid var(--border);
@@ -120,7 +120,7 @@ body.notes-on .addnote, section.card.shownote .addnote { display: none; }
   resize: vertical; }
 .notewrap.filled textarea { border-color: var(--border);
   border-left: 2px solid var(--accent); background: var(--surface-2); }
-/* notes:false hard-disables the surface — hide the toggle, the +note buttons,
+/* notes:false hard-disables the surface: hide the toggle, the +note buttons,
    and every note field (JS also blocks the n/m keys). */
 body.notes-off #notes, body.notes-off .addnote,
 body.notes-off .notewrap, body.notes-off #endnotes { display: none; }
@@ -169,7 +169,7 @@ kbd { background: var(--surface-2); border: 1px solid var(--border);
   <button id="submit" title="send answers straight to Claude (s)">Submit to Claude</button>
 </header>
 <main id="main"><p class="note">Loading config.json…</p></main>
-<div id="drawer"><span class="cap">answer preview — this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
+<div id="drawer"><span class="cap">answer preview: this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
 <div id="overlay"><div class="box">
   <h3 style="margin-top:0">Keyboard</h3>
   <table>
@@ -177,7 +177,7 @@ kbd { background: var(--surface-2); border: 1px solid var(--border);
     <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>pick option in the focused decision</td></tr>
     <tr><td><kbd>a</kbd></td><td>toggle agree on the focused item</td></tr>
     <tr><td><kbd>n</kbd></td><td>add a note to the focused item (<kbd>Esc</kbd> to leave)</td></tr>
-    <tr><td><kbd>m</kbd></td><td>notes mode — show a note field on every item</td></tr>
+    <tr><td><kbd>m</kbd></td><td>notes mode: show a note field on every item</td></tr>
     <tr><td><kbd>N</kbd></td><td>jump to the end-of-form notes for Claude</td></tr>
     <tr><td><kbd>f</kbd></td><td>show only items you changed or noted</td></tr>
     <tr><td><kbd>p</kbd></td><td>answer preview drawer</td></tr>
@@ -187,14 +187,14 @@ kbd { background: var(--surface-2); border: 1px solid var(--border);
     <tr><td><kbd>t</kbd></td><td>theme</td></tr>
     <tr><td><kbd>?</kbd></td><td>this help (<kbd>Esc</kbd> closes)</td></tr>
   </table>
-  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste — notes are optional.</p>
+  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste: notes are optional.</p>
 </div></div>
-<div id="toast">Copied — paste it in chat</div>
+<div id="toast">Copied: paste it in chat</div>
 <script>
 /* Generic decision page. Reads ./config.json (same folder, served over http).
    Renders decision radio-groups + item cards with agree/note reactions, plus an
    optional end-of-form note, persists to localStorage (incl. a ts the hub reads),
-   and builds a compact answer string. Notes are OFF by default — the payload
+   and builds a compact answer string. Notes are OFF by default: the payload
    stays lean until you actually write one. Schema: ~/.claude/features/decision-pages.md */
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
@@ -219,9 +219,9 @@ function noteField(cls, seed, ph) {
 function render() {
   document.title = CFG.title || "Decision page";
   $("#title").textContent = CFG.title || "Decision page";
-  // notes:false hard-disables the whole notes surface (rare — agent opts out)
+  // notes:false hard-disables the whole notes surface (rare: agent opts out)
   if (CFG.notes === false) document.body.classList.add("notes-off");
-  // per-page accent override — lets the authoring agent theme a page
+  // per-page accent override: lets the authoring agent theme a page
   if (CFG.accent) document.documentElement.style.setProperty("--accent", CFG.accent);
   const M = $("#main");
   let h = "";
@@ -285,11 +285,11 @@ function render() {
     h += `</section>`;
   });
   if (open) h += `</div>`;
-  // end-of-form notes for Claude — the escape hatch for anything the form can't hold
+  // end-of-form notes for Claude: the escape hatch for anything the form can't hold
   if (CFG.notes !== false)
     h += `<div id="endnotes"><section class="card endnote" data-s="__end" tabindex="-1">
       <h3>Notes for Claude <span class="idtag">optional</span></h3>
-      <p class="read">Anything the form above can't capture — extra context, a
+      <p class="read">Anything the form above can't capture: extra context, a
         constraint, a follow-up. Leave blank to keep the payload lean.</p>
       <div class="notewrap" style="display:block"><textarea class="endnotes"
         rows="2" placeholder="e.g. do the Walmart ones first; ping me before the DB migration…"></textarea></div>
@@ -339,7 +339,7 @@ function load() {
   } catch {}
 }
 
-/* the single source for "what deviates from the draft" — drives flagged styling,
+/* the single source for "what deviates from the draft": drives flagged styling,
    the progress line, the copy badge, and the answer string. A note counts as a
    deviation (the human went out of their way to add it). */
 function flips() {
@@ -357,15 +357,15 @@ function answerString() {
   if ((CFG.decisions || []).length)
     lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || recOf(d.id) || "?")).join(" "));
   (CFG.decisions || []).forEach(d => {
-    if (s.dnotes[d.id]) lines.push(`${d.id} note — ${s.dnotes[d.id]}`);
+    if (s.dnotes[d.id]) lines.push(`${d.id} note: ${s.dnotes[d.id]}`);
   });
   Object.entries(s.screens).forEach(([k, v]) => {
     if (!v.agree || v.note) lines.push(
-      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
+      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? ": " + v.note : ""}`);
   });
   if (s.endnotes) lines.push("notes:", s.endnotes);
   // "agreed with everything" only when nothing actually deviates (a flipped
-  // option, a note, or end notes) — the decisions line alone is not a deviation.
+  // option, a note, or end notes): the decisions line alone is not a deviation.
   if (!f.d.length && !f.dnote.length && !f.screens.length && !f.end)
     lines.push("all items: agree as drafted");
   return lines.join("\n");
@@ -385,7 +385,7 @@ function refresh() {
   });
   // mark filled note wrappers so a written note never hides when notes-mode is off.
   // shownote is add-only here: a manually-opened empty note (openNote) must stay
-  // open — recomputing it from `filled` on every keystroke would collapse it.
+  // open: recomputing it from `filled` on every keystroke would collapse it.
   $$(".notewrap").forEach(w => {
     const t = $("textarea", w); const filled = t && t.value.trim();
     w.classList.toggle("filled", !!filled);
@@ -485,7 +485,7 @@ $("#copy").onclick = async () => {
   const txt = answerString();
   try { await navigator.clipboard.writeText(txt); }
   catch { prompt("Copy this:", txt); }
-  toast("Copied — paste it in chat");
+  toast("Copied: paste it in chat");
 };
 /* Submit sends the answer string to the server (POST /_submit/<slug>), which
    hands it to the agent that made the page. Falls back to clipboard if the
@@ -497,18 +497,18 @@ $("#submit").onclick = async () => {
     const r = await fetch(`/_submit/${encodeURIComponent(slug)}`, { method: "POST",
       headers: { "Content-Type": "application/json" }, body: JSON.stringify({ answer: txt }) });
     if (!r.ok) throw new Error("http " + r.status);
-    toast("Sent to Claude ✓ — you can close this tab", 2600);
+    toast("Sent to Claude ✓: you can close this tab", 2600);
     $("#submit").textContent = "Sent ✓";
     setTimeout(() => { $("#submit").textContent = "Submit to Claude"; }, 2600);
   } catch (e) {
     try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
-    toast("Submit unavailable — copied instead, paste it in chat", 2800);
+    toast("Submit unavailable: copied instead, paste it in chat", 2800);
   }
 };
 
 fetch("config.json", { cache: "no-store" }).then(r => r.json()).then(c => { CFG = c; render(); load(); refresh(); })
   .catch(e => { $("#main").innerHTML =
-    `<p class="note">Failed to load config.json — serve this folder over http
+    `<p class="note">Failed to load config.json: serve this folder over http
     (decision-page.sh serve) and check the JSON. ${esc(e)}</p>`; });
 </script>
 </body>

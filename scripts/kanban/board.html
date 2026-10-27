@@ -8,10 +8,10 @@
 <link rel="stylesheet" href="/shared.css">
 <style>
   /* ============================================================
-     kanban — v10. Product-grade skin: system UI type, crisp
+     kanban: v10. Product-grade skin: system UI type, crisp
      saturated accents, 6px geometry, state icons, label pills.
      Six equal kanban columns; labels and sub-items intact.
-     Read + notes only — every mutation still goes through the CLI.
+     Read + notes only: every mutation still goes through the CLI.
      ============================================================ */
   /* Tokens, the tooltip and the button/chip primitives live in shared.css. */
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
@@ -23,7 +23,7 @@
        font-variant-numeric:tabular-nums;display:flex;flex-direction:column;
        /* The card panel parks OFFSCREEN to the right when shut, at x≈1610 in a
           1400px window, and a parked panel was widening the whole document by
-          84px — so the page scrolled sideways at every width, and the lanes'
+          84px: so the page scrolled sideways at every width, and the lanes'
           own scroll was not the cause. main keeps its own overflow-x:auto, so
           the columns still scroll inside it; this only stops the parked panel
           from dragging the page along with it. */
@@ -43,7 +43,7 @@
      above the summary row, and the inset it does keep belongs to that row. */
   header.top{flex:none;padding:0;display:flex;flex-direction:column;border-bottom:1px solid var(--border)}
   /* Height is the scarce axis (§6) and 43px of it went on the three gaps
-     between the bar, this row and the first lane — more air than the row is
+     between the bar, this row and the first lane: more air than the row is
      tall. §18: use the space you already have. The row keeps its own height;
      only the space around it is spent more carefully. */
   header.top > .summary{margin:5px 16px 6px}
@@ -72,7 +72,7 @@
   /* the floor: whatever else the bar wants, the board's own name shows at
      least ~8 characters before anything reads "a…" */
   .btitle .bnm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:8ch}
-  /* .bpath is in shared.css now — the doc viewer names its file the same way */
+  /* .bpath is in shared.css now: the doc viewer names its file the same way */
   /* Charter §6: group, then hold. Four groups, each a holder, so the row parses
      as find / pick / act / view instead of eight peers in a line. The gap
      BETWEEN groups is larger than the gap inside one, which is what makes the
@@ -170,7 +170,7 @@
   .linkish{background:none;border:none;padding:0 2px;height:auto;color:var(--text-3);text-decoration:underline;font-size:var(--fs-body)}
   .linkish:hover{background:none;border:none;color:var(--text)}
 
-  /* inline notices — one grammar for delta / stale / errors */
+  /* inline notices: one grammar for delta / stale / errors */
   .notice{display:none;align-items:center;gap:10px;border:1px solid var(--border);background:var(--well);
           border-radius:var(--r-card);padding:9px 12px;font-size:var(--fs-lead);color:var(--text-2)}
   .notice.on{display:flex}
@@ -193,7 +193,7 @@
   .shell{flex:1;min-height:0;display:flex;align-items:stretch;min-width:0}
   /* A panel, built like the drawer: a shell that does not scroll, holding a
      head that stays put, a body that scrolls, and a grip on the edge. The grip
-     could not be grabbed while it lived inside the scrolling box — an
+     could not be grabbed while it lived inside the scrolling box: an
      overflow:auto box clips anything reaching past its padding, so the handle
      sat 16px inside the edge, under the content. */
   aside.side{position:relative;flex:none;width:186px;border-right:1px solid var(--border);
@@ -234,7 +234,7 @@
   .sgroup{display:flex;flex-direction:column;gap:2px;min-width:0}
   .sgroup + .sgroup{margin-top:4px;padding-top:4px;border-top:1px solid var(--border)}
   /* Two levels that read as two levels. A section and a kind were 11.5px and
-     10.5px, both weight 600, both uppercase — one pixel apart, which is no
+     10.5px, both weight 600, both uppercase: one pixel apart, which is no
      hierarchy at all. A section is now a sentence-case heading you can fold;
      a kind stays small caps and steps back, so the eye sorts them by shape
      rather than by measuring them. */
@@ -306,7 +306,7 @@
   .empty-how{display:block;margin-top:5px;color:var(--text-3);opacity:.82;line-height:1.55}
   .empty-how code{font:var(--fs-small) var(--mono);background:var(--well);
                   border:1px solid var(--border);border-radius:4px;padding:.05em .32em}
-  /* the two columns that need you sit on a lighter well — weight, not hue */
+  /* the two columns that need you sit on a lighter well: weight, not hue */
   /* attention is width and border weight, never a tint: a hue here would be a
      fourth claimant on a closed palette, and the light tint measured 1.000 */
   .col.attn{flex:1.25 1 460px;max-width:640px;border-color:var(--border-2);border-width:1.5px}
@@ -347,7 +347,7 @@
   /* three toggles read as one vocabulary; the destructive one is set apart by a
      gap and a divider, the way the drawer holds its close button away from nav */
   /* Five labelled buttons on every ask read as five demands. They are icons
-     now, and they fade in on hover or focus — except the ones already ON,
+     now, and they fade in on hover or focus: except the ones already ON,
      which are state and must stay visible when nobody is pointing at the row. */
   .item .iacts button{height:22px;width:22px;padding:0;justify-content:center;font-size:var(--fs-small);
                       background:none;border-color:transparent;color:var(--text-3);
@@ -406,7 +406,7 @@
      and status stays right even when either one wraps to a second line */
   .pills{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
   .pills .ident,.pills .stat{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
-  /* one auto margin holds the two slots apart — no spacer element, and it
+  /* one auto margin holds the two slots apart: no spacer element, and it
      survives wrapping: the status group moves down but stays right */
   .pills .stat{margin-left:auto;justify-content:flex-end}
   .pill{display:inline-flex;align-items:center;gap:5px;height:20px;padding:0 8px;border-radius:var(--r-pill);
@@ -438,7 +438,7 @@
   .col.archive .card .title{flex:1;min-width:0;font-size:var(--fs-body);font-weight:450;color:var(--text-2);
                             display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* Tags postdate this row and were never added to it, so they rendered at full
-     size beside a title that is flex:1 min-width:0 — the chips took the width and
+     size beside a title that is flex:1 min-width:0: the chips took the width and
      the title computed to 0px, leaving settled cards with no title at all. The
      row is title-first, as the rest of this block already says; a settled card's
      tags are not a skim fact and the drawer still carries them. */
@@ -473,7 +473,7 @@
   /* a user-set width wins over the default, and survives a reload */
   #drawer.open.sized{width:var(--dw)}
   #drawer.open.collapsed{width:46px}
-  /* Everything but the stub rail is hidden at 46px — including the tint, whose
+  /* Everything but the stub rail is hidden at 46px: including the tint, whose
      2px would otherwise read as a stray line above the stubs. */
   #drawer.collapsed .dhead,#drawer.collapsed .dbody,#drawer.collapsed .composer,#drawer.collapsed .dtint{display:none}
 
@@ -498,8 +498,8 @@
             font-size:var(--fs-small);color:var(--text-3);opacity:0;transition:opacity var(--t-fast),background var(--t-fast)}
   .dtab:hover .tx,.dtab.on .tx{opacity:1}
   .dtab .tx:hover{background:var(--card);color:var(--text)}
-  /* Collapsed: a vertical stack of stubs. Text stays horizontal — a rotated
-     label is the "vertical distortion" this is meant to avoid — so identity is
+  /* Collapsed: a vertical stack of stubs. Text stays horizontal: a rotated
+     label is the "vertical distortion" this is meant to avoid: so identity is
      carried by the lane glyph plus two letters, with the tooltip holding the
      rest. */
   #drawer.collapsed .dtabs{flex-direction:column;gap:4px;padding:8px 5px;overflow-x:hidden;overflow-y:auto;
@@ -533,7 +533,7 @@
   .ghead .gsp{flex:1}
   .ghead .gval{font:500 var(--fs-small)/1 var(--mono);letter-spacing:0;text-transform:none;color:var(--text-2)}
   /* verification is a CLAIM, not metadata: it gets a container you can be
-     skeptical at — the grade, the agent's own words, and who said them */
+     skeptical at: the grade, the agent's own words, and who said them */
   /* The choice, where the context is. The recommended option is named in
      words, not marked by colour alone (§4): "the agent's pick" reads to
      someone who cannot see the tint. */
@@ -585,7 +585,7 @@
   .srcrow .go{color:var(--text-3);flex:none;font-size:var(--fs-small)}
   /* However many are working here, this cannot grow without bound: it shares a
      row with the primary action, and an unbounded list pushed "Send to agent"
-     off the bar the moment a third session appeared (C7 — the bar needs a
+     off the bar the moment a third session appeared (C7: the bar needs a
      layout algorithm, not a hope that content stays short). */
   .livepeers{display:none;align-items:center;gap:6px;font-size:var(--fs-small);color:var(--text-2);
              white-space:nowrap;min-width:0;max-width:190px;flex:0 1 auto}
@@ -625,7 +625,7 @@
   /* other notes read at zero clicks, in the scrolling body so the composer
      keeps its whole height. Clicking one swaps it into the editor. */
   .notestack{display:flex;flex-direction:column;gap:6px}
-  /* drag to rank, middle-click to dismiss — both on rows and tabs, so the two
+  /* drag to rank, middle-click to dismiss: both on rows and tabs, so the two
      lists behave the same way */
   .notestack .nrow{cursor:grab}
   /* The saved notes are the half you scroll and the composer is the half you
@@ -669,7 +669,7 @@
   .notestack .npick.on{background:var(--blue);border-color:var(--blue);color:var(--on-accent)}
   .notestack .nrow.picked{border-color:var(--blue-br)}
   /* the keyboard's position in the list, distinct from "being edited" (active)
-     and from "selected" (picked) — three different facts about one row */
+     and from "selected" (picked): three different facts about one row */
   .notestack .nrow.cursor{outline:2px solid var(--ring);outline-offset:1px}
   .addnote{flex:none;height:22px;padding:0 9px;border-radius:var(--r-pill);font-size:var(--fs-small);
        background:none;border:1px solid var(--border);color:var(--text-2)}
@@ -683,7 +683,7 @@
   .idbtn{font:var(--fs-body)/1 var(--mono);gap:8px;height:28px}
   .idbtn:hover{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
 
-  /* the note is this product's only input, so it is docked — never scrolled to.
+  /* the note is this product's only input, so it is docked: never scrolled to.
      it takes a comfortable share of the height and no more; drag to grow */
   .composer{flex:none;border-top:1px solid var(--border);background:var(--well);padding:12px 16px 14px;display:flex;flex-direction:column;gap:9px}
   /* A place to write, not a form field. Slightly larger type, a longer measure,
@@ -781,7 +781,7 @@
   .inserts{display:flex;gap:5px;flex-wrap:wrap;flex:1}
   .tagbtn{font:500 var(--fs-small)/1 var(--mono);padding:0 9px;height:24px;border-radius:var(--r-pill);color:var(--text-2)}
   .tagbtn:hover{color:var(--blue);border-color:var(--blue-br);background:var(--blue-bg)}
-  /* not a duplicate of the note: a parse receipt — what the agent will ACT on */
+  /* not a duplicate of the note: a parse receipt: what the agent will ACT on */
   .parsed{display:none;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--fs-small);color:var(--text-3)}
   .parsed.on{display:flex}
   .hint{font-size:var(--fs-small);color:var(--text-3);line-height:1.6}
@@ -889,8 +889,8 @@
              display:grid;place-items:center;font-size:var(--fs-micro);color:transparent}
   .chip.picked .cbx{background:var(--on-accent);border-color:var(--on-accent);color:var(--blue)}
 
-  /* A tag chip is the same object everywhere it appears — card face, drawer,
-     sidebar, picker — so learning it once is enough. The dot carries the kind
+  /* A tag chip is the same object everywhere it appears: card face, drawer,
+     sidebar, picker: so learning it once is enough. The dot carries the kind
      and is the only place colour is spent; the text stays readable text. */
   .chip.tag{padding-left:7px}
   .chip.tag .tdot{width:7px;height:7px;border-radius:50%;background:var(--dot,var(--grey));flex:none}
@@ -945,7 +945,7 @@
   .srow.decrow.pend .stxt{color:var(--text)}
   /* A decision question is the one row label worth two lines. The shared .stxt
      rule ellipsises to a single line, which in a 186px panel showed about 63px
-     of a 318px question — enough to know a decision exists and not which one.
+     of a 318px question: enough to know a decision exists and not which one.
      Decisions are few and each one is a thing the owner has to answer, so they
      get the height. The state badge moves to the top so a long question grows
      downward rather than pushing it out of line. */
@@ -1234,7 +1234,7 @@
 
   /* ---------- note popover ---------- */
   /* Opened from a chip and sized off the card it belongs to, so the writing
-     surface is bigger than the thing that spawned it — the point is to be able
+     surface is bigger than the thing that spawned it: the point is to be able
      to actually write here instead of in a 2-line preview. */
   #pop{position:fixed;z-index:var(--z-pop);display:none;flex-direction:column;gap:10px;
        background:var(--canvas);border:1px solid var(--border-2);border-radius:var(--r-panel);padding:14px;
@@ -1275,13 +1275,13 @@
      not by a box around it: three-sided borders never quite meet the seam. */
   /* The modal names itself, then offers its four doors. The title bar is the
      quietest ground in the stack, the tab strip sits on the same ground, and
-     the active tab is the only thing wearing the canvas — so the eye reads
+     the active tab is the only thing wearing the canvas: so the eye reads
      title, then tabs, then the page. */
   /* Three tabs open with a reference the rows beneath keep pointing at: a drawn
      keyboard, a map of the pipeline. Reading row 40 while the thing it names has
      scrolled off is the hiccup, so the reference holds and the rows move under
      it. Hey Claude opens with a playground instead, which is a thing you use
-     rather than one you consult, and pinning it would eat the pane — so #hTags
+     rather than one you consult, and pinning it would eat the pane: so #hTags
      is deliberately absent from this list.
      The modal's own title and tab strip are NOT involved and must never be: they
      are flex:none siblings of this scroller, which is why they cannot drift.
@@ -1301,7 +1301,7 @@
                            padding-bottom:12px;border-bottom:1px solid var(--border)}
 
   /* the map. One picture of how a doc becomes a card and how anything you
-     write reaches an agent — the two flows this whole board exists to run. */
+     write reaches an agent: the two flows this whole board exists to run. */
   .hmap{width:100%;height:auto;margin-bottom:20px;border:1px solid var(--border);border-radius:var(--r-panel);background:var(--well)}
   .hmap text{font:var(--fs-small) var(--sans);fill:var(--text-2)}
   .hmap text.t{font:600 var(--fs-small) var(--sans);fill:var(--text)}
@@ -1617,7 +1617,7 @@
     <tbody>
       <tr><td colspan="2" class="grouphead">Goal and tags</td></tr>
       <tr><td><kbd>g</kbd></td><td>set the card's goal, in one line</td></tr>
-      <tr><td><kbd>#</kbd></td><td>tag it — milestone, model tier, effort, anything</td></tr>
+      <tr><td><kbd>#</kbd></td><td>tag it: milestone, model tier, effort, anything</td></tr>
     </tbody>
     <tbody>
       <tr><td colspan="2" class="grouphead">Everything else</td></tr>
@@ -1636,7 +1636,7 @@
     <div class="pane-l" id="hPlayLeft"></div>
   <table>
     <tr><td colspan="2" class="grouphead">Note tags</td></tr>
-    <tr><td><kbd>@me</kbd></td><td>note to self — the agent isn't nagged</td></tr>
+    <tr><td><kbd>@me</kbd></td><td>note to self: the agent isn't nagged</td></tr>
     <tr><td><kbd>!now</kbd></td><td>agent acts on next pickup</td></tr>
     <tr><td><kbd>/skill</kbd></td><td>run that skill on the card</td></tr>
     <tr><td><kbd>&gt;lane</kbd></td><td>agent applies the move via CLI</td></tr>
@@ -1685,7 +1685,7 @@ function tailPath(s, max = 26) {
 // What a card calls itself on the board face. The agent supplies `titleBrief`
 // (capped at 100 chars by the CLI); a harvested card has only the doc line it
 // came from, which is routinely a paragraph, so we cut one here rather than
-// show a wall. The full text is never lost — it hovers on the face and reads
+// show a wall. The full text is never lost: it hovers on the face and reads
 // as the drawer's description.
 const BRIEF_MAX = 100;
 function briefOf(c) {
@@ -1694,7 +1694,7 @@ function briefOf(c) {
   if (t.length <= BRIEF_MAX) return t;
   const head = t.slice(0, BRIEF_MAX + 1);
   // prefer a real clause end, then a word end, before falling back to a hard cut
-  const stop = Math.max(head.lastIndexOf(". "), head.lastIndexOf(" — "), head.lastIndexOf(" – "), head.lastIndexOf(": "), head.lastIndexOf(" · "));
+  const stop = Math.max(head.lastIndexOf(". "), head.lastIndexOf(": "), head.lastIndexOf(" – "), head.lastIndexOf(": "), head.lastIndexOf(" · "));
   if (stop > 40) return t.slice(0, stop).trim() + "…";
   const sp = head.lastIndexOf(" ");
   return (sp > 40 ? t.slice(0, sp) : t.slice(0, BRIEF_MAX)).trim() + "…";
@@ -1875,7 +1875,7 @@ function mountBoardNav() {
   // renderLive found nothing and every board poll threw.
   const live = $("live");
   // No `aside:` any more. The toggle rendered at the head of the common zone,
-  // which put it between the search box and the first kind tab — floating in the
+  // which put it between the search box and the first kind tab: floating in the
   // middle of the bar with nothing either side to say what it belonged to. It is
   // also the third way to do the same thing: the panel has its own grip on its
   // edge and the `|` key toggles it, both of which sit where the panel is rather
@@ -1903,7 +1903,7 @@ function mountBoardNav() {
 }
 mountBoardNav();
 // theme attribute on BOTH root and body: vars resolve in any cloned subtree,
-// and the toggle restyles by class alone — no re-render, nothing inlined
+// and the toggle restyles by class alone: no re-render, nothing inlined
 
 // Turn bare URLs and absolute paths into things you can click or copy.
 //
@@ -2004,7 +2004,7 @@ function tagChip(t, { onCard = null } = {}) {
   // the kind reads as a prefix rather than a second chip: one object, not two
   b.querySelector(".tk").textContent = t.kind === "plain" ? "#" : `${t.kind}:`;
   b.querySelector(".tn").textContent = t.name;
-  b.dataset.tip = `${presetOf(t.kind).label} · ${t.name}${t.note ? ` — ${t.note}` : ""}\nPress to show every card that shares it.`;
+  b.dataset.tip = `${presetOf(t.kind).label} · ${t.name}${t.note ? `: ${t.note}` : ""}\nPress to show every card that shares it.`;
   b.onclick = (e) => {
     e.stopPropagation();
     // a tag press is "show me the others", which is a peek beside the board
@@ -2061,7 +2061,7 @@ async function setGoal(cardId, goal) {
 // ---------- selection ----------
 // Two independent sets, mirroring the server's selection.json. Cards and notes
 // answer different questions ("work on these" vs "read these"), so they are
-// never merged — the same card can be unticked while one of its notes is not.
+// never merged: the same card can be unticked while one of its notes is not.
 let selMode = false, noteSelMode = false;
 const picked = () => data?.selection ?? { cards: [], notes: [] };
 const nKey = (cardId, noteId) => `${cardId}:${noteId}`;
@@ -2110,8 +2110,8 @@ async function sendToAgent() {
     toast(out.sent.length
       ? `Sent ${out.cards} card(s), ${out.notes} note(s) to ${out.sent.join(", ")}`
       : out.reason
-        ? `Could not deliver — ${out.reason}. The selection is saved; the next agent will still be told.`
-        : `Nobody is live here — the selection is saved and the next agent will be told`,
+        ? `Could not deliver: ${out.reason}. The selection is saved; the next agent will still be told.`
+        : `Nobody is live here: the selection is saved and the next agent will be told`,
       out.reason ? 6000 : 4200, out.reason ? "err" : "");
   } catch (e) { toast(`Send failed: ${e.message}`, 4000, "err"); }
 }
@@ -2143,7 +2143,7 @@ function selBar(kind) {
   if (!mode) {
     const b = document.createElement("button");
     b.className = "sel-toggle" + (n ? " on" : "");
-    b.dataset.tip = `Pick ${label} to push at an agent. Ticking never changes the board — it says "this is what I mean".`;
+    b.dataset.tip = `Pick ${label} to push at an agent. Ticking never changes the board: it says "this is what I mean".`;
     b.innerHTML = `${kind === "note" ? NOTE_ICON : PICK_ICON}<span>Select ${label}${n ? ` · ${n}` : ""}</span>`;
     b.onclick = () => { if (kind === "note") noteSelMode = true; else selMode = true; applyModes(); };
     return b;
@@ -2155,7 +2155,7 @@ function selBar(kind) {
   const clear = document.createElement("button");
   clear.className = "ghost"; clear.textContent = "Clear"; clear.disabled = !n;
   clear.dataset.tip = n ? `Deselect every ${label.slice(0, -1)}`
-    : `Nothing is selected yet — press x on a ${label.slice(0, -1)} first`;
+    : `Nothing is selected yet: press x on a ${label.slice(0, -1)} first`;
   clear.onclick = () => clearSel(kind === "note" ? "notes" : "cards");
   const exit = document.createElement("button");
   exit.className = "ghost icon"; exit.innerHTML = X_ICON; exit.setAttribute("aria-label", `exit ${label} selection`);
@@ -2267,7 +2267,7 @@ const colKey = (lane) => `kanban-colw-${slug}-${lane}`;
 
 // A column setting is a per-lane VIEW preference the owner holds across visits.
 // Anything that changes the data, or that applies to the whole board, belongs
-// elsewhere — that is the rule the plan set and the reason hide-lane and the
+// elsewhere: that is the rule the plan set and the reason hide-lane and the
 // second length knob are not here. Width keeps its own key because it already
 // had one; the rest ride together so "reset this lane" is one delete.
 const SORTS = { updated: "Last touched", created: "Newest first", title: "Title",
@@ -2322,7 +2322,7 @@ function applyColWidth(el, lane) {
   el.classList.toggle("sized", !!w);
   // A folded column is 210px by the space rule, and its remembered width is for
   // when it is open again. Writing that width inline while folded beat the
-  // class, so folding a widened lane reclaimed nothing — which is the one thing
+  // class, so folding a widened lane reclaimed nothing: which is the one thing
   // folding is for. The width is kept, just not applied while folded.
   const px = w && !el.classList.contains("folded") ? `${w}px` : "";
   el.style.width = px;
@@ -2478,7 +2478,7 @@ function openNameView(btn, clauses) {
 // Answering a decision, from the board, without leaving it.
 //
 // This did not exist. A recorded decision rendered "needs you", and clicking it
-// showed a TOAST with the why and nothing else — so the one surface that says a
+// showed a TOAST with the why and nothing else: so the one surface that says a
 // decision is waiting had no way to answer it. The owner's words, 2026-08-26:
 // "Why doesn't it fucking open anything wtf am I supposed to type it out and
 // send it to the agent? Why can't I answer here and nudge the agent". Both
@@ -2525,13 +2525,13 @@ function openDecideAnswer(d, btn) {
   ta.focus();
   const save = async () => {
     const text = ta.value.trim();
-    if (!text) return toast("An empty ruling is not a ruling — say what you decided, or Cancel", 3200, true);
+    if (!text) return toast("An empty ruling is not a ruling: say what you decided, or Cancel", 3200, true);
     closeColCard();
     const res = await fetch("/api/decide", { method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify({ slug, op: "answer", id: d.id, answer: text, notify: true }) });
     const out = await res.json().catch(() => ({ error: "could not save that" }));
     if (out.error) return toast(out.error, 4000, true);
-    toast(out.told ? `Ruled — ${out.told} was told` : "Ruled", 3000);
+    toast(out.told ? `Ruled: ${out.told} was told` : "Ruled", 3000);
     await afterWrite();
   };
   card.querySelector("#dcsave").onclick = save;
@@ -2918,7 +2918,7 @@ function peekEl(pk) {
     // opening a second copy of the same detail
     el.onclick = (e) => {
       if (e.target.closest(".chip,.cbox")) return;
-      if (!findCard(c.id)) toast("That card is hidden by the filter — clear it with escape in the search box");
+      if (!findCard(c.id)) toast("That card is hidden by the filter: clear it with escape in the search box");
     };
     list.appendChild(el);
   });
@@ -2958,7 +2958,7 @@ const PAIRS = [
   // turned into `peek-<tagId>`, but these three readers kept matching `#peek`,
   // which exists nowhere. So the selector matched nothing, the pair never fired,
   // and hovering a card in a tag peek stopped highlighting its source on the
-  // board — the class and the CSS were both fine the whole time.
+  // board: the class and the CSS were both fine the whole time.
   { sel: ".col.peek .card", peers: (el) => [boardCardFor(el)] },
   { sel: ".item", peers: (el) => [landedCardFor(el)] },
   { sel: ".card", peers: (el) => [tabNode(el.dataset.id), peekRowFor(el.dataset.id)] },
@@ -3143,7 +3143,7 @@ const VISIT_KEY = `kanban-visit-${slug}`;
 let anchor = +localStorage.getItem(VISIT_KEY) || 0;
 const since = (iso) => anchor > 0 && Date.parse(iso) > anchor;
 
-// lane state icons — the state's identity is a shape, so a label that happens
+// lane state icons: the state's identity is a shape, so a label that happens
 // to be named "In progress" can never be mistaken for one
 function laneIcon(lane, size = 14) {
   const s = size, c = s / 2, r = s / 2 - 1.4;
@@ -3158,7 +3158,7 @@ function laneIcon(lane, size = 14) {
     default: return wrap(ring("1.6 2.4"), "var(--border-2)");
   }
 }
-// sub-item progress as a ring — a proportion you read without parsing digits
+// sub-item progress as a ring: a proportion you read without parsing digits
 function progRing(done, total) {
   const r = 5, C = 2 * Math.PI * r, p = total ? done / total : 0;
   return `<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="${r}" stroke="var(--border-2)" stroke-width="2"/>` +
@@ -3170,7 +3170,7 @@ const CHECK = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path
 
 function showState(kind, msg) {
   const s = $("state");
-  const hint = kind === "err" ? `the board server may be down — check <code>kanban.sh check</code>`
+  const hint = kind === "err" ? `the board server may be down: check <code>kanban.sh check</code>`
     : kind === "empty" ? `run <code>kanban.sh sync</code> in the project` : "";
   s.innerHTML = `<div class="big">${kind === "err" ? "Board failed to load" : kind === "empty" ? "No cards yet" : "Loading board…"}</div>` +
     (msg ? `<div class="statemsg"></div>` : "") + (hint ? `<div>${hint}</div>` : "");
@@ -3209,15 +3209,15 @@ async function load() {
     data = parsed;
     render();
     // ?q= lands you on the CARDS, not on the board. Every index row that
-    // counts something — a milestone's members, a tag's cards, a decision's
-    // subject — had nowhere to point except /b/<slug>, so following any of them
+    // counts something: a milestone's members, a tag's cards, a decision's
+    // subject: had nowhere to point except /b/<slug>, so following any of them
     // opened the whole board and left you to find the thing yourself. A count
     // you cannot follow is a number, not a link.
     const wantQ = deepLink.get("q");
     if (wantQ) {
       deepLink.delete("q");
       setFilter(wantQ);
-      toast(`Filtered to: ${wantQ} — clear it with the filter box or Escape`, 5200);
+      toast(`Filtered to: ${wantQ}: clear it with the filter box or Escape`, 5200);
     }
     const wantCard = deepLink.get("card");
     if (wantCard && data.board.cards.some((c) => c.id === wantCard)) {
@@ -3248,7 +3248,7 @@ async function load() {
 const labelHue = (s) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 6; };
 
 // Tagged notes: tags live inside free-form note text, parsed at read time.
-// Mirrored by parseNoteTags in lib.ts — keep in sync.
+// Mirrored by parseNoteTags in lib.ts: keep in sync.
 function parseTags(text) {
   const t = { me:false, act:false, skills:[], moves:[], defer:false, review:false, free:[] };
   if (!text) return t;
@@ -3286,7 +3286,7 @@ function tagPills(nt, shown, max) {
   const add = (cls, txt, title) => out.push(`<span class="pill tag ${cls}" data-tip="${title}">${txt}</span>`);
   if (nt.act && !has("!now")) add("", "!now", "act on next agent pickup");
   nt.skills.slice(0, 2).forEach((s) => { if (!has(s)) add("", s, "capability requested on this card"); });
-  nt.moves.slice(0, 1).forEach((l) => { if (!has(">" + l)) add("", "&gt;" + l, "move requested — the agent applies it via CLI"); });
+  nt.moves.slice(0, 1).forEach((l) => { if (!has(">" + l)) add("", "&gt;" + l, "move requested: the agent applies it via CLI"); });
   if (nt.review && !has("#review-me")) add("", "#review-me", "flagged for your own review queue");
   if (nt.defer && !has("#defer")) add("quiet", "#defer", "parked");
   nt.free.slice(0, 2).forEach((f) => { if (!has(f)) add("quiet", f, "tag"); });
@@ -3389,7 +3389,7 @@ function cardEl(c) {
   const needs = c.verify?.needsHuman;
   const statParts = [
     subs.length ? `<span class="pill prog" data-tip="Checkboxes nested under this card in its source document">${progRing(done, subs.length)}${done}/${subs.length}</span>` : "",
-    c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" data-tip="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? " — " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
+    c.verify && !(needs && !isArchive) ? `<span class="pill verify${c.verify.grade === "executed" ? "" : " soft"}" data-tip="${VF_TIP[c.verify.grade] || ""}${c.verify.note ? ": " + c.verify.note.replace(/"/g, "&quot;") : ""}">${c.verify.grade === "executed" ? CHECK : ""}${VF[c.verify.grade] || c.verify.grade}</span>` : "",
     needs && !isArchive ? (() => {
       const a = askOn(c), st = askStateOf(a);
       if (st === "answered") {
@@ -3442,7 +3442,7 @@ function cardEl(c) {
   }
   if (c.staleReason) el.querySelector(".pill.why").textContent = c.staleReason;
   // One chip per note, numbered. #n is the card's own numbering and it is what
-  // makes a note referable — "note #2" means something to a human reading the
+  // makes a note referable: "note #2" means something to a human reading the
   // board and to an agent reading `kanban.sh selected`.
   const chipRow = el.querySelector(".chips");
   const cardTags = tagsOnCard(c.id);
@@ -3517,7 +3517,7 @@ function digestText() {
   const cards = data.board.cards;
   const by = (k) => cards.filter((c) => c.lane === k);
   const titles = (arr, n = 4) => arr.slice(0, n).map((c) => c.title).join("; ") + (arr.length > n ? ` (+${arr.length - n})` : "");
-  const lines = [`${data.name} — status ${new Date().toLocaleString()}`];
+  const lines = [`${data.name}: status ${new Date().toLocaleString()}`];
   if (anchor > 0) {
     const chg = cards.filter((c) => since(c.updatedAt));
     const doneSince = chg.filter((c) => c.lane === "done");
@@ -3537,13 +3537,13 @@ function digestText() {
 }
 async function copyDigest() {
   try { await navigator.clipboard.writeText(digestText()); toast("Status digest copied"); }
-  catch { toast("The browser blocked the clipboard — select the text and copy it by hand", 3000, "err"); }
+  catch { toast("The browser blocked the clipboard: select the text and copy it by hand", 3000, "err"); }
 }
 $("digestBtn").onclick = copyDigest;
 
 // Three registers, top to bottom and left to right: what wants you, what the
 // board is doing, how fresh the mirror is. The delta is a second line because
-// it is news rather than state — it appears when you have been away and leaves
+// it is news rather than state: it appears when you have been away and leaves
 // when you clear it.
 const SB_ICON = {
   needs: `<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1.8 12.6 11.6H1.4L7 1.8Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M7 5.6v2.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="9.8" r=".75" fill="currentColor"/></svg>`,
@@ -3593,7 +3593,7 @@ function renderSummary() {
   // 0. Whether this board still has a project at all. First, because every
   //    number after it describes a mirror of a directory that is not there.
   //    The hub has flagged this since 2026-08-25 and the board did not, so
-  //    opening a dead board downgraded the news to "synced 32d ago" — which
+  //    opening a dead board downgraded the news to "synced 32d ago": which
   //    reads as a stale mirror rather than a project that no longer exists.
   if (data.rootGone) {
     band.append(statChip({ icon: "blocked", n: "", label: "project is gone", cls: "warn",
@@ -3624,7 +3624,7 @@ function renderSummary() {
   // owner ruled it out on 2026-08-25. The deltas ride along with it.
   // The counts belong on the SECOND bar, not the first. They are this board's
   // state, which is exactly what .sbstate is for, and leaving them in the main
-  // bar kept it 126px over at 800 — the width the owner actually works at —
+  // bar kept it 126px over at 800: the width the owner actually works at:
   // which pushed the whole document sideways rather than just the lanes.
   const slot = document.getElementById("bStats") ?? document.getElementById("nbStatus");
   if (slot) slot.replaceChildren(band, ...deltaRow());
@@ -3683,7 +3683,7 @@ function renderStale() {
   const ts = data.board.syncedAt ? Date.parse(data.board.syncedAt) : 0;
   if (ts && Date.now() - ts > 24 * 36e5) {
     const cmd = `kanban.sh sync --project ${data.root}`;
-    bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago — it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>` +
+    bar.innerHTML = `<span class="bar"></span><span class="grow">This mirror was synced ${ago(ts)} ago: it reflects the docs then, not the code now. Refresh with <code>kanban.sh sync</code>.</span>` +
       `<button type="button" id="copySync" data-verb="copy" data-tip="Copy the sync command to run in a terminal">Copy command</button>`;
     bar.className = "notice warn on";
     $("copySync").onclick = () => { navigator.clipboard.writeText(cmd); toast("Sync command copied"); };
@@ -3875,7 +3875,7 @@ function railEl() {
   const box = document.createElement("div");
   box.className = "railbox";
   const ta = document.createElement("textarea");
-  ta.placeholder = "Type anything for the agent. It gets sorted into a card for you — no need to say where it goes.";
+  ta.placeholder = "Type anything for the agent. It gets sorted into a card for you: no need to say where it goes.";
   ta.value = itemDraft;
   ta.setAttribute("aria-label", "write an ask");
   // Layer 0, no opt-out (EDITOR-LAYERS.md). This node is replaced on every ask
@@ -3938,7 +3938,7 @@ function railEl() {
   if (itemsBroken) {
     const e = document.createElement("div");
     e.className = "railbroken";
-    e.textContent = `Your asks could not be read, so this list is not trustworthy: ${itemsBroken}. Fix or trash ~/.claude/kanban/items.json — nothing else on this board is affected.`;
+    e.textContent = `Your asks could not be read, so this list is not trustworthy: ${itemsBroken}. Fix or trash ~/.claude/kanban/items.json: nothing else on this board is affected.`;
     list.appendChild(e);
   } else if (!shown.length) {
     const e = document.createElement("div");
@@ -4007,8 +4007,8 @@ function renderSaveView() {
 
 // The sidebar was a fixed 186px, which is why a milestone read "aug22-kar" and
 // a view read "open not do…": it had no way to be wider. It is a panel like the
-// drawer now — a head that names it, a grip that resizes it, and a width kept
-// per board — which is the parity #74 asks for (FEEDBACK-CLASSES C3).
+// drawer now: a head that names it, a grip that resizes it, and a width kept
+// per board: which is the parity #74 asks for (FEEDBACK-CLASSES C3).
 let sideQuery = "";
 const sideOpenKey = () => `kanban-sideopen-${slug}`;
 const sideOpenAll = () => { try { return JSON.parse(localStorage.getItem(sideOpenKey())) ?? {}; } catch { return {}; } };
@@ -4146,7 +4146,7 @@ function renderSide() {
                    after: () => el.classList.remove("sizing") });
 
   // A section folds, remembers whether it is folded, and says how much it holds
-  // while folded — the same bargain the lanes strike. Searching opens every
+  // while folded: the same bargain the lanes strike. Searching opens every
   // section that still has something in it, because a hit hidden inside a
   // folded section reads as no hit at all.
   const group = (label, build) => {
@@ -4166,7 +4166,7 @@ function renderSide() {
     build(inner);
     const n = inner.querySelectorAll(".srow").length;
     l.querySelector(".sct").textContent = n ? String(n) : "";
-    l.dataset.tip = `${label} — ${n} item${n === 1 ? "" : "s"}`;
+    l.dataset.tip = `${label}: ${n} item${n === 1 ? "" : "s"}`;
     // A section with nothing left after a search says nothing at all, rather
     // than standing there as an empty heading.
     if (sideQuery && !n) return;
@@ -4441,7 +4441,7 @@ function renderSide() {
         : d.session ? `\ncould not check whether ${d.session} is still around`
         : "";
       // The question leads the tooltip. Two clamped lines still cut a long one,
-      // and the row's whole job is saying WHICH decision — a tooltip that gives
+      // and the row's whole job is saying WHICH decision: a tooltip that gives
       // the provenance and age of a question you cannot read is answering a
       // question nobody asked.
       b.dataset.tip = d.title + "\n" +
@@ -4479,7 +4479,7 @@ function renderSide() {
     if (!tags.length) {
       const e = document.createElement("div");
       e.className = "sempty";
-      e.textContent = "No tags yet. Open a card and press # to make one — a milestone, a model tier, an effort.";
+      e.textContent = "No tags yet. Open a card and press # to make one: a milestone, a model tier, an effort.";
       g.appendChild(e);
       return;
     }
@@ -4656,7 +4656,7 @@ function render() {
   flat = [];
   const colEl = (lane) => {
     const cardsIn = sortLane(by(lane), lane);
-    // an empty column still renders — "nothing is active" must be visible.
+    // an empty column still renders: "nothing is active" must be visible.
     // only an empty stale column pays no layout.
     if (!cardsIn.length && lane === "stale") return null;
     const collapsible = lane === "stale";
@@ -4697,7 +4697,7 @@ function render() {
     // An empty column said "Drag one here to move it" for as long as the board
     // has existed, and cards have never been draggable. Charter §7 is why they
     // are not: "drag means rank", and a card's lane is its state rather than its
-    // order — columns, notes and tabs drag because their order persists, cards
+    // order: columns, notes and tabs drag because their order persists, cards
     // are sorted. So the sentence was not a missing feature, it was an
     // instruction for something the board deliberately does not do.
     //
@@ -4752,7 +4752,7 @@ function render() {
 
 // Where the columns sit, as an order the owner sets by dragging one. The peek
 // column arrives at the end because that is where it slides in from, and a
-// column you dragged somewhere should stay there — including that one, which is
+// column you dragged somewhere should stay there: including that one, which is
 // the whole of "ephemeral columns cannot be dragged around".
 //
 // Order is a list of ids, and anything the list does not name keeps its natural
@@ -4787,7 +4787,7 @@ function applyColOrder(lanes, { animate = false } = {}) {
   const saved = colOrder();
   // Reorder the DOM, not a CSS order property. The reorder primitive indexes by
   // document order, so a visual order laid over the top disagrees with it and
-  // moves the wrong column — measured: dragging Done landed Blocked.
+  // moves the wrong column: measured: dragging Done landed Blocked.
   //
   // Moving a node blurs anything focused inside it, and the asks column holds a
   // composer somebody may be typing in, so a pass that would move it while it
@@ -4824,7 +4824,7 @@ function markSel() {
 }
 
 // the parse receipt: not the note repeated, but what the agent will ACT on.
-// free tags and @me are excluded — they ask the agent for nothing.
+// free tags and @me are excluded: they ask the agent for nothing.
 function renderParse() {
   const nt = parseTags($("dNote").value);
   const pills = tagPills({ ...nt, defer: false, free: [] }, null);
@@ -4867,7 +4867,7 @@ function sweepDrafts() {
 let baseNote = "", conflictNote = null;
 // The popover edits the same note the composer does, so it races the same way:
 // an agent can rewrite the body while the owner is mid-sentence. Same data,
-// same race, same notice — the spec's "adds" row.
+// same race, same notice: the spec's "adds" row.
 function checkPopConflict(parsed) {
   const el = $("popConflict"), ta = $("popNote");
   if (!el || !ta || !popCard || !$("pop").classList.contains("on")) return;
@@ -4918,9 +4918,9 @@ const EXT_ICON = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" ar
 const FILE_ICON = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="color:var(--text-3)"><rect x="2.5" y="1.5" width="8" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.7 5h3.6M4.7 7.4h3.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
 
 const INSERT_TOKENS = [
-  ["@me", "note to self — the agent isn't nagged"],
+  ["@me", "note to self: the agent isn't nagged"],
   ["!now", "agent acts on next pickup"],
-  ["/skeptical-review", "run this skill on the card — edit the name for another"],
+  ["/skeptical-review", "run this skill on the card: edit the name for another"],
   [">backlog", "ask the agent to move it (edit the lane)"],
   ["#defer", "park it"],
   ["#review-me", "flag for your own review queue"],
@@ -4988,7 +4988,7 @@ $("dNote").addEventListener("blur", () => setTimeout(syncComposer, 150));
 // The old list hid whichever note the composer held, so the list reshuffled
 // every time you clicked a row and the thing you were editing vanished from
 // the place you clicked it. Now the list is the notes, the composer is a
-// separate surface, and the draft is the last row of the list — a durable
+// separate surface, and the draft is the last row of the list: a durable
 // canvas that stays until it is saved rather than a state the list falls into.
 const GOAL_ICON = `<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.4" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2.4" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r=".9" fill="currentColor"/></svg>`;
 
@@ -5318,7 +5318,7 @@ async function dismissNote(cardId, noteId) {
     if (openNoteId === noteId) openNoteId = null;
     await afterWrite();
     if (openId === cardId) { loadNoteIntoComposer(cardId); renderOtherNotes(cardId); }
-    toast("Note dismissed — press u to undo", 5000);
+    toast("Note dismissed: press u to undo", 5000);
   } catch (e) { toast(`Dismiss failed: ${e.message}`, 4000, "err"); }
 }
 async function undoDismiss() {
@@ -5449,11 +5449,11 @@ function toggleDrawer() {
   if (d.classList.contains("open")) {
     flushDraft();
     d.classList.remove("open");
-    toast("Panel closed — \\ brings it back");
+    toast("Panel closed: \\ brings it back");
     return;
   }
   const back = openId ?? tabs[tabs.length - 1] ?? flat[sel];
-  if (!back) { toast("No card open yet — press enter on one first"); return; }
+  if (!back) { toast("No card open yet: press enter on one first"); return; }
   openDrawer(back);
 }
 
@@ -5488,7 +5488,7 @@ function openInBackground(id) {
   // "Added a tab, waiting in the panel" named two things the owner has never
   // called them and offered no way to reach what it had just done. A message
   // about an action says what happened and how to get to it.
-  toast(wasOpen ? "Opened behind what you are reading" : "Added to the panel — press \\ to open it");
+  toast(wasOpen ? "Opened behind what you are reading" : "Added to the panel: press \\ to open it");
 }
 
 function openDrawer(id, wantNoteId, opts = {}) {
@@ -5575,7 +5575,7 @@ function openDrawer(id, wantNoteId, opts = {}) {
   $("dId").querySelector("span").textContent = c.id;
   $("dId").onclick = async () => {
     try { await navigator.clipboard.writeText(c.id); toast("Card id copied"); }
-    catch { toast("The browser blocked the clipboard — select the text and copy it by hand", 3000, "err"); }
+    catch { toast("The browser blocked the clipboard: select the text and copy it by hand", 3000, "err"); }
   };
   $("dVia").textContent = c.via ? `authored by session ${c.via}` : "";
 
@@ -5665,7 +5665,7 @@ function renderAsk(c) {
       ? "no option" : a.options[a.answer.pick];
     done.innerHTML = `<b></b>`;
     done.querySelector("b").textContent = chosen;
-    if (a.answer.text) done.append(document.createTextNode(` — ${a.answer.text}`));
+    if (a.answer.text) done.append(document.createTextNode(`: ${a.answer.text}`));
     const change = document.createElement("button");
     change.type = "button"; change.className = "ghost"; change.textContent = "Change";
     change.dataset.tip = "Answer it differently";
@@ -5703,7 +5703,7 @@ function renderAsk(c) {
 
   const text = document.createElement("input");
   text.type = "text"; text.className = "asktext"; text.id = "dAskText";
-  text.placeholder = "or say something else — that counts as the answer";
+  text.placeholder = "or say something else: that counts as the answer";
   text.setAttribute("aria-label", "answer in your own words");
   box.append(text);
 
@@ -5774,7 +5774,7 @@ function closeHelp() {
 // ---------- overlay contract ----------
 // Every modal on this board now opens and closes the same way: the scroll
 // behind it locks, focus moves into it, and focus returns to whatever opened it.
-// The last part is the one that was missing everywhere — closing a palette used
+// The last part is the one that was missing everywhere: closing a palette used
 // to drop the keyboard back at the top of the document, which ends a
 // keyboard-only session on the spot.
 const openStack = [];
@@ -5810,7 +5810,7 @@ const VIG = {
 
 const TERMS = [
   { id: "board", vig: "sync", title: "Board", rel: ["sync", "card", "lane"],
-    p: "One board mirrors one project. It is built by reading that project's plan documents, checkpoints and live workspace notes, so it is a view of what those files say rather than a place you type work into. That direction matters: editing the board never edits your docs. Boards are per-project and independent, and the name in the header switches between them. What the board adds on top of the mirror is everything the mirror cannot hold — your notes, your tags, your goals, what you have selected — all of which survive the next re-read.",
+    p: "One board mirrors one project. It is built by reading that project's plan documents, checkpoints and live workspace notes, so it is a view of what those files say rather than a place you type work into. That direction matters: editing the board never edits your docs. Boards are per-project and independent, and the name in the header switches between them. What the board adds on top of the mirror is everything the mirror cannot hold (your notes, your tags, your goals, what you have selected) all of which survive the next re-read.",
     do: "Treat it as a reading surface for a project, and one place to leave things for an agent.",
     dont: "Do not expect edits here to change your markdown. The docs are upstream." },
   { id: "card", vig: "card", title: "Card", rel: ["title brief", "goal", "tag", "note"],
@@ -6484,13 +6484,13 @@ function goSearch(hit) {
 async function selectAllShown() {
   const cards = spRows.filter((x) => x.kind === "card").map((x) => x.r.id);
   const notes = spRows.filter((x) => x.kind === "note").map((x) => nKey(x.r.cid, x.r.n.id));
-  if (!cards.length && !notes.length) { toast("Nothing here to select — this column is empty"); return; }
+  if (!cards.length && !notes.length) { toast("Nothing here to select: this column is empty"); return; }
   closeSearch();
   for (const id of cards) await toggleSel("card", id, true);
   for (const k of notes) await toggleSel("note", k, true);
   selMode = selMode || !!cards.length; noteSelMode = noteSelMode || !!notes.length;
   applyModes();
-  toast(`Selected ${cards.length} card(s) and ${notes.length} note(s) — press s to send them`);
+  toast(`Selected ${cards.length} card(s) and ${notes.length} note(s): press s to send them`);
 }
 $("spq").addEventListener("input", () => { spAt = 0; renderSearch(); });
 $("spq").addEventListener("keydown", (e) => {
@@ -6678,9 +6678,9 @@ $("nudgeBtn").onclick = async () => {
     if (!res.ok) throw new Error(out.error || res.status);
     // the same three honest outcomes the send button reports
     toast(out.sent.length
-      ? `Nudged ${out.sent.join(", ")} — they will sync the board and carry on`
+      ? `Nudged ${out.sent.join(", ")}: they will sync the board and carry on`
       : out.reason
-        ? `Could not reach anyone — ${out.reason}`
+        ? `Could not reach anyone: ${out.reason}`
         : `Nobody is working here right now. Nothing was sent.`,
       out.sent.length ? 4200 : 5200, out.reason ? "err" : "");
   } catch (e) { toast(`Nudge failed: ${e.message}`, 4000, "err"); }
@@ -6916,10 +6916,10 @@ function closeDrawer() {
   flushDraft();
   // dirty means "typed", not "changed": reverting to the saved text leaves
   // nothing to keep, so promising a kept draft would be a lie.
-  if (dirty && $("dNote").value !== baseNote) toast("Draft kept — it will be here when you come back");
+  if (dirty && $("dNote").value !== baseNote) toast("Draft kept: it will be here when you come back");
   dirty = false;
   $("drawer").classList.remove("open");
-  toast("Panel closed — \\ brings it back");
+  toast("Panel closed: \\ brings it back");
 }
 
 
@@ -7084,7 +7084,7 @@ document.addEventListener("keydown", (e) => {
       e.preventDefault(); break;
     case "X": selMode = !selMode; applyModes(); break;
     case "N": noteSelMode = !noteSelMode; applyModes(); break;
-    case "s": { const p = picked(); if (p.cards.length + p.notes.length) sendToAgent(); else toast("Nothing selected yet — press x on a card"); break; }
+    case "s": { const p = picked(); if (p.cards.length + p.notes.length) sendToAgent(); else toast("Nothing selected yet: press x on a card"); break; }
     case "C": clearSel("all"); toast("Selection cleared"); break;
 
     // ---- everything else ----

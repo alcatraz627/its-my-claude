@@ -29,7 +29,7 @@ fi
 
 # Build WAL snapshot entry
 SNAPSHOT="
-=== SHELL SNAPSHOT [sid:$SESSION_ID] — $TIMESTAMP ===
+=== SHELL SNAPSHOT [sid:$SESSION_ID]: $TIMESTAMP ===
 Active background processes at time of compaction:
 $ACTIVE_BG
 (Resume with: shell_tail or shell-mem tail to see full context)"

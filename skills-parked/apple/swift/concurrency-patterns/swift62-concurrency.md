@@ -7,13 +7,13 @@ Swift 6.2 makes strict concurrency dramatically easier to adopt. The core philos
 In Swift 6.0/6.1, non-actor-annotated async functions hopped to the generic concurrent executor. This caused data race errors when called from `@MainActor` types.
 
 ```swift
-// ❌ Swift 6.0/6.1 — ERROR: Sending 'self.processor' risks causing data races
+// ❌ Swift 6.0/6.1: ERROR: Sending 'self.processor' risks causing data races
 @MainActor
 final class StickerModel {
     let processor = PhotoProcessor()
 
     func extract(_ item: PhotosPickerItem) async throws -> Sticker? {
-        // processor would hop off MainActor — data race
+        // processor would hop off MainActor: data race
         return await processor.extractSticker(data: data, with: item.itemIdentifier)
     }
 }
@@ -24,7 +24,7 @@ class PhotoProcessor {
 ```
 
 ```swift
-// ✅ Swift 6.2 — No error. Async functions stay on the caller's actor.
+// ✅ Swift 6.2: No error. Async functions stay on the caller's actor.
 // The same code compiles cleanly with no changes needed.
 @MainActor
 final class StickerModel {
@@ -61,7 +61,7 @@ An opt-in build setting that makes all code implicitly `@MainActor` unless expli
 With this mode enabled, you no longer need `@MainActor` annotations on app-level types:
 
 ```swift
-// ❌ Before (Swift 6.0/6.1) — manual annotations everywhere
+// ❌ Before (Swift 6.0/6.1): manual annotations everywhere
 @MainActor
 final class StickerLibrary {
     static let shared: StickerLibrary = .init()
@@ -75,7 +75,7 @@ final class StickerModel {
 ```
 
 ```swift
-// ✅ After (Swift 6.2 with infer main actor) — no annotations needed
+// ✅ After (Swift 6.2 with infer main actor): no annotations needed
 final class StickerLibrary {
     static let shared: StickerLibrary = .init()  // Implicitly @MainActor
 }
@@ -117,7 +117,7 @@ protocol Exportable {
     func export()
 }
 
-// ❌ Swift 6.0/6.1 — ERROR: Conformance crosses into main actor-isolated code
+// ❌ Swift 6.0/6.1: ERROR: Conformance crosses into main actor-isolated code
 extension StickerModel: Exportable {
     func export() {
         processor.exportAsPNG()
@@ -126,7 +126,7 @@ extension StickerModel: Exportable {
 ```
 
 ```swift
-// ✅ Swift 6.2 — Isolated conformance
+// ✅ Swift 6.2: Isolated conformance
 extension StickerModel: @MainActor Exportable {
     func export() {
         processor.exportAsPNG()
@@ -139,17 +139,17 @@ extension StickerModel: @MainActor Exportable {
 Isolated conformances can only be used in matching isolation contexts:
 
 ```swift
-// ✅ Used within @MainActor context — OK
+// ✅ Used within @MainActor context: OK
 @MainActor
 struct ImageExporter {
     var items: [any Exportable]
 
     mutating func add(_ item: StickerModel) {
-        items.append(item)  // OK — both are @MainActor
+        items.append(item)  // OK: both are @MainActor
     }
 }
 
-// ❌ Used outside @MainActor — compile error
+// ❌ Used outside @MainActor: compile error
 nonisolated struct ImageExporter {
     var items: [any Exportable]
 
@@ -177,7 +177,7 @@ class PhotoProcessor {
 
     @concurrent
     static func extractSubject(from data: Data) async -> Sticker {
-        // Heavy image processing — runs on concurrent thread pool
+        // Heavy image processing: runs on concurrent thread pool
         ...
     }
 }

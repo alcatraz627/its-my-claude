@@ -1,6 +1,6 @@
 /// <reference types="node" />
 /**
- * generate-html.ts — Renders structured JSON into a self-contained HTML report.
+ * generate-html.ts: Renders structured JSON into a self-contained HTML report.
  *
  * Pipeline: JSON → validate → renderStyle → inlineAssets → single HTML file
  * Supports 13 styles via pluggable template.ts modules in styles/<name>/.
@@ -408,7 +408,7 @@ export function countBlocksOfType(blocks: Block[], types: string[]): number {
 // from corrupting class= attributes or string values inserted by earlier passes.
 
 /** Highlight bash/sh/shell: comments → keywords → strings. */
-/** Internal — use highlight() dispatcher instead. */
+/** Internal: use highlight() dispatcher instead. */
 function highlightBash(escaped: string): string {
   const { protect, restore } = makePlaceholder();
   return restore(
@@ -841,7 +841,7 @@ function renderFontMenu(): string {
       </div>`;
 }
 
-/** Tiny SVG wireframe previews for each style — shown on hover in the style picker. */
+/** Tiny SVG wireframe previews for each style: shown on hover in the style picker. */
 const STYLE_PREVIEWS: Record<string, string> = {
   default: `<rect fill="#0f0f17" width="160" height="100" rx="4"/>
     <rect fill="#1a1a2e" x="0" y="0" width="40" height="100" rx="4"/>
@@ -1205,7 +1205,7 @@ export function buildHtml(
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
 
-  <div class="flex-1 min-w-0 flex flex-col justify-center" title="${esc(data.title)}${data.subtitle ? " — " + esc(data.subtitle ?? "") : ""}">
+  <div class="flex-1 min-w-0 flex flex-col justify-center" title="${esc(data.title)}${data.subtitle ? ": " + esc(data.subtitle ?? "") : ""}">
     <div class="hdr-title">${esc(data.title)}</div>
     ${data.subtitle ? `<div class="hdr-subtitle">${esc(data.subtitle)}</div>` : ""}
   </div>
@@ -1233,7 +1233,7 @@ export function buildHtml(
 
   <main class="content grow min-w-0" style="padding:48px 64px;max-width:960px">
     ${contentHtml}
-    <div id="no-results">No sections match your search — try different terms.</div>
+    <div id="no-results">No sections match your search: try different terms.</div>
   </main>
 
 </div>
@@ -1294,7 +1294,7 @@ function buildLauncherHtml(data: ReportData, styles: string[]): string {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(data.title)} — All Styles</title>
+<title>${esc(data.title)}: All Styles</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:#0f0f17;color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;gap:16px}
@@ -1329,7 +1329,7 @@ function writeSharedOutputs(outputDir: string, data: ReportData): void {
 /**
  * Inline external CSS/JS references into the HTML string, producing a
  * single self-contained file. External CDN references (Google Fonts,
- * KaTeX, Tailwind) are left as-is — they enhance the page but the
+ * KaTeX, Tailwind) are left as-is: they enhance the page but the
  * report is functional without them.
  */
 function inlineAssets(html: string, css: string, js: string): string {
@@ -1569,7 +1569,7 @@ async function main(): Promise<void> {
     console.info(
       `✓ Report written to: ${resolvedOutput} (style: ${styleName})`,
     );
-    console.info(`  data.json saved — switch styles without Claude:`);
+    console.info(`  data.json saved: switch styles without Claude:`);
     console.info(
       `  bash ~/.claude/skills/create-report/restyle-report.sh ${reportRootDir} terminal`,
     );

@@ -90,11 +90,11 @@ $AUTH_LINE
 - **Decaying prerequisites:** none
 - **Verification state:** $VERIFY
 - **Live commitments:** goal: none · wake: none · deadline: none · crons: none
-- **Task list, glanced:** —
-- **Task store:** —
-- **Goal record:** —
+- **Task list, glanced:** $(printf '\342\200\224')
+- **Task store:** $(printf '\342\200\224')
+- **Goal record:** $(printf '\342\200\224')
 - **ipc alias:** gcc-test
-- **Key anchor:** —
+- **Key anchor:** $(printf '\342\200\224')
 - **Key files:** $KEYFILES
 - **Atone this session:** none
 - **Rulings this session:** $RULINGS

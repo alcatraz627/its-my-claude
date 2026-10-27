@@ -32,7 +32,7 @@ printf '# T\n## L\nWe never write `robust` or `seamless` on a slide; per the WRI
 printf '# T\n## C\n:::callout purple nope\n' > "$T/k.md"; python3 "$D/render.py" "$T/k.md" -o "$T/k.html" | rg -q "unknown callout kind" && ok "unknown callout kind is reported and falls back" || ko "unknown kind silent"
 # lint
 python3 "$D/lint.py" "$D/fixtures/DECK.md" >/dev/null; [ $? -eq 0 ] && ok "lint: fixture is clean" || ko "lint fixture"
-printf '# T\n## A\nWe made it faster, simpler, and more robust — dramatically so, with many wins across the board for everyone involved in the whole programme end to end.\n- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7\n> notes: fast\n## N\n:::stat 42%% | of rows\n' > "$T/bad.md"
+printf '# T\n## A\nWe made it faster, simpler, and more robust \xe2\x80\x94 dramatically so, with many wins across the board for everyone involved in the whole programme end to end.\n- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7\n> notes: fast\n## N\n:::stat 42%% | of rows\n' > "$T/bad.md"
 out=$(python3 "$D/lint.py" "$T/bad.md"); for k in em-dash bullets adjectives hedge-triad ste notes-voice unsourced; do echo "$out" | rg -q "\[$k\]" && ok "lint fires: $k" || ko "lint silent: $k"; done
 trash "$T" 2>/dev/null || true
 echo "== the review prompt's placeholder count describes itself =="
@@ -62,10 +62,10 @@ rg -q 'DECK_MTIME' "$RP" && ok "the prompt pins the deck mtime so a stale read i
 
 T2=$(mktemp -d)   # the original suite trashes $T before this point
 echo "== lint: em-dash in backticks is a specimen, not a use (handback item 2) =="
-printf '# T\n## L\nNever an em-dash; the rule bans `—` as a mark on slides.\n' > "$T2/dash.md"
+printf '# T\n## L\nNever an em-dash; the rule bans `\xe2\x80\x94` as a mark on slides.\n' > "$T2/dash.md"
 python3 "$D/lint.py" "$T2/dash.md" > "$T2/dash.out" 2>&1
 rg -q '\[em-dash\]' "$T2/dash.out" && ko "em-dash specimen in backticks still fires" || ok "em-dash quoted in backticks stays silent"
-printf '# T\n## L\nA bare em-dash — like this — must still fire.\n' > "$T2/dash2.md"
+printf '# T\n## L\nA bare em-dash \xe2\x80\x94 like this \xe2\x80\x94 must still fire.\n' > "$T2/dash2.md"
 python3 "$D/lint.py" "$T2/dash2.md" > "$T2/dash2.out" 2>&1
 rg -q '\[em-dash\]' "$T2/dash2.out" && ok "a real em-dash still fires" || ko "em-dash rule went blind"
 

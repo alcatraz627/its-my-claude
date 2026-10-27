@@ -391,7 +391,7 @@ def cmd_report(a):
         for dep in ch.get("depends_on", []):
             if dep in dependents:
                 dependents[dep] += 1
-    mark = {"held": "held", "shaky": "shaky", "missed": "missed", "retry due": "retry due", "unasked": "—"}
+    mark = {"held": "held", "shaky": "shaky", "missed": "missed", "retry due": "retry due", "unasked": "-"}
     n = {s: sum(v == s for v in states.values()) for s in mark}
     out = [f"# Quiz map: {q['artifact']['ref']}", "",
            f"{n['held']} held, {n['shaky']} shaky, {n['missed']} missed, {n['retry due']} due a retry, "

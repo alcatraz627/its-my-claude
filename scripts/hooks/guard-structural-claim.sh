@@ -319,16 +319,16 @@ else base="soft"; fi
 MARK="/tmp/claude-structural-claim-${sid8}"
 
 if [ "$fire_kind" = "authoring" ]; then
-  body="you're assigning ownership/authority in a design ($klass shape) but this turn shows no Read/Grep/Edit of any code file — designing over code from memory is exactly how structural-claim (S3) recurs. Ground the design: read the modules you're designing over, then state the ownership. False positive (you read code / verified out-of-band)? Say so and proceed — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
+  body="you're assigning ownership/authority in a design ($klass shape) but this turn shows no Read/Grep/Edit of any code file: designing over code from memory is exactly how structural-claim (S3) recurs. Ground the design: read the modules you're designing over, then state the ownership. False positive (you read code / verified out-of-band)? Say so and proceed: this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
 elif [ "$klass" = deploy ]; then
-  body="you're saying work can't go live or has to wait because of how deploys, CI or infrastructure behave, but this turn shows no read of the deploy path (deploy script, pipeline or workflow file) and no file:line cite. A 'must wait until X' that rests on an unread deploy path is how three finished features sat undeployed for a day. Read the deploy script or workflow first, or name its file:line, or tag it [UNVERIFIED]; and if a route avoids the blocked mechanism, offer it. False positive (you read it / verified out-of-band)? Say so — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
+  body="you're saying work can't go live or has to wait because of how deploys, CI or infrastructure behave, but this turn shows no read of the deploy path (deploy script, pipeline or workflow file) and no file:line cite. A 'must wait until X' that rests on an unread deploy path is how three finished features sat undeployed for a day. Read the deploy script or workflow first, or name its file:line, or tag it [UNVERIFIED]; and if a route avoids the blocked mechanism, offer it. False positive (you read it / verified out-of-band)? Say so: this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
 else
-  body="your message states how '${subject:-a subsystem}' works ($klass) but this turn shows no Read/Grep of it and no in-message file:line/backtick-path cite. Pattern-matching is not evidence. Read ${subject:-the subject} (or name its file:line), or tag it [UNVERIFIED]. False positive (you read it / verified out-of-band)? Say so — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
+  body="your message states how '${subject:-a subsystem}' works ($klass) but this turn shows no Read/Grep of it and no in-message file:line/backtick-path cite. Pattern-matching is not evidence. Read ${subject:-the subject} (or name its file:line), or tag it [UNVERIFIED]. False positive (you read it / verified out-of-band)? Say so: this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
 fi
 
-emit_soft() { jq -cn --arg m "⚠ structural-claim (grounding gate) — $body" '{systemMessage:$m}' 2>/dev/null || true
+emit_soft() { jq -cn --arg m "⚠ structural-claim (grounding gate): $body" '{systemMessage:$m}' 2>/dev/null || true
   [ -x "$WARN" ] && bash "$WARN" --hook structural-claim --action soft --heeded unknown >/dev/null 2>&1 || true; }
-emit_block() { jq -cn --arg r "⛔ structural-claim (grounding gate) — $body" '{decision:"block", reason:$r}' 2>/dev/null || true
+emit_block() { jq -cn --arg r "⛔ structural-claim (grounding gate): $body" '{decision:"block", reason:$r}' 2>/dev/null || true
   [ -x "$WARN" ] && bash "$WARN" --hook structural-claim --action block --heeded unknown >/dev/null 2>&1 || true; }
 
 if ! hook_loop_check "$MARK" "$claim_sentence"; then

@@ -1,4 +1,4 @@
-/* report.js — interactive behaviours for the generated HTML report */
+/* report.js: interactive behaviours for the generated HTML report */
 (function () {
   'use strict';
 

@@ -54,7 +54,7 @@ strict = true
 
 ### src/{{name}}/__init__.py
 ```python
-"""{{name}} — a Python package."""
+"""{{name}}: a Python package."""
 
 __version__ = "0.1.0"
 ```

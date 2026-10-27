@@ -13,7 +13,7 @@ import StoreKit
 /// Covers all possible states a subscription can be in,
 /// including grace period, billing retry, and revocation.
 enum SubscriptionState: Sendable, Equatable {
-    /// No subscription found — user has never subscribed.
+    /// No subscription found: user has never subscribed.
     case notSubscribed
 
     /// Subscription is active and in good standing.

@@ -231,10 +231,10 @@ Specify exact azimuth (horizontal rotation) and inclination (vertical tilt):
 ### Read-Only vs Interactive
 
 ```swift
-// ✅ Read-only — user cannot rotate the chart
+// ✅ Read-only: user cannot rotate the chart
 .chart3DPose(Chart3DPose.front)
 
-// ✅ Interactive — user can drag to rotate, pose updates automatically
+// ✅ Interactive: user can drag to rotate, pose updates automatically
 @State private var pose = Chart3DPose.default
 // ...
 .chart3DPose($pose)

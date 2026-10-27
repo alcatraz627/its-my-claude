@@ -218,9 +218,9 @@ done
 got=$(printf '1. one\n```\ncode\n```\n2. two\n' | render)
 n=$(printf '%s' "$got" | grep -o '<ol' | wc -l | tr -d ' ')
 if [ "$n" = "1" ]; then
-  no "KNOWN GAP CLOSED: a fence no longer splits an ordered list — delete this row and its comment"
+  no "KNOWN GAP CLOSED: a fence no longer splits an ordered list: delete this row and its comment"
 else
-  echo "  GAP   a fenced block still splits an ordered list ($n <ol>) — known, unfixed, see comment"
+  echo "  GAP   a fenced block still splits an ordered list ($n <ol>): known, unfixed, see comment"
 fi
 
 # --- GFM allows a single-hyphen separator row (validation gate, MEDIUM) --------

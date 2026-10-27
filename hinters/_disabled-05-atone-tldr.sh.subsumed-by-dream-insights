@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# 05-atone-tldr.sh — first-turn injection of top-5 mistake patterns.
+# 05-atone-tldr.sh: first-turn injection of top-5 mistake patterns.
 #
 # Reads from stdin (the user prompt) and emits a small map of recent S3+S2
-# patterns the agent should be aware of — once per session.
+# patterns the agent should be aware of: once per session.
 #
 # Skip conditions:
 #   - ~/.claude/atone/.tldr-off exists (user mute)

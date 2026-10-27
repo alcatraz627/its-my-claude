@@ -56,7 +56,7 @@ For each vulnerability, record:
 - Fix available (yes/no via `fixAvailable` field)
 - Affected version range
 
-Print: `  npm audit complete — N critical, N high, N moderate, N low.`
+Print: `  npm audit complete: N critical, N high, N moderate, N low.`
 
 ### 1.2: Categorize by fix availability
 
@@ -107,14 +107,14 @@ These libraries have high impact when outdated: always flag them explicitly:
 This skill runs under `context: fork`, so the parent agent reads your returned text, not a terminal. Return a plain-text structured report: do not source `gum-tui.sh` (its escape codes are noise to the parent). Include only sections that have data; omit empty ones.
 
 ```
-DEP AUDIT — <project>
+DEP AUDIT: <project>
 
 CRITICAL / HIGH SECURITY (N)
-  ✗ lodash 4.17.19 — prototype pollution (GHSA-xxxx) — fix: npm audit fix (patch available)
-  ✗ axios 1.4.0 — SSRF (GHSA-yyyy) — fix: manual update to ≥1.6.0 required
+  ✗ lodash 4.17.19 (prototype pollution (GHSA-xxxx)) fix: npm audit fix (patch available)
+  ✗ axios 1.4.0 (SSRF (GHSA-yyyy)) fix: manual update to ≥1.6.0 required
 
 MAJOR VERSION GAPS / breaking risk (N)
-  ⚠ next-auth 4.x → 5.x — session + adapter API changes — review the v5 migration guide before upgrading
+  ⚠ next-auth 4.x → 5.x (session + adapter API changes) review the v5 migration guide before upgrading
 
 MINOR / PATCH UPDATES / optional (N)
   · react 19.0.0 → 19.2.3 (patch)
@@ -127,7 +127,7 @@ SUMMARY
   run:           npm audit fix (N patch-level fixes available)
 ```
 
-If zero issues: return `DEP AUDIT — <project>: no security vulnerabilities or major version gaps found.`
+If zero issues: return `DEP AUDIT: <project>: no security vulnerabilities or major version gaps found.`
 
 ---
 
@@ -144,8 +144,8 @@ npm audit fix
 After running, re-run `npm audit --json` to verify the vulnerability count dropped. Print:
 
 ```
-  ✓ npm audit fix applied — N vulnerabilities resolved.
-  Remaining: N (require manual update — see report above)
+  ✓ npm audit fix applied: N vulnerabilities resolved.
+  Remaining: N (require manual update: see report above)
 ```
 
 ### 4.1: Exercise the app after the fix
@@ -165,7 +165,7 @@ npm test
 Read the pass/fail line, not just the exit code. If the suite is green, report it. If it goes
 red, the dependency bump broke something: say so explicitly and surface the failing tests rather
 than reporting the fix as clean. If the project has no runnable test suite, say so
-(`UNCONFIRMED — no test suite`) instead of claiming the app still works. This follows
+(`UNCONFIRMED: no test suite`) instead of claiming the app still works. This follows
 `rules/exercise-based-verification.md`: a change is done when you have run the affected path and
 read the result, not when the audit count looks right.
 

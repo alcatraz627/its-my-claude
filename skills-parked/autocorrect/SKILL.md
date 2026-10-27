@@ -76,7 +76,7 @@ If no dict specified, show a summary of all three: entry count and last 5 entrie
 
 1. Append the word to `~/.claude/assets/autocorrect/blacklist.txt`
 2. Also remove from typo-map.txt if it appears as a correction target
-3. Confirm: `Ignored "<word>" — will never be corrected (N blacklisted)`
+3. Confirm: `Ignored "<word>": will never be corrected (N blacklisted)`
 
 ### `log [N]`
 

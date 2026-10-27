@@ -22,7 +22,7 @@ REAL_TASKS="${TASKS_DIR:-$HOME/.claude/tasks}"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
-has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — no match for [$2]"; fi; }
+has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: no match for [$2]"; fi; }
 
 # Pick the busiest real store. A migration guard proven on three synthetic rows
 # is the very failure this suite exists to catch, so an absent store SKIPS

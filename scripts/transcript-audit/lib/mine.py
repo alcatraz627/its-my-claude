@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ta mine — turn a corpus query into ready-to-paste sub-agent prompts.
+"""ta mine: turn a corpus query into ready-to-paste sub-agent prompts.
 
 This is a scaffold, not a dispatcher: it runs a `ta query`, chunks the matching
 turns into batches, and for each batch prints a self-contained prompt built from
@@ -80,7 +80,7 @@ def main(argv=None):
     rows = C.run_query(spec)
 
     if not rows:
-        print("ta mine: query matched 0 turns — nothing to mine.", file=sys.stderr)
+        print("ta mine: query matched 0 turns: nothing to mine.", file=sys.stderr)
         return 1
 
     today = datetime.date.today().strftime("%Y%m%d")
@@ -90,7 +90,7 @@ def main(argv=None):
 
     batches = list(chunk(rows, a.batch_size))
     total = len(batches)
-    print("# ta mine — preset '%s' — %d turns → %d batch(es) of ≤%d" %
+    print("# ta mine: preset '%s': %d turns → %d batch(es) of ≤%d" %
           (a.preset, len(rows), total, a.batch_size))
     print("# preset source: %s" % preset_path)
     print("# suggested output dir: %s" % out_base)
@@ -98,7 +98,7 @@ def main(argv=None):
     for i, batch in enumerate(batches, 1):
         out_path = os.path.join(out_base, "batch-%02d.md" % i)
         print("=" * 78)
-        print("### BATCH %d/%d — paste the block below into an Agent dispatch" % (i, total))
+        print("### BATCH %d/%d: paste the block below into an Agent dispatch" % (i, total))
         print("=" * 78)
         print(render_batch(preset_body, batch, i, total, out_path))
         print()

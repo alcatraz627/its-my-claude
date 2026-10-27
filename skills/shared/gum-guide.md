@@ -209,7 +209,7 @@ gum style \
   "Analysis Complete"
 
 # Warning
-gum style --foreground 1 --bold "✗ Lock acquisition failed — skipping file."
+gum style --foreground 1 --bold "✗ Lock acquisition failed: skipping file."
 
 # Success
 gum style --foreground 2 "✓ All improvements applied."
@@ -305,9 +305,9 @@ The standard pattern for skills that offer multiple actions on multiple items:
 while true; do
   # Build the choice list dynamically
   CHOICE=$(gum choose \
-    "1. arch-qa — explain" \
-    "2. create-report — edit" \
-    "3. GUIDELINES.md — simplify" \
+    "1. arch-qa: explain" \
+    "2. create-report: edit" \
+    "3. GUIDELINES.md: simplify" \
     "─── done ───")
 
   case "$CHOICE" in
@@ -334,20 +334,20 @@ done
 For skills like `/new-skill` that gather information step by step:
 
 ```bash
-gum style --bold --foreground 212 "Step 1 of 7 — Skill Name"
+gum style --bold --foreground 212 "Step 1 of 7: Skill Name"
 
 while true; do
   NAME=$(gum input --placeholder "kebab-case-name" --prompt "Name: " --width 40)
 
   # Show formalized version
-  gum style --border rounded --padding "0 1" "I'll use: \`$NAME\` — invoked as \`/$NAME\`"
+  gum style --border rounded --padding "0 1" "I'll use: \`$NAME\`: invoked as \`/$NAME\`"
 
   if gum confirm "Does this look right?"; then
     break
   fi
 done
 
-gum style --bold --foreground 212 "Step 2 of 7 — Goal"
+gum style --bold --foreground 212 "Step 2 of 7: Goal"
 GOAL=$(gum write --placeholder "What does this skill do?" --width 60 --height 5)
 ```
 
@@ -420,7 +420,7 @@ gum style --bold --foreground 212 "All $TOTAL skills processed."
 # Build TSV in memory
 ROWS="Skill\tChanges\tRisk\tStatus"
 ROWS+="\narch-qa\t3\tlow\t✓ Applied"
-ROWS+="\ncreate-report\t0\t—\t– Skipped"
+ROWS+="\ncreate-report\t0\t-\t– Skipped"
 ROWS+="\nproject-index\t1\tmedium\t✓ Applied"
 
 printf "$ROWS" | gum table --widths 18,10,8,12
@@ -485,7 +485,7 @@ command -v gum >/dev/null 2>&1 || { echo "Install gum: brew install gum" >&2; ex
 gum style \
   --foreground 212 --border-foreground 212 --border double \
   --align center --width 50 --margin "1 0" \
-  "/my-skill — Interactive Mode"
+  "/my-skill: Interactive Mode"
 
 # Step 1: pick target
 SKILL=$(ls .claude/skills/ | grep -v shared | grep -v README \

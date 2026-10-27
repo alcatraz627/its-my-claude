@@ -235,7 +235,7 @@ cmd_scan() {
   fi
 
   if [ -s "$trk" ]; then
-    printf '\n%s⚠ tracked in git (EXCLUDED — you committed these; delete manually if intended):%s\n' "$Y" "$R"
+    printf '\n%s⚠ tracked in git (EXCLUDED: you committed these; delete manually if intended):%s\n' "$Y" "$R"
     sort -t$'\t' -k1,1 -rn "$trk" | while IFS=$'\t' read -r kb cat p; do
       printf '  %s%-9s%s %-16s %s\n' "$Y" "$(human_kb "$kb")" "$R" "$cat" "$p"
     done
@@ -244,7 +244,7 @@ cmd_scan() {
   # .git sizes (gc-able via `zreclaim gc`)
   local repos; repos=$(mktemp); for r in "${rr[@]}"; do find_repos "$r"; done > "$repos"
   if [ -s "$repos" ]; then
-    printf '\n%sgit repos (.git size — reclaim with `%s gc`):%s\n' "$B" "$SELF" "$R"
+    printf '\n%sgit repos (.git size: reclaim with `%s gc`):%s\n' "$B" "$SELF" "$R"
     while IFS= read -r repo; do
       [ -n "$repo" ] || continue
       local gk; gk=$(du -sk "$repo/.git" 2>/dev/null | awk '{print $1}')
@@ -253,7 +253,7 @@ cmd_scan() {
   fi
 
   # large tracked files (report only)
-  printf '\n%slarge files tracked in git (report only — decide per file):%s\n' "$B" "$R"
+  printf '\n%slarge files tracked in git (report only: decide per file):%s\n' "$B" "$R"
   local bigf; bigf=$(mktemp)
   while IFS= read -r repo; do
     [ -n "$repo" ] || continue
@@ -276,7 +276,7 @@ cmd_scan() {
   fi
 
   # large loose files OUTSIDE deletion scope (report only: you decide)
-  printf '\n%slarge files not auto-deletable (>= %sMB, report only — you decide):%s\n' "$B" "$big" "$R"
+  printf '\n%slarge files not auto-deletable (>= %sMB, report only: you decide):%s\n' "$B" "$big" "$R"
   local loose; loose=$(mktemp)
   for r in "${rr[@]}"; do large_loose_files "$r" "$big"; done > "$loose"
   if [ -s "$loose" ]; then
@@ -498,7 +498,7 @@ internal_pareto() { pareto "$1" "$2"; }   # __pareto SORTED_DESC_FILE PCT (deter
 # ── help ─────────────────────────────────────────────────────────────────────
 show_help() {
   cat <<EOF
-${B}zreclaim${R} — recon + safe cleanup of reproducible cache/build data (v$VERSION)
+${B}zreclaim${R}: recon + safe cleanup of reproducible cache/build data (v$VERSION)
 
 ${Y}USAGE${R}
   ${C}zreclaim${R} <command> [PATHS...] [options]     ${D}(PATHS default to .)${R}

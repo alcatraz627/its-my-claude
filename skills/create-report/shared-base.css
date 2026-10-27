@@ -1,4 +1,4 @@
-/* shared-base.css — Common styles for all create-report templates.
+/* shared-base.css: Common styles for all create-report templates.
  *
  * Prepended to each template's style.css by generate-html.ts.
  * Templates can override any variable or class.
@@ -240,7 +240,7 @@ mark.search-active {
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* ── Width Classes (shared defaults — styles can override these) ────────── */
+/* ── Width Classes (shared defaults: styles can override these) ────────── */
 /* Applied by the shared toolbar JS via class toggling on the content container.
    Individual style CSS files can define their own values for these classes. */
 .width-sm {
@@ -381,7 +381,7 @@ mark.search-active {
     margin-top: 0.6rem !important;
     margin-bottom: 0.3rem !important;
   }
-  /* Don't prevent page breaks inside sections/cards — long sections
+  /* Don't prevent page breaks inside sections/cards: long sections
      would leave previous pages half-empty. Let content flow naturally. */
 
   /* ── Blockquotes ───────────────────────────────────────────────────── */
@@ -476,7 +476,7 @@ code.code-path .code-path-line {
 }
 
 /* ── Floating Toolbar ──────────────────────────────────────────────────── */
-/* Unified container — both rows share one pill background so they look like
+/* Unified container: both rows share one pill background so they look like
    a single widget rather than two independent floating bars.
    Row 2 (template-specific controls) sits above row 1 (universal actions);
    a thin divider appears between them only when row 2 is visible. */

@@ -24,7 +24,7 @@ missing, this skill fails loud rather than inventing a cloud call.
 Read `~/.claude/skills/GUIDELINES.md` and apply it for the run.
 
 ```bash
-command -v imagine || { echo "imagine not on PATH — the local image-gen backend (~/Code/local-models) is unavailable on this machine. No cloud fallback exists by design. Stopping."; exit 1; }
+command -v imagine || { echo "imagine not on PATH: the local image-gen backend (~/Code/local-models) is unavailable on this machine. No cloud fallback exists by design. Stopping."; exit 1; }
 ```
 If missing, stop with that message. Do NOT attempt a cloud/API image call. None is
 configured, and inventing one violates both model-tier routing and the no-speculative-
@@ -60,7 +60,7 @@ verification/"just to be sure" step (the mistake that graduated this rule
 ```bash
 model_dir=~/.cache/huggingface/hub/models--Qwen--Qwen-Image   # map requested model → its HF dir
 if [ ! -d "$model_dir" ] || ls "$model_dir"/blobs/*.incomplete >/dev/null 2>&1; then
-  echo "'$model' isn't cached — using it means a ~GB download. NOT doing that without your OK. Use a cached model (see the ls above), or confirm the download."; exit 0
+  echo "'$model' isn't cached: using it means a ~GB download. NOT doing that without your OK. Use a cached model (see the ls above), or confirm the download."; exit 0
 fi
 ```
 
@@ -130,11 +130,11 @@ block completion on it.
 ## Phase 7: Completion block
 
 ```
-What was done:   <one line — what was generated>
+What was done:   <one line: what was generated>
 Files created:   <absolute path to the .png>
 Model / seed:    <model · seed>   (seed = how to reproduce exactly)
 Time:            <ms from the JSONL, humanized>
-Looked at it:    <yes — matches intent | issues noted>
+Looked at it:    <yes: matches intent | issues noted>
 Critique:        <ran | skipped | unavailable>
 ```
 

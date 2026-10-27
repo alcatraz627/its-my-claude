@@ -465,7 +465,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 // ✅ Right -- release heavy resources in sceneDidDisconnect
 func sceneDidDisconnect(_ scene: UIScene) {
     // Release image caches, media players, etc.
-    // Keep user data — scene may reconnect
+    // Keep user data: scene may reconnect
     releaseHeavyResources()
 }
 ```

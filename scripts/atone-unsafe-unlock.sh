@@ -19,7 +19,7 @@ RCA_DIR="$ATONE_DIR/rca"
 UNLOCK_LOG="$HOME/.claude/atone-snapshots/_unlock-log.txt"
 
 show_help() {
-  printf '\n  %s%satone-unsafe-unlock%s %s—%s Clear kernel protection (escape hatch)\n' \
+  printf '\n  %s%satone-unsafe-unlock%s %s-%s Clear kernel protection (escape hatch)\n' \
     "$C_BOLD" "$C_RED" "$C_RESET" "$C_DIM" "$C_RESET"
 
   _section "USAGE"
@@ -41,7 +41,7 @@ esac
 
 REASON="${1:-no-reason-given}"
 
-gum_panel "DANGER — Remove raw-data protection" \
+gum_panel "DANGER: Remove raw-data protection" \
   "This clears append-only flags on:" \
   "  • ~/.claude/atone/events.jsonl  (uappnd)" \
   "  • ~/.claude/atone/rca/*.md       (uchg)" \
@@ -55,7 +55,7 @@ printf '%s> %s' "$C_DIM" "$C_RESET"
 read -r INPUT
 
 if [ "$INPUT" != "$PHRASE" ]; then
-  _err "Aborted — phrase did not match."
+  _err "Aborted: phrase did not match."
   exit 1
 fi
 

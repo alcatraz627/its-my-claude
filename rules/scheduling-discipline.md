@@ -77,7 +77,7 @@ Every schedule that fires more than a few hours out (daily, weekly, one-shot N d
 - "One-shot fire to resume statusline-fix session and inspect debug log"
 - "Weekly Friday 17:00: open review template; runs even on holidays"
 
-If you are tempted to skip `--description` "because it's obvious", remember that it won't be obvious in 3 weeks when you see `[cron-once] mystery-cron — fires …` in Calendar.
+If you are tempted to skip `--description` "because it's obvious", remember that it won't be obvious in 3 weeks when you see `[cron-once] mystery-cron: fires …` in Calendar.
 
 ## Every cron gets a companion calendar event (MANDATORY)
 

@@ -45,7 +45,7 @@ ahead=$(echo "$ahead_behind" | awk '{print $2}')
 
 cat <<EOF
 ─────────────────────────────────────────────────────
-  git state — $DIR
+  git state: $DIR
 ─────────────────────────────────────────────────────
   branch:   $branch  →  $tracking   (ahead=$ahead behind=$behind)
 

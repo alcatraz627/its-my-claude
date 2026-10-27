@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-replay-corpus.py — the ship-gate driver for ~/.claude Stop-hook changes.
+replay-corpus.py: the ship-gate driver for ~/.claude Stop-hook changes.
 
 What it is, in human terms: a way to ask "if I change this Stop hook, how does it
 behave on every turn the account has ever actually taken?" It walks the real
 transcript corpus, reconstructs each turn the way Claude Code would present it to
-a Stop hook, and pipes it through the REAL hook script under test — not a Python
+a Stop hook, and pipes it through the REAL hook script under test: not a Python
 re-implementation. So the numbers it reports are the numbers the live hook would
 produce, with no port-drift risk.
 
@@ -23,7 +23,7 @@ Caveats worth knowing (see README.md for the full list):
     (empirical-declared-ready.md §1c) and is the conservative under-count
     direction. Production's edit-list is cumulative across the session; a claim in
     a turn that edited nothing but referenced source edited earlier won't fire
-    here. Deliberate — it matches the ~28 calibration target.
+    here. Deliberate: it matches the ~28 calibration target.
   - Per-turn isolated slices mean run-detection only sees THIS turn's runs. This
     matches the gate's intent ("did you run it THIS turn"). Production's tail(-400)
     can leak a prior turn's run into a short turn; that direction fires LESS, so
@@ -79,7 +79,7 @@ def main():
     print(f"[guard] hook honors mute files: {tokens or '(none)'}", file=sys.stderr)
     if present:
         print("\n" + "!" * 72, file=sys.stderr)
-        print("!! MUTE FILE PRESENT — this hook will silently exit 0 for EVERY turn.", file=sys.stderr)
+        print("!! MUTE FILE PRESENT: this hook will silently exit 0 for EVERY turn.", file=sys.stderr)
         print("!! The replay would report 0 fires and LIE about the hook's behavior.", file=sys.stderr)
         for f in present:
             print(f"!!   present: {f}", file=sys.stderr)

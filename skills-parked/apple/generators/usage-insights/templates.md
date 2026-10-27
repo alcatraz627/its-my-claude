@@ -11,7 +11,7 @@ import SwiftData
 /// A single user activity event recorded on-device.
 ///
 /// Events are the raw data from which insights are computed.
-/// All data stays on the user's device — never transmitted to a server.
+/// All data stays on the user's device: never transmitted to a server.
 ///
 /// Usage:
 /// ```swift
@@ -219,7 +219,7 @@ import Foundation
 
 /// Pure computation engine that aggregates UsageEvents into InsightResults.
 ///
-/// All methods are pure functions with no side effects — easy to test.
+/// All methods are pure functions with no side effects: easy to test.
 /// Uses Calendar for correct period grouping that respects the user's
 /// locale, first-day-of-week, and timezone settings.
 ///
@@ -286,7 +286,7 @@ struct InsightCalculator: Sendable {
         let mostActive = mostActiveDay(in: currentWeekEvents)
         insights.append(InsightResult(
             title: "Most Active Day",
-            value: mostActive ?? "—",
+            value: mostActive ?? "-",
             iconName: "calendar.badge.clock",
             comparison: nil,
             trend: mostActive != nil ? .stable : .newData,
@@ -435,7 +435,7 @@ struct InsightCalculator: Sendable {
         let mostActive = mostActiveDay(in: currentEvents)
         insights.append(InsightResult(
             title: "Most Active Day",
-            value: mostActive ?? "—",
+            value: mostActive ?? "-",
             iconName: "calendar.badge.clock",
             comparison: nil,
             trend: mostActive != nil ? .stable : .newData,
@@ -1474,7 +1474,7 @@ import SwiftData
 
 /// Convenience class for recording usage events from anywhere in the app.
 ///
-/// Batches writes for performance — instead of saving after every event,
+/// Batches writes for performance: instead of saving after every event,
 /// accumulates events and flushes periodically or when a threshold is reached.
 ///
 /// Usage:
@@ -1624,7 +1624,7 @@ final class UsageEventRecorder {
             )
             try modelContext.save()
         } catch {
-            // Log error but don't crash — pruning is best-effort
+            // Log error but don't crash: pruning is best-effort
         }
     }
 

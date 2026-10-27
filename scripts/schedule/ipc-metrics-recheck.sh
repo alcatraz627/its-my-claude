@@ -8,7 +8,7 @@ set -uo pipefail
 OUT="$HOME/.claude/assets/reports/20260726-ipc-metrics-recheck.md"
 METRICS="$HOME/Code/Claude/claude-ipc/scripts/ipc-metrics.sh"
 {
-  echo "# ipc metrics recheck — scheduled 2026-07-26 (baseline: 20260710-ipc-activation/01-data-profile.md)"
+  echo "# ipc metrics recheck: scheduled 2026-07-26 (baseline: 20260710-ipc-activation/01-data-profile.md)"
   echo "Baseline (2026-07-10, filtered organic): stuck-queued 67% · ask success 30%."
   echo
   echo "## All-time"
@@ -18,6 +18,6 @@ METRICS="$HOME/Code/Claude/claude-ipc/scripts/ipc-metrics.sh"
   bash "$METRICS" --since 2026-07-11 2>&1
 } > "$OUT" 2>/dev/null || true
 HEAD="$(rg -o 'headline.*' "$OUT" 2>/dev/null | tail -2 | tr '\n' ' ' || true)"
-osascript -e "display notification \"ipc post-deploy numbers ready: ${HEAD:-see report} — $OUT\" with title \"IPC Metrics Recheck\" sound name \"Glass\"" 2>/dev/null || true
-printf '%s review-due — report: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$OUT" >> "$HOME/.claude/scheduled/review-due.log" 2>/dev/null || true
+osascript -e "display notification \"ipc post-deploy numbers ready: ${HEAD:-see report}: $OUT\" with title \"IPC Metrics Recheck\" sound name \"Glass\"" 2>/dev/null || true
+printf '%s review-due: report: %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$OUT" >> "$HOME/.claude/scheduled/review-due.log" 2>/dev/null || true
 exit 0

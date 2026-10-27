@@ -62,7 +62,7 @@ lock_alloc() {
   until mkdir "$MUTEX" 2>/dev/null; do
     i=$((i + 1))
     if [ "$i" -ge 50 ]; then
-      echo "ports: allocation mutex busy 5s — if no other claim is running, clear a stale lock: rmdir $MUTEX" >&2
+      echo "ports: allocation mutex busy 5s: if no other claim is running, clear a stale lock: rmdir $MUTEX" >&2
       return 1
     fi
     sleep 0.1
@@ -303,7 +303,7 @@ elif mode == "resolve":
 
 elif mode == "derived":
     rows = sorted(state.values(), key=lambda c: (c["tier"], c["port"]))
-    print("# Port Registry (DERIVED — regenerate via `ports.sh scan`; never hand-edit)")
+    print("# Port Registry (DERIVED: regenerate via `ports.sh scan`; never hand-edit)")
     print(f"\n_Source: dev-servers/port-events.jsonl · regenerated {now().strftime('%Y-%m-%d %H:%M')}Z_\n")
     print("| Port | Tier | Status | Name | Note |")
     print("|------|------|--------|------|------|")
@@ -396,7 +396,7 @@ case "$cmd" in
       kill "$pid" 2>/dev/null || true
       emit "$(printf '%s' "$c" | jq -c --arg ts "$(NOW)" --arg s "$SESSION" \
         '{ts:$ts, op:"reap", port:.port, name:.name, cmd:.cmd, cwd:.cwd, session:$s}')"
-      echo "reaped :$port (pid $pid) — revive later: ports.sh revive $port"
+      echo "reaped :$port (pid $pid): revive later: ports.sh revive $port"
     done
     py derived > "$DERIVED" 2>/dev/null || true
     ;;
@@ -414,18 +414,18 @@ case "$cmd" in
       # gets a fresh band port instead of evicting anyone.
       newport=$(py next "$tier")
       [ -n "$newport" ] || { unlock_alloc; echo "revive: band exhausted" >&2; exit 1; }
-      echo "note: :$port is now held by '$occupant' — reviving '$name' on :$newport instead (adjust the port flag in the command below)."
+      echo "note: :$port is now held by '$occupant': reviving '$name' on :$newport instead (adjust the port flag in the command below)."
       port="$newport"
     fi
     emit "$(jq -cn --arg ts "$(NOW)" --arg n "$name" --arg s "$SESSION" --arg cmd "$cmd" --arg cwd "$cwd" \
       --argjson p "$port" --argjson t "$tier" --argjson ttl "$ttl" \
       '{ts:$ts, op:"revive", port:$p, name:$n, tier:$t, ttl_h:$ttl, cmd:$cmd, cwd:$cwd, session:$s}')"
     unlock_alloc
-    echo "revive :$port ($name) — run:"
+    echo "revive :$port ($name): run:"
     echo "  (cd $cwd && $cmd)"
     if [ "$((revives + 1))" -ge 2 ]; then
       echo "⚑ MIS-TIERED: '$name' has now been revived $((revives + 1))×. A one-off that keeps"
-      echo "  coming back is a tier-2 service — promote it: ports.sh free $port &&"
+      echo "  coming back is a tier-2 service: promote it: ports.sh free $port &&"
       echo "  ports.sh claim $name --tier 2, then run it under pm2 (features/dev-servers.md)."
     fi
     ;;

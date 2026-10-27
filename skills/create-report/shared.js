@@ -1,5 +1,5 @@
 /**
- * shared.js — Reusable interactive modules for create-report templates.
+ * shared.js: Reusable interactive modules for create-report templates.
  *
  * Attaches to window.__RPT namespace. Templates call only what they need:
  *   __RPT.initThemeToggle('#theme-btn');

@@ -65,12 +65,12 @@ fail() { err "$*"; exit 1; }
 # ── Help ───────────────────────────────────────────────────────────────────
 cmd_help() {
   cat <<HELP
-${BLD}gcc-schedule${RST} — manage launchd schedules with Calendar companion
+${BLD}gcc-schedule${RST}: manage launchd schedules with Calendar companion
 
 ${DIM}Claude-facing usage contract: ~/.claude/scripts/schedule/INSTRUCTIONS.md${RST}
 
 ${BLD}USAGE${RST}
-  $PROG ${CYN}-i${RST}${DIM}|--interactive${RST}          ${DIM}colored fuzzy browser — every command, for humans (needs a terminal)${RST}
+  $PROG ${CYN}-i${RST}${DIM}|--interactive${RST}          ${DIM}colored fuzzy browser: every command, for humans (needs a terminal)${RST}
   $PROG ${CYN}add${RST}     --name <slug> <schedule-mode> --command <shell> [opts]
                 schedule-mode: --at <ISO> | --daily-at <HH:MM> | --weekly <dow> <HH:MM> | --monthly <day> <HH:MM>
   $PROG ${CYN}list${RST}    [--all]
@@ -108,7 +108,7 @@ ${BLD}add FLAGS${RST}
   --dry-run                print the PLANNED block + exit without creating anything
 
 ${BLD}NOTES${RST}
-  Every 'add' prints a PLANNED block before any state mutation — Claude (and
+  Every 'add' prints a PLANNED block before any state mutation: Claude (and
   you) can verify the resolved spec before launchd takes the plist. --dry-run
   exits after the PLANNED block. --cron is intentionally absent: use the
   focused --daily-at / --weekly / --at flags instead (rationale + alternatives
@@ -129,7 +129,7 @@ ${BLD}EXAMPLES${RST}
 ${BLD}NOTES${RST}
   One-shot schedules fire once, record the outcome to history.jsonl, then fully
   self-retire (no dead entry in the registry). Daily/weekly schedules record
-  each fire and never retire — they run until '$PROG rm' or '$PROG disable'.
+  each fire and never retire: they run until '$PROG rm' or '$PROG disable'.
   Every lifecycle + fire event lands in history.jsonl (append-only); see
   '$PROG history' / '$PROG status'. Calendar companion is recurring (RRULE) for
   daily/weekly.
@@ -146,11 +146,11 @@ ${BLD}REGISTER NOTES${RST}
   Adopted entries have command=null (the actual work lives in the external
   script we didn't author) and adopted=true. 'rm' of an adopted entry deletes
   the plist and our sched_dir but does NOT remove the external script or any
-  Calendar event we didn't create — those are yours to clean up.
+  Calendar event we didn't create: those are yours to clean up.
 
 ${BLD}FILES${RST}
   registry:    $REGISTRY
-  history:     $HIST  (append-only ledger — rg/jq/Read directly)
+  history:     $HIST  (append-only ledger: rg/jq/Read directly)
   per-sched:   $SCHED_HOME/<name>/{script.sh, meta.json}
   plist:       $LAUNCHAGENTS/com.alcatraz.<name>.plist
   logs:        $LOG_HOME/<name>.{out,err}.log
@@ -453,7 +453,7 @@ main() {
   # history record, no retire.
   local today; today=\$(date '+%Y-%m-%d')
   if [[ "\$today" != "\$FIRE_DATE" ]]; then
-    echo "[\$today] not the intended fire date \$FIRE_DATE — exiting"
+    echo "[\$today] not the intended fire date \$FIRE_DATE: exiting"
     return 0
   fi
 
@@ -592,7 +592,7 @@ cmd_add() {
       --no-bootstrap) do_bootstrap=0; shift ;;
       --force)        force=1; shift ;;
       --dry-run)      dry_run=1; shift ;;
-      --cron)         fail "--cron is intentionally absent — use --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM>, or --at <ISO>. See 'help' or INSTRUCTIONS.md." ;;
+      --cron)         fail "--cron is intentionally absent: use --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM>, or --at <ISO>. See 'help' or INSTRUCTIONS.md." ;;
       -h|--help)      cmd_help; exit 0 ;;
       *) fail "unknown flag: $1 (try '$PROG help')" ;;
     esac
@@ -685,7 +685,7 @@ cmd_add() {
       fire_at_meta="$at"
       when_human="ONCE on $fire_date $(printf '%02d:%02d' $h $mi) local time then self-unloads"
       cal_y="$y"; cal_mo="$mo"; cal_d="$d"; cal_h="$h"; cal_mi="$mi"
-      cal_summary="[cron-once] $name — fires $fire_date $(printf '%02d:%02d' $h $mi)"
+      cal_summary="[cron-once] $name: fires $fire_date $(printf '%02d:%02d' $h $mi)"
       ;;
 
     daily)
@@ -696,7 +696,7 @@ cmd_add() {
       fire_at_meta="daily@$(printf '%02d:%02d' $h $mi)"
       when_human="DAILY at $(printf '%02d:%02d' $h $mi) local time (recurring; does not self-unload)"
       read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_daily_start "$h" "$mi")
-      cal_summary="[cron-daily] $name — fires daily at $(printf '%02d:%02d' $h $mi)"
+      cal_summary="[cron-daily] $name: fires daily at $(printf '%02d:%02d' $h $mi)"
       cal_rrule="FREQ=DAILY"
       ;;
 
@@ -712,7 +712,7 @@ cmd_add() {
       fire_at_meta="weekly@$dow_low@$(printf '%02d:%02d' $h $mi)"
       when_human="WEEKLY on $dow_low at $(printf '%02d:%02d' $h $mi) local time (recurring; does not self-unload)"
       read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_weekly_start "$tdow" "$h" "$mi")
-      cal_summary="[cron-weekly] $name — fires every $dow_low at $(printf '%02d:%02d' $h $mi)"
+      cal_summary="[cron-weekly] $name: fires every $dow_low at $(printf '%02d:%02d' $h $mi)"
       cal_rrule="FREQ=WEEKLY;BYDAY=$byday"
       ;;
 
@@ -728,7 +728,7 @@ cmd_add() {
       fire_at_meta="monthly@day$monthly_day@$(printf '%02d:%02d' $h $mi)"
       when_human="MONTHLY on day $monthly_day at $(printf '%02d:%02d' $h $mi) local time (recurring; does not self-unload)"
       read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_monthly_start "$monthly_day" "$h" "$mi")
-      cal_summary="[cron-monthly] $name — fires day $monthly_day at $(printf '%02d:%02d' $h $mi)"
+      cal_summary="[cron-monthly] $name: fires day $monthly_day at $(printf '%02d:%02d' $h $mi)"
       cal_rrule="FREQ=MONTHLY;BYMONTHDAY=$monthly_day"
       ;;
   esac
@@ -748,11 +748,11 @@ $desc}"
   # ── PLANNED block: print BEFORE any state mutation ───────────────────────
   # Always prints (default-on). Claude can self-check the resolved spec; user
   # can read. --dry-run exits here, leaving zero artifacts.
-  local plan_calendar="(skipped — --no-calendar)"
+  local plan_calendar="(skipped: --no-calendar)"
   if (( do_calendar )); then
     plan_calendar="yes${cal_rrule:+, recurrence: $cal_rrule}, alert ${alert}m before"
   fi
-  local plan_bootstrap="(skipped — --no-bootstrap)"
+  local plan_bootstrap="(skipped: --no-bootstrap)"
   (( do_bootstrap )) && plan_bootstrap="yes (will be loaded into gui/$USER_UID)"
   (( GATEWAY )) && plan_bootstrap="no: gcc-cron starts it (gateway mode)"
   printf '\n%s%s%s\n' "$BLD" "PLANNED:" "$RST"
@@ -793,7 +793,7 @@ $desc}"
   # ── Lint plist (same for all kinds) ───────────────────────────────────────
   if ! plutil -lint "$plist" >/dev/null; then
     rm -f "$plist"; rm -rf "$sched_dir"
-    fail "plist lint failed — rolled back"
+    fail "plist lint failed: rolled back"
   fi
 
   # ── Calendar event ────────────────────────────────────────────────────────
@@ -801,7 +801,7 @@ $desc}"
   if (( do_calendar )); then
     cal_uid=$(calendar_create "$cal_y" "$cal_mo" "$cal_d" "$cal_h" "$cal_mi" "$cal_summary" "$cal_notes" "$alert" "$cal_rrule" | tail -1)
     if [[ -z "$cal_uid" ]]; then
-      warn "Calendar event creation returned empty UID — Automations permission for osascript? (event NOT created)"
+      warn "Calendar event creation returned empty UID: Automations permission for osascript? (event NOT created)"
     else
       ok "Calendar event: $cal_uid${cal_rrule:+ (recurrence: $cal_rrule)}"
     fi
@@ -814,7 +814,7 @@ $desc}"
     if launchctl bootstrap "gui/$USER_UID" "$plist" 2>&1; then
       ok "loaded into launchd (gui/$USER_UID/$label)"
     else
-      warn "bootstrap failed — files written but agent not loaded"
+      warn "bootstrap failed: files written but agent not loaded"
     fi
   elif (( GATEWAY )); then
     ok "runs under gcc-cron (gateway mode; no Login Item of its own)"
@@ -872,7 +872,7 @@ cmd_list() {
 
   if (( show_all )); then
     say
-    say "${BLD}other com.alcatraz.* LaunchAgents${RST} ${DIM}(read-only — not managed by gcc-schedule)${RST}"
+    say "${BLD}other com.alcatraz.* LaunchAgents${RST} ${DIM}(read-only: not managed by gcc-schedule)${RST}"
     local found=0
     for p in "$LAUNCHAGENTS"/com.alcatraz.*.plist; do
       [[ -e "$p" ]] || continue
@@ -907,8 +907,8 @@ _retire() {
   # The plist itself we DO remove (we adopted ownership); the external script
   # and any existing Calendar event are the user's to clean up.
   if [[ "$adopted" == "true" && "$mode" != silent ]]; then
-    warn "adopted entry — external script will NOT be removed: $ext_script"
-    [[ -z "$cal_uid" ]] && warn "adopted entry — no Calendar event UID stored; clean up any companion event manually"
+    warn "adopted entry: external script will NOT be removed: $ext_script"
+    [[ -z "$cal_uid" ]] && warn "adopted entry: no Calendar event UID stored; clean up any companion event manually"
   fi
 
   # bootout
@@ -961,7 +961,7 @@ cmd_run() {
     script_path=$(jq -r '.script' <<<"$entry")
     fail "no inline command for adopted entry '$name'. Test-fire its external script directly: bash '$script_path'"
   fi
-  say "${BLD}running command for '$name' (test fire — no date guard, no self-unload)${RST}"
+  say "${BLD}running command for '$name' (test fire: no date guard, no self-unload)${RST}"
   say "${DIM}$ $cmd_str${RST}"
   bash -c "$cmd_str"
   local rc=$?
@@ -994,7 +994,7 @@ cmd_logs() {
   [[ -f "$outlog" ]] && exists_out=1
   [[ -f "$errlog" ]] && exists_err=1
   if (( ! exists_out && ! exists_err )); then
-    warn "no log files yet — the schedule hasn't fired (or wrote nothing)."
+    warn "no log files yet: the schedule hasn't fired (or wrote nothing)."
     say "${DIM}  expected: $outlog${RST}"
     say "${DIM}            $errlog${RST}"
     return 0
@@ -1119,7 +1119,7 @@ cmd_show() {
   printf '  %-12s %s\n' "state:"        "$state"
   printf '  %-12s %s\n' "last fired:"   "$last_fired"
   printf '  %-12s %s\n' "created:"      "$created"
-  printf '  %-12s %s\n' "calendar:"     "${cal_uid:-(none — --no-calendar)}"
+  printf '  %-12s %s\n' "calendar:"     "${cal_uid:-(none: --no-calendar)}"
   printf '  %-12s %s\n' "script:"       "$script"
   printf '  %-12s %s\n' "plist:"        "$plist"
   printf '  %-12s %s\n' "out log:"      "$outlog"
@@ -1139,7 +1139,7 @@ cmd_show() {
   fi
   if [[ "$cmd_str" == "null" || -z "$cmd_str" ]]; then
     printf '  %s\n' "${DIM}command:${RST}"
-    printf '    %s(adopted — actual command lives in the external script: %s)%s\n' "$DIM" "$(jq -r '.script' <<<"$entry")" "$RST"
+    printf '    %s(adopted: actual command lives in the external script: %s)%s\n' "$DIM" "$(jq -r '.script' <<<"$entry")" "$RST"
   else
     printf '  %s\n' "${DIM}command:${RST}"
     printf '    %s%s%s\n' "$DIM" "$cmd_str" "$RST"
@@ -1159,7 +1159,7 @@ cmd_enable() {
     ok "enabled: $name (gcc-cron will start it on schedule)"
     return 0
   fi
-  [[ -f "$plist" ]] || fail "plist missing: $plist (registry desync — consider '$PROG rm $name')"
+  [[ -f "$plist" ]] || fail "plist missing: $plist (registry desync: consider '$PROG rm $name')"
   if _is_loaded "$label"; then ok "already loaded: $label"; return 0; fi
   if launchctl bootstrap "gui/$USER_UID" "$plist" 2>&1; then
     ledger_append modified "$name" change enabled
@@ -1183,7 +1183,7 @@ cmd_disable() {
   if ! _is_loaded "$label"; then ok "already not loaded: $label (plist still on disk)"; return 0; fi
   if launchctl bootout "gui/$USER_UID/$label" 2>&1; then
     ledger_append modified "$name" change disabled
-    ok "unloaded: $label (plist + script preserved — 'enable' to reload)"
+    ok "unloaded: $label (plist + script preserved: 'enable' to reload)"
   else
     fail "bootout failed"
   fi
@@ -1229,7 +1229,7 @@ cmd_doctor() {
     adopted=$(jq -r '.adopted // false' <<<"$entry")
     entry_issues=""
 
-    [[ -f "$plist" ]]      || entry_issues+="    plist missing: $plist  (probably post self-unload — '$PROG rm $name' to clean registry)"$'\n'
+    [[ -f "$plist" ]]      || entry_issues+="    plist missing: $plist  (probably post self-unload: '$PROG rm $name' to clean registry)"$'\n'
     [[ -d "$sched_dir" ]]  || entry_issues+="    sched_dir missing: $sched_dir"$'\n'
     if [[ -n "$script" && "$script" != "null" && ! -f "$script" ]]; then
       [[ "$adopted" == "true" ]] && \
@@ -1279,7 +1279,7 @@ cmd_doctor() {
     fi
   done
 
-  printf '%s%s%s\n' "$BLD" "── doctor — registry vs filesystem vs launchd${check_cal:+ vs Calendar} ──" "$RST"
+  printf '%s%s%s\n' "$BLD" "── doctor: registry vs filesystem vs launchd${check_cal:+ vs Calendar} ──" "$RST"
   if (( drift_count == 0 )); then
     printf '%s✓%s all healthy: %d registry entr%s, no drift detected\n' \
       "$GRN" "$RST" "$total" "$([[ $total -eq 1 ]] && echo y || echo ies)"
@@ -1288,7 +1288,7 @@ cmd_doctor() {
     printf '\n%ssummary:%s %d healthy, %d with drift, %d total\n' \
       "$BLD" "$RST" "$healthy_count" "$drift_count" "$total"
   fi
-  (( check_cal )) || printf '%s(Calendar check skipped — pass --check-calendar to verify Automations events; slower)%s\n' "$DIM" "$RST"
+  (( check_cal )) || printf '%s(Calendar check skipped: pass --check-calendar to verify Automations events; slower)%s\n' "$DIM" "$RST"
 }
 
 # ── inventory (v0.4) ───────────────────────────────────────────────────────
@@ -1352,7 +1352,7 @@ cmd_duplicate() {
 
   # Adopted entries have command=null: we can't duplicate what we don't know.
   local src_cmd; src_cmd=$(jq -r '.command' <<<"$entry")
-  [[ "$src_cmd" == "null" ]] && fail "cannot duplicate adopted entry '$src' — its command lives in an external script we don't track. Re-create from scratch with '$PROG add'."
+  [[ "$src_cmd" == "null" ]] && fail "cannot duplicate adopted entry '$src': its command lives in an external script we don't track. Re-create from scratch with '$PROG add'."
 
   local src_kind src_fire_at src_desc src_workdir
   src_kind=$(jq -r '.kind' <<<"$entry")
@@ -1378,7 +1378,7 @@ cmd_duplicate() {
         local dow="${rest%%@*}" tm="${rest##*@}"
         mode_args=(--weekly "$dow" "$tm")
         ;;
-      *) warn "source kind '$src_kind' not directly supported — you'll need to pass a mode flag in the overrides" ;;
+      *) warn "source kind '$src_kind' not directly supported: you'll need to pass a mode flag in the overrides" ;;
     esac
   fi
 
@@ -1423,7 +1423,7 @@ cmd_register() {
   [[ -f "$plist" ]]            || fail "plist not found: $plist"
   [[ "$plist" == *.plist ]]    || fail "must end in .plist, got '$plist'"
   [[ "$plist" == "$LAUNCHAGENTS"/* ]] || fail "only files under $LAUNCHAGENTS may be registered (got '$plist')"
-  plutil -lint "$plist" >/dev/null    || fail "plist lint failed — refusing to register a malformed plist"
+  plutil -lint "$plist" >/dev/null    || fail "plist lint failed: refusing to register a malformed plist"
 
   local label; label=$(_plutil_get "$plist" Label)
   [[ -n "$label" ]] || fail "plist has no Label key"
@@ -1495,7 +1495,7 @@ META
   printf '  %skind:  %s  fire_at: %s%s\n' "$DIM" "$kind" "$fire_at_meta" "$RST"
   printf '  %sext script: %s%s\n' "$DIM" "${ext_script:-(none)}" "$RST"
   if ! _is_loaded "$label"; then
-    warn "label '$label' is NOT currently loaded — run '$PROG enable $name' to bootstrap"
+    warn "label '$label' is NOT currently loaded: run '$PROG enable $name' to bootstrap"
   fi
 }
 
@@ -1503,7 +1503,7 @@ META
 cmd_reconcile() {
   local n; n=$(reconcile_missed)
   if (( n > 0 )); then
-    ok "reconciled $n missed one-shot(s) — logged outcome=missed and retired"
+    ok "reconciled $n missed one-shot(s): logged outcome=missed and retired"
   else
     ok "no missed one-shots to reconcile"
   fi
@@ -1554,7 +1554,7 @@ cmd_status() {
     local recent; recent=$(jq -s -r '[.[]|select(.ev=="run")]|.[-5:]|reverse|.[]|"    \(.ts)  \(.outcome)  \(.name)\(if .reason then "  ("+.reason+")" else "" end)"' "$HIST" 2>/dev/null)
     [[ -n "$recent" ]] && { printf '  recent fires   :\n'; printf '%s\n' "$recent"; }
   else
-    printf '  %s(no history yet — %s)%s\n' "$DIM" "$HIST" "$RST"
+    printf '  %s(no history yet: %s)%s\n' "$DIM" "$HIST" "$RST"
   fi
   printf '  %stip: '\''%s reconcile'\'' sweeps any missed one-shots into history%s\n' "$DIM" "$PROG" "$RST"
 }
@@ -1614,13 +1614,13 @@ _i_schedule_rows() {
 # Field 1 (the verb) is the clean key _i_do_action routes on; field 2 is the
 # colored label shown. Verb color carries meaning (rm red, disable yellow).
 _i_actions() {
-  printf '%s\t%sshow%s — details, state, next fire\n'      show      "$CYN" "$RST"
-  printf '%s\t%slogs%s — tail out+err\n'                   logs      "$CYN" "$RST"
-  printf '%s\t%srun%s — test-fire now (no date guard)\n'   run       "$CYN" "$RST"
-  printf '%s\t%sdisable%s — bootout, keep plist (pause)\n' disable   "$YLW" "$RST"
-  printf '%s\t%senable%s — reload plist (resume)\n'        enable    "$GRN" "$RST"
-  printf '%s\t%sduplicate%s — copy to a new name\n'        duplicate "$CYN" "$RST"
-  printf '%s\t%srm%s — retire fully (destructive)\n'       rm        "$RED" "$RST"
+  printf '%s\t%sshow%s: details, state, next fire\n'      show      "$CYN" "$RST"
+  printf '%s\t%slogs%s: tail out+err\n'                   logs      "$CYN" "$RST"
+  printf '%s\t%srun%s: test-fire now (no date guard)\n'   run       "$CYN" "$RST"
+  printf '%s\t%sdisable%s: bootout, keep plist (pause)\n' disable   "$YLW" "$RST"
+  printf '%s\t%senable%s: reload plist (resume)\n'        enable    "$GRN" "$RST"
+  printf '%s\t%sduplicate%s: copy to a new name\n'        duplicate "$CYN" "$RST"
+  printf '%s\t%srm%s: retire fully (destructive)\n'       rm        "$RED" "$RST"
   printf '%s\t%sback%s\n'                                  back      "$DIM" "$RST"
 }
 
@@ -1677,7 +1677,7 @@ _i_browse() {
   SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)/$(basename "${BASH_SOURCE[0]}")"
   while :; do
     rows=$(_i_schedule_rows)
-    [ -n "$rows" ] || { warn "no schedules yet — pick 'Create' from the main menu."; return 0; }
+    [ -n "$rows" ] || { warn "no schedules yet: pick 'Create' from the main menu."; return 0; }
     # up/down to browse, live preview shows the schedule's `show`, enter opens
     # its details; tui_pick_key renders the colored row and returns the clean name.
     key=$(printf '%s\n' "$rows" | tui_pick_key --prompt 'schedule > ' \
@@ -1696,10 +1696,10 @@ _i_browse() {
 _i_add_wizard() {
   local name="" mode="" when="" dow="" cmd="" desc="" nocal="" line
   tui_read_tty -p "name (slug): " name || return 0; [ -n "$name" ] || { warn "cancelled"; return 0; }
-  mode=$( { printf 'at\t%sone-shot%s — fires once at an ISO datetime\n' "$CYN" "$RST"
-            printf 'daily\t%sdaily%s — every day at HH:MM\n'            "$CYN" "$RST"
-            printf 'weekly\t%sweekly%s — every <dow> at HH:MM\n'        "$CYN" "$RST"
-            printf 'monthly\t%smonthly%s — on day-of-month at HH:MM\n'  "$CYN" "$RST"; } \
+  mode=$( { printf 'at\t%sone-shot%s: fires once at an ISO datetime\n' "$CYN" "$RST"
+            printf 'daily\t%sdaily%s: every day at HH:MM\n'            "$CYN" "$RST"
+            printf 'weekly\t%sweekly%s: every <dow> at HH:MM\n'        "$CYN" "$RST"
+            printf 'monthly\t%smonthly%s: on day-of-month at HH:MM\n'  "$CYN" "$RST"; } \
           | tui_pick_key --prompt 'when > ') || return 0
   case "$mode" in
     at)      tui_read_tty -p "ISO datetime (YYYY-MM-DDTHH:MM): " when || return 0 ;;
@@ -1724,9 +1724,9 @@ _i_add_wizard() {
 
 _i_audit_menu() {
   local a
-  a=$( { printf 'inventory\t%sinventory%s — all launchd plists + crontab\n' "$CYN" "$RST"
-         printf 'doctor\t%sdoctor%s — drift audit\n'                        "$CYN" "$RST"
-         printf 'reconcile\t%sreconcile%s — retire missed one-shots\n'      "$CYN" "$RST"
+  a=$( { printf 'inventory\t%sinventory%s: all launchd plists + crontab\n' "$CYN" "$RST"
+         printf 'doctor\t%sdoctor%s: drift audit\n'                        "$CYN" "$RST"
+         printf 'reconcile\t%sreconcile%s: retire missed one-shots\n'      "$CYN" "$RST"
          printf 'back\t%sback%s\n'                                          "$DIM" "$RST"; } \
        | tui_pick_key --prompt 'audit > ') || return 0
   case "$a" in inventory) cmd_inventory ;; doctor) cmd_doctor ;; reconcile) cmd_reconcile ;; *) return 0 ;; esac
@@ -1735,9 +1735,9 @@ _i_audit_menu() {
 
 _i_status_menu() {
   local a o
-  a=$( { printf 'status\t%sstatus%s — live count + all-time outcomes\n' "$CYN" "$RST"
-         printf 'history\t%shistory%s — recent events\n'                "$CYN" "$RST"
-         printf 'filter\t%shistory%s — filter by outcome\n'             "$CYN" "$RST"
+  a=$( { printf 'status\t%sstatus%s: live count + all-time outcomes\n' "$CYN" "$RST"
+         printf 'history\t%shistory%s: recent events\n'                "$CYN" "$RST"
+         printf 'filter\t%shistory%s: filter by outcome\n'             "$CYN" "$RST"
          printf 'back\t%sback%s\n'                                      "$DIM" "$RST"; } \
        | tui_pick_key --prompt 'status > ') || return 0
   case "$a" in
@@ -1799,7 +1799,7 @@ cmd_interactive() {
     say "Headless? Everything is a text subcommand: ${CYN}$PROG list${RST} · ${CYN}status${RST} · ${CYN}show <name>${RST} · ${CYN}add …${RST}  (${CYN}$PROG help${RST})"
     return 1
   fi
-  say "${BLD}gcc-schedule${RST} ${DIM}interactive — ↑↓ to move, type to filter, enter to pick, esc/ctrl-c to leave${RST}"
+  say "${BLD}gcc-schedule${RST} ${DIM}interactive: ↑↓ to move, type to filter, enter to pick, esc/ctrl-c to leave${RST}"
   while :; do
     pick=$(_i_main_menu | tui_pick_key --prompt 'gcc-schedule > ') || break
     case "$pick" in

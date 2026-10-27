@@ -22,7 +22,7 @@ MARK="/tmp/claude-tmp-py-nudge-${SID8}"
 rm -f "$MARK"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 
 # feed <command> -> runs the hook, returns "NUDGE" if it recorded a nudge, else "quiet".
 # A nudge is a new kind:"warn" line in the ledger. The hook no longer prints
@@ -75,7 +75,7 @@ echo "── mute suppresses everything ──"
 # Never clobber a real user mute file: only exercise this if it doesn't pre-exist.
 MUTE="$HOME/.claude/.no-inline-py-hint"
 if [ -f "$MUTE" ]; then
-  echo "  (skipped — mute file already set by the user; not touching it)"
+  echo "  (skipped: mute file already set by the user; not touching it)"
 else
   rm -f "$MARK"; : > "$STORE"
   touch "$MUTE"

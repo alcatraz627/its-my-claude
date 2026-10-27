@@ -288,7 +288,7 @@ if rewardManager.canClaimToday {
 
 // Time until next spin
 let timeRemaining = rewardManager.timeUntilNextClaim
-// Returns TimeInterval — use for countdown display
+// Returns TimeInterval: use for countdown display
 ```
 
 ### Claim a Reward

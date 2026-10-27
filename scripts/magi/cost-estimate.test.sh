@@ -54,7 +54,7 @@ cov=$(printf '%s' "$OUT" | jq -r '.coverage' 2>/dev/null)
 un=$(printf '%s' "$OUT" | jq -r '.voters_unmeasured' 2>/dev/null)
 case "$cov" in
   none*) ok "coverage says none ('$cov')" ;;
-  *)     bad "coverage='$cov' — a \$0.00 run still looks free" ;;
+  *)     bad "coverage='$cov': a \$0.00 run still looks free" ;;
 esac
 [ "$un" = "5" ] && ok "counts all 5 unmeasured" || bad "voters_unmeasured=$un"
 if rg -q "not free" "$B/err.txt" 2>/dev/null; then ok "says out loud it was not free"; else bad "silent about a \$0.00 run"; fi
@@ -68,7 +68,7 @@ OUT=$(run "$C")
 cov=$(printf '%s' "$OUT" | jq -r '.coverage' 2>/dev/null)
 case "$cov" in
   partial*floor*) ok "coverage marks the cost a floor ('$cov')" ;;
-  *)              bad "coverage='$cov' — a partial total reads as complete" ;;
+  *)              bad "coverage='$cov': a partial total reads as complete" ;;
 esac
 if rg -q "floor" "$C/err.txt" 2>/dev/null; then ok "warns on stderr"; else bad "no warning"; fi
 rm -rf "$C"

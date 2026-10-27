@@ -66,11 +66,11 @@ screencapture -x -D 1 ~/.claude/assets/screenshots/display1.png
 # All of display 2 (3024×1964 Retina)
 screencapture -x -D 2 ~/.claude/assets/screenshots/display2.png
 
-# Specific app window — most apps (uses System Events)
+# Specific app window: most apps (uses System Events)
 WINID=$(osascript -e 'tell application "System Events" to tell process "Slack" to id of window 1')
 screencapture -x -l "$WINID" ~/.claude/assets/screenshots/slack-window.png
 
-# Specific app window — Chrome and multi-process apps (use JXA instead)
+# Specific app window: Chrome and multi-process apps (use JXA instead)
 # System Events fails for Chrome with "Can't get id of window 1 (-1728)"
 WINID=$(osascript -l JavaScript -e "
   var se = Application('System Events');
@@ -79,7 +79,7 @@ WINID=$(osascript -l JavaScript -e "
 ")
 screencapture -x -l "$WINID" ~/.claude/assets/screenshots/chrome-window.png
 
-# After taking screenshot: Read the file — Claude sees the screen via vision
+# After taking screenshot: Read the file: Claude sees the screen via vision
 ```
 
 **Storage rule:** Always save to `~/.claude/assets/screenshots/`. Never use `/tmp` (it resolves to `/private/tmp` which is deny-listed in settings.json).
@@ -184,7 +184,7 @@ cliclick rc:820,450
 # Type text into focused window
 cliclick t:"Hello world"
 
-# Key press — simple key
+# Key press: simple key
 cliclick p:return
 cliclick p:tab
 cliclick p:escape

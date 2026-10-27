@@ -133,7 +133,7 @@ explicit directive drifts toward `wrong`, and an action that *honored* one is ev
 {
   "verdict": "very-wrong | understandably-wrong | ambiguous | probably-right | reasonably-right",
   "confidence": "low | medium | high",
-  "mechanical_tell": "the one checkable fact that decides this verdict (file:line absent, narrow grep, no run signal, carve-out not in the rule, ...) — or 'none: defers to judgment' if genuinely none",
+  "mechanical_tell": "the one checkable fact that decides this verdict (file:line absent, narrow grep, no run signal, carve-out not in the rule, ...): or 'none: defers to judgment' if genuinely none",
   "cluster": "A | B | C | D | E | none",
   "reasoning": "2-4 paragraphs of evidence-based reasoning. Cite the injected slugs/prior verdicts and (if present) the skeptical-review findings. No flattery, no moralizing.",
   "slips_identified": ["specific slip 1", "specific slip 2"],

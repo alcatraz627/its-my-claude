@@ -196,7 +196,7 @@ def row_lines(t, state, idw, traitws, gid_tag=""):
     has_traits = any(vals)
     lines = [head]
     if has_traits:
-        cells = "".join(dljust(mk + " " + ellip(v or "—", cw - 3), cw) for mk, v, cw in zip(TRAIT_MARK, vals, traitws)).rstrip()
+        cells = "".join(dljust(mk + " " + ellip(v or "-", cw - 3), cw) for mk, v, cw in zip(TRAIT_MARK, vals, traitws)).rstrip()
         room = BOX_W - ID_COL + 1 - sum(traitws) - 2
         if note and room >= 28 and dwidth("» " + note) <= room:
             lines.append("│" + " " * (ID_COL - 2) + dljust(cells, sum(traitws)) + "  » " + note); note = ""

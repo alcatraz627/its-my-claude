@@ -323,7 +323,7 @@ mutate_record() {
     # Tell "corrupt store" apart from "no such id": one malformed JSONL line makes
     # the id lookup fail for EVERY id, which is otherwise baffling to debug.
     if ! jq empty "$STORE" >/dev/null 2>&1; then
-      echo "propose: $STORE has a malformed JSONL line — fix it before mutating" >&2
+      echo "propose: $STORE has a malformed JSONL line: fix it before mutating" >&2
     else
       echo "propose: no proposal with id=$id" >&2
     fi
@@ -340,7 +340,7 @@ mutate_record() {
   if jq -c --arg id "$id" "$@" "$prog" "$STORE" > "$tmp"; then
     mv "$tmp" "$STORE" || rc=$?
   else
-    rc=$?   # jq failed — $tmp is discarded, $STORE left byte-identical (no corruption)
+    rc=$?   # jq failed: $tmp is discarded, $STORE left byte-identical (no corruption)
   fi
   [ "$held" = 1 ] && rmdir "$dirlock" 2>/dev/null
   rm -f "$tmp" 2>/dev/null || true
@@ -356,7 +356,7 @@ mutate_status() {
   # (e.g. --resolution): the text would be silently dropped. Refuse loudly;
   # nine audit-trail entries were lost this way on 2026-07-10.
   case "$reason" in
-    --*) echo "propose $new_status: reason looks like a flag ('$reason') — pass it positionally: propose.sh retire <id> --as $new_status \"<reason>\"" >&2; exit 2 ;;
+    --*) echo "propose $new_status: reason looks like a flag ('$reason'): pass it positionally: propose.sh retire <id> --as $new_status \"<reason>\"" >&2; exit 2 ;;
   esac
   # A close with no reason left 111 'done' rows that prove nothing about whether the
   # need was met; every close now says why, in its own words.
@@ -419,7 +419,7 @@ cmd_update() {
   local note="$*"
   [ -z "$id" ] && { echo "propose update: <id> \"note\" required" >&2; exit 2; }
   [ -z "$note" ] && { echo "propose update: note text required" >&2; exit 2; }
-  case "$note" in --*) echo "propose update: note looks like a flag — pass it positionally: propose.sh update <id> \"<note>\"" >&2; exit 2 ;; esac
+  case "$note" in --*) echo "propose update: note looks like a flag: pass it positionally: propose.sh update <id> \"<note>\"" >&2; exit 2 ;; esac
   local ts; ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   mutate_record "$id" '
     if .id == $id then .updates = ((.updates // []) + [{ts:$ts, note:$note}]) else . end

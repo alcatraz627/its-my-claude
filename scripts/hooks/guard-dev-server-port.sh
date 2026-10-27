@@ -120,7 +120,7 @@ block() { # block <reason>
   exit 0
 }
 
-FEEDBACK_LINE="False fire? Re-run prefixed with PORTS_OK=1 AND file: bash ~/.claude/scripts/propose.sh add --category hooks --title \"guard-dev-server-port false fire\" --body \"<the command>\" — the hook-telemetry review reads these."
+FEEDBACK_LINE="False fire? Re-run prefixed with PORTS_OK=1 AND file: bash ~/.claude/scripts/propose.sh add --category hooks --title \"guard-dev-server-port false fire\" --body \"<the command>\": the hook-telemetry review reads these."
 
 # No port on the command line? The framework-recommended place to pin a port is
 # the project CONFIG, and blocking that correct setup was the highest-frequency
@@ -140,10 +140,10 @@ fi
 
 if [ -z "$PORT" ]; then
   SUGG=$(bash "$PORTS" next --tier 3 2>/dev/null)
-  block "⛔ DEV SERVER WITHOUT A PORT — no port on the command line AND none found in the project config (vite/next/astro/nuxt config, .env PORT, package.json scripts). A portless launch lands on a framework default (5173/3000/…), which collides with the user's mature apps and stacks orphans (rules: features/dev-servers.md, three-tier port policy).
+  block "⛔ DEV SERVER WITHOUT A PORT: no port on the command line AND none found in the project config (vite/next/astro/nuxt config, .env PORT, package.json scripts). A portless launch lands on a framework default (5173/3000/…), which collides with the user's mature apps and stacks orphans (rules: features/dev-servers.md, three-tier port policy).
 
 Pick the right tier and relaunch with an explicit port:
-  one-off/ephemeral (tier 3): port ${SUGG:-6200} is free — e.g. add: --port ${SUGG:-6200} --strictPort   (vite/react-router; next: PORT=${SUGG:-6200}; record it: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3 --port ${SUGG:-6200})
+  one-off/ephemeral (tier 3): port ${SUGG:-6200} is free: e.g. add: --port ${SUGG:-6200} --strictPort   (vite/react-router; next: PORT=${SUGG:-6200}; record it: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3 --port ${SUGG:-6200})
   persistent local service (tier 2): bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 2   (then run under pm2)
 If this project's own config already pins a safe non-default port, re-run prefixed with PORTS_OK=1.
 $FEEDBACK_LINE"
@@ -154,18 +154,18 @@ case "$VERDICT" in
   OK*) exit 0 ;;
   PINNED-UNSCOPED*)
     OWNER=${VERDICT#PINNED-UNSCOPED }
-    block "⛔ PORT $PORT IS PINNED to '$OWNER' but the pin has NO owning directory, so the gate cannot tell owner from squatter. If this launch IS the pinned project: rescope the pin from its root — bash ~/.claude/scripts/dev-servers/ports.sh pin $PORT $OWNER --cwd <project-root> — then re-run (or one-off: PORTS_OK=1). If it is NOT yours, claim a 62xx port instead: ports.sh claim <name> --tier 3. Unsure whose it is? That is a USER call — PESTER the user explicitly; never stall silently.
+    block "⛔ PORT $PORT IS PINNED to '$OWNER' but the pin has NO owning directory, so the gate cannot tell owner from squatter. If this launch IS the pinned project: rescope the pin from its root: bash ~/.claude/scripts/dev-servers/ports.sh pin $PORT $OWNER --cwd <project-root>: then re-run (or one-off: PORTS_OK=1). If it is NOT yours, claim a 62xx port instead: ports.sh claim <name> --tier 3. Unsure whose it is? That is a USER call: PESTER the user explicitly; never stall silently.
 $FEEDBACK_LINE" ;;
   PINNED*)
     OWNER=${VERDICT#PINNED }
-    block "⛔ PORT $PORT IS PINNED to '$OWNER' (tier-1, user-owned — see ports.sh list) and this launch is from a DIFFERENT directory. Claude-launched servers may never squat a pinned port. Get your own: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3   (prints a free 62xx port). If you believe the pin itself must change, that is a USER decision — PESTER the user explicitly in your reply; do not stall silently or work around the gate.
+    block "⛔ PORT $PORT IS PINNED to '$OWNER' (tier-1, user-owned: see ports.sh list) and this launch is from a DIFFERENT directory. Claude-launched servers may never squat a pinned port. Get your own: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3   (prints a free 62xx port). If you believe the pin itself must change, that is a USER decision: PESTER the user explicitly in your reply; do not stall silently or work around the gate.
 $FEEDBACK_LINE" ;;
   CLAIMED*)
     block "⛔ PORT $PORT IS ALREADY CLAIMED (${VERDICT#CLAIMED }). Two services on one port means the second silently fails or auto-increments into a third service's port. Allocate your own: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3
 $FEEDBACK_LINE" ;;
   BLOCKED*)
     SUGG=$(bash "$PORTS" next --tier 3 2>/dev/null)
-    block "⛔ PORT $PORT IS A FRAMEWORK DEFAULT (blocklist: 3000 3001 4200 5000 5173-5179 8000 8080 8888) — defaults are exactly where agent servers collide with the user's apps. Use ${SUGG:-6200} instead (add --strictPort so nothing auto-increments), and record it: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3 --port ${SUGG:-6200}
+    block "⛔ PORT $PORT IS A FRAMEWORK DEFAULT (blocklist: 3000 3001 4200 5000 5173-5179 8000 8080 8888): defaults are exactly where agent servers collide with the user's apps. Use ${SUGG:-6200} instead (add --strictPort so nothing auto-increments), and record it: bash ~/.claude/scripts/dev-servers/ports.sh claim <name> --tier 3 --port ${SUGG:-6200}
 $FEEDBACK_LINE" ;;
 esac
 exit 0

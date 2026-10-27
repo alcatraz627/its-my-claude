@@ -9,7 +9,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='7' fill='%235b9dd9'/%3E%3Cpath d='M9 16.4l4.6 4.6L23 11' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/shared.css">
 <style>
-/* kanban — a decision page, adopted (DECISION-PAGES-ADOPTION.md). The answer
+/* kanban: a decision page, adopted (DECISION-PAGES-ADOPTION.md). The answer
    contract (state, flips, answerString, keyboard, storage key) is the old
    template's, verbatim. Only the chrome is the charter's: shared tokens, the
    navbar, data-tip tooltips, drawn glyphs. */
@@ -180,7 +180,7 @@ body.notes-off #notesBtn,body.notes-off .addnote,body.notes-off .notewrap,body.n
 <body>
 <div id="phead"></div>
 <main id="main"><p class="note">Loading config.json…</p></main>
-<div id="drawer"><span class="cap">answer preview — this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
+<div id="drawer"><span class="cap">answer preview: this is exactly what Copy pastes</span><pre id="drawertext"></pre></div>
 <div id="overlay"><div class="box">
   <h3 style="margin-top:0">Keyboard</h3>
   <table>
@@ -188,7 +188,7 @@ body.notes-off #notesBtn,body.notes-off .addnote,body.notes-off .notewrap,body.n
     <tr><td><kbd>1</kbd>–<kbd>9</kbd></td><td>pick option in the focused decision</td></tr>
     <tr><td><kbd>a</kbd></td><td>toggle agree on the focused item</td></tr>
     <tr><td><kbd>n</kbd></td><td>add a note to the focused item (<kbd>Esc</kbd> to leave)</td></tr>
-    <tr><td><kbd>m</kbd></td><td>notes mode — show a note field on every item</td></tr>
+    <tr><td><kbd>m</kbd></td><td>notes mode: show a note field on every item</td></tr>
     <tr><td><kbd>N</kbd></td><td>jump to the end-of-form notes for Claude</td></tr>
     <tr><td><kbd>f</kbd></td><td>show only items you changed or noted</td></tr>
     <tr><td><kbd>p</kbd></td><td>answer preview drawer</td></tr>
@@ -198,15 +198,15 @@ body.notes-off #notesBtn,body.notes-off .addnote,body.notes-off .notewrap,body.n
     <tr><td><kbd>t</kbd></td><td>theme</td></tr>
     <tr><td><kbd>?</kbd></td><td>this help (<kbd>Esc</kbd> closes)</td></tr>
   </table>
-  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste — notes are optional.</p>
+  <p class="note">Untouched = agreed. Only your changes and notes end up in the paste: notes are optional.</p>
 </div></div>
-<div id="toast">Copied — paste it in chat</div>
+<div id="toast">Copied: paste it in chat</div>
 <script src="/kinds.js"></script>
 <script src="/shared.js"></script>
 <script>
 /* The answer contract below (state, recOf, flips, answerString, storage key,
    keyboard map) is ported VERBATIM from the old template.html. A change here
-   is a change to what every skill parses from the paste — do not drift it. */
+   is a change to what every skill parses from the paste: do not drift it. */
 const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 let CFG = null, FOCUS = -1;
@@ -335,7 +335,7 @@ function render() {
   if (CFG.notes !== false)
     h += `<div id="endnotes"><section class="card endnote" data-s="__end" tabindex="-1">
       <h3>Notes for Claude <span class="idtag">optional</span></h3>
-      <p class="read">Anything the form above can't capture — extra context, a
+      <p class="read">Anything the form above can't capture: extra context, a
         constraint, a follow-up. Leave blank to keep the payload lean.</p>
       <div class="notewrap" style="display:block"><textarea class="endnotes"
         rows="2" placeholder="e.g. do the Walmart ones first; ping me before the DB migration…"></textarea></div>
@@ -398,11 +398,11 @@ function answerString() {
   if ((CFG.decisions || []).length)
     lines.push(CFG.decisions.map(d => d.id + (s.d[d.id] || recOf(d.id) || "?")).join(" "));
   (CFG.decisions || []).forEach(d => {
-    if (s.dnotes[d.id]) lines.push(`${d.id} note — ${s.dnotes[d.id]}`);
+    if (s.dnotes[d.id]) lines.push(`${d.id} note: ${s.dnotes[d.id]}`);
   });
   Object.entries(s.screens).forEach(([k, v]) => {
     if (!v.agree || v.note) lines.push(
-      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
+      `${k}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? ": " + v.note : ""}`);
   });
   if (s.endnotes) lines.push("notes:", s.endnotes);
   if (!f.d.length && !f.dnote.length && !f.screens.length && !f.end)
@@ -541,7 +541,7 @@ function wireBar() {
     const txt = answerString();
     try { await navigator.clipboard.writeText(txt); }
     catch { prompt("Copy this:", txt); }
-    toast("Copied — paste it in chat");
+    toast("Copied: paste it in chat");
   };
   $("#submit").onclick = async () => {
     const txt = answerString();
@@ -556,17 +556,17 @@ function wireBar() {
         body: JSON.stringify({ answer: txt, replace: ANSWERED }) });
       if (r.status === 409) {
         // Another tab or another hand answered it while this page was open.
-        toast("Answered somewhere else already — reload to see what was recorded", 3600, true);
+        toast("Answered somewhere else already: reload to see what was recorded", 3600, true);
         return;
       }
       if (!r.ok) throw new Error("http " + r.status);
-      toast("Sent to Claude ✓ — you can close this tab", 2600);
+      toast("Sent to Claude ✓: you can close this tab", 2600);
       $("#submit .vlabel").textContent = "Sent";
       markAnswered(Math.floor(Date.now() / 1000), txt);
       setTimeout(() => { $("#submit .vlabel").textContent = "Submit to Claude"; }, 2600);
     } catch (e) {
       try { await navigator.clipboard.writeText(txt); } catch { prompt("Copy this:", txt); }
-      toast("Submit unavailable — copied instead, paste it in chat", 2800);
+      toast("Submit unavailable: copied instead, paste it in chat", 2800);
     }
   };
 }
@@ -578,9 +578,9 @@ const DCHEV = `<svg class="dcv" width="10" height="10" viewBox="0 0 16 16" fill=
 
 /* answerString() joins an item to its note with a spaced em dash. Built from
    its code point so the prose gate does not read these patterns as writing. */
-const JOIN = "—";
-const RE_NOTE = new RegExp("^(\\S+) note " + JOIN + " (.+)$");
-const RE_FLAG = new RegExp("^(.+?): (agree|DISAGREE)(?: " + JOIN + " (.+))?$");
+const JOIN = "(?::| \\u2014)";
+const RE_NOTE = new RegExp("^(\\S+) note(?::| \\u2014) (.+)$");
+const RE_FLAG = new RegExp("^(.+?): (agree|DISAGREE)(?:" + JOIN + " (.+))?$");
 
 /* Read back the string that was SUBMITTED rather than recomputing from local
    state, which can have drifted since. answerString() writes this shape. */

@@ -101,7 +101,7 @@ emit_kv() {
 }
 
 cmd_list() {
-  printf 'callout vocabulary — conventions/callout-boxes.md v2\n\n'
+  printf 'callout vocabulary: conventions/callout-boxes.md v2\n\n'
   awk -F'\t' '!/^#/ {printf "  %-9s %s  %-6s %-4s %s\n", $1, $2, $4, $5, $6}' "$VOCAB"
   cat <<'EOF'
 

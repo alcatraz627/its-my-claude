@@ -87,13 +87,13 @@ while IFS= read -r seg; do
 done < <(printf '%s\n' "$scan" | tr ';|&' '\n')
 
 if [ "$footgun" = 1 ]; then
-  reason="⚡ rg -r IS --replace, NOT recursive. In ripgrep, -r consumes the next token as a REPLACEMENT string and prints transformed output — it does NOT mean recursive (rg recurses by default). This silently mangles output that LOOKS plausible (the metadata→mnidata incident).
+  reason="⚡ rg -r IS --replace, NOT recursive. In ripgrep, -r consumes the next token as a REPLACEMENT string and prints transformed output: it does NOT mean recursive (rg recurses by default). This silently mangles output that LOOKS plausible (the metadata→mnidata incident).
 
 Blocked command:
   ${command}
 
 Fix:
-  • Recursive search is the DEFAULT — just drop -r:   rg \"PATTERN\" path/
+  • Recursive search is the DEFAULT: just drop -r:   rg \"PATTERN\" path/
   • Need hidden/ignored files too:                    rg --no-ignore --hidden \"PATTERN\" path/
   • You GENUINELY want substitution: spell it out with the long flag so intent is explicit:
                                                        rg \"PATTERN\" --replace \"REPL\" path/

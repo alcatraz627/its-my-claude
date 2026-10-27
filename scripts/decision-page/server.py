@@ -39,7 +39,7 @@ def _notify_origin(slug, page):
         if origin:
             subprocess.Popen(
                 ["claude-ipc", "send", "--from", "dp-server", "--to", origin,
-                 f"decision page {slug} answered — read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer {slug}"],
+                 f"decision page {slug} answered: read it: bash ~/.claude/scripts/decision-page/decision-page.sh answer {slug}"],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception:
         pass
@@ -112,7 +112,7 @@ class DPHandler(SimpleHTTPRequestHandler):
         return self._json(200, {"ok": True, "slug": slug})
 
     def log_message(self, *args):
-        pass  # quiet — per-request logs add nothing useful under pm2
+        pass  # quiet: per-request logs add nothing useful under pm2
 
 
 if __name__ == "__main__":

@@ -245,7 +245,7 @@ $registration
 "
 blockjson "⛔ PUSH GATE: this push needs fresh user approval ($why).
 $refused
-Pushing to a shared branch is a per-push approval — one approval is never blanket,
+Pushing to a shared branch is a per-push approval: one approval is never blanket,
 and a context compaction may have wiped an earlier one. Do NOT work around this
 (no --no-verify, no editing the protection config, no creating the sentinel yourself).
 
@@ -267,6 +267,6 @@ Instead:
      Fallback in their own terminal shell only (dead from web and mobile):
           ! touch ${SENTINEL}
   3. When a [push-gate] line says the sentinel is written, re-run the same push.
-     The approval is single-use — it is consumed by this one push.
+     The approval is single-use: it is consumed by this one push.
 
-If you believe this repo/branch should not be gated, ASK THE USER — that call is theirs."
+If you believe this repo/branch should not be gated, ASK THE USER: that call is theirs."

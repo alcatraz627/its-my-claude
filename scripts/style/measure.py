@@ -24,9 +24,9 @@ def mechanical_lexicon():
         p = f"{SK}/{s}/SKILL.md"
         if not os.path.exists(p): continue
         for line in open(p, errors="replace"):
-            m = re.match(r"^##\s+(?:Phase|Step)\s*[\d.]*\s*[:.—-]?\s*(.+)", line.strip())
+            m = re.match(r"^##\s+(?:Phase|Step)\s*[\d.]*\s*[:.\u2014-]?\s*(.+)", line.strip())
             if m:
-                t = re.sub(r"\(.*?\)", "", m.group(1)).strip(" .:—-").lower()
+                t = re.sub(r"\(.*?\)", "", m.group(1)).strip(" .:\u2014-").lower()
                 lex |= {w for w in re.findall(r"[a-z][a-z-]{3,}", t) if w not in STOP}
     return lex
 

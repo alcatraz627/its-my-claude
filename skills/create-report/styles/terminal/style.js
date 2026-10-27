@@ -1,5 +1,5 @@
 /**
- * Terminal style — report.js
+ * Terminal style: report.js
  *
  * Handles:
  * - Smooth scroll for nav links

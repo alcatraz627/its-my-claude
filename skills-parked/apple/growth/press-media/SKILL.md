@@ -275,17 +275,17 @@ Present outreach plan as:
 
 ## Target List (20-30 contacts)
 
-### Tier 1 — Exclusive Target
+### Tier 1: Exclusive Target
 | Outlet | Contact | Why Them |
 |--------|---------|----------|
 | [outlet] | [name] | [reason] |
 
-### Tier 2 — Embargo Group
+### Tier 2: Embargo Group
 | Outlet | Contact | Why Them |
 |--------|---------|----------|
 | ... | ... | ... |
 
-### Tier 3 — Broad Outreach
+### Tier 3: Broad Outreach
 | Outlet | Contact | Why Them |
 |--------|---------|----------|
 | ... | ... | ... |

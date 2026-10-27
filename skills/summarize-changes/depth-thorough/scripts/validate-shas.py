@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""validate-shas.py — replace any SHA in a themes file not present in commits.tsv.
+"""validate-shas.py: replace any SHA in a themes file not present in commits.tsv.
 
 Catches the "fake-precise SHA" failure: the themes agent can emit SHA-shaped
 strings (7-12 hex chars) that look like real commits but aren't in scope. This
 script extracts every such token, checks it against the actual commit list, and
-replaces unknown ones with `(post-cutoff)` — removing the SHA-hygiene burden
+replaces unknown ones with `(post-cutoff)`: removing the SHA-hygiene burden
 from the verifier entirely.
 
 Usage:

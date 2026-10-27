@@ -47,7 +47,7 @@ cmd_submit() {
   local target; target=$(jq -r '.target // empty' "$spec")
   [ -n "$target" ] || die "spec has no .target"
   if ! resolve_target "$target" >/dev/null; then
-    echo "deployq: REFUSED — target '$target' is not in the registry." >&2
+    echo "deployq: REFUSED: target '$target' is not in the registry." >&2
     echo "  A spec names a target, never a command. Register it in $TARGETS first," >&2
     echo "  pointing at a wrapper script that already lives in the repo." >&2
     echo "  Known targets:" >&2; cmd_targets >&2
@@ -58,7 +58,7 @@ cmd_submit() {
   # moment of submitting, because the caller is usually an agent and the cost of
   # learning this afterwards is a live deploy nobody asked for.
   local dry; dry=$(jq -r '.dry_run // false' "$spec")
-  [ "$dry" = "true" ] || echo "deployq: NOTE — no \"dry_run\": true in this spec, so this is a REAL deploy of '$target'." >&2
+  [ "$dry" = "true" ] || echo "deployq: NOTE: no \"dry_run\": true in this spec, so this is a REAL deploy of '$target'." >&2
 
   # THE CONTENDED RESOURCE IS THE SERVICE, NOT THE CALLER'S STRING.
   # gcp-fable registered a second target deploying a branch worktree to the SAME
@@ -68,7 +68,7 @@ cmd_submit() {
   # service as one resource whatever the caller called it.
   local purl; purl=$(awk -F'\t' -v n="$target" '$1==n && $0 !~ /^#/ {print $4; exit}' "$TARGETS")
   local shared; shared=$(awk -F'\t' -v u="$purl" '!/^#/ && NF>=4 && $4==u {print $1}' "$TARGETS" | tr '\n' ' ')
-  case "$shared" in *" "*[!" "]*) echo "deployq: NOTE — targets [$shared] all deploy to $purl; the queue batches them as ONE service." >&2 ;; esac
+  case "$shared" in *" "*[!" "]*) echo "deployq: NOTE: targets [$shared] all deploy to $purl; the queue batches them as ONE service." >&2 ;; esac
 
   local id; id=$(ticket_id)
   local f="$Q/pending/$(date '+%Y%m%d-%H%M%S')-$id.json"
@@ -105,7 +105,7 @@ case "${1:-help}" in
   targets) shift; cmd_targets ;;
   home)    echo "$Q" ;;
   *) cat <<'USAGE'
-deployq — non-blocking deploy queue. The caller never waits.
+deployq: non-blocking deploy queue. The caller never waits.
 
   deployq submit <spec.json>   queue a deploy; prints a TICKET id and returns
   deployq status <ticket>      one line of state, plus the report path

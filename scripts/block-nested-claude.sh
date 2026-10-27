@@ -72,7 +72,7 @@ if [ -z "$offender" ] && [ -n "$command_str" ]; then
     if [ -z "$offender" ] && [ "$cwd" = "$GCC" ]; then
       if printf '%s' "$blanked" | grep -qE '(^|[[:space:]=>])\.claude/'; then
         offender="$command_str"
-        why="relative .claude/ write while cwd is $GCC — resolves into the nest"
+        why="relative .claude/ write while cwd is $GCC: resolves into the nest"
       fi
     fi
   fi
@@ -88,7 +88,7 @@ Reason: $why
 Offending call:
   $offender
 
-When cwd is $GCC, a relative ".claude/output/..." does NOT mean "$GCC/output" —
+When cwd is $GCC, a relative ".claude/output/..." does NOT mean "$GCC/output":
 it resolves one level deeper, into a directory nothing reads.
 
 Correct targets when working inside the gcc:
@@ -99,6 +99,6 @@ Correct targets when working inside the gcc:
 
 Use an absolute path, or drop the ".claude/" segment.
 
-Reading, grepping, or testing that path is NOT blocked — only writing to it.
+Reading, grepping, or testing that path is NOT blocked: only writing to it.
 EOF
 exit 2

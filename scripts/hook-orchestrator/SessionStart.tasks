@@ -1,4 +1,4 @@
-# SessionStart tasks — parallel orchestrator config
+# SessionStart tasks: parallel orchestrator config
 # One command per line. Lines starting with # are comments / disabled.
 # Each task receives the SessionStart hook input JSON via stdin.
 #
@@ -6,7 +6,7 @@
 # to /dev/null). That is correct for SIDE-EFFECT tasks only. CONTEXT-INJECTING
 # hooks (those that print {additionalContext}) were moved out to the synchronous
 # injection lane at scripts/session-mgmt/sessionstart-inject.sh, registered
-# directly in settings.json — otherwise their output is silently dropped. Keep
+# directly in settings.json: otherwise their output is silently dropped. Keep
 # injectors there, not here.
 
 # Tab title initialization
@@ -33,5 +33,5 @@ bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh
 # [moved → session-mgmt/sessionstart-inject.sh] Detect stale prior session + /catchup hint
 # [moved → session-mgmt/sessionstart-inject.sh] Validate settings.json hooks
 
-# sync-todos Phase 1 — workspace pull
+# sync-todos Phase 1: workspace pull
 ~/.claude/scripts/sync-todos/pull.sh

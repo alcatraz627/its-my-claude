@@ -86,7 +86,7 @@ else:
     project = os.path.basename(os.path.dirname(os.path.dirname(notes_path))) or "unknown"
     with open(archive_path, "w", encoding="utf-8") as f:
         f.write(
-            f"# Runtime Notes Archive — {now.year} Q{quarter}\n\n"
+            f"# Runtime Notes Archive: {now.year} Q{quarter}\n\n"
             f"Archived entries from {project}. Original file: runtime-notes.md\n\n---\n\n"
             + archived_text
         )

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-banner.py — Reusable terminal banner renderer with aligned Unicode borders.
+banner.py: Reusable terminal banner renderer with aligned Unicode borders.
 
 Generates fixed-width box-drawn banners safe for monospace terminals.
 Uses hybrid ASCII/Unicode: corners + verticals from Unicode (╔╗╚╝╠╣║),

@@ -1,5 +1,5 @@
 {
-  "_doc": "Selective CLI access gating policy. Read by scripts/cli-gating/gate-cli-actions.sh (PreToolUse[Bash] hook). JSON not YAML — no PyYAML dependency. Design: assets/magi/20260521-0509-cli-gating-design/. Model: allowlist of READ verbs per CLI; everything else on a gated CLI is WRITE; env is 'dev' only when positively proven; prod-write/unknown-env-write -> BLOCK (exit 2); reads + proven-dev writes pass. Project .claude/cli-gating.json may tighten; loosening a prod gate needs allow_loosen:true.",
+  "_doc": "Selective CLI access gating policy. Read by scripts/cli-gating/gate-cli-actions.sh (PreToolUse[Bash] hook). JSON not YAML: no PyYAML dependency. Design: assets/magi/20260521-0509-cli-gating-design/. Model: allowlist of READ verbs per CLI; everything else on a gated CLI is WRITE; env is 'dev' only when positively proven; prod-write/unknown-env-write -> BLOCK (exit 2); reads + proven-dev writes pass. Project .claude/cli-gating.json may tighten; loosening a prod gate needs allow_loosen:true.",
   "version": 1,
   "gates": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "cli": "aws",
-      "_model": "Read iff operation matches read_op_prefixes/read_ops_exact; everything else (create-/delete-/put-/update-/terminate-/run-/s3 cp|sync|mv|rm|mb|rb) is a WRITE and approval-gated per-command (any account). Conservative: an unlisted read just gets gated once; no write prefix is ever read. s3 cp/sync DOWNLOADS (dst is local) are gated too in v1 — known false-positive, approve once.",
+      "_model": "Read iff operation matches read_op_prefixes/read_ops_exact; everything else (create-/delete-/put-/update-/terminate-/run-/s3 cp|sync|mv|rm|mb|rb) is a WRITE and approval-gated per-command (any account). Conservative: an unlisted read just gets gated once; no write prefix is ever read. s3 cp/sync DOWNLOADS (dst is local) are gated too in v1: known false-positive, approve once.",
       "read_op_prefixes": ["describe-", "list-", "get-", "lookup-", "head-", "batch-get-", "search-", "view-"],
       "read_ops_exact": ["ls", "help", "list", "get", "scan", "query", "select", "tail", "filter-log-events", "wait", "presign", "estimate-template-cost"],
       "sensitive_read_ops": ["get-secret-value", "batch-get-secret-value", "get-login-password", "get-session-token", "get-federation-token"],

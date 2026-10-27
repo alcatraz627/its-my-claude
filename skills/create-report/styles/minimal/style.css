@@ -1,4 +1,4 @@
-/* ─── Minimal style — ultra-clean reading layout ──────────────────────────── */
+/* ─── Minimal style: ultra-clean reading layout ──────────────────────────── */
 
 /* ─── CSS Custom Properties (Dark mode = default, html.light = light) ─────── */
 :root {
@@ -32,7 +32,7 @@
   --pill-active-text: #111;
   --nav-bg: rgba(17, 17, 17, 0.92);
 
-  /* Syntax highlighting — dark */
+  /* Syntax highlighting: dark */
   --hl-keyword: #c084fc;
   --hl-string: #86efac;
   --hl-comment: #64748b;
@@ -74,7 +74,7 @@ html.light {
   --pill-active-text: #ffffff;
   --nav-bg: rgba(255, 255, 255, 0.92);
 
-  /* Syntax highlighting — light */
+  /* Syntax highlighting: light */
   --hl-keyword: #a626a4;
   --hl-string: #50a14f;
   --hl-comment: #a0a1a7;
@@ -313,7 +313,7 @@ blockquote {
   color: var(--blockquote-color);
 }
 
-/* ─── Table — horizontal rules only ───────────────────────────────────────── */
+/* ─── Table: horizontal rules only ───────────────────────────────────────── */
 .table-wrap {
   overflow-x: auto;
   margin: 20px 0;
@@ -343,7 +343,7 @@ tbody td {
   color: var(--text);
 }
 
-/* ─── Code blocks — 1px border, no header bar ─────────────────────────────── */
+/* ─── Code blocks: 1px border, no header bar ─────────────────────────────── */
 .code-wrap {
   margin: 20px 0;
   border: 1px solid var(--code-border);
@@ -679,7 +679,7 @@ section.search-hidden {
     color: #1a1a1a;
   }
 
-  /* Tables — visible borders for PDF clarity */
+  /* Tables: visible borders for PDF clarity */
   .table-wrap {
     overflow: visible !important;
   }
@@ -694,7 +694,7 @@ section.search-hidden {
     color: #1a1a1a;
   }
 
-  /* Code blocks — light bg, visible border */
+  /* Code blocks: light bg, visible border */
   .code-wrap {
     border: 1px solid #ddd;
     background: #f8f9fa;

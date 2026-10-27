@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# codex-gcc — launch Codex with the gcc adapter fully armed.
+# codex-gcc: launch Codex with the gcc adapter fully armed.
 #
 #   codex-gcc exec [--brief <path>] [codex exec args] "<task>"
 #                                  non-interactive; hooks trusted for this run;

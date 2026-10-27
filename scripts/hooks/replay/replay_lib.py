@@ -98,12 +98,12 @@ def turn_edit_paths(turn):
 
 def has_source_edit(paths):
     """True if any edited path is a source/test file (the Gate0 condition). Each
-    path is matched independently — the hook's rg check is per-line."""
+    path is matched independently: the hook's rg check is per-line."""
     return any(SOURCE_EXT_RE.search(p) for p in paths)
 
 
 def turn_final_text(turn):
-    """The last assistant message's joined text — what the hook keys its claim on."""
+    """The last assistant message's joined text: what the hook keys its claim on."""
     last = None
     for _, obj in turn:
         if obj is not None and obj.get("type") == "assistant":
@@ -142,7 +142,7 @@ def turn_session_id(turn):
 
 
 def turn_ts(turn):
-    """When this turn started — the ISO-8601 `timestamp` of its opening user
+    """When this turn started: the ISO-8601 `timestamp` of its opening user
     message, falling back to the first timestamped line. "" if none present."""
     for _, obj in turn:
         if obj is not None:
@@ -173,7 +173,7 @@ def turn_user_text(turn):
 
 
 def turn_assistant_text(turn):
-    """Everything the assistant said this turn — every text block across every
+    """Everything the assistant said this turn: every text block across every
     assistant message in it, in order. Distinct from `turn_final_text`, which
     returns only the last message; use this to match against the whole reply."""
     out = []
@@ -190,7 +190,7 @@ def turn_assistant_text(turn):
 
 def turn_tool_names(turn):
     """The tools this turn invoked (Bash, Edit, Read, …), in call order and with
-    duplicates kept — so a caller can ask 'did this turn use tool X'."""
+    duplicates kept: so a caller can ask 'did this turn use tool X'."""
     names = []
     for _, obj in turn:
         if obj is None or obj.get("type") != "assistant":

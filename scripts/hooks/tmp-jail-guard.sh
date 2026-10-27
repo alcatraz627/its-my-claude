@@ -72,7 +72,7 @@ if [ "$tool" = "Bash" ]; then
     jq -cn --arg r "✅ /tmp JAIL ENABLED for this session ($sid).
 Writes are now confined to /tmp (and /private/tmp); reads are unaffected.
 To work outside /tmp again, ask the USER to run:  tmp-jail off $sid
-You should not try to lift it yourself — ask the user." \
+You should not try to lift it yourself: ask the user." \
       '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0
   fi
@@ -85,18 +85,18 @@ fi
 # ════ from here: THIS session is jailed ════
 block() {
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook tmp-jail-guard --action block --heeded unknown >/dev/null 2>&1 || true
-  jq -cn --arg r "🔒 /tmp JAIL active for this session ($sid) — writes confined to /tmp.
+  jq -cn --arg r "🔒 /tmp JAIL active for this session ($sid): writes confined to /tmp.
 Blocked: $1
 To work outside /tmp, ASK THE USER to lift the jail with this exact instruction:
   → the user runs:  tmp-jail off $sid
-Do not try to lift it yourself or work around the jail — ask the user." \
+Do not try to lift it yourself or work around the jail: ask the user." \
     '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0
 }
 
 # Block the agent's own off-attempt (incl. path-qualified `~/.local/bin/tmp-jail off`).
 if [ "$tool" = "Bash" ] && jail_verb off; then
-  block "tmp-jail off — the agent cannot lift the jail; the user must run it"
+  block "tmp-jail off: the agent cannot lift the jail; the user must run it"
 fi
 
 case "$tool" in
@@ -111,7 +111,7 @@ case "$tool" in
     [ -n "${cmd:-}" ] || exit 0
     : "${scan:=$cmd}"
     # Can't verify Bash write targets without rg → fail CLOSED while jailed.
-    command -v rg >/dev/null 2>&1 || block "rg unavailable — cannot verify the write target while jailed"
+    command -v rg >/dev/null 2>&1 || block "rg unavailable: cannot verify the write target while jailed"
     # Absolute path NOT under /tmp, or a ~ / $HOME path (PCRE negative lookahead).
     NONTMP='(/(?!tmp(/|$|[[:space:]])|private/tmp(/|$|[[:space:]]))[^[:space:]|;&)]+|~[^[:space:]|;&)]*|\$HOME[^[:space:]|;&)]*)'
     WVERB='cp|mv|tee|install|rsync|ln|mkdir|touch|trash|unlink|truncate|shred'

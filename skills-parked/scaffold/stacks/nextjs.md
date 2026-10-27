@@ -158,7 +158,7 @@ import { type ClassValue, clsx } from "clsx";
 
 /**
  * Merge Tailwind classes safely. Add `clsx` and `tailwind-merge` as needed.
- * Placeholder — replace with your preferred class merging utility.
+ * Placeholder: replace with your preferred class merging utility.
  */
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs);

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ta query — the content-query surface the transcript corpus lacks.
+"""ta query: the content-query surface the transcript corpus lacks.
 
 Find the turns that match a set of content filters and print them as jsonl, a
 table, a count, or the bare list of files that contain them. The heavy lifting

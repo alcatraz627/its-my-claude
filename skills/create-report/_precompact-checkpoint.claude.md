@@ -40,7 +40,7 @@ After compaction, run `/catchup`: it will:
 Current: Compaction imminent (auto trigger)
 Next: Continue from this checkpoint after compaction
 Blockers: None
-Learnings: Compaction fired (auto) — if auto, consider delegating heavy subtasks to subagents (context: fork)
+Learnings: Compaction fired (auto): if auto, consider delegating heavy subtasks to subagents (context: fork)
 ===
 === CHECKPOINT ===
 Goal: pm2-manage Phase 2 (Cron) + Phase 3 (LaunchD) implementation
@@ -48,24 +48,24 @@ Done: All three types scan+render; status detection working via gui/<uid> domain
 Current: Dashboard fully operational with daemon/cron/launchd cards
 Next: Phase 4 polish (type filter bar, /api/all unified endpoint, keyboard shortcuts)
 Blockers: none
-Learnings: `launchctl list` fails from daemon context — always use `launchctl print gui/<uid>/<label>` to query GUI-domain LaunchAgents from pm2/server processes. Template literals in server-side HTML generation cannot contain backtick template literals in client JS — use string concatenation instead.
+Learnings: `launchctl list` fails from daemon context: always use `launchctl print gui/<uid>/<label>` to query GUI-domain LaunchAgents from pm2/server processes. Template literals in server-side HTML generation cannot contain backtick template literals in client JS: use string concatenation instead.
 === END CHECKPOINT ===
 
 === CHECKPOINT [21:32] (auto compaction) ===
-Goal: [see above — auto compaction fired, preserving state]
+Goal: [see above: auto compaction fired, preserving state]
 Done: [actions logged above]
 Current: Compaction imminent (auto trigger)
 Next: Continue from this checkpoint after compaction
 Blockers: None
-Learnings: Compaction fired (auto) — if auto, consider delegating heavy subtasks to subagents (context: fork)
+Learnings: Compaction fired (auto): if auto, consider delegating heavy subtasks to subagents (context: fork)
 ===
 === CHECKPOINT [00:37] (auto compaction) ===
-Goal: [see above — auto compaction fired, preserving state]
+Goal: [see above: auto compaction fired, preserving state]
 Done: [actions logged above]
 Current: Compaction imminent (auto trigger)
 Next: Continue from this checkpoint after compaction
 Blockers: None
-Learnings: Compaction fired (auto) — if auto, consider delegating heavy subtasks to subagents (context: fork)
+Learnings: Compaction fired (auto): if auto, consider delegating heavy subtasks to subagents (context: fork)
 ===
 ```
 
@@ -77,22 +77,22 @@ Learnings: Compaction fired (auto) — if auto, consider delegating heavy subtas
 Append-only log of post-run insights from every skill execution.
 Newest entries appear at the top. Each entry is prepended by the agent after the skill completes.
 
-## improve-config: Global config audit + CLAUDE.md trim + archive — 2026-04-08
+## improve-config: Global config audit + CLAUDE.md trim + archive: 2026-04-08
 
-**Purpose:** Full audit of ~/.claude/ runtime — MCPs, CLAUDE.md, skills, plugins, hooks, context overhead. Applied 6 improvements and archived 73 oldest runtime-notes entries.
+**Purpose:** Full audit of ~/.claude/ runtime: MCPs, CLAUDE.md, skills, plugins, hooks, context overhead. Applied 6 improvements and archived 73 oldest runtime-notes entries.
 
 **Insights:**
 
-1. runtime-notes.md at 31K tokens was the single largest context cost — 6x reduction achieved by archiving 73 oldest entries. Archive runs should happen every 3 weeks.
-2. Two CLAUDE.md sections (File Tools MCP, Interactive Inputs MCP) duplicated MCP server injection context — trimming them saves tokens without losing guidance.
-3. Extracting verbose content into `dev-servers-guide.md` + a 2-line pointer in CLAUDE.md is the right scaling pattern — keeps CLAUDE.md scannable.
+1. runtime-notes.md at 31K tokens was the single largest context cost: 6x reduction achieved by archiving 73 oldest entries. Archive runs should happen every 3 weeks.
+2. Two CLAUDE.md sections (File Tools MCP, Interactive Inputs MCP) duplicated MCP server injection context: trimming them saves tokens without losing guidance.
+3. Extracting verbose content into `dev-servers-guide.md` + a 2-line pointer in CLAUDE.md is the right scaling pattern: keeps CLAUDE.md scannable.
 4. Dead Vercel env vars and deprecated AWS MCP (`awslabs.core-mcp-server@latest`) were safe to remove with no functional impact.
-5. Plugin vs custom skill preference rule added — prevents ambiguity when both cover similar ground.
+5. Plugin vs custom skill preference rule added: prevents ambiguity when both cover similar ground.
 
 ---
 
 
-  ## core-dump: statusline v4 fix session stat-fix-2e — 2026-04-08 17:48          
+  ## core-dump: statusline v4 fix session stat-fix-2e: 2026-04-08 17:48          
                                                                                   
   **Purpose:** Fix 4 bugs discovered after v4 rendering rewrite: dead v3 code, git
   cache format, bash 3.2 empty arrays, _vlen subshell.                            
@@ -100,16 +100,16 @@ Newest entries appear at the top. Each entry is prepended by the agent after the
   **Insights:**                                                                   
                                                                                   
   1. macOS bash 3.2 (GPL v2) crashes with set -u on empty arrays arr=() when      
-  accessed as "${arr[@]}". Fix: "${arr[@]-}" — one extra char, no restructuring.  
+  accessed as "${arr[@]}". Fix: "${arr[@]-}": one extra char, no restructuring.  
   2. printf '%s %s' "" "0" writes " 0". read -r a b skips leading whitespace so   
-  a="0" and b="" — values swap silently. Use newlines as delimiters.              
+  a="0" and b="": values swap silently. Use newlines as delimiters.              
   3. cp commands went to background silently in this environment. install -m 755  
   is a reliable workaround when cp misbehaves.                                    
   4. When inserting a large block of new code in place of old code, verify the old
   code was actually removed (check line counts / search for old markers). "Insert 
   but forget to delete" leaves both versions executing.                           
   5. _vlen() was using echo "${#s}" which spawns a subshell on every call. Changed
-  to _VLEN="${#s}" global var pattern — zero subshell forks in loops.             
+  to _VLEN="${#s}" global var pattern: zero subshell forks in loops.             
                                                                                   
   --------                                                                        
 ```

@@ -1,4 +1,4 @@
-# agent-ready.jq — the ONE definition of "a row an agent may take right now".
+# agent-ready.jq: the ONE definition of "a row an agent may take right now".
 # Shared by ward-revive.sh, session-state.sh and goal.sh, so a fix lands once.
 #
 # A row is agent-ready when it is pending, not blocked or gated, waits on no other

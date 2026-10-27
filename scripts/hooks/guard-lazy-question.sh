@@ -159,7 +159,7 @@ PY
 
 [ "$verdict" = "NOREAD" ] || exit 0
 
-msg="[lazy-question] You are asking the user a question but did NOT read/grep the codebase this turn. If any part of this is answerable from the code (which file, which pattern, current value, existing convention, whether X already exists), check first — ask only what the code cannot tell you. If it is a genuine preference / design / user-intent call the code can't answer, proceed.  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md). (mute: touch ~/.claude/.no-lazy-question-gate)"
+msg="[lazy-question] You are asking the user a question but did NOT read/grep the codebase this turn. If any part of this is answerable from the code (which file, which pattern, current value, existing convention, whether X already exists), check first: ask only what the code cannot tell you. If it is a genuine preference / design / user-intent call the code can't answer, proceed.  →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md). (mute: touch ~/.claude/.no-lazy-question-gate)"
 
 jq -n --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse", additionalContext:$c}}'
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-lazy-question --action nudge --heeded unknown >/dev/null 2>&1 || true

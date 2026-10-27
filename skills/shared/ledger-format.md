@@ -208,7 +208,7 @@ jq -r '.tags[]?' "$L" | sort | uniq -c
 The sanctioned reader `scripts/ledger/ledger.sh` (Phase 4) generalizes these over
 the registered domain set (`list / search / show / stats / timeline / sources` for
 humans; `ask / status` for agents), keyed on `id / ts / session_id / tags / the
-domain-declared classifier` — never a global `--kind/--severity`.
+domain-declared classifier`: never a global `--kind/--severity`.
 
 ---
 

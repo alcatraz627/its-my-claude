@@ -10,7 +10,7 @@ ok()  { pass=$((pass+1)); echo "  ok    $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL  $1"; }
 if [ -f "$HOME/.claude/.no-emdash-gate" ]; then echo "mute file present, test would pass vacuously"; exit 2; fi
 
-D='—'
+D=$'\xe2\x80\x94'
 run() { # run <sid> <reply> [transcript-text]
   local tp=""
   if [ -n "${3:-}" ]; then

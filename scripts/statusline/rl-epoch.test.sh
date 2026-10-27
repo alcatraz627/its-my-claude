@@ -43,8 +43,8 @@ check "garbage" "not-a-time" "0"
 
 echo
 echo "== the boundary (14 days) =="
-check "13 days out — plausible, keep" "$((NOW + 13*86400))" "$((NOW + 13*86400))"
-check "15 days out — implausible, unknown" "$((NOW + 15*86400))" "0"
+check "13 days out: plausible, keep" "$((NOW + 13*86400))" "$((NOW + 13*86400))"
+check "15 days out: implausible, unknown" "$((NOW + 15*86400))" "0"
 
 echo
 echo "== the merge consequence: sentinel must NOT beat a real timestamp =="
@@ -79,12 +79,12 @@ clean=$(printf '%s' "$out" | sed 's/\x1b\[[0-9;]*m//g')
 if printf '%s' "$clean" | rg -q 'wk 22%'; then
   ok "merge took the cached 22% over the sentinel-stamped 88%"
 elif printf '%s' "$clean" | rg -q 'wk 88%'; then
-  bad "merge kept the stale 88% — the sentinel still wins"
+  bad "merge kept the stale 88%: the sentinel still wins"
 else
   bad "could not read a 7d pct from the render (got: $(printf '%s' "$clean" | tr '\n' ' ' | cut -c1-90))"
 fi
 if printf '%s' "$clean" | rg -q '[0-9]{5,}h'; then
-  bad "an absurd countdown rendered — the sentinel reached the display"
+  bad "an absurd countdown rendered: the sentinel reached the display"
 else
   ok "no year-2286 countdown in the render"
 fi

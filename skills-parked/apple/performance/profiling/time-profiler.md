@@ -57,12 +57,12 @@
 #### Synchronous File I/O on Main Thread
 
 ```swift
-// Bad — blocks main thread
+// Bad: blocks main thread
 func loadData() -> Data {
     return try! Data(contentsOf: largeFileURL)
 }
 
-// Good — move to background
+// Good: move to background
 func loadData() async -> Data {
     return try! await Task.detached {
         try Data(contentsOf: largeFileURL)
@@ -73,24 +73,24 @@ func loadData() async -> Data {
 #### Synchronous Network Call
 
 ```swift
-// Bad — URLSession.shared.dataTask is async but
+// Bad: URLSession.shared.dataTask is async but
 // this pattern blocks main thread waiting for result
 let data = try! Data(contentsOf: remoteURL)
 
-// Good — use async/await
+// Good: use async/await
 let (data, _) = try await URLSession.shared.data(from: remoteURL)
 ```
 
 #### Heavy Computation on Main Thread
 
 ```swift
-// Bad — sorting/filtering large arrays on main thread
+// Bad: sorting/filtering large arrays on main thread
 func updateUI() {
     let sorted = hugeArray.sorted { $0.score > $1.score }
     tableView.reloadData()
 }
 
-// Good — offload computation
+// Good: offload computation
 func updateUI() async {
     let sorted = await Task.detached {
         hugeArray.sorted { $0.score > $1.score }
@@ -102,10 +102,10 @@ func updateUI() async {
 #### Core Data / SwiftData Fetch on Main Thread
 
 ```swift
-// Bad — fetching thousands of objects blocks UI
+// Bad: fetching thousands of objects blocks UI
 let items = try context.fetch(FetchDescriptor<Item>())
 
-// Good — use background context (SwiftData)
+// Good: use background context (SwiftData)
 let items = try await Task.detached {
     let context = ModelContext(container)
     return try context.fetch(FetchDescriptor<Item>())
@@ -115,15 +115,15 @@ let items = try await Task.detached {
 #### Image Decoding on Main Thread
 
 ```swift
-// Bad — decoding happens lazily on first display, blocking main thread
+// Bad: decoding happens lazily on first display, blocking main thread
 imageView.image = UIImage(contentsOfFile: path)
 
-// Good — decode off main thread (iOS 15+)
+// Good: decode off main thread (iOS 15+)
 let thumbnail = await UIImage(contentsOfFile: path)?
     .byPreparingThumbnail(ofSize: targetSize)
 imageView.image = thumbnail
 
-// Good — using preparingForDisplay
+// Good: using preparingForDisplay
 let decoded = await UIImage(contentsOfFile: path)?
     .byPreparingForDisplay()
 ```

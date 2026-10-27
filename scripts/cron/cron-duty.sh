@@ -105,7 +105,7 @@ row_line() { # <file> -> "<verdict>\t<render>"
 
 cmd_check() {
   local slug="${1:?usage: cron-duty.sh check <slug>}"
-  [ -f "$DIR/$slug.json" ] || { printf 'UNARMED %s — no record\n' "$slug"; exit 1; }
+  [ -f "$DIR/$slug.json" ] || { printf 'UNARMED %s: no record\n' "$slug"; exit 1; }
   local line; line=$(row_line "$DIR/$slug.json")
   printf '%s\n' "${line#*$'\t'}"
   [ "${line%%$'\t'*}" = "LIVE" ] || exit 1

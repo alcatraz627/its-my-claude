@@ -93,7 +93,7 @@
 :root.light .scanline-overlay {
   display: none;
 }
-/* Tone down neon text glow in light mode — bright on white is distracting */
+/* Tone down neon text glow in light mode: bright on white is distracting */
 :root.light h1,
 :root.light h2,
 :root.light h3,
@@ -435,7 +435,7 @@ body {
   min-width: 0;
 }
 
-/* Width overrides — !important to beat shared-base defaults */
+/* Width overrides: !important to beat shared-base defaults */
 .content.width-sm {
   max-width: 680px !important;
 }
@@ -749,7 +749,7 @@ h4 {
   color: var(--text-muted);
 }
 
-/* ── Horizontal rule — animated gradient ─────────────────────────────────── */
+/* ── Horizontal rule: animated gradient ─────────────────────────────────── */
 hr {
   border: none;
   height: 1px;

@@ -69,7 +69,7 @@ block() {
     exit 0
   fi
   bash "$WARN" --hook guard-system-dir-writes --action block --heeded unknown >/dev/null 2>&1 || true
-  jq -cn --arg r "🛑 SYSTEM-DIR WRITE GUARD — refusing a destructive write to a system directory.
+  jq -cn --arg r "🛑 SYSTEM-DIR WRITE GUARD: refusing a destructive write to a system directory.
 
 $1
 

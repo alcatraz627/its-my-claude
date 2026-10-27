@@ -71,7 +71,7 @@ if [ -n "$H1_LINE" ]; then
      echo "$NEXT_CONTENT" | grep -qE '^[[:space:]]*(#|>)'; then
     ok "H1 is single-line"
   else
-    fail "H1 at line $H1_LINE appears to wrap to line $NEXT_LINE — markdown renders second line as body text. Keep H1 on one line."
+    fail "H1 at line $H1_LINE appears to wrap to line $NEXT_LINE: markdown renders second line as body text. Keep H1 on one line."
   fi
 else
   fail "no H1 heading found (must have a '# <title>' line)"
@@ -80,7 +80,7 @@ fi
 # ─── 3. No ellipsis in tables ────────────────────────────────────
 # Strong signal of pre-rendered output (truncated cell labels like "What I assu…")
 if grep -nE '\|.*…' "$RCA" >/dev/null; then
-  fail "ellipsis (…) found inside a table — this is the signature of TTY-rendered output saved as source. Tables should be written as plain markdown: \`| col | col |\\n|---|---|\\n| val | val |\`"
+  fail "ellipsis (…) found inside a table: this is the signature of TTY-rendered output saved as source. Tables should be written as plain markdown: \`| col | col |\\n|---|---|\\n| val | val |\`"
   grep -nE '\|.*…' "$RCA" | head -3 | sed 's/^/      /' >&2
 else
   ok "no ellipsis in tables (no pre-rendered output detected)"
@@ -95,7 +95,7 @@ INDENTED=$(awk '/^  [^ ]/ { n++ } END { print n+0 }' "$RCA")
 if [ "$TOTAL" -gt 10 ] && [ "$INDENTED" -gt 0 ]; then
   RATIO=$((100 * INDENTED / TOTAL))
   if [ "$RATIO" -gt 50 ]; then
-    fail "$RATIO% of content lines start with leading whitespace — signature of TTY-rendered output saved as source. Write plain markdown, don't pipe through renderers before saving."
+    fail "$RATIO% of content lines start with leading whitespace: signature of TTY-rendered output saved as source. Write plain markdown, don't pipe through renderers before saving."
   else
     ok "leading-indent ratio: $RATIO% (acceptable)"
   fi
@@ -116,10 +116,10 @@ if [ -n "$PROC_LINE" ]; then
   if [ "$NUMBERED" -le 1 ]; then
     ok "Procedure has $NUMBERED numbered check(s) (template specifies single check)"
   else
-    fail "Procedure section has $NUMBERED numbered steps — template specifies 'the single at-action-time check that would have prevented this'. Collapse to one runnable check, OR use a blockquote (>) for the single procedure."
+    fail "Procedure section has $NUMBERED numbered steps: template specifies 'the single at-action-time check that would have prevented this'. Collapse to one runnable check, OR use a blockquote (>) for the single procedure."
   fi
 else
-  fail "no '## Procedure' section found — template requires it"
+  fail "no '## Procedure' section found: template requires it"
 fi
 
 # ─── 6. Required sections present ────────────────────────────────

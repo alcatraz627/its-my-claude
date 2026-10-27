@@ -331,7 +331,7 @@ For lists with thousands of items, consider:
 
 ### Don't Use Array Index as Page Number
 ```swift
-// ❌ Fragile — breaks if items are filtered or reordered
+// ❌ Fragile: breaks if items are filtered or reordered
 let page = items.count / pageSize
 
 // ✅ Track page number explicitly

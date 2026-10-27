@@ -76,7 +76,7 @@ cat <<'NUDGE'
 [affirm-nudge] User language suggests affirmation. If the choice you just made was
 non-obvious / surprising / counter to a default, consider /affirm:
   1. Identify what you did (one sentence) and what the default would have been.
-  2. Invoke /affirm — the skill captures the trigger condition + at-action-time check.
-Bar is HIGH — only log if a future agent might not repeat without an external nudge.
+  2. Invoke /affirm: the skill captures the trigger condition + at-action-time check.
+Bar is HIGH: only log if a future agent might not repeat without an external nudge.
 Mute: touch ~/.claude/atone/.affirm-nudge-off
 NUDGE

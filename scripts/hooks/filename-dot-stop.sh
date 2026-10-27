@@ -77,7 +77,7 @@ if ! hook_loop_check "$MARK" "$prose"; then
   exit 0
 fi
 
-reason="⛔ FILE PATH FOLLOWED BY A PERIOD — Ghostty auto-links file paths in the terminal, and a period right after the path gets swallowed into the link, so the path is NOT clickable and the user has to ask for it again.
+reason="⛔ FILE PATH FOLLOWED BY A PERIOD: Ghostty auto-links file paths in the terminal, and a period right after the path gets swallowed into the link, so the path is NOT clickable and the user has to ask for it again.
 
 Offending line(s):
 $hit

@@ -1,5 +1,5 @@
 /**
- * Neon cyberpunk report — interactive JS
+ * Neon cyberpunk report: interactive JS
  * Uses window.__RPT namespace for shared modules.
  * Custom: neon accent cycling (cyan/magenta/pink), sidebar tracking,
  * print button, smooth scroll.

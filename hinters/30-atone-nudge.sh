@@ -93,7 +93,7 @@ for p in patterns:
   if [ "$CLEAR_KEYWORD" = "clear" ]; then
     rm -f "$MARKER" 2>/dev/null || true
     cat <<'EOF'
-[atone-nudge] Marker cleared — user signaled this wasn't a correction.
+[atone-nudge] Marker cleared: user signaled this wasn't a correction.
 EOF
     # Don't fall through to standard nudge: the user is explicitly disclaiming.
     exit 0
@@ -105,7 +105,7 @@ if [ -f "$MARKER" ] && command -v jq >/dev/null 2>&1; then
   TURNS_UNADDRESSED=$(jq -r '.turns_unaddressed // 0' "$MARKER" 2>/dev/null)
   SNIPPET=$(jq -r '.correction_snippet // ""' "$MARKER" 2>/dev/null | head -c 120)
   case "$TURNS_UNADDRESSED" in
-    0) ;;  # fresh marker — no escalation yet; standard nudge will re-emit below
+    0) ;;  # fresh marker: no escalation yet; standard nudge will re-emit below
     1)
       cat <<EOF
 [atone-nudge:reminder] You mentioned a correction last turn and didn't /atone.
@@ -117,7 +117,7 @@ EOF
       ;;
     2)
       cat <<EOF
-[atone-nudge:escalation-2] Two turns without /atone — this is the §1.5 hole.
+[atone-nudge:escalation-2] Two turns without /atone: this is the §1.5 hole.
   prior: "$SNIPPET"
   either invoke /atone NOW, or:
     - "never mind" to clear (false-positive)
@@ -176,7 +176,7 @@ fi
 cat <<'NUDGE'
 [atone-nudge] User language suggests a correction. Before proceeding:
   1. Identify the specific mistake (one sentence).
-  2. Invoke /atone — gathers context, classifies severity, writes structured entry.
+  2. Invoke /atone: gathers context, classifies severity, writes structured entry.
   3. Then apply the fix.
 If this isn't a correction, say "never mind" or "that was fine" to clear the marker.
 Mute the pipeline entirely: touch ~/.claude/atone/.nudge-off

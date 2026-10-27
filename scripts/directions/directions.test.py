@@ -116,8 +116,8 @@ variant("- `A1`: %s, [`src/real.py`](../../src/real.py)." % SHA, "- `A1`: deadbe
         "✅ whose proof does not exist is caught")
 variant("| A doc-only row with proof |", "| A row with %s in it |" % SHA, "proof-in-row", "a commit in a row is caught")
 variant("| Ship the second change |", "| %s |" % ("word " * 25), "row-long", "a paragraph in a row is caught")
-variant("| stays shipped |", "| — |", "ask-no-default", "an ask with no default is caught")
-found, rc = lint(GOOD.replace("| Read the reply on PR 12 and say keep or revert |", "| — |"))
+variant("| stays shipped |", "| \u2014 |", "ask-no-default", "an ask with no default is caught")
+found, rc = lint(GOOD.replace("| Read the reply on PR 12 and say keep or revert |", "| \u2014 |"))
 check("an ask with an empty need is an error", "ask-no-need" in codes(found, "error") and rc == 1, str(codes(found)))
 found, rc = lint(GOOD.replace("| id | ask | what I need from you | if you say nothing |\n| --- | --- | --- | --- |\n"
                               "| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |",
@@ -160,7 +160,7 @@ check("an ask whose row is not 🔴 is a warning", "ask-row-state" in codes(foun
 many = "\n".join("| `B%d` | 🟢 | Row %d |" % (i, i) for i in range(9))
 found, _ = lint(GOOD.replace("| `A2` | ✅ | 💭 A row the agent inferred |", many))
 check("more than eight rows under a goal is a warning", "too-many-rows" in codes(found, "warn"), str(codes(found)))
-found, _ = lint(GOOD.replace("| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |", "| `#2 to #3` | Look | Say which | — |"))
+found, _ = lint(GOOD.replace("| `#4` | Look at the new reply | Read the reply on PR 12 and say keep or revert | stays shipped |", "| `#2 to #3` | Look | Say which | \u2014 |"))
 ids = [f["ids"] for f in found if f["code"] == "ask-no-default"]
 check("a range inside one pair of backticks reads as each id", ids == [["#2", "#3"]], str(ids))
 
@@ -187,7 +187,7 @@ S = {"session_id": "sess0001", "cwd": REPO}
 hook("hook-post", dict(S, tool_name="Edit", tool_input={"file_path": F}))
 check("an edit that adds nothing new lets the turn end", hook("hook-stop", S) == "")
 hook("hook-post", dict(S, tool_name="Edit", tool_input={"file_path": F}))
-write(open(F).read().replace("| stays shipped |", "| — |"))
+write(open(F).read().replace("| stays shipped |", "| \u2014 |"))
 out = hook("hook-stop", S)
 check("an error this turn added holds the turn", '"block"' in out and "owner says nothing" in out, out)
 check("and the old error is not blamed on it", "goal record says" not in out, out)

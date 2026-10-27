@@ -120,7 +120,7 @@ fi
 # ── Summary ──────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-printf "  std::claude test_scripts.sh — %d passed, %d failed\n" "$passed" "$failed"
+printf "  std::claude test_scripts.sh: %d passed, %d failed\n" "$passed" "$failed"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 [[ $failed -gt 0 ]] && exit 1

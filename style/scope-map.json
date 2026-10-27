@@ -11,7 +11,7 @@
     { "match": "artifact:user-facing-report",                                    "tier": "heavy",  "note": "reports shown to the user or filed as a 'main' thing; includes assets/reports/** and .claude/output/** report deliverables" },
     { "match": "path:**/{README,USAGE,MIGRATION,GUIDEBOOK}*.md",                 "tier": "heavy",  "note": "user: claude-owned projects mostly exempt, 'but for their README.md / USAGE.md / MIGRATION.md / GUIDEBOOK.md, I absolutely care'" },
     { "match": "artifact:magi-final-synthesis",                                  "tier": "heavy",  "note": "user: 'absolutely needs to be tone curated'; synthesis prompt derives tone from thesaurus digest, never from intermediate artifacts" },
-    { "match": "artifact:magi-intermediate",                                     "tier": "off",    "note": "user: 'however the agent outputs them' — unless they would inform the final report's tone" },
+    { "match": "artifact:magi-intermediate",                                     "tier": "off",    "note": "user: 'however the agent outputs them': unless they would inform the final report's tone" },
     { "match": "artifact:code-comments",                                         "tier": "comment-minimal" },
     { "match": "path:**/docs/**",                                                "tier": "medium", "note": "user: 'can have some flair but understandability without being boring'" },
     { "match": "project:claude-owned",                                           "tier": "off",    "note": "user: 'Projects where claude owns it mostly, I really don't care' (doc exceptions matched above)" },

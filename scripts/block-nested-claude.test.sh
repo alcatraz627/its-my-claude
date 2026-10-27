@@ -29,7 +29,7 @@ NEST="$GCC/$C"
 PROJ="/tmp/some-project"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 
 verdict(){ # verdict <json> -> block|allow
   local rc

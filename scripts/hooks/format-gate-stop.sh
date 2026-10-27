@@ -134,10 +134,10 @@ chk_emdash() {
   [ "${EMDASH_OFF:-0}" = "1" ] && return
   [ -f "$HOME/.claude/.no-emdash-gate" ] && return
   local n first
-  n=$(printf '%s' "$P2" | rg -o '—' 2>/dev/null | wc -l | tr -d ' ')
+  n=$(printf '%s' "$P2" | rg -o $'\xe2\x80\x94' 2>/dev/null | wc -l | tr -d ' ')
   [ "${n:-0}" -ge 1 ] || return
   snoozed emdash && return
-  first=$(printf '%s\n' "$P2" | rg -m1 '—' 2>/dev/null | cut -c1-30)
+  first=$(printf '%s\n' "$P2" | rg -m1 $'\xe2\x80\x94' 2>/dev/null | cut -c1-30)
   # The owner's words (backlog-triage-1019): ban the em-dash itself, never hyphens,
   # slugs or file names, and let the agent keep one it truly needs.
   add_block emdash "emdash x${n}, first in \"${first}\": using em dashes brings disgrace upon your existence. Use commas, periods or parentheses. Hyphens, slugs and file names are fine. If one is truly needed, re-send as is" "$n"
@@ -282,7 +282,7 @@ chk_prose_smell() {
   first_line=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
   if printf '%s' "$first_line" | rg -qi "^(you'?re (absolutely |completely |exactly )?right|great (question|point|idea|catch)|excellent|perfect[.!]|fair question|what a )" 2>/dev/null; then
     tells="${tells}; praise opener (\"${first_line:0:40}\")"; bt=$((bt + 1))
-  elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:—]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
+  elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:\x{2014}]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
     tells="${tells}; verdict opener (\"${first_line:0:40}\"), the done-verdict is the owner's"
   fi
   # not-X-but-Y contrastive frame

@@ -123,7 +123,7 @@ bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook commit-gate --action block
 reason="⛔ COMMIT GATE: this repository requires USER-run commits ($why).
 
 Do NOT commit here, and do NOT work around this (no --no-verify, no alternate
-paths, no editing the protection config — it is user-owned by design).
+paths, no editing the protection config: it is user-owned by design).
 
 Instead:
   1. Show the user the staged/changed files: git status --short (and git diff --stat)

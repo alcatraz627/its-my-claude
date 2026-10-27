@@ -53,7 +53,7 @@ check BLOCK "gh extension install foo/bar"
 # but `command <cli>` WITHOUT -v actually RUNS it: a write must still gate:
 check BLOCK "command gh pr merge 123"
 
-echo "=== EVERY WRITE GATED (gate_all_writes — even dev/preview writes BLOCK) ==="
+echo "=== EVERY WRITE GATED (gate_all_writes: even dev/preview writes BLOCK) ==="
 check BLOCK "render deploy --env staging"
 check BLOCK "vercel deploy --target preview"
 check BLOCK "vercel deploy"
@@ -64,7 +64,7 @@ check BLOCK "render deploy --production"
 check BLOCK "render restart --env production"
 check BLOCK "vercel deploy --prod"
 
-echo "=== UNKNOWN-ENV WRITES (expect BLOCK — treated as prod) ==="
+echo "=== UNKNOWN-ENV WRITES (expect BLOCK: treated as prod) ==="
 check BLOCK "render deploy"
 check BLOCK "render restart srv-123"
 check BLOCK "render secret set FOO=bar"
@@ -174,7 +174,7 @@ echo "=== gh api READ still allowed ==="
 check ALLOW "gh api /user"
 check ALLOW "gh api /repos/o/r/pulls"
 
-echo "=== REAL INCIDENT REGRESSIONS (last-2-day transcripts — all expect ALLOW) ==="
+echo "=== REAL INCIDENT REGRESSIONS (last-2-day transcripts: all expect ALLOW) ==="
 # FP-1: gh reads with --jq/--json (shlex-breaking): were wrongly blocked
 check ALLOW "gh run view 26197629560 --json status,conclusion,jobs --jq '{s: .status}'"
 check ALLOW "gh run list --branch gh-pages-cleanup/aakarsh --limit 7 --json status"
@@ -191,7 +191,7 @@ check ALLOW "cd \"\$(git rev-parse --show-toplevel)\" && gh pr view 180 --json l
 # bash -c wrapping a READ should now pass (recursion), not block
 check ALLOW 'bash -c "gh pr list"'
 
-echo "=== SKEPTICAL-REVIEW FALSE-NEGATIVES (2026-05-22 — all expect BLOCK) ==="
+echo "=== SKEPTICAL-REVIEW FALSE-NEGATIVES (2026-05-22: all expect BLOCK) ==="
 # read-namespace prefix laundering a write subcommand
 check BLOCK "render env-vars set FOO=bar"
 check BLOCK "render services delete srv-1"
@@ -206,7 +206,7 @@ check BLOCK "vercel deploy --prod=true"
 check BLOCK "vercel deploy --target production"
 check BLOCK "vercel deploy --target=production"
 
-echo "=== NAMESPACE READS must STILL pass (no over-correction back — expect ALLOW) ==="
+echo "=== NAMESPACE READS must STILL pass (no over-correction back: expect ALLOW) ==="
 check ALLOW "render services"
 check ALLOW "render env-vars"
 check ALLOW "render deploys"
@@ -214,7 +214,7 @@ check ALLOW "render logs --tail"
 check BLOCK "vercel deploy"
 check BLOCK "vercel deploy --target preview"
 
-echo "=== VERCEL NOUN-LS READS (2026-06-01 domains-ls false-block — expect ALLOW) ==="
+echo "=== VERCEL NOUN-LS READS (2026-06-01 domains-ls false-block: expect ALLOW) ==="
 check ALLOW "vercel domains ls"
 check ALLOW "vercel certs ls"
 check ALLOW "vercel dns ls"
@@ -224,7 +224,7 @@ check BLOCK "vercel domains add x.com"
 check BLOCK "vercel domains rm x.com"
 check BLOCK "vercel secrets add API x"
 
-echo "=== QUOTED-PIPE FALSE-POSITIVE (2026-05-31 bug — expect ALLOW) ==="
+echo "=== QUOTED-PIPE FALSE-POSITIVE (2026-05-31 bug: expect ALLOW) ==="
 check ALLOW 'rg -i "declare|render|workspace|automat" /tmp/x'
 check ALLOW 'grep -E "render|vercel|gh" file.txt'
 check ALLOW 'rg "a|b|render" .'
@@ -272,7 +272,7 @@ shim_check() {
 }
 # Skip if user has the hook disabled (marker present)
 if [ -f "$HOME/.claude/cli-gating.off" ]; then
-  echo "  (skipped — cli-gating.off present; remove it to run shim tests)"
+  echo "  (skipped: cli-gating.off present; remove it to run shim tests)"
 else
   shim_check 0 "gh pr list"
   shim_check 0 "render services"

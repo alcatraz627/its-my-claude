@@ -47,9 +47,9 @@ if [ -d "$STATE_DIR" ]; then
       # then reads as "your session died" (csync, 2026-09-07, ledger 5). Name it.
       case "$prompt" in
         "/core-dump mini --no-prompt --name retroactive-"*)
-          STALE_TURNS+=("$sid @ $ts — a retro-dump run for that uuid, killed before it wrote (see ~/.claude/logs/retro-dump.log); not a session of yours") ;;
+          STALE_TURNS+=("$sid @ $ts: a retro-dump run for that uuid, killed before it wrote (see ~/.claude/logs/retro-dump.log); not a session of yours") ;;
         *)
-          STALE_TURNS+=("$sid @ $ts — \"$prompt\"") ;;
+          STALE_TURNS+=("$sid @ $ts: \"$prompt\"") ;;
       esac
     fi
   done < <(find "$STATE_DIR" -maxdepth 1 -name '*.json' -type f 2>/dev/null)
@@ -94,7 +94,7 @@ if [ -z "${I_DREAM_CHILD:-}" ] && mkdir -p "$ACK_DIR" 2>/dev/null; then
 fi
 
 # Build the hint
-MSG="Previous session(s) did not close cleanly — possible crash, API error, or abrupt termination."
+MSG="Previous session(s) did not close cleanly: possible crash, API error, or abrupt termination."
 if [ ${#STALE_TURNS[@]} -gt 0 ]; then
   MSG="$MSG"$'\n\nOrphan turn-state files (turn started but never finished):'
   for t in "${STALE_TURNS[@]}"; do

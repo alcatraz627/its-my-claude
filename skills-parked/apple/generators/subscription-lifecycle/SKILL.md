@@ -265,7 +265,7 @@ switch state {
 case .active(let renewalDate):
     print("Active until \(renewalDate)")
 case .inGracePeriod(let expiresIn):
-    print("Payment issue — \(expiresIn) days to fix")
+    print("Payment issue: \(expiresIn) days to fix")
 case .inBillingRetry:
     print("Apple retrying payment")
 case .expired(let reason):

@@ -20,7 +20,7 @@ LOCK_FILE="$AFFIRM_DIR/events.jsonl.lock"
 mkdir -p "$AFFIRM_DIR" 2>/dev/null || true
 
 show_help() {
-  printf '\n  %s%saffirm%s %s—%s Affirmed-good-behavior tracker\n' \
+  printf '\n  %s%saffirm%s %s-%s Affirmed-good-behavior tracker\n' \
     "$C_BOLD" "$C_GREEN" "$C_RESET" "$C_DIM" "$C_RESET"
   printf '  %sLog non-obvious approaches the user explicitly approved. Sibling of atone.sh.%s\n' \
     "$C_DIM" "$C_RESET"

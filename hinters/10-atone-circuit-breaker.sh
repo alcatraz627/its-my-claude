@@ -117,7 +117,7 @@ while IFS=$'\t' read -r slug count stakes; do
     if [ -n "$qual" ]; then qual="$qual, cluster $cluster"; else qual="cluster $cluster"; fi ;;
   esac
 
-  OUT="${OUT}⛔ [atone-circuit-breaker] MOMENTUM STOP — \`${slug}\` recorded ${count}× this session (${qual}).
+  OUT="${OUT}⛔ [atone-circuit-breaker] MOMENTUM STOP: \`${slug}\` recorded ${count}× this session (${qual}).
    The second same-session occurrence is the documented repeat signature: you atoned for this and slipped again. Awareness is saturated; the missing piece is a hard stop, so here is one.
    Before your next edit, claim, or tool action:
      1. STOP and surface a one-line plan for the current step. State how it differs from the prior slip.

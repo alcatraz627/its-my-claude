@@ -85,7 +85,7 @@ Add the answered question to the "Example questions" section in SKILL.md:
 If you discovered effective Grep patterns, add them to Phase 3:
 
 ```bash
-# Example — if this project uses a specific auth pattern:
+# Example: if this project uses a specific auth pattern:
 grep -r "authService\|loginUser\|authenticateUser"
 ```
 

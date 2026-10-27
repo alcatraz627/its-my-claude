@@ -26,5 +26,5 @@ COUNT=$(jq -r '.unchecked_todos | length' "$PENDING" 2>/dev/null || echo 0)
 
 PREVIEW=$(jq -r '.unchecked_todos[:3] | .[]' "$PENDING" 2>/dev/null | sed 's/^/  - /')
 rm -f "$PENDING" 2>/dev/null
-printf '[sync-todos] %d workspace todo(s) carried over — seed them into your task list via TaskCreate at the start of your response:\n%s\n' \
+printf '[sync-todos] %d workspace todo(s) carried over: seed them into your task list via TaskCreate at the start of your response:\n%s\n' \
   "$COUNT" "$PREVIEW"

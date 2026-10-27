@@ -49,8 +49,8 @@ case "$count" in *[!0-9]*|"") count=0 ;; esac
 [ "$count" -ge 2 ] && exit 0
 echo $((count + 1)) > "$FIRES" 2>/dev/null || true
 final=""
-[ $((count + 1)) -ge 2 ] && final=" (Going quiet on this now — if this harness has no Task tool, keep todos in the session workspace doc instead.)"
+[ $((count + 1)) -ge 2 ] && final=" (Going quiet on this now: if this harness has no Task tool, keep todos in the session workspace doc instead.)"
 
 printf '{"ts":"%s","sid":"-","event":"nudge:heartbeat turns=%s fire=%s"}\n' \
   "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$turns" "$((count + 1))" >> "$HOME/.claude/logs/sync-todos.log" 2>/dev/null || true
-printf '[task-sync] Task list unchanged for %s turns while work continued — if the focus has moved, reconcile it now (TaskCreate/TaskUpdate); it auto-syncs to your notes + memory. Keeping it current silences this.%s\n' "$turns" "$final"
+printf '[task-sync] Task list unchanged for %s turns while work continued: if the focus has moved, reconcile it now (TaskCreate/TaskUpdate); it auto-syncs to your notes + memory. Keeping it current silences this.%s\n' "$turns" "$final"

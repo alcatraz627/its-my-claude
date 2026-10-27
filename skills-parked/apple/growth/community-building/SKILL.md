@@ -293,8 +293,8 @@ Present community strategy as:
 # Community Building Plan: [App Name]
 
 ## Platform Strategy
-**Primary:** [Platform] — [Why]
-**Secondary:** [Platform] — [Why]
+**Primary:** [Platform]: [Why]
+**Secondary:** [Platform]: [Why]
 
 ## Building in Public
 **Transparency level:** [Fully/Mostly/Selectively/Journey-focused]

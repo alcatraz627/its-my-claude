@@ -43,7 +43,7 @@ msg_lines() { awk -F'\t' 'NF>=4 {print "  • " $4}'; }
 
 block_hits=$(printf '%s' "$payload" | "$LINT" --path "$file_path" --block-only 2>/dev/null)
 if [ -n "$block_hits" ]; then
-  reason="⚠ atone-lint BLOCK — this edit to ${file_path} introduces a smell you have corrected before:
+  reason="⚠ atone-lint BLOCK: this edit to ${file_path} introduces a smell you have corrected before:
 $(printf '%s' "$block_hits" | msg_lines)
 
 Blocked at write-time because it recurs. Conform to the sibling inline pattern
@@ -60,7 +60,7 @@ fi
 all_hits=$(printf '%s' "$payload" | "$LINT" --path "$file_path" 2>/dev/null)
 if [ -n "$all_hits" ]; then
   hint_lines=$(printf '%s' "$all_hits" | msg_lines)
-  msg="[hint] atone-lint — review this edit ($file_path):
+  msg="[hint] atone-lint: review this edit ($file_path):
 $hint_lines
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
   jq -cn --arg c "$msg" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$c}}' 2>/dev/null || true

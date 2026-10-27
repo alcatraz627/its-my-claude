@@ -2,7 +2,7 @@
 """Extract one DomainEvent per Claude Code session into sessions-domain/events.jsonl.
 
 Run by `i-dream dream-pass` (or `i-dream consolidate`) via the manifest's
-[consolidation].script field.  Safe to run repeatedly — sessions already in
+[consolidation].script field.  Safe to run repeatedly: sessions already in
 _seen.json are skipped.  On first run the extraction is capped at the 30
 most-recent sessions to avoid delivering a giant initial delta to the LLM.
 

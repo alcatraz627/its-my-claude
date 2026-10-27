@@ -54,7 +54,7 @@ references, and outdated instructions with per-skill diffs, then applies approve
 ### Example 4: Workflow composition + skill building
 
 ```
-/improve-config 'using existing skills, here is a task: <description> — compose a workflow and list any missing skills, then build them'
+/improve-config 'using existing skills, here is a task: <description>: compose a workflow and list any missing skills, then build them'
 ```
 
 Maps the task onto existing skills, designs a multi-skill execution workflow, identifies

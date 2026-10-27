@@ -738,7 +738,7 @@ struct WebhookFeedbackSubmitter: FeedbackSubmitting {
     let session: URLSession
     let additionalHeaders: [String: String]
 
-    /// Default submitter — configure this URL for your backend.
+    /// Default submitter: configure this URL for your backend.
     static let `default` = WebhookFeedbackSubmitter(
         url: URL(string: "https://your-api.example.com/feedback")!
     )
@@ -843,7 +843,7 @@ final class EmailFeedbackSubmitter: NSObject, FeedbackSubmitting, MFMailComposeV
             let composer = MFMailComposeViewController()
             composer.mailComposeDelegate = self
             composer.setToRecipients([recipient])
-            composer.setSubject("\(subject) — \(entry.category.displayName)")
+            composer.setSubject("\(subject): \(entry.category.displayName)")
 
             let body = """
             Category: \(entry.category.displayName)
@@ -897,7 +897,7 @@ final class EmailFeedbackSubmitter: NSObject, FeedbackSubmitting, MFMailComposeV
     }
 
     private func openMailtoFallback(entry: FeedbackEntry) throws {
-        let subject = "\(subject) — \(entry.category.displayName)"
+        let subject = "\(subject): \(entry.category.displayName)"
             .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         let body = """
         Category: \(entry.category.displayName)
@@ -940,7 +940,7 @@ final class EmailFeedbackSubmitter: FeedbackSubmitting {
     }
 
     func submit(_ entry: FeedbackEntry) async throws {
-        let subject = "\(subject) — \(entry.category.displayName)"
+        let subject = "\(subject): \(entry.category.displayName)"
         let body = """
         Category: \(entry.category.displayName)
         Rating: \(entry.rating)/5
@@ -1168,7 +1168,7 @@ enum DeviceDiagnostics {
 
         return "\(percentage)% \(stateString)".trimmingCharacters(in: .whitespaces)
         #elseif os(macOS)
-        // macOS battery info requires IOKit — return N/A for simplicity
+        // macOS battery info requires IOKit: return N/A for simplicity
         return "N/A (macOS)"
         #else
         return "N/A"

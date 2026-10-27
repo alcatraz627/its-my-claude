@@ -163,7 +163,7 @@ cmd_start() {
                 _start_watchdog
                 return 0
             fi
-            gum_info "Ollama running with $loaded — switching to $model"
+            gum_info "Ollama running with $loaded: switching to $model"
             cmd_switch "$model"
             return $?
         fi
@@ -191,7 +191,7 @@ cmd_start() {
     local models
     models=$(get_available_models 2>/dev/null || echo "")
     if ! echo "$models" | grep -q "^${model}"; then
-        gum_info "Pulling $model (first run — may take a while)..."
+        gum_info "Pulling $model (first run: may take a while)..."
         ollama pull "$model" 2>&1
     fi
 
@@ -229,7 +229,7 @@ cmd_stop() {
     sleep 1
 
     if is_ollama_running; then
-        gum_warn "Still running — sending SIGKILL"
+        gum_warn "Still running: sending SIGKILL"
         pkill -9 -f 'ollama serve' 2>/dev/null
         sleep 1
     fi
@@ -305,7 +305,7 @@ cmd_switch() {
     fi
 
     if ! is_ollama_running; then
-        gum_info "Ollama not running — starting with $model"
+        gum_info "Ollama not running: starting with $model"
         cmd_start "$model"
         return $?
     fi
@@ -528,7 +528,7 @@ cmd_ensure() {
                             local models model
                             models=$(ollama list 2>/dev/null | tail -n +2 | awk '{print $1}')
                             if [[ -z "$models" ]]; then
-                                gum_warn "No downloaded models — using $DEFAULT_MODEL" >&2
+                                gum_warn "No downloaded models: using $DEFAULT_MODEL" >&2
                                 cmd_start "$DEFAULT_MODEL" >&2
                                 return $?
                             fi
@@ -575,7 +575,7 @@ cmd_idle_check() {
         cmd_stop
     else
         local remaining=$(( (threshold - idle_sec) / 60 ))
-        gum_info "Idle ${idle_sec}s — auto-stop in ~${remaining}m"
+        gum_info "Idle ${idle_sec}s: auto-stop in ~${remaining}m"
     fi
 }
 

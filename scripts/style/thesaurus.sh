@@ -92,11 +92,11 @@ case "$cmd" in
         | join("\n")' "$LEDGER")
       if [ -n "$body" ]; then
         {
-          echo "# thesaurus digest — $class (cap $DIGEST_CAP, active only)"
+          echo "# thesaurus digest: $class (cap $DIGEST_CAP, active only)"
           echo ""
           echo "$body"
           echo ""
-          echo "_Derived from style/thesaurus.jsonl — regen: thesaurus.sh digest. Do not hand-edit._"
+          echo "_Derived from style/thesaurus.jsonl: regen: thesaurus.sh digest. Do not hand-edit._"
         } > "$out"
         echo "wrote $out ($(printf '%s\n' "$body" | wc -l | tr -d ' ') entries)"
       else
@@ -137,7 +137,7 @@ case "$cmd" in
     fi
     GDECAY="$HOME/.claude/scripts/style/glossary-decay.sh"
     if [ -x "$GDECAY" ]; then
-      echo "== glossary vocabulary dormancy (decay review — mig 0036) =="
+      echo "== glossary vocabulary dormancy (decay review: mig 0036) =="
       "$GDECAY"
     fi
     ;;

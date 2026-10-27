@@ -43,7 +43,7 @@ test -f .fiber-snatcher/config.json   # if absent: offer `fs init`, don't instal
 fs doctor                       # end-to-end health
 fs page                         # semantic snapshot: route + interactables with refs
 fs click "Export All Sheets"    # intent target; auto-waits; returns a mutation/surface digest
-fs why <ref>                    # every identity signal for an unlabeled icon — incl. what a
+fs why <ref>                    # every identity signal for an unlabeled icon: incl. what a
                                 #   CLOSED dropdown/tooltip opens, read from fiber props (no click)
 fs state <ref|css>              # fiber state/props/hooks of the nearest stateful ancestor
 fs wait --settled|--url /re/|--gone <t>   # explicit waits when a verb's auto-wait isn't enough

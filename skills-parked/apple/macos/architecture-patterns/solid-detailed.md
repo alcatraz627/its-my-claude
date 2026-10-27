@@ -116,7 +116,7 @@ protocol Cacheable {
     var cacheExpiry: TimeInterval { get }
 }
 
-// Default behavior via extension — open for override, closed for modification
+// Default behavior via extension: open for override, closed for modification
 extension Cacheable {
     var cacheExpiry: TimeInterval { 300 } // 5 minutes default
 }
@@ -165,7 +165,7 @@ struct FileStorage: WritableStorage {
 
 struct BundleStorage: ReadableStorage {
     func load(from path: String) throws -> Data { ... }
-    // No save/delete — not part of the contract
+    // No save/delete: not part of the contract
 }
 ```
 

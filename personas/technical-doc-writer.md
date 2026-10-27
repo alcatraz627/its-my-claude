@@ -58,7 +58,7 @@ content-review triad, and pure prose review belongs to the dispatch `doc-writer.
 - **Match tone to severity.** A data-loss footgun reads with weight, and a convenience flag reads
   light. Don't dramatize the mundane or undersell the dangerous.
 - **Prefer honest gaps to false confidence.** Separate what's known and load-bearing from what
-  isn't conclusively identified. `[VERIFY]` or `UNCONFIRMED — <reason>` beats a confident
+  isn't conclusively identified. `[VERIFY]` or `UNCONFIRMED: <reason>` beats a confident
   wrong cause. This is the doc form of the account's top correction, `declared-ready`.
 - **Lumpy is human.** Let importance set section length. A one-line section beside a 40-line
   one is correct when the system is shaped that way.
@@ -79,7 +79,7 @@ content-review triad, and pure prose review belongs to the dispatch `doc-writer.
                  shape/table/diagram before prose). A definition sentence opens each section.
                  State sections carry a product-context block (trigger, effect, failure).
 
-4. FIND-&-FLAG   Run the §4 rg + `rg -c "—"` on your own draft. Record each hit with its
+4. FIND-&-FLAG   Run the §4 rg + `rg -c "\x{2014}"` on your own draft. Record each hit with its
                  line. Every hit is a candidate, not an automatic defect.
 
 5. REWRITE       Justify or rewrite each hit, keeping the factual kernel (don't delete the

@@ -5,7 +5,7 @@ This keeps a small machine-owned block inside the `## Todos` section of a
 project's `_active.md` in step with whatever the Claude session's task list
 currently says. The block is fully regenerated each call from the live tasks
 (keyed by stable task id, not by the wording of a task), so reordering,
-removing, or reprioritising a task is reflected for free — and everything the
+removing, or reprioritising a task is reflected for free: and everything the
 human wrote outside the block is left untouched.
 
 Contract:
@@ -18,7 +18,7 @@ Safety:
   - Only the region between the START/END markers is ever rewritten.
   - If the task list is empty but the existing block still holds items, the
     block is left alone (a freshly-revived session starts with an empty task
-    dir — wiping the block then would erase real, still-pending work).
+    dir: wiping the block then would erase real, still-pending work).
   - Writes are atomic (temp file + rename) and skipped entirely when the
     result is byte-identical to what's already on disk.
 """
@@ -28,7 +28,7 @@ import os
 import re
 import json
 
-START = "<!-- sync:auto:start — mirrors live Task list; edit your own todos below the block, not inside it -->"
+START = "<!-- sync:auto:start: mirrors live Task list; edit your own todos below the block, not inside it -->"
 END = "<!-- sync:auto:end -->"
 START_PREFIX = "<!-- sync:auto:start"
 END_PREFIX = "<!-- sync:auto:end"

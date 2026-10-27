@@ -62,7 +62,7 @@ else no "afterWrite re-reads for real, and the rail's refresh uses it (C5)" \
         "afterWrite body no longer drops the cache and re-loads, or refreshRail bypasses it"; fi
 if [ "$inval" = "7" ]; then ok "cache invalidations outside afterWrite are the ledgered seven (C5)"
 else no "cache invalidations outside afterWrite are the ledgered seven (C5)" \
-        "found $inval; a new one is a second path out of a write — route it through afterWrite or update the ledger AND this count"; fi
+        "found $inval; a new one is a second path out of a write: route it through afterWrite or update the ledger AND this count"; fi
 
 # C6: the editing core is layer 0, "every surface, no opt-out" (EDITOR-LAYERS.md),
 # and it was loaded by board.html alone. A page that builds a text surface loads
@@ -125,7 +125,7 @@ fi
 # A tooltip is the most human-facing prose in the app and the prose gate cannot
 # see string literals, so nothing caught an em-dash in one until the owner
 # hovered it. Budget is zero (rules/audience-aware-writing.md).
-hits=$(rg -n -o '(?:data-tip|dataset\.tip|tip:)[^,;]{0,24}"[^"]*[—–][^"]*"' \
+hits=$(rg -n -o '(?:data-tip|dataset\.tip|tip:)[^,;]{0,24}"[^"]*[\x{2014}–][^"]*"' \
        "$HERE"/*.html "$HERE"/*.js 2>/dev/null || true)
 if [ -z "$hits" ]; then ok "no em-dash in any tooltip (budget: zero)"
 else no "no em-dash in any tooltip (budget: zero)" "$hits"; fi

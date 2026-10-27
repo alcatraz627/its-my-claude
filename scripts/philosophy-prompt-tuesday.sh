@@ -17,7 +17,7 @@ mkdir -p "$(dirname "$LOG")"
 exec >> "$LOG" 2>&1
 echo "=== $(date -Iseconds) firing ==="
 
-INITIAL_PROMPT="Read the LAST section of ~/.claude/improvement-ideas.md (titled \"Prompt design with structured-goals → N-subagent generation → voting + independent pick\") and start the workflow on TaskList #53 — the philosophy poem/prose prompt for the mock pipeline llm arg. Meta-prompt first, then 5 subagents, then voting, then independent pick. Show both picks at the end."
+INITIAL_PROMPT="Read the LAST section of ~/.claude/improvement-ideas.md (titled \"Prompt design with structured-goals → N-subagent generation → voting + independent pick\") and start the workflow on TaskList #53: the philosophy poem/prose prompt for the mock pipeline llm arg. Meta-prompt first, then 5 subagents, then voting, then independent pick. Show both picks at the end."
 
 # Activate (or launch) Ghostty
 osascript <<APPLESCRIPT

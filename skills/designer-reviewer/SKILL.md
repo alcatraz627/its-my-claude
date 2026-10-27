@@ -156,7 +156,7 @@ For each visible issue, produce a finding in this format:
 
 ```
 [FINDING-N] <element or area>
-  Violation: FP-<N> — <rule name>
+  Violation: FP-<N>: <rule name>
   Observation: <what you see and why it's wrong, 1-2 sentences>
   Severity: critical | major | minor
   Confidence: high | medium | low
@@ -188,10 +188,10 @@ For each finding, produce a concrete fix. Fixes must be in CSS/HTML/token form, 
 ```
 
 Examples of good fixes:
-- `Change: Replace inline color with token — color: #ff4444 → color: var(--danger)`
-- `Change: Switch table font — font-family: Inter → font-family: 'JetBrains Mono', monospace`
-- `Change: Tighten row padding — padding: 16px 20px → padding: 4px 8px`
-- `Change: Background token — background: #000 → background: var(--bg) /* #1e1e1e */`
+- `Change: Replace inline color with token: color: #ff4444 → color: var(--danger)`
+- `Change: Switch table font: font-family: Inter → font-family: 'JetBrains Mono', monospace`
+- `Change: Tighten row padding: padding: 16px 20px → padding: 4px 8px`
+- `Change: Background token: background: #000 → background: var(--bg) /* #1e1e1e */`
 
 Every finding must have a corresponding fix. Do not generate orphaned findings.
 
@@ -202,7 +202,7 @@ Every finding must have a corresponding fix. Do not generate orphaned findings.
 List 3–6 things that are working well and should stay as they are. Format:
 
 ```
-[+] <element or pattern>: <why it's correct — which fingerprint rule it satisfies>
+[+] <element or pattern>: <why it's correct: which fingerprint rule it satisfies>
 ```
 
 This section prevents future reviewers (human or agent) from accidentally "fixing" things that are intentionally correct.
@@ -261,7 +261,7 @@ After outputting the critique, generate 2–4 insights about this run for future
 
 ```bash
 cat > /tmp/runtime-note-designer-reviewer.md << 'ENTRY'
-## designer-reviewer: reviewed <filename> — <YYYY-MM-DD HH:MM>
+## designer-reviewer: reviewed <filename>: <YYYY-MM-DD HH:MM>
 
 **Purpose:** Visual critique of <UI name / brief description>
 
@@ -281,7 +281,7 @@ bash ~/.claude/skills/shared/prepend-runtime-note.sh "designer-reviewer" /tmp/ru
 
 - **Read-only**: never modify the screenshot or any project files during a review
 - **No hallucinated code**: fixes must reference only what is visible or inferable from the screenshot; do not invent component names or file paths not shown
-- **Missing context**: if the screenshot is too low-resolution or cropped to assess a dimension, note it explicitly: `[SCORE-N: unable to assess — image resolution insufficient for font identification]`
+- **Missing context**: if the screenshot is too low-resolution or cropped to assess a dimension, note it explicitly: `[SCORE-N: unable to assess: image resolution insufficient for font identification]`
 - **Scope**: if the screenshot shows only a partial UI (a single component, a modal), note this and limit critique to what is visible; do not assume the rest of the UI is broken
 - **No design trends**: critique only against the 6 fingerprint rules, not against general design best practices or current industry trends that conflict with the user's aesthetic
 

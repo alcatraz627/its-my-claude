@@ -37,13 +37,13 @@ these commands are written to be run by a *simulation agent*, not executed here.
 # tearing down a previous one.
 PROJECT="${PROJECT:-$HOME/.claude/scratchpad/kanban-uxtest-todo-app}"
 mkdir -p "$PROJECT"
-REALROOT="$(cd "$PROJECT" && pwd -P)"   # canonical realpath — checkpoint pointers must match this exactly
+REALROOT="$(cd "$PROJECT" && pwd -P)"   # canonical realpath: checkpoint pointers must match this exactly
 CKROOT="$HOME/.claude/checkpoints"
 mkdir -p "$CKROOT"
 
 KSH() { bash "$HOME/.claude/scripts/kanban/kanban.sh" "$@"; }   # function, not a string: survives zsh's no-word-split
 
-# Card-id lookup by exact title (ids are content-hash — never hardcode them).
+# Card-id lookup by exact title (ids are content-hash: never hardcode them).
 # Assumes no fixture title contains the literal substrings "] " or " (".
 id_for() {
   KSH status --project "$PROJECT" --cards | grep -F "] $1 (" | awk '{print $1}'
@@ -55,7 +55,7 @@ urlenc() { python3 -c "import urllib.parse,sys;print(urllib.parse.quote(sys.argv
 # Kanban server port, read live via the CLI (not by reading server.json by hand).
 KPORT="$(KSH status --project "$PROJECT" | head -1 | grep -oE 'port [0-9]+' | grep -oE '[0-9]+')"   # no 2>/dev/null: a broken helper must fail loudly, not read as "server down"
 if [ -z "$KPORT" ]; then
-  echo "kanban server not configured/running — run: KSH check   (it prints the exact fix)"
+  echo "kanban server not configured/running: run: KSH check   (it prints the exact fix)"
   exit 1
 fi
 ```
@@ -77,7 +77,7 @@ action names which one.
 ```bash
 mkdir -p "$PROJECT/docs"
 cat > "$PROJECT/docs/plan.md" <<'EOF'
-# Todo App — Plan
+# Todo App: Plan
 
 ## In Progress
 - [ ] Build task list UI component
@@ -88,7 +88,7 @@ cat > "$PROJECT/docs/plan.md" <<'EOF'
 
 ## Backlog
 - [ ] OWNER REVIEW: confirm signup copy
-- [ ] Update onboarding flow copy — see [content brief](./onboarding-content-brief.md)
+- [ ] Update onboarding flow copy: see [content brief](./onboarding-content-brief.md)
 
 ## Parking Lot
 - [ ] Investigate GraphQL vs REST for API layer
@@ -112,7 +112,7 @@ EOF
 cat > "$PROJECT/docs/onboarding-content-brief.md" <<'EOF'
 # Onboarding content brief
 
-Copy direction for the onboarding flow. Plain reference doc, no checkboxes —
+Copy direction for the onboarding flow. Plain reference doc, no checkboxes:
 exists to prove the harvester scans every docs/*.md file even when a file
 contributes zero cards.
 EOF
@@ -149,7 +149,7 @@ EOF
   "Now" matches the active-lane keyword regex.
 - **Expect:** 1 card ("Wire up drag-and-drop reordering", lane active) with
   `subs: [{title:"Add drag handles to task rows", done:false}, {title:"Persist
-  new order to backend", done:true}]` — a `1/2` progress chip in the UI.
+  new order to backend", done:true}]`: a `1/2` progress chip in the UI.
 
 **1.4: `package.json`: doubles as the `/doc` 415 (non-md) fixture later**
 
@@ -199,7 +199,7 @@ EOF
 
 ```bash
 cat > "$PROJECT/_checkpoint-A.claude.md" <<'EOF'
-# Checkpoint — sprint 1 handoff
+# Checkpoint: sprint 1 handoff
 
 ## Pending Items
 - [ ] Wire the signup email verification flow
@@ -234,7 +234,7 @@ EOF
 
 ```bash
 cat > "$PROJECT/_checkpoint-B-stale.claude.md" <<'EOF'
-# Checkpoint — early spike (frozen)
+# Checkpoint: early spike (frozen)
 
 ## Pending Items
 - [ ] Old spike: evaluate websocket library for live sync
@@ -491,7 +491,7 @@ $KSH add "Write integration tests: delete & reorder task" --lane backlog --proje
 ```bash
 cat >> "$PROJECT/docs/plan.md" <<'EOF'
 
-## Sprint 2 — In Progress
+## Sprint 2: In Progress
 - [ ] Add CSV export for tasks
 - [ ] Add keyboard shortcuts to task list
 EOF
@@ -701,7 +701,7 @@ curl -s -o /dev/null -w '%{http_code}\n' "http://localhost:$KPORT/doc?path=$(url
 
 # traversal attempt starting INSIDE the project root, escaping it -> refusal
 # (403 when the escaped path exists, 404 when the ../ count overshoots at this
-# PROJECT depth and the target doesn't exist — BOTH are refusals; accept either)
+# PROJECT depth and the target doesn't exist: BOTH are refusals; accept either)
 curl -s -o /dev/null -w '%{http_code}\n' "http://localhost:$KPORT/doc?path=$(urlenc "$REALROOT/../journal.md")"
 
 # allowlisted but wrong extension -> 415
@@ -879,7 +879,7 @@ All verified green 2026-07-27 (incl. forced-unread branch + lane integration).
 ## Phase 13: terminal skin + usability bundle + tagged notes v1 probes (added 2026-07-27)
 
 ```bash
-# three-way unread consistency (@me excluded everywhere): these MUST agree —
+# three-way unread consistency (@me excluded everywhere): these MUST agree:
 KSH notes --unread --json --project "$PROJECT" | jq '[.notes[] | select(.unread)] | length'
 curl -s localhost:5106/api/boards | jq '.boards[] | select(.slug=="'$SLUG'") | .unread'
 echo '{"cwd":"'"$PROJECT"'"}' | bash ~/.claude/scripts/kanban/session-start-line.sh  # count in the line

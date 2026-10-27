@@ -22,7 +22,7 @@ mkdir -p "$ROOT/.claude/goals"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
-has(){ if printf '%s' "$2" | rg -q -- "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — no match for [$3]"; fi; }
+has(){ if printf '%s' "$2" | rg -q -- "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: no match for [$3]"; fi; }
 
 set_as(){ # set_as <sid> <by> <text>
   HOME="$ROOT" CLAUDE_CODE_SESSION_ID="$1" bash "$G" set --by "$2" "$3" 2>&1

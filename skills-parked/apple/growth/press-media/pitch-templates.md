@@ -19,15 +19,15 @@ Email templates for press and media outreach. Customize every template for each 
 Use for new app launches. Best sent 2-3 weeks before launch.
 
 ```
-Subject: [App Name] — [One-Sentence Value Proposition] (launching [date])
+Subject: [App Name]: [One-Sentence Value Proposition] (launching [date])
 
 Hi [First Name],
 
-I loved your recent piece on [their article/topic] — [brief, genuine comment showing you read it].
+I loved your recent piece on [their article/topic]: [brief, genuine comment showing you read it].
 
 I'm reaching out because I'm launching [App Name], a [category] app for [platform] that [one sentence explaining what it does and why it matters].
 
-[App Name] is different because [unique angle — privacy-first / solo developer story / innovative tech use / solves a specific problem]. [One sentence expanding on the story angle.]
+[App Name] is different because [unique angle: privacy-first / solo developer story / innovative tech use / solves a specific problem]. [One sentence expanding on the story angle.]
 
 Key details:
 - Launch date: [date]
@@ -35,7 +35,7 @@ Key details:
 - Platforms: [iOS 17+ / macOS 14+]
 - Press kit: [URL]
 
-[Embedded screenshot — choose your most visually impressive screen]
+[Embedded screenshot: choose your most visually impressive screen]
 
 I'd love to offer you early access via TestFlight if you're interested. Happy to answer any questions or hop on a quick call.
 
@@ -51,20 +51,20 @@ Best,
 Use for significant feature updates. Best for apps that already have some users.
 
 ```
-Subject: [App Name] [version] — [headline feature] now available
+Subject: [App Name] [version]: [headline feature] now available
 
 Hi [First Name],
 
 [App Name] just shipped its biggest update yet, and I thought it might interest you given your coverage of [relevant topic/category].
 
 What's new in [version]:
-- [Feature 1]: [one sentence — the hero feature]
+- [Feature 1]: [one sentence: the hero feature]
 - [Feature 2]: [one sentence]
 - [Feature 3]: [one sentence]
 
-The headline feature, [Feature 1], lets users [specific benefit]. I built it because [brief story — user request / personal need / new Apple API].
+The headline feature, [Feature 1], lets users [specific benefit]. I built it because [brief story: user request / personal need / new Apple API].
 
-[App Name] now has [social proof — X downloads / X rating / featured by Apple]. This update is free for existing users.
+[App Name] now has [social proof: X downloads / X rating / featured by Apple]. This update is free for existing users.
 
 Press kit with new screenshots: [URL]
 App Store: [URL]
@@ -89,11 +89,11 @@ Hi [First Name],
 
 I've been following your coverage of indie developers, especially [specific piece they wrote]. I have a story that might resonate with your audience.
 
-[2-3 sentences telling your story — why you built this app, what personal experience drove it, what makes your journey unusual or interesting.]
+[2-3 sentences telling your story: why you built this app, what personal experience drove it, what makes your journey unusual or interesting.]
 
-The result is [App Name], a [category] app that [what it does]. [One sentence on traction or reception — downloads, ratings, user testimonials, Apple feature.]
+The result is [App Name], a [category] app that [what it does]. [One sentence on traction or reception: downloads, ratings, user testimonials, Apple feature.]
 
-I'm not just pitching an app — I think there's a story here about [broader theme: indie sustainability / building for accessibility / leaving big tech / solving personal problems with code]. I'd be happy to share more details or do an interview.
+I'm not just pitching an app: I think there's a story here about [broader theme: indie sustainability / building for accessibility / leaving big tech / solving personal problems with code]. I'd be happy to share more details or do an interview.
 
 App Store: [URL]
 Press kit: [URL]
@@ -110,24 +110,24 @@ Thanks for considering,
 Use for podcast hosts. Keep it shorter: they need to see interview value, not just app features.
 
 ```
-Subject: Podcast guest pitch — [one-line hook about your story]
+Subject: Podcast guest pitch: [one-line hook about your story]
 
 Hi [Host Name],
 
 I'm a listener of [Podcast Name] and particularly enjoyed your episode about [specific episode]. [One genuine sentence about why it resonated.]
 
-I'm [Name], an indie developer who [brief personal hook — quit FAANG / built app while traveling / went from zero to $X revenue / overcame specific challenge]. I recently launched [App Name], a [category] app that [one sentence].
+I'm [Name], an indie developer who [brief personal hook: quit FAANG / built app while traveling / went from zero to $X revenue / overcame specific challenge]. I recently launched [App Name], a [category] app that [one sentence].
 
 I think your listeners would enjoy hearing about:
-- [Topic 1 — something practical they can learn from]
-- [Topic 2 — a challenge you faced and how you solved it]
-- [Topic 3 — a broader insight about indie development]
+- [Topic 1: something practical they can learn from]
+- [Topic 2: a challenge you faced and how you solved it]
+- [Topic 3: a broader insight about indie development]
 
 I'm comfortable on mic and can keep things conversational. Happy to work around your schedule.
 
 Best,
 [Name]
-[App Name] — [URL]
+[App Name]: [URL]
 [Twitter/X handle]
 ```
 
@@ -146,11 +146,11 @@ I wanted to follow up on my email from last week about [App Name].
 
 Since then, [add one piece of new information]:
 - "[App Name] was just featured in [Apple editorial / another outlet / award]"
-- "We hit [milestone — 1,000 downloads / 4.8 star rating / featured by Apple]"
+- "We hit [milestone: 1,000 downloads / 4.8 star rating / featured by Apple]"
 - "I just shipped [new feature] that I think adds to the story"
 - "A user shared this testimonial: '[brief quote]'"
 
-If the timing isn't right or [App Name] isn't a fit for your coverage, no worries at all — I appreciate your time either way.
+If the timing isn't right or [App Name] isn't a fit for your coverage, no worries at all: I appreciate your time either way.
 
 Press kit: [URL]
 TestFlight: [URL]

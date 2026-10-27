@@ -84,7 +84,7 @@ Print the split plan:
    - If no, create a new archive file with a header:
 
 ```markdown
-# Runtime Notes Archive — YYYY QN
+# Runtime Notes Archive: YYYY QN
 
 Archived entries from <project-name>. Original file: runtime-notes.md
 

@@ -80,7 +80,7 @@ func calculatesTotal() {
 
     let result = calculator.total(subtotal: 100.0, taxRate: 0.08)
 
-    // Document actual behavior — even if the rounding seems wrong
+    // Document actual behavior: even if the rounding seems wrong
     #expect(result == 108.0)
 }
 ```
@@ -185,10 +185,10 @@ This is the key step. For each test:
 3. **Write the assertion with the actual value**, even if it seems wrong
 
 ```swift
-// ❌ Wrong — this is what you WANT it to do
+// ❌ Wrong: this is what you WANT it to do
 #expect(result == expectedCorrectValue)
 
-// ✅ Right — this is what it ACTUALLY does
+// ✅ Right: this is what it ACTUALLY does
 #expect(result == actualCurrentValue)  // Note: off-by-one, but current behavior
 ```
 
@@ -245,7 +245,7 @@ xcodebuild test -scheme YourApp \
 
 ### Surprising Behaviors Found
 - `PriceCalculator.total()` rounds DOWN, not to nearest cent
-- `ItemManager.sort()` is unstable — equal dates may reorder
+- `ItemManager.sort()` is unstable: equal dates may reorder
 
 ### Ready to Refactor
 All [X] characterization tests passing. Safe to refactor with AI.

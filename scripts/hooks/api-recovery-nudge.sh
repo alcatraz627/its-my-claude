@@ -46,7 +46,7 @@ printf '%s' "$errtext" | match 'api error|rate limit|overloaded|temporarily limi
 
 # Keyword gist only: the full 4-step ritual is the single source of truth in
 # rules/api-error-recovery.md (keep them from drifting by not duplicating it).
-msg="[api-recovery] The previous turn died on a transient API error (not your usage limit) and produced nothing. Re-orient before continuing — don't trust pre-abort memory: restate the goal · verify what's actually done (Task list, git status/diff, recent files) · find the in-flight step and check it on disk, rolling back if half-done · then resume. Fleet died? → ~/.claude/scripts/fleet-triage.py (reuse finished, re-dispatch only the dead). Starting a NEW task instead? note the abort and proceed. Full ritual: rules/api-error-recovery.md."
+msg="[api-recovery] The previous turn died on a transient API error (not your usage limit) and produced nothing. Re-orient before continuing: don't trust pre-abort memory: restate the goal · verify what's actually done (Task list, git status/diff, recent files) · find the in-flight step and check it on disk, rolling back if half-done · then resume. Fleet died? → ~/.claude/scripts/fleet-triage.py (reuse finished, re-dispatch only the dead). Starting a NEW task instead? note the abort and proceed. Full ritual: rules/api-error-recovery.md."
 
 jq -nc --arg m "$msg" '{hookSpecificOutput:{hookEventName:"UserPromptSubmit",additionalContext:$m}}'
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)

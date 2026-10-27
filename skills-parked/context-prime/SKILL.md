@@ -94,14 +94,14 @@ Print a concise session briefing:
 
 ```
 ─────────────────────────────────────────────────────
-  Context Primed — [project name]
+  Context Primed: [project name]
 ─────────────────────────────────────────────────────
 
-  Stack:    [framework, language, key libs — 1 line]
+  Stack:    [framework, language, key libs: 1 line]
   Backend:  [backend location and type, if relevant]
 
   Recent activity:
-    [bullet list from git log — 5-8 items]
+    [bullet list from git log: 5-8 items]
 
   Uncommitted changes:
     [git status summary, or "Clean working tree"]

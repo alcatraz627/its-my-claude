@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# tmp-jail — control the session-scoped "/tmp jail".
+# tmp-jail: control the session-scoped "/tmp jail".
 #
 #   tmp-jail on               enable for the CURRENT Claude session
 #   tmp-jail off <session_id> lift it (run by the USER; the agent cannot)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-generate_pdf.py — Convert a markdown file to a compact, styled PDF.
+generate_pdf.py: Convert a markdown file to a compact, styled PDF.
 
 Usage:
     python3 generate_pdf.py <input.md>

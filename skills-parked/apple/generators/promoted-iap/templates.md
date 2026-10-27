@@ -94,11 +94,11 @@ final class PromotedPurchaseHandler {
         )
 
         if !hasCompletedOnboarding {
-            // New user from App Store — show onboarding first
+            // New user from App Store: show onboarding first
             return .showOnboarding(product)
         }
 
-        // Existing user — check if they should see the paywall
+        // Existing user: check if they should see the paywall
         // (e.g., to show other subscription options)
         if product.type == .autoRenewable {
             return .showPaywall(product)

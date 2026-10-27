@@ -24,7 +24,7 @@ printf '#!/bin/sh\nexit 0\n' > "$FAKE/.claude/scripts/atone.sh"
 printf '#!/bin/sh\nexit 0\n' > "$FAKE/.claude/scripts/hooks/warn-log.sh"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 
 verdict(){ # verdict <command> -> NUDGE|quiet
   local out

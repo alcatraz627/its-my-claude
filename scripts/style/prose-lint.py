@@ -21,13 +21,13 @@ HEDGE_ASSERT = ["typically","generally","usually","in most cases","for the most 
 UNVERIFIED = ["should now work","should work now","should be fixed","that should do it",
     "this should fix","should be working"]
 VERDICT_OPENER = re.compile(
-    r"^\W*(?:\*\*)?(?:(?:Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\s*[.!:—]|"
+    r"^\W*(?:\*\*)?(?:(?:Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\s*[.!:\u2014]|"
     r"All (?:done|set|good)\b|Everything (?:is|works)\b|Release is live\b)", re.I)
 META_ID = re.compile(r"\b(?:thes|mist|aff|pin)-\d{8}")
 # connective dashes only; digit ranges (L15-L36, 2024-2026) never count
-DASH = re.compile(r"\s[—–]\s|(?<=[A-Za-z])[—–](?=[A-Za-z])")
+DASH = re.compile(r"\s[\u2014–]\s|(?<=[A-Za-z])[\u2014–](?=[A-Za-z])")
 # two high-precision forms only; bare "not X \u2014" catches plain negation (validated 2026-07-27)
-CONTRASTIVE = re.compile(r"\bnot\s+[^.;,]{2,40},?\s+but\s+|[—–]\s*it'?s\b", re.I)
+CONTRASTIVE = re.compile(r"\bnot\s+[^.;,]{2,40},?\s+but\s+|[\u2014–]\s*it'?s\b", re.I)
 
 # Named tells reported but not yet scored (weight 0), so existing gates keep
 # their thresholds while the backlog is rewritten. Proposed once it lands:
@@ -132,7 +132,7 @@ def main(argv):
         return 0
     for f in files:
         if not os.path.exists(f):
-            print(f"{f}: not found — check the path, or pipe content via stdin (cmd | prose-lint.py)")
+            print(f"{f}: not found: check the path, or pipe content via stdin (cmd | prose-lint.py)")
             continue
         r = lint(open(f, errors="replace").read())
         if as_json:

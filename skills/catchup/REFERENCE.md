@@ -137,7 +137,7 @@ Then read `checkpoint_path` directly and skip to **Phase 1.3** (parse). Do NOT c
 If CWD is `$HOME/.claude` AND no entries exist in the index AND no `filename` arg was passed, **stop and ask** rather than scanning `~/.claude/` for `_*.claude.md` files. Print:
 
 ```
-CWD is ~/.claude/ — this is the global config dir, not a project.
+CWD is ~/.claude/: this is the global config dir, not a project.
 No entries in ~/.claude/checkpoints/index.jsonl either.
 
 Options:

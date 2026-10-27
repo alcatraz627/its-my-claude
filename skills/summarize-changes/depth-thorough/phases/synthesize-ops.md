@@ -18,19 +18,19 @@ You are the synthesis agent producing the ops/SRE pre-deploy checklist. Audience
 Write to `{OUTPUT_PATH}`. Pure checklist format: actionable, scannable.
 
 ```
-# Ops Pre-Deploy Checklist — <auto title>
+# Ops Pre-Deploy Checklist: <auto title>
 
 ## Severity
-- 🔴 BLOCKING — must complete before deploy
-- 🟡 PRE-DEPLOY — complete in the hour before merge
-- 🟢 POST-DEPLOY — complete within 24h after deploy
+- 🔴 BLOCKING: must complete before deploy
+- 🟡 PRE-DEPLOY: complete in the hour before merge
+- 🟢 POST-DEPLOY: complete within 24h after deploy
 
 ## Environment variables (🔴)
-- [ ] `<VAR_NAME>` — purpose, default value, where to set
+- [ ] `<VAR_NAME>`: purpose, default value, where to set
 - [ ] ...
 
 ## Secrets / webhooks (🔴)
-- [ ] `<SECRET_NAME>` — rotated/provisioned where
+- [ ] `<SECRET_NAME>`: rotated/provisioned where
 - [ ] Slack webhook URLs: <list, with which alerts route to which>
 
 ## Database (🔴 schema / 🟡 indexes / 🟢 backfill)
@@ -39,13 +39,13 @@ Write to `{OUTPUT_PATH}`. Pure checklist format: actionable, scannable.
 - [ ] Data backfills: <list with estimated run time>
 
 ## Cron jobs / schedulers (🟡)
-- [ ] `<job-name>` — cadence, what it does, expected error rate
+- [ ] `<job-name>`: cadence, what it does, expected error rate
 
 ## External services (🟡)
 - [ ] <service>: confirm API key, quota, region
 
 ## Feature flags (🟡)
-- [ ] `<FLAG>` — initial state for first boot
+- [ ] `<FLAG>`: initial state for first boot
 
 ## Post-deploy tasks (🟢)
 - [ ] Drop deprecated collections after 1-2 weeks
@@ -57,8 +57,8 @@ Write to `{OUTPUT_PATH}`. Pure checklist format: actionable, scannable.
 - [ ] Data corruption risks + backup status
 
 ## Smoke tests
-- [ ] curl <endpoint> — expected 200
-- [ ] worker boot logs — expected stable for N minutes
+- [ ] curl <endpoint>: expected 200
+- [ ] worker boot logs: expected stable for N minutes
 
 ## Known caveats / first-boot behavior
 - [Items from MAYBE/TO-CHECK issues + breaking themes' post-deploy notes]

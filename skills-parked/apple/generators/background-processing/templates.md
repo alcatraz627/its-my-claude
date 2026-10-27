@@ -218,8 +218,8 @@ import Foundation
 /// ## Required Background Modes
 ///
 /// In Xcode, add these under Target > Signing & Capabilities > Background Modes:
-/// - **Background fetch** — enables BGAppRefreshTask
-/// - **Background processing** — enables BGProcessingTask
+/// - **Background fetch**: enables BGAppRefreshTask
+/// - **Background processing**: enables BGProcessingTask
 ///
 /// These add to Info.plist:
 /// ```xml

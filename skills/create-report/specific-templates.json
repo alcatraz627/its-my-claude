@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Catalog of one-off, purpose-built HTML reports — curated reference designs with tagged features, styles, and vibes. Unlike generic styles/ templates, these are not reusable with arbitrary markdown. They serve as a design reference library for borrowing UI patterns.",
+    "description": "Catalog of one-off, purpose-built HTML reports: curated reference designs with tagged features, styles, and vibes. Unlike generic styles/ templates, these are not reusable with arbitrary markdown. They serve as a design reference library for borrowing UI patterns.",
     "updated": "2026-04-07"
   },
   "templates": [
@@ -68,7 +68,7 @@
     },
     {
       "id": "claude-usage-insights",
-      "title": "Claude Code Usage Insights — Monthly Report",
+      "title": "Claude Code Usage Insights: Monthly Report",
       "source": "~/.claude/usage-data/report.html",
       "tags": {
         "features": [
@@ -104,7 +104,7 @@
     },
     {
       "id": "statusline-playground",
-      "title": "Claude Code Statusline Playground — Interactive Configurator",
+      "title": "Claude Code Statusline Playground: Interactive Configurator",
       "source": "~/.claude/assets/static/statusline-playground.html",
       "tags": {
         "features": [

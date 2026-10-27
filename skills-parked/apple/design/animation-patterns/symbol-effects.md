@@ -101,13 +101,13 @@ Image(systemName: "heart.fill")
 ### Variable Color Modes
 
 ```swift
-// Iterative — layers animate one by one
+// Iterative: layers animate one by one
 .symbolEffect(.variableColor.iterative)
 
-// Cumulative — layers build up
+// Cumulative: layers build up
 .symbolEffect(.variableColor.cumulative)
 
-// Reversing — forward then backward
+// Reversing: forward then backward
 .symbolEffect(.variableColor.iterative.reversing)
 
 // Hide inactive layers (instead of dimming)
@@ -121,7 +121,7 @@ Image(systemName: "heart.fill")
 withAnimation(.spring) {
     Image(systemName: "star.fill")
 }
-// Symbol effects are NOT driven by withAnimation — they have their own timing
+// Symbol effects are NOT driven by withAnimation: they have their own timing
 
 // ✅ RIGHT: Use .symbolEffect modifier
 Image(systemName: "star.fill")

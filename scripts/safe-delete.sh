@@ -44,7 +44,7 @@ if [[ -n "$hit" ]]; then
   reason="${y}⚠️  SAFE DELETE: 'rm' is blocked. Use 'trash' instead to move files to macOS Trash.${z}
 
 ${y}Blocked command:${z}  $command
-${y}Replacement:${z}     Replace 'rm [-rf]' with 'trash' — e.g.: trash $paths
+${y}Replacement:${z}     Replace 'rm [-rf]' with 'trash': e.g.: trash $paths
 
 ${y}💡 Recovery:${z} If a file was already deleted, check:
    • Finder → Trash (⌘+Shift+Delete to empty)

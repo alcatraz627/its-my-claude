@@ -248,7 +248,7 @@ If 2+ sections were wrong/missing/invented:
 1. Derive a skeleton from the actual structure used in this run.
 2. Show it to the user inline:
    ```
-   This topic is a <category>. The default template didn't fit well — here's a
+   This topic is a <category>. The default template didn't fit well: here's a
    proposed variant based on what we actually used:
 
    ---
@@ -276,11 +276,11 @@ If 2+ sections were wrong/missing/invented:
 Compose a run entry for `_insights.claude.md`:
 
 ```markdown
-## <Topic Title> — <DD MMM YY HH:MM>
+## <Topic Title>: <DD MMM YY HH:MM>
 **Category:** <query type>
 **Template used:** <name> [new variant created: yes/no]
-**What worked:** <1–3 bullet points — what research path / tools were efficient>
-**What to improve:** <1–2 bullet points — what was slow, redundant, or surprising>
+**What worked:** <1–3 bullet points: what research path / tools were efficient>
+**What to improve:** <1–2 bullet points: what was slow, redundant, or surprising>
 **Rule for next time:** <one actionable sentence for a future run on this topic type>
 ---
 ```

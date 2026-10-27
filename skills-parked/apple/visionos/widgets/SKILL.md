@@ -200,7 +200,7 @@ struct MyWidgetView: View {
 ### Anti-Patterns
 
 ```swift
-// ❌ No container background — accented mode shows nothing
+// ❌ No container background: accented mode shows nothing
 struct BadWidgetView: View {
     var body: some View {
         ZStack {

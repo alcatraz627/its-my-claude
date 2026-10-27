@@ -1,4 +1,4 @@
-/* shared.css — the one source for what the kanban surfaces look like.
+/* shared.css: the one source for what the kanban surfaces look like.
  *
  * Three pages used to declare their own tokens, their own buttons and their own
  * header, which agreed by hand and drifted by default. This file is what
@@ -240,7 +240,7 @@
   /* Identity shrinks but DOES NOT VANISH. It held flex:none (a long path then
      squeezed find to zero), then flex:0 1 auto with no floor (identity itself
      went to zero: logo, crumb, board name and path all gone). §18b applies to
-     this zone as much as to the other one — the fix for one zone reaching zero
+     this zone as much as to the other one: the fix for one zone reaching zero
      must not be another zone reaching zero. */
   /* And it is CAPPED, and its basis is modest. With the status band aboard,
      this zone's natural width reached 55% of the bar, the verbs zone was
@@ -310,7 +310,7 @@
      - A counted, ordinary chip sheds its word. That is the intended trade.
      - A chip with no number keeps its icon instead of disappearing. `.mute`
        used to be display:none outright, so `synced 32d ago` vanished below
-       1920px — and charter §12 is that a thing which vanishes cannot be told
+       1920px: and charter §12 is that a thing which vanishes cannot be told
        apart from a thing that broke. Owner, 2026-08-25: "I wouldn't even know
        if its supposed to be there / or if it is broken, it will disappear."
      - A warning keeps its words at every width. A red glyph with a tooltip is
@@ -331,7 +331,7 @@
      rather than letting it go under its flex-basis, so turning it on with the
      zones' 340px and 140px bases intact moved 1400 from one row to three. With
      the bases released the zones compress the way they always did, shed their
-     words, and only then take a second row — which is what an overflowing bar
+     words, and only then take a second row: which is what an overflowing bar
      should have done all along instead of widening the document. */
   /* Shed first, wrap last. The zones keep their flex-bases because those are
      what make them compress in order rather than each claiming a row; with the
@@ -551,7 +551,7 @@
 
   /* Under 1200 the bar sheds words before it sheds room. The tab keeps its icon
      and its count, and the name moves to the tooltip that was already there, so
-     nothing becomes unreachable — it becomes shorter. Measured at the four
+     nothing becomes unreachable: it becomes shorter. Measured at the four
      widths this app is used at: 900, 1280, 1600, 1920. */
   @media (max-width:1200px){
     .navbar .nsub{display:none}

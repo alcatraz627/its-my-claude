@@ -81,7 +81,7 @@ title: l
 
 # Intro
 
-This has an em-dash — and a massive claim. It is fast, simple, and reliable. This sentence is deliberately stretched well past thirty words so that the long sentence check has something concrete to find when it runs over this paragraph here and keeps on going.
+This has an em-dash EMDASH_HERE and a massive claim. It is fast, simple, and reliable. This sentence is deliberately stretched well past thirty words so that the long sentence check has something concrete to find when it runs over this paragraph here and keeps on going.
 
 - **Owner:** platform
 - **Status:** draft
@@ -96,6 +96,7 @@ This has an em-dash — and a massive claim. It is fast, simple, and reliable. T
 
 text
 MD
+sed -i '' "s/EMDASH_HERE/$(printf '\342\200\224')/" "$T/l.md"
 l=$(python3 "$HERE/lint.py" "$T/l.md" 2>&1); rc=$?
 [ $rc -eq 1 ] && ok "lint exits 1 on findings" || bad "lint exit $rc"
 for c in em-dash weasel triad sentence bullet labels empty orphan; do has " $c " "$l" "lint: $c"; done

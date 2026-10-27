@@ -16,10 +16,10 @@
 **Fix:** Use the `Read` tool instead of `cat` for any file inspection task. Reserve `Bash` for commands that genuinely need shell execution.
 
 ```bash
-# ❌ Can hang — jq blocks on stdin
+# ❌ Can hang: jq blocks on stdin
 cat ~/.claude/.mcp.json 2>/dev/null | jq 'keys' 2>/dev/null
 
-# ✅ Use Read tool instead — no shell, no pipe, no hang
+# ✅ Use Read tool instead: no shell, no pipe, no hang
 # Read: /Users/alcatraz627/.claude/.mcp.json
 ```
 
@@ -36,7 +36,7 @@ cat ~/.claude/.mcp.json 2>/dev/null | jq 'keys' 2>/dev/null
 **Fix:** Use explicit subshells or `{ ... }` grouping, or break into separate commands.
 
 ```bash
-# ❌ Ambiguous — pipe and logical operators mixed
+# ❌ Ambiguous: pipe and logical operators mixed
 cat file 2>/dev/null || echo "NOT FOUND" && echo "---" && cat other 2>/dev/null | jq 'keys'
 
 # ✅ Break into separate steps
@@ -77,7 +77,7 @@ terminal. This always works as long as a terminal is attached (i.e. the user is 
 read -r choice
 echo "Got: $choice"    # always empty when called as: echo "" | ./script.sh
 
-# ✅ Read from /dev/tty — always gets real user input
+# ✅ Read from /dev/tty: always gets real user input
 read -r choice </dev/tty
 echo "Got: $choice"
 ```

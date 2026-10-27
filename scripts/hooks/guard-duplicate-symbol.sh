@@ -169,7 +169,7 @@ done <<< "$names"
 
 [ -z "$hits" ] && exit 0
 
-reason="⚠ DUPLICATE SYMBOL — this edit to ${file_path} introduces a name that already exists in the project. Reuse or extend the existing one instead of reinventing it:
+reason="⚠ DUPLICATE SYMBOL: this edit to ${file_path} introduces a name that already exists in the project. Reuse or extend the existing one instead of reinventing it:
 ${hits}
 If this is a genuinely distinct symbol (or a deliberate re-export), rename it or mute: touch ~/.claude/.no-dup-symbol-guard"
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-duplicate-symbol --heeded unknown >/dev/null 2>&1 &

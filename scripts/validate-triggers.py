@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""validate-triggers.py — Validate sub-file frontmatter in ~/.claude/{rules,features,conventions}/
+"""validate-triggers.py: Validate sub-file frontmatter in ~/.claude/{rules,features,conventions}/
 
 Checks:
   - Every .md file has YAML frontmatter with required fields
@@ -140,7 +140,7 @@ def main():
             if updated_dt and stale_days is not None:
                 age = (today - updated_dt).days
                 if age > stale_days:
-                    print(f"⚠ {rel}: STALE — {age}d since update (threshold {stale_days}d)")
+                    print(f"⚠ {rel}: STALE: {age}d since update (threshold {stale_days}d)")
                     warnings += 1
             # Triggers
             for t in fields.get("triggers", []):
@@ -161,7 +161,7 @@ def main():
             if root == "rules" and f.stem != HALT_ANCHOR and "paths" not in fields:
                 body = text[text.find("\n---\n", 4) + 5:] if text.startswith("---\n") else text
                 if HALT_DIRECTIVE.search(body) and HALT_ANCHOR not in text:
-                    print(f"✗ {rel}: halt directive without the halt-scope anchor — "
+                    print(f"✗ {rel}: halt directive without the halt-scope anchor: "
                           f"add the one-line inaction clause referencing "
                           f"`never-halt-on-authority-you-hold.md` "
                           f"(see assets/reports/20260901-halt-imbalance/report.md)")

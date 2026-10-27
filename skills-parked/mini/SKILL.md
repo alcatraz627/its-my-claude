@@ -78,9 +78,9 @@ Options: --quality (cloud Haiku), --template <name>, --list (show templates)
 ```
 /mini slash command
   └── bash ~/.claude/scripts/mini-core.sh
-        ├── Local: Ollama (llama3.2) — <1s warm
-        └── Cloud: Anthropic API (Haiku) — ~1-2s
-              └── Fallback: claude -p --model haiku — ~20s
+        ├── Local: Ollama (llama3.2): <1s warm
+        └── Cloud: Anthropic API (Haiku): ~1-2s
+              └── Fallback: claude -p --model haiku: ~20s
 ```
 
 All 6 surfaces (CLI, MCP, slash command, hook, Python, stdin pipe) share `mini-core.sh`

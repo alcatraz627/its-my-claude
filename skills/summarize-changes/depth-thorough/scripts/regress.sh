@@ -103,6 +103,6 @@ if theme_ok and def_ok and ops_ok:
     print("\nPASS")
     sys.exit(0)
 else:
-    print("\nFAIL — see regressions above")
+    print("\nFAIL: see regressions above")
     sys.exit(1)
 PY

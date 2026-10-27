@@ -46,7 +46,7 @@ fi
 # Read the marker
 MARKER_TS=$(jq -r '.ts // empty' "$MARKER" 2>/dev/null)
 MARKER_TURNS=$(jq -r '.turns_unaddressed // 0' "$MARKER" 2>/dev/null)
-[ -z "$MARKER_TS" ] && exit 0  # malformed marker — silently bail
+[ -z "$MARKER_TS" ] && exit 0  # malformed marker: silently bail
 
 # Check events.jsonl for any event timestamped after the marker
 EVENTS="$HOME/.claude/atone/events.jsonl"

@@ -69,7 +69,7 @@ while [ $# -gt 0 ]; do
     # Callers are hooks that must never be broken, so a bad flag still writes the
     # record (a partial row beats no row): but it says so on stderr, because a
     # silently-dropped field is how nine audit trails were lost (2026-07-10).
-    --*|-?*)   echo "warn-log: unknown flag '$1' — ignored; record written without it" >&2; shift ;;
+    --*|-?*)   echo "warn-log: unknown flag '$1': ignored; record written without it" >&2; shift ;;
     *) shift ;;
   esac
 done

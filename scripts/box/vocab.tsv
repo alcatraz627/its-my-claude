@@ -1,4 +1,4 @@
-# The callout vocabulary — single source of truth for conventions/callout-boxes.md v2.
+# The callout vocabulary: single source of truth for conventions/callout-boxes.md v2.
 # Read by box.sh (agent side) and hook-common.sh hook_box_kind (hook side).
 # Admission = a row here + a Ghostty render-check + the spec table note.
 # kind	emoji	label	rail	tier	when

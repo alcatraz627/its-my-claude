@@ -285,10 +285,10 @@ enum ShareCardStyle: String, CaseIterable, Identifiable, Sendable {
 
 /// Predefined card sizes optimized for different sharing platforms.
 enum ShareCardSize: String, CaseIterable, Identifiable, Sendable {
-    case square      // 1080x1080 — Instagram, general
-    case story       // 1080x1920 — Instagram Stories, TikTok
-    case wide        // 1200x630  — Twitter/X, Open Graph
-    case compact     // 800x600   — Messages, lightweight
+    case square      // 1080x1080: Instagram, general
+    case story       // 1080x1920: Instagram Stories, TikTok
+    case wide        // 1200x630: Twitter/X, Open Graph
+    case compact     // 800x600: Messages, lightweight
 
     var id: String { rawValue }
 
@@ -444,7 +444,7 @@ import SwiftUI
 /// The SwiftUI view that composes the card layout.
 ///
 /// This view is rendered to an image by `ShareCardRenderer`.
-/// It should NOT be used directly in the app UI — use `ShareCardSheet` instead.
+/// It should NOT be used directly in the app UI: use `ShareCardSheet` instead.
 struct ShareCardView: View {
     let content: any ShareCardContent
     let style: ShareCardStyle

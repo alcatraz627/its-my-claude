@@ -45,7 +45,7 @@ MARKER = re.compile(r"^\s*>?\s*Generated via a 🤖 on @\S+ machine(?: \(_[^)]*_
 FOOTER = re.compile(r"^\s*🤖 Generated with ")
 SESSION_URL = re.compile(r"^\s*https://claude\.ai/code/session_\S*\s*$")
 
-DASH = re.compile(r"—|(?<!\d)–(?!\d)")
+DASH = re.compile(r"\u2014|(?<!\d)–(?!\d)")
 SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'(\[])")
 
 PATH = re.compile(r"(?<![\w])(?:[\w.-]+/)+[\w.-]+|\b[\w-]+\.(?:ts|tsx|js|jsx|mjs|cjs|py|rs|go|sh|md|json|ya?ml|css|html|toml|sql|lock)\b")

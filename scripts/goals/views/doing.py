@@ -48,7 +48,7 @@ def main():
         who = m["delegated_to"] or m["lane"] or "no lane"
         sess = m["session"] or "?"
         tomb = "" if m["session_live"] is None else ("" if m["session_live"] else "  ⚠ its session is not live: a tombstone")
-        print(f"   {R.BALL[m['state']]} {R.TWIN[m['state']]} #{m['id']:<4} {R.ellip(m['subject'], 56):<56}  ◆ {who:<10} ◇ {m['tier'] or '—':<6} session {sess}  {m['age']}{tomb}")
+        print(f"   {R.BALL[m['state']]} {R.TWIN[m['state']]} #{m['id']:<4} {R.ellip(m['subject'], 56):<56}  ◆ {who:<10} ◇ {m['tier'] or '-':<6} session {sess}  {m['age']}{tomb}")
     if live is None:
         print("\n  (no ipc broker answered, so session liveness is not shown)")
 

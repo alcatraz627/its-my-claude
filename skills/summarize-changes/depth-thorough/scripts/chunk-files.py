@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""chunk-files.py — group files into semantic chunks for sub-agent fan-out.
+"""chunk-files.py: group files into semantic chunks for sub-agent fan-out.
 
 Strategy:
-  1. Drop binary/asset files (images, fonts, archives) — they bloat byte counts
+  1. Drop binary/asset files (images, fonts, archives): they bloat byte counts
      without inventory value.
   2. Group by 2-3 segment path prefix (e.g., backend/lib, frontend/src/app/jobs).
   3. Split groups >MAX_FILES into sub-chunks, but cap sub-chunks per prefix so one
@@ -10,7 +10,7 @@ Strategy:
   4. Merge groups <MIN_FILES into _misc buckets per top-level area; split a _misc
      bucket if it overflows MAX_FILES_PER_MISC.
   5. Flat fallback ONLY when the count of *substantive* semantic chunks exceeds
-     MAX_CHUNKS — not when many tiny groups exist (those collapse into _misc).
+     MAX_CHUNKS: not when many tiny groups exist (those collapse into _misc).
 
 Output: 04-chunks.json with [{id, files, total_bytes, index}, ...]
 """
@@ -61,7 +61,7 @@ for p in code_files:
     groups[prefix_key(p, 3)].append(p)
 
 # 3/4. Split / merge into semantic chunks.
-semantic_chunks = []   # substantive — counts toward the cap
+semantic_chunks = []   # substantive: counts toward the cap
 misc_by_top = defaultdict(list)
 for key, files in sorted(groups.items()):
     if len(files) < args.min_files:

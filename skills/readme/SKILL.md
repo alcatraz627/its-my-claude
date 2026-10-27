@@ -69,7 +69,7 @@ Resolve the target output path (default `./README.md`). If the file already exis
 before doing any scanning work:
 
 ```bash
-gum confirm "<output-path> already exists — overwrite it?"
+gum confirm "<output-path> already exists: overwrite it?"
 ```
 
 If the user declines, stop immediately and report. Do not proceed with Phase 1 scanning.
@@ -300,7 +300,7 @@ Example skeleton (write the SVG to `assets/cover.svg`):
 ```xml
 <!-- assets/cover.svg -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128">
-  <!-- 8x8 pixel grid — fill each rect based on motif -->
+  <!-- 8x8 pixel grid: fill each rect based on motif -->
   <rect x="0" y="0" width="8" height="8" fill="#..." />
   ...
 </svg>
@@ -458,7 +458,7 @@ run faster or more accurate. Examples:
 
 ```bash
 cat > /tmp/runtime-note-entry.md << 'ENTRY'
-## readme: [repo-slug] — [YYYY-MM-DD HH:MM]
+## readme: [repo-slug]: [YYYY-MM-DD HH:MM]
 
 **Purpose:** Generated README.md for <repo-name>.
 

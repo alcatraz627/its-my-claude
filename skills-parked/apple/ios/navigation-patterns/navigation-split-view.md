@@ -189,7 +189,7 @@ NavigationSplitView {
 ### When NOT to Use NavigationStack Inside Detail
 
 ```swift
-// ❌ Unnecessary NavigationStack — detail has no drill-down
+// ❌ Unnecessary NavigationStack: detail has no drill-down
 NavigationSplitView {
     SidebarView()
 } detail: {

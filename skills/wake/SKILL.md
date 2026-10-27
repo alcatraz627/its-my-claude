@@ -119,27 +119,27 @@ What that claim covers, precisely, because the difference matters:
 ```
 Wake check. Two steps, in this order. Do not skip step 1.
 
-STEP 1 — Can you afford to be awake?
+STEP 1: Can you afford to be awake?
 
 Run: bash ~/.claude/scripts/wake/limits-check.sh
 It prints one line and sets the exit code. Branch on the code:
 
-  exit 1  NEAR-FULL — the 5h window is nearly spent. STOP HERE: say so in one
+  exit 1  NEAR-FULL: the 5h window is nearly spent. STOP HERE: say so in one
           line, CronDelete this job, and do nothing else. Do not keep poking a
           closing window; leave what is left for the user's real work. Re-arming
           is their call, not yours.
-  exit 0  OPEN    — there is headroom. Go to step 2.
-  exit 2  UNKNOWN — no usable reading. Say so in one line, then go to step 2.
+  exit 0  OPEN: there is headroom. Go to step 2.
+  exit 2  UNKNOWN: no usable reading. Say so in one line, then go to step 2.
           Not knowing is not permission to burn budget, but it is not a reason
           to stall either.
 
-STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
+STEP 2: Were you cut off, or did you stop on purpose? Mechanical check FIRST:
 
   Run: jq -r '.prev_aborted.prompt_preview // "CLEAN-HALT"' ~/.claude/.turn-state/<SESSION_ID>.json
 
-  CLEAN-HALT — the turn before this wake ended through the Stop hook: the
+  CLEAN-HALT: the turn before this wake ended through the Stop hook: the
     session finished, or DELIBERATELY halted (parked on a decision, ended its
-    loop, hit a gate). A halt is a decision, not an outage — do not re-animate
+    loop, hit a gate). A halt is a decision, not an outage: do not re-animate
     it and do not re-explain. But do not stand down on the halt alone either:
     a clean halt can be a deliberate park that is WAITING for this wake, and
     two parks lost their wake exactly that way (task #25, 2026-08-19/20).
@@ -181,10 +181,10 @@ STEP 2 — Were you cut off, or did you stop on purpose? Mechanical check FIRST:
     away; a wake that re-animates a session with nothing to do is worse than
     none.
 
-  anything else — that output is the prompt of a turn that DIED mid-flight
+  anything else: that output is the prompt of a turn that DIED mid-flight
     (only an abort leaves turn-state behind; turn-start preserves it as
     prev_aborted when this wake's own turn overwrites the file). CUT OFF:
-    re-orient per rules/api-error-recovery.md — restate the goal, verify what
+    re-orient per rules/api-error-recovery.md: restate the goal, verify what
     is actually done (Task list, git status, files on disk), find the
     in-flight step, roll back if it is half-done. Then continue from there.
 ```

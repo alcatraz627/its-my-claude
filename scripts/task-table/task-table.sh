@@ -1099,7 +1099,7 @@ def closers_of(x):
         m = re.match(r"^(run|do|key)\s*[:\-]\s*(.*)$", s, re.I)
         verb, body = (m.group(1).lower(), m.group(2).strip()) if m else ("do", s)
         cmd, hint = body, ""
-        halves = re.split(r"\s+[—–]\s+|\s{3,}", body, maxsplit=1)
+        halves = re.split(r"\s+[\u2014–]\s+|\s{3,}", body, maxsplit=1)
         if len(halves) == 2: cmd, hint = halves[0].strip(), halves[1].strip()
         found.append((verb, cmd, hint))
     if found: return found
@@ -1362,7 +1362,7 @@ if goal_meta.get("_broken"): _bangs.append(f"  !! goal sidecar did not parse, ig
 notier = sum(1 for x in live if not (meta_of(x, "tier") or meta_of(x, "model"))
              and (meta_of(x, "lane") or "").lower() != "owner" and not deferred(x))
 if notier:
-    _quiet.append(f"  {notier} open row(s) carry no tier (◇ — in the trait column); set with task.sh update <id> --tier <fable|opus|sonnet|haiku|lm>")
+    _quiet.append(f"  {notier} open row(s) carry no tier (◇: in the trait column); set with task.sh update <id> --tier <fable|opus|sonnet|haiku|lm>")
 # A grouping key most rows do not carry produces one huge band. Auto-selection
 # refuses such a key, but a flag or a project view file can still pin one, and a
 # pinned ruling is not ours to override. Say what it costs instead.
@@ -1478,8 +1478,8 @@ def build_body():
         _cn = ([x for x in clear_now if _closers[x["id"]]]
                + [x for x in clear_now if not _closers[x["id"]]])
         shown_c = _cn[:CLEAR_CAP]
-        _gn = len({meta_of(x, "goal") or "—" for x in clear_now})
-        _ln = len({meta_of(x, "lane") or meta_of(x, "owner") or "—" for x in clear_now})
+        _gn = len({meta_of(x, "goal") or "-" for x in clear_now})
+        _ln = len({meta_of(x, "lane") or meta_of(x, "owner") or "-" for x in clear_now})
         if fits(2 + 2 * len(shown_c)):
             w("")
             w(f"⚡ CLEAR NOW   {len(shown_c)} of {len(clear_now)} waiting on you,"
@@ -1625,7 +1625,7 @@ def build_body():
             b, t = ball_of(x)
             w("│" + " " * (BALL_COL - 2) + b + " " + t + " "
               + dljust(f"#{x['id']}", IDW) + " " + ellip(titled(x), TITLE_W))
-            cells = "".join(dljust(mk + " " + ellip(val or "—", cw - 3), cw)
+            cells = "".join(dljust(mk + " " + ellip(val or "-", cw - 3), cw)
                             for mk, val, cw in zip(TRAIT_MARK, trait_values(x), TRAITWS))
             # The note rides the trait row when it fits, so a row costs two lines
             # instead of three. The traits keep their fixed columns either way,
@@ -1727,10 +1727,10 @@ def build_body():
         emo  = fixed_emoji or ("\U0001F4E5" if unfiled else goal_emoji(key, items))
         title = "unfiled" if unfiled else str(labels.get(key, key))
         if unfiled:
-            age = "—"
+            age = "-"
         else:
             _mt = max((x.get("_mtime") or 0) for x in items) or 0
-            age = _age(time.time() - _mt) if _mt else "—"
+            age = _age(time.time() - _mt) if _mt else "-"
         # The title is plain text above the rails. The owner copies his goal off
         # this screen, and a rail glyph on a wrapped continuation line came along
         # with the selection: "the box around the goal makes it hard to copy paste

@@ -359,14 +359,14 @@ All generators are under `skills/generators/`. The generators overview lives at 
 If you are an agent focused on **UI, UX, or macOS design**, read these skills first: they cover the most commonly needed patterns and have the highest density of design-relevant content:
 
 ```
-1. skills/design/liquid-glass/SKILL.md         — Liquid Glass (iOS/macOS 26)
-2. skills/design/animation-patterns/SKILL.md   — All animation patterns
-3. skills/ios/navigation-patterns/SKILL.md     — Modern navigation architecture
-4. skills/swiftui/toolbars/SKILL.md            — Toolbar patterns
-5. skills/ios/ui-review/SKILL.md               — HIG compliance review process
-6. skills/macos/SKILL.md                       — macOS-specific guidance
-7. skills/ios/ipad-patterns/SKILL.md           — iPad-specific patterns
-8. skills/swiftui/text-editing/SKILL.md        — Text / rich text
-9. skills/performance/swiftui-debugging/SKILL.md — Performance diagnosis
-10. skills/ios/assistive-access/SKILL.md        — Cognitive accessibility
+1. skills/design/liquid-glass/SKILL.md: Liquid Glass (iOS/macOS 26)
+2. skills/design/animation-patterns/SKILL.md: All animation patterns
+3. skills/ios/navigation-patterns/SKILL.md: Modern navigation architecture
+4. skills/swiftui/toolbars/SKILL.md: Toolbar patterns
+5. skills/ios/ui-review/SKILL.md: HIG compliance review process
+6. skills/macos/SKILL.md: macOS-specific guidance
+7. skills/ios/ipad-patterns/SKILL.md: iPad-specific patterns
+8. skills/swiftui/text-editing/SKILL.md: Text / rich text
+9. skills/performance/swiftui-debugging/SKILL.md: Performance diagnosis
+10. skills/ios/assistive-access/SKILL.md: Cognitive accessibility
 ```

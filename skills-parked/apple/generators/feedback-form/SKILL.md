@@ -243,12 +243,12 @@ try await submitter.submit(entry)
 ### Route by sentiment after submission
 ```swift
 if entry.suggestsAppStoreReview {
-    // Happy user — ask for App Store review
+    // Happy user: ask for App Store review
     if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
         SKStoreReviewController.requestReview(in: scene)
     }
 } else if entry.suggestsSupportFollowUp {
-    // Unhappy user — show support confirmation
+    // Unhappy user: show support confirmation
     showSupportConfirmation = true
 }
 ```

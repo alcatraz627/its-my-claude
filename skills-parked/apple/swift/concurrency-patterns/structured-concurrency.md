@@ -37,11 +37,11 @@ func loadDashboard() async throws -> Dashboard {
 | Use when | 2-5 parallel calls with different types | Processing a collection in parallel |
 
 ```swift
-// ✅ async let — different return types, fixed count
+// ✅ async let: different return types, fixed count
 async let user = fetchUser()        // -> User
 async let settings = fetchSettings() // -> Settings
 
-// ✅ TaskGroup — same return type, dynamic count
+// ✅ TaskGroup: same return type, dynamic count
 let images = try await withThrowingTaskGroup(of: UIImage.self) { group in
     for url in imageURLs {
         group.addTask { try await downloadImage(url) }
@@ -112,17 +112,17 @@ func downloadImages(urls: [URL]) async throws -> [UIImage] {
 For fire-and-forget child tasks where you don't need to collect results. More memory-efficient because completed child task values are discarded immediately.
 
 ```swift
-// ✅ Discarding — good for side effects (logging, notifications, cache warming)
+// ✅ Discarding: good for side effects (logging, notifications, cache warming)
 await withDiscardingTaskGroup { group in
     for item in items {
         group.addTask {
             await cacheService.warm(item)
         }
     }
-    // No iteration needed — results are discarded
+    // No iteration needed: results are discarded
 }
 
-// ❌ Don't use regular TaskGroup if you ignore results — leaks memory
+// ❌ Don't use regular TaskGroup if you ignore results: leaks memory
 await withTaskGroup(of: Void.self) { group in
     for item in items {
         group.addTask { await cacheService.warm(item) }
@@ -187,7 +187,7 @@ struct ItemDetailView: View {
 **Why use `.task(id:)` over `.onChange` + manual Task?**
 
 ```swift
-// ❌ Manual pattern — error-prone, must handle cancellation yourself
+// ❌ Manual pattern: error-prone, must handle cancellation yourself
 @State private var loadTask: Task<Void, Never>?
 
 .onChange(of: itemID) { _, newID in
@@ -206,14 +206,14 @@ struct ItemDetailView: View {
 ### .task vs Task {} in .onAppear
 
 ```swift
-// ❌ Unstructured task — not cancelled when view disappears
+// ❌ Unstructured task: not cancelled when view disappears
 .onAppear {
     Task {
         items = await fetchItems()  // May complete after view is gone
     }
 }
 
-// ✅ Structured — automatically cancelled on disappear
+// ✅ Structured: automatically cancelled on disappear
 .task {
     items = await fetchItems()
 }
@@ -261,7 +261,7 @@ func downloadFile(from url: URL) async throws -> Data {
         try await URLSession.shared.data(for: request)
     } onCancel: {
         // Called immediately when the task is cancelled
-        // Runs on an arbitrary thread — must be Sendable-safe
+        // Runs on an arbitrary thread: must be Sendable-safe
         URLSession.shared.getAllTasks { tasks in
             tasks.filter { $0.originalRequest?.url == url }.forEach { $0.cancel() }
         }
@@ -317,14 +317,14 @@ This prevents priority inversion but can cause unexpected scheduling behavior. D
 ### Creating Tasks Where Structured Concurrency Works
 
 ```swift
-// ❌ Unstructured — no automatic cancellation, harder to reason about
+// ❌ Unstructured: no automatic cancellation, harder to reason about
 func loadData() {
     let task1 = Task { await fetchUsers() }
     let task2 = Task { await fetchPosts() }
     // Must manually manage cancellation
 }
 
-// ✅ Structured — automatic cancellation, clear lifetime
+// ✅ Structured: automatic cancellation, clear lifetime
 func loadData() async {
     async let users = fetchUsers()
     async let posts = fetchPosts()
@@ -335,12 +335,12 @@ func loadData() async {
 ### Not Iterating TaskGroup Results
 
 ```swift
-// ❌ Memory leak — completed task values accumulate
+// ❌ Memory leak: completed task values accumulate
 await withTaskGroup(of: Data.self) { group in
     for url in urls {
         group.addTask { await download(url) }
     }
-    // Never iterate group — results pile up in memory
+    // Never iterate group: results pile up in memory
 }
 
 // ✅ Always iterate, or use withDiscardingTaskGroup for Void results

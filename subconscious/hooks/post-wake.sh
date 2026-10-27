@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# post-wake.sh — hook called after each i-dream Wake consolidation phase.
+# post-wake.sh: hook called after each i-dream Wake consolidation phase.
 #
 # This script is intended to run after the daemon logs "Wake: promoted N insights"
 # (see src/modules/dreaming.rs, Wake phase completion).

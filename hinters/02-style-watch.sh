@@ -30,7 +30,7 @@ awk -F'|' -v now="$NOW" -v cwd="$CWD_NOW" -v keep="$TMP" '
 }
 END {
     if (delivered) {
-        if (extra > 0) out = out " (+" extra " more file(s) flagged — logs/style-watch.jsonl)"
+        if (extra > 0) out = out " (+" extra " more file(s) flagged: logs/style-watch.jsonl)"
         print out
     }
 }' "$NOTES"

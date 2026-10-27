@@ -31,11 +31,11 @@ block() {
     exit 0
   fi
   bash "$WARN" --hook guard-anthropic-credentials --action block --heeded unknown >/dev/null 2>&1 || true
-  jq -cn --arg r "🛑 CREDENTIAL GUARD — refusing to modify the Anthropic key / global credential.
+  jq -cn --arg r "🛑 CREDENTIAL GUARD: refusing to modify the Anthropic key / global credential.
 
 $1
 
-A bad value crashes EVERY Claude instance at once and the agent that set it dies with them — only YOU can recover it. Do NOT do this. Instead, hand the exact command to the user and ask them to run it themselves, then continue.
+A bad value crashes EVERY Claude instance at once and the agent that set it dies with them: only YOU can recover it. Do NOT do this. Instead, hand the exact command to the user and ask them to run it themselves, then continue.
 (rules/never-modify-anthropic-credentials.md · override: touch ~/.claude/.allow-cred-write)" \
     '{decision:"block", reason:$r}' 2>/dev/null || true
   exit 0

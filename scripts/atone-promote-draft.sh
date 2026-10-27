@@ -17,7 +17,7 @@ STORE="$ATONE_DIR/events.jsonl"
 DRAFT="$ATONE_DIR/events.jsonl.draft"
 
 show_help() {
-  printf '\n  %s%satone-promote-draft%s %s—%s Migration step: draft → events.jsonl\n' \
+  printf '\n  %s%satone-promote-draft%s %s-%s Migration step: draft → events.jsonl\n' \
     "$C_BOLD" "$C_MAGENTA" "$C_RESET" "$C_DIM" "$C_RESET"
 
   _section "USAGE"
@@ -30,7 +30,7 @@ show_help() {
   _dim "2. backs up current events.jsonl to events.jsonl.pre-promote.bak.<ts>"
   _dim "3. mv events.jsonl.draft → events.jsonl"
   _dim "4. git add + commit"
-  _dim "5. does NOT apply chflags — run 'atone.sh lock' after verifying"
+  _dim "5. does NOT apply chflags: run 'atone.sh lock' after verifying"
   echo
 }
 
@@ -42,7 +42,7 @@ case "${1:-}" in
   *) _err "unknown flag: $1"; show_help; exit 2 ;;
 esac
 
-[ -f "$DRAFT" ] || _die "no draft at $DRAFT — run the migration parser first"
+[ -f "$DRAFT" ] || _die "no draft at $DRAFT: run the migration parser first"
 
 # Validate JSONL
 if ! python3 -c "
@@ -52,11 +52,11 @@ for i, l in enumerate(open('$DRAFT'), 1):
         try: json.loads(l)
         except Exception as e: print(f'line {i}: {e}'); sys.exit(1)
 " >&2; then
-  _die "draft has invalid JSONL — fix before promoting"
+  _die "draft has invalid JSONL: fix before promoting"
 fi
 
 LINES=$(wc -l < "$DRAFT" | tr -d ' ')
-_ok "draft validated — $LINES events ready to promote"
+_ok "draft validated: $LINES events ready to promote"
 
 if [ -s "$STORE" ]; then
   EXISTING=$(wc -l < "$STORE" | tr -d ' ')

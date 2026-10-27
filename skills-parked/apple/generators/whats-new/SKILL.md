@@ -172,7 +172,7 @@ struct HomeView: View {
 ### Adding New Releases
 
 ```swift
-// In LocalWhatsNewProvider.swift — add a new entry per release
+// In LocalWhatsNewProvider.swift: add a new entry per release
 static let releases: [WhatsNewRelease] = [
     WhatsNewRelease(
         version: "2.1.0",
@@ -209,7 +209,7 @@ func showsWhatsNewForNewVersion() {
         currentVersion: "2.0.0"
     )
 
-    // First launch — no previous version stored
+    // First launch: no previous version stored
     #expect(tracker.shouldShowWhatsNew() == true)
 
     tracker.markVersionAsShown()
@@ -227,7 +227,7 @@ func skipsWhatsNewWhenVersionUnchanged() {
     )
     tracker.markVersionAsShown()
 
-    // Same version — should not show
+    // Same version: should not show
     let tracker2 = VersionTracker(
         defaults: defaults,
         currentVersion: "1.5.0"
@@ -302,7 +302,7 @@ let release = try await provider.latestRelease()
 ```swift
 func shouldShowWhatsNew() -> Bool {
     guard let lastShown = lastShownVersion else {
-        // First install — mark current version, don't show
+        // First install: mark current version, don't show
         markVersionAsShown()
         return false
     }

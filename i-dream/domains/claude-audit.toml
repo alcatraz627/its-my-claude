@@ -1,18 +1,18 @@
-# i-dream domain manifest — claude-audit (hook-usage feedback)
+# i-dream domain manifest: claude-audit (hook-usage feedback)
 #
 # LIVE since ~2026-07 (header corrected 2026-07-13): the activation gate in
-# integration-requests/claude-audit-staged/ACTIVATION.md is satisfied — the
+# integration-requests/claude-audit-staged/ACTIVATION.md is satisfied: the
 # events stream has real, ongoing data. Canonical copy is THIS file; the one
 # under integration-requests/ is the historical staging artifact.
 #
 # Derived from the filled integration request (../claude-audit.md) + two owner
-# decisions: (1) synthesized join — an extractor merges vents ⋈ telemetry on
-# hook_id; (2) severity_order generalization — impact uses low/med/high.
+# decisions: (1) synthesized join: an extractor merges vents ⋈ telemetry on
+# hook_id; (2) severity_order generalization: impact uses low/med/high.
 
 [domain]
 name        = "claude-audit"
 version     = "1.0"
-description = "Hook/guardrail usage feedback — which hooks help vs obstruct"
+description = "Hook/guardrail usage feedback: which hooks help vs obstruct"
 root        = "~/.claude/hooks-feedback-domain"
 
 [event_stream]
@@ -33,7 +33,7 @@ timeout = "60s"
 
 [dream]
 enabled       = true
-cadence       = "every-2-days"        # mirror atone — the sibling signal
+cadence       = "every-2-days"        # mirror atone: the sibling signal
 budget_tokens = 4000
 prompt_path   = "{root}/dream/prompt.md"
 insights_path = "{root}/dream/insights.jsonl"

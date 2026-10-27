@@ -1,7 +1,7 @@
 # deployq target registry.  target <TAB> repo <TAB> wrapper <TAB> probe-url
 #
 # The registry is DATA and this file carries the ids, exactly as estate.ids does
-# for gcp-actions.sh — so the scripts beside it stay estate-agnostic and can be
+# for gcp-actions.sh: so the scripts beside it stay estate-agnostic and can be
 # promoted without edits.
 #
 # A wrapper must already exist in its repo and be the reviewed deploy path for

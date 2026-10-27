@@ -250,10 +250,10 @@ The pirate metrics framework: diagnose where your funnel leaks.
 ```
               Month 0  Month 1  Month 2  Month 3  Month 4  Month 5
 Jan cohort    100%     62%      55%      50%      48%      46%
-Feb cohort    100%     58%      51%      46%      44%      —
-Mar cohort    100%     65%      59%      54%      —        —
-Apr cohort    100%     70%      63%      —        —        —
-May cohort    100%     68%      —        —        —        —
+Feb cohort    100%     58%      51%      46%      44%     :
+Mar cohort    100%     65%      59%      54%::
+Apr cohort    100%     70%      63% ( ):
+May cohort    100%     68% ( )::
 ```
 
 **What to look for:**
@@ -311,7 +311,7 @@ Low tap-through rate
 │       ├── NO → Rewrite title: [Brand] - [Value Keyword]
 │       └── YES → Is your subtitle compelling?
 │           ├── NO → Rewrite subtitle with specific benefit
-│           └── YES → Check competitor positioning — are you differentiated?
+│           └── YES → Check competitor positioning: are you differentiated?
 ```
 
 #### Good Downloads, Bad Retention (D1 < 25%)
@@ -337,7 +337,7 @@ Low monetization
 │       ├── NO → Redesign paywall (show value, social proof, feature comparison)
 │       └── YES → Is the price right?
 │           ├── TOO HIGH → Test lower price point or add cheaper tier
-│           ├── TOO LOW → Users may not perceive enough value — test higher price
+│           ├── TOO LOW → Users may not perceive enough value: test higher price
 │           └── SEEMS RIGHT → Is trial experience showcasing premium features?
 │               ├── NO → Onboard users to premium features during trial
 │               └── YES → Test different trial lengths or offer types
@@ -420,12 +420,12 @@ Present analysis as an Analytics Health Report:
 | Revenue | LTV | $XX.XX | 🟢/🟡/🔴 | ... |
 
 ## Primary Bottleneck
-**[Stage name]** — [One sentence explanation of the biggest problem]
+**[Stage name]**: [One sentence explanation of the biggest problem]
 
 ## Recommended Actions (Priority Order)
-1. 🔴 [Critical fix] — Expected impact: [X]
-2. 🟠 [High priority] — Expected impact: [X]
-3. 🟡 [Medium priority] — Expected impact: [X]
+1. 🔴 [Critical fix]: Expected impact: [X]
+2. 🟠 [High priority]: Expected impact: [X]
+3. 🟡 [Medium priority]: Expected impact: [X]
 
 ## Overall Assessment
 **Recommendation:** [Invest / Iterate / Pivot / Sunset]

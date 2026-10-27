@@ -3,7 +3,7 @@
 # not feed the daemon (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
 case "${CLAUDE_CODE_ENTRYPOINT:-}" in ""|cli|claude-vscode) ;; *) exit 0 ;; esac
-# i-dream: PreToolUse hook — compiled-intervention nudges (advisory only).
+# i-dream: PreToolUse hook: compiled-intervention nudges (advisory only).
 # stdout carries at most one hookSpecificOutput/additionalContext JSON.
 HOOK_INPUT=$(cat)
 IDREAM_INPUT="$HOOK_INPUT" python3 << 'PYEOF' 2>/dev/null || true
@@ -40,7 +40,7 @@ sid = data.get("session_id", "") or ""
 
 live, shadow = [], []
 # ReDoS guard (validation MAJOR-1): a catastrophic compiler-authored pattern
-# aborts the whole match loop within 2s — silent exit 0, no stdout — instead
+# aborts the whole match loop within 2s (silent exit 0, no stdout) instead
 # of stalling the tool call. Subject capped as the second belt.
 import signal as _sig
 def _rex_abort(_s, _f):

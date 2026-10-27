@@ -132,9 +132,9 @@ Write the full report to the path the dispatcher gives you:
 
 ## Failed attacks (attempted, did not land)
 
-- <attack> — <run evidence it survived>
+- <attack>: <run evidence it survived>
 
-## Unanchored observations (appendix — no recorded user-value anchor; max 5 lines)
+## Unanchored observations (appendix: no recorded user-value anchor; max 5 lines)
 
 ## Verdict
 

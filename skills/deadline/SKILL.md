@@ -134,7 +134,7 @@ future blocked ones. In order:
 ## The Deadline state block (in the workspace doc)
 
 ```
-## Deadline: <goal> — due <absolute datetime> (margin → target <T-minus-margin>)
+## Deadline: <goal>: due <absolute datetime> (margin → target <T-minus-margin>)
 Strategy: <chosen mode> (<reasoning one-liner>)
 Baseline: <N> parts / est <H>h / start <t0> → projected <tP>
 Now (<t>): DRIFT <x>x · GROWTH +<h>h (<parts>) · BURN → <projected> = ON-TRACK|SLIPPING
@@ -142,18 +142,18 @@ Limits runway: <window resets at / headroom note>
 
 Parts (ring / est / actual / status / reversible):
   1  <part>   CORE / 45m / 40m / done / reversible
-  2  <part>   CORE / 90m / --  / building / IRREVERSIBLE at deploy — WILL HALT
+  2  <part>   CORE / 90m / --  / building / IRREVERSIBLE at deploy: WILL HALT
   ...
 
-Veto list (reversible choices made in your absence — flip any in one line):
-  - <choice> (<t>) — <why this default> · revert: <cost>
+Veto list (reversible choices made in your absence: flip any in one line):
+  - <choice> (<t>): <why this default> · revert: <cost>
 
-Decision queue (answer FIRST on return — pre-drafted, one word each):
+Decision queue (answer FIRST on return: pre-drafted, one word each):
   Q1 <question>: <optA> ✓rec / <optB> / <optC>
 
 Shed log / cut list:
   auto-shed  <part>  POLISH  <t>  (pre-authorized)
-  PENDING    <part>  CORE    needs your call — ranked by regret below
+  PENDING    <part>  CORE    needs your call: ranked by regret below
 ```
 
 ## Phase 3: The return brief (fixed shape, decision-first)
@@ -163,9 +163,9 @@ renders it on demand) gets exactly this, in this order:
 
 ```
 ⏳ <N> decisions unblock the next stretch:    ← one word each, pre-drafted
-BURN: on/off-track vs T — DRIFT and GROWTH split out
+BURN: on/off-track vs T: DRIFT and GROWTH split out
 DID:  closed since your last visit
-VETO: ledger delta — flip any in one line
+VETO: ledger delta: flip any in one line
 NEXT: the standing plan if you leave right now
 ```
 

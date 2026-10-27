@@ -268,7 +268,7 @@ TabView(selection: $stateManager.selectedTab) {
 // Save draft only after user pauses typing (1 second)
 .onChange(of: textContent) {
     draftManager.save(key: "content", value: textContent)
-    // Internally debounced — won't write to disk on every keystroke
+    // Internally debounced: won't write to disk on every keystroke
 }
 ```
 

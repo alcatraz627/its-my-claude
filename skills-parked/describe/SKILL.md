@@ -234,7 +234,7 @@ Write the analysis to a temporary markdown file at `/tmp/describe-<name>.md`.
 ```markdown
 # /describe: <name>
 
-> <type> — <one-line description>
+> <type>: <one-line description>
 
 ## Intent
 
@@ -259,11 +259,11 @@ Write the analysis to a temporary markdown file at `/tmp/describe-<name>.md`.
 
 ## Workflow
 
-### Phase 1 — ...
+### Phase 1: ...
 
 <numbered steps>
 
-### Phase 2 — ...
+### Phase 2: ...
 
 ...
 

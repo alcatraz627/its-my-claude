@@ -172,16 +172,16 @@ The scaffolded body follows the Claude-consumption shape, **no interactive gates
 1. ONE-LINE IDENTITY      A single sentence: what this agent is and the one job it does.
                           (e.g. "Scans App Router route files and flags missing auth guards.")
 
-2. WHEN TO INVOKE         The trigger — the situation that should route work here, in the
+2. WHEN TO INVOKE         The trigger: the situation that should route work here, in the
                           user's terms. (e.g. "after editing auth middleware, or before a PR
                           that touches a mutation handler.")
 
 3. WORKFLOW (numbered)    The autonomous steps the agent runs, or a loop if it iterates. Each
-                          step is an action on real files/commands — no prompts between them.
+                          step is an action on real files/commands: no prompts between them.
                           Match the step count to the task; a sync-checker may be 2 steps, an
                           audit 4. Don't pad to three.
 
-4. CHECKLIST / HEURISTICS A few canonical things to look for or rules to apply — not an
+4. CHECKLIST / HEURISTICS A few canonical things to look for or rules to apply: not an
                           exhaustive edge-case enumeration. Heuristics + examples beat lists.
 
 5. OUTPUT CONTRACT        The load-bearing section. A tiered, structured block the parent
@@ -229,7 +229,7 @@ The shape is **verb + object + trigger**: what it does, to what, and the situati
     <the trigger situation, in the user's terms>
 
   Workflow
-    <numbered autonomous steps — match count to the task, no prompts>
+    <numbered autonomous steps: match count to the task, no prompts>
 
   Checklist / heuristics
     <a few canonical things to look for / rules to apply>
@@ -237,7 +237,7 @@ The shape is **verb + object + trigger**: what it does, to what, and the situati
   Output contract
     <tiered structured block the parent consumes>
 
-  [Convert mode only — Changes from original:]
+  [Convert mode only: Changes from original:]
     ✗ Removed: [interactive elements]
     ✗ Removed: [self-update references]
     + Added:   context: fork
@@ -299,10 +299,10 @@ Keep emphasis plain. Reserve ALL-CAPS / "MUST" for the rare load-bearing guardra
 ─────────────────────────────────────────────────────
 
   ── ERRORS (must fix) ──────────────────────────────
-  ✗ [file:line] — [description]
+  ✗ [file:line]: [description]
 
   ── WARNINGS (should fix) ──────────────────────────
-  ⚠ [file:line] — [description]
+  ⚠ [file:line]: [description]
 
   ── LOOKS GOOD ─────────────────────────────────────
   ✓ [what passed]
@@ -373,8 +373,8 @@ Print final summary:
     <DEST>/SKILL.md   (<N> lines)
 
   Agent properties:
-    context: fork ✓   — runs in isolated context
-    interactive:  ✓   — none (fully autonomous)
+    context: fork ✓: runs in isolated context
+    interactive:  ✓: none (fully autonomous)
 
   To use: type /<name> in any Claude Code session.
   To review: /user-config edit → select the agent.

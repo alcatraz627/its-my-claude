@@ -84,7 +84,7 @@ block_hits=0    # count of block-tier categories
 
 # 2 · decoration-emoji headers / traffic-light status lines.
 if printf '%s\n' "$prose" | rg -q '^[[:space:]]*(#{1,6}[[:space:]]*)?(🔴|🟡|🟢|🟠|🚦|🎯|🚀|🔥|💡|📊|🧠|✨|🛑|📌|⚡|❗|✅|⚠️|❌)' 2>/dev/null; then
-  tells="${tells}\n- decoration-emoji header/status lines (traffic-lights, section emoji — decoration is not rigor)"
+  tells="${tells}\n- decoration-emoji header/status lines (traffic-lights, section emoji: decoration is not rigor)"
   block_hits=$((block_hits + 1))
 fi
 
@@ -111,23 +111,23 @@ fi
 # so the reply gate and the file gate cannot disagree about what a verdict is.
 first_line=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
 if printf '%s' "$first_line" | rg -qi "^(you'?re (absolutely |completely |exactly )?right|great (question|point|idea|catch)|excellent|perfect[.!]|fair question|what a )" 2>/dev/null; then
-  tells="${tells}\n- praise opener (\"${first_line:0:60}…\") — open with substance, praise only with evidence"
+  tells="${tells}\n- praise opener (\"${first_line:0:60}…\"): open with substance, praise only with evidence"
   block_hits=$((block_hits + 1))
-elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:—]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
+elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:\x{2014}]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
   # WARN-TIER, deliberately. PROSE_SMELL_ENFORCE=1 is set in settings.json, so
   # this gate really blocks, and a verdict opener is a judgment call that
   # collides with terse-in-terse-out: "Done. Pushed the fix and reran the suite"
   # is a shape this account's own doctrine asks for. Flag it, never block on it
   # alone. The validator produced a compliant reply that this blocked before the
   # demotion. Promote only if telemetry shows it firing on real defects.
-  tells="${tells}\n- self-grading verdict opener (\"${first_line:0:60}…\") — warn-tier: the done-verdict is the owner's; prefer leading with what is true"
+  tells="${tells}\n- self-grading verdict opener (\"${first_line:0:60}…\"): warn-tier: the done-verdict is the owner's; prefer leading with what is true"
 fi
 
 # 5b · the not-X-but-Y contrastive frame, banned in earnest prose. Same lexicon
 # as prose-lint.py's CONTRASTIVE. Quoted material is already stripped upstream.
 contra_n=$(printf '%s' "$prose" | rg -coiP "\\bnot\\s+[^.;,]{2,40},?\\s+but\\s+" 2>/dev/null || true)
 if [ "${contra_n:-0}" -ge 1 ] 2>/dev/null; then
-  tells="${tells}\n- not-X-but-Y frame ×${contra_n} — state the thing; the contrast scaffold adds length, not meaning"
+  tells="${tells}\n- not-X-but-Y frame ×${contra_n}: state the thing; the contrast scaffold adds length, not meaning"
   block_hits=$((block_hits + 1))
 fi
 
@@ -186,14 +186,14 @@ if [ -n "$last_user" ] \
   opener=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
   if printf '%s' "$opener" | rg -qP '^\s*(#{1,6}\s|\*\*[^*]{2,60}\*\*\s*:?\s*$)' 2>/dev/null \
      && ! printf '%s' "$opener" | rg -qP '[.!?]\s*\*{0,2}\s*$' 2>/dev/null; then
-    tells="${tells}\n- opened a ${#prose}-char reply to a ${#last_user}-char question with a title, not the answer (\"${opener:0:48}…\") — lead with the sentence that answers, then explain"
+    tells="${tells}\n- opened a ${#prose}-char reply to a ${#last_user}-char question with a title, not the answer (\"${opener:0:48}…\"): lead with the sentence that answers, then explain"
   fi
 fi
 
 # 7 · option-menu closer (warn-tier: genuine forks are legitimate).
 closer=$(printf '%s\n' "$prose" | rg '\S' 2>/dev/null | tail -3)
 if printf '%s' "$closer" | rg -qi '(would you like me to|do you want me to|shall i|want me to) .+ or .+\?' 2>/dev/null; then
-  tells="${tells}\n- option-menu closer — if the task is done, report and stop; offer forks only at genuine decision points"
+  tells="${tells}\n- option-menu closer: if the task is done, report and stop; offer forks only at genuine decision points"
 fi
 
 MARK="/tmp/claude-prose-smell-${sid8}"

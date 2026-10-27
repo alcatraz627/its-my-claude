@@ -376,16 +376,16 @@ Core Spotlight indexes are **on-device only**. Indexed content is:
 ### What to Index vs. Keep Private
 
 ```swift
-// ✅ Safe to index — user-facing content
+// ✅ Safe to index: user-facing content
 attributes.title = article.title
 attributes.contentDescription = article.summary
 attributes.keywords = article.tags
 
-// ❌ Never index — sensitive data
+// ❌ Never index: sensitive data
 // attributes.contentDescription = user.socialSecurityNumber
 // attributes.keywords = [user.password, user.apiKey]
 
-// ⚠️ Be careful — potentially sensitive
+// ⚠️ Be careful: potentially sensitive
 // Consider a user setting to opt-out of indexing
 attributes.contentDescription = message.preview  // Private messages?
 ```

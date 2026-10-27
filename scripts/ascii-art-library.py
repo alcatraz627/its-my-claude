@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """
-ascii-art-library.py — ASCII art pieces for session-banner.py
+ascii-art-library.py: ASCII art pieces for session-banner.py
 
 PRNG selector: select(model, hour) -> (artwork_dict, tip_str)
-  Seed = MD5(f"{model}:{hour}") — stable within the same hour, changes each hour.
+  Seed = MD5(f"{model}:{hour}"): stable within the same hour, changes each hour.
 
 Adding new art:
   1. Add a dict to ARTWORKS with keys: name (str), lines (list[str]), delay (float)
   2. Keep each line <= 64 chars (banner W=72, border+indent = 8 chars overhead)
   3. Keep height <= 12 lines for compact display
-  4. Use plain ASCII only — no Unicode art (breaks width calculations)
-  5. Avoid trailing backslashes on lines — use double backslash \\ or redesign
+  4. Use plain ASCII only: no Unicode art (breaks width calculations)
+  5. Avoid trailing backslashes on lines: use double backslash \\ or redesign
   6. Test: python3 ~/.claude/scripts/ascii-art-library.py --preview <name>
 
 Adding announcements:

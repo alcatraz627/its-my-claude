@@ -30,7 +30,7 @@ If it does not exist yet, continue without it.
 ## Usage
 
 ```
-/scaffold                                    # Interactive wizard — asks what to build
+/scaffold                                    # Interactive wizard: asks what to build
 /scaffold nextjs --name my-app               # Next.js project named "my-app"
 /scaffold fastapi --name api --dir ~/Code    # FastAPI project in ~/Code/api
 /scaffold express --minimal                  # Express with bare minimum files
@@ -219,7 +219,7 @@ project type and start command); otherwise use the stack's run command directly.
 
 Report `✓ Booted: <observed signal>` (the listening line, the HTTP status, the help output)
 or `✗ Boot failed: <reason>`. If the app genuinely can't be booted here (missing service,
-hardware), report `UNCONFIRMED — <reason>` rather than claiming it passed.
+hardware), report `UNCONFIRMED: <reason>` rather than claiming it passed.
 
 ---
 

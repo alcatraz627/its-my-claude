@@ -56,20 +56,20 @@ If `--emit-proposals`: file top-N findings via `propose.sh add --source auto-sca
 
 ```
 ~/.claude/skills/scan-sessions/
-  SKILL.md          — this file
-  main.py           — entry point + CLI
-  crawl.py          — JSONL walker + SQLite indexer (incremental, prunes stale entries)
+  SKILL.md: this file
+  main.py: entry point + CLI
+  crawl.py: JSONL walker + SQLite indexer (incremental, prunes stale entries)
   signals/
-    user_frustration.py  — keyword + short-reply detection (filters boilerplate/instructions)
-    self_correction.py   — re_edit, fix_attempt, actually patterns
-    tool_errors.py       — 30+ regex patterns across 15 error categories
-    repeated_reads.py    — tracks files read 3+ times in a session
-    skill_outcomes.py    — 40-turn lookahead for confirmed/implicit success/error/rejection
-  aggregate.py      — cross-session analysis + novel pattern detection
-  report.py         — HTML report generator (dark/light toggle, CSS bar charts)
+    user_frustration.py: keyword + short-reply detection (filters boilerplate/instructions)
+    self_correction.py: re_edit, fix_attempt, actually patterns
+    tool_errors.py: 30+ regex patterns across 15 error categories
+    repeated_reads.py: tracks files read 3+ times in a session
+    skill_outcomes.py: 40-turn lookahead for confirmed/implicit success/error/rejection
+  aggregate.py: cross-session analysis + novel pattern detection
+  report.py: HTML report generator (dark/light toggle, CSS bar charts)
 
 ~/.claude/assets/scan-sessions/
-  index.db          — SQLite index (WAL mode, 3 tables: sessions, turns, signals)
+  index.db: SQLite index (WAL mode, 3 tables: sessions, turns, signals)
 ```
 
 ## Signal Details

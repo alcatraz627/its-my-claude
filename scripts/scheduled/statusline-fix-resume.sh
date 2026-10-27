@@ -16,7 +16,7 @@ FIRE_DATE="2026-06-02"
 
 today=$(date '+%Y-%m-%d')
 if [[ "$today" != "$FIRE_DATE" ]]; then
-  echo "[$today] not the intended fire date $FIRE_DATE — exiting without action"
+  echo "[$today] not the intended fire date $FIRE_DATE: exiting without action"
   exit 0
 fi
 

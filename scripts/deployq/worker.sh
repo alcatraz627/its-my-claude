@@ -32,7 +32,7 @@ finish() {  # $1 file  $2 state  $3 verdict
      '. + {state:$s, verdict:$v, finished_at:$t}' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
   mv "$f" "$Q/done/$(basename "$f")"
   notify "$(jq -r '.notify // empty' "$Q/done/$(basename "$f")")" \
-    "deployq $id: $state — $verdict. Report: $Q/reports/$id.md"
+    "deployq $id: $state: $verdict. Report: $Q/reports/$id.md"
   log "$id -> $state ($verdict)"
 }
 
@@ -130,7 +130,7 @@ run_ticket() {
 
   if [ $bad -ne 0 ]; then
     # deployed but not trusted: its own state, because those are different claims
-    finish "$f" "failed:postcheck" "DEPLOYED BUT NOT TRUSTED — a post-check failed"
+    finish "$f" "failed:postcheck" "DEPLOYED BUT NOT TRUSTED: a post-check failed"
   else
     finish "$f" "done" "deployed and post-checked"
   fi
@@ -157,7 +157,7 @@ collapse_batch() {
         '. + {state:"superseded", verdict:("batched into " + $n), finished_at:$t}' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
       mv "$f" "$Q/done/$(basename "$f")"
       notify "$(jq -r '.notify // empty' "$Q/done/$(basename "$f")")" \
-        "deployq $id: SUPERSEDED — batched into $nid on key '$key'. Not dropped; $nid deploys the newer ref."
+        "deployq $id: SUPERSEDED: batched into $nid on key '$key'. Not dropped; $nid deploys the newer ref."
       log "$id superseded by $nid (batch $key)"
       return 1
     fi
@@ -175,11 +175,11 @@ collapse_batch() {
 shopt -s nullglob
 for orphan in "$Q"/running/*.json; do
   oid=$(jq -r .ticket "$orphan")
-  jq --arg t "$(now)" '. + {state:"failed:interrupted", verdict:"the worker restarted mid-deploy; whether the build landed is UNKNOWN — check the service before resubmitting", finished_at:$t}' \
+  jq --arg t "$(now)" '. + {state:"failed:interrupted", verdict:"the worker restarted mid-deploy; whether the build landed is UNKNOWN: check the service before resubmitting", finished_at:$t}' \
     "$orphan" > "$orphan.tmp" && mv "$orphan.tmp" "$orphan"
   mv "$orphan" "$Q/done/$(basename "$orphan")"
   notify "$(jq -r '.notify // empty' "$Q/done/$(basename "$orphan")")" \
-    "deployq $oid: FAILED:INTERRUPTED — the worker restarted mid-deploy. Whether the build landed is UNKNOWN. Check the live service before resubmitting; do NOT assume it failed."
+    "deployq $oid: FAILED:INTERRUPTED: the worker restarted mid-deploy. Whether the build landed is UNKNOWN. Check the live service before resubmitting; do NOT assume it failed."
   log "$oid recovered as failed:interrupted (worker restarted mid-deploy)"
 done
 shopt -u nullglob

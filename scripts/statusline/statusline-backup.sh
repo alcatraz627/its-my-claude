@@ -24,7 +24,7 @@ fi
 
 # Current → bak_1 (with timestamp + reason in a comment header)
 {
-  echo "# Backup: $(date '+%Y-%m-%d %H:%M') — ${REASON}"
+  echo "# Backup: $(date '+%Y-%m-%d %H:%M'): ${REASON}"
   cat "$CONF"
 } > "$BAK1"
 

@@ -330,9 +330,9 @@ protocol DataStore { ... }
 | invariants | 1 | count consistency |
 
 ### Implementations Tested
-- [x] InMemoryDataStore — all passing
-- [x] SQLiteDataStore — all passing
-- [ ] CloudDataStore — pending implementation
+- [x] InMemoryDataStore: all passing
+- [x] SQLiteDataStore: all passing
+- [ ] CloudDataStore: pending implementation
 
 ### Files Created
 - `Tests/Contracts/DataStoreContractTests.swift`

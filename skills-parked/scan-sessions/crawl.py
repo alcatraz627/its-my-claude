@@ -1,5 +1,5 @@
 """
-crawl.py — Walk ~/.claude/projects/**/*.jsonl and index into SQLite.
+crawl.py: Walk ~/.claude/projects/**/*.jsonl and index into SQLite.
 
 Incremental by default: tracks mtime + size per file, skips unchanged.
 Force full re-crawl with rescan=True.
@@ -141,7 +141,7 @@ def _derive_project(filepath, cwd=None):
 def _extract_text(content, include_tool_results=False):
     """Extract plain text from message content (string or content blocks).
 
-    By default skips tool_result blocks — those are indexed as separate turns.
+    By default skips tool_result blocks: those are indexed as separate turns.
     """
     if isinstance(content, str):
         return content
@@ -201,7 +201,7 @@ def crawl(conn, rescan=False, projects_dir=None, prune_orphans=False):
     Returns (new_sessions, updated_sessions, skipped).
 
     prune_orphans: if True, delete DB rows for sessions whose JSONL is gone from
-    disk. DEFAULT FALSE — the index is now the ONLY surviving record of sessions
+    disk. DEFAULT FALSE: the index is now the ONLY surviving record of sessions
     older than Claude Code's cleanupPeriodDays (which permanently deletes old
     transcripts). Pruning would destroy that history. Keep orphaned rows; they
     are the archive.

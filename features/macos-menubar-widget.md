@@ -68,7 +68,7 @@ final class SettingsWindowController {
             w.setContentSize(NSSize(width: 600, height: 680))
             window = w
         }
-        // Open on the screen UNDER THE CURSOR, not NSScreen.main — main can be an
+        // Open on the screen UNDER THE CURSOR, not NSScreen.main: main can be an
         // asleep/secondary display, and the window then opens invisibly there.
         if let w = window {
             let scr = NSScreen.screens.first { NSMouseInRect(NSEvent.mouseLocation, $0.frame, false) } ?? NSScreen.main
@@ -106,7 +106,7 @@ must be drawn into ONE `NSImage`:
 ```swift
 let img = NSImage(size: NSSize(width: totalW, height: NSStatusBar.system.thickness),
                   flipped: false) { _ in /* icon.draw / attrStr.draw(at:) / NSBezierPath dots */ true }
-img.isTemplate = false          // MANDATORY for per-element color — template flattens to fg
+img.isTemplate = false          // MANDATORY for per-element color: template flattens to fg
 btn.image = img; btn.imagePosition = .imageOnly; btn.title = ""
 ```
 

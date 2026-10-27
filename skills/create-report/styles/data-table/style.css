@@ -1,5 +1,5 @@
 /* ============================================================
-   data-table style — Airtable / Google Sheets inspired
+   data-table style: Airtable / Google Sheets inspired
    Dense, data-heavy layout with full-width tables and tabs
    ============================================================ */
 
@@ -425,7 +425,7 @@ body {
   gap: 16px;
 }
 
-/* ── Tables — Hero Element ───────────────────────────────── */
+/* ── Tables: Hero Element ───────────────────────────────── */
 
 .table-wrap {
   width: 100%;
@@ -481,7 +481,7 @@ th:last-child::after {
   display: none;
 }
 
-/* Sort indicators — scoped to active panel only */
+/* Sort indicators: scoped to active panel only */
 .tab-panel.active th[data-sort]::before {
   content: "⇅";
   font-size: 9px;
@@ -524,7 +524,7 @@ tbody tr:hover {
   background: var(--row-hover);
 }
 
-/* Number detection — right-align cells that look numeric */
+/* Number detection: right-align cells that look numeric */
 td.cell-number {
   text-align: right;
   font-family: var(--font-mono);
@@ -544,7 +544,7 @@ td .search-match {
   padding: 0 1px;
 }
 
-/* Expandable cells — click truncated cells to show full content */
+/* Expandable cells: click truncated cells to show full content */
 td.cell-expandable {
   cursor: pointer;
   position: relative;
@@ -679,32 +679,32 @@ blockquote code {
   color: var(--inline-code-text);
 }
 
-/* Syntax highlight tokens — good contrast on dark code bg */
+/* Syntax highlight tokens: good contrast on dark code bg */
 .kw {
   color: #c084fc;
-} /* keyword — purple */
+} /* keyword: purple */
 .st {
   color: #86efac;
-} /* string — green */
+} /* string: green */
 .cm {
   color: #64748b;
   font-style: italic;
-} /* comment — muted */
+} /* comment: muted */
 .nm {
   color: #fbbf24;
-} /* number — amber */
+} /* number: amber */
 .tp {
   color: #67e8f9;
-} /* type — cyan */
+} /* type: cyan */
 .at {
   color: #fb923c;
-} /* attribute — orange */
+} /* attribute: orange */
 .op {
   color: #94a3b8;
-} /* operator — slate */
+} /* operator: slate */
 .fn {
   color: #60a5fa;
-} /* function — blue */
+} /* function: blue */
 
 /* ── Tree Blocks ─────────────────────────────────────────── */
 
@@ -906,7 +906,7 @@ a:hover {
     color: #24292e;
   }
 
-  /* Header bar — print as a clean title strip */
+  /* Header bar: print as a clean title strip */
   .header-bar {
     position: static;
     box-shadow: none;
@@ -924,7 +924,7 @@ a:hover {
     font-size: 16pt;
   }
 
-  /* Stats bar — keep but simplify */
+  /* Stats bar: keep but simplify */
   .stats-bar {
     background: #f0fdf4;
     border-bottom: 1px solid #d0d7de;
@@ -939,17 +939,17 @@ a:hover {
     color: #16a34a;
   }
 
-  /* Filter bar — hide (search not useful in PDF) */
+  /* Filter bar: hide (search not useful in PDF) */
   .filter-bar {
     display: none !important;
   }
 
-  /* Tab bar — hide (all panels visible) */
+  /* Tab bar: hide (all panels visible) */
   .tab-bar {
     display: none !important;
   }
 
-  /* Show ALL tab panels — this is the key for PDF */
+  /* Show ALL tab panels: this is the key for PDF */
   .tab-panel {
     display: block !important;
     page-break-inside: avoid;
@@ -965,13 +965,13 @@ a:hover {
     border-bottom: 2px solid #d0d7de;
   }
 
-  /* Main content — full width */
+  /* Main content: full width */
   .main-content {
     max-width: none;
     padding: 16px 0 0;
   }
 
-  /* Tables — explicit borders, no hover */
+  /* Tables: explicit borders, no hover */
   .table-wrap {
     box-shadow: none;
     border: 1px solid #d0d7de;
@@ -1005,7 +1005,7 @@ a:hover {
     background: inherit;
   }
 
-  /* Code blocks — light bg for print readability */
+  /* Code blocks: light bg for print readability */
   .code-wrap {
     border: 1px solid #d0d7de;
   }
@@ -1025,7 +1025,7 @@ a:hover {
   pre code {
     color: #24292f;
   }
-  /* Syntax tokens — print-safe dark colors on light bg */
+  /* Syntax tokens: print-safe dark colors on light bg */
   .kw {
     color: #8250df;
   }
@@ -1094,7 +1094,7 @@ a:hover {
     display: none !important;
   }
 
-  /* Paragraphs — full width */
+  /* Paragraphs: full width */
   p {
     max-width: none;
     color: #24292e;

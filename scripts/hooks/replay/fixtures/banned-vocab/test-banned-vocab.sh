@@ -60,7 +60,7 @@ whitelist
 click here => the settings page
 '
 
-echo "=== guard-banned-vocab.sh — synthetic acceptance suite ==="
+echo "=== guard-banned-vocab.sh: synthetic acceptance suite ==="
 
 # 1. banned term added to a .md, project opted in → BLOCK
 p=$(mkproj p1 "$VOCAB")

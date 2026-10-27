@@ -1,5 +1,5 @@
 """
-Detect repeated file reads — a sign of confusion or context loss.
+Detect repeated file reads: a sign of confusion or context loss.
 
 Signals:
 - Same file Read 3+ times in a session

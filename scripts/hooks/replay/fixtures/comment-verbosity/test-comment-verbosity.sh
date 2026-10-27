@@ -53,7 +53,7 @@ js_slash_run() { local n="$1" i out='function j() {'; for i in $(seq 1 "$n"); do
   return 1;
 }'; printf '%s' "$out"; }
 
-echo "=== guard-comment-verbosity.sh — synthetic acceptance suite ==="
+echo "=== guard-comment-verbosity.sh: synthetic acceptance suite ==="
 
 # --- SHOULD FIRE (clear over-verbosity) ---
 out=$(run Write /tmp/p/a.py "$(py_docstring 14)")

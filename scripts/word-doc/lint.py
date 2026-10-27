@@ -81,7 +81,7 @@ def lint(src):
 
     for i, s, kind in rows:
         if kind in ("para", "bullet", "quote", "heading"):
-            if "—" in s:
+            if "\u2014" in s:
                 out.append((i, "em-dash", "replace with a comma, a period, or parentheses"))
             if kind != "heading":
                 m = WEASEL.search(s)

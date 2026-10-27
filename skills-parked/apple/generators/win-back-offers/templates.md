@@ -194,11 +194,11 @@ final class WinBackMessageHandler {
             // message.display(in: .current)
 
         case .priceIncreaseConsent:
-            // Price increase consent — always let system handle
+            // Price increase consent: always let system handle
             break
 
         case .billingIssue:
-            // Billing issue — always let system handle
+            // Billing issue: always let system handle
             break
 
         default:

@@ -70,18 +70,18 @@ After:  3 dynamic frameworks  → ~50ms DYLD loading
 Static initializers (`+load`, `__attribute__((constructor))`) run before `main()`:
 
 ```swift
-// Bad — runs before main(), delays launch
+// Bad: runs before main(), delays launch
 class LegacyManager: NSObject {
     override class func load() { // ObjC +load
         setup()
     }
 }
 
-// Bad — C-style constructor
+// Bad: C-style constructor
 @_cdecl("initEarly")
 func initEarly() { /* runs before main */ }
 
-// Good — defer to first use
+// Good: defer to first use
 class LegacyManager {
     static let shared = LegacyManager() // Lazy, created on first access
 }
@@ -100,7 +100,7 @@ class LegacyManager {
 @main
 struct MyApp: App {
     init() {
-        // Bad — all of this delays first frame
+        // Bad: all of this delays first frame
         AnalyticsManager.shared.configure()
         CrashReporter.shared.start()
         RemoteConfig.shared.fetch()
@@ -115,7 +115,7 @@ struct MyApp: App {
     }
 }
 
-// Good — only essential work at init, defer the rest
+// Good: only essential work at init, defer the rest
 @main
 struct MyApp: App {
     init() {
@@ -144,14 +144,14 @@ struct MyApp: App {
 ### Lazy View Loading
 
 ```swift
-// Bad — all tabs initialize their full view hierarchy at launch
+// Bad: all tabs initialize their full view hierarchy at launch
 TabView {
     HomeView()        // Heavy: fetches data, builds complex layout
     SearchView()      // Heavy: initializes search index
     ProfileView()     // Heavy: loads user data
 }
 
-// Good — use lazy containers, each tab builds only when selected
+// Good: use lazy containers, each tab builds only when selected
 TabView {
     NavigationStack {
         HomeView()
@@ -170,7 +170,7 @@ TabView {
 ### Reduce Initial View Complexity
 
 ```swift
-// Bad — loading everything at once
+// Bad: loading everything at once
 struct ContentView: View {
     @State private var allItems: [Item] = []
 
@@ -186,7 +186,7 @@ struct ContentView: View {
     }
 }
 
-// Good — show skeleton immediately, load data async
+// Good: show skeleton immediately, load data async
 struct ContentView: View {
     @State private var items: [Item]?
 
@@ -210,11 +210,11 @@ struct ContentView: View {
 ### Database Migration at Launch
 
 ```swift
-// Bad — blocking migration on main thread
+// Bad: blocking migration on main thread
 let container = try ModelContainer(for: Item.self)
 // If migration runs, this blocks until complete
 
-// Good — show migration UI if needed
+// Good: show migration UI if needed
 struct AppEntry: View {
     @State private var container: ModelContainer?
     @State private var isMigrating = false

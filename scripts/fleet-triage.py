@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Triage a sub-agent fleet after an API outage — what survived, what to re-run.
+"""Triage a sub-agent fleet after an API outage: what survived, what to re-run.
 
 After a transient 429 kills part of a parallel Agent fleet, the dispatching
-parent needs to know which agents finished, which died, and — crucially —
+parent needs to know which agents finished, which died, and: crucially:
 which DIED but already wrote a usable output file (so they need NOT be re-run).
 This reads the parent session's subagents/ directory and classifies each agent.
 
@@ -154,7 +154,7 @@ def main():
     header = d
     if os.path.abspath(d).startswith(os.path.abspath(ROOT) + os.sep):
         header = os.path.relpath(d, ROOT)
-    print(f"# Fleet triage — {header}")
+    print(f"# Fleet triage: {header}")
     print(f"# {len(results)} agents | " +
           " ".join(f"{k}={v}" for k, v in sorted(counts.items())))
     print()

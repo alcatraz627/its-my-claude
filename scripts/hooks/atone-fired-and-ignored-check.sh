@@ -62,7 +62,7 @@ while IFS=$'\t' read -r slug count eid; do
   if [ -f "$EMITTED" ] && grep -qxF "$slug" "$EMITTED" 2>/dev/null; then
     continue
   fi
-  notes="objective: slug recorded ${count}x in session ${SESSION_KEY} — same-session recurrence after the first atone (fired-and-ignored detector)"
+  notes="objective: slug recorded ${count}x in session ${SESSION_KEY}: same-session recurrence after the first atone (fired-and-ignored detector)"
   args=(feedback --kind fired-and-ignored --slug "$slug" --notes "$notes")
   [ -n "$eid" ] && args+=(--event-id "$eid")
   ( bash "$ATONE" "${args[@]}" >/dev/null 2>&1 & ) &

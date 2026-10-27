@@ -71,7 +71,7 @@ cmd_list() {  # list [--src D] [--session S] [--since ISO] [--limit N]
     | sort -rt$'\t' -k1 | head -n "$limit" | _trunc | _tbl || true
 }
 
-cmd_timeline() {  # timeline <session> — every domain's events in one session, in order
+cmd_timeline() {  # timeline <session>: every domain's events in one session, in order
   [ -n "${1:-}" ] || { echo "usage: ledger timeline <session-id>" >&2; return 2; }
   _emit | awk -F'\t' -v s="$1" '$4==s' | sort -t$'\t' -k1 | _trunc | _tbl
 }
@@ -83,7 +83,7 @@ cmd_search() {  # search <query> [--src D]
   _emit "$src" | rg -i --no-config -- "$q" 2>/dev/null | sort -rt$'\t' -k1 | head -30 | _trunc | _tbl || true
 }
 
-cmd_show() {  # show <id> — full record from whichever stream holds it
+cmd_show() {  # show <id>: full record from whichever stream holds it
   [ -n "${1:-}" ] || { echo "usage: ledger show <id>" >&2; return 2; }
   # No pipeline here: `_streams | while … return` runs the loop in a subshell,
   # so the return never left the function and every hit ALSO printed "id not
@@ -101,7 +101,7 @@ cmd_show() {  # show <id> — full record from whichever stream holds it
   echo "id not found: $1" >&2; return 1
 }
 
-cmd_stats() {  # stats [--src D] — counts per domain + 7-day recency
+cmd_stats() {  # stats [--src D]: counts per domain + 7-day recency
   local src="${2:-}" cut7; cut7=$(date -u -v-7d '+%Y-%m-%dT%H:%M:%SZ' 2>/dev/null || echo "")
   _emit "$src" | awk -F'\t' -v c="$cut7" '{ n[$2]++; if(c!=""&&$1>=c) r[$2]++ } END { for (d in n) printf "  %-12s %5d total  %4d in 7d\n", d, n[d], r[d] }' | sort
 }
@@ -119,7 +119,7 @@ cmd_status() {  # agent: has any detector tripped? read alert-state live (never 
   [ -f "$st" ] || { echo "no detector state yet (evaluator runs daily 03:15)"; return 0; }
   local firing; firing=$(jq -r 'to_entries[] | select(.value.firing==true) | .key' "$st" 2>/dev/null)
   if [ -z "$firing" ]; then echo "ledger: no detectors firing"; else
-    echo "ledger: FIRING — $firing"
+    echo "ledger: FIRING: $firing"
     for d in $firing; do
       jq -r --arg d "$d" 'select(.detector==$d and .actionable==true) | "  "+.idempotence_key+": "+.instruction' "$al" 2>/dev/null | tail -1
     done
@@ -132,7 +132,7 @@ cmd_ask() {  # agent: cited facts about a topic (recency × substring), NOT pros
   [ -n "$q" ] || { echo "usage: ledger ask <topic> [--src D]" >&2; return 2; }
   echo "ledger says about \"$q\" (most recent first; each cites a domain + id):"
   _emit "$src" | rg -i --no-config -- "$q" 2>/dev/null | sort -rt$'\t' -k1 | head -8 \
-    | awk -F'\t' '{ printf "  [%s] %s#%s — %s\n", $2, $1, $3, substr($6,1,90) }'
+    | awk -F'\t' '{ printf "  [%s] %s#%s: %s\n", $2, $1, $3, substr($6,1,90) }'
 }
 
 case "${1:-help}" in
@@ -144,7 +144,7 @@ case "${1:-help}" in
   sources)  cmd_sources;;
   status)   cmd_status;;
   ask)      shift; cmd_ask "$@";;
-  *) printf 'ledger — query surface over the gcc event-ledger family\n\n'
+  *) printf 'ledger: query surface over the gcc event-ledger family\n\n'
      printf '  list [--src D] [--session S] [--since ISO] [--limit N]\n'
      printf '  timeline <session>     all domains, one session, in order\n'
      printf '  search <q> [--src D]   substring across the union\n'

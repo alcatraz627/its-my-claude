@@ -1,10 +1,10 @@
-# ~/.claude version control — ALLOWLIST model: ignore everything, then
+# ~/.claude version control: ALLOWLIST model: ignore everything, then
 # un-ignore only the config/code layer. This is leak-proof against new data
 # dirs (transcripts, dream data, .turn-state, telemetry, caches) that a
 # blocklist would silently start tracking.
 #
 # Raw data (projects/, assets/, widgets/, plugins/, sessions*/, .turn-state/,
-# output/, telemetry/, …) is NOT tracked — it moves via rsync per
+# output/, telemetry/, …) is NOT tracked: it moves via rsync per
 # mac-migration/MANIFEST.md §6. Standalone sub-projects become their own repos
 # (see PORTABILITY.md). Secrets are never tracked.
 #
@@ -41,7 +41,7 @@
 /adapters/codex/i-dream/derived/
 !/skills/
 # skills-parked/: the 11 skills moved out of the roster by mig 0048. Kept in
-# the repo, just not loaded — so it needs its own un-ignore line, because the
+# the repo, just not loaded: so it needs its own un-ignore line, because the
 # allowlist above ignores every new top level by default (owner ruling
 # 2026-08-20, after a sync nearly recorded the move as 428 bare deletions).
 !/skills-parked/
@@ -69,7 +69,7 @@
 !/style/glossary-hints.tsv
 !/style/profiles.json
 
-# accumulated LEARNED state — real value, version it (all tiny unless noted)
+# accumulated LEARNED state: real value, version it (all tiny unless noted)
 !/memory/
 # Holds test-account passwords in plain text; this repo is pushed to GitHub.
 /memory/global/reference_test-logins.md

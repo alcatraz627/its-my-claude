@@ -76,7 +76,7 @@ case "$verdict" in
     fi
     # Telemetry: record the fire so the claude-audit dream domain can see it.
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook cli-gating --heeded unknown >/dev/null 2>&1 &
-    printf '🛑 CLI WRITE GATE — human approval required (fires even in bypass).\n\nReason: %s\n\nEVERY write to a gated CLI (render/vercel/gh), any env, needs per-command approval. To proceed:\n  1. SHOW the user the exact command + a one-line plain-English note of what it does + its env, THEN ask with AskUserQuestion. Never ask without showing the command first.\n  2. On approval:  touch %s\n  3. Re-issue the EXACT same command. Approval is one-shot, expires in 300s.\n\nReads are never gated. If this blocked a READ, it is a bug: log it (bash ~/.claude/scripts/hooks/hook-feedback.sh --hook cli-gating --kind false-positive --note "...") and tell the user. Broad override: touch ~/.claude/cli-gating.off\n' "$reason" "$NONCE" >&2
+    printf '🛑 CLI WRITE GATE: human approval required (fires even in bypass).\n\nReason: %s\n\nEVERY write to a gated CLI (render/vercel/gh), any env, needs per-command approval. To proceed:\n  1. SHOW the user the exact command + a one-line plain-English note of what it does + its env, THEN ask with AskUserQuestion. Never ask without showing the command first.\n  2. On approval:  touch %s\n  3. Re-issue the EXACT same command. Approval is one-shot, expires in 300s.\n\nReads are never gated. If this blocked a READ, it is a bug: log it (bash ~/.claude/scripts/hooks/hook-feedback.sh --hook cli-gating --kind false-positive --note "...") and tell the user. Broad override: touch ~/.claude/cli-gating.off\n' "$reason" "$NONCE" >&2
     exit 2
     ;;
   *)

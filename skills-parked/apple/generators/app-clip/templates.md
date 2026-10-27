@@ -454,7 +454,7 @@ import CoreLocation
 /// proceeding with the App Clip experience.
 ///
 /// Uses the App Clip location confirmation API. The system shows a
-/// confirmation dialog — the app never receives the exact location,
+/// confirmation dialog: the app never receives the exact location,
 /// only a boolean result indicating if the user is within the expected region.
 ///
 /// Usage:
@@ -563,7 +563,7 @@ final class AppClipLocationManager: NSObject, CLLocationManagerDelegate {
         return try await withCheckedThrowingContinuation { continuation in
             self.continuation = continuation
 
-            // Request location confirmation — system shows a dialog
+            // Request location confirmation: system shows a dialog
             manager.requestWhenInUseAuthorization()
             manager.startMonitoring(for: region)
             manager.requestState(for: region)
@@ -875,7 +875,7 @@ enum AppClipMigrator {
 
     /// Check for and migrate App Clip data.
     ///
-    /// This is idempotent — it only runs once per install.
+    /// This is idempotent: it only runs once per install.
     ///
     /// - Parameter handler: Closure called with the list of keys that had data.
     static func migrateIfNeeded(handler: ([String]) -> Void) {

@@ -51,7 +51,7 @@ if [ "$prev_sig" = "$sig" ]; then same=$((prev_cnt + 1)); else same=1; fi
 printf '%s %s' "$sig" "$same" > "$SIG_FILE"
 
 tone="unresolved speculative atones from the residue review; resolve each this session"
-[ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS — the Stop gate is armed and blocks turn-ends once the owner has been quiet 30 minutes"
+[ "$n" -ge "$ESCALATE_AT" ] && tone="IGNORED $n TURNS: the Stop gate is armed and blocks turn-ends once the owner has been quiet 30 minutes"
 verbs="confirm = run /atone then \`atone-speculative.sh confirm <id> --atone <mist-id>\` · agree = \`atone-speculative.sh agree <id> --evidence \"<cited>\"\` (terminal, nothing further owed) · refute = \`atone-speculative.sh refute <id> --evidence \"<cited>\"\`"
 
 # agree is terminal (owner D7a, 2026-09-18): no owed line, no inherited debt.

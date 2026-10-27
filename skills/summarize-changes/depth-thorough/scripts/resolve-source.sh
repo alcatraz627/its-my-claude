@@ -26,10 +26,10 @@ case "$mode" in
     include_wt=0
     [[ "${1:-}" == "--include-worktree" ]] && include_wt=1
     if ! command -v gh >/dev/null 2>&1; then
-      echo "gh not installed — fall back to: resolve-source.sh branch <range>" >&2; exit 2
+      echo "gh not installed: fall back to: resolve-source.sh branch <range>" >&2; exit 2
     fi
     if ! base_branch=$(gh pr view "$pr_num" --json baseRefName -q .baseRefName 2>/dev/null); then
-      echo "gh pr view failed for #$pr_num — auth, fork, or closed PR?" >&2; exit 2
+      echo "gh pr view failed for #$pr_num: auth, fork, or closed PR?" >&2; exit 2
     fi
     head_branch=$(gh pr view "$pr_num" --json headRefName -q .headRefName)
     range="origin/${base_branch}...origin/${head_branch}"

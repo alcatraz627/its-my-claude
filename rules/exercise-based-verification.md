@@ -24,7 +24,7 @@ Before writing done · works · fixed · passing · verified · shipped:
 3. **A cached re-run is one run.** Bust the cache or vary the key before counting a repeat.
 4. **Induce the state that matters** (empty list, fault, pressure, cold vs warm) rather than inferring from the happy path.
 5. **A guard needs the opposite proof.** Break the thing it protects, watch its test go red, restore, watch it go green. A mutation that stays green means the test is the bug.
-6. **Mark the un-exercisable honestly:** `UNCONFIRMED — <reason>`, never a checkmark.
+6. **Mark the un-exercisable honestly:** `UNCONFIRMED: <reason>`, never a checkmark.
 
 Scale the run to the change (typo → syntax check; transform → smoke test with real data). Enforcement: `declared-ready-stop.sh`, armed (owner, 2026-10-19: keep it armed). It blocks a done-claim with no run behind it once per claim, then demotes to a soft note. Mute it only with `touch ~/.claude/.no-declared-ready-gate`; the SessionStart brief lists muted gates.
 

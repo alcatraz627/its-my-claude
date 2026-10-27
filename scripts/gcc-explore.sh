@@ -233,7 +233,7 @@ def foot(*paths):
     print(f"  {'└─ sources:':<13}" + f"\n  {'':<13}".join(paths))
 
 def render_shape(s, fr):
-    print("◆ SHAPE — what the gcc is")
+    print("◆ SHAPE: what the gcc is")
     print()
     lanes = s["lanes"]
     ss, up = lanes.get("SessionStart", 0), lanes.get("UserPromptSubmit", 0)
@@ -265,7 +265,7 @@ def render_shape(s, fr):
     foot(s["map_path"], p("settings.json"), p("rules") + "/  " + p("skills") + "/")
 
 def render_movement(mv):
-    print("◆ MOVEMENT — which way it is drifting")
+    print("◆ MOVEMENT: which way it is drifting")
     print()
     if not mv["ok"]:
         print(f"   ! vitals unavailable: {mv['error']}")
@@ -294,7 +294,7 @@ def render_movement(mv):
     foot(mv["source"] + " --json", p("atone/events.jsonl"), p("proposals.jsonl"))
 
 def render_cycle(cy):
-    print("◆ CYCLE — the loops that keep it alive")
+    print("◆ CYCLE: the loops that keep it alive")
     print()
     for r in cy["rows"]:
         jobs = ", ".join(r["jobs"]) if r["jobs"] else "no scheduler entry"

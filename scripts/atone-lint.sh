@@ -57,7 +57,7 @@ slug_count() {
 emit() {  # severity rule slug message
   [ "$block_only" = "1" ] && [ "$1" != "block" ] && return 0
   local n; n=$(slug_count "$3")
-  local seen=""; [ "${n:-0}" -gt 0 ] && seen=" — flagged ${n}× as \`$3\`"
+  local seen=""; [ "${n:-0}" -gt 0 ] && seen=": flagged ${n}× as \`$3\`"
   printf '%s\t%s\t%s\t%s%s\n' "$1" "$2" "$3" "$4" "$seen"
 }
 
@@ -191,7 +191,7 @@ t = sys.stdin.read()
 lines = t.split("\n")
 msgs = []
 if t.count("```") % 2 != 0:
-    msgs.append("Unclosed code fence (odd number of ``` ) — everything after it renders as a code block.")
+    msgs.append("Unclosed code fence (odd number of ``` ): everything after it renders as a code block.")
 
 # A real GFM table is a header row FOLLOWED BY a separator row (|---|---|).
 # Only after that do we compare data-row column counts. Escaped pipes (\|) are
@@ -231,7 +231,7 @@ for i, l in enumerate(lines):
     if (chr(0x2026) in l
             and re.search(chr(0x2026) + r"[ \t]*\|([ \t]|$)", l)
             and re.search(r"\S[ \t]{2,}\|", l)):
-        msgs.append(f"Ellipsis at a fixed-width table-cell boundary on line {i+1} — a TTY-rendered/truncated table saved as source. Write source markdown, not rendered output.")
+        msgs.append(f"Ellipsis at a fixed-width table-cell boundary on line {i+1}: a TTY-rendered/truncated table saved as source. Write source markdown, not rendered output.")
 seen = set()
 for m in msgs:
     if m not in seen:

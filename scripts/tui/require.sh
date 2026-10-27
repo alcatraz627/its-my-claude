@@ -31,7 +31,7 @@ tui_require() {
   local dep miss=0
   for dep in "$@"; do
     command -v "$dep" >/dev/null 2>&1 && continue
-    printf '%s not found — install: brew install %s\n' "$dep" "$(_tui_brew_pkg "$dep")" >&2
+    printf '%s not found: install: brew install %s\n' "$dep" "$(_tui_brew_pkg "$dep")" >&2
     miss=1
   done
   return "$miss"

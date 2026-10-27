@@ -351,7 +351,7 @@ PY
 tab_glyph_perm_options() {
   cat <<'EOF'
 free      🆓   positive framing of unlocked permissions (default)
-lock      🔓   unlocked padlock — "guards are down"
+lock      🔓   unlocked padlock: "guards are down"
 robot     🤖   delegated to AI / autopilot
 bolt      ⚡   fast / auto mode
 alarm     🚨   be careful, unsafe-by-default

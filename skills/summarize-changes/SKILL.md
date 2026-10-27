@@ -164,7 +164,7 @@ It surfaces in ~6 lines what the user usually wants to know before deciding how 
 If a time flag is in `argv`, parse it and skip this phase. Otherwise `pick_one`:
 
 ```
-1. Right now — uncommitted work (staged + unstaged combined)
+1. Right now: uncommitted work (staged + unstaged combined)
 2. Since the last work session  (WAL session_start, ~hours ago)
 3. Last N hours / days / weeks   → follow-up: duration text
 4. Between two timestamps / refs → follow-up: two text inputs
@@ -183,7 +183,7 @@ If a time flag is in `argv`, parse it and skip this phase. Otherwise `pick_one`:
 `pick_one`:
 
 ```
-1. No topic filter — summarize everything in the time window
+1. No topic filter: summarize everything in the time window
 2. A feature / area / keyword         → text_input
 3. A specific file or directory       → pick_path (composes with #2)
 4. A ticket / issue / PR id           → text_input (matched in commit messages, runtime-notes, memory)
@@ -205,7 +205,7 @@ Topic propagates as a filter to every source query in Phase 5+.
 [?] Runtime notes        (.claude/skills/runtime-notes.md entries in window)
 [?] Checkpoint files     (_*.claude.md mtime in window)
 [?] Memory               (~/.claude/projects/<encoded>/memory/*.md created/modified in window)
-[?] Recently-modified    (find . -mtime within window — captures uncommitted work)
+[?] Recently-modified    (find . -mtime within window: captures uncommitted work)
 [?] Past-session transcripts  (via skills-parked/past-sessions/scripts/list-sessions.sh; slow, opt-in)
 ```
 
@@ -250,11 +250,11 @@ I detected <N> themes in the window:
   • <theme 3>
 
 How should the report group entries?
-  1. By detected theme — narrative around the <N> themes above
-  2. By impact bucket — Big / Medium / Small (default)
-  3. By area — directory-tree-aligned sections (frontend/backend/infra)
-  4. By type — feat / fix / refactor / chore / docs
-  5. Chronological — oldest first
+  1. By detected theme: narrative around the <N> themes above
+  2. By impact bucket: Big / Medium / Small (default)
+  3. By area: directory-tree-aligned sections (frontend/backend/infra)
+  4. By type: feat / fix / refactor / chore / docs
+  5. Chronological: oldest first
 ```
 
 If only 1–2 themes detected, skip this picker (use impact bucket default).
@@ -266,8 +266,8 @@ Most recent checkpoint says:
   Goal: "<one line from checkpoint Initial Goal>"
 
 Anchor the report's TL;DR on this goal?
-  1. Yes — frame the narrative as progress against this goal
-  2. No — treat the goal as one signal among many (default)
+  1. Yes: frame the narrative as progress against this goal
+  2. No: treat the goal as one signal among many (default)
 ```
 
 Skip if no checkpoint Goal in window.
@@ -277,7 +277,7 @@ Skip if no checkpoint Goal in window.
 ```
 Who's reading this report?
   1. Me (terse, terminal-only, optimized for fast skim)
-  2. Team (default — moderate depth, defensible without me explaining)
+  2. Team (default: moderate depth, defensible without me explaining)
   3. PR reviewer (Summary / Changes / Test plan / Risks)
   4. Release notes (user-facing language, no internal jargon)
   5. Retrospective (chronological + insights + lessons)
@@ -290,21 +290,21 @@ Audience sets vocabulary ("the engine" vs `JobsManager.get_job_output`), depth (
 
 ```
 How deep should the agent read into each entry?
-  1. Headline only — one line per entry
-  2. Brief — 3 lines per entry (what / why / watch)
-  3. Standard — full What/Why/Watch + file table (default)
-  4. Deep — include code snippets from key diffs + git blame context
+  1. Headline only: one line per entry
+  2. Brief: 3 lines per entry (what / why / watch)
+  3. Standard: full What/Why/Watch + file table (default)
+  4. Deep: include code snippets from key diffs + git blame context
 ```
 
 ### 1D.5: Emphasis
 
 ```
 What should the report emphasize?
-  1. Risks-first — Watch lines + uncommitted/security/breaking surface up top
-  2. Features-first — feat: commits and new modules up top (default)
-  3. Chronological — strict time order
-  4. By-area — frontend / backend / infra as top-level sections
-  5. Author-by-author — split by who did the work
+  1. Risks-first: Watch lines + uncommitted/security/breaking surface up top
+  2. Features-first: feat: commits and new modules up top (default)
+  3. Chronological: strict time order
+  4. By-area: frontend / backend / infra as top-level sections
+  5. Author-by-author: split by who did the work
 ```
 
 ### 1D.6: Compare-against (optional)
@@ -313,7 +313,7 @@ What should the report emphasize?
 Compare this window to anything?
   1. No (default)
   2. Prior period (same duration, immediately preceding)
-  3. A baseline branch — pick from recent branches → text_input
+  3. A baseline branch: pick from recent branches → text_input
   4. A specific tag → text_input
 ```
 
@@ -353,8 +353,8 @@ If totals exceed thresholds (>150 commits, >50k diff lines, >500 files, >50 note
 ```
 This range is large.
   1. Continue at full depth (slow, most accurate)
-  2. Coarse mode — diffstat only, skip per-file diff reads
-  3. Top-N mode — read the N largest entries per source (default N=20)
+  2. Coarse mode: diffstat only, skip per-file diff reads
+  3. Top-N mode: read the N largest entries per source (default N=20)
   4. Cancel and refine the scope
 ```
 
@@ -384,7 +384,7 @@ For each selected source, run its query and store results keyed by source.
 | Git               | `git log <range> --pretty=format:"%h\|%ad\|%an\|%ae\|%s" --date=iso` + `git log <range> --numstat`                                     |
 | Worktree          | `git diff` + `git diff --cached` + `git status --porcelain`                                                                            |
 | WAL               | `jq -c 'select(.ts >= "<lower>" and .ts <= "<upper>")' .claude/wal.jsonl`. Collect `kind`, `target`, `goal`, `current`, `next` fields |
-| Runtime notes     | Parse `.claude/skills/runtime-notes.md`, extract `## session: ... — DATE` blocks, filter by date in heading                            |
+| Runtime notes     | Parse `.claude/skills/runtime-notes.md`, extract `## session: ...: DATE` blocks, filter by date in heading                            |
 | Checkpoint files  | `find . -maxdepth 2 -name "_*.claude.md" -newermt "<lower>"` then `Read` each, extract Goal / Pending / Current Expectation           |
 | Memory            | List + Read modified files in `~/.claude/projects/<encoded-cwd>/memory/`. Cross-reference against `MEMORY.md` index                    |
 | Recently-modified | `find . -type f -newermt "<lower>" \| filter forbidden paths`. Focus on files NOT in `git log` (uncommitted work)                     |
@@ -478,10 +478,10 @@ Conflict:
   But no commit in the window touches lib/tasks/claimer.py.
 
 How should this be reconciled?
-  1. Treat the WAL as authoritative — include as "uncommitted fix"
-  2. Treat git as authoritative — drop the WAL signal
+  1. Treat the WAL as authoritative: include as "uncommitted fix"
+  2. Treat git as authoritative: drop the WAL signal
   3. Mark as ambiguous in output and let the reader decide
-  4. Investigate further — let me read the WAL session in detail
+  4. Investigate further: let me read the WAL session in detail
   5. Skip this entry entirely
 ```
 
@@ -496,9 +496,9 @@ Each format includes ambient evidence, not just commits.
 ### 7.1: `bullets`
 
 ```
-• <theme>          — <user impact> · evidence: git, WAL
-• <theme>          — <user impact> · evidence: checkpoint + 3 commits
-• [WIP] <theme>    — uncommitted, captured in WAL/recent-files only
+• <theme>: <user impact> · evidence: git, WAL
+• <theme>: <user impact> · evidence: checkpoint + 3 commits
+• [WIP] <theme>: uncommitted, captured in WAL/recent-files only
 ```
 
 The `evidence:` tag is one short word per source contributing to the entry.
@@ -511,7 +511,7 @@ A skim-friendly report: the reader understands the whole window in 30 seconds wi
 
 ```
 ═══════════════════════════════════════════════════════════════
-  SCAN CARD — what happened in this window
+  SCAN CARD: what happened in this window
 ═══════════════════════════════════════════════════════════════
   Window:   <lower> → <upper>  (<duration>)
   Volume:   <C> commits · <F> files · +<I> -<D> lines · <U> uncommitted
@@ -526,13 +526,13 @@ The Volume / Themes / Risks lines are one-liners with hard counts, no prose.
 #### 7.2.b: Aggregate Risks panel (collapses every entry's "Watch")
 
 ```
-RISKS / DEPLOY CONCERNS — read before merging
+RISKS / DEPLOY CONCERNS: read before merging
 ─────────────────────────────────────────────
   🔒  <Item B>  Security cleanup (hardcoded password removal) UNCOMMITTED
-  ⚠   <Item D>  "catastrophic for refund" — verify null-check at every caller
-  💥  <Item A>  cache.py _SENTINEL — `is None` callers silently broken
+  ⚠   <Item D>  "catastrophic for refund": verify null-check at every caller
+  💥  <Item A>  cache.py _SENTINEL: `is None` callers silently broken
   🆕  <Item A>  3 new env vars: JOB_OUTPUT_CACHE_DISABLED / *_TTL_SEC / ADMIN_SCRAPER_API_TOKEN
-  ⏳  <Items B/D/F/G>  Significant uncommitted surface — /clear + git stash would lose it
+  ⏳  <Items B/D/F/G>  Significant uncommitted surface: /clear + git stash would lose it
 ─────────────────────────────────────────────
 ```
 
@@ -568,9 +568,9 @@ For each entry, header line with status pills + a tight FILE TABLE (replaces den
     ├─ backend/api/auth.py                    +15 / -0   ✏ modified
     └─ frontend/.../route.ts                  +120       🆕 NEW (untracked)
 
-  What:   <2 lines — behavior change>
-  Why:    <1 line — quoted from checkpoint Goal / memory entry / commit body>
-  Watch:  <1 line — env var / default flip / breaking surface>
+  What:   <2 lines: behavior change>
+  Why:    <1 line: quoted from checkpoint Goal / memory entry / commit body>
+  Watch:  <1 line: env var / default flip / breaking surface>
 ```
 
 The file table is the single most-skimmable artifact: path · diffstat · one-icon status. If >6 files, show first 6 + `└─ ... and N more`.
@@ -599,14 +599,14 @@ If `--style <s>` was passed, use it. Otherwise prompt via `pick_one`:
 
 ```
 Which HTML layout?
-  1. Feed — card-per-theme, status pills visible, best for skim (default)
-  2. Dashboard — analytics layout with metric cards (good for many small entries)
-  3. Data-table — spreadsheet layout (good when most entries are file-list-heavy)
-  4. Magazine — editorial layout (good for narrative emphasis, e.g. retro)
-  5. Notion — clean minimal (good for sharing externally)
-  6. Terminal — green-on-black (good for me-only)
+  1. Feed: card-per-theme, status pills visible, best for skim (default)
+  2. Dashboard: analytics layout with metric cards (good for many small entries)
+  3. Data-table: spreadsheet layout (good when most entries are file-list-heavy)
+  4. Magazine: editorial layout (good for narrative emphasis, e.g. retro)
+  5. Notion: clean minimal (good for sharing externally)
+  6. Terminal: green-on-black (good for me-only)
   ─
-  All styles — chain `--all-styles` to render every variant
+  All styles: chain `--all-styles` to render every variant
 ```
 
 Output written to `~/.claude/assets/reports/<YYYYMMDD>-<slug>/index.html` (colocated with `source.md` and `data.json`). Print the absolute path AND the `restyle.sh` command at end so the user can swap styles without re-running the skill.

@@ -72,7 +72,7 @@ class HookParity(unittest.TestCase):
     def test_comment_and_prose_advisories_use_shared_detectors(self):
         result = patch.decision(self.payload("*** Add File: feature.py\n+# Phase 2: old behavior\n+pass"), Path.home())
         self.assertIn("cleanup-comments", result["hookSpecificOutput"]["additionalContext"])
-        result = patch.decision(self.payload("*** Add File: notes.md\n+This is ready — now you can use it."), Path.home())
+        result = patch.decision(self.payload("*** Add File: notes.md\n+This is ready \u2014 now you can use it."), Path.home())
         self.assertIn("prose linter", result["hookSpecificOutput"]["additionalContext"])
 
     def post(self, tool, command, response):

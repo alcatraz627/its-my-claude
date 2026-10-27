@@ -58,9 +58,9 @@ Discover in this order: print each path as it is found:
 
 1. `Read .claude/personal.md` → print: `  ✓ personal.md`
 2. `Read .claude/settings.local.json` → print: `  ✓ settings.local.json`
-3. `Read .claude/settings.json` → print: `  ✓ settings.json` (or `  — settings.json not found`)
+3. `Read .claude/settings.json` → print: `  ✓ settings.json` (or `: settings.json not found`)
 4. `Read .claude/skills/GUIDELINES.md` → print: `  ✓ skills/GUIDELINES.md`
-5. `Glob(".claude/rules/*.md")` → for each match, print: `  ✓ rules/[filename]` (or `  — rules/ not found`)
+5. `Glob(".claude/rules/*.md")` → for each match, print: `  ✓ rules/[filename]` (or `: rules/ not found`)
 6. `Glob(".claude/skills/*/SKILL.md")` → for each match, print: `  ✓ skills/[name]/SKILL.md`
 7. `Glob(".claude/skills/shared/*")` → for each match, print: `  ✓ skills/shared/[filename]`
 8. Check optional files (print exists/not found):
@@ -81,7 +81,7 @@ For each `SKILL.md` found in Step 1:
 
 **2.3b: Brief NOT found:**
 
-Print: `  ✗ No brief found for [skill-name] — generating...`
+Print: `  ✗ No brief found for [skill-name]: generating...`
 
 Generate a 1–2 sentence brief that answers:
 - What does this skill do?
@@ -110,7 +110,7 @@ Source gum-tui.sh and render using this layout:
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh
-gum_header "Claude Config — [project-root folder name]"
+gum_header "Claude Config: [project-root folder name]"
 
 gum_divider "GENERAL CONFIG"
 gum_kv "personal.md" "Roles: [list roles from file, comma-separated]"
@@ -129,8 +129,8 @@ gum_table "File,Description" \
   "[filename],[one-line description from script comments or filename]"
 
 gum_divider "LOGS & GENERATED FILES"
-gum_kv "runtime-notes.md" "[exists — N entries | not found]"
-gum_kv "project-index.md" "[exists — last modified YYYY-MM-DD | not found]"
+gum_kv "runtime-notes.md" "[exists: N entries | not found]"
+gum_kv "project-index.md" "[exists: last modified YYYY-MM-DD | not found]"
 ```
 
 ---
@@ -148,10 +148,10 @@ gum_panel "Select an item" \
   "  3. settings.local.json   Allowed commands" \
   "" \
   "SKILLS" \
-  "  4. arch-qa               [brief — truncated to 50 ch]" \
-  "  5. create-report         [brief — truncated to 50 ch]" \
-  "  6. project-index         [brief — truncated to 50 ch]" \
-  "  7. user-config           [brief — truncated to 50 ch]" \
+  "  4. arch-qa               [brief: truncated to 50 ch]" \
+  "  5. create-report         [brief: truncated to 50 ch]" \
+  "  6. project-index         [brief: truncated to 50 ch]" \
+  "  7. user-config           [brief: truncated to 50 ch]" \
   "" \
   "SHARED UTILITIES" \
   "  8. check-path.sh         Path validation" \

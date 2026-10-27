@@ -12,7 +12,7 @@ touch "$RD/some-rule.md"
 export METABOLISM_LEDGER="$LED" METABOLISM_RULES_DIR="$RD"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 last(){ tail -1 "$LED" 2>/dev/null; }
 
 echo "── a well-formed retirement records as PROPOSED, removes nothing ──"

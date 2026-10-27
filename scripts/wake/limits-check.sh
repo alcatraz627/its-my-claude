@@ -44,7 +44,7 @@ say() { printf '%s\t%s\t%s\n' "$1" "$2" "$3"; }
 # 64-bit int (19+ digits) aborts `-gt` exactly like the junk it is meant to catch,
 # so testing its size arithmetically would die on the same rock.
 _bad_threshold() {
-  printf 'limits-check: ignoring WAKE_NEAR_FULL_PCT=%s (%s) — using 90\n' \
+  printf 'limits-check: ignoring WAKE_NEAR_FULL_PCT=%s (%s): using 90\n' \
     "${WAKE_NEAR_FULL_PCT:-<empty>}" "$1" >&2
   THRESHOLD=90
 }
@@ -57,10 +57,10 @@ esac
 [ "$THRESHOLD" -gt 100 ] && _bad_threshold "a percentage cannot exceed 100"
 
 command -v jq >/dev/null 2>&1 || {
-  say UNKNOWN "" "jq unavailable — cannot read $LIMITS"; exit 2; }
+  say UNKNOWN "" "jq unavailable: cannot read $LIMITS"; exit 2; }
 
 [ -f "$LIMITS" ] || {
-  say UNKNOWN "" "no limits file at $LIMITS (written by every statusline render — is the statusline running?)"; exit 2; }
+  say UNKNOWN "" "no limits file at $LIMITS (written by every statusline render: is the statusline running?)"; exit 2; }
 
 # `."5h".pct` is the field the statusline writes. Take anything that is honestly a
 # number: int or float, quoted or bare: and floor it, because bash `-ge` cannot
@@ -89,7 +89,7 @@ pct=$(jq -r '(."5h".pct | tonumber? | floor) // empty' "$LIMITS" 2>/dev/null)
 # Four characters covers every real percentage ("-0".."100"); longer is a broken
 # writer, and also what would overflow the comparison below.
 if [ "${#pct}" -gt 4 ]; then
-  say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS — a percentage has at most 3 digits"
+  say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS: a percentage has at most 3 digits"
   exit 2
 fi
 
@@ -97,7 +97,7 @@ fi
 # than let it sail under the threshold and read as headroom. Above 100 is different
 # : over-spent is still spent, so it falls through to NEAR-FULL below.
 if [ "$pct" -lt 0 ]; then
-  say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS — a percentage cannot be negative"
+  say UNKNOWN "" "implausible 5h.pct '${pct}' in $LIMITS: a percentage cannot be negative"
   exit 2
 fi
 
@@ -109,9 +109,9 @@ fi
 [ "$pct" = "-0" ] && pct=0
 
 if [ "$pct" -ge "$THRESHOLD" ]; then
-  say NEAR-FULL "$pct" "5h window ${pct}% spent (>= ${THRESHOLD}%) — leave the rest for real work"
+  say NEAR-FULL "$pct" "5h window ${pct}% spent (>= ${THRESHOLD}%): leave the rest for real work"
   exit 1
 fi
 
-say OPEN "$pct" "5h window ${pct}% spent (< ${THRESHOLD}%) — headroom to wake"
+say OPEN "$pct" "5h window ${pct}% spent (< ${THRESHOLD}%): headroom to wake"
 exit 0

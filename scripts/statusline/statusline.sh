@@ -116,31 +116,31 @@ use_icons=0
 if (( use_icons )); then
   # Prefer nf-fa/nf-pl (single-width) over nf-md (often double-width)
   # Every icon ends with a space for consistent "icon value" formatting
-  ic_git=" "      # nf-pl-branch (U+E0A0) — git branch
-  ic_model=" "     # nf-fa-code (U+F121) — model name
-  ic_cost=" "      # nf-fa-dollar (U+F155) — cost
-  ic_rate=" "      # nf-fa-tachometer (U+F0E4) — rate limit
-  ic_cpu=" "      # nf-fa-microchip (U+F2DB) — cpu/mem
-  ic_ctx=" "      # nf-fa-cogs (U+F085) — context window
-  ic_wal=" "      # nf-fa-bookmark (U+F02E) — WAL entries
-  ic_turn=" "     # nf-fa-repeat (U+F01E) — turns
-  ic_pm2=" "      # nf-fa-server (U+F233) — pm2 procs
-  ic_spark=" "     # nf-fa-line-chart (U+F201) — sparkline
-  ic_agent=" "     # nf-fa-user-secret (U+F21B) — agent
-  ic_warn=" "     # nf-fa-warning (U+F071) — 200k warn
-  ic_net=" "      # nf-fa-globe (U+F0AC) — network
-  ic_mem=" "     # nf-fa-database (U+F1C0) — memory
-  ic_disk=" "      # nf-fa-hdd-o (U+F0A0) — disk
-  ic_tspd=" "     # nf-fa-bolt (U+F0E7) — tok/speed
-  ic_stash=" "     # nf-fa-archive (U+F187) — git stash
-  ic_up=" "      # nf-fa-clock-o (U+F017) — uptime
-  ic_eratio=" "    # nf-fa-pencil (U+F040) — edit ratio
-  ic_branch=" "   # nf-fa-code-fork (U+F126) — branch age
-  ic_burn=" "      # nf-fa-fire (U+F06D) — burn rate
-  ic_focus=" "     # nf-fa-eye (U+F06E) — focus file
-  ic_test=" "     # nf-fa-flask (U+F0C3) — test status
-  ic_cache=" "   # nf-fa-database (U+F1C0) — cache hit ratio
-  ic_cloud=" "   # nf-fa-cloud (U+F0C2) — cloud profile
+  ic_git=" "      # nf-pl-branch (U+E0A0): git branch
+  ic_model=" "     # nf-fa-code (U+F121): model name
+  ic_cost=" "      # nf-fa-dollar (U+F155): cost
+  ic_rate=" "      # nf-fa-tachometer (U+F0E4): rate limit
+  ic_cpu=" "      # nf-fa-microchip (U+F2DB): cpu/mem
+  ic_ctx=" "      # nf-fa-cogs (U+F085): context window
+  ic_wal=" "      # nf-fa-bookmark (U+F02E): WAL entries
+  ic_turn=" "     # nf-fa-repeat (U+F01E): turns
+  ic_pm2=" "      # nf-fa-server (U+F233): pm2 procs
+  ic_spark=" "     # nf-fa-line-chart (U+F201): sparkline
+  ic_agent=" "     # nf-fa-user-secret (U+F21B): agent
+  ic_warn=" "     # nf-fa-warning (U+F071): 200k warn
+  ic_net=" "      # nf-fa-globe (U+F0AC): network
+  ic_mem=" "     # nf-fa-database (U+F1C0): memory
+  ic_disk=" "      # nf-fa-hdd-o (U+F0A0): disk
+  ic_tspd=" "     # nf-fa-bolt (U+F0E7): tok/speed
+  ic_stash=" "     # nf-fa-archive (U+F187): git stash
+  ic_up=" "      # nf-fa-clock-o (U+F017): uptime
+  ic_eratio=" "    # nf-fa-pencil (U+F040): edit ratio
+  ic_branch=" "   # nf-fa-code-fork (U+F126): branch age
+  ic_burn=" "      # nf-fa-fire (U+F06D): burn rate
+  ic_focus=" "     # nf-fa-eye (U+F06E): focus file
+  ic_test=" "     # nf-fa-flask (U+F0C3): test status
+  ic_cache=" "   # nf-fa-database (U+F1C0): cache hit ratio
+  ic_cloud=" "   # nf-fa-cloud (U+F0C2): cloud profile
 else
   # ASCII fallbacks: short labels as icon stand-ins
   ic_git="git:"

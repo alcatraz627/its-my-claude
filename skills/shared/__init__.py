@@ -1,4 +1,4 @@
-"""std::claude — shared utility library for Claude skills.
+"""std::claude: shared utility library for Claude skills.
 
 Standard library at ~/.claude/skills/shared/. Provides terminal banner
 rendering, file locking, runtime note management, and reference docs.

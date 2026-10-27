@@ -149,25 +149,25 @@ source ~/.claude/skills/shared/gum-tui.sh
 gum_header "Sync API Types: <endpoint-path or 'all endpoints'>"
 gum_info "Backend models scanned: N | Frontend types matched: N | Missing: N"
 
-# Render only if mismatches exist — one gum_panel per mismatched model:
+# Render only if mismatches exist: one gum_panel per mismatched model:
 gum_panel "MISMATCH: JobResponse" \
   "JobResponse (../backend/api/jobs.py:45) ↔ (src/data/pipeline/pipeline.types.ts:12)" \
   "" \
   "✗ MISSING in frontend:  pipeline_id (number)" \
-  "✗ TYPE MISMATCH:        created_at — backend: datetime→string, frontend: Date" \
+  "✗ TYPE MISMATCH:        created_at: backend: datetime→string, frontend: Date" \
   "✗ EXTRA in frontend:    legacyField (not in backend model)"
 
 # Then print suggested TypeScript fix as a code block in the output.
 
 # Render only if missing frontend types exist:
 gum_panel "MISSING FRONTEND TYPES" \
-  "✗ TeamMemberResponse — no TypeScript type found" \
+  "✗ TeamMemberResponse: no TypeScript type found" \
   "  Suggested location: src/data/team/team.types.ts"
 
 # Render only if in-sync types exist:
 gum_panel "IN SYNC" \
-  "✓ UserResponse ↔ UserResponse — all N fields match" \
-  "✓ PipelineArgs ↔ PipelineArgs — all N fields match"
+  "✓ UserResponse ↔ UserResponse: all N fields match" \
+  "✓ PipelineArgs ↔ PipelineArgs: all N fields match"
 
 gum_complete "sync-api-types" \
   "Mismatches=N models" \

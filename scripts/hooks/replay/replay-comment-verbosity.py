@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""replay-comment-verbosity.py — corpus fire-rate estimator for
+"""replay-comment-verbosity.py: corpus fire-rate estimator for
 guard-comment-verbosity.sh.
 
 Walks every transcript under ~/.claude/projects, pulls each Edit/Write/MultiEdit
 that targets a TS/JS/Python file, keeps the ones whose ADDED text plausibly holds
 a comment block (cheap pre-filter), synthesizes a PostToolUse payload, runs the
 REAL hook, and tallies fires. Because the hook only reads the added slice (never
-the on-disk tree), this replay is FAITHFUL — the fire it records is exactly the
+the on-disk tree), this replay is FAITHFUL: the fire it records is exactly the
 fire the agent would have seen at write time.
 
 The number that matters: fires / comment-adding-edits. A high rate means the gate

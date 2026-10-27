@@ -44,13 +44,13 @@ Namespace answers *"what category does this belong to?"*. Lookup answers *"which
 ```
 std::claude
 ├── ::shared              Python + Bash utility library         → ~/.claude/skills/shared/
-├── ::code                Reference material (read-only)        → ~/.claude/code/           (new — Phase 1)
+├── ::code                Reference material (read-only)        → ~/.claude/code/           (new: Phase 1)
 │   ├── ::code::ideas         code-pattern seeds, snippets
 │   └── ::code::templates     scaffolds, boilerplate
-├── ::rules               Behavioral/process rules              → ~/.claude/rules/          (new — impr-cfg-7a)
-├── ::features            Subsystem/tool/integration docs       → ~/.claude/features/       (new — impr-cfg-7a)
-├── ::conventions         Output/authoring standards            → ~/.claude/conventions/    (new — impr-cfg-7a)
-├── ::placement           Placement rule (category × tier)      → ~/.claude/PLACEMENT.md    (new — impr-cfg-7a)
+├── ::rules               Behavioral/process rules              → ~/.claude/rules/          (new: impr-cfg-7a)
+├── ::features            Subsystem/tool/integration docs       → ~/.claude/features/       (new: impr-cfg-7a)
+├── ::conventions         Output/authoring standards            → ~/.claude/conventions/    (new: impr-cfg-7a)
+├── ::placement           Placement rule (category × tier)      → ~/.claude/PLACEMENT.md    (new: impr-cfg-7a)
 ├── ::scripts             Operational executables                → ~/.claude/scripts/
 ├── ::skills              Custom SKILL.md definitions            → ~/.claude/skills/
 ├── ::personas            Sub-agent personas (working-mode + dispatch) → ~/.claude/personas/

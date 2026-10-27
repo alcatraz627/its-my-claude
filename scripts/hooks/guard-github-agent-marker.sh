@@ -94,10 +94,10 @@ fi
 pick=${PHRASES[$((RANDOM % ${#PHRASES[@]}))]}
 GH_LOGIN=$(gh api user --jq .login 2>/dev/null || echo "the-logged-in-gh-user")
 if [ "$problem" = "phrase" ]; then
-  echo "⛔ AGENT MARKER PHRASE NOT THE OWNER'S — the marker's phrase \"${used}\" is not on the owner's fixed list. Do not write your own; replace the whole marker line with the one below." >&2
+  echo "⛔ AGENT MARKER PHRASE NOT THE OWNER'S: the marker's phrase \"${used}\" is not on the owner's fixed list. Do not write your own; replace the whole marker line with the one below." >&2
 fi
 cat >&2 <<EOF
-⛔ AGENT MARKER MISSING OR WRONG — this posts to GitHub under the owner's account,
+⛔ AGENT MARKER MISSING OR WRONG: this posts to GitHub under the owner's account,
 and its body must carry the attribution marker (owner ruling 2026-08-24, no
 bypass exists for this gate).
 

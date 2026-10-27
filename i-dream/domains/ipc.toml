@@ -1,7 +1,7 @@
-# i-dream domain manifest — claude-ipc (cross-session handoff signal)
+# i-dream domain manifest: claude-ipc (cross-session handoff signal)
 #
 # LIVE since 2026-07-16: re-promoted per integration-requests/ipc-staged/PARKED.md
-# after its gate was satisfied — the hardened extractor demonstrably wrote 132
+# after its gate was satisfied: the hardened extractor demonstrably wrote 132
 # events in one run (operator-scoped bodies, 2-day window, fail-without-clobber).
 # Canonical copy is THIS file; the one under integration-requests/ is the
 # historical staging artifact. One-way: i-dream reads the claude-ipc message log
@@ -10,7 +10,7 @@
 [domain]
 name        = "claude-ipc"
 version     = "1.0"
-description = "Cross-session IPC handoffs — who hands what to whom, how often"
+description = "Cross-session IPC handoffs: who hands what to whom, how often"
 root        = "~/.claude-ipc"
 
 [event_stream]

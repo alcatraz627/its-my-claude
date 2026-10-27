@@ -60,30 +60,30 @@ if voting_expected and not voting_ran and not no_voting:
     if has_jester:         why.append("a jester voter is present (⇒ full mode)")
     if full_by_count and not has_jester:
         why.append(f"{len(proposals)} voters (⇒ full mode; lite=3)")
-    crit.append("VOTING SKIPPED without --no-voting — " + ", ".join(why) +
+    crit.append("VOTING SKIPPED without --no-voting: " + ", ".join(why) +
                 ", but 04-voting/ has no scores/matrix. Phase-6 anonymized voting "
                 "+ bias-matrix never ran. If convergence was genuine, run the vote "
                 "to PROVE it (it's cheap once proposals exist); if you truly intend "
-                "to skip, set --no-voting at dispatch — do not skip mid-run and cite "
+                "to skip, set --no-voting at dispatch: do not skip mid-run and cite "
                 "Phase-8 'pick directly' (that step is POST-voting).")
 elif voting_ran:
     ok.append("Phase-6 voting ran (scores/matrix present)")
 elif no_voting:
-    ok.append("voting intentionally off (--no-voting / voting:false) — exempt")
+    ok.append("voting intentionally off (--no-voting / voting:false): exempt")
 else:
     ok.append("voting not expected (lite/no-jester run)")
 
 # ── Phase-2: params recorded (WARN) ──────────────────────────────────────────
 if (not params) or ("_params_parse_error" in params):
     why = "params{} empty" if not params else f"params failed to parse ({params.get('_params_parse_error')})"
-    warn.append(f"Phase-2 MISS: meta.json {why} — mode/voters/voting unrecorded; "
+    warn.append(f"Phase-2 MISS: meta.json {why}: mode/voters/voting unrecorded; "
                 "the run can't be audited from metadata.")
 else:
     ok.append("Phase-2 params recorded")
 
 # ── Phase-4: voter prompts persisted (WARN) ──────────────────────────────────
 if not nonempty_dir("02-voter-prompts"):
-    warn.append("Phase-4 MISS: 02-voter-prompts/ empty — no dispatched-prompt "
+    warn.append("Phase-4 MISS: 02-voter-prompts/ empty: no dispatched-prompt "
                 "trail; anonymization/randomization/evidence-assignment unverifiable.")
 else:
     ok.append("Phase-4 voter prompts persisted")

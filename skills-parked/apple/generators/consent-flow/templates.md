@@ -766,7 +766,7 @@ final class ConsentAuditLog: Sendable {
         return entries.map { entry in
             let action = entry.status == .granted ? "Granted" : "Denied"
             let date = formatter.string(from: entry.timestamp)
-            let reg = entry.regulation?.displayName ?? "—"
+            let reg = entry.regulation?.displayName ?? "-"
             return "[\(date)] \(action) \(entry.category.displayName) (Regulation: \(reg), App: \(entry.appVersion))"
         }.joined(separator: "\n")
     }

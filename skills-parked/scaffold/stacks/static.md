@@ -91,7 +91,7 @@ code {
 
 ### scripts/main.js
 ```javascript
-// Entry point — add your JavaScript here.
+// Entry point: add your JavaScript here.
 console.log("{{name}} loaded");
 ```
 

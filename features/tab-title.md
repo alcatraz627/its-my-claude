@@ -63,9 +63,9 @@ $TT show                             # composed title
 $TT get all                          # state dump
 
 # Named-enum slots
-$TT status ok                        # ✅ — task succeeded
-$TT mode debug                       # 🐛 — investigating
-$TT intent feature                   # ✨ — feature work
+$TT status ok                        # ✅: task succeeded
+$TT mode debug                       # 🐛: investigating
+$TT intent feature                   # ✨: feature work
 $TT mode --list                      # show all enum values
 
 # Free-form fields
@@ -73,8 +73,8 @@ $TT focus "csrf token validation"    # 1-3 word current sub-task
 $TT focus --clear
 $TT set base="Auth refactor" focus="login flow"   # multi-field atomic
 
-# Decorator glyph configuration (persisted per-session in state — no env vars)
-$TT glyph perm robot                 # 🤖 — perm-mode glyph
+# Decorator glyph configuration (persisted per-session in state: no env vars)
+$TT glyph perm robot                 # 🤖: perm-mode glyph
 $TT glyph ssh 🐢                     # raw emoji also accepted
 $TT glyph perm --options             # named alias table
 $TT glyph perm --clear               # back to default 🆓

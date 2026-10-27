@@ -135,7 +135,7 @@ import UIKit
 import os
 
 /// Classifies images using Vision framework's built-in model.
-/// No custom Core ML model required — uses Apple's on-device classification.
+/// No custom Core ML model required: uses Apple's on-device classification.
 struct ImageClassifier {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "app", category: "ImageClassifier")
 

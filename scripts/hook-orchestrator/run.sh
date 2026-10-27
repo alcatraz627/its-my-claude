@@ -45,7 +45,7 @@ while IFS= read -r line; do
   TASKS+=("$line")
 done < "$CFG"
 
-(( ${#TASKS[@]} == 0 )) && { echo "[orch] $EVENT — no enabled tasks" >> "$LOG"; exit 0; }
+(( ${#TASKS[@]} == 0 )) && { echo "[orch] $EVENT: no enabled tasks" >> "$LOG"; exit 0; }
 
 # Fork each task with stdin = $INPUT and bounded timeout.
 PIDS=()

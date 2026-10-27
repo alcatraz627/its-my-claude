@@ -30,20 +30,20 @@ if [[ -f "$STAMP" ]]; then
   # can land seconds short of 14 days, which skipped it and made the cadence 21.
   if (( elapsed < INTERVAL - 3600 )); then
     days=$(( elapsed / 86400 ))
-    echo "[$(date '+%F %T')] repo-sync skipped — only ${days}d since last run (need 14d)"
+    echo "[$(date '+%F %T')] repo-sync skipped: only ${days}d since last run (need 14d)"
     write_meta "outcome=ok" "reason=cadence_skip" "stage=gate" "detail=${days}d_elapsed"
     exit 0
   fi
 fi
 
-echo "[$(date '+%F %T')] repo-sync eligible — launching opus sync session"
+echo "[$(date '+%F %T')] repo-sync eligible: launching opus sync session"
 if bash "$LAUNCH" opus acceptEdits "$PROMPT" "$HOME/.claude"; then
   printf '%s\n' "$now" > "$STAMP"     # bump cadence only on a confirmed window open
   echo "[$(date '+%F %T')] launched; stamp updated"
   exit 0
 else
   rc=$?
-  echo "[$(date '+%F %T')] launch failed (rc=$rc) — stamp NOT bumped, will retry next Thursday" >&2
+  echo "[$(date '+%F %T')] launch failed (rc=$rc): stamp NOT bumped, will retry next Thursday" >&2
   write_meta "outcome=failed" "reason=launch_failed" "stage=open" "exit=$rc"
   exit "$rc"
 fi

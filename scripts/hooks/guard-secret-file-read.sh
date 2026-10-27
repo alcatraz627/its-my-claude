@@ -84,7 +84,7 @@ if [ "$tool_name" = "Read" ]; then
   # A committed template holds names and placeholders, never values.
   printf '%s' "$fp" | rg -q "$ENV_TEMPLATE_PATH" 2>/dev/null && exit 0
   printf '%s' "$fp" | rg -q "$SECRET_PATH" 2>/dev/null || exit 0
-  block "⛔ SECRET FILE READ BLOCKED — $fp" \
+  block "⛔ SECRET FILE READ BLOCKED: $fp" \
     "The Read tool emits the whole file into the transcript, and this path is secret-shaped. A private key reached a transcript this way on 2026-08-17; the key had to be rotated." \
     "$SAFE_INSTEAD"
 fi
@@ -189,7 +189,7 @@ if printf '%s' "$seg" | rg -q -e '\b(rg|grep)\s+.*(-[a-zA-Z]*o[a-zA-Z]*[[:space:
     '^'*) printf '%s' "$pat" | rg -q -e '\.' -e '\[\^' 2>/dev/null || safe=yes ;;
   esac
   [ "$safe" = yes ] && continue
-  block "⛔ SECRET FILE READ BLOCKED — -o prints what your pattern matched" \
+  block "⛔ SECRET FILE READ BLOCKED: -o prints what your pattern matched" \
     "\`-o\` emits the matched text, and the pattern is yours to choose, so \`rg -o '.*'\` prints the whole file. It is allowed only with an anchored, wildcard-free pattern that can name variables without revealing them." \
     "$SAFE_INSTEAD"
 fi

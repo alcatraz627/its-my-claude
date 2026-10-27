@@ -71,7 +71,7 @@ Grep: "@Test|func test" that reference the classes being refactored
 Even if tests exist, check quality:
 
 ```swift
-// ❌ Low-quality test — doesn't actually verify behavior
+// ❌ Low-quality test: doesn't actually verify behavior
 @Test("test items")
 func testItems() {
     let vm = ViewModel()
@@ -125,7 +125,7 @@ Before refactoring [ClassName], generate characterization tests:
 
 **Files**: ItemManager.swift, ItemRepository.swift
 **Test coverage**: Good (12 tests covering 8/9 public methods)
-**Test quality**: Adequate — tests verify behavior, not implementation
+**Test quality**: Adequate: tests verify behavior, not implementation
 
 Safe to refactor. Run tests after each change:
 `xcodebuild test -scheme YourApp`
@@ -139,10 +139,10 @@ Safe to refactor. Run tests after each change:
 **Files**: ItemManager.swift, ItemRepository.swift
 **Test coverage**: Partial (5 tests covering 4/9 public methods)
 **Missing coverage**:
-- `ItemManager.sort()` — no test
-- `ItemManager.filter(by:)` — no test
-- `ItemRepository.sync()` — no test
-- Error paths for `save()` and `delete()` — not tested
+- `ItemManager.sort()`: no test
+- `ItemManager.filter(by:)`: no test
+- `ItemRepository.sync()`: no test
+- Error paths for `save()` and `delete()`: not tested
 
 **Action**: Generate characterization tests for uncovered methods before refactoring.
 Use `characterization-test-generator` skill.
@@ -157,7 +157,7 @@ Use `characterization-test-generator` skill.
 **Test coverage**: None (0 tests found)
 
 **Action**: Do NOT refactor until characterization tests exist.
-Refactoring without tests is like surgery without monitoring —
+Refactoring without tests is like surgery without monitoring:
 you won't know if you killed the patient.
 
 Run `characterization-test-generator` on:
@@ -230,8 +230,8 @@ Full contract tests recommended:
 | ItemRepository | 5 | 2 | 40% | ⚠️ |
 
 ### Missing Coverage
-- [ ] `ItemRepository.sync()` — needs characterization test
-- [ ] Error path for `ItemRepository.delete()` — untested
+- [ ] `ItemRepository.sync()`: needs characterization test
+- [ ] Error path for `ItemRepository.delete()`: untested
 
 ### Recommendations
 1. [Action item]

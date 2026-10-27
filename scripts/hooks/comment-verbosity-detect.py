@@ -7,7 +7,7 @@ block, and reports only the ones long enough to read as a "code essay" rather
 than a comment. A block is a Python docstring, a JS/TS block comment, or a run of
 consecutive full-line comments. Length is measured in non-blank prose lines.
 
-It deliberately does NOT try to judge whether prose "restates the code" — a line
+It deliberately does NOT try to judge whether prose "restates the code": a line
 regex cannot tell an essay from a load-bearing caveat, so cleanup-comments/detect.py
 leaves that whole tier to the agent, and so do we. Length is the one mechanical
 proxy for verbosity that stays high-precision, and even that is tuned to spare the
@@ -102,10 +102,10 @@ def find_triple_strings(text: str):
 
     Yields (start_line, end_line, is_doc) 1-based. is_doc is True only when the
     string opens a bare expression statement (nothing but an optional r/b/f prefix
-    precedes it on its line) — a real docstring, not an assignment (x = triple)
+    precedes it on its line): a real docstring, not an assignment (x = triple)
     or a call argument (foo(triple)). Consuming assignment/argument strings too is
     the whole point: it stops their CLOSING delimiter from being read as a new
-    docstring open — the bug that swallowed 24 lines of code as prose in
+    docstring open: the bug that swallowed 24 lines of code as prose in
     PartTypeClassifierAgent.py.
     """
     out = []
@@ -122,7 +122,7 @@ def find_triple_strings(text: str):
         is_doc = re.fullmatch(r"[rbufRBUF]{0,2}", prefix.strip()) is not None
         close = text.find(delim, idx + 3)
         start_line = text.count("\n", 0, idx) + 1
-        if close == -1:  # unterminated (partial edit slice) — runs to EOF
+        if close == -1:  # unterminated (partial edit slice): runs to EOF
             end_line = text.count("\n", 0, L) + 1
             out.append((start_line, end_line, is_doc))
             break
@@ -225,7 +225,7 @@ def scan_line_runs(lines: list[str], marker: str, is_py: bool,
                    exclude: set[int] | None = None) -> list[dict]:
     """Runs of consecutive FULL-LINE comments (trailing `code # x` never counts).
 
-    `exclude` is a set of 1-based line numbers to treat as non-comment — used to
+    `exclude` is a set of 1-based line numbers to treat as non-comment: used to
     skip `#`-lines that actually live inside a triple-quoted string, so a docstring
     full of `# example` lines is not double-counted as a comment run.
     """

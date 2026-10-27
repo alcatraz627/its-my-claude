@@ -1,4 +1,4 @@
-# i-dream domain manifest — claude-ipc (cross-session handoff signal)
+# i-dream domain manifest: claude-ipc (cross-session handoff signal)
 #
 # STAGED, NOT LIVE. Copy to ~/.claude/i-dream/domains/ipc.toml to register (see
 # ACTIVATION.md). One-way: i-dream reads the claude-ipc message log as a
@@ -7,7 +7,7 @@
 [domain]
 name        = "claude-ipc"
 version     = "1.0"
-description = "Cross-session IPC handoffs — who hands what to whom, how often"
+description = "Cross-session IPC handoffs: who hands what to whom, how often"
 root        = "~/.claude-ipc"
 
 [event_stream]

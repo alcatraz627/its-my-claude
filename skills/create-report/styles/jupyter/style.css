@@ -43,7 +43,7 @@
   --pill-active-bg: #1976d2;
   --pill-active-text: #ffffff;
 
-  /* Syntax highlighting — dark code cells (always dark bg) */
+  /* Syntax highlighting: dark code cells (always dark bg) */
   --hl-keyword: #c678dd;
   --hl-string: #98c379;
   --hl-comment: #5c6370;

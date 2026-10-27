@@ -4,7 +4,7 @@
 The on-disk task dir (`~/.claude/tasks/<sid>/`) is a volatile runtime cache: it
 lags within a turn, drops completed tasks, and is wiped on resume. The session
 transcript, by contrast, is an append-only durable log of every Task tool call,
-so replaying it yields the true current state — including completed tasks the
+so replaying it yields the true current state: including completed tasks the
 cache has already discarded.
 
 Usage:  replay_tasks.py <transcript.jsonl>

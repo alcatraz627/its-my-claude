@@ -24,7 +24,7 @@ check_gcloud_alive() {
   local out; out=$(bash "$pf" 2>&1); local rc=$?
   case $rc in
     0) echo "preflight: ready" ; return 0 ;;
-    1) echo "preflight: REAUTH NEEDED — the human runs the ADC login; $(echo "$out" | rg -o 'gcloud auth[^ ]*.*' | head -1)" ; return 1 ;;
+    1) echo "preflight: REAUTH NEEDED: the human runs the ADC login; $(echo "$out" | rg -o 'gcloud auth[^ ]*.*' | head -1)" ; return 1 ;;
     2) echo "preflight: no account logged in" ; return 1 ;;
     3) echo "preflight: gcloud not installed / not on PATH" ; return 1 ;;
     *) echo "preflight: unexpected exit $rc" ; return 1 ;;
@@ -52,7 +52,7 @@ check_clean_tree() {
   local repo="$2"
   local d; d=$(git -C "$repo" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
   [ "$d" = "0" ] && { echo "tree clean"; return 0; }
-  echo "$d uncommitted change(s) — deploying something not in git"; return 1
+  echo "$d uncommitted change(s): deploying something not in git"; return 1
 }
 
 # --- post-checks: they ask the RUNNING service, not the build ---------------
@@ -102,7 +102,7 @@ check_head_matches_ref() {
   [ -n "$head" ] || { echo "cannot read HEAD in $repo"; return 1; }
   case "$ref" in "$head"*) echo "HEAD is $head, matches requested $ref"; return 0 ;; esac
   case "$head" in "$ref"*) echo "HEAD is $head, matches requested $ref"; return 0 ;; esac
-  echo "HEAD is $head BUT THE TICKET ASKS FOR $ref — the wrapper ships HEAD, so this would deploy the wrong thing"
+  echo "HEAD is $head BUT THE TICKET ASKS FOR $ref: the wrapper ships HEAD, so this would deploy the wrong thing"
   return 1
 }
 
@@ -118,6 +118,6 @@ run_check() {
     build-info-matches-ref)  check_build_info_matches_ref "$@" ;;
     no-private-jwks)         check_no_private_jwks "$@" ;;
     unauth-refused)          check_unauth_refused "$@" ;;
-    *) echo "unknown check '$name' — checks are named, not free shell"; return 1 ;;
+    *) echo "unknown check '$name': checks are named, not free shell"; return 1 ;;
   esac
 }

@@ -30,7 +30,7 @@ mkdir -p "$ATONE_DIR" "$RCA_DIR" 2>/dev/null || true
 # ─── Help ─────────────────────────────────────────────────────────
 
 show_help() {
-  printf '\n  %s%satone%s %s—%s Mistake-tracker CLI\n' \
+  printf '\n  %s%satone%s %s-%s Mistake-tracker CLI\n' \
     "$C_BOLD" "$C_MAGENTA" "$C_RESET" "$C_DIM" "$C_RESET"
   printf '  %sAppend-only event log; NOT git-tracked (gitignore allowlist); kernel-locked.%s\n' \
     "$C_DIM" "$C_RESET"
@@ -82,7 +82,7 @@ show_help() {
   _opt '--cluster X'     'A–E (or null; cron may assign during consolidation)'
   _opt '--project PATH'  'absolute project path or empty'
   _opt '--files "p:N"'   'space-separated file:line locations'
-  _opt '--rca-content S' 'full RCA body (S3 path) — file is written with chflags uchg'
+  _opt '--rca-content S' 'full RCA body (S3 path): file is written with chflags uchg'
   _opt '--rca-file PATH' 'load RCA body from a file (alternative to --rca-content)'
   _opt '--payload-file PATH' 'the prose fields as one JSON object (slug/title/issue/cause/fix/what_not/precheck/severity/tags/cluster/project/files). Flags still win; the file fills only what a flag did not set. Prefer this: inline prose flags echo in full into the caller transcript.'
 
@@ -146,7 +146,7 @@ _add_exit_trap() {
 
 cmd_add() {
   _ATONE_ADD_ATTEMPTED=0          # global (no `local`): the EXIT trap reads it
-  _ATONE_ADD_SLUG=""              # global too — carries the final slug into the
+  _ATONE_ADD_SLUG=""              # global too: carries the final slug into the
                                   # failed-add marker so atone-stop-gate can tell a
                                   # dup/rejected re-run of an already-recorded slug
                                   # from a genuinely-unrecorded first-attempt failure
@@ -251,7 +251,7 @@ cmd_add() {
         printf '  %sauto-bumping severity:%s %s → %s\n' "$C_BOLD" "$C_RESET" "$severity" "$bumped_sev"
         severity="$bumped_sev"
       else
-        _info "severity already at S3 — no further bump available"
+        _info "severity already at S3: no further bump available"
       fi
       # Append same-session-repeat tag (if not already present)
       if ! echo " $tags_str " | grep -q " same-session-repeat "; then
@@ -269,7 +269,7 @@ cmd_add() {
   # + the reason in suspect_fields) and countable via events.jsonl. Next lever if
   # this is abused: a human-only token, per the graduated-approval model.
   if { [ "$severity" = "S3" ] || [ "$severity" = "S2" ]; } && [ "${ATONE_NO_JUROR:-0}" = "1" ] && [ -z "${ATONE_NO_JUROR_REASON:-}" ]; then
-    _die "ATONE_NO_JUROR=1 on an S2/S3 requires ATONE_NO_JUROR_REASON=\"why the juror can't run\". The juror is reliable now — silent self-bypass is not allowed. Legit reasons: migration/test isolation, or claude -p genuinely down."
+    _die "ATONE_NO_JUROR=1 on an S2/S3 requires ATONE_NO_JUROR_REASON=\"why the juror can't run\". The juror is reliable now: silent self-bypass is not allowed. Legit reasons: migration/test isolation, or claude -p genuinely down."
   fi
 
   # Fuzzy-slug check: warn if a near-duplicate slug already exists.
@@ -298,7 +298,7 @@ best = None
 for slug in existing.split():
     slug = slug.strip()
     if not slug or slug == new:
-        continue  # exact match — recurrence path is fine
+        continue  # exact match: recurrence path is fine
     d = lev(slug, new)
     overlap = len(new_tokens & set(slug.split("-"))) / max(1, len(new_tokens | set(slug.split("-"))))
     if d < 3 or overlap >= 0.5:
@@ -314,7 +314,7 @@ PY
       near_slug=$(echo "$near_match" | cut -f1)
       lev_dist=$(echo "$near_match" | cut -f2)
       overlap_pct=$(echo "$near_match" | cut -f3)
-      _warn "near-duplicate slug detected — did you mean an existing one?"
+      _warn "near-duplicate slug detected: did you mean an existing one?"
       printf '\n  %sproposed:%s %s\n'  "$C_DIM" "$C_RESET" "$slug"
       printf '  %sexisting:%s %s%s%s  (Levenshtein=%s, token-overlap=%s)\n\n' \
         "$C_DIM" "$C_RESET" "$C_CYAN" "$near_slug" "$C_RESET" "$lev_dist" "$overlap_pct"
@@ -331,7 +331,7 @@ PY
           *)   _info "keeping proposed new slug: $slug" ;;
         esac
       else
-        _info "non-interactive — keeping proposed slug. To reuse instead:"
+        _info "non-interactive: keeping proposed slug. To reuse instead:"
         _info "  re-run with --slug $near_slug"
       fi
     fi
@@ -368,7 +368,7 @@ PY
       if ! lint_out=$(bash "$lint_script" "$rca_tmp" 2>&1); then
         printf '%s\n' "$lint_out" >&2
         rm -f "$rca_tmp" 2>/dev/null || true
-        _die "RCA failed lint — fix the issues above and retry, or set ATONE_NO_RCA_LINT=1 to bypass. If you passed --rca-content \"\$(cat …)\" and the source file is clean, the shell layer mangled it in transit (a known trap) — Write the RCA to a file and pass --rca-file PATH instead; that path reads the bytes directly."
+        _die "RCA failed lint: fix the issues above and retry, or set ATONE_NO_RCA_LINT=1 to bypass. If you passed --rca-content \"\$(cat …)\" and the source file is clean, the shell layer mangled it in transit (a known trap): Write the RCA to a file and pass --rca-file PATH instead; that path reads the bytes directly."
       fi
       [ "${ATONE_VERBOSE:-0}" = "1" ] && printf '%s\n' "$lint_out" >&2
     fi
@@ -410,7 +410,7 @@ PY
     # appended FIRST; the judgment is recorded AFTER the event (no orphan window).
     djid=$(printf 'judg-%s-%02x' "$(date -u '+%Y%m%d-%H%M%S')" $((RANDOM % 256)))
     local dispatch_script="$(dirname "${BASH_SOURCE[0]}")/atone-juror-dispatch.sh"
-    _info "dispatching juror (atone-owned, claude -p) — this takes ~20-40s…"
+    _info "dispatching juror (atone-owned, claude -p): this takes ~20-40s…"
     verdict_json=$(bash "$dispatch_script" --case-file "$case_file" \
       ${review_report:+--review-report "$review_report"} 2>/tmp/atone-juror-$$.err)
     dispatch=$?
@@ -422,7 +422,7 @@ PY
       local jreason
       jreason=$(rg -o 'atone-juror-dispatch: .*' /tmp/atone-juror-$$.err 2>/dev/null | tail -1 | sed 's/atone-juror-dispatch: //; s/[|]/ /g; s/ /_/g' | cut -c1-60)
       [ -n "$jreason" ] || jreason="unknown"
-      _warn "juror unavailable — recording event with juror_unavailable:true ($jreason)"
+      _warn "juror unavailable: recording event with juror_unavailable:true ($jreason)"
       suspect_fields_str="${suspect_fields_str}|juror-unavailable:${jreason}"
       juror_unavailable=1
       cat /tmp/atone-juror-$$.err >&2 2>/dev/null || true
@@ -464,11 +464,11 @@ PY
           rm -f "$rca_path" 2>/dev/null || true
         fi
         cat >&2 <<EOF
-${C_RED:-}atone add: REFUSED — juror cleared the agent${C_RESET:-}
+${C_RED:-}atone add: REFUSED: juror cleared the agent${C_RESET:-}
 
 verdict=$dverdict  ($dreason)
 
-The juror said the agent was '$dverdict' — recording an atone contradicts the
+The juror said the agent was '$dverdict': recording an atone contradicts the
 verdict (the "I'll atone anyway to please the user" failure mode). The verdict
 is preserved as a judgment for measurement; no event was written.
 
@@ -515,7 +515,7 @@ This is an $severity event but no recent juror judgment was found whose
 related_atone_slugs contains "$slug" (checked last 15 min of
 ~/.claude/atone/judgments.jsonl).
 
-S2 and S3 events MUST have a linked juror verdict — anti-sycophancy gate
+S2 and S3 events MUST have a linked juror verdict: anti-sycophancy gate
 (widened from S3-only 2026-07-17: jurorless S2 flag-path writes were the
 scot-free hole). The juror must be an INDEPENDENT second opinion, not
 composed by the atoning agent.
@@ -524,7 +524,7 @@ Options:
 
   1. (REQUIRED PATH) Re-run this add with --case-file <case.json>. atone will
      dispatch the juror itself (claude -p, fresh context), persist the verdict,
-     record the judgment, and gate — you do NOT compose or relay the verdict.
+     record the judgment, and gate: you do NOT compose or relay the verdict.
      Case file = {slug, user_callout, agent_did, agent_defense, context}.
        bash ~/.claude/scripts/atone.sh add ... --severity S3 --case-file <path>
 
@@ -555,15 +555,15 @@ EOF
     if [ "$matched_verdict" = "probably-right" ] || [ "$matched_verdict" = "reasonably-right" ]; then
       if [ -z "${ATONE_OVERRIDE_VERDICT:-}" ]; then
         cat >&2 <<EOF
-${C_RED:-}atone add: REFUSED — juror cleared the agent${C_RESET:-}
+${C_RED:-}atone add: REFUSED: juror cleared the agent${C_RESET:-}
 
 Matched judgment: $matched_judgment_id  verdict=$matched_verdict
 
-The juror said the agent was '$matched_verdict' — recording an atone on
+The juror said the agent was '$matched_verdict': recording an atone on
 top of that contradicts the verdict and defeats the anti-sycophancy gate.
 This is the "I'll atone anyway to please the user" failure mode.
 
-If the user is overruling the juror (legitimate sometimes — juror is
+If the user is overruling the juror (legitimate sometimes: juror is
 fallible), retry with:
   ATONE_OVERRIDE_VERDICT="<reason user is overruling>" bash atone.sh add ...
 
@@ -595,7 +595,7 @@ EOF
       gap_s=$(( now_epoch - jud_epoch ))
       if [ "$gap_s" -lt 10 ]; then
         suspect_fields_str="${suspect_fields_str}|synthetic-juror-suspected:gap_${gap_s}s"
-        _warn "juror→atone gap was ${gap_s}s — real sub-agent dispatch takes ≥10s. Flagging suspect_fields."
+        _warn "juror→atone gap was ${gap_s}s: real sub-agent dispatch takes ≥10s. Flagging suspect_fields."
       fi
       [ "${ATONE_VERBOSE:-0}" = "1" ] && _ok "juror gate: matched $matched_judgment_id (verdict=$matched_verdict, gap=${gap_s}s)"
     fi
@@ -605,7 +605,7 @@ EOF
     # Sanitize | and newlines so the reason can't corrupt the suspect_fields split.
     _byreason=$(printf '%s' "$_byreason" | tr '|\n' '  ' | cut -c1-80)
     suspect_fields_str="${suspect_fields_str}|juror-bypassed:ATONE_NO_JUROR=1:${_byreason}"
-    _warn "ATONE_NO_JUROR=1 — recording event with juror_bypassed:true (reason: $_byreason)"
+    _warn "ATONE_NO_JUROR=1: recording event with juror_bypassed:true (reason: $_byreason)"
   fi
   # Strip leading | from suspect_fields_str for cleaner downstream split.
   suspect_fields_str="${suspect_fields_str#|}"
@@ -773,7 +773,7 @@ EOF
   [ "$repeat_bumped" = "1" ] && sum_resid="${sum_resid}${sum_resid:+$'\n'}tag: same-session-repeat"
 
   render_atone_summary "$sum_in" "$sum_steps" "$sum_out" "$sum_resid"
-  return 0    # explicit — guards against the [ -n ... ] && pattern above returning 1 on empty
+  return 0    # explicit: guards against the [ -n ... ] && pattern above returning 1 on empty
 }
 
 # ─── list ─────────────────────────────────────────────────────────
@@ -960,7 +960,7 @@ cmd_feedback() {
       -h|--help)
         cat <<EOF
 
-  atone feedback — record trigger-effectiveness signal
+  atone feedback: record trigger-effectiveness signal
 
   Flags:
     --kind X       fired-and-useful | fired-and-ignored | fired-and-irrelevant | missed
@@ -1047,7 +1047,7 @@ cmd_juror() {
       -h|--help)
         cat <<'EOF'
 
-  atone juror — record one juror verdict
+  atone juror: record one juror verdict
 
   Required:
     --user-callout S       verbatim user message that triggered atone
@@ -1179,7 +1179,7 @@ cmd_resweep() {
   while [ $# -gt 0 ]; do
     case "$1" in
       --limit) limit="$2"; shift 2 ;;
-      -h|--help) echo "atone resweep [--limit N] — re-juror events flagged juror-unavailable"; exit 0 ;;
+      -h|--help) echo "atone resweep [--limit N]: re-juror events flagged juror-unavailable"; exit 0 ;;
       *) _die "resweep: unknown flag: $1" ;;
     esac
   done
@@ -1208,7 +1208,7 @@ cmd_resweep() {
     cf="/tmp/atone-resweep-$$-$n.json"
     printf '%s' "$ev" | jq '{slug, session_id:(.session_id//"resweep"),
       user_callout:("[resweep] original mistake: " + (.issue//"")),
-      agent_did:(.cause//""), agent_defense:"(re-juror sweep — original dispatch was unavailable)",
+      agent_did:(.cause//""), agent_defense:"(re-juror sweep: original dispatch was unavailable)",
       context:(.fix//"")}' > "$cf"
     _info "resweep: re-dispatching juror for $eid ($slug)…"
     local vj rc
@@ -1298,7 +1298,7 @@ cmd_judgments() {
     -h|--help|help)
       cat <<'EOF'
 
-  atone judgments — inspect judgment records
+  atone judgments: inspect judgment records
 
   Subcommands:
     list [--verdict X] [--outcome Y] [--slug Z]   tabular listing
@@ -1358,7 +1358,7 @@ cmd_triggers() {
   [ $# -lt 1 ] && _die "triggers: keyword required"
   local kw="$1"
   local file="$HOME/.claude/atone/derived/triggers.json"
-  [ -f "$file" ] || _die "triggers: no triggers.json yet — run atone-consolidate.sh"
+  [ -f "$file" ] || _die "triggers: no triggers.json yet: run atone-consolidate.sh"
   _require jq
 
   # First: gather slugs whose underlying events have a matching tag.

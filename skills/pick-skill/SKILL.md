@@ -121,13 +121,13 @@ skill's behavior is the defect shape indicted twice in the router-plan reviews.
 Before invoking, emit the machine-consumable line:
 
 ```
-ROUTE: /<skill> — mode: retrieval|chain|named — <one-line why> — confidence: high|medium|low
+ROUTE: /<skill> (mode: retrieval|chain|named) <one-line why>: confidence: high|medium|low
 ```
 
 On the no-match path emit instead:
 
 ```
-ROUTE: none — closest: /<a>, /<b> — suggest: /create-skill
+ROUTE: none (closest: /<a>, /<b>) suggest: /create-skill
 ```
 
 ## Phase 4: Record the run

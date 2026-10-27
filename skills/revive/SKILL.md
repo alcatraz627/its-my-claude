@@ -102,7 +102,7 @@ Print:
   claude --resume <uuid>
 
   Transcript:  <full path>
-  Checkpoint:  <name> — "<summary>"   (or "(no checkpoint)")
+  Checkpoint:  <name>: "<summary>"   (or "(no checkpoint)")
   Last touched: <age>
 ─────────────────────────────────────────────────────
 ```

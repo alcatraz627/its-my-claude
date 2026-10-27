@@ -40,7 +40,7 @@ Without idempotency keys, this failure scenario creates duplicates:
 2. Server processes request, creates order #1234
 3. Network drops before response reaches client
 4. Client thinks it failed, retries POST /api/orders
-5. Server creates ANOTHER order #1235 — duplicate!
+5. Server creates ANOTHER order #1235: duplicate!
 ```
 
 With idempotency keys:
@@ -383,7 +383,7 @@ final class BackgroundUploadManager: NSObject, URLSessionDelegate, URLSessionTas
         didCompleteWithError error: Error?
     ) {
         if let error {
-            // Handle upload failure — re-enqueue if needed
+            // Handle upload failure: re-enqueue if needed
             print("Background upload failed: \(error.localizedDescription)")
         } else {
             // Upload succeeded
@@ -655,7 +655,7 @@ func retryWithBackoffOnFailure() async throws {
 ### Don't Queue GET Requests
 
 ```swift
-// ❌ Don't queue reads — cache them instead
+// ❌ Don't queue reads: cache them instead
 if !networkMonitor.isConnected {
     queueManager.enqueue(OfflineOperation(endpoint: "/api/feed", httpMethod: .get))
 }

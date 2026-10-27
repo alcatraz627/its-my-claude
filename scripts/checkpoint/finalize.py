@@ -31,7 +31,7 @@ SCRIPTS = os.path.dirname(HERE)
 VALIDATE = os.path.join(HERE, "validate-checkpoint.sh")
 WRITE = os.path.join(HERE, "write.sh")
 TRACE = os.environ.get("CK_TRACE") or os.path.join(SCRIPTS, "render", "trace.sh")
-NONE_WORDS = ("", "none", "-", "—", "n/a")
+NONE_WORDS = ("", "none", "-", "\u2014", "n/a")
 STOP = set("this that with from have been were will into also than then them they their there what when "
            "which while about after before still just only more most some such each other over under "
            "again next item items file files work done".split())

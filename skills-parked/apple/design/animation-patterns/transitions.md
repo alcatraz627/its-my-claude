@@ -55,14 +55,14 @@ Transitions only work on views that are conditionally rendered:
 VStack {
     if showDetail {
         DetailView()
-            .transition(.slide)  // ✅ Works — view is added/removed
+            .transition(.slide)  // ✅ Works: view is added/removed
     }
 }
 
 VStack {
     DetailView()
-        .opacity(showDetail ? 1 : 0)  // This is NOT a transition — it's an animation
-        .transition(.slide)             // ❌ No effect — view is always present
+        .opacity(showDetail ? 1 : 0)  // This is NOT a transition: it's an animation
+        .transition(.slide)             // ❌ No effect: view is always present
 }
 ```
 
@@ -149,7 +149,7 @@ struct ExpandableCard: View {
 4. **isSource parameter**: when both views exist simultaneously (e.g., overlay), set `isSource: true` on the source and `isSource: false` on the target
 
 ```swift
-// When both views coexist — source dictates geometry
+// When both views coexist: source dictates geometry
 SmallPhoto()
     .matchedGeometryEffect(id: "photo", in: ns, isSource: true)
 
@@ -172,7 +172,7 @@ let animation = Namespace()  // This is wrong
 // ❌ WRONG: Using for NavigationStack push/pop transitions
 NavigationLink { DetailView().matchedGeometryEffect(id: "item", in: ns) }
 // matchedGeometryEffect does NOT work across NavigationStack push/pop
-// ✅ Use matchedTransitionSource (iOS 18+) instead — see below
+// ✅ Use matchedTransitionSource (iOS 18+) instead: see below
 ```
 
 ## Navigation Transitions (iOS 18+)
@@ -226,7 +226,7 @@ struct GalleryView: View {
 // Zoom from a source
 .navigationTransition(.zoom(sourceID: id, in: namespace))
 
-// Automatic — system chooses based on context
+// Automatic: system chooses based on context
 .navigationTransition(.automatic)
 ```
 

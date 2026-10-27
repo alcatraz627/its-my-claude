@@ -37,7 +37,7 @@ State is an append-only event log at `~/.claude/dev-servers/port-events.jsonl`.
 hand-edited (the old hand-rotted scratchpad registry is retired).
 
 ```
-ports.sh scan                 # live listeners vs claims — "what is where"
+ports.sh scan                 # live listeners vs claims: "what is where"
 ports.sh claim <name> --tier 2|3 [--port N] [--ttl-h H]   # prints the port
 ports.sh pin <port> <name> [--cwd DIR]                     # tier-1 declaration
 ports.sh reap [--dry-run]     # kill expired tier-3 listeners (records revive cmd)

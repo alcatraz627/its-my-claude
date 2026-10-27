@@ -47,7 +47,7 @@ screen0() {  # tier-0 free screen; exit 0 = hits found
   if [ "$tier" = "comment-minimal" ]; then
     [ -f "$DETECT" ] && python3 "$DETECT" "$f" 2>/dev/null | jq -e '.totals // {} | (add? // 0) > 0' >/dev/null 2>&1
   else
-    rg -q "—|·  |it's worth noting|not just | simply | essentially | basically |You're absolutely right" "$f" 2>/dev/null
+    rg -q "\x{2014}|·  |it's worth noting|not just | simply | essentially | basically |You're absolutely right" "$f" 2>/dev/null
   fi
 }
 
@@ -97,7 +97,7 @@ while IFS= read -r f; do
   if [ "$n" -gt 0 ]; then
     top=$(printf '%s\n' "$findings" | head -1)
     id="${top%%|*}"
-    note "[style-watch] ${f##*/}: $n ledger finding(s) at tier $tier; top: $top — act or dismiss, then log heed: bash ~/.claude/scripts/style/style-log.sh --kind watcher-fire --entry $id --heeded yes|no"
+    note "[style-watch] ${f##*/}: $n ledger finding(s) at tier $tier; top: $top: act or dismiss, then log heed: bash ~/.claude/scripts/style/style-log.sh --kind watcher-fire --entry $id --heeded yes|no"
     bash "$LOGGER" --kind watcher-fire --surface "$tier" --artifact "$f" --model sonnet --findings "$n" --entry "$id" --tokens "$(cat "$TOKENS_FILE" 2>/dev/null || echo 0)" >/dev/null 2>&1
     [ "${id}" != "thes-fake-0000" ] && bash "$HOME/.claude/scripts/style/thesaurus.sh" hit "$id" >/dev/null 2>&1
   else

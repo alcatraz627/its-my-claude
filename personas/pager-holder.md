@@ -301,7 +301,7 @@ Return a single markdown document with exactly these sections, in this order. Be
 concrete: cite line numbers or quote short phrases (≤12 words). Do not pad.
 
 ```markdown
-# Pager-Holder Review — <doc title or path>
+# Pager-Holder Review: <doc title or path>
 
 ## Headline verdict
 
@@ -325,7 +325,7 @@ Flag any prereq discovered mid-procedure.
 
 For each step in the doc:
 
-- Step N: **<short label>** — clear / ambiguous / missing-observable / missing-failure-branch
+- Step N: **<short label>**: clear / ambiguous / missing-observable / missing-failure-branch
   - Specific issue + concrete fix
 
 ## Verification audit
@@ -352,9 +352,9 @@ escalation is vague or names a former owner / dead channel.
 
 ## Friction findings (numbered, ordered by severity)
 
-- **<short label>** — line/anchor: "<short quote>"
+- **<short label>**: line/anchor: "<short quote>"
   - Why it's friction at 2am (1 sentence)
-  - Fix: <quick-fix | deep-rewrite> — concrete suggestion
+  - Fix: <quick-fix | deep-rewrite>: concrete suggestion
 
 ## Done-criteria checklist
 
@@ -369,7 +369,7 @@ escalation is vague or names a former owner / dead channel.
 
 ## Out of scope for me (hand off to other reviewers)
 
-Anything I noticed but isn't my lane — code correctness, system design, product
+Anything I noticed but isn't my lane: code correctness, system design, product
 framing, customer communications strategy.
 ```
 

@@ -12,9 +12,9 @@ Stdout protocol (single line):
 Core principle (revised 2026-05-21 after real false-positive incidents):
   Gate ONLY when a gated CLI is the actual COMMAND being invoked AND it's a
   write. Three things therefore ALWAYS pass:
-    - reads (gh run view, render logs, vercel ls) — even with --jq/--json/quotes
+    - reads (gh run view, render logs, vercel ls): even with --jq/--json/quotes
       that defeat tokenizing;
-    - a gated NAME that isn't the command (e.g. `bash render-visual.sh` — the
+    - a gated NAME that isn't the command (e.g. `bash render-visual.sh`: the
       script merely contains "render"; `cat file` with no gated CLI at all);
     - any command with no gated command-token anywhere.
   Writes via launcher/shell wrappers (env gh, /usr/bin/gh, bash -c "render
@@ -231,11 +231,11 @@ AWS_GLOBAL_VALUE_FLAGS = frozenset({
 
 def _aws_service_op(rest):
     """Return (service, operation) for an `aws …` invocation, skipping global
-    flags — and the values of value-taking ones — that may precede the service.
+    flags (and the values of value-taking ones) that may precede the service.
 
     Fail-safe by construction: a global value-flag we don't know at worst leaves
     its value sitting where the service is expected, which yields a non-read op
-    and therefore a gated (blocked) verdict — never a wrongful allow."""
+    and therefore a gated (blocked) verdict: never a wrongful allow."""
     pos = []
     i = 0
     while i < len(rest):
@@ -256,13 +256,13 @@ def _aws_service_op(rest):
 
 def _aws_is_read(rest, g):
     """AWS commands are `aws <service> <operation>`. Returns True ONLY when a read
-    can be POSITIVELY identified — the operation name starts with a known read
+    can be POSITIVELY identified: the operation name starts with a known read
     prefix (describe-/list-/get-/lookup-/head-/…) or is an exact read (`s3 ls`,
     `dynamodb scan|query`). The prefix set is the closed dimension; it covers
     AWS's ~7000 verb-noun operations without enumerating them.
 
-    Anything NOT provably a read — create-/delete-/put-/terminate-/run-/
-    `s3 cp|sync|mv|rm`, an unknown op, an unparseable shape — falls through to a
+    Anything NOT provably a read: create-/delete-/put-/terminate-/run-/
+    `s3 cp|sync|mv|rm`, an unknown op, an unparseable shape: falls through to a
     WRITE and is gated. For a security gate the unidentifiable case must block,
     never allow."""
     service, op = _aws_service_op(rest)
@@ -277,7 +277,7 @@ def _aws_is_read(rest, g):
 
 def _aws_is_sensitive_read(op, rest, g):
     """Some AWS operations read no resource state yet hand back a live secret or
-    credential — `secretsmanager get-secret-value`, `ecr get-login-password`, STS
+    credential: `secretsmanager get-secret-value`, `ecr get-login-password`, STS
     short-lived tokens, an SSM SecureString fetched with decryption. They mutate
     nothing, so the plain read rule would wave them through; but surfacing a
     credential deserves the same per-command approval a write gets. SSM
@@ -366,7 +366,7 @@ def _classify_gated(cmd, rest, parse_ok, policy, segment):
                 mains = g.get("main_branches", ["main", "master"])
                 if any(re.search(rf"\b{re.escape(b)}\b", rest_str) for b in mains):
                     return ("block", f"gh `{mv}` targets a protected branch")
-                return ("block", f"gh `{mv}` — target branch not provable as non-main; gating")
+                return ("block", f"gh `{mv}`: target branch not provable as non-main; gating")
         return ("block", f"gh write/unknown verb (not in read allowlist): `{rest_str}`")
 
     norm = _split_eq(rest)
@@ -378,7 +378,7 @@ def _classify_gated(cmd, rest, parse_ok, policy, segment):
         return ("allow", None)
     if g.get("default_env") == "dev" and verb in g.get("safe_default_verbs", []):
         return ("allow", None)
-    return ("block", f"{cmd} write, no proven-dev signal (verb={verb or '∅'}) — treated as prod: `{segment}`")
+    return ("block", f"{cmd} write, no proven-dev signal (verb={verb or '∅'}): treated as prod: `{segment}`")
 
 
 def classify_segment(segment, policy, _depth=0):
@@ -460,7 +460,7 @@ def main():
             for s in segments[:200]
         )
         if any_gated:
-            print("BLOCK\tcommand has >50 segments and invokes a gated CLI — too complex to classify safely; gating")
+            print("BLOCK\tcommand has >50 segments and invokes a gated CLI: too complex to classify safely; gating")
             return
 
     for seg in segments:

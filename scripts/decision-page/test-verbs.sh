@@ -31,8 +31,8 @@ cat > "$PAGE/config.json" <<'JSON'
     { "id": "D2", "none": true, "options": [ { "code": "a", "rec": true } ] } ],
   "sections": [ { "id": "S1" } ] }
 JSON
-FRESH=$'Verbs smoke:\nD1a D2a\nD1 note — seed'
-FLIPPED=$'Verbs smoke:\nD1b D2z\nS1: DISAGREE — no\nnotes:\nend'
+FRESH=$'Verbs smoke:\nD1a D2a\nD1 note: seed'
+FLIPPED=$'Verbs smoke:\nD1b D2z\nS1: DISAGREE: no\nnotes:\nend'
 STATE='{"d":{"D1":"b","D2":"z"},"dnotes":{"D1":""},"screens":{"S1":{"agree":false,"note":"no"}},"endnotes":"end"}'
 
 eq "compose: the page as drawn" "$(bash "$DP" compose "$SLUG" </dev/null)" "$FRESH"

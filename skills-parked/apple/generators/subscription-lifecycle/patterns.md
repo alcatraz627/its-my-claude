@@ -397,13 +397,13 @@ for await result in Transaction.currentEntitlements {
 ### Don't Check Receipt File Directly
 
 ```swift
-// Bad — StoreKit 1 pattern, fragile
+// Bad: StoreKit 1 pattern, fragile
 if let receiptURL = Bundle.main.appStoreReceiptURL,
    let receiptData = try? Data(contentsOf: receiptURL) {
     // Parse ASN.1... this is painful and error-prone
 }
 
-// Good — StoreKit 2 handles verification
+// Good: StoreKit 2 handles verification
 for await result in Transaction.currentEntitlements {
     if case .verified(let transaction) = result {
         // Already verified by StoreKit
@@ -414,10 +414,10 @@ for await result in Transaction.currentEntitlements {
 ### Don't Forget to Handle Revocation
 
 ```swift
-// Bad — only checks if active, ignores refunds
+// Bad: only checks if active, ignores refunds
 if hasActiveTransaction { grantAccess() }
 
-// Good — explicitly handle revocation
+// Good: explicitly handle revocation
 switch status.state {
 case .subscribed: grantAccess()
 case .revoked: revokeAccess(); showRefundMessage()
@@ -428,12 +428,12 @@ case .revoked: revokeAccess(); showRefundMessage()
 ### Don't Treat Grace Period as Expired
 
 ```swift
-// Bad — user loses access during grace period → involuntary churn
+// Bad: user loses access during grace period → involuntary churn
 if status.state != .subscribed {
     revokeAccess()
 }
 
-// Good — grant access during grace period and billing retry
+// Good: grant access during grace period and billing retry
 switch status.state {
 case .subscribed, .inGracePeriod, .inBillingRetryPeriod:
     grantAccess()
@@ -445,12 +445,12 @@ case .expired, .revoked:
 ### Don't Poll for Status Changes
 
 ```swift
-// Bad — wasteful polling
+// Bad: wasteful polling
 Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
     Task { await checkSubscriptionStatus() }
 }
 
-// Good — listen for real-time updates
+// Good: listen for real-time updates
 Task.detached {
     for await result in Transaction.updates {
         if case .verified(let transaction) = result {
@@ -464,10 +464,10 @@ Task.detached {
 ### Don't Ignore Pending Tier Changes
 
 ```swift
-// Bad — shows current tier without mentioning pending change
+// Bad: shows current tier without mentioning pending change
 Text("Your plan: Pro")
 
-// Good — inform user about upcoming change
+// Good: inform user about upcoming change
 if pendingDowngrade != nil {
     Text("Your plan: Pro")
     Text("Changing to Basic on \(renewalDate)")
@@ -479,10 +479,10 @@ if pendingDowngrade != nil {
 ### Don't Gate All Features During Billing Issues
 
 ```swift
-// Bad — locks out user immediately on billing failure
+// Bad: locks out user immediately on billing failure
 if state != .active { showPaywall() }
 
-// Good — progressive restriction
+// Good: progressive restriction
 switch state {
 case .active:
     showFullApp()

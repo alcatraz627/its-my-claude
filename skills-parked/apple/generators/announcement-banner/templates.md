@@ -166,7 +166,7 @@ final class AnnouncementManager {
             allAnnouncements = announcements
             updateActiveAnnouncement()
         } catch {
-            // Silently fail — banner is non-critical UI
+            // Silently fail: banner is non-critical UI
             // Optionally log: print("Failed to load announcements: \(error)")
         }
     }

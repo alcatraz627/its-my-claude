@@ -224,15 +224,15 @@ skill anyway.
 
   Proposed improvements (N total):
 
-    cross-cutting     [N] — [brief overall theme]
-    per-skill         [N] — [brief overall theme]
-    consolidation     [N] — [brief overall theme]
-    skill-extraction  [N] — [brief overall theme]
-    guideline-promo   [N] — [brief overall theme]
-    dead-instruction  [N] — [brief overall theme]
+    cross-cutting     [N]: [brief overall theme]
+    per-skill         [N]: [brief overall theme]
+    consolidation     [N]: [brief overall theme]
+    skill-extraction  [N]: [brief overall theme]
+    guideline-promo   [N]: [brief overall theme]
+    dead-instruction  [N]: [brief overall theme]
 
   Full list:
-    1. [category] [title] — [rationale] (risk: low/medium/high)
+    1. [category] [title]: [rationale] (risk: low/medium/high)
     2. ...
 
 ─────────────────────────────────────────────────────
@@ -265,7 +265,7 @@ If `DRY_RUN=true`: skip both questions. Print:
 
 ```
 ─────────────────────────────────────────────────────
-  DRY RUN — no files will be written.
+  DRY RUN: no files will be written.
   Improvements that would have been applied: [list]
 ─────────────────────────────────────────────────────
 ```
@@ -312,8 +312,8 @@ Narrate each applied improvement in one block: title, files, the section touched
 result. The lock acquire/release happens per 3.1; you don't need to narrate each lock step.
 
 ```
-  [✎] <title> — <files> — editing <section> ... ✓
-  [+] Extracting skill <name> — invoking /create-skill ...
+  [✎] <title> (<files>) editing <section> ... ✓
+  [+] Extracting skill <name>: invoking /create-skill ...
 ```
 
 ### 3.3: Respect modification prompt
@@ -378,7 +378,7 @@ Write the entry to a temp file and call `prepend-runtime-note.sh`:
 
 ```bash
 cat > /tmp/runtime-note-entry.md << 'ENTRY'
-## improve-config: <brief description of what was run> — YYYY-MM-DD HH:MM
+## improve-config: <brief description of what was run>: YYYY-MM-DD HH:MM
 
 **Purpose:** <one sentence>
 

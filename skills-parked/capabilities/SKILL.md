@@ -160,7 +160,7 @@ new locations not listed here, add them to this list in the report cache metadat
     "script_count": 30,
     "memory_count": 12
   },
-  "discovery_sources": ["<list of all paths scanned — update if new ones found>"],
+  "discovery_sources": ["<list of all paths scanned: update if new ones found>"],
   "sections": { ... }
 }
 ```
@@ -205,7 +205,7 @@ One-screen summary. Format:
 
 ```
 ─────────────────────────────────────────────────────
-  Claude Capabilities — <date>
+  Claude Capabilities: <date>
 ─────────────────────────────────────────────────────
 
   Skills:       42 (38 user-invocable)
@@ -234,26 +234,26 @@ Categorized inventory. Group by namespace cluster:
 
 ```
 ─────────────────────────────────────────────────────
-  Claude Capabilities Report — <date>
+  Claude Capabilities Report: <date>
 ─────────────────────────────────────────────────────
 
   ## Skills (42)
 
   ### Development
-  /git-setup       — Repo init, health audit, maintenance
-  /scaffold        — Project scaffolder with wizard
-  /write-docs      — Technical documentation generator
+  /git-setup: Repo init, health audit, maintenance
+  /scaffold: Project scaffolder with wizard
+  /write-docs: Technical documentation generator
   ...
 
   ### Analysis
-  /arch-qa         — Architecture Q&A by tracing code paths
-  /scan-sessions   — Deep-scan sessions for patterns
+  /arch-qa: Architecture Q&A by tracing code paths
+  /scan-sessions: Deep-scan sessions for patterns
   ...
 
   ### Output
-  /create-report   — Markdown → HTML report (13 styles)
-  /generate-pdf    — Markdown → styled PDF
-  /diagram         — Terminal diagrams
+  /create-report: Markdown → HTML report (13 styles)
+  /generate-pdf: Markdown → styled PDF
+  /diagram: Terminal diagrams
   ...
 
   ## MCP Servers (8 active)
@@ -275,21 +275,21 @@ Categorized inventory. Group by namespace cluster:
   ## Runtime Architecture
 
   ### Persistence
-  - WAL (write-ahead log) — session action tracking
-  - Core-dump / Catchup — checkpoint and restore
-  - Memory (2 tiers) — per-project + global
-  - Scratchpad (2 tiers) — plans + learnings
-  - Runtime notes — cross-session skill insights
+  - WAL (write-ahead log): session action tracking
+  - Core-dump / Catchup: checkpoint and restore
+  - Memory (2 tiers): per-project + global
+  - Scratchpad (2 tiers): plans + learnings
+  - Runtime notes: cross-session skill insights
 
   ### Automation
-  - Hooks — 56 event-driven shell commands
-  - Scheduled triggers — cron-based remote agents
-  - Desktop automation — screenshots, clicks, annotation
+  - Hooks: 56 event-driven shell commands
+  - Scheduled triggers: cron-based remote agents
+  - Desktop automation: screenshots, clicks, annotation
 
   ### UI
-  - Statusline — live segments + profiles
-  - Widgets — claude-instances tracker
-  - Banner — session greeting
+  - Statusline: live segments + profiles
+  - Widgets: claude-instances tracker
+  - Banner: session greeting
 
   ## Unique Capabilities
   [List things factory Claude cannot do]
@@ -358,7 +358,7 @@ During each scan:
 4. At the end of the run, if new sources were found, print:
    ```
    New config locations discovered:
-   - ~/.claude/<new-path> — <description>
+   - ~/.claude/<new-path>: <description>
    Consider updating the SKILL.md discovery table.
    ```
 

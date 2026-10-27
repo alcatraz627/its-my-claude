@@ -19,9 +19,9 @@ cwd=$(echo "$input" | jq -r '.cwd // empty')
 session_id=$(echo "$input" | jq -r '.session_id // empty')
 
 if [[ "$trigger" == "auto" ]]; then
-  echo "⚠️  AUTO-COMPACTION — Writing comprehensive checkpoint before compaction." >&2
+  echo "⚠️  AUTO-COMPACTION: Writing comprehensive checkpoint before compaction." >&2
 else
-  echo "📋 MANUAL COMPACT — Writing comprehensive checkpoint before compaction." >&2
+  echo "📋 MANUAL COMPACT: Writing comprehensive checkpoint before compaction." >&2
 fi
 
 # ── 1. Write WAL CHECKPOINT ──────────────────────────────────────────────────
@@ -31,12 +31,12 @@ for wal_path in "$cwd/.claude/wal.md" "$HOME/.claude/wal.md"; do
     cat >> "$wal_path" << EOF
 
 === CHECKPOINT [$ts] ($trigger compaction) ===
-Goal: [see above — $trigger compaction fired, preserving state]
+Goal: [see above: $trigger compaction fired, preserving state]
 Done: [actions logged above]
 Current: Compaction imminent ($trigger trigger)
 Next: Continue from this checkpoint after compaction
 Blockers: None
-Learnings: Compaction fired ($trigger) — if auto, consider delegating heavy subtasks to subagents (context: fork)
+Learnings: Compaction fired ($trigger): if auto, consider delegating heavy subtasks to subagents (context: fork)
 ===
 EOF
     echo "  WAL CHECKPOINT written to $wal_path" >&2
@@ -72,7 +72,7 @@ if [[ -n "$cwd" ]] && command -v git >/dev/null 2>&1; then
 fi
 
 # Format recent files as markdown list
-recent_files_md="- _(no git changes detected — check WAL for file references)_"
+recent_files_md="- _(no git changes detected: check WAL for file references)_"
 if [[ -n "$recent_files" ]]; then
   recent_files_md=""
   while IFS= read -r f; do
@@ -139,7 +139,7 @@ for wal_path in "$cwd/.claude/wal.md" "$HOME/.claude/wal.md"; do
     wal_goal=$(grep -m 1 '^Goal:' "$wal_path" 2>/dev/null | sed 's/^Goal: //' | sed 's/ *\[.*$//' ) || true
     # Fall back to session header if Goal line is generic
     if [[ -z "$wal_goal" || "$wal_goal" == *"see above"* ]]; then
-      wal_goal=$(grep -m 1 '^## Session:' "$wal_path" 2>/dev/null | sed 's/^## Session: //' | sed 's/ — [0-9].*//' ) || true
+      wal_goal=$(grep -m 1 '^## Session:' "$wal_path" 2>/dev/null | sed 's/^## Session: //' | sed 's/ '$'\xe2\x80\x94'' [0-9].*//' ) || true
     fi
     break
   fi
@@ -190,7 +190,7 @@ if [[ -n "$session_todos" ]]; then
 
 $session_todos"
 fi
-[[ -n "$pending_md" ]] || pending_md="- _(no tasks or workspace todos captured at compaction — run \`TaskList\` after resume)_"
+[[ -n "$pending_md" ]] || pending_md="- _(no tasks or workspace todos captured at compaction: run \`TaskList\` after resume)_"
 
 # --- Workspace session-notes (the live Todos/Notes/Decisions that survive /clear) ---
 # The richest semantic source: sync-todos mirrors the live Task list into it and
@@ -258,11 +258,11 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 > **Authoritative current state = the Workspace Notes section below** (session-id
 > keyed, this session's own doc). The two goal lines here are best-effort text
-> scrapes that can belong to a PRIOR session — verify against Workspace Notes
+> scrapes that can belong to a PRIOR session: verify against Workspace Notes
 > before resuming, don't lead with them.
 
-**From WAL (may be a prior session's goal — verify):** ${wal_goal:-_(no WAL session header found)_}
-**From previous checkpoint$([[ "$prev_goal_is_current" == "no" ]] && echo " — ⚠ belongs to a DIFFERENT session, likely stale" || { [[ "$prev_goal_is_current" == "yes" ]] && echo " — confirmed this session"; }):** ${prev_goal:-_(no prior checkpoint goal found)_}
+**From WAL (may be a prior session's goal: verify):** ${wal_goal:-_(no WAL session header found)_}
+**From previous checkpoint$([[ "$prev_goal_is_current" == "no" ]] && echo ": ⚠ belongs to a DIFFERENT session, likely stale" || { [[ "$prev_goal_is_current" == "yes" ]] && echo ": confirmed this session"; }):** ${prev_goal:-_(no prior checkpoint goal found)_}
 
 > If these differ from each other or from Workspace Notes, trust Workspace Notes
 > (it is keyed to this session); the scrapes above may be a prior session's goal.
@@ -273,7 +273,7 @@ dump_file="$dump_dir/_precompact-checkpoint.claude.md"
 
 ## Current Expectation
 
-After compaction, run \`/catchup\` — it will:
+After compaction, run \`/catchup\`: it will:
 1. Check WAL for the last CHECKPOINT block (fast path)
 2. Fall back to this file for structured state
 3. Load targeted file context from pending items
@@ -293,7 +293,7 @@ $recent_files_md
 HEADER
 
   if [[ -n "$workspace_notes" ]]; then
-    echo "## Workspace Notes — live, survives /clear (\`$workspace_source\`)"
+    echo "## Workspace Notes: live, survives /clear (\`$workspace_source\`)"
     echo
     echo "> Todos/Notes/Decisions for this session. The Task list is mirrored here"
     echo "> by sync-todos; this is the primary thing to restore after compaction."
@@ -360,8 +360,8 @@ HEADER
 
 ## Additional Context Sources
 
-- **WAL:** \`.claude/wal.md\` — full action log with checkpoints
-- **Scratchpad:** \`.claude/scratchpad/\` — in-progress plans and learnings
+- **WAL:** \`.claude/wal.md\`: full action log with checkpoints
+- **Scratchpad:** \`.claude/scratchpad/\`: in-progress plans and learnings
 - **Tasks:** run \`TaskList\` for pending agent tasks
 
 ---
@@ -388,7 +388,7 @@ if [[ -e "$symlink" && ! -L "$symlink" ]]; then
   # A REGULAR file at this path is not ours to destroy (hand-authored note,
   # foreign artifact). ln -sf would unlink it silently; skip and warn instead.
   skip_link=1
-  cur_target="(regular file, not a symlink — left untouched)"
+  cur_target="(regular file, not a symlink: left untouched)"
 fi
 if [[ -L "$symlink" ]]; then
   cur_target=$(readlink "$symlink" 2>/dev/null) || true
@@ -408,7 +408,7 @@ fi
 
 # ── 5. Preservation instructions for the compaction summary ───────────────────
 echo "" >&2
-echo "CRITICAL — Include these in your compaction summary:" >&2
+echo "CRITICAL: Include these in your compaction summary:" >&2
 echo "  • All modified file paths with line numbers" >&2
 echo "  • All pending task IDs and their status" >&2
 echo "  • The current goal and what step you're on" >&2
@@ -455,7 +455,7 @@ cp_kind="${PRECOMPACT_KIND_OVERRIDE:-precompact}"
   --mode              replace-latest \
   --guard-newer-than  1800 \
   --name              "${cp_kind}-${sid_short}" \
-  --summary           "Auto ${cp_kind} (${trigger}) — shell-only structural snapshot, no LLM synthesis" \
+  --summary           "Auto ${cp_kind} (${trigger}): shell-only structural snapshot, no LLM synthesis" \
   >/dev/null 2>&1 || true
 
 exit 0

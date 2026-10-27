@@ -296,7 +296,7 @@ struct ItemDataFlowIntegrationTests {
         // Act
         await env.viewModel.loadItems()
 
-        // Assert — verify end-to-end
+        // Assert: verify end-to-end
         #expect(env.viewModel.items.count == 2)
         #expect(env.viewModel.items.first?.title == "First")
         #expect(env.viewModel.state == .loaded)
@@ -308,12 +308,12 @@ struct ItemDataFlowIntegrationTests {
         MockURLProtocol.reset()
         let env = TestEnvironment.create()
 
-        // First load — from API
+        // First load: from API
         MockServer.respondWith([APIItem(id: "1", title: "Cached")], for: "/api/items")
         await env.viewModel.loadItems()
         #expect(env.viewModel.items.count == 1)
 
-        // Second load — API fails, should use cache
+        // Second load: API fails, should use cache
         MockServer.respondWithError(for: "/api/items")
         await env.viewModel.loadItems()
         #expect(env.viewModel.items.count == 1)
@@ -330,12 +330,12 @@ struct ItemDataFlowIntegrationTests {
         // Act
         try await env.viewModel.addItem(title: "New Item")
 
-        // Assert — saved to local store
+        // Assert: saved to local store
         let descriptor = FetchDescriptor<Item>()
         let stored = try env.container.mainContext.fetch(descriptor)
         #expect(stored.count == 1)
 
-        // Assert — API was called
+        // Assert: API was called
         let postRequests = MockURLProtocol.capturedRequests.filter { $0.httpMethod == "POST" }
         #expect(postRequests.count == 1)
     }

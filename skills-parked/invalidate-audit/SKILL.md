@@ -119,20 +119,20 @@ gum_info "Mutations scanned: N"
 # Render only if warnings exist:
 gum_panel "WARNINGS (stale data risk)" \
   "⚠ src/app/jobs/components/job-form.tsx:42" \
-  "  Mutation: createJob — onSuccess present but no invalidateQueries" \
+  "  Mutation: createJob: onSuccess present but no invalidateQueries" \
   "" \
   "⚠ src/app/users/hooks/use-update-user.ts:18" \
-  "  Mutation: updateUser — no onSuccess callback"
+  "  Mutation: updateUser: no onSuccess callback"
 
 # Render only if suppressed mutations exist:
 gum_panel "SUPPRESSED (// no-invalidate)" \
   "ℹ src/app/analytics/use-track-event.ts:7" \
-  "  Mutation: trackEvent — intentionally fire-and-forget"
+  "  Mutation: trackEvent: intentionally fire-and-forget"
 
 # Render only if clean mutations exist:
 gum_panel "CLEAN" \
-  "✓ src/app/jobs/hooks/use-create-job.ts:11   — invalidateQueries(QueryKeys.jobs)" \
-  "✓ src/app/users/hooks/use-delete-user.ts:8  — invalidateQueries(QueryKeys.users)"
+  "✓ src/app/jobs/hooks/use-create-job.ts:11: invalidateQueries(QueryKeys.jobs)" \
+  "✓ src/app/users/hooks/use-delete-user.ts:8: invalidateQueries(QueryKeys.users)"
 
 gum_complete "invalidate-audit" \
   "Warnings=N (missing invalidation)" \

@@ -76,7 +76,7 @@ first_slug=$(printf '%s' "$slugs" | head -1)
 
 bash "$GCC/scripts/propose.sh" add \
   --title "Flesh out gcc friction from session ${sid:0:8} (auto-stub: ${first_slug:-atone})" \
-  --body "Auto-stubbed by gcc-signal-capture: this session edited ~/.claude/ and filed atone event(s) [${first_slug:-?}] but contributed no improvement proposal. A reusable gcc improvement likely applies — flesh this out from the linked atone slug(s), or reject at triage. (Stub: not yet reviewed.)" \
+  --body "Auto-stubbed by gcc-signal-capture: this session edited ~/.claude/ and filed atone event(s) [${first_slug:-?}] but contributed no improvement proposal. A reusable gcc improvement likely applies: flesh this out from the linked atone slug(s), or reject at triage. (Stub: not yet reviewed.)" \
   --category other \
   --effort medium \
   --session "$sid" \

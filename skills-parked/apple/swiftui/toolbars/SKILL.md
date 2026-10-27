@@ -82,13 +82,13 @@ ContentView()
 
 ```swift
 ToolbarSpacer(.fixed)      // Fixed-width space
-ToolbarSpacer(.flexible)   // Flexible space — pushes items apart
+ToolbarSpacer(.flexible)   // Flexible space: pushes items apart
 ```
 
 ### Anti-Patterns
 
 ```swift
-// ❌ Missing IDs in customizable toolbar — items can't be customized
+// ❌ Missing IDs in customizable toolbar: items can't be customized
 .toolbar(id: "main") {
     ToolbarItem {           // No id parameter
         ShareButton()

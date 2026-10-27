@@ -33,7 +33,7 @@ _tags_row() { rg -m1 "^${1}	" "$TAGS" 2>/dev/null; }
 cmd_index() {
   local out="$PARKED/INDEX.md" d name
   {
-    echo "# Parked skills — tldr, tags, activation"
+    echo "# Parked skills: tldr, tags, activation"
     echo
     echo "Not loaded; see README.md for the two-way check. Regenerate: \`bash ~/.claude/scripts/parked/parked.sh index\`."
     echo
@@ -119,7 +119,7 @@ cmd_friction() {
       local n
       n=$(jq -r --arg sh "$shape" --arg p "$proj" 'select(.shape == $sh and .project == $p) | .id' "$FRICTION" | wc -l | tr -d ' ')
       if [ "$n" -ge 2 ]; then
-        echo "SECOND occurrence of shape '$shape' in $proj — ask the owner now whether to commission a skill for it (their ruling, 2026-08-20: twice builds the repo)."
+        echo "SECOND occurrence of shape '$shape' in $proj: ask the owner now whether to commission a skill for it (their ruling, 2026-08-20: twice builds the repo)."
       else
         echo "recorded (1st occurrence of this shape here)"
       fi;;

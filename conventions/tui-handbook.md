@@ -72,7 +72,7 @@ out of `-h` and completions, and **headless-testable** (§5).
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
-# SELF must be overridable for tests, and ALWAYS %q-quoted into fzf bind strings —
+# SELF must be overridable for tests, and ALWAYS %q-quoted into fzf bind strings:
 # an unquoted path word-splits under sh -c and breaks on a space in the install dir.
 SELF="${MYTOOL_SELF:-$(command -v mytool || printf '%s' "$0")}"
 source "$HOME/.claude/scripts/tui/colors.sh"; tui_colors_init

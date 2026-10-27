@@ -41,7 +41,7 @@ fixed point a later session measures drift against.
 shared: shared.css (602) · shared.js (866): navbar, crumbFor, kindIndex,
   kindFind, kindMatches, searchSelect, helpModal, verbButton, paintVerbs,
   watchVerbs, wireGrip, tailTrim, firstLineName, fillKeys
-registry: kinds.js (115) — boards · asks · drafts · decisions · previews
+registry: kinds.js (115): boards · asks · drafts · decisions · previews
 agent side: kanban.sh / cli.ts (1152) · session-start-line.sh · 27 /api routes
 ```
 

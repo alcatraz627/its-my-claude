@@ -69,7 +69,7 @@ If it does not exist yet, continue without it.
 4. If the output directory already exists → skip generation, open the existing file, print:
    ```
    ✓ Report already exists: <output_html>
-     Skipping generation — opening existing file.
+     Skipping generation: opening existing file.
    ```
 
 ---

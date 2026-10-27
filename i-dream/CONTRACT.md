@@ -103,11 +103,11 @@ budget_tokens = 4000
 prompt_path   = "{root}/dream/prompt.md"
 insights_path = "{root}/dream/insights.jsonl"   # i-dream writes here
 cursor_path   = "{root}/dream/cursor.json"       # i-dream writes here
-prompt_fields = ["slug", "..."]       # SEE §4 — what the LLM sees per event
+prompt_fields = ["slug", "..."]       # SEE §4: what the LLM sees per event
 prompt_field_max_chars = 300          # per-field truncation
-severity_field = "severity"           # SEE §4 — your importance tag, if any
-severity_order = ["low","med","high"] # SEE §4 — your scale low→high; omit for S1/S2/S3 default
-adapter       = "{root}/dream/adapter.sh"  # SEE §5 — the return channel
+severity_field = "severity"           # SEE §4: your importance tag, if any
+severity_order = ["low","med","high"] # SEE §4: your scale low→high; omit for S1/S2/S3 default
+adapter       = "{root}/dream/adapter.sh"  # SEE §5: the return channel
 
 [hinter]
 tldr_path     = "{root}/derived/_tldr.txt"   # you write; top-N joins the union
@@ -221,7 +221,7 @@ is proven, you may **self-register** (write the manifest + events to the
 centralized dir directly): see §8 for which to choose.
 
 ```markdown
-## i-dream Integration Request — <your-system>
+## i-dream Integration Request: <your-system>
 
 1. SYSTEM: <one line: what it tracks, why dream over it>
 2. PATTERN: native-emitted | synthesized

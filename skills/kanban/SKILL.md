@@ -39,7 +39,7 @@ local copy) and apply them for the run.
 bash ~/.claude/scripts/kanban/kanban.sh init            # register + first sync + URL
 bash ~/.claude/scripts/kanban/kanban.sh sync            # prints the delta digest
 bash ~/.claude/scripts/kanban/kanban.sh notes --unread  # read-only re-peek, never marks read
-bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack   # displays AND marks read — only after acting
+bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack   # displays AND marks read: only after acting
 bash ~/.claude/scripts/kanban/kanban.sh open|status|check
 ```
 
@@ -159,7 +159,7 @@ one and existing boards get milestones with no migration.
 bash $K milestone                          # list them: order, goal, N/M done, and any mismatch
 bash $K milestone check                    # where a milestone and its cards disagree
 bash $K milestone add M1 --goal "what shipping it means" [--order 1]
-bash $K tag <card-id> milestone:M1         # membership — the tag, as always
+bash $K tag <card-id> milestone:M1         # membership: the tag, as always
 bash $K milestone goal M1 "a better sentence"
 bash $K milestone doc M1 docs/plan/m1.md   # as many plans and docs as it takes
 bash $K milestone done M1 [--no-cards]     # ships it AND moves its cards to done

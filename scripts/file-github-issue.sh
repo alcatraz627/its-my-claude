@@ -60,7 +60,7 @@ printf '%s\n' "$FULL_BODY"
 echo "──────────────────────────────────────────"
 
 if [ "$CONFIRM" -eq 0 ]; then
-  echo "DRY-RUN — nothing filed. To file: re-run with --confirm (the gh write is still approval-gated)."
+  echo "DRY-RUN: nothing filed. To file: re-run with --confirm (the gh write is still approval-gated)."
   exit 0
 fi
 

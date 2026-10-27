@@ -2,7 +2,7 @@
 # subconscious/scripts/aggregate-todos.sh
 #
 # Walk all ingest-queue/*.json files, extract their `pending` arrays, and emit
-# a single deduped JSONL stream of pending todos with provenance — newest first.
+# a single deduped JSONL stream of pending todos with provenance: newest first.
 #
 # Output: ~/.claude/subconscious/dreams/pending-todos.jsonl
 # Each line: {"todo": "...", "session_id": "...", "project_root": "...", "ts": "...",

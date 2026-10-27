@@ -99,7 +99,7 @@ def main():
         if r.get("score", 0) > BLOCK_SCORE:
             why.append(f"prose-lint score {r['score']}/100w (block line {BLOCK_SCORE:g})")
         if why:
-            first = next((n for n, t in rows if re.search(r"[—–]", t)), rows[0][0])
+            first = next((n for n, t in rows if re.search(r"[\u2014–]", t)), rows[0][0])
             refusals.append(f"  {f} (e.g. line {first}): " + "; ".join(why))
     if not refusals:
         return 0

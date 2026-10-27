@@ -190,7 +190,7 @@ if [ -z "$SUMMARY" ]; then
   ' 2>/dev/null || echo "")
 fi
 
-REASON="Your task list hasn't changed in ${TURNS_SINCE} turns but ~${EDITS_SINCE} edits happened — it's drifted from what you're actually doing. Before stopping, reconcile it with TaskUpdate/TaskCreate: mark finished work completed, add anything new you took on, and set the right task in_progress. Current: ${SUMMARY}. (This check only fires above a few tasks; update the list and it won't fire again.)"
+REASON="Your task list hasn't changed in ${TURNS_SINCE} turns but ~${EDITS_SINCE} edits happened: it's drifted from what you're actually doing. Before stopping, reconcile it with TaskUpdate/TaskCreate: mark finished work completed, add anything new you took on, and set the right task in_progress. Current: ${SUMMARY}. (This check only fires above a few tasks; update the list and it won't fire again.)"
 
 if [ "$STOP_ACTIVE" = "true" ]; then
   # Already blocked once this stop-cycle: don't block again (escape the loop).

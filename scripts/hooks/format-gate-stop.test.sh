@@ -17,7 +17,7 @@ pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok    $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL  $1"; }
 
-D='—'
+D=$'\xe2\x80\x94'
 # tx <file> <user text> [written file path ...]: a transcript with the owner's
 # prompt, then one Write per path, then a stale assistant text.
 tx() {

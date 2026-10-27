@@ -48,7 +48,7 @@ Contract this fills: `i-dream contract` §7 / `docs/20-ingestion-contract.md`.
      {"id":"hookfb-20260521-143052-7a", "ts":"2026-05-21T14:30:52Z",
       "slug":"cli-gating", "kind":"false-positive", "impact":"high",
       "hook_id":"cli-gating", "sid":"2edcbebe",
-      "note":"blocked 'gh run view' — a read I was asked to do",
+      "note":"blocked 'gh run view': a read I was asked to do",
       "command_or_context":"gh run view 18234 --log",
       "heeded":false, "fire_count_14d":31}
      ```

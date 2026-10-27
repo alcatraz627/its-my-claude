@@ -35,7 +35,7 @@ if [ "$n" -eq 0 ]; then printf 'needs-you nothing needs you\n'; else
   for a in "${ASKS[@]}"; do
     IFS='|' read -r tag text draft <<< "$a"
     printf '  · [%s] %s' "$tag" "$text"
-    [ -n "$draft" ] && printf ' — my answer: %s' "$draft"; printf '\n'
+    [ -n "$draft" ] && printf ': my answer: %s' "$draft"; printf '\n'
   done
 fi
 printf 'next      %s\n' "$NEXT"

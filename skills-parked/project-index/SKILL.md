@@ -121,7 +121,7 @@ library plays in *this* project (framework, UI/styling, state, data fetching, da
 auth, infra, utilities, build/test). Infer a group only when you see the dependency; don't list
 empty groups. For polyglot or monorepo projects, do this per package.
 
-For each dependency, resolve a canonical link and write it as `[name](url) (version) — purpose`:
+For each dependency, resolve a canonical link and write it as `[name](url) (version): purpose`:
 
 1. **npm** → `https://npmjs.com/package/<name>` (npmjs.com accepts unencoded scoped names like
    `@tanstack/react-query`).
@@ -132,8 +132,8 @@ For each dependency, resolve a canonical link and write it as `[name](url) (vers
 Example:
 
 ```
-- [react](https://npmjs.com/package/react) (^19.2.3) — UI library
-- [fastapi](https://pypi.org/project/fastapi/) (^0.115) — async web framework
+- [react](https://npmjs.com/package/react) (^19.2.3): UI library
+- [fastapi](https://pypi.org/project/fastapi/) (^0.115): async web framework
 ```
 
 ### Step 5: Identify architectural patterns: detect the project's own pattern
@@ -202,7 +202,7 @@ Rules: capture **10–25 lines** per snippet (use Read `offset`+`limit` to slice
 section); prefer the start of a file (imports + first exported declaration) unless a later
 section is more revealing; skip generated files, config boilerplate, and pure re-export
 barrels. Place them in a `## Key Code Snippets` section, each a fenced block under a
-`### path/to/file — one-line description` heading.
+`### path/to/file: one-line description` heading.
 
 ### Step 7: Generate the index document
 
@@ -218,14 +218,14 @@ have; lumpy is fine):
 - **Framework / Runtime:** …   **Language:** …   **Package Manager:** …   **Type:** …
 
 ## Directory Structure
-<!-- indented bullet tree — create-report converts these to expandable tree blocks -->
+<!-- indented bullet tree: create-report converts these to expandable tree blocks -->
 
 ## Key Files
 ### Configuration
 ### Entry Points
 
 ## Dependencies
-### Production    <!-- [name](url) (version) — purpose -->
+### Production    <!-- [name](url) (version): purpose -->
 ### Development
 
 ## Architectural Patterns
@@ -254,7 +254,7 @@ never overwrite). Read the file first; create it with the header below if absent
 
 ```markdown
 ---
-## Run: [YYYY-MM-DD HH:MM] — [one-line summary]
+## Run: [YYYY-MM-DD HH:MM]: [one-line summary]
 ### What was scanned
 - [full vs incremental, scope]
 ### Changes since last run
@@ -262,8 +262,8 @@ never overwrite). Read the file first; create it with the header below if absent
 ### Notable findings
 - [patterns, anomalies, architectural shifts, debt to watch]
 ### Files updated this run
-- `.claude/project-index.md` — [overwritten / created]
-- `.claude/indexing-notes.md` — [this entry appended]
+- `.claude/project-index.md`: [overwritten / created]
+- `.claude/indexing-notes.md`: [this entry appended]
 ```
 
 Header when creating the file fresh:
@@ -296,7 +296,7 @@ Print them, then write the entry and call `prepend-runtime-note.sh`:
 
 ```bash
 cat > /tmp/runtime-note-entry.md << 'ENTRY'
-## project-index: [short summary] — [YYYY-MM-DD HH:MM]
+## project-index: [short summary]: [YYYY-MM-DD HH:MM]
 
 **Purpose:** [one sentence]
 
@@ -316,11 +316,11 @@ you return. Return a short structured summary, not the index itself:
 
 ```
 WROTE: <absolute path to project-index.md> (<line count>)
-REPORT: <html report path, or "skipped — create-report unavailable">
-STACK: <one line — framework / language / package manager / project type>
-PATTERNS: <state · data · db · styling, one phrase each — the detected approaches>
+REPORT: <html report path, or "skipped: create-report unavailable">
+STACK: <one line: framework / language / package manager / project type>
+PATTERNS: <state · data · db · styling, one phrase each: the detected approaches>
 CHANGES: <new/removed dirs + dependency deltas since last run, or "first run">
-NOTES: <0–3 bullets — anomalies, debt, or things the parent should know>
+NOTES: <0–3 bullets: anomalies, debt, or things the parent should know>
 ```
 
 The file on disk is the artifact; this summary is the pointer. Keep it under ~12 lines.

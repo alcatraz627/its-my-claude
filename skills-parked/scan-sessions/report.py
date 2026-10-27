@@ -1,5 +1,5 @@
 """
-report.py — Generate a self-contained HTML report from scan-sessions aggregate data.
+report.py: Generate a self-contained HTML report from scan-sessions aggregate data.
 
 Produces a single HTML file with:
 - Dark/light toggle

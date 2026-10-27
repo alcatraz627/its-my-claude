@@ -34,7 +34,7 @@ run() {  # <sid8> ; prints BLOCK/REMIND/SILENT
   elif printf '%s' "$out" | rg -q '"decision":"block"'; then echo BLOCK
   else echo REMIND; fi
 }
-reset() {  # <sid8> — clean repo + clear this sid's markers
+reset() {  # <sid8>: clean repo + clear this sid's markers
   ( cd "$REPO" && git checkout -q -- . && git clean -fdq )
   rm -f "/tmp/claude-edited-files-$1" "/tmp/claude-review-done-$1" \
         "/tmp/claude-review-gate-blocked-$1" "/tmp/claude-review-required-blocked-$1" 2>/dev/null || true

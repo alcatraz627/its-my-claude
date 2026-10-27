@@ -122,7 +122,7 @@ extension QuickWinTask {
     static let createFirstNote = QuickWinTask(
         id: "create-first-note",
         title: "Create Your First Note",
-        description: "Let's get started — it only takes a few seconds.",
+        description: "Let's get started: it only takes a few seconds.",
         estimatedSeconds: 30,
         steps: [
             QuickWinStep(instruction: "Tap the + button to create a new note", actionType: .tap, targetView: "addButton"),

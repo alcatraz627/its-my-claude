@@ -25,7 +25,7 @@ mkdir -p "$STORE"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
-atleast(){ if [ "$2" -ge "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got $2, want at least $3"; fi; }
+atleast(){ if [ "$2" -ge "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got $2, want at least $3"; fi; }
 
 # n gate rows (blocked_on starting USER:, each carrying a second line) plus
 # m ordinary work rows under a named goal.
@@ -97,7 +97,7 @@ nb_work=$(rg -c '^│\s+[🟢🟠🔵⚪]' "$ROOT/render-nobudget.txt" 2>/dev/nu
 if [ "$nb_work" -lt "$workrows" ]; then
   pass=$((pass+1)); echo "  ok    without the budget the work rows drop to $nb_work (from $workrows)"
 else
-  fail=$((fail+1)); echo "  FAIL: removing the budget changed nothing ($nb_work work rows) — the test is blind"
+  fail=$((fail+1)); echo "  FAIL: removing the budget changed nothing ($nb_work work rows): the test is blind"
 fi
 
 echo

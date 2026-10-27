@@ -12,11 +12,11 @@
 **Never use `rm` to delete files or directories.** Use `trash` instead.
 
 ```bash
-# ✅ Correct — moves to macOS Trash (recoverable)
+# ✅ Correct: moves to macOS Trash (recoverable)
 trash src/old-component/
 trash temp.txt build.log
 
-# ❌ Blocked — PreToolUse hook will reject this
+# ❌ Blocked: PreToolUse hook will reject this
 rm -rf src/old-component/
 rm temp.txt
 ```

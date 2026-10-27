@@ -33,8 +33,8 @@ Glob: **/Assets.xcassets/AppIcon.appiconset/Contents.json
 Gather app information to customize the icon:
 
 ```
-Read: .planning/APP.md          (if exists — app definition)
-Read: .planning/CODEBASE.md     (if exists — app description)
+Read: .planning/APP.md          (if exists: app definition)
+Read: .planning/CODEBASE.md     (if exists: app description)
 Grep: "CFBundleName" or app name in project files
 ```
 

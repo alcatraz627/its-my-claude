@@ -5,13 +5,13 @@ This is the write-time preventer that the SessionStart validate-settings-hooks.s
 warning never was. It fires as a PreToolUse gate on Write / Edit / MultiEdit
 aimed at settings.json, settings.local.json, or .mcp.json. It reconstructs the
 content the tool is about to write, parses it as JSON, and blocks the call
-(exit 2) if the result would not parse — or if a known structural invariant is
+(exit 2) if the result would not parse: or if a known structural invariant is
 broken (a hooks entry missing its `hooks` array; .mcp.json missing mcpServers).
 
 Runtime contract: reads the PreToolUse JSON payload on stdin
 ({tool_name, tool_input, ...}); exit 0 = allow, exit 2 = block with a message
 on stderr that the agent sees. Anything it cannot evaluate confidently passes
-(fail-open) — a guard that blocked legitimate edits would be worse than the gap
+(fail-open): a guard that blocked legitimate edits would be worse than the gap
 it closes. It only ever blocks on a *confirmed* invalid result.
 
 Note: ~/.claude.json is rewritten by Claude Code itself, not via these tools, so

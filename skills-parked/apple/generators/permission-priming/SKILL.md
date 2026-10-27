@@ -120,7 +120,7 @@ Permissions/
 ```swift
 // Show priming screen, then request system permission on tap
 PermissionPrimingView(permissionType: .notifications) {
-    // User granted — proceed with feature
+    // User granted: proceed with feature
     startSendingNotifications()
 } onDenied: {
     // User denied or tapped "Not Now"

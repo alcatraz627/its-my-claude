@@ -35,14 +35,14 @@ if printf '%s' "$cmd" | rg -q -e 'Co-.uthored-.y:.{0,20}Claude' -e 'Claude-Sessi
   block "Commit message or PR body carries an AI signature trailer (Co-Authored-By Claude / Claude-Session / Generated with Claude Code). The owner bans these in every repo, any model (rules/git.md § Commit message style). Remove the trailer lines from the message and rerun the commit."
 fi
 
-if [ "$is_pr" = "1" ] && printf '%s' "$cmd" | rg -q ' — '; then
+if [ "$is_pr" = "1" ] && printf '%s' "$cmd" | rg -q ' \x{2014} '; then
   block "PR body carries a connective em-dash. PR descriptions are docs register (rules/audience-aware-writing.md): owner budget is zero. Reword and rerun."
 fi
 
 if [ "$is_commit" = "1" ] && printf '%s' "$cmd" | rg -q -e 'commit[^|;&]*--no-verify' -e 'commit[^|;&]*\s-n\b' -e 'commit[^|;&]*\s-[a-zA-Z]*n[a-zA-Z]*\s'; then
   # -n bundled into short flags (e.g. -an) is rare but real; better a rare
   # false block with a clear next step than a silent bypass of the msg gate
-  block "git commit with --no-verify/-n skips the commit-msg hook that enforces the no-AI-signature ban (migration 0040). Rerun without --no-verify. If a repo's own hooks are the obstacle, fix the message or ask the owner — bypassing the gate is not available."
+  block "git commit with --no-verify/-n skips the commit-msg hook that enforces the no-AI-signature ban (migration 0040). Rerun without --no-verify. If a repo's own hooks are the obstacle, fix the message or ask the owner: bypassing the gate is not available."
 fi
 
 exit 0

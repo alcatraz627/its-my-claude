@@ -18,7 +18,7 @@ PROG=$(basename "$0")
 # ── Help ─────────────────────────────────────────────────────────────────────
 print_help() {
   cat <<EOF
-$PROG — Ghostty tab-title composer CLI
+$PROG: Ghostty tab-title composer CLI
 
 USAGE
   $PROG <command> [args]
@@ -49,11 +49,11 @@ UPDATING
   intent <name>               Session-level kind of work (noun). --list / --clear.
                                 feature | bugfix | refactor | docs | chore | …
   glyph <perm|ssh> <name>     Configure a decorator's emoji. --options / --clear.
-                              Persists per-session in state — no shell env
+                              Persists per-session in state: no shell env
                               vars. Accepts named alias or raw emoji.
                               e.g.  glyph perm robot  /  glyph ssh 🐢
   refresh                     Re-run decorators + re-emit (no field changes)
-  raw [-y --reason X] <text>  ESCAPE HATCH — bypass compose, emit literal
+  raw [-y --reason X] <text>  ESCAPE HATCH: bypass compose, emit literal
                               <text> as the OSC title. Without -y prints a
                               dissuade message and exits 1; with -y, a
                               PreToolUse hook prompts the user. Use ONLY
@@ -71,9 +71,9 @@ SESSIONS
     1. \$CLAUDE_TAB_SESSION_ID
     2. /tmp/claude-tab-current (last hook to fire)
   If neither resolves, the command halts with a dim notice and exits 0
-  (non-blocking for the caller — Claude won't see an error spam).
+  (non-blocking for the caller: Claude won't see an error spam).
 
-COMPOSE SHAPE (v3 — left identifier + right volatile flags)
+COMPOSE SHAPE (v3: left identifier + right volatile flags)
   ✻ <mode?> <intent?> <base> [:<focus?>]    <status?> <decorators?>
   └────────── identifier (left) ───────┘    └──── volatile (right) ────┘
   Two-space separator. Ghostty truncates right side first; identifier sticks.
@@ -99,17 +99,17 @@ EXAMPLES
 NOTES
   • status / mode / intent are the three named-enum slots; LLMs can pick
     by name (run --list to discover values). Unknown names are stored but
-    render no glyph — gives soft-validation feedback.
+    render no glyph: gives soft-validation feedback.
   • mode is AUTO-DERIVED by the PreToolUse hook from the running tool's
     name + command. Manual 'mode <x>' overrides until the next tool call.
   • Transient focus (watchdog) wins over manual focus while a tool is in
     flight. Don't write 'transient' directly unless you know what you're
-    doing — the watchdog overwrites it.
+    doing: the watchdog overwrites it.
   • Bracket chars in focus are stripped by 'fix' (would break round-trip).
     Keep focus text to 1-3 lowercase words.
   • Visible title refreshes once per turn at the Stop hook firing. Mid-turn
     state mutations accumulate; the compose renders at end of turn.
-  • Glyph slots (perm/ssh) persist per-session in state — no shell env
+  • Glyph slots (perm/ssh) persist per-session in state: no shell env
     vars. Claude can flip them mid-session; user can override via this CLI.
 
 SEE ALSO
@@ -124,7 +124,7 @@ resolve_sid_or_warn() {
   local sid
   sid=$(tab_resolve_sid)
   if [[ -z "$sid" ]]; then
-    tab_notice "no active session — has the Stop hook fired yet?"
+    tab_notice "no active session: has the Stop hook fired yet?"
     return 1
   fi
   printf '%s' "$sid"
@@ -189,7 +189,7 @@ cmd_show() {
 cmd_set() {
   (( $# >= 1 )) || { echo "usage: $PROG set <field>=<value> [...]"; return 2; }
   local sid; sid=$(resolve_sid_or_warn) || return 0
-  tab_load_state "$sid" || { tab_notice "no state for $sid — run a turn first"; return 0; }
+  tab_load_state "$sid" || { tab_notice "no state for $sid: run a turn first"; return 0; }
   local arg field value
   for arg in "$@"; do
     if [[ "$arg" != *=* ]]; then
@@ -224,7 +224,7 @@ cmd_enum_slot() {
       # Validate the name maps to a glyph; warn if not (still accept: enum
       # might grow later; better to render empty than refuse).
       local g; g=$(tab_"${field}"_glyph "$1")
-      [[ -z "$g" ]] && tab_notice "unknown $field '$1' — run '$PROG $field --list'"
+      [[ -z "$g" ]] && tab_notice "unknown $field '$1': run '$PROG $field --list'"
       cmd_set "$field=$1"
       ;;
   esac
@@ -314,7 +314,7 @@ cmd_raw() {
 hook will overwrite whatever you set, so this is almost always the wrong
 tool. Prefer:  $PROG focus "..."  /  $PROG set base="..." focus="..."
 
-If you're certain raw is needed (rare — e.g., emitting a custom OSC that
+If you're certain raw is needed (rare: e.g., emitting a custom OSC that
 can't fit the ✻ <decorators> <base> [:focus] shape), re-call with:
     $PROG raw -y --reason "<one-line reason>" "$title"
 The user will see a permission prompt before the write happens.

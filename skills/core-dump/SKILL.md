@@ -149,7 +149,7 @@ Write using this template:
 
 **Goal:** <1-2 sentences>
 
-**Resume:** <one imperative sentence — the first move>
+**Resume:** <one imperative sentence: the first move>
 
 **Done:**
 
@@ -240,7 +240,7 @@ A numbered list of actions in order. For each:
 - For tool calls: note the tool and the outcome.
 - For decisions: capture the decision, not the deliberation.
 
-Example: `3. Read src/data/pipeline/pipeline.types.ts — found PipelineArgs type mismatch at line 42; proposed fix captured below`
+Example: `3. Read src/data/pipeline/pipeline.types.ts: found PipelineArgs type mismatch at line 42; proposed fix captured below`
 
 ### 2.3 Current expectation
 
@@ -309,7 +309,7 @@ everything below them:
   (constraints dropped while task momentum survived, see
   `rules/invariant-graduation.md`).
 - **Standing caveats**: the honest qualifications that must survive
-  summarization: unverified claims, `UNCONFIRMED — <reason>` markers,
+  summarization: unverified claims, `UNCONFIRMED: <reason>` markers,
   "N commits unreviewed", undispositioned review findings (count + ledger
   path). Copied verbatim, never compressed. A summary that drops a caveat is
   wrong, not shorter ("checkpoint compression laundered the debt", claude-ipc
@@ -338,7 +338,7 @@ everything below them:
   The transcript holds the requirements and `/clear` destroys the transcript.
   That is the whole reason this field exists.
 
-- **Blocked on**: `USER: <what>` · `AGENT: none — go` · external actor + what.
+- **Blocked on**: `USER: <what>` · `AGENT: none: go` · external actor + what.
   Before recording any blocker, answer: **is it reproducible on demand right
   now?** Run the thirty-second check (re-trigger the job, hit the endpoint,
   re-run the command) and record the RESULT, not a conclusion from a stale
@@ -449,12 +449,12 @@ everything below them:
 - **Goal record:** the goal id this session works under (`~/.claude/goals/by-id/<id>.json`,
   from gather). Catchup reads the record by this id and OFFERS `gs link <id>` with
   the goal paste line; linking also arms the standing-goal hinter, so it is the
-  owner's call, like `/goal`. Write `—` when no goal was filed,
+  owner's call, like `/goal`. Write `-` when no goal was filed,
   and say why in one clause.
 - **Task store:** the agent's own checklist store (`session-<sid8>`, under
-  `~/.claude/tasks/`), for `gs adopt` if a resumed agent wants rows from it. `—` if empty.
+  `~/.claude/tasks/`), for `gs adopt` if a resumed agent wants rows from it. `-` if empty.
 - **ipc alias**: this session's claude-ipc alias (`claude-ipc who` or the SessionStart line), so a resume knows which dead mailbox holds its predecessor's mail.
-- **Key anchor**: the single most load-bearing file:line, or `—`.
+- **Key anchor**: the single most load-bearing file:line, or `-`.
 
 **Copy these fields from gather, do not recall them.** Live commitments, the goal
 record and the task store are exactly the values a long session mis-remembers;
@@ -552,17 +552,17 @@ section headings below are parsed verbatim by `/catchup`. Keep them exact:
 > caveat or an action already says the next action is done, captured or superseded,
 > rewrite the next action or drop the stale caveat; never write both. Sections written
 > at different moments of the session drift apart, and the resume pays for it.
-- **Blocked on:** <USER: … | AGENT: none — go>
+- **Blocked on:** <USER: … | AGENT: none: go>
 - **Standing authorizations:** <"<owner's verbatim words>" (<YYYY-MM-DD HH:MM>) · target: <repo[/branch|PR] @<sha>> · one-shot|standing … | none>
 - **Pending approval codes:** <target · nonce <code> … | none>
 - **Decaying prerequisites:** <each with its fix command, plus · check: <read-only command> where one exists | none>
 - **Verification state:** <last run + result + command | UNCONFIRMED: nothing run>
 - **Live commitments:** goal: <verbatim · STILL VALID|SUPERSEDED by …|none · clauses: <name>=served|UNSERVED … (2+ clause goals only) · harness ARMED|not armed · gcc set|none> · wake: <schedule · ARMED|FIRED|none> · deadline: <commitment due when · LIVE|MET|MISSED|none> · crons: <duty-slug (job, schedule) via CronList|none>
-- **Task list, glanced:** <N open, M done · needs you: #ids · grouped by <key> | —>
-- **Goal record:** <goal id | —>
-- **Task store:** <store from gather | —>
-- **ipc alias:** <alias | —>
-- **Key anchor:** <file:line | —>
+- **Task list, glanced:** <N open, M done · needs you: #ids · grouped by <key> |:>
+- **Goal record:** <goal id |:>
+- **Task store:** <store from gather |:>
+- **ipc alias:** <alias |:>
+- **Key anchor:** <file:line |:>
 - **Key files:** <absolute paths, comma separated | none>
 - **Atone this session:** <atone ids | none>
 - **Rulings this session:** <"<quote>" -> <path where recorded> … | none>
@@ -585,7 +585,7 @@ section headings below are parsed verbatim by `/catchup`. Keep them exact:
 
 ## Session Insights
 
-<2.5 content — what worked, what didn't, gotchas, notes for future agents>
+<2.5 content: what worked, what didn't, gotchas, notes for future agents>
 
 
 ## Re-arm in the TUI
@@ -683,7 +683,7 @@ session**?
 
 ```bash
 bash ~/.claude/scripts/propose.sh add \
-  --title "<imperative — what to change in ~/.claude>" \
+  --title "<imperative: what to change in ~/.claude>" \
   --body  "<the friction · where it bit (file:line if known) · the proposed fix>" \
   --category hooks|scripts|skills|config|docs|other \
   --effort  small|medium|large \

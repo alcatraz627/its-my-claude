@@ -57,7 +57,7 @@
     initSaveBtn();
   });
 
-  /** Click a cell to "select" it — adds blue left border */
+  /** Click a cell to "select" it: adds blue left border */
   function initCellSelection() {
     var cells = document.querySelectorAll(".nb-cell");
     cells.forEach(function (cell) {
@@ -84,7 +84,7 @@
     });
   }
 
-  /** Click run button on code cells — brief "executed" animation */
+  /** Click run button on code cells: brief "executed" animation */
   function initRunButtons() {
     var btns = document.querySelectorAll(".cell-run-btn");
     btns.forEach(function (btn) {

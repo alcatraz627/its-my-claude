@@ -4,7 +4,7 @@
 Scans TS/TSX/JS/Python files for comment-style violations defined in
 frontend/docs/tech/conventions/comment-style.md and reports them as JSON.
 
-This script only DETECTS and proposes — it never edits a file. The
+This script only DETECTS and proposes: it never edits a file. The
 /cleanup-comments skill reads its findings, shows a preview, and applies
 fixes with human judgment after confirmation. Splitting detection (regex,
 deterministic) from application (context-aware, agent-driven) is deliberate:
@@ -19,7 +19,7 @@ Findings are grouped into three tiers:
                   claims). Reported for human review, never auto-edited.
 
 The judgment tier (tier2: essays, WHAT-comments) is intentionally NOT
-detected here — line regex can't tell "essay" from "load-bearing caveat".
+detected here: line regex can't tell "essay" from "load-bearing caveat".
 The agent handles tier2 by reading the file.
 
 Usage:
@@ -84,7 +84,7 @@ BANNER_CHARS = re.compile(r"[─━═\-=*#~_]{6,}")
 # tier2 voice patterns (AI-tells; fix needs judgment)
 # Em dash and spaced en dash read as AI-generated prose. Comments should use
 # plain punctuation (comma, period, parens) instead.
-EM_DASH = re.compile(r"—|\s–\s")
+EM_DASH = re.compile(r"\u2014|\s–\s")
 # Real emoji + symbol + dingbat blocks. Arrows (U+2190-21FF) are deliberately
 # excluded: `a -> b` "maps to" notation is legit in technical comments.
 EMOJI = re.compile(

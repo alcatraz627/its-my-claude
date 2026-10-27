@@ -32,7 +32,7 @@ says(){   # says <label> <command> <substring the reason must contain>
   local out
   out=$(jq -cn --arg c "$2" '{tool_name:"Bash", tool_input:{command:$c}}' | bash "$G" 2>/dev/null)
   if printf '%s' "$out" | rg -q -- "$3"; then pass=$((pass+1));
-  else fail=$((fail+1)); echo "  FAIL: $1 — reason lacks [$3]"; fi
+  else fail=$((fail+1)); echo "  FAIL: $1: reason lacks [$3]"; fi
 }
 
 echo "── the reported shape, verbatim from forge-brains msg-33af190e195248fd ──"

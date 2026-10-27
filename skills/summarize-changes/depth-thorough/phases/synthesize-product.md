@@ -17,7 +17,7 @@ You are the synthesis agent producing the product-team report. Audience: interna
 Write to `{OUTPUT_PATH}`. Tight: aim for ~50 lines.
 
 ```
-# Product Summary — <auto title>
+# Product Summary: <auto title>
 
 > Released: <pending>. Theme of release: <one sentence>
 
@@ -25,10 +25,10 @@ Write to `{OUTPUT_PATH}`. Tight: aim for ~50 lines.
 - [3-6 bullets, plain English. Visible UX changes only.]
 
 ## What admins/internal users will notice
-- [3-6 bullets — admin tools, internal panels, etc.]
+- [3-6 bullets: admin tools, internal panels, etc.]
 
 ## Platform improvements (invisible but load-bearing)
-- [3-5 bullets — reliability/speed/quality. NO internal module names.]
+- [3-5 bullets: reliability/speed/quality. NO internal module names.]
 
 ## Known caveats for first 1-2 weeks post-release
 - [Bullets from breaking themes that affect users + first-boot caveats]

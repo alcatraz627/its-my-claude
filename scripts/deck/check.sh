@@ -37,7 +37,7 @@ print(html.unescape(m.group(1)) if m else "[]")')
   echo "== ${size} =="
   measured=$(printf '%s' "$rep" | python3 -c 'import sys,json; print(len(json.load(sys.stdin)))' 2>/dev/null || echo 0)
   if [ "$measured" -eq 0 ] || [ "$measured" -ne "$srccount" ]; then
-    echo "  GATE FAILURE: measured $measured slide(s), source has $srccount — the page never ran its check=1 measurement; a pass off nothing measured is a lie"
+    echo "  GATE FAILURE: measured $measured slide(s), source has $srccount: the page never ran its check=1 measurement; a pass off nothing measured is a lie"
     rc=1
   fi
   printf '%s' "$rep" | python3 -c '

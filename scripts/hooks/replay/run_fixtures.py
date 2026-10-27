@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-run_fixtures.py — regression runner for the Stop-hook fixture set.
+run_fixtures.py: regression runner for the Stop-hook fixture set.
 
 Runs each fixture (a captured single-turn slice) through the REAL hook and checks
 the outcome against the manifest's `expected` field. This is the ship-gate check:
-before a hook change goes live, run the fixtures — a FAIL means the change altered
+before a hook change goes live, run the fixtures: a FAIL means the change altered
 behavior on a turn whose correct outcome is already pinned.
 
 `expected` records what the CURRENT hook does (the guardrail against regressions).
@@ -63,7 +63,7 @@ def main():
             return 2
         tokens, present = rl.check_mute_files(hook_path)
         if present:
-            print(f"!! WARNING: mute file present for {hook_base} — every fixture will read SILENT:", file=sys.stderr)
+            print(f"!! WARNING: mute file present for {hook_base}: every fixture will read SILENT:", file=sys.stderr)
             for f in present:
                 print(f"!!   {f}", file=sys.stderr)
 

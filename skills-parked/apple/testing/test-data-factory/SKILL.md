@@ -21,7 +21,7 @@ Use this skill when the user:
 ## Why Test Factories
 
 ```swift
-// ❌ Without factory — every test repeats this
+// ❌ Without factory: every test repeats this
 let item = Item(
     id: UUID(),
     title: "Test Item",
@@ -34,7 +34,7 @@ let item = Item(
     author: User(id: UUID(), name: "Test User", email: "test@test.com")
 )
 
-// ✅ With factory — one line, override only what matters
+// ✅ With factory: one line, override only what matters
 let item = Item.fixture()
 let favoriteItem = Item.fixture(isFavorite: true)
 let taggedItem = Item.fixture(tags: ["swift", "testing"])
@@ -298,7 +298,7 @@ extension APIResponse where T == [Item] {
 ### Naming Conventions
 
 ```swift
-// Static factory — use .fixture() for customizable, .sample for quick
+// Static factory: use .fixture() for customizable, .sample for quick
 Item.fixture(title: "Custom")   // Customizable
 Item.sample                     // Quick default
 Item.sampleList                 // Collection
@@ -308,7 +308,7 @@ Item.favorite                   // Specific state
 Item.expired                    // Specific state
 Item.empty                      // Edge case
 
-// Builder — use descriptive method names
+// Builder: use descriptive method names
 ItemBuilder().favorited().build()
 ItemBuilder().with(title: "X").build()
 ```
@@ -322,8 +322,8 @@ ItemBuilder().with(title: "X").build()
 | Model | Factory Type | Named Fixtures | Collection Fixtures |
 |-------|-------------|----------------|-------------------|
 | Item | Static + Builder | sample, favorite, empty | sampleList, fixtures(count:) |
-| User | Static | sample | — |
-| APIResponse | Static | success, empty, error | — |
+| User | Static | sample |: |
+| APIResponse | Static | success, empty, error |: |
 
 ### Files Created
 - `Tests/Factories/Item+Factory.swift`

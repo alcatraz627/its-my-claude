@@ -1,4 +1,4 @@
-"""Interactive Tailwind color picker for the Excel export — one self-contained
+"""Interactive Tailwind color picker for the Excel export: one self-contained
 HTML page. Dropdowns for each group's header + body, live sheet preview, contrast
 readout, and a copy-paste summary of the chosen hexes.
 """
@@ -59,7 +59,7 @@ th,td{border:1px solid #c9ccd1;padding:7px 9px;text-align:left;overflow:hidden;t
 .out{margin-top:18px;max-width:1000px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,monospace;font-size:12px;white-space:pre-wrap}
 .bad{color:#ff8888}
 </style></head><body data-theme=dark>
-<header><h1>Excel export — pick colors for all 3 groups</h1>
+<header><h1>Excel export: pick colors for all 3 groups</h1>
 <button onclick="document.body.dataset.theme=document.body.dataset.theme=='dark'?'light':'dark'">◐ theme</button></header>
 <p style="color:var(--dim);max-width:1000px;margin:2px 0 0">Header text (white/dark) is auto-chosen by contrast. <b>rest</b> body can be “none” (white). Play, then copy the summary at the bottom and tell me which to finalize.</p>
 <div class=controls id=controls></div>

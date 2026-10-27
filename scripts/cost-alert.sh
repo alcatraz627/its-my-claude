@@ -62,6 +62,6 @@ if [[ "$is_high" == "1" ]]; then
   # Output warning to stderr
   ylw="\033[33m" rst="\033[0m" dim="\033[2m" bld="\033[1m"
   {
-    printf "${ylw}${bld} Cost velocity: \$%s/turn${rst} ${dim}— projected \$%s for 30 more turns${rst}\n" "$velocity" "$projected"
+    printf "${ylw}${bld} Cost velocity: \$%s/turn${rst} ${dim}: projected \$%s for 30 more turns${rst}\n" "$velocity" "$projected"
   } >&2
 fi

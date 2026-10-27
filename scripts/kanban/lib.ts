@@ -43,7 +43,7 @@ export function deriveBrief(title: string): string | undefined {
   // Prefer a real clause end that lands in the window: those read as written
   // rather than chopped. Semicolons and sentence stops first: they end a
   // thought, where a comma usually continues one.
-  for (const sep of ["; ", ". ", " — ", " – ", "), ", ", then ", " · "]) {
+  for (const sep of ["; ", ". ", " \u2014 ", " – ", "), ", ", then ", " · "]) {
     const at = t.indexOf(sep);
     if (at >= BRIEF_AUTO_MIN && at <= BRIEF_AUTO_MAX) return t.slice(0, at).trim() + "…";
   }
@@ -259,7 +259,7 @@ export function readJson<T>(file: string, fallback: T): T {
     return JSON.parse(fs.readFileSync(file, "utf8")) as T;
   } catch (e: any) {
     if (e.code === "ENOENT") return fallback;
-    throw new Error(`${file} is unreadable/corrupt (${e.message}) — fix or trash it; refusing to guess`);
+    throw new Error(`${file} is unreadable/corrupt (${e.message}): fix or trash it; refusing to guess`);
   }
 }
 
@@ -310,7 +310,7 @@ export function withBoardLock<T>(boardDir: string, fn: () => T): T {
       fs.rmdirSync(lock);
     }
   }
-  throw new CliError(`board lock at ${lock} held >15s — a writer is genuinely stuck`, `inspect the lock dir, then remove it if its owner crashed: ${lock}`);
+  throw new CliError(`board lock at ${lock} held >15s: a writer is genuinely stuck`, `inspect the lock dir, then remove it if its owner crashed: ${lock}`);
 }
 
 export const registry = (): RegistryFile => readJson<RegistryFile>(REGISTRY, { boards: {} });
@@ -460,7 +460,7 @@ export function renderSelection(dir: string, name: string, sel: Selection): stri
   const byId = new Map(board.cards.map((c) => [c.id, c]));
   const out: string[] = [
     `[kanban] the owner selected ${sel.cards.length} card(s) and ${sel.notes.length} note(s) on board "${name}" and sent them to you.`,
-    `They are pointing at this deliberately — treat it as the working set for right now.`,
+    `They are pointing at this deliberately: treat it as the working set for right now.`,
     ``,
   ];
   for (const id of sel.cards) {
@@ -1065,7 +1065,7 @@ export function mergeSync(boardDir: string, harvested: HarvestedCard[], by: stri
     // legitimate outcome, and the rotated backup below covers it.
     if (!force && !cards.length && prev.cards.length) {
       throw new CliError(
-        `harvest found no cards, but the board holds ${prev.cards.length} — refusing to empty it`,
+        `harvest found no cards, but the board holds ${prev.cards.length}: refusing to empty it`,
         `check the sources first (are the doc paths still there? did a rename move docs/?); ` +
         `if the board really should be empty, kanban.sh sync --force`);
     }

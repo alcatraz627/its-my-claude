@@ -22,7 +22,7 @@ Quick orientation for what's here:
 ├── logs/                   launchd cron logs
 │   ├── daily.out.log
 │   └── daily.err.log
-├── audits/                 (B Stage 5+6 — coming)
+├── audits/                 (B Stage 5+6: coming)
 │   ├── YYYY-MM-DD.md       per-audit log
 │   └── _rejections.jsonl   4-week rejection memory
 └── _runtime.json           per-domain enable/disable state

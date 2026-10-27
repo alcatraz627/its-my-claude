@@ -159,10 +159,10 @@ struct ContentView: View {
 
 **Share data with the full app:**
 ```swift
-// In App Clip — save order before user upgrades
+// In App Clip: save order before user upgrades
 SharedDataManager.shared.save(order, forKey: "pendingOrder")
 
-// In Full App — restore after install
+// In Full App: restore after install
 if let order: Order = SharedDataManager.shared.load(forKey: "pendingOrder") {
     showOrder(order)
 }

@@ -55,9 +55,9 @@ cmd_check() {
     --out) out="$2"; shift 2;; --min-bytes) min="$2"; shift 2;;
     *) echo "seat check: unknown flag $1" >&2; return 2;;
   esac; done
-  [ -f "$out" ] || { echo "seat check: verdict MISSING at $out — the return abstract is a pointer, not the artifact" >&2; return 1; }
+  [ -f "$out" ] || { echo "seat check: verdict MISSING at $out: the return abstract is a pointer, not the artifact" >&2; return 1; }
   local size; size=$(wc -c < "$out" | tr -d ' ')
-  [ "$size" -ge "$min" ] || { echo "seat check: verdict at $out is only ${size} bytes (< $min) — likely a stub" >&2; return 1; }
+  [ "$size" -ge "$min" ] || { echo "seat check: verdict at $out is only ${size} bytes (< $min): likely a stub" >&2; return 1; }
   echo "seat verdict present: $out (${size} bytes)"
 }
 

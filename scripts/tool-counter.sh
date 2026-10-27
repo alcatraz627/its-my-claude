@@ -113,7 +113,7 @@ if (( new_total > 0 && new_total % 30 == 0 )); then
   [[ "$rem" =~ ^[0-9]+(\.[0-9]+)?$ ]] && used=$(awk -v r="$rem" 'BEGIN { printf "%d", 100 - r }' 2>/dev/null)
   if (( ! recent_ckpt )) && [[ -n "$used" ]] && (( used >= 50 )); then
     if (( new_total == 30 )); then
-      msg="Tool count 30, context ~${used}% full — consider a WAL checkpoint to preserve session state."
+      msg="Tool count 30, context ~${used}% full: consider a WAL checkpoint to preserve session state."
     else
       msg="Tool count ${new_total}, context ~${used}% full (measured). Do not run /core-dump yourself; at 60% or more and a task boundary, you may suggest /core-dump then /clear to the owner in one line."
     fi

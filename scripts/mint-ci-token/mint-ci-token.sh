@@ -123,12 +123,12 @@ oauth_round() { # $1=session $2=command $3=human label
   sleep 20
 }
 
-oauth_round auth "claude auth login --claudeai" "STEP 1 of 2 — sign the box in"
+oauth_round auth "claude auth login --claudeai" "STEP 1 of 2: sign the box in"
 ACCT=$(rsh 'claude auth status' 2>/dev/null | grep '"email"' | cut -d'"' -f4)
 [ -n "$ACCT" ] || die "sign-in did not complete"
 say "signed in as: ${B}${ACCT}${R}"
 
-oauth_round tok "claude setup-token" "STEP 2 of 2 — mint the 1-year token"
+oauth_round tok "claude setup-token" "STEP 2 of 2: mint the 1-year token"
 
 # Extract, strip EVERY whitespace character, and never echo it. The line break a
 # human paste introduced at character 101 is precisely what `tr -d` removes here.
@@ -147,7 +147,7 @@ else
   OUT="${TMPDIR:-/tmp}/claude-ci-token.txt"
   rsh "cat /tmp/token.txt" 2>/dev/null | tr -d '[:space:]' > "$OUT"
   chmod 600 "$OUT"
-  printf '%s✓%s token written to %s (mode 600) — set it, then delete it\n' "$G" "$R" "$OUT"
+  printf '%s✓%s token written to %s (mode 600): set it, then delete it\n' "$G" "$R" "$OUT"
 fi
 
 # Prove the local login was never touched. This is the whole point of the script.

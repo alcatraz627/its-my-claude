@@ -218,7 +218,7 @@ EOF
       REPOMARK="/tmp/claude-declared-ready-repostate-${sid8}"
       if [ ! -f "$REPOMARK" ]; then
         : > "$REPOMARK" 2>/dev/null || true
-        soft_note "✓ repo-state verdict (soft — nothing read the tree this turn): your message states what is committed, pushed, or clean, and no git status/log/diff ran this turn. State drifts under the user, hooks, sub-agents, and concurrent sessions, so a check from earlier in the session is not evidence for a verdict written now. The first time this happened the message listed three commits to stage that the owner had already pushed (atone status-verdict-from-stale-mental-model, S3, 6x). Cheap fix: git status + git log --oneline -3 immediately before the sentence. Mute: touch ~/.claude/.no-declared-ready-gate"
+        soft_note "✓ repo-state verdict (soft: nothing read the tree this turn): your message states what is committed, pushed, or clean, and no git status/log/diff ran this turn. State drifts under the user, hooks, sub-agents, and concurrent sessions, so a check from earlier in the session is not evidence for a verdict written now. The first time this happened the message listed three commits to stage that the owner had already pushed (atone status-verdict-from-stale-mental-model, S3, 6x). Cheap fix: git status + git log --oneline -3 immediately before the sentence. Mute: touch ~/.claude/.no-declared-ready-gate"
       fi
     fi
   fi
@@ -254,7 +254,7 @@ if [ -n "$adv_urls" ] \
     uprev=""; [ -f "$URLMARK" ] && uprev=$(cat "$URLMARK" 2>/dev/null)
     if [ "$usig" != "$uprev" ] && [ -n "$usig" ]; then
       printf '%s' "$usig" > "$URLMARK" 2>/dev/null || true
-      reason="⚠ LOCALHOST URL ADVERTISED WITHOUT EXERCISING IT — your message hands the user localhost link(s) on port(s) ${bad_ports}but no tool activity this turn touched them. The last time this happened the user's first click failed on both links (atone 2026-07-10, S3, recurs 9×).
+      reason="⚠ LOCALHOST URL ADVERTISED WITHOUT EXERCISING IT: your message hands the user localhost link(s) on port(s) ${bad_ports}but no tool activity this turn touched them. The last time this happened the user's first click failed on both links (atone 2026-07-10, S3, recurs 9×).
 
   Before advertising a localhost URL: navigate to it and exercise its primary action, and run 'lsof -nP -iTCP:<port> -sTCP:LISTEN' to confirm exactly ONE owner across IPv4+IPv6. If the server is deliberately not running, say that instead of linking it.
 
@@ -279,7 +279,7 @@ Loop-safe: won't re-fire for this URL set. Mute: touch ~/.claude/.no-declared-re
     URLSOFT="/tmp/claude-declared-ready-urlsoft-${sid8}"
     if [ ! -f "$URLSOFT" ]; then
       : > "$URLSOFT" 2>/dev/null || true
-      soft_note "✓ localhost URL (soft — weak exercise credit): the advertised port(s) appear in this turn's tool activity, but no lsof and no browser navigation. A passing curl is not the user's access path (2026-07-10: IPv4 curl passed, the browser hit an IPv6 squatter). Cheap check before handing over the link: lsof -nP -iTCP:<port> -sTCP:LISTEN → exactly ONE owner across both stacks, and exercise the primary action in a browser. Mute: touch ~/.claude/.no-declared-ready-gate"
+      soft_note "✓ localhost URL (soft: weak exercise credit): the advertised port(s) appear in this turn's tool activity, but no lsof and no browser navigation. A passing curl is not the user's access path (2026-07-10: IPv4 curl passed, the browser hit an IPv6 squatter). Cheap check before handing over the link: lsof -nP -iTCP:<port> -sTCP:LISTEN → exactly ONE owner across both stacks, and exercise the primary action in a browser. Mute: touch ~/.claude/.no-declared-ready-gate"
     fi
   fi
 fi
@@ -489,7 +489,7 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
     STATEMARK="/tmp/claude-declared-ready-states-${sid8}"
     if [ ! -f "$STATEMARK" ]; then
       : > "$STATEMARK" 2>/dev/null || true
-      soft_note "✓ declared-ready (soft — a run was observed, on a UI surface): if this surface has states — dark AND light theme, open/closed, breakpoints — exercise the changed surface in EACH state before the claim, or scope it explicitly ('verified in dark only'). Dark-only sign-offs shipped a broken light theme twice (2026-07-02, 2026-07-07). Mute: touch ~/.claude/.no-declared-ready-gate"
+      soft_note "✓ declared-ready (soft (a run was observed, on a UI surface): if this surface has states) dark AND light theme, open/closed, breakpoints: exercise the changed surface in EACH state before the claim, or scope it explicitly ('verified in dark only'). Dark-only sign-offs shipped a broken light theme twice (2026-07-02, 2026-07-07). Mute: touch ~/.claude/.no-declared-ready-gate"
     fi
   fi
   # Mutation-test reminder (jegs 2026-07-15): a test RAN green, but a green test
@@ -501,7 +501,7 @@ if [ "$ran" = 1 ] || [ "$passfail" = 1 ]; then
     MUTMARK="/tmp/claude-declared-ready-mutation-${sid8}"
     if [ ! -f "$MUTMARK" ]; then
       : > "$MUTMARK" 2>/dev/null || true
-      soft_note "✓ declared-ready (soft — a test ran, and you edited a test): a passing test proves nothing until you've seen it FAIL. Mutation-test the guard — revert the code it protects, confirm the test goes RED, restore. A test that stays green when the fix is reverted is the bug, not coverage (four shipped as decoration 2026-07-15). Mute: touch ~/.claude/.no-declared-ready-gate"
+      soft_note "✓ declared-ready (soft: a test ran, and you edited a test): a passing test proves nothing until you've seen it FAIL. Mutation-test the guard: revert the code it protects, confirm the test goes RED, restore. A test that stays green when the fix is reverted is the bug, not coverage (four shipped as decoration 2026-07-15). Mute: touch ~/.claude/.no-declared-ready-gate"
     fi
   fi
   exit 0
@@ -516,13 +516,13 @@ fi
 
 # A) self-disclosed gap → reinforce the honest hedge → SOFT (never block).
 if [ "$disclosed" = 1 ] && [ "$cov_decision" != "uncovered" ]; then
-  soft_note "✓ declared-ready (soft — you scoped the gap yourself): you edited source and claimed success, and your message already discloses what you have NOT exercised (or asks me/you to verify). That is the correct hedge, not an over-claim — no block. If you can cheaply exercise the changed path (drive the dev server, run the CLI, click the toggle), do; otherwise this is fine. Mute: touch ~/.claude/.no-declared-ready-gate"
+  soft_note "✓ declared-ready (soft: you scoped the gap yourself): you edited source and claimed success, and your message already discloses what you have NOT exercised (or asks me/you to verify). That is the correct hedge, not an over-claim: no block. If you can cheaply exercise the changed path (drive the dev server, run the CLI, click the toggle), do; otherwise this is fine. Mute: touch ~/.claude/.no-declared-ready-gate"
 fi
 
 # W) a project-CLI / non-inspection command produced real output → something ran
 #    that the static allow-list missed; can't prove sufficiency → SOFT (not block).
 if [ "$has_nonharmless" = 1 ] && [ "$substantial" = 1 ] && [ "$cov_decision" != "uncovered" ]; then
-  soft_note "✓ declared-ready (soft — a run was observed): you edited source and claimed success, and a command that is not pure inspection produced output this turn (a project CLI / script the run allow-list doesn't name). Something ran, but I can't prove it exercised the exact lines you changed. If it did, carry on; if it was adjacent scope, exercise the change itself. Mute: touch ~/.claude/.no-declared-ready-gate"
+  soft_note "✓ declared-ready (soft: a run was observed): you edited source and claimed success, and a command that is not pure inspection produced output this turn (a project CLI / script the run allow-list doesn't name). Something ran, but I can't prove it exercised the exact lines you changed. If it did, carry on; if it was adjacent scope, exercise the change itself. Mute: touch ~/.claude/.no-declared-ready-gate"
 fi
 
 # S) style-only edit, nothing rendered it → SOFT (never block; see Gate 0 note).
@@ -530,7 +530,7 @@ if [ "$style_only" = 1 ]; then
   STYLEMARK="/tmp/claude-declared-ready-style-${sid8}"
   if [ ! -f "$STYLEMARK" ]; then
     : > "$STYLEMARK" 2>/dev/null || true
-    soft_note "✓ declared-ready (soft — style-only edit): you changed only stylesheet/markup-style files and claimed success, and nothing rendered the surface this turn. CSS is the one change class you cannot read off the diff — a rule that looks right still collapses a layout. Take a screenshot and look at it (headless Chrome, or mcp__plugin_chrome-devtools__take_screenshot), in dark AND light if the surface has a theme. This is the 'shipping-css-ui-changes-without-visual-verification' pattern (S3, 3×). Mute: touch ~/.claude/.no-declared-ready-gate"
+    soft_note "✓ declared-ready (soft: style-only edit): you changed only stylesheet/markup-style files and claimed success, and nothing rendered the surface this turn. CSS is the one change class you cannot read off the diff: a rule that looks right still collapses a layout. Take a screenshot and look at it (headless Chrome, or mcp__plugin_chrome-devtools__take_screenshot), in dark AND light if the surface has a theme. This is the 'shipping-css-ui-changes-without-visual-verification' pattern (S3, 3×). Mute: touch ~/.claude/.no-declared-ready-gate"
   fi
   exit 0
 fi
@@ -549,27 +549,27 @@ fi
 printf '%s' "$sig" > "$MARK" 2>/dev/null || true
 
 if [ "$is_tsx_next" = 1 ]; then
-  reason="⚠ DECLARED READY WITHOUT EXERCISING IT (frontend) — you edited a .tsx/.jsx in a Next/RSC app and your message claims success, but the only checks this turn were type/unit-level (tsc/vitest/jest) — nothing rendered the page.
+  reason="⚠ DECLARED READY WITHOUT EXERCISING IT (frontend): you edited a .tsx/.jsx in a Next/RSC app and your message claims success, but the only checks this turn were type/unit-level (tsc/vitest/jest): nothing rendered the page.
 
-  Unit tests and tsc run RSC in Node; they structurally CANNOT see hydration mismatches, the client/server boundary, or a cursor/keyboard/toggle interaction. The value of this change is exactly what tsc can't see. Exercise it: 'next build' (catches RSC/hydration) or a dev-server page load + the actual interaction, and read the result before declaring done. And if the surface has states — dark AND light theme, open/closed, breakpoints — exercise EACH state you sign off on, or scope the claim to what you saw (dark-only sign-offs shipped a broken light theme twice: 2026-07-02, 2026-07-07).
+  Unit tests and tsc run RSC in Node; they structurally CANNOT see hydration mismatches, the client/server boundary, or a cursor/keyboard/toggle interaction. The value of this change is exactly what tsc can't see. Exercise it: 'next build' (catches RSC/hydration) or a dev-server page load + the actual interaction, and read the result before declaring done. And if the surface has states (dark AND light theme, open/closed, breakpoints) exercise EACH state you sign off on, or scope the claim to what you saw (dark-only sign-offs shipped a broken light theme twice: 2026-07-02, 2026-07-07).
 
-This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×). If you drove it out-of-band, or this is a false positive, say so and proceed — this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
+This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×). If you drove it out-of-band, or this is a false positive, say so and proceed: this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
 elif [ "$cov_decision" = "uncovered" ]; then
-  reason="⚠ DECLARED READY BUT THE RUN DIDN'T COVER YOUR CHANGE — you edited source and claimed success, and something ran, but diff-coverage shows 0% of the lines you changed this turn were executed by it. A green suite that never runs your changed lines is scope substitution, not verification.
+  reason="⚠ DECLARED READY BUT THE RUN DIDN'T COVER YOUR CHANGE: you edited source and claimed success, and something ran, but diff-coverage shows 0% of the lines you changed this turn were executed by it. A green suite that never runs your changed lines is scope substitution, not verification.
 
   Run the path that hits the lines you edited and read the actual pass/fail line before declaring done.
 
-This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×). If you exercised it out-of-band, or this is a false positive, say so and proceed — this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
+This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×). If you exercised it out-of-band, or this is a false positive, say so and proceed: this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
 else
-  reason="⚠ DECLARED READY WITHOUT RUNNING IT — you edited source/test files and your message claims success (done/works/fixed/passing), but nothing exercised the changed path this turn.
+  reason="⚠ DECLARED READY WITHOUT RUNNING IT: you edited source/test files and your message claims success (done/works/fixed/passing), but nothing exercised the changed path this turn.
 
   collect ≠ run:  pytest --collect-only, tsc --noEmit, bash -n, node --check, an
-  import-check, or a lint are NOT a run — none of them executes an assertion. Run
+  import-check, or a lint are NOT a run: none of them executes an assertion. Run
   the code path in the state that matters and read the actual pass/fail line
   before declaring done.
 
 This is the 'declared-ready-without-runtime-exercise' pattern (S3, recurs 5–6×).
-If you genuinely ran it out-of-band, or this is a false positive, say so and proceed — this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
+If you genuinely ran it out-of-band, or this is a false positive, say so and proceed: this won't block again for the same claim. Mute: touch ~/.claude/.no-declared-ready-gate"
 fi
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
 [ -x "$WARN" ] && bash "$WARN" --hook declared-ready --action block --heeded unknown >/dev/null 2>&1 || true

@@ -14,7 +14,7 @@
 set -uo pipefail
 DIR="$HOME/.claude/auto-continue"; mkdir -p "$DIR"
 sid="${CLAUDE_CODE_SESSION_ID:-${CLAUDE_SESSION_ID:-}}"
-[ -n "$sid" ] || { echo "no \$CLAUDE_CODE_SESSION_ID in env — run this inside a Claude Code session"; exit 1; }
+[ -n "$sid" ] || { echo "no \$CLAUDE_CODE_SESSION_ID in env: run this inside a Claude Code session"; exit 1; }
 flag="$DIR/${sid:0:8}.json"
 
 case "${1:-status}" in
@@ -22,7 +22,7 @@ case "${1:-status}" in
     maxr="${2:-3}"; cooldown="${3:-30}"
     jq -n --argjson m "$maxr" --argjson c "$cooldown" --arg s "$sid" \
       '{session:$s, max_retries:$m, cooldown:$c, streak:0}' > "$flag"
-    echo "✓ auto-continue ON for ${sid:0:8} — error-recovery, max_retries=$maxr/error-run, cooldown=${cooldown}s"
+    echo "✓ auto-continue ON for ${sid:0:8}: error-recovery, max_retries=$maxr/error-run, cooldown=${cooldown}s"
     echo "  re-drives only after a transient API error; clean turn-ends still stop;"
     echo "  streak resets on any clean turn, so a real outage gives up after $maxr tries."
     echo "  log: $DIR/${sid:0:8}.log   ·   disable: auto-continue.sh off"

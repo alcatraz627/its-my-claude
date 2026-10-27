@@ -182,7 +182,7 @@ body {
 }
 
 /* ── Slide Container ── */
-/* Navigation is via arrows/dots — hide all scrollbars */
+/* Navigation is via arrows/dots: hide all scrollbars */
 html,
 body,
 .slide-container {
@@ -203,7 +203,7 @@ body::-webkit-scrollbar,
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   margin: 0 auto; /* center when width picker constrains max-width */
-  max-width: 100% !important; /* Override shared-base width classes — slides are always full-viewport */
+  max-width: 100% !important; /* Override shared-base width classes: slides are always full-viewport */
 }
 .slide-container.width-sm .slide-inner {
   max-width: 640px !important;

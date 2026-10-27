@@ -108,7 +108,7 @@ if ! hook_loop_check "$MARK" "$prose"; then
 fi
 
 listed=$(printf '%s' "$pending" | rg -v '^\s*$' | head -4 | sed 's/^/  /')
-msg="⚠ relative deliverable path — these will not resolve from the user's terminal, because they hold no working directory:
+msg="⚠ relative deliverable path: these will not resolve from the user's terminal, because they hold no working directory:
 
 $listed
 

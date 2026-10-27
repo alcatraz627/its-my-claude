@@ -79,7 +79,7 @@
     ]
    },
    "state": null,
-   "expected": "synthetic rulings:\nD1a D2b D3a\nD2 note — seeded d2 note\nS1: agree — seeded s1 note"
+   "expected": "synthetic rulings:\nD1a D2b D3a\nD2 note (seeded d2 note\nS1: agree) seeded s1 note"
   },
   {
    "name": "every flag at once",
@@ -183,7 +183,7 @@
     },
     "endnotes": "end notes here\nand a second line"
    },
-   "expected": "synthetic rulings:\nD1b D2x D3a\nD3 note — first line\nsecond line\nS2: DISAGREE — wrong layout\nS3: agree — agree, with a caveat\nnotes:\nend notes here\nand a second line"
+   "expected": "synthetic rulings:\nD1b D2x D3a\nD3 note (first line\nsecond line\nS2: DISAGREE) wrong layout\nS3: agree: agree, with a caveat\nnotes:\nend notes here\nand a second line"
   },
   {
    "name": "seeds cleared, all as drafted",
@@ -389,7 +389,7 @@
     },
     "endnotes": ""
    },
-   "expected": "synthetic rulings:\nD1a D2b D3z\nD2 note — seeded d2 note\nS1: agree — seeded s1 note"
+   "expected": "synthetic rulings:\nD1a D2b D3z\nD2 note (seeded d2 note\nS1: agree) seeded s1 note"
   },
   {
    "name": "notes off, fresh",
@@ -526,7 +526,7 @@
     ]
    },
    "state": null,
-   "expected": "Golden sections only:\ncard-2: agree — seeded card note"
+   "expected": "Golden sections only:\ncard-2: agree: seeded card note"
   },
   {
    "name": "sections only, disagree and end note",

@@ -1,4 +1,4 @@
-/* style.js — Slide / Presentation style interactive behaviours */
+/* style.js: Slide / Presentation style interactive behaviours */
 (function () {
   "use strict";
 

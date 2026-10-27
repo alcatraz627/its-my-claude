@@ -53,7 +53,7 @@ running_names() {
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-gum_header "pm2 resurrect — $SCAN_DIR"
+gum_header "pm2 resurrect: $SCAN_DIR"
 
 # Find ecosystem files, excluding noise dirs
 ECOSYSTEM_FILES=()
@@ -100,7 +100,7 @@ PYEOF
 )
 
   if [[ -z "$names" ]]; then
-    fail "~/$rel — could not parse process names, skipping"
+    fail "~/$rel: could not parse process names, skipping"
     (( failed++ )) || true
     failed_list+=("~/$rel (parse error)")
     continue

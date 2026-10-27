@@ -36,7 +36,7 @@ _gum_tui_help() {
   gum style \
     --foreground 212 --border-foreground 212 --border double \
     --align center --width 55 --margin "1 0" --padding "0 2" \
-    "gum-tui.sh — TUI Library for Claude Code"
+    "gum-tui.sh: TUI Library for Claude Code"
 
   gum style --foreground 14 --bold "Usage:"
   echo
@@ -63,7 +63,7 @@ _gum_tui_help() {
 }
 
 _gum_tui_list() {
-  gum style --foreground 14 --bold "gum-tui.sh — All Functions"
+  gum style --foreground 14 --bold "gum-tui.sh: All Functions"
   echo
   gum table --print --separator "," < <(printf '%s\n' \
     "Function,Args,Description" \
@@ -93,10 +93,10 @@ _gum_tui_list() {
 }
 
 _gum_tui_demo() {
-  gum_header "gum-tui.sh — Component Demo"
+  gum_header "gum-tui.sh: Component Demo"
 
   gum_divider "Status Messages"
-  gum_success "Build passed — 0 errors"
+  gum_success "Build passed: 0 errors"
   gum_error "Connection refused on port 5432"
   gum_warn "Deprecated API detected in auth.ts"
   gum_info "Processing 42 files..."
@@ -151,7 +151,7 @@ _gum_tui_is_sourced() {
   elif [[ -n "${BASH_SOURCE[0]:-}" ]]; then
     [[ "${BASH_SOURCE[0]}" != "$0" ]]
   else
-    return 1  # can't determine — assume not sourced
+    return 1  # can't determine: assume not sourced
   fi
 }
 

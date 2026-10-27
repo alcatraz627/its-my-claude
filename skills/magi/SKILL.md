@@ -154,7 +154,7 @@ Then dispatch:
 ```
 Single message, multiple Agent tool calls (one per voter).
 Each agent gets:
-  - The voter prompt — scoped to that voter's assigned evidence slice (Phase 2
+  - The voter prompt: scoped to that voter's assigned evidence slice (Phase 2
     voter_evidence); tell it which source is ITS primary base and to ground there
   - The output path: $ARCHIVE/03-voter-proposals/voter-<N>.md
   - Instruction: "write before returning" + 5-8 bullet abstract format
@@ -231,7 +231,7 @@ Each voter gets the Round 2 prompt (design § 13) with:
   - Their personal proposal-path permutation (per 6.1)
   - The rubric (light or thorough)
   - Output path: $ARCHIVE/04-voting/voter-<N>-scores.json
-  - JSON format spec (strict — schema in design § 13)
+  - JSON format spec (strict: schema in design § 13)
 ```
 
 After all return, attempt to parse each JSON. If voter-N returns malformed JSON:
@@ -316,7 +316,7 @@ in the run:
 Sections:
 
 ```markdown
-# MAGI report — <task title>
+# MAGI report: <task title>
 
 ## Decision
 [1-3 sentence outcome]
@@ -388,7 +388,7 @@ Print this block to the user every run, regardless of mode (added 2026-05-17 per
 
 ```
 ─────────────────────────────────────────────────────
-  /magi cost — <slug>
+  /magi cost: <slug>
 ─────────────────────────────────────────────────────
   Mode:           <lite | full>
   Voters:         N (M main + jester if applicable)

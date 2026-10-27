@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# gcc — the one command a codex session uses to write into the owner's gcc.
+# gcc: the one command a codex session uses to write into the owner's gcc.
 #
 #   gcc ipc        <claude-ipc args>      send / reply / register / peers ...
 #   gcc propose    <propose.sh args>      file an improvement proposal
@@ -150,5 +150,5 @@ n=1; [ -f "$seq" ] && n=$(( $(cat "$seq" 2>/dev/null || printf 0) + 1 )); printf
 jq -cn --argjson n "$n" --arg ts "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" --arg sid "$SID" --arg cwd "$PWD" \
   --arg verb "$verb" --args '{n:$n, ts:$ts, sid:$sid, cwd:$cwd, verb:$verb, argv:$ARGS.positional}' -- "${cmd[@]}" >> "$q" \
   || die "could not append to $q"
-printf 'gcc: queued #%s (%s) — the sandbox refused the direct call; a hook applies it within seconds and the receipt shows at your next turn.\n' "$n" "$verb"
+printf 'gcc: queued #%s (%s): the sandbox refused the direct call; a hook applies it within seconds and the receipt shows at your next turn.\n' "$n" "$verb"
 exit 0

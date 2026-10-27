@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""backlog-consolidate.py — merge the gcc improvement backlog into one ranked, triaged file.
+"""backlog-consolidate.py: merge the gcc improvement backlog into one ranked, triaged file.
 
 The improvement signals already converge on the proposal store: the /core-dump and
 /catchup contribution phases file cross-linked proposals, gcc-signal-capture auto-stubs
 on strong friction, atone-consolidate drafts prevention proposals, and the human files
 directly. What was missing is a step that READS that store, clusters items by their
-shared provenance, ranks them, and decides which are actually worth acting on — so the
+shared provenance, ranks them, and decides which are actually worth acting on: so the
 backlog stops being a write-only graveyard.
 
 This is that step. It:
@@ -18,7 +18,7 @@ This is that step. It:
 It NEVER mutates the store and NEVER auto-applies. The human PROMOTE/DROP decision (via
 /backlog-triage -> propose.sh done|reject) is the only thing that changes state.
 
-The anti-churn triage gate — an item is PROMOTE-worthy iff ANY of:
+The anti-churn triage gate: an item is PROMOTE-worthy iff ANY of:
   - corroboration >= 2 (two independent streams point at the same idea), OR
   - a linked atone slug is severity S3, OR
   - a linked atone slug has recurrence >= 3.
@@ -28,11 +28,11 @@ other single signal.
 Everything else -> WATCH (visible, still accruing corroboration, not presented as actionable).
 Open > STALE_DAYS with corroboration < 2 and no S3 -> DROP-REVIEW (graveyard cleanup).
 A single weak signal is, by the user's own right-sized-code / speculative-abstractions
-rules, not yet actionable — it waits for a second stream. That bar IS the anti-churn lever.
+rules, not yet actionable: it waits for a second stream. That bar IS the anti-churn lever.
 
 Scope note: corroboration is computed from the link:* tags already on each proposal
 (provenance travels with the item), so this does not re-scan the raw dream/valence/metacog
-pools — those enter the backlog via the contribution/auto-stub link tags. Wiring them as
+pools: those enter the backlog via the contribution/auto-stub link tags. Wiring them as
 direct feeders is a later enhancement, intentionally deferred to avoid churn.
 
 Usage: backlog-consolidate.py [--force] [--read-only] [--no-content] [--explain]
@@ -141,7 +141,7 @@ def link_types(item):
 
     This is the corroboration signal: linking to two DIFFERENT systems means two
     independent residue streams flagged the same idea. An item's own `src:` tag is
-    NOT corroboration — it only says who filed it (the auto-stub fires *because of*
+    NOT corroboration: it only says who filed it (the auto-stub fires *because of*
     the atone link, so counting both would double-count one signal)."""
     types = set()
     for t in item.get("tags", []):
@@ -153,7 +153,7 @@ def link_types(item):
 
 
 def provenance(item):
-    """All provenance tags for DISPLAY only (src + link types) — not corroboration."""
+    """All provenance tags for DISPLAY only (src + link types): not corroboration."""
     out = set()
     for t in item.get("tags", []):
         if t.startswith("link:"):
@@ -205,7 +205,7 @@ PHRASE_SUPPORT_MIN = 0.06
 def tokens(item):
     """Content tokens for similarity: title + body, lowercased, stopworded.
 
-    Deliberately cheap and local — this runs in a cron path, so no LLM and no
+    Deliberately cheap and local: this runs in a cron path, so no LLM and no
     embedding model. Identifier-ish tokens (guard-git-push, task-sync) survive
     intact because the split keeps hyphens/dots/underscores inside a word."""
     global TOKEN_RE
@@ -221,7 +221,7 @@ def content_edges(items, jaccard_min=0.55, rare_max_df=0.05):
     """Edges between proposals describing the same friction without linking to it.
 
     The link:* graph only joins proposals whose filer remembered a provenance tag,
-    so two sessions that independently hit one bug each stay at corroboration 1 —
+    so two sessions that independently hit one bug each stay at corroboration 1:
     scoring rediscovery, the strongest available signal, as noise.
 
     Edge when token Jaccard >= jaccard_min, or on a shared rare bigram (a cheap
@@ -230,7 +230,7 @@ def content_edges(items, jaccard_min=0.55, rare_max_df=0.05):
     distinct idea, so every edge is auditable via --explain.
 
     Scope: ONLY items with no link:* edge. Content matching is the fallback for
-    proposals the link graph cannot see — an auto-filed one already carries a
+    proposals the link graph cannot see: an auto-filed one already carries a
     precise link:atone:<slug> identity and must not be fuzzy-matched. Their bodies
     come from one template, so scoring them fused unrelated slugs at 0.81 (they
     share 12 template tokens and differ only in the slug). Excluding them removes
@@ -434,11 +434,11 @@ def render(rows, stale_days):
     for r in rows:
         by[r["bucket"]].append(r)
     out = []
-    out.append(f"# Backlog triage — {today}")
+    out.append(f"# Backlog triage: {today}")
     out.append("")
     out.append(
         "Derived view of the open improvement backlog (`proposals.jsonl`), clustered by "
-        "shared provenance and ranked. This file never changes state — act on items via "
+        "shared provenance and ranked. This file never changes state: act on items via "
         "`/backlog-triage` (or `propose.sh done|reject`). Regenerated weekly by "
         "`backlog-consolidate.py`."
     )
@@ -450,9 +450,9 @@ def render(rows, stale_days):
     out.append("")
 
     sections = [
-        ("PROMOTE", "PROMOTE candidates", "Corroborated or proven-severe — worth acting on now."),
+        ("PROMOTE", "PROMOTE candidates", "Corroborated or proven-severe: worth acting on now."),
         ("WATCH", "Watch", "A single weak signal so far; waiting for a second stream to corroborate."),
-        ("DROP-REVIEW", "Drop review", f"Open > {stale_days}d with no corroboration — candidates to reject."),
+        ("DROP-REVIEW", "Drop review", f"Open > {stale_days}d with no corroboration: candidates to reject."),
     ]
     for key, head, blurb in sections:
         items = by[key]

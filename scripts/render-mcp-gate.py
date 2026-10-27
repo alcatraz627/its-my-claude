@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PreToolUse gate for Render MCP WRITE-grade tools (GLOBAL — loads every session).
+"""PreToolUse gate for Render MCP WRITE-grade tools (GLOBAL: loads every session).
 
 Every Render write to ANY env (dev / staging / prod) requires explicit per-call
 human approval. `query_render_postgres` (arbitrary SQL, can read prod PII) and
@@ -9,7 +9,7 @@ human approval. `query_render_postgres` (arbitrary SQL, can read prod PII) and
 Registered globally under matcher `mcp__render__.*` (fires on ALL render tools);
 this script decides read vs write, so there is no dependency on matcher-regex
 alternation support. exit 2 blocks the call even under
---dangerously-skip-permissions — the only unskippable mechanism.
+--dangerously-skip-permissions: the only unskippable mechanism.
 
 Flow:
   no nonce -> exit 2 with the exact nonce path + target ENV (so the agent's
@@ -83,7 +83,7 @@ def main():
 
     tool = data.get("tool_name", "") or ""
     if not (tool.startswith(GATED_PREFIXES) or tool in GATED_EXACT):
-        sys.exit(0)  # a read tool (list_*/get_*/logs/...) — allow
+        sys.exit(0)  # a read tool (list_*/get_*/logs/...): allow
 
     tinput = data.get("tool_input", {})
     cwd = data.get("cwd", ".") or "."
@@ -115,7 +115,7 @@ def main():
             age = time.time() - os.path.getmtime(nonce)
             os.remove(nonce)  # one-shot: consume whether fresh or stale
             if age <= NONCE_TTL_SEC:
-                sys.exit(0)  # approved — allow this one call
+                sys.exit(0)  # approved: allow this one call
         except Exception:
             pass  # fall through to block
 

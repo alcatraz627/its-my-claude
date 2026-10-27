@@ -63,9 +63,9 @@ if [[ "$notif_type" == "idle_prompt" ]]; then
 fi
 
 case "$notif_type" in
-  idle_prompt)       label="Waiting${action_detail} —" ;;
-  elicitation_dialog) label="MCP Input Needed —"       ;;
-  *)                 label="Claude Code —"             ;;
+  idle_prompt)       label="Waiting${action_detail}:" ;;
+  elicitation_dialog) label="MCP Input Needed:"       ;;
+  *)                 label="Claude Code:"             ;;
 esac
 
 # OSC 9: terminal notification, attributed to Ghostty, navigates to the right tab on click.

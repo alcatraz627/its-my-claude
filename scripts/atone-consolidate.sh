@@ -67,7 +67,7 @@ NOW_UTC=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 # ─── Help ─────────────────────────────────────────────────────────
 
 show_help() {
-  printf '\n  %s%satone-consolidate%s %s—%s Regenerate derived views from raw event log\n' \
+  printf '\n  %s%satone-consolidate%s %s-%s Regenerate derived views from raw event log\n' \
     "$C_BOLD" "$C_MAGENTA" "$C_RESET" "$C_DIM" "$C_RESET"
 
   _section "USAGE"
@@ -172,14 +172,14 @@ fi
 # Idempotency guard (full mode)
 if [ "$MODE" != "force" ]; then
   if [ "$(last_run_seconds_ago)" -lt 82800 ]; then  # 23h
-    _info "<23h since last run — use --force to rebuild anyway"
+    _info "<23h since last run: use --force to rebuild anyway"
     exit 0
   fi
   if [ -f "$META" ]; then
     prev_hash=$(jq -r '.input_hash // empty' "$META" 2>/dev/null)
     cur_hash=$(_input_hash)
     if [ -n "$prev_hash" ] && [ "$prev_hash" = "$cur_hash" ]; then
-      _info "input hash unchanged — skipping (use --force to rebuild)"
+      _info "input hash unchanged: skipping (use --force to rebuild)"
       exit 0
     fi
   fi

@@ -129,7 +129,7 @@ reference: do NOT use for new WALs.
 ### File Header
 
 ```markdown
-# WAL — [project name]
+# WAL: [project name]
 <!-- Auto-maintained by Claude. Read by /catchup for session resumption. -->
 ```
 
@@ -144,12 +144,12 @@ reference: do NOT use for new WALs.
 ### Action Log (one line each)
 
 ```markdown
-[HH:MM] READ src/api/route.ts — found auth middleware at L42
-[HH:MM] WRITE src/api/users/route.ts — new GET handler for user list
-[HH:MM] EDIT src/lib/db.ts L15-20 — added connection pooling config
-[HH:MM] BASH npm test — 14 pass, 0 fail
-[HH:MM] AGENT(explore) "find all AuthContext usages" — 7 files returned
-[HH:MM] AGENT_DONE(explore) — 7 files returned
+[HH:MM] READ src/api/route.ts: found auth middleware at L42
+[HH:MM] WRITE src/api/users/route.ts: new GET handler for user list
+[HH:MM] EDIT src/lib/db.ts L15-20: added connection pooling config
+[HH:MM] BASH npm test: 14 pass, 0 fail
+[HH:MM] AGENT(explore) "find all AuthContext usages": 7 files returned
+[HH:MM] AGENT_DONE(explore): 7 files returned
 [HH:MM] DECISION: Zod over yup for validation (smaller bundle, better TS inference)
 [HH:MM] COMMIT "Add user list endpoint with auth guard"
 ```

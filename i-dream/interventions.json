@@ -55,10 +55,10 @@
     "trigger": {
       "prompt_pattern": "^\\s*(ok|okay|sure|yes|yeah|go|go ahead|continue|keep going|next|do it|proceed)\\b[\\s.!]*$"
     },
-    "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral — do only the unambiguous part, or ask one line.",
+    "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral: do only the unambiguous part, or ask one line.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted_by": "owner-demoted",
-    "strength": 0.8
+    "strength": 0.7000000000000001
   },
   {
     "id": "3c40a861cd0842a7",
@@ -102,7 +102,7 @@
       "tool": "Write",
       "input_pattern": "\\.md$"
     },
-    "body": "Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source — rewrite it.",
+    "body": "Write source markdown, never renderer output. Scan the first ~20 lines: uniform 2-space indent or '…' inside table rows means rendered-output-saved-as-source: rewrite it.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.350713Z",
     "promoted_by": "owner-flip",
@@ -118,7 +118,7 @@
       "tool": "Edit",
       "input_pattern": "\\.(ts|tsx|js|jsx|py|go|rs|swift)$"
     },
-    "body": "For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay — move it to a doc and link.",
+    "body": "For any comment over 3 lines: name the single load-bearing fact, write only that in 1-2 lines. Still longer? It's an essay: move it to a doc and link.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted": "2026-07-27T22:09:22.357518Z",
     "promoted_by": "owner-flip",
@@ -257,7 +257,7 @@
     "trigger": {
       "prompt_pattern": "^\\s*(keep going|continue|carry on|go on|next|proceed)\\b"
     },
-    "body": "A terse 'continue' means the last turn stopped short. Don't end a turn on a sentence naming work you could start — do it. Stop only when a human must decide something first.",
+    "body": "A terse 'continue' means the last turn stopped short. Don't end a turn on a sentence naming work you could start: do it. Stop only when a human must decide something first.",
     "created": "2026-08-19T01:04:07.339490Z",
     "promoted": "2026-08-21T19:13:12.930807Z",
     "promoted_by": "evidence-auto",
@@ -289,7 +289,7 @@
       "tool": "Write",
       "input_pattern": "\\.html?$"
     },
-    "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait — a skill's silence is not an exemption.",
+    "body": "HTML output rule: dark is the default :root palette and a dark/light toggle control is MANDATORY. Add both before writing, or state the conflict and wait: a skill's silence is not an exemption.",
     "created": "2026-08-19T19:49:09.230148Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
@@ -320,7 +320,7 @@
       "tool": "Bash",
       "input_pattern": "gh\\s+(pr|issue)\\s+comment|gh\\s+api\\s+.*(comments|reviews)"
     },
-    "body": "Read the first two lines of the body you are about to post. If it does not carry the agent-attribution marker (via 🤖claude), add it before sending — it lands under the owner's account.",
+    "body": "Read the first two lines of the body you are about to post. If it does not carry the agent-attribution marker (via 🤖claude), add it before sending: it lands under the owner's account.",
     "created": "2026-08-24T19:34:43.973505Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
@@ -403,7 +403,7 @@
     "created": "2026-09-02T05:39:33.700961Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 1.0
+    "strength": 0.6000000000000001
   },
   {
     "id": "d178058596c639ab",
@@ -482,7 +482,7 @@
     "created": "2026-09-06T02:09:07.057532Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 1.0
+    "strength": 0.6000000000000001
   },
   {
     "id": "595b0fe0fc23f577",
@@ -509,11 +509,11 @@
       "tool": "Bash",
       "input_pattern": "gh\\s+pr\\s+merge"
     },
-    "body": "Before merging: read the PR review comments against the current HEAD sha. Green checks are not a settled review — findings can stand while CI passes.",
+    "body": "Before merging: read the PR review comments against the current HEAD sha. Green checks are not a settled review: findings can stand while CI passes.",
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 1.0
+    "strength": 0.7000000000000001
   },
   {
     "id": "e8c3ac862b73ef60",
@@ -544,7 +544,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.7000000000000001
+    "strength": 0.8
   },
   {
     "id": "53f74d55587f358b",
@@ -555,7 +555,7 @@
     "trigger": {
       "prompt_pattern": "^\\s*/atone\\b"
     },
-    "body": "Run the atone ritual end to end — case file, RCA, then atone.sh add — before any unrelated tool call. Do not interleave it with other work.",
+    "body": "Run the atone ritual end to end: case file, RCA, then atone.sh add: before any unrelated tool call. Do not interleave it with other work.",
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-16T03:10:17.341254Z",
     "promoted_by": "evidence-auto",
@@ -572,7 +572,7 @@
     },
     "body": "A plan doc's claim that something is missing or done is a sentence, not a probe. Run the read-only list/describe check before asking the owner to create, grant, or delete anything.",
     "created": "2026-09-08T22:23:12.115567Z",
-    "strength": 0.7000000000000001
+    "strength": 0.6000000000000001
   },
   {
     "id": "b12ac46b19ef4c8d",
@@ -587,7 +587,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.6000000000000001
+    "strength": 0.5
   },
   {
     "id": "dc466ca4f5535f1b",
@@ -602,7 +602,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-29T03:58:35.531272Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.5
+    "strength": 0.0
   },
   {
     "id": "e32634fcb04ae5f2",
@@ -645,7 +645,7 @@
     "created": "2026-09-11T02:00:52.014374Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.6000000000000001
+    "strength": 0.0
   },
   {
     "id": "b175f25979ecdbd3",
@@ -677,33 +677,6 @@
     "strength": 1.0
   },
   {
-    "id": "f6e0260d58a3e589",
-    "slug": "mutating-command-against-unverified-environment",
-    "source": "atone-precheck",
-    "form": "nudge",
-    "state": "shadow",
-    "trigger": {
-      "tool": "Bash",
-      "input_pattern": "^(?!.*CLAUDE_HUB_PORT=\\d+)(?=.*\\bhub\\.sh\\s+(start|stop|restart)\\b)"
-    },
-    "body": "This hub.sh start/stop/restart has no CLAUDE_HUB_PORT, so it targets the owner's :5400 hub. Add CLAUDE_HUB_PORT=<scratch port> or don't run it.",
-    "created": "2026-10-01T05:29:00.582345Z",
-    "strength": 0.014285714285714301
-  },
-  {
-    "id": "5de28956ccaf6009",
-    "slug": "carried-wrong-path-through-repeated-payload-refreshes",
-    "source": "atone-precheck",
-    "form": "hint",
-    "state": "shadow",
-    "trigger": {
-      "prompt_pattern": "\\b(refresh|update|re-?arm|re-?issue)\\b.{0,40}\\b(payload|standing (instruction|order)s?|cron prompt|loop prompt)\\b"
-    },
-    "body": "A refresh is not a review. Before you ship the refreshed payload, resolve every path in it (ls/rg) and fix any that no longer exist. Do not carry the old paths forward unchecked.",
-    "created": "2026-10-04T19:09:32.332430Z",
-    "strength": 0.057142857142857134
-  },
-  {
     "id": "73f81f3d9d2f2e18",
     "slug": "pr-title-missing-required-flag",
     "source": "atone-precheck",
@@ -722,12 +695,14 @@
     "slug": "fabricated-link-handed-to-owner",
     "source": "atone-precheck",
     "form": "hint",
-    "state": "candidate",
+    "state": "live",
     "trigger": {
       "prompt_pattern": "\\b(give|send|share|paste|drop|post)\\s+(me\\s+)?(the\\s+|a\\s+)?(link|url)s?\\b|\\b(what|where)('?s| is)\\s+the\\s+(link|url)\\b"
     },
     "body": "Only give a URL that a tool output this turn contains, vendor URLs included. If no tool output has it, describe where to go in words instead.",
     "created": "2026-10-09T23:00:59.234443Z",
+    "promoted": "2026-10-26T20:27:38.132546Z",
+    "promoted_by": "evidence-auto",
     "strength": 1.0
   },
   {
@@ -755,7 +730,7 @@
     },
     "body": "This prints process args or unit contents on extractor-vm, which leaks secrets into the transcript. Use ss -tlnp or ps -o pid,stat,etime,comm instead.",
     "created": "2026-10-10T23:00:58.096034Z",
-    "strength": 0.14285714285714285
+    "strength": 0.07142857142857144
   },
   {
     "id": "950aabdafcab9812",
@@ -769,7 +744,7 @@
     },
     "body": "Did the owner ask for a checkpoint? If their last message named a deliverable and it is already written, stop here. Don't add a checkpoint, summary or report as an extra artifact.",
     "created": "2026-10-12T23:01:22.849139Z",
-    "strength": 0.1714285714285714
+    "strength": 0.1
   },
   {
     "id": "1b06a73dd595df26",
@@ -796,7 +771,7 @@
     },
     "body": "New doc must stand alone: before saving, rg draft for 'changes from', 'unchanged', 'see the', links to the source doc; carry that content in. Change list goes in the reply, not the doc.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 0.21428571428571427
+    "strength": 0.14285714285714285
   },
   {
     "id": "bb91078a96285f82",
@@ -811,21 +786,21 @@
     },
     "body": "Stop: live_eval.py/grade.py spend the owner's local claude login. Use launch.py on Clanky's account (prod probe) or run no model.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 0.5
+    "strength": 0.8
   },
   {
     "id": "b3affb0ca94ccf83",
     "slug": "internal-process-leaked-into-reader-facing-doc",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Edit",
       "input_pattern": "(?:^|/)[^/]*(?:status|review)[^/]*\\.md\\b"
     },
     "body": "Re-derive every status cell from live state (gh pr view, reply sweep) and replace in place. No 'Updated at'/'as of' lines or past-action logs.",
     "created": "2026-10-20T23:02:07.473144Z",
-    "strength": 0.6000000000000001
+    "strength": 0.9
   },
   {
     "id": "7139ee0236dd4643",
@@ -838,6 +813,48 @@
     },
     "body": "Before presenting a reply/todo list, run the sweep (gh api pulls/N/comments per PR, human comments without in_reply_to_id) and diff it against the list. Never list from memory.",
     "created": "2026-10-20T23:02:07.473144Z",
-    "strength": 0.2857142857142857
+    "strength": 0.21428571428571427
+  },
+  {
+    "id": "02002ed82205d631",
+    "slug": "prose-wall-where-structure-was-the-answer",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "candidate",
+    "trigger": {
+      "tool": "Edit",
+      "input_pattern": "(^|/)(README|STATUS|ROADMAP|BRIEF|SUMMARY|HANDOFF)[^/]*\\.md$"
+    },
+    "body": "Owner-read doc: one fact per line, no bullet or table cell over two lines; move shas, build ids and mechanisms to Sources. Heed any doc-shape nudge before committing.",
+    "created": "2026-10-22T23:01:46.057439Z",
+    "strength": 1.0
+  },
+  {
+    "id": "53223174e7d0b4ab",
+    "slug": "push-approval-treated-as-blanket-authorization",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgh\\s+pr\\s+merge\\b"
+    },
+    "body": "Before merging: confirm a quoted owner grant names this repo and a review on the current head sha landed with no blocking finding. Otherwise ask for the merge in one line.",
+    "created": "2026-10-22T23:01:46.057439Z",
+    "strength": 0.24285714285714285
+  },
+  {
+    "id": "36db13bcb51036f1",
+    "slug": "bare-identifier-where-the-name-belongs",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgh\\s+(issue|pr)\\s+(comment|review|create)\\b.*(?<![\\w/&])#\\d+\\b"
+    },
+    "body": "This message cites a bare #N. Name each referenced issue/PR in words and link it before posting; don't ask the owner to rule on formalities you can decide.",
+    "created": "2026-10-23T23:02:06.052165Z",
+    "strength": 0.5
   }
 ]

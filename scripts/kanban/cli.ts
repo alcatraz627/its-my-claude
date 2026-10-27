@@ -79,7 +79,7 @@ function checkBrief(raw: string | undefined, title: string): string | undefined 
   const n = charLen(t);
   if (n > BRIEF_MAX) {
     die(`--brief is ${n} chars, cap is ${BRIEF_MAX}`,
-        `summarise, don't truncate — a phrase the human can recognise the card by: --brief "${[...t].slice(0, 48).join("").trim()}…"`);
+        `summarise, don't truncate: a phrase the human can recognise the card by: --brief "${[...t].slice(0, 48).join("").trim()}…"`);
   }
   if (title && n > charLen(title)) die("--brief is longer than the title", `drop --brief; the title already is one`);
   return t;
@@ -118,7 +118,7 @@ function serverPort(): number | null {
 
 function urlFor(slug: string): string {
   const port = serverPort();
-  return port ? `http://localhost:${port}/b/${slug}` : `(server not set up — see kanban.sh check)`;
+  return port ? `http://localhost:${port}/b/${slug}` : `(server not set up: see kanban.sh check)`;
 }
 
 function doSync(dir: string, by: string) {
@@ -141,7 +141,7 @@ function doSync(dir: string, by: string) {
   if (delta.new === 0 && h.barren.length) {
     const rel = (f: string) => f.replace(root + "/", "");
     console.log(`  ${h.barren.length} of ${h.scanned.length} scanned files produced no cards:`);
-    for (const b of h.barren.slice(0, 5)) console.log(`    ${rel(b.file)} — ${b.why}`);
+    for (const b of h.barren.slice(0, 5)) console.log(`    ${rel(b.file)}: ${b.why}`);
     if (h.barren.length > 5) console.log(`    … and ${h.barren.length - 5} more`);
     console.log(`  a card comes from a checkbox line; in session-notes only under "## Todos"`);
   }
@@ -153,7 +153,7 @@ function doSync(dir: string, by: string) {
     `${coverage.noBrief ? ` · ${coverage.noBrief} still unnamed` : ""}` +
     ` · ${coverage.untagged} untagged`;
   console.log(coverage.untagged || coverage.autoBrief
-    ? `${cov}\n  ${coverage.autoBrief ? `auto names are a starting point — improve one: kanban.sh brief <id> "<name>"` : ""}` +
+    ? `${cov}\n  ${coverage.autoBrief ? `auto names are a starting point: improve one: kanban.sh brief <id> "<name>"` : ""}` +
       `${coverage.untagged ? `${coverage.autoBrief ? "\n  " : ""}tag them so a lane can be read: kanban.sh tag <id> <tag>` : ""}`
     : cov);
   return { slug, boardDir };
@@ -440,7 +440,7 @@ switch (verb) {
     ask.options.forEach((o, i) => console.log(`  ${i + 1}. ${o}${ask.rec === i ? "   <- the agent's pick" : ""}`));
     if (state === "answered") {
       const a = ask.answer!;
-      console.log(`  answered: ${a.pick === null || a.pick === undefined ? "(no option)" : `${a.pick + 1}. ${ask.options[a.pick]}`}${a.text ? ` — ${a.text}` : ""}`);
+      console.log(`  answered: ${a.pick === null || a.pick === undefined ? "(no option)" : `${a.pick + 1}. ${ask.options[a.pick]}`}${a.text ? `: ${a.text}` : ""}`);
     } else if (ask.deferredAt) console.log("  the owner saw it and said later");
     else if (ask.seenAt) console.log("  the owner has seen it, not answered yet");
     else console.log("  the owner has not opened it yet");
@@ -499,7 +499,7 @@ switch (verb) {
     const sel = loadSelection(boardDir);
     if (hasFlag("json")) { console.log(JSON.stringify(sel)); break; }
     if (!sel.cards.length && !sel.notes.length) {
-      console.log(`nothing selected on ${slug} — the owner has not ticked anything`);
+      console.log(`nothing selected on ${slug}: the owner has not ticked anything`);
       break;
     }
     console.log(renderSelection(boardDir, name, sel));
@@ -564,7 +564,7 @@ switch (verb) {
         failed.push({ line, why });
         console.log(`  FAIL ${line}`);
         console.log(`      ${why}`);
-        if (!keep) { console.log(`  stopped here — later lines usually depend on earlier ones (--keep-going to push through)`); break; }
+        if (!keep) { console.log(`  stopped here: later lines usually depend on earlier ones (--keep-going to push through)`); break; }
       }
     }
     console.log(`\nbatch: ${ok} ok, ${failed.length} failed, ${lines.length - ok - failed.length} not attempted`);
@@ -630,7 +630,7 @@ switch (verb) {
       const ms = mismatches();
       if (hasFlag("json")) { console.log(JSON.stringify(ms.map((x) => ({ milestone: x.m.name, kind: x.kind, say: x.say, fix: x.fix })))); break; }
       if (!ms.length) { console.log(`no milestone disagrees with its cards on ${slug}`); break; }
-      console.log(`${ms.length} mismatch(es) on ${slug} — each needs a judgment, so none is applied for you:`);
+      console.log(`${ms.length} mismatch(es) on ${slug}: each needs a judgment, so none is applied for you:`);
       for (const x of ms) { console.log(`  ${x.say}`); console.log(`    → ${x.fix}`); }
       break;
     }
@@ -721,7 +721,7 @@ switch (verb) {
       const name = rest[0];
       if (!name) die("usage", "kanban.sh milestone rm <name>");
       await post({ op: "rm", name });
-      console.log(`milestone ${name} removed — its tag and the cards wearing it are untouched`);
+      console.log(`milestone ${name} removed: its tag and the cards wearing it are untouched`);
       break;
     }
     die(`unknown milestone verb ${sub}`, "one of: list check add goal order doc done reopen rm");
@@ -742,7 +742,7 @@ switch (verb) {
       const any = loadChanges(boardDir, 0, 1).length;
       console.log(any
         ? `nothing changed on ${slug} in the last ${spec}`
-        : `no history on ${slug} yet — it starts recording at the next sync, move or ruling`);
+        : `no history on ${slug} yet: it starts recording at the next sync, move or ruling`);
       break;
     }
     console.log(`${rows.length} change(s) on ${slug} in the last ${spec}`);
@@ -1177,7 +1177,7 @@ switch (verb) {
       if (!targets.length) die("need at least one recipient", `kanban.sh to ${id} agent:<alias>   ·   --clear to address it to anyone`);
       for (const t of targets) {
         if (!/^(agent|board):.+$/.test(t)) {
-          die(`"${t}" is not a recipient`, `use agent:<alias> or board:<slug> — kanban.sh status lists the board slugs`);
+          die(`"${t}" is not a recipient`, `use agent:<alias> or board:<slug>: kanban.sh status lists the board slugs`);
         }
         // Same refusal /api/pin makes: a recipient pointing at nothing is a draft
         // addressed to a place that does not exist, which reads as delivered.
@@ -1341,7 +1341,7 @@ switch (verb) {
     let bad = 0;
     const reg = registry();
     const port = serverPort();
-    if (!port) { console.log("FAIL server.json has no port — fix: ports.sh claim kanban --tier 2, write ~/.claude/kanban/server.json, pm2 start"); bad++; }
+    if (!port) { console.log("FAIL server.json has no port: fix: ports.sh claim kanban --tier 2, write ~/.claude/kanban/server.json, pm2 start"); bad++; }
     for (const [slug] of Object.entries(reg.boards)) {
       const board = loadBoard(path.join(KROOT, "boards", slug));
       const badLane = board.cards.find((c) => !LANES.includes(c.lane));
@@ -1353,14 +1353,14 @@ switch (verb) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         console.log(`ok server responds on :${port} (${Object.keys(reg.boards).length} boards)`);
       } catch (e: any) {
-        console.log(`FAIL server not answering on :${port} (${e.message}) — fix: pm2 restart kanban (or pm2 start bun --name kanban -- ${__dirname}/server.ts --port ${port})`);
+        console.log(`FAIL server not answering on :${port} (${e.message}): fix: pm2 restart kanban (or pm2 start bun --name kanban -- ${__dirname}/server.ts --port ${port})`);
         bad++;
       }
     }
     try {
       const launchd = execFileSync("launchctl", ["list"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
       if (!/pm2/i.test(launchd)) {
-        console.log("note: pm2 is not launchd-registered — the board will NOT survive a reboot. One-time fix (needs sudo, run it YOURSELF): pm2 startup   (run the command it prints, then: pm2 save)");
+        console.log("note: pm2 is not launchd-registered: the board will NOT survive a reboot. One-time fix (needs sudo, run it YOURSELF): pm2 startup   (run the command it prints, then: pm2 save)");
       }
     } catch { /* launchctl unavailable: nothing to report */ }
     console.log(bad === 0 ? "READY" : `${bad} problem(s)`);
@@ -1390,7 +1390,7 @@ switch (verb) {
     if (tags.length) console.log(`tags: ${tags.map((t) => `${t.kind}:${t.name}`).join(" · ")}`);
     if (after.length) console.log(`after: ${after.join(" ")}`);
     console.log(`source: ${card.source.kind === "manual" ? "manual" : `${card.source.path}${card.source.line ? ":" + card.source.line : ""}`}${card.via ? ` · via ${card.via}` : ""}`);
-    if (card.verify) console.log(`verified: ${card.verify.grade}${card.verify.needsHuman ? " + needs-human" : ""}${card.verify.note ? ` — ${card.verify.note}` : ""} (${card.verify.at})`);
+    if (card.verify) console.log(`verified: ${card.verify.grade}${card.verify.needsHuman ? " + needs-human" : ""}${card.verify.note ? `: ${card.verify.note}` : ""} (${card.verify.at})`);
     for (const s of card.subs ?? []) console.log(`  [${s.done ? "x" : " "}] ${s.title}`);
     if (card.docs.length) console.log(`docs: ${card.docs.join(" · ")}`);
     if (note?.note) console.log(`note (${note.updatedAt}): ${note.note}`);
@@ -1403,10 +1403,10 @@ switch (verb) {
     if (hasFlag("undo")) {
       withBoardLock(boardDir, () => {
         const board = loadBoard(boardDir);
-        if (!board.tombstones?.[id]) die(`no tombstone for ${id} on ${slug}`, `kanban.sh show ${id} — the card may simply be live`);
+        if (!board.tombstones?.[id]) die(`no tombstone for ${id} on ${slug}`, `kanban.sh show ${id}: the card may simply be live`);
         delete board.tombstones[id];
         atomicWrite(path.join(boardDir, "board.json"), board, "drop-undo", `card=${id}`);
-        console.log(`tombstone removed — ${id} returns on next sync if its source line still exists`);
+        console.log(`tombstone removed: ${id} returns on next sync if its source line still exists`);
       });
       break;
     }
@@ -1450,7 +1450,7 @@ switch (verb) {
       atomicWrite(path.join(boardDir, "board.json"), board, "drop", `card=${id}`);
       console.log(card.source.kind === "manual"
         ? `dropped ${id} (manual card, gone for good)`
-        : `dropped ${id} (tombstoned — sync won't resurrect it; undo: kanban.sh drop ${id} --undo)`);
+        : `dropped ${id} (tombstoned: sync won't resurrect it; undo: kanban.sh drop ${id} --undo)`);
     });
     // Tags and goal live in plan.json, which the server owns. Forget them there
     // so the store does not keep rows for a card that no longer exists.
@@ -1483,7 +1483,7 @@ switch (verb) {
         execFileSync("trash", [boardDir]);
         console.log(`unregistered ${slug}; board data trashed (recoverable from Trash)`);
       } catch {
-        console.log(`unregistered ${slug}; board data left at ${boardDir} (trash unavailable — remove it yourself)`);
+        console.log(`unregistered ${slug}; board data left at ${boardDir} (trash unavailable: remove it yourself)`);
       }
     } else {
       console.log(`unregistered ${slug}${hasFlag("keep-data") ? `; data kept at ${boardDir}` : ""}`);
@@ -1503,13 +1503,13 @@ switch (verb) {
     console.log(`kanban.sh <verb>
   init [--project dir]     register + first sync + URL
   sync [--project dir]     re-harvest; prints the delta digest. Refuses to empty
-                           a populated board when the harvest finds nothing —
+                           a populated board when the harvest finds nothing:
                            [--force] if that is genuinely right
   add "<title>" [--lane l] manual card (model-driven lifecycle, D4a); pass
                            [--brief "…"] whenever the title runs long
   after <id> <id…>         execution order: this card comes after those (bare reads; --clear)
   brief <id> "<text>"      the ${BRIEF_MAX}-char summary phrase the board face shows in
-                           place of a long title — a name the human can scan and
+                           place of a long title: a name the human can scan and
                            recognise, not a description. The full title stays as
                            the card's description in the drawer. [--clear] drops it
   move <id> <lane>         override lane (survives sync)
@@ -1520,7 +1520,7 @@ switch (verb) {
   show <id> [--json]       one card: lane, tag, subs, docs, note
   notes [--unread] [--ack] human notes (D5a pull); --ack also displays, so plain
                            --unread is the read-only re-peek; --ack marks read.
-                           note text may carry tags — @me self-note (excluded
+                           note text may carry tags: @me self-note (excluded
                            from --unread) · !now act on pickup · /skill run it ·
                            >lane apply via move · #review-me human's queue
   drop <id> [--force|--undo] retire a card; doc-sourced ones tombstone (sync
@@ -1585,7 +1585,7 @@ switch (verb) {
                            is a filter, not a rollup
   goal <id> "<why>"        one line saying why the card exists; bare reads it,
                            [--clear] drops it
-  selected [--json]        what the owner has ticked on this board — cards and
+  selected [--json]        what the owner has ticked on this board: cards and
                            notes they are pointing at right now, in full. They
                            may also have pushed it at you directly with the
                            board's "Send to agent" button

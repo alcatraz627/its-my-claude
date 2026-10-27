@@ -43,7 +43,7 @@ recent=$(find "$HOME/.claude/migrations" -name '00*.md' -mmin -30 2>/dev/null | 
 
 cat <<EOF
 [migrate-hint] Structural command on ~/.claude/ detected. If this is a
-structural change (path move, rename, hook-arch update, schema change —
+structural change (path move, rename, hook-arch update, schema change:
 see conventions/gcc-hygiene.md), file a migration entry first:
 
   /migrate --title "<short title>"

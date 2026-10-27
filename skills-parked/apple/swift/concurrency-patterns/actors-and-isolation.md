@@ -37,10 +37,10 @@ actor UserStore {
     private var users: [User] = []
 
     nonisolated var storeIdentifier: String {
-        id.uuidString               // Only accesses let property — safe
+        id.uuidString               // Only accesses let property: safe
     }
 
-    func addUser(_ user: User) {    // Isolated — requires await
+    func addUser(_ user: User) {    // Isolated: requires await
         users.append(user)
     }
 }
@@ -55,13 +55,13 @@ await store.addUser(user)          // await required
 Actors are reentrant: when an actor method hits an `await` suspension point, other callers can execute on the same actor. This means state can change across `await` points.
 
 ```swift
-// ❌ Bug — actor reentrancy
+// ❌ Bug: actor reentrancy
 actor BankAccount {
     var balance: Int = 1000
 
     func withdraw(amount: Int) async -> Bool {
         guard balance >= amount else { return false }
-        // ⚠️ SUSPENSION POINT — another caller can run here
+        // ⚠️ SUSPENSION POINT: another caller can run here
         await logTransaction(amount)
         // balance may have changed! Another withdraw could have run.
         balance -= amount  // Could go negative!
@@ -116,7 +116,7 @@ actor BankAccount {
 actor BankAccount {
     var balance: Int = 1000
 
-    // Synchronous — no reentrancy possible
+    // Synchronous: no reentrancy possible
     func withdraw(amount: Int) -> Bool {
         guard balance >= amount else { return false }
         balance -= amount
@@ -204,7 +204,7 @@ Types that can safely cross isolation boundaries (between actors, between thread
 ### Explicit Sendable
 
 ```swift
-// ✅ Value type with Sendable properties — automatically Sendable
+// ✅ Value type with Sendable properties: automatically Sendable
 struct UserProfile: Sendable {
     let id: UUID
     let name: String
@@ -295,7 +295,7 @@ actor Processor {
 ### Assuming Actors Are Like Locks
 
 ```swift
-// ❌ Wrong mental model — actor is not a lock, it's a mailbox
+// ❌ Wrong mental model: actor is not a lock, it's a mailbox
 actor Counter {
     var count = 0
 
@@ -306,11 +306,11 @@ actor Counter {
     }
 }
 
-// ✅ Correct mental model — avoid await between state mutations
+// ✅ Correct mental model: avoid await between state mutations
 actor Counter {
     var count = 0
 
-    func incrementTwice() {  // Synchronous — no interleaving
+    func incrementTwice() {  // Synchronous: no interleaving
         count += 2
     }
 }
@@ -319,7 +319,7 @@ actor Counter {
 ### @MainActor with Heavy Computation
 
 ```swift
-// ❌ Blocks the main thread — UI freezes
+// ❌ Blocks the main thread: UI freezes
 @MainActor
 func processImages(_ images: [Data]) -> [UIImage] {
     images.map { heavyProcessing($0) }  // Synchronous heavy work on main thread
@@ -346,7 +346,7 @@ func processImages(_ images: [Data]) async -> [UIImage] {
 ### Using @unchecked Sendable to Silence Warnings
 
 ```swift
-// ❌ Dangerous — silences compiler but doesn't fix the data race
+// ❌ Dangerous: silences compiler but doesn't fix the data race
 class UnsafeCache: @unchecked Sendable {
     var items: [String: Any] = [:]  // No synchronization!
 }

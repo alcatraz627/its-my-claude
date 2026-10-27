@@ -37,7 +37,7 @@ path.removeLast(2)          // Pop two levels
 ### Pop to Root
 
 ```swift
-path = NavigationPath()     // Clear entire stack — returns to root
+path = NavigationPath()     // Clear entire stack: returns to root
 ```
 
 ### Check Stack
@@ -223,13 +223,13 @@ final class NavigationCoordinator {
 **Requirements:** All value types pushed onto the path must conform to `Codable` (in addition to `Hashable`).
 
 ```swift
-// ✅ Works — conforms to both Hashable and Codable
+// ✅ Works: conforms to both Hashable and Codable
 struct Item: Hashable, Codable {
     let id: UUID
     let name: String
 }
 
-// ❌ Won't compile for state restoration — missing Codable
+// ❌ Won't compile for state restoration: missing Codable
 struct Item: Hashable {
     let id: UUID
     let name: String
@@ -375,7 +375,7 @@ var body: some View {
 ### Not Resetting Path on Deep Link
 
 ```swift
-// ❌ Deep link pushes on top of existing stack — confusing
+// ❌ Deep link pushes on top of existing stack: confusing
 func handle(deepLink: DeepLink) {
     path.append(deepLink.destination)
 }

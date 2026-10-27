@@ -105,11 +105,11 @@ const PROBE = () => {
 };
 
 const RULES = {
-  xsOutlineChip: "co-20260831-220833-24 — the xs outline chip is banned",
-  pageSize: "co-20260831-220818-b3 — every admin table defaults to 10 rows",
-  inertChip: "co-20260831-220818-26 — a chip in a cell toggles its filter",
-  noPointer: "co-20260831-220818-26 — interactive elements show cursor:pointer",
-  singleItemMenu: "co-20260831-220818-26 — no row menu holds only one action",
+  xsOutlineChip: "co-20260831-220833-24: the xs outline chip is banned",
+  pageSize: "co-20260831-220818-b3: every admin table defaults to 10 rows",
+  inertChip: "co-20260831-220818-26: a chip in a cell toggles its filter",
+  noPointer: "co-20260831-220818-26: interactive elements show cursor:pointer",
+  singleItemMenu: "co-20260831-220818-26: no row menu holds only one action",
 };
 
 const ROUTES = [
@@ -134,7 +134,7 @@ if (page.url().includes("/login")) {
   await page.waitForTimeout(3000);
 }
 if (page.url().includes("/login")) {
-  console.error("signed out — every route would redirect and this gate would report clean.");
+  console.error("signed out: every route would redirect and this gate would report clean.");
   await ctx.close(); process.exit(2);
 }
 

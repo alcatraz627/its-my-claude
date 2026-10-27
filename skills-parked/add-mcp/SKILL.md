@@ -90,7 +90,7 @@ If it exists: parse it and note existing `mcpServers` keys.
 If it doesn't exist: start with `{ "mcpServers": {} }`.
 
 For each requested server that **already exists** in the project's `.mcp.json`:
-- Print: `  ⚠ 'name' already present in .mcp.json — skipping`
+- Print: `  ⚠ 'name' already present in .mcp.json: skipping`
 - Remove from the list unless `--force` was passed
 
 ---

@@ -76,7 +76,7 @@ cmd_confirm() {
   case "$atone" in mist-*) ;; *) echo "atone-speculative confirm: --atone must be a real mist- id from atone/events.jsonl" >&2; exit 2;; esac
   # The link is only honest if the real event exists.
   rg -q "\"id\": ?\"$atone\"" "$HOME/.claude/atone/events.jsonl" 2>/dev/null \
-    || { echo "atone-speculative confirm: $atone not found in the real atone ledger — run /atone first" >&2; exit 2; }
+    || { echo "atone-speculative confirm: $atone not found in the real atone ledger: run /atone first" >&2; exit 2; }
   _mutate "$id" '.status = "confirmed" | .atone_id = "'"$atone"'" | .resolved_ts = $now' \
     && echo "confirmed: $id -> $atone"
 }
@@ -86,7 +86,7 @@ cmd_refute() {
   local evidence=""
   while [ $# -gt 0 ]; do case "$1" in --evidence) evidence="$2"; shift 2;; *) shift;; esac; done
   [ -n "$id" ] || { echo "atone-speculative refute: <id> --evidence required" >&2; exit 2; }
-  [ ${#evidence} -ge 40 ] || { echo "atone-speculative refute: evidence under 40 chars is a dismissal, not a refutation — cite the turn or file:line that disproves it" >&2; exit 2; }
+  [ ${#evidence} -ge 40 ] || { echo "atone-speculative refute: evidence under 40 chars is a dismissal, not a refutation: cite the turn or file:line that disproves it" >&2; exit 2; }
   _mutate "$id" ".status = \"refuted\" | .evidence = $(jq -cn --arg e "$evidence" '$e') | .resolved_ts = \$now" \
     && echo "refuted: $id"
 }
@@ -104,7 +104,7 @@ cmd_agree() {
   local evidence=""
   while [ $# -gt 0 ]; do case "$1" in --evidence) evidence="$2"; shift 2;; *) shift;; esac; done
   [ -n "$id" ] || { echo "atone-speculative agree: <id> --evidence required" >&2; exit 2; }
-  [ ${#evidence} -ge 40 ] || { echo "atone-speculative agree: evidence under 40 chars is a nod, not agreement — cite the turn or file:line that shows the auditor was right" >&2; exit 2; }
+  [ ${#evidence} -ge 40 ] || { echo "atone-speculative agree: evidence under 40 chars is a nod, not agreement: cite the turn or file:line that shows the auditor was right" >&2; exit 2; }
   # Terminal since owner ruling D7a (2026-09-18): the cited evidence IS the
   # record. The "owed when idle" debt never got paid (36 rows, 0 filed) and
   # successor sessions inherited the nag and asked the owner about it.

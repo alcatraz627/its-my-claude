@@ -85,9 +85,9 @@ echo "== magnitudes big enough to break the comparison itself =="
 # ran. This case is what pins the character-class check; without it, weakening that
 # check to only-reject-empty leaves the suite green (validator finding, 2026-07-17).
 r=$(run '{"5h":{"pct":9999999999999999},"resets_at":"9999999999"}')
-[ "${r%% *}" = "UNKNOWN" ] && ok "16 digits (jq -> 1e+16) -> UNKNOWN" || bad "1e+16 gave '$r', want UNKNOWN — the char-class guard is not holding"
+[ "${r%% *}" = "UNKNOWN" ] && ok "16 digits (jq -> 1e+16) -> UNKNOWN" || bad "1e+16 gave '$r', want UNKNOWN: the char-class guard is not holding"
 r=$(run '{"5h":{"pct":999999999999999},"resets_at":"9999999999"}')
-[ "${r%% *}" = "UNKNOWN" ] && ok "15 digits (stays plain) -> UNKNOWN" || bad "15 digits gave '$r', want UNKNOWN — no percentage has 15 digits"
+[ "${r%% *}" = "UNKNOWN" ] && ok "15 digits (stays plain) -> UNKNOWN" || bad "15 digits gave '$r', want UNKNOWN: no percentage has 15 digits"
 
 echo
 echo "== jq's own non-numbers (the deny-list's blind spot) =="
@@ -97,7 +97,7 @@ echo "== jq's own non-numbers (the deny-list's blind spot) =="
 # It enumerated big integers and generalised. Every case here is one that
 # generalisation missed.
 r=$(run '{"5h":{"pct":"nan"}}')
-[ "${r%% *}" = "UNKNOWN" ] && ok "\"nan\" (jq -> null, 4 chars) -> UNKNOWN" || bad "\"nan\" gave '$r' — FAIL-OPEN"
+[ "${r%% *}" = "UNKNOWN" ] && ok "\"nan\" (jq -> null, 4 chars) -> UNKNOWN" || bad "\"nan\" gave '$r': FAIL-OPEN"
 [ "${r##* }" = "2" ] && ok "  ...and exits 2, not 0" || bad "  ...exited ${r##* }, want 2"
 r=$(run '{"5h":{"pct":"infinity"}}')
 [ "${r%% *}" = "UNKNOWN" ] && ok "\"infinity\" -> UNKNOWN" || bad "infinity gave '$r'"
@@ -123,7 +123,7 @@ thr() { # $1 threshold, $2 pct  -> "verdict exit"
   rm -rf "$T"; printf '%s %s' "$(printf '%s' "$out" | head -1 | cut -f1)" "$rc"
 }
 r=$(thr 9999999999999999999 95)
-[ "${r%% *}" = "NEAR-FULL" ] && ok "19-digit threshold -> falls back to 90, 95% -> NEAR-FULL" || bad "overflow threshold gave '$r' — fail-open"
+[ "${r%% *}" = "NEAR-FULL" ] && ok "19-digit threshold -> falls back to 90, 95% -> NEAR-FULL" || bad "overflow threshold gave '$r': fail-open"
 r=$(thr 150 95)
 [ "${r%% *}" = "NEAR-FULL" ] && ok "threshold 150 (>100) -> falls back to 90" || bad "threshold 150 gave '$r'"
 r=$(thr abc 95)

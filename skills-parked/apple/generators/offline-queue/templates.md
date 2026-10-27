@@ -348,7 +348,7 @@ actor OfflineQueueManager {
                 let isConnected = await MainActor.run { self.monitor.isConnected }
 
                 if isConnected && !wasConnected {
-                    // Just came online — process the queue
+                    // Just came online: process the queue
                     await self.processQueue()
                 }
                 wasConnected = isConnected
@@ -1010,7 +1010,7 @@ struct OfflineQueueBannerModifier: ViewModifier {
         HStack(spacing: 8) {
             Image(systemName: "wifi.slash")
                 .font(.subheadline)
-            Text("Offline — changes will sync when connected")
+            Text("Offline: changes will sync when connected")
                 .font(.subheadline)
         }
         .foregroundStyle(.white)

@@ -39,18 +39,18 @@ The Energy Impact gauge shows a composite score:
 ### Excessive Timer Usage
 
 ```swift
-// Bad — timer fires every second even when app is idle
+// Bad: timer fires every second even when app is idle
 Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
     self.checkForUpdates() // Keeps CPU awake
 }
 
-// Good — use tolerance for coalescing, stop when not needed
+// Good: use tolerance for coalescing, stop when not needed
 let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
     self.updateTimestamp()
 }
 timer.tolerance = 0.5 // System can defer ±0.5s to coalesce with other work
 
-// Better — use system notifications instead of polling
+// Better: use system notifications instead of polling
 NotificationCenter.default.addObserver(
     forName: .significantTimeChange, // System fires this at midnight, timezone change
     object: nil, queue: .main
@@ -60,12 +60,12 @@ NotificationCenter.default.addObserver(
 ### Location Accuracy Over-specification
 
 ```swift
-// Bad — GPS accuracy when you only need city-level
+// Bad: GPS accuracy when you only need city-level
 let manager = CLLocationManager()
 manager.desiredAccuracy = kCLLocationAccuracyBest // GPS radio stays on
 manager.startUpdatingLocation() // Continuous updates
 
-// Good — match accuracy to need
+// Good: match accuracy to need
 // For weather/city features:
 manager.desiredAccuracy = kCLLocationAccuracyKilometer
 manager.requestLocation() // Single update, not continuous
@@ -84,7 +84,7 @@ manager.distanceFilter = 100 // Only notify on 100m movement
 ### Network Request Inefficiency
 
 ```swift
-// Bad — separate requests that could be batched
+// Bad: separate requests that could be batched
 func refreshAll() async {
     let profile = try? await api.fetchProfile()
     let posts = try? await api.fetchPosts()
@@ -93,7 +93,7 @@ func refreshAll() async {
     // 4 separate radio activations
 }
 
-// Good — batch into single request or parallel group
+// Good: batch into single request or parallel group
 func refreshAll() async {
     async let profile = api.fetchProfile()
     async let posts = api.fetchPosts()
@@ -103,7 +103,7 @@ func refreshAll() async {
     let results = await (profile, posts, notifications)
 }
 
-// Better — single batch endpoint
+// Better: single batch endpoint
 func refreshAll() async {
     let batch = try? await api.fetchDashboard()
     // 1 request with all data
@@ -136,12 +136,12 @@ monitor.start(queue: .main)
 ### Background Task Energy
 
 ```swift
-// Bad — long-running background work without proper task
+// Bad: long-running background work without proper task
 func applicationDidEnterBackground(_ application: UIApplication) {
     syncAllData() // May be killed, wastes energy if interrupted
 }
 
-// Good — use BGTaskScheduler for deferrable work
+// Good: use BGTaskScheduler for deferrable work
 import BackgroundTasks
 
 func scheduleSync() {
@@ -167,7 +167,7 @@ func handleSync(task: BGProcessingTask) {
 ### Animation Energy
 
 ```swift
-// Bad — continuous animation running when not visible
+// Bad: continuous animation running when not visible
 struct PulsingView: View {
     @State private var isPulsing = false
 
@@ -179,7 +179,7 @@ struct PulsingView: View {
     }
 }
 
-// Good — stop animation when not visible
+// Good: stop animation when not visible
 struct PulsingView: View {
     @State private var isPulsing = false
     @Environment(\.scenePhase) var scenePhase
@@ -218,15 +218,15 @@ func handleThermalState(_ state: ProcessInfo.ThermalState) {
         // Full performance
         enableAllFeatures()
     case .fair:
-        // Slightly warm — reduce optional work
+        // Slightly warm: reduce optional work
         disablePreloading()
     case .serious:
-        // Hot — reduce significantly
+        // Hot: reduce significantly
         reduceAnimations()
         lowerImageQuality()
         pauseBackgroundSync()
     case .critical:
-        // Thermal throttling imminent — minimize everything
+        // Thermal throttling imminent: minimize everything
         stopNonEssentialWork()
         showThermalWarningIfAppropriate()
     @unknown default:

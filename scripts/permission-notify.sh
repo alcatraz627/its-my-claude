@@ -9,7 +9,7 @@
 set -uo pipefail
 
 if ! command -v jq &>/dev/null; then
-  ( printf '\033]9;%s\007' "Claude Code — Permission Required: Tool approval needed" > /dev/tty ) 2>/dev/null || true
+  ( printf '\033]9;%s\007' "Claude Code: Permission Required: Tool approval needed" > /dev/tty ) 2>/dev/null || true
   exit 0
 fi
 
@@ -51,7 +51,7 @@ esac
 # OSC 9: Ghostty-attributed notification: clicking navigates to this exact tab
 # TTY_PATH can be overridden in tests (defaults to /dev/tty)
 msg=$(printf '%s' "$tool: $summary" | tr -d '\000-\031\177')
-( printf '\033]9;%s\007' "Permission Required — $msg" > "${TTY_PATH:-/dev/tty}" ) 2>/dev/null || true
+( printf '\033]9;%s\007' "Permission Required: $msg" > "${TTY_PATH:-/dev/tty}" ) 2>/dev/null || true
 
 # Play sound separately (OSC 9 has no audio support)
 afplay /System/Library/Sounds/Ping.aiff &>/dev/null &

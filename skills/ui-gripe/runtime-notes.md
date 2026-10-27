@@ -318,7 +318,7 @@ light; target resolved from newest screenshot pair + the active kanban-prosecuto
 3. Badge-slot semantic overload has a mechanical check: list every badge value from
    ELEMENTS and type them (id vs word). `#3…#9` + `USER` in the same visual slot = one
    slot, two meanings. Also check the same word rendered multiple ways ("USER" appeared
-   as badge, `USER —` prefix, and `USER:` prefix on one screen).
+   as badge, a dash-style prefix, and `USER:` prefix on one screen).
 4. Spec/annotation copy shipped in the UI ("one bar = the whole board, segments jump")
    reads exactly like a designer note. Any status-bar clause that describes the UI's
    own behavior instead of the data is suspect: OCR-verify then flag.

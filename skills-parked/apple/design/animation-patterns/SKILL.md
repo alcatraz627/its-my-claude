@@ -30,9 +30,9 @@ What are you animating?
 │
 ├─ A state change (opacity, position, color)
 │  └─ → core-animations.md
-│     ├─ withAnimation { } — explicit animation
-│     ├─ .animation(_:value:) — implicit animation
-│     └─ Spring configuration — .spring, .bouncy, .snappy, .smooth
+│     ├─ withAnimation { }: explicit animation
+│     ├─ .animation(_:value:): implicit animation
+│     └─ Spring configuration: .spring, .bouncy, .snappy, .smooth
 │
 ├─ A multi-step / sequenced animation
 │  └─ → phase-keyframe-animators.md (PhaseAnimator)
@@ -44,9 +44,9 @@ What are you animating?
 │
 ├─ A view appearing / disappearing
 │  └─ → transitions.md
-│     ├─ .transition() — insertion/removal
-│     ├─ .contentTransition() — text/symbol changes
-│     └─ .asymmetric() — different in/out
+│     ├─ .transition(): insertion/removal
+│     ├─ .contentTransition(): text/symbol changes
+│     └─ .asymmetric(): different in/out
 │
 ├─ A hero / zoom navigation transition
 │  └─ → transitions.md (matchedTransitionSource section)

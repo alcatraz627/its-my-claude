@@ -56,7 +56,7 @@ validate_screenshot() {
     echo "SCREENSHOT FAILED: file is only ${size} bytes (expected > ${MIN_SCREENSHOT_BYTES})" >&2
     echo "Path: $path" >&2
     echo "Possible causes: window not visible, occluded, wrong app name, blank display" >&2
-    echo "Do NOT continue the task — report this failure to the user." >&2
+    echo "Do NOT continue the task: report this failure to the user." >&2
     exit 1
   fi
 }
@@ -172,7 +172,7 @@ OSASCRIPT
     result=$(osascript "$_tmp_as" 2>/dev/null || echo "")
     rm -f "$_tmp_as"
     if [[ -z "$result" ]]; then
-      echo "WINDOWS FAILED: no output from System Events — is Accessibility permission granted?" >&2
+      echo "WINDOWS FAILED: no output from System Events: is Accessibility permission granted?" >&2
       echo "Run: bash ~/.claude/scripts/desktop.sh check   to diagnose" >&2
       exit 1
     fi
@@ -277,7 +277,7 @@ OSASCRIPT
     if command -v cliclick &>/dev/null; then
       echo "[OK] cliclick: $(which cliclick) $(cliclick --version 2>/dev/null || echo '')"
     else
-      echo "[FAIL] cliclick not found — install with: brew install cliclick"
+      echo "[FAIL] cliclick not found: install with: brew install cliclick"
     fi
 
     # annotate's Pillow dep: isolated via uv (no global install)
@@ -306,7 +306,7 @@ OSASCRIPT
       if [[ "$size" -gt 100 ]]; then
         echo "[OK] Screen Recording permission: granted"
       else
-        echo "[WARN] Screen Recording: file was tiny (${size}B) — may be restricted"
+        echo "[WARN] Screen Recording: file was tiny (${size}B): may be restricted"
       fi
     else
       echo "[FAIL] Screen Recording permission: DENIED or screencapture failed"
@@ -317,7 +317,7 @@ OSASCRIPT
     if osascript -e 'tell application "System Events" to get name of first process' &>/dev/null; then
       echo "[OK] System Events (osascript): accessible"
     else
-      echo "[FAIL] System Events: not accessible — Automation permission may be missing"
+      echo "[FAIL] System Events: not accessible: Automation permission may be missing"
     fi
 
     # Images dir
@@ -331,7 +331,7 @@ OSASCRIPT
 
   help|--help|-h|"")
     cat << 'HELP'
-desktop.sh — macOS GUI automation (Phase 1 / v1)
+desktop.sh: macOS GUI automation (Phase 1 / v1)
 
 Commands:
   screenshot display N        Capture display N (1=main, 2=secondary)
@@ -355,7 +355,7 @@ Output:
 
 Error policy:
   All failures exit non-zero with a clear message.
-  Screenshots < 5KB are treated as failures — never silently accepted.
+  Screenshots < 5KB are treated as failures: never silently accepted.
   Claude must STOP on any failure. Never assume or hallucinate screen state.
 
 Phase 2 upgrade: ~/.claude/skills/shared/desktop-automation.md#phase-2-upgrade-guide

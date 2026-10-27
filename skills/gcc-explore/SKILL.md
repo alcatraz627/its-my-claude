@@ -86,8 +86,8 @@ Then offer the dig-deeper paths and stop:
 
 ```
   I notice:
-    · movement — [observation]
-    · cycle    — [observation]
+    · movement: [observation]
+    · cycle: [observation]
 
   dig deeper:  1 shape · a folder      2 movement · a vital's history
                3 cycle · one loop end to end      or ask anything

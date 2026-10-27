@@ -56,7 +56,7 @@ PATHISH = re.compile(r"^~?[\w.-]+(/[\w.@-]+)+/?$|^[\w.-]+\.(py|md|ts|tsx|js|cjs|
 # Proof that belongs in Sources, not in a row: a commit, a file:line, a run id. A
 # folder or file named as the subject of a task ("move X to ops/") is fine.
 ROW_PROOF = re.compile(r"\b(?=[0-9a-f]*\d)(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\b|[\w./-]+\.[a-z]{1,5}:\d+|\b\d{9,}\b")
-NO_DEFAULT = {"", "-", "—", "n/a", "none", "?", "tbd"}
+NO_DEFAULT = {"", "-", "\u2014", "n/a", "none", "?", "tbd"}
 GS_DONE = {"done", "dropped"}
 
 

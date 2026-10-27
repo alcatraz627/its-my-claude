@@ -499,6 +499,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
+            "timeout": 45
+          }
+        ]
+      },
+      {
         "matcher": "Bash|mcp__github__create_repository",
         "hooks": [
           {
@@ -1075,6 +1085,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
+            "timeout": 45
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hooks/parked-skills-nudge.sh"
           },
           {
@@ -1605,6 +1624,8 @@
   "worktree": {
     "baseRef": "fresh"
   },
+  "enableWorkflows": false,
+  "workflowKeywordTriggerEnabled": false,
   "statusLine": {
     "type": "command",
     "command": "~/.claude/scripts/statusline/statusline.sh",
@@ -1695,6 +1716,7 @@
   "verbose": false,
   "preferredNotifChannel": "ghostty",
   "autoCompactEnabled": true,
+  "idleCompaction": false,
   "switchModelsOnFlag": false,
   "terminalProgressBarEnabled": true,
   "teammateMode": "auto",
@@ -1707,17 +1729,17 @@
   "autoMode": {
     "soft_deny": [
       "$defaults",
-      "Bash(gcloud *iam-policy-binding*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier",
-      "Bash(gcloud *storage cp*:*) and Bash(gcloud *storage mv*:*) — scoped to Versable GCP projects, matches this repo's declared ASK tier",
-      "Bash(gcloud *run deploy*:*) — scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier"
+      "Bash(gcloud *iam-policy-binding*:*): scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier",
+      "Bash(gcloud *storage cp*:*) and Bash(gcloud *storage mv*:*): scoped to Versable GCP projects, matches this repo's declared ASK tier",
+      "Bash(gcloud *run deploy*:*): scoped to Versable GCP projects (walmart-496912, speedway-versable, versable-pim), matches this repo's declared ASK tier"
     ],
     "environment": [
       "### Org-wide",
       "**Organization**: Versable (versable.ai Google Workspace)",
-      "**Cloud provider(s)**: Google Cloud Platform — projects `walmart-496912` (gcloud CLI default), `speedway-versable`, `versable-pim`",
+      "**Cloud provider(s)**: Google Cloud Platform: projects `walmart-496912` (gcloud CLI default), `speedway-versable`, `versable-pim`",
       "**Repository visibility**: repos under github.com/versable-git are private (Versable work); repos under github.com/alcatraz627 are the owner's own and public by default, including ~/.claude (its-my-claude). ~/Code/Versable/gcp has no remote and is local-only",
-      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
-      "**Secrets management**: GCP Secret Manager (`gcloud secrets`) — reading secret values (`secrets versions access`) and creating service-account keys are hard-blocked per this repo's CLAUDE.md safety model",
+      "**Internal sharing / snippet hosting**: None configured: treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: GCP Secret Manager (`gcloud secrets`): reading secret values (`secrets versions access`) and creating service-account keys are hard-blocked per this repo's CLAUDE.md safety model",
       "**Default / protected branches**: `main` in every repo; pushes to main are gated by the owner's own Switchboard policy hooks (they ask or allow per repo), so a push the hooks let through is owner-sanctioned",
       "**CI/CD deploy targets**: Cloud Run service `speedway` and `speedway-dev` in `us-central1` under project `speedway-versable`, driven by `/Users/alcatraz627/Code/Versable/speedway/deploy/deploy.sh`",
       "**Network posture**: None configured",
@@ -1726,10 +1748,10 @@
       "**Trusted cloud buckets**: None configured",
       "**Key internal services**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim`; Cloud Run services `speedway`, `speedway-dev`",
       "**Internal package registry**: None configured",
-      "**Sensitive data locations & audiences**: on-disk GCP credentials, ADC files, and any output of `gcloud secrets versions access` are sensitive — never print secret values or key material into the transcript; audience is the operator at a real terminal only",
+      "**Sensitive data locations & audiences**: on-disk GCP credentials, ADC files, and any output of `gcloud secrets versions access` are sensitive: never print secret values or key material into the transcript; audience is the operator at a real terminal only",
       "**Data retention / declassification**: None configured",
       "**Sensitive remote targets**: any GCP resource, namespace, or Cloud Run service whose name carries `prod` or `production` as a whole word or name segment; also treat `speedway` and `speedway-dev` production traffic paths as sensitive per this repo's deploy tiering (mutations require explicit ask)",
-      "**Protected deployment namespaces / environments**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim` — mutating operations (`run deploy`, `instances create/stop`, `services enable`, `secrets create`, `*-iam-policy-binding`, `config set`, `bq query`, `storage cp/mv`, `tf apply`) require an explicit ask each time per this repo's declared safety model; delete/destroy, `set-iam-policy`, `secrets versions access`, `sa keys create`, and `auth revoke` are hard-blocked with no override",
+      "**Protected deployment namespaces / environments**: GCP projects `walmart-496912`, `speedway-versable`, `versable-pim`: mutating operations (`run deploy`, `instances create/stop`, `services enable`, `secrets create`, `*-iam-policy-binding`, `config set`, `bq query`, `storage cp/mv`, `tf apply`) require an explicit ask each time per this repo's declared safety model; delete/destroy, `set-iam-policy`, `secrets versions access`, `sa keys create`, and `auth revoke` are hard-blocked with no override",
       "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment; `set-iam-policy` specifically flagged as dangerous (wholesale policy replacement, can silently drop bindings)",
       "### User-specific",
       "**Primary use of Claude Code**: software engineering across Versable product repos (~/Code/Versable/*), the owner's own tools (~/Code/Claude/*) and their Claude Code configuration repo ~/.claude; GCP operations and inspection run from ~/Code/Versable/gcp",
@@ -1738,7 +1760,5 @@
       "Routine under `/Users/alcatraz627/Code/Versable/` prefix: gcloud read-only operations (list, describe, get-iam-policy, logging read, versions list, ls, du, builds log) run freely per this repo's declared allow tier"
     ]
   },
-  "voiceEnabled": false,
-  "idleCompaction": false,
-  "enableWorkflows": false
+  "voiceEnabled": false
 }

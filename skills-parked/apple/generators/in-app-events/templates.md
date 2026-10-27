@@ -43,7 +43,7 @@ Reference Name: holiday-collection-2025
 Badge: Special Event
 Event Name: Holiday Collection
 Short Description: Limited-time festive themes and content
-Long Description: Celebrate the holidays with exclusive seasonal themes, festive stickers, and special rewards. Available for a limited time — don't miss out!
+Long Description: Celebrate the holidays with exclusive seasonal themes, festive stickers, and special rewards. Available for a limited time: don't miss out!
 Start Date: 2025-12-15 00:00 PST
 End Date: 2026-01-05 23:59 PST
 Deep Link: yourapp://seasonal/holiday-2025
@@ -90,7 +90,7 @@ Reference Name: ai-assistant-premiere
 Badge: Premiere
 Event Name: Introducing AI Assistant
 Short Description: Your new intelligent helper is here
-Long Description: Meet your personal AI assistant — powered by on-device intelligence. Ask questions, get suggestions, and work smarter. Available now for all Pro users.
+Long Description: Meet your personal AI assistant: powered by on-device intelligence. Ask questions, get suggestions, and work smarter. Available now for all Pro users.
 Start Date: [feature release date]
 End Date: [release date + 14 days]
 Deep Link: yourapp://features/ai-assistant

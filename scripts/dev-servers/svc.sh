@@ -176,7 +176,7 @@ for r in rows:
     fi
     if "$PM2" stop "$name" > /dev/null 2>&1; then
       emit "{\"ts\":\"$(now_iso)\",\"event\":\"reap\",\"name\":\"$name\",\"idle_h\":$idle,\"ports\":\"$ports\",\"revive\":\"svc up $name\",\"session\":\"$SESSION\"}"
-      echo "reaped $name (idle ${idle}h) — revive: svc up $name"
+      echo "reaped $name (idle ${idle}h): revive: svc up $name"
     else
       echo "svc: failed to stop $name" >&2
     fi
@@ -219,7 +219,7 @@ print("known:", ", ".join(sorted(a.get("name", "?") for a in apps)), file=sys.st
     if lsof -nP -iTCP:"$p" -sTCP:LISTEN > /dev/null 2>&1; then
       local holder
       holder=$(lsof -nP -iTCP:"$p" -sTCP:LISTEN 2>/dev/null | awk 'NR==2 {print $1" (pid "$2")"}')
-      echo "svc: port $p is already held by $holder — not starting $name" >&2
+      echo "svc: port $p is already held by $holder: not starting $name" >&2
       echo "     free that port first, or let the existing process serve it" >&2
       emit "{\"ts\":\"$(now_iso)\",\"event\":\"up_blocked\",\"name\":\"$name\",\"port\":$p,\"holder\":\"$holder\",\"session\":\"$SESSION\"}"
       return 1
@@ -250,7 +250,7 @@ print("known:", ", ".join(sorted(a.get("name", "?") for a in apps)), file=sys.st
     local after; after=$(restart_count "$name")
     if [ "$((after - before))" -ge 3 ]; then
       "$PM2" stop "$name" > /dev/null 2>&1
-      echo "svc: $name is crash-looping ($((after - before)) restarts in ${waited}s) — stopped it" >&2
+      echo "svc: $name is crash-looping ($((after - before)) restarts in ${waited}s): stopped it" >&2
       echo "     check: pm2 logs $name --err --lines 20" >&2
       emit "{\"ts\":\"$(now_iso)\",\"event\":\"crashloop\",\"name\":\"$name\",\"restarts\":$((after - before)),\"session\":\"$SESSION\"}"
       return 1
@@ -270,13 +270,13 @@ cmd_down() {
   "$PM2" stop "$name" > /dev/null 2>&1 ||
     { echo "svc: pm2 stop $name failed" >&2; return 1; }
   emit "{\"ts\":\"$(now_iso)\",\"event\":\"down\",\"name\":\"$name\",\"revive\":\"svc up $name\",\"session\":\"$SESSION\"}"
-  echo "stopped $name — revive: svc up $name"
+  echo "stopped $name: revive: svc up $name"
   lock; sample watch json > /dev/null; unlock
 }
 
 usage() {
   cat <<'EOF'
-svc — idle lifecycle for pm2-managed services
+svc: idle lifecycle for pm2-managed services
 
   svc status              what is running, its ports, how long unused
   svc up <name>           start if stopped, wait for its port (idempotent)
@@ -286,7 +286,7 @@ svc — idle lifecycle for pm2-managed services
   svc ports <name>        ports svc believes the app holds
 
 Scope: pm2-managed processes only. A server started by hand in a terminal is
-untouched — svc cannot see it and will never stop it.
+untouched: svc cannot see it and will never stop it.
 
 Tuning (env):
   SVC_IDLE_HOURS   idle window before reap        (default 12)

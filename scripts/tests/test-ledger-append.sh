@@ -46,7 +46,7 @@ fi
 if [ "$valid" = "$WRITERS" ]; then
   printf '  \033[32mPASS\033[0m  every line is valid JSON (no interleaving)\n'
 else
-  printf '  \033[31mFAIL\033[0m  only %s/%s lines parse as JSON — appends interleaved\n' "$valid" "$WRITERS"; fail=1
+  printf '  \033[31mFAIL\033[0m  only %s/%s lines parse as JSON: appends interleaved\n' "$valid" "$WRITERS"; fail=1
 fi
 
 if [ "$ids" = "$WRITERS" ]; then

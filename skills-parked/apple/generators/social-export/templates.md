@@ -729,12 +729,12 @@ struct ContentFormatter: Sendable {
         var cropRect: CGRect
 
         if imageRatio > targetRatio {
-            // Image is wider than target — crop sides
+            // Image is wider than target: crop sides
             let newWidth = imageSize.height * targetRatio
             let xOffset = (imageSize.width - newWidth) / 2
             cropRect = CGRect(x: xOffset, y: 0, width: newWidth, height: imageSize.height)
         } else {
-            // Image is taller than target — crop top and bottom
+            // Image is taller than target: crop top and bottom
             let newHeight = imageSize.width / targetRatio
             let yOffset = (imageSize.height - newHeight) / 2
             cropRect = CGRect(x: 0, y: yOffset, width: imageSize.width, height: newHeight)

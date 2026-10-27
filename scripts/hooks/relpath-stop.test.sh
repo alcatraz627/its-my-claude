@@ -59,7 +59,7 @@ That prints it.'
 expect SILENT "command position" \
   'Run cat docs/architecture/overview.md to see the flow.'
 expect SILENT "absolute form present in the same message" \
-  'Wrote /Users/alcatraz627/.claude/docs/architecture/overview.md — after that, docs/architecture/overview.md holds the flow.'
+  'Wrote /Users/alcatraz627/.claude/docs/architecture/overview.md and after that, docs/architecture/overview.md holds the flow.'
 
 echo "== narrowness is the FP tuning: ordinary repo talk must not fire =="
 expect SILENT "relative source path outside the deliverable roots" \

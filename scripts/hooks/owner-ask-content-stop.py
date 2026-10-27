@@ -39,7 +39,7 @@ CONTENT = re.compile(r"\?|\b[a-d]\)\s|\(\s*default|\bdefault(?:s)?\b|\bwhether\b
 QUESTION_OBJECT = re.compile(r"^\s*(?:on\s+)?(?:whether|when|how|which|what|if)\b", re.IGNORECASE)
 # The id or file has to be the verb's object: soon after it, before the clause ends.
 NEAR = 60
-CLAUSE_END = re.compile(r"[,;:]\s|\s—\s|\.\s")
+CLAUSE_END = re.compile(r"[,;:]\s|\s\u2014\s|\.\s")
 
 
 def last_reply(tp):
@@ -75,7 +75,7 @@ def bare_asks(text):
 
 def bare_object(tail):
     """True when what follows an ask verb is only ids or a file, with no question in words."""
-    tail = re.sub(r"^\s*[:—-]\s*", " ", tail)  # "Decide: H2, H7" lists its object after a colon
+    tail = re.sub(r"^\s*[:\u2014-]\s*", " ", tail)  # "Decide: H2, H7" lists its object after a colon
     if QUESTION_OBJECT.search(tail):
         return False
     end = CLAUSE_END.search(tail)

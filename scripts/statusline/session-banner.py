@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-session-banner.py — SessionStart hook: rich startup banner with animated ASCII art.
+session-banner.py: SessionStart hook: rich startup banner with animated ASCII art.
 
 Reads Claude Code hook JSON from stdin, gathers git/project context,
 and renders a styled banner to stderr (visible in terminal).
@@ -9,14 +9,14 @@ Usage (as hook command):
     python3 ~/.claude/scripts/statusline/session-banner.py
 
 Hook input fields used:
-    cwd         — working directory
-    type        — "startup" | "resume" | "clear" | "compact"
-    session_id  — Claude session ID (may be absent)
-    model       — model name (may be absent; falls back to CLAUDE_MODEL env)
+    cwd: working directory
+    type: "startup" | "resume" | "clear" | "compact"
+    session_id: Claude session ID (may be absent)
+    model: model name (may be absent; falls back to CLAUDE_MODEL env)
 
 Environment:
-    NO_ANIMATE=1    — skip animation delays (useful in CI or fast sessions)
-    CLAUDE_MODEL    — model name fallback if not in hook input
+    NO_ANIMATE=1: skip animation delays (useful in CI or fast sessions)
+    CLAUDE_MODEL: model name fallback if not in hook input
 """
 
 from __future__ import annotations
@@ -112,7 +112,7 @@ def _count_daily_sessions() -> int:
 def _render_art(artwork: dict, total_width: int = 72) -> str:
     """
     Return ASCII art as a string, centered in total_width.
-    No delays — the full block is collected into a buffer and printed
+    No delays: the full block is collected into a buffer and printed
     atomically with the banner to avoid race conditions with Claude Code's
     own terminal renderer (spinner, UI) which writes concurrently when the
     hook uses /dev/tty.

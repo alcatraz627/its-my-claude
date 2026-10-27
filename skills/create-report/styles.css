@@ -519,7 +519,7 @@ mark {
   width: min(94vw, 940px);
   max-height: 88vh;
   overflow: hidden;
-  display: none;           /* hidden by default — overrides UA; [open] enables */
+  display: none;           /* hidden by default: overrides UA; [open] enables */
   flex-direction: column;
   box-shadow: 0 24px 64px rgba(0, 0, 0, .55);
   color: var(--text);
@@ -659,7 +659,7 @@ mark {
   .search-wrap { flex-shrink: 1; }
   #search { width: 88px; transition: width .2s; }
   #search:focus { width: 120px; }
-  /* Toolbar: icon-only — hide text labels */
+  /* Toolbar: icon-only: hide text labels */
   .btn-label { display: none; }
   .tool-btn { padding: 5px 8px; }
 }

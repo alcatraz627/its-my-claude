@@ -37,7 +37,7 @@ When an issue's underlying change appears in an in-progress task note or carries
 ## Theme: <kebab-name>
 Type: feature | improvement | fix | perf | infra | breaking
 Coupling: FE-only | BE-only | FE+BE coupled | infra-only
-Summary: <1-2 sentences — what shipped, plain English>
+Summary: <1-2 sentences: what shipped, plain English>
 Files (representative, ≤8): <paths>
 Commits (SHAs from commits.tsv): <short-sha list, or "(post-cutoff)" if not in tsv>
 Issues raised: <count or "none">

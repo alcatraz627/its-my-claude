@@ -65,7 +65,7 @@ node ~/.claude/assets/static/statusline-server.mjs
 3. Display the current state as a comparison table, grouped by category. Use this exact format:
 
 ```
-Statusline Configuration — All Profiles
+Statusline Configuration: All Profiles
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
  Segment        │ default │ minimal │  full

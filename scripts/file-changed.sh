@@ -44,25 +44,25 @@ echo "$now" > "$cd_file"
 suggestion=""
 case "$file_name" in
   package.json)
-    suggestion="dependencies may have changed — consider running npm install"
+    suggestion="dependencies may have changed: consider running npm install"
     ;;
   package-lock.json|yarn.lock|pnpm-lock.yaml|bun.lockb)
-    suggestion="lockfile changed — dependencies were updated externally"
+    suggestion="lockfile changed: dependencies were updated externally"
     ;;
   .envrc)
-    suggestion="direnv config changed — may need 'direnv allow' to reload"
+    suggestion="direnv config changed: may need 'direnv allow' to reload"
     ;;
   .env|.env.local|.env.development|.env.production)
-    suggestion="environment variables changed — restart dev server if running"
+    suggestion="environment variables changed: restart dev server if running"
     ;;
   tsconfig.json|tsconfig.*.json)
-    suggestion="TypeScript config changed — IDE may need restart for full effect"
+    suggestion="TypeScript config changed: IDE may need restart for full effect"
     ;;
   .gitignore)
-    suggestion="gitignore updated — check if new patterns affect tracked files"
+    suggestion="gitignore updated: check if new patterns affect tracked files"
     ;;
   Dockerfile|docker-compose.yml|docker-compose.yaml)
-    suggestion="container config changed — rebuild may be needed"
+    suggestion="container config changed: rebuild may be needed"
     ;;
   *)
     # Generic for any other watched file

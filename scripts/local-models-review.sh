@@ -43,20 +43,20 @@ ROUNDS=$(cat "$LM"/outputs/see/loops/*/ledger.json 2>/dev/null \
     '[.[].rounds[]? | select((.ts | fromdateiso8601? // 0) >= $since)] | length' 2>/dev/null || echo 0)
 
 verdict() {  # <count> <threshold> <name> <drop-advice>
-  if [ "${1:-0}" -ge "$2" ]; then echo "**USED** ($1)"; else echo "**DEAD** ($1) — $4"; fi
+  if [ "${1:-0}" -ge "$2" ]; then echo "**USED** ($1)"; else echo "**DEAD** ($1): $4"; fi
 }
 
 {
-  printf '# Local-models review — %s (last %s days)\n\n' "$(date +%Y-%m-%d)" "$SINCE_DAYS"
+  printf '# Local-models review: %s (last %s days)\n\n' "$(date +%Y-%m-%d)" "$SINCE_DAYS"
   printf 'The July 9-13 wave shipped a lot. The only question that matters now: is any of it\n'
   printf 'being reached for? A capability nobody uses is a failure however green its tests are.\n\n'
 
-  printf '## The 2026-07-13 additions — used or dead?\n\n'
+  printf '## The 2026-07-13 additions: used or dead?\n\n'
   printf '| Capability | Signal | Verdict |\n|---|---|---|\n'
-  printf '| `see diff` / vis-compare | %s compare runs | %s |\n' "$CMP" "$(verdict "$CMP" 3 x 'nobody compared anything — the L1/L2 stack is unused; consider retiring the skill from the menu')"
-  printf '| L3 convergence loop | %s loop dir(s), %s round(s) | %s |\n' "$LOOPS" "$ROUNDS" "$(verdict "$ROUNDS" 3 x 'the loop was never driven — its ledger + policy machinery is dead weight')"
+  printf '| `see diff` / vis-compare | %s compare runs | %s |\n' "$CMP" "$(verdict "$CMP" 3 x 'nobody compared anything: the L1/L2 stack is unused; consider retiring the skill from the menu')"
+  printf '| L3 convergence loop | %s loop dir(s), %s round(s) | %s |\n' "$LOOPS" "$ROUNDS" "$(verdict "$ROUNDS" 3 x 'the loop was never driven: its ledger + policy machinery is dead weight')"
   printf '| **schnell (31GB disk)** | %s schnell generation(s) | %s |\n' "$SCHNELL" "$(verdict "$SCHNELL" 3 x 'THE 31GB WAS WASTED. Drop it: trash ~/.cache/huggingface/hub/models--black-forest-labs--FLUX.1-schnell and restore the config.sh ruling (qwen-only). The preflight will refuse it cleanly.')"
-  printf '| asset-verify | run it: `lib/asset-verify.py <src> <rungs...>` | check by hand — no history stream |\n'
+  printf '| asset-verify | run it: `lib/asset-verify.py <src> <rungs...>` | check by hand: no history stream |\n'
   printf '| findings-gate (/bloop 4.0) | check bloop runtime-notes for pre-gate mentions | check by hand |\n'
   printf '| E8 web lane | check for e8-capture-*.json outside probe/fixtures | check by hand |\n\n'
 
@@ -72,7 +72,7 @@ verdict() {  # <count> <threshold> <name> <drop-advice>
   printf '   say so honestly in docs/STATE.md rather than leaving it as aspiration.\n'
   printf '3. **Routing**: did the fleet/local-coder seat get real work? (STATE §DONE 2026-07-13\n'
   printf '   cleared it for scoped-worker-under-a-judge.) If it never ran again, the experiment\n'
-  printf '   was interesting and unadopted — worth knowing.\n\n'
+  printf '   was interesting and unadopted: worth knowing.\n\n'
   printf 'Full context: `~/Code/local-models/docs/STATE.md` · `docs/10-visual-compare-design.md`\n'
   printf 'Verify the suite still passes: `bash ~/Code/local-models/scripts/verify.sh`\n'
 } > "$OUT"

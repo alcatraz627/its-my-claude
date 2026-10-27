@@ -92,7 +92,7 @@ Each entry is `session-id@YYYY-MM-DD`: the date is when that session last touche
 | **Existing doc, new session** | Append: `<!-- sessions: fix-auth-3b@2026-03-31, add-chart-f1@2026-03-29 -->` |
 | **Cleanup stale entries** | Remove entries where the timestamp is >3 days old. Do this when touching the file for any other reason: don't make a special pass. |
 | **WAL** | Session encoded in `## Session: YYYY-MM-DD HH:MM [session-id]` header: no separate tag |
-| **Runtime notes** | Session ID in `## session: [desc] [session-id] — YYYY-MM-DD` heading: no separate tag |
+| **Runtime notes** | Session ID in `## session: [desc] [session-id]: YYYY-MM-DD` heading: no separate tag |
 | **Source code** | Never add session tags to `.ts`, `.js`, `.py`, etc. |
 
 ### Lifecycle example

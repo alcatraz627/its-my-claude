@@ -141,10 +141,10 @@ def line(label, arrow_s, body, note):
     if note: print(f"      {note}")
 
 print("─"*66)
-print("  gcc vitals — direction, not defects (the map is the X-ray; this is the EKG)")
+print("  gcc vitals: direction, not defects (the map is the X-ray; this is the EKG)")
 print("─"*66)
 
-print("\n▸ LEARNING — is the config getting smarter?")
+print("\n▸ LEARNING: is the config getting smarter?")
 if len(last3) >= 2:
     # The current calendar month is INCOMPLETE: comparing its partial count to a
     # full prior month points the arrow the wrong way (final-review R7). Mark it
@@ -158,10 +158,10 @@ if len(last3) >= 2:
 if clusters_recent or clusters_prior:
     rising = [c for c in clusters_recent if clusters_recent[c] > clusters_prior.get(c,0)]
     falling = [c for c in clusters_prior if clusters_prior[c] > clusters_recent.get(c,0)]
-    line("cluster drift", "→", f"rising: {','.join(rising) or '—'}   falling: {','.join(falling) or '—'}",
+    line("cluster drift", "→", f"rising: {','.join(rising) or '-'}   falling: {','.join(falling) or '-'}",
          "which failure CLASSES dominate now vs last month")
 
-print("\n▸ METABOLIC — is ingested material flowing or piling up?")
+print("\n▸ METABOLIC: is ingested material flowing or piling up?")
 if total_props:
     frac = metabolized/total_props
     a = "↑" if frac >= 0.6 else ("→" if frac >= 0.4 else "↓")
@@ -171,13 +171,13 @@ if rule_count:
     bf = blind/rule_count
     a = "↓" if bf < 0.2 else ("→" if bf < 0.35 else "↑")
     line("retirement-blind rules", a, f"{blind}/{rule_count} ({bf*100:.0f}%) have no signal",
-         "rules with no hook + no atone lineage — cannot be evaluated for value. rising = adding unmeasurable prose")
+         "rules with no hook + no atone lineage: cannot be evaluated for value. rising = adding unmeasurable prose")
 
-print("\n▸ GROWTH — is the surface area sustainable?")
+print("\n▸ GROWTH: is the surface area sustainable?")
 line("rules count", "→", f"{rule_count}  (map: v2=35 → v3=41 → now {rule_count})",
      "the recent dip = absorption happened. per-agent token cost rides this")
 
-print("\n▸ CHURN — where is edit-attention actually going?")
+print("\n▸ CHURN: where is edit-attention actually going?")
 for d, n in top_churn:
     print(f"    {n:>4}  {d}")
 print("      the hottest surface. auto-generated learned-state here = code-history pollution (WS4)")

@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/shared.css">
 <style>
-  /* kanban — v10 hub. Same skin as the board: system UI type, crisp accents,
+  /* kanban: v10 hub. Same skin as the board: system UI type, crisp accents,
      6px geometry, pills. Boards that want something from you sort first. */
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
   body{margin:0;background:var(--canvas);color:var(--text);font:13px/1.5 var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
@@ -263,7 +263,7 @@ function boardEl(b, quiet) {
       </span></div>
       <div class="root"></div>
       ${b.stack?.length || b.branch ? `<div class="facts">${[...(b.stack ?? []), b.branch].filter(Boolean).join(" · ")}</div>` : ""}
-      <div class="counts"><span><b>${b.counts.active}</b> active</span>${sep}<span><b>${open}</b> in motion${b.counts.blocked ? `, ${b.counts.blocked} of them blocked` : ""}</span>${sep}<span>${b.counts.done} done${b.counts.stale ? ` · ${b.counts.stale} stale` : ""}</span>${b.verify?.graded ? `${sep}<span class="ver">${b.verify.graded} verified</span>` : ""}${sep}<span${stale ? ' class="stale"' : ""}>synced ${ts ? ago(ts) + " ago" : "never"}${stale ? " — stale mirror" : ""}</span></div>`;
+      <div class="counts"><span><b>${b.counts.active}</b> active</span>${sep}<span><b>${open}</b> in motion${b.counts.blocked ? `, ${b.counts.blocked} of them blocked` : ""}</span>${sep}<span>${b.counts.done} done${b.counts.stale ? ` · ${b.counts.stale} stale` : ""}</span>${b.verify?.graded ? `${sep}<span class="ver">${b.verify.graded} verified</span>` : ""}${sep}<span${stale ? ' class="stale"' : ""}>synced ${ts ? ago(ts) + " ago" : "never"}${stale ? ": stale mirror" : ""}</span></div>`;
   }
   a.querySelector(".name").textContent = b.name;
   const ico = a.querySelector(".bico");
@@ -301,7 +301,7 @@ function boardEl(b, quiet) {
     box.className = "bstar bbox" + (off ? " on" : "");
     box.innerHTML = BOX(off);
     box.dataset.tip = off ? "Archived. Click to bring it back to the list."
-                          : "Archive this board — it folds away without being deleted";
+                          : "Archive this board: it folds away without being deleted";
     box.setAttribute("aria-label", off ? "restore this board to the list" : "archive this board");
     box.setAttribute("aria-pressed", String(off));
     box.onclick = async (e) => {
@@ -855,7 +855,7 @@ async function loadMilestones() {
             `/b/${m.board}?q=${encodeURIComponent("tag:milestone:" + m.name + " is:open")}`,
             "show only the ones not done"));
       } else {
-        // Was: "no cards yet — tag one milestone:review-debt", which is a CLI
+        // Was: "no cards yet: tag one milestone:review-debt", which is a CLI
         // fragment quoted at a person plus a banned dash. Say the state; the
         // tooltip carries the command for whoever wants it.
         const none = document.createElement("span");
@@ -1007,7 +1007,7 @@ async function load() {
       archived = new Set(pins.filter((x) => x.kind === "archived").map((x) => x.ref));
     } catch { starred = new Set(); archived = new Set(); }
     document.getElementById("huberr")?.remove(); // recovered: clear the failure note
-    if (!boards.length) { list.innerHTML = `<div class="empty">No boards yet — run <code>kanban.sh init</code> in a project</div>`; return; }
+    if (!boards.length) { list.innerHTML = `<div class="empty">No boards yet: run <code>kanban.sh init</code> in a project</div>`; return; }
     // a board that asks something of you is a card; the rest are rows
     const wants = (b) => b.counts.blocked > 0 || (b.unread || 0) > 0 || (b.reviewMe || 0) > 0;
     const bySync = (a, b) => Date.parse(b.syncedAt || 0) - Date.parse(a.syncedAt || 0);
@@ -1040,9 +1040,9 @@ async function load() {
     // one failed poll must not delete the fleet view: keep the last known rows
     if (list.querySelector("a")) {
       if (!document.getElementById("huberr")) list.insertAdjacentHTML("afterbegin", `<div id="huberr"></div>`);
-      document.getElementById("huberr").textContent = `Hub poll failed: ${e.message} — showing last known state`;
+      document.getElementById("huberr").textContent = `Hub poll failed: ${e.message}: showing last known state`;
     } else {
-      list.innerHTML = `<div class="empty">Hub failed to load: ${e.message} — is the server up? kanban.sh check</div>`;
+      list.innerHTML = `<div class="empty">Hub failed to load: ${e.message}: is the server up? kanban.sh check</div>`;
     }
   }
 }
@@ -1054,7 +1054,7 @@ setView((() => {
   // The kind list comes from kinds.js, never a literal here. This line used to
   // read ["boards", "decisions", "previews"] and so silently ignored any kind
   // added later: registering milestones gave the navbar a tab that led back to
-  // the boards view, which is the myopia the owner named on 2026-08-24 — "you
+  // the boards view, which is the myopia the owner named on 2026-08-24: "you
   // do know we're gonna be adding session and maybe other things in the future
   // right? don't be myopic". Adding a kind should cost one entry in kinds.js
   // and nothing else, which is the whole point of that file.

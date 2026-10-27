@@ -41,7 +41,7 @@ echo "content-edge regression:"
 if echo "$report" | grep -q "dup-a, dup-b"; then
   ok "true duplicate merged into one cluster (task-sync pair)"
 else
-  bad "true duplicate NOT merged — the feature is a no-op again"
+  bad "true duplicate NOT merged: the feature is a no-op again"
 fi
 
 # 2. and that merge produces real corroboration (this is what clears the gate).
@@ -82,5 +82,5 @@ else
 fi
 
 echo
-[ "$fail" = "0" ] && echo "all passed" || echo "FAILURES — do not ship"
+[ "$fail" = "0" ] && echo "all passed" || echo "FAILURES: do not ship"
 exit "$fail"

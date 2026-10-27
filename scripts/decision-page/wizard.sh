@@ -73,7 +73,7 @@ wrap() {  # wrap <indent> <text>   (always ends with a newline)
   local ind="$1"; shift
   printf '%s\n' "$*" | fold -s -w "$(( W > 20 ? W : 76 ))" | sed "s/^/$ind/"
 }
-fit() {   # fit <width> <text>  — one line, ellipsis when it will not fit
+fit() {   # fit <width> <text>: one line, ellipsis when it will not fit
   local w="$1"; shift
   local t="$*"
   if [ "${#t}" -le "$w" ]; then printf '%s' "$t"

@@ -158,7 +158,7 @@ cmd_list() {
 
 cmd_help() {
   cat <<'EOF'
-skill-log.sh — efficacy residue trail for ~/.claude skills
+skill-log.sh: efficacy residue trail for ~/.claude skills
 
   record <skill> [flags]   append one usage event (prints the event id)
     --task "<1-line>"       what the skill run was asked to do
@@ -181,7 +181,7 @@ Outcomes are a closed set; any other value is refused (exit 2). Rows written bef
 (ok, success, kept, failed, fail) are folded into accepted/discarded by `summary`, never rewritten.
 
 Events: ~/.claude/skills/usage/events.jsonl (append-only JSONL)
-Efficacy = result per unit of the user's effort counting rework — never speed.
+Efficacy = result per unit of the user's effort counting rework: never speed.
 EOF
 }
 

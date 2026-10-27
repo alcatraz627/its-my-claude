@@ -72,7 +72,7 @@ source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
 gum_divider "Config Hygiene"
 
 # Stale sub-files. validate-triggers prints:
-#   ⚠ <file>: STALE — <age>d since update (threshold <N>d)
+#   ⚠ <file>: STALE: <age>d since update (threshold <N>d)
 stale_lines=$(bash ~/.claude/scripts/validate-triggers.sh 2>&1 | rg "STALE")
 if [ -n "$stale_lines" ]; then
   echo "$stale_lines" | while IFS= read -r line; do gum_warn "$line"; done
@@ -87,7 +87,7 @@ for nf in ~/.claude/skills/runtime-notes.md "$PWD/.claude/skills/runtime-notes.m
   [ -f "$nf" ] || continue
   lines=$(wc -l < "$nf" | tr -d ' ')
   if [ "$lines" -gt 800 ]; then
-    gum_warn "runtime-notes over budget: $nf (${lines} lines > 800) — run /archive-notes or scripts/archive-runtime-notes.sh"
+    gum_warn "runtime-notes over budget: $nf (${lines} lines > 800): run /archive-notes or scripts/archive-runtime-notes.sh"
   else
     gum_success "runtime-notes within budget: $nf (${lines} lines)"
   fi
@@ -111,7 +111,7 @@ gum_divider "Events Log"
 LOG=$(bash ~/.claude/scripts/find-events-log.sh)
 if [ ! -f "$LOG" ]; then
   gum_error "Events log not found at: $LOG"
-  gum_info "emit-event.sh may have never fired — check settings.json hook entries"
+  gum_info "emit-event.sh may have never fired: check settings.json hook entries"
 else
   size=$(wc -c < "$LOG" | tr -d ' ')
   lines=$(wc -l < "$LOG" | tr -d ' ')
@@ -124,7 +124,7 @@ else
 
   # Warn if >50MB
   if [ "$size" -gt 52428800 ]; then
-    gum_warn "over 50MB — rotate-events.sh should archive this on next Stop"
+    gum_warn "over 50MB: rotate-events.sh should archive this on next Stop"
   fi
 
   # Today check via jq (avoids ugrep alias issues with grep)
@@ -134,12 +134,12 @@ else
   today_count=$(jq -r --arg cutoff "$cutoff" \
     'select(.ts >= $cutoff) | .ts' "$LOG" 2>/dev/null | wc -l | tr -d ' ')
   if [ "$today_count" -eq 0 ]; then
-    gum_warn "no events in last 24h — check emit-event.sh hooks"
+    gum_warn "no events in last 24h: check emit-event.sh hooks"
   else
     gum_success "$today_count events in last 24h"
   fi
 
-  # 24h histogram by event kind — rendered as a table
+  # 24h histogram by event kind: rendered as a table
   echo
   gum_divider "Event Kinds (last 24h)"
   hist_data=$(jq -r --arg cutoff "$cutoff" \
@@ -328,7 +328,7 @@ else
   fi
   lints=$(jq -r 'select(.tier=="find") | select(.subject | test("-lint: ")) | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
   if [ -n "$lints" ]; then
-    gum_error "Detector-lint findings (a broken detector goes silently quiet — fix):"
+    gum_error "Detector-lint findings (a broken detector goes silently quiet: fix):"
     echo "$lints" | sed 's/^/  /'
   fi
   findings=$(jq -r 'select(.tier=="find") | select(.subject | test("-lint: ") | not) | .instruction' "$LED/alerts.jsonl" 2>/dev/null | tail -3)
@@ -381,7 +381,7 @@ if [ -n "$latest" ]; then
   latest_date=$(basename "$latest" .md)
   days_old=$(( ( $(date +%s) - $(date -j -f "%Y-%m-%d" "$latest_date" +%s 2>/dev/null || echo 0) ) / 86400 ))
   if [ "$days_old" -ge 2 ]; then
-    gum_warn "Daily digest stale: newest is $latest_date (${days_old}d old) — the 03:00 job is silently failing"
+    gum_warn "Daily digest stale: newest is $latest_date (${days_old}d old): the 03:00 job is silently failing"
   else
     gum_success "Daily digest current ($latest_date)"
   fi
@@ -402,10 +402,10 @@ gum_divider "Skills roster"
 SK=~/.claude/skills
 newer=$(find "$SK" -name SKILL.md -newer "$SK/00-index.md" 2>/dev/null | wc -l | tr -d ' ')
 if [ "$newer" = "0" ]; then gum_success "index current (no SKILL.md newer than 00-index.md)"
-else gum_warn "index STALE: $newer SKILL.md newer than 00-index.md — run: bash ~/.claude/scripts/skills-index.sh"; fi
+else gum_warn "index STALE: $newer SKILL.md newer than 00-index.md: run: bash ~/.claude/scripts/skills-index.sh"; fi
 overs=$(python3 ~/.claude/scripts/skill-lint.py "$SK"/*/SKILL.md 2>/dev/null | rg -c "description-long"); overs=${overs:-0}
 if [ "$overs" = "0" ]; then gum_success "description budget: no skill over the 300-char cap"
-else gum_warn "description budget: $overs skill(s) over the 300-char cap (roster drops long ones first) — python3 ~/.claude/scripts/skill-lint.py to list"; fi
+else gum_warn "description budget: $overs skill(s) over the 300-char cap (roster drops long ones first): python3 ~/.claude/scripts/skill-lint.py to list"; fi
 python3 - <<'PY'
 import json, glob, os
 names = {os.path.basename(os.path.dirname(f)) for f in glob.glob(os.path.expanduser('~/.claude/skills/*/SKILL.md'))}
@@ -434,7 +434,7 @@ the worst issue found across all steps: error > warning > healthy.
 
 ```bash
 source ~/.claude/skills/shared/gum-tui.sh 2>/dev/null
-# Summarise what was checked — actual issue counts come from steps above
+# Summarise what was checked: actual issue counts come from steps above
 gum_complete "doctor" \
   "Baseline=health-check.sh" \
   "Events=events.jsonl" \

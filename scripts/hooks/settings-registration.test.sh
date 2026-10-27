@@ -135,7 +135,7 @@ printf '#!/usr/bin/env bash\nexit 0\n' > "$T/bin/nox.sh";  chmod 644 "$T/bin/nox
 echo "== a bare-path target without the x bit is caught =="
 fixture "$T/a" "$T/bin/nox.sh resolve"
 [ "$(audit "$T/a/settings.json")" = "notexec $T/bin/nox.sh" ] \
-  && ok "flags notexec — the exact shape that shipped dead for two days" \
+  && ok "flags notexec: the exact shape that shipped dead for two days" \
   || bad "did not flag a 644 bare-path hook, got: $(audit "$T/a/settings.json")"
 
 echo "== a bare-path statusLine.command without the x bit is caught (I1) =="

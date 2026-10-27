@@ -13,7 +13,7 @@ import os, subprocess, sys, tempfile, unittest
 ROOT = os.environ.get("PROSE_GATE_TEST_ROOT") or os.path.expanduser("~/.claude")
 GATE = os.path.join(ROOT, "scripts", "hooks", "git-prose-gate.py")
 STUB = os.path.join(ROOT, "git-hooks", "pre-commit")
-DASH = "—"
+DASH = "\u2014"
 CLEAN = "The loader reads the config file. It builds the table once."
 DASHED = f"The loader reads the config file {DASH} it builds the table once."
 

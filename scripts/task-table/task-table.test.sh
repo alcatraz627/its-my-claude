@@ -97,7 +97,7 @@ render --detail | rg -q "carry no tier" && ok "unset tier is named under --detai
 echo "$out" | rg -q "carry no tier" && ko "the tier nag must not spend a header line on the plain render" || ok "and stays off the plain header"
 
 
-echo "== #103: many bands — the shape that actually overshot =="
+echo "== #103: many bands: the shape that actually overshot =="
 # The height assertion above passed at 33/33 while the live store rendered 47/44,
 # because its fixture had two batches. A band header costs two lines and used to
 # be written before the cap was consulted, so the overshoot scales with the BAND

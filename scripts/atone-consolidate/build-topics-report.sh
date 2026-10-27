@@ -9,7 +9,7 @@
 build_topics_report() {
   local out="$TOPICS_DIR/atone-consolidate-$TODAY.md"
   {
-    echo "# atone consolidation — $TODAY"
+    echo "# atone consolidation: $TODAY"
     echo
     echo "Generated: $NOW_UTC"
     echo

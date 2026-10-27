@@ -151,7 +151,7 @@ final class MilestoneTracker {
             return nil
         }
 
-        // Already unlocked — do not celebrate again
+        // Already unlocked: do not celebrate again
         guard !state.isUnlocked else { return nil }
 
         state.currentProgress = value
@@ -951,7 +951,7 @@ final class HapticManager: Sendable {
                 return .stopEngine
             }
         } catch {
-            // Haptics are non-critical — fail silently
+            // Haptics are non-critical: fail silently
         }
     }
 }

@@ -94,7 +94,7 @@ if [ ! -f "$TRANSCRIPT" ]; then
 fi
 if [ -z "$TRANSCRIPT" ] || [ ! -f "$TRANSCRIPT" ]; then
   TRANSCRIPT=""
-  TRANSCRIPT_MISS="no transcript for session $SID under ~/.claude/projects/*/ — harness-goal state UNKNOWN, not 'not armed'"
+  TRANSCRIPT_MISS="no transcript for session $SID under ~/.claude/projects/*/: harness-goal state UNKNOWN, not 'not armed'"
 fi
 
 # The last /goal the owner ran in this session, or nothing. Four shapes carry it,
@@ -472,7 +472,7 @@ case "$CMD" in
     ha=$(echo "$h" | jq -r '.armed'); gs=$(echo "$g" | jq -r '.set')
     if [ "$JSON" = 1 ]; then jq -n --argjson h "$h" --argjson g "$g" '{harness:$h,gcc:$g}'; else
       if [ "$ha" = true ]; then echo "harness /goal ARMED: $(echo "$h" | jq -r .text)"
-      elif [ "$ha" = null ]; then echo "harness /goal: UNKNOWN — $(echo "$h" | jq -r .reason)"
+      elif [ "$ha" = null ]; then echo "harness /goal: UNKNOWN: $(echo "$h" | jq -r .reason)"
       else echo "harness /goal: not armed ($(echo "$h" | jq -r .reason))"; fi
       if [ "$gs" = true ]; then echo "gcc goal (${SID:0:8}, by $(echo "$g" | jq -r .by), $(echo "$g" | jq -r .set_at)): $(echo "$g" | jq -r .text)"; else echo "gcc goal: none"; fi
       if [ "$ha" != true ] && [ "$gs" = true ]; then echo "to arm in the TUI:  /goal $(echo "$g" | jq -r .text)"; fi

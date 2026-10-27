@@ -296,12 +296,12 @@ extension APIEndpoint {
 ### Don't Ignore Cache-Control: no-store
 ```swift
 // ❌ Cache everything regardless of server headers
-// ✅ Respect no-store — the server says this data must not be persisted
+// ✅ Respect no-store: the server says this data must not be persisted
 ```
 
 ### Don't Use In-Memory Only
 ```swift
-// ❌ NSCache alone — cleared on memory pressure, lost on app restart
+// ❌ NSCache alone: cleared on memory pressure, lost on app restart
 // ✅ Disk cache with memory layer for fast access
 ```
 

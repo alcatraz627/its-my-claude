@@ -1,5 +1,5 @@
 /**
- * Dashboard report — interactive JS
+ * Dashboard report: interactive JS
  * Handles: sidebar active state, smooth scroll, theme toggle, accent picker,
  * search, code dialog, copy buttons, math, external links, code paths
  */

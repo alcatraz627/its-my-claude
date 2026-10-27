@@ -24,7 +24,7 @@ source ~/.claude/skills/shared/gum-tui.sh
 If `gum` is not installed, fall back to raw Unicode rendering and warn the user:
 
 ```bash
-command -v gum >/dev/null 2>&1 || { echo "⚠ gum not found — install with: brew install gum"; }
+command -v gum >/dev/null 2>&1 || { echo "⚠ gum not found: install with: brew install gum"; }
 ```
 
 Also read `.claude/skills/runtime-notes.md` for past rendering notes relevant to this skill.
@@ -206,7 +206,7 @@ ERROR=$(gum style --border double --padding '0 2' 'Error')
 
 # Main path (horizontal)
 gum join --horizontal "$IDLE" " ──▶ " "$LOADING" " ──▶ " "$SUCCESS"
-# Error branch (below loading — hand-craft the vertical arrow)
+# Error branch (below loading: hand-craft the vertical arrow)
 echo "                │"
 echo "                ▼"
 echo "$ERROR"

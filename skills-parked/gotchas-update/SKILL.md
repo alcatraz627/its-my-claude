@@ -70,7 +70,7 @@ ls gotchas.md 2>/dev/null
 Format the entry to match the existing file's style, or use this default:
 
 ```markdown
-## YYYY-MM-DD — [one-line title]
+## YYYY-MM-DD: [one-line title]
 
 [1–3 sentence description of the pitfall, what caused it, and how to avoid it]
 

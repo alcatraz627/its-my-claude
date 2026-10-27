@@ -37,7 +37,7 @@
   --dialog-header-bg: #222;
   --dialog-border: #333;
 
-  /* Syntax highlighting — dark mode */
+  /* Syntax highlighting: dark mode */
   --hl-keyword: #c084fc;
   --hl-string: #86efac;
   --hl-comment: #64748b;
@@ -84,7 +84,7 @@ html.light {
   --dialog-header-bg: #f7f7f5;
   --dialog-border: #e8e8e5;
 
-  /* Syntax highlighting — light mode (darker for readability) */
+  /* Syntax highlighting: light mode (darker for readability) */
   --hl-keyword: #a626a4;
   --hl-string: #50a14f;
   --hl-comment: #a0a1a7;
@@ -780,7 +780,7 @@ mark {
     max-width: none;
   }
 
-  /* Title block — clean header for PDF */
+  /* Title block: clean header for PDF */
   .title-block {
     margin-bottom: 36px;
     padding-top: 0;
@@ -796,7 +796,7 @@ mark {
     color: #999;
   }
 
-  /* Cards — visible structure without shadows */
+  /* Cards: visible structure without shadows */
   .card {
     box-shadow: none;
     border: 1px solid #e0e0de;
@@ -818,7 +818,7 @@ mark {
     font-size: 14pt;
   }
 
-  /* Tables — explicit borders for PDF */
+  /* Tables: explicit borders for PDF */
   .table-wrap {
     border: 1px solid #e0e0de;
   }
@@ -838,7 +838,7 @@ mark {
     background: inherit;
   }
 
-  /* Code blocks — light bg for print */
+  /* Code blocks: light bg for print */
   .code-wrap {
     border: 1px solid #e0e0de;
     background: #f7f7f5;
@@ -878,7 +878,7 @@ mark {
     border-color: #e0e0de;
   }
 
-  /* Links — dark text in print */
+  /* Links: dark text in print */
   a {
     color: #37352f;
     text-decoration: underline;

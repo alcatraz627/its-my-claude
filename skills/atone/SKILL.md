@@ -196,7 +196,7 @@ bash ~/.claude/scripts/atone.sh add \
   --precheck "<...>" \
   --severity S1 \
   --tags "<space-separated>" \
-  --cluster "<A|B|C|D|E — see cluster-map.tsv; empty only if no family fits>" \
+  --cluster "<A|B|C|D|E: see cluster-map.tsv; empty only if no family fits>" \
   --files "<file1:line file2:line>" \
   --project "$(pwd)"
 ```

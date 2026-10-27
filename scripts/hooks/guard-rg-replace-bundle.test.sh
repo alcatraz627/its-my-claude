@@ -24,7 +24,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 HOOK="${GUARD_UNDER_TEST:-$HERE/guard-rg-replace-bundle.sh}"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 
 verdict(){ # verdict <command> -> BLOCK|allow
   local out rc

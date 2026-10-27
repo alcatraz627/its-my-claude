@@ -17,7 +17,7 @@ no(){ echo "  FAIL  $1"; echo "     $2"; fail=$((fail+1)); }
 # empty response, so a dead server would otherwise read as a clean run.
 alive(){ curl -s -o /dev/null -w '%{http_code}' "$S/" | grep -q 200; }
 
-alive || { echo "no server on :$PORT — start it (pm2 restart kanban) and re-run"; exit 2; }
+alive || { echo "no server on :$PORT: start it (pm2 restart kanban) and re-run"; exit 2; }
 echo "server on :$PORT is up"
 
 code(){ curl -s -o /dev/null -w '%{http_code}' "$@"; }
@@ -71,7 +71,7 @@ if [ -z "$ans" ]; then
 else
   got=$(code -X POST "$S/api/dp-submit/$ans" -H 'content-type: application/json' -d '{"answer":"SMOKE"}')
   [ "$got" = "409" ] && ok "re-submitting '$ans' is refused (409)" \
-                     || no "re-submitting '$ans' is refused" "got $got — A RULING CAN BE OVERWRITTEN"
+                     || no "re-submitting '$ans' is refused" "got $got: A RULING CAN BE OVERWRITTEN"
   # The guard's FIRST version read `!body?.replace`, which is truthiness, so
   # replace:"false" and replace:[] both sailed through and destroyed the ruling
   # with a 200. This suite was green throughout, because it only ever sent the
@@ -83,7 +83,7 @@ else
     got=$(code -X POST "$S/api/dp-submit/$ans" -H 'content-type: application/json' \
           -d "{\"answer\":\"SMOKE\",\"replace\":$bad}")
     [ "$got" = "409" ] && ok "replace:$bad is not accepted as consent" \
-                       || no "replace:$bad is not accepted as consent" "got $got — A RULING CAN BE OVERWRITTEN"
+                       || no "replace:$bad is not accepted as consent" "got $got: A RULING CAN BE OVERWRITTEN"
   done
 fi
 

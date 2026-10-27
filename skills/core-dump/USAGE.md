@@ -72,10 +72,10 @@ CPU-dump visual in the terminal showing the session flow.
 ### Full mode
 
 ```
-# Quick Summary (for LLMs) — <timestamp>
+# Quick Summary (for LLMs): <timestamp>
 > Executive summary for agents...
 
-# Core Dump — <timestamp>
+# Core Dump: <timestamp>
 ## Initial Goal
 ## Agent Actions
 ## Current Expectation
@@ -88,7 +88,7 @@ Plus a CPU-dump visual summary printed to terminal (not in the file).
 ### Mini mode
 
 ```
-# Mini Core Dump — <timestamp>
+# Mini Core Dump: <timestamp>
 **Goal:** ...
 **Done:** ...
 **Not Done:** ...

@@ -130,7 +130,7 @@ with open(active_md_path + ".tmp", "w") as f:
                         parts.append(f"{p}:{rng[0]}-{rng[1]}")
                     else:
                         parts.append(str(p))
-                files_str = " — files: " + ", ".join(parts)
+                files_str = ": files: " + ", ".join(parts)
             f.write(f"- **{text}** _(framing: {framing}){files_str}_  \n")
             f.write(f"  `{pid}`\n")
 os.replace(active_md_path + ".tmp", active_md_path)

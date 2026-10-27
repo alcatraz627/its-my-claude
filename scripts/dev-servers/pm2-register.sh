@@ -35,7 +35,7 @@ hr() { echo "──────────────────────�
 get_used_suffixes() {
   # Extract 30xx/50xx port numbers from registry table rows, return last 2 digits
   grep "^|" "$REGISTRY" 2>/dev/null \
-    | grep -v "^| Port\|^|---\|^| —" \
+    | grep -v "^| Port\|^|---\|^| "$'\xe2\x80\x94'"" \
     | grep -oE '\b[35]0[1-9][0-9]\b' \
     | sed 's/^[35]0//' \
     | sort -u
@@ -93,7 +93,7 @@ for i, line in enumerate(lines):
     if (stripped.startswith('|')
             and not stripped.startswith('| Port')
             and '---' not in stripped
-            and '| —' not in stripped):
+            and '| '$'\xe2\x80\x94''' not in stripped):
         insert_at = i
 if insert_at is None:
     lines.append(new_row + '\n')
@@ -334,7 +334,7 @@ cmd_list() {
 
 usage() {
   cat <<'EOF'
-pm2-register.sh — Port allocation and pm2 app registration
+pm2-register.sh: Port allocation and pm2 app registration
 
 Commands:
   register    --name <n> --type server|pair [--suffix <nn>] [--cwd <path>] [--framework vite|next|svelte]

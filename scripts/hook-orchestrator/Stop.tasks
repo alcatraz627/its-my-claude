@@ -1,4 +1,4 @@
-# Stop tasks — parallel orchestrator config
+# Stop tasks: parallel orchestrator config
 # Each task receives the Stop hook input JSON via stdin.
 
 # Refresh tab title at end-of-turn

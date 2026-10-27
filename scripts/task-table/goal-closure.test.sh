@@ -25,7 +25,7 @@ mkdir -p "$STORE"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
-hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1 — unexpected match for [$2]"; else pass=$((pass+1)); fi; }
+hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1: unexpected match for [$2]"; else pass=$((pass+1)); fi; }
 
 mk(){ # mk <id> <status> <goal> <milestone>
   python3 - "$STORE/$1.json" "$1" "$2" "$3" "$4" <<'PY'

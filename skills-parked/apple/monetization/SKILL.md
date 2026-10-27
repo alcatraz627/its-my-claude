@@ -245,7 +245,7 @@ Present monetization strategy as:
 # Monetization Strategy: [App Name]
 
 ## Readiness Assessment
-**Score**: X/6 — [Ready to monetize / Soft-launch / Focus on product]
+**Score**: X/6: [Ready to monetize / Soft-launch / Focus on product]
 
 | Signal | Status | Notes |
 |--------|--------|-------|
@@ -257,7 +257,7 @@ Present monetization strategy as:
 | Polish | ✅/❌ | ... |
 
 ## Recommended Model
-**[Model Name]** — [One-line rationale]
+**[Model Name]**: [One-line rationale]
 
 ## Tier Structure
 

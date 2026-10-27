@@ -346,7 +346,7 @@ func loadBestAvailableModel(named name: String) async throws -> MLModel {
         do {
             return try await MLModel.load(contentsOf: downloadedURL)
         } catch {
-            // Downloaded model corrupted — fall back to bundled
+            // Downloaded model corrupted: fall back to bundled
             try? FileManager.default.removeItem(at: downloadedURL)
         }
     }

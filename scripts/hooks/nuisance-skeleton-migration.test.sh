@@ -61,9 +61,9 @@ invocation() {
 mention() {
   local now before; now=$(fire "$1" "$3"); before=$(fire "$1" "$3" "$BARE")
   if [ "$before" != FIRE ]; then
-    bad "$1 · $2 — DEAD FIXTURE, does not fire pre-migration either"
+    bad "$1 · $2: DEAD FIXTURE, does not fire pre-migration either"
   elif [ "$now" != SILENT ]; then
-    bad "$1 · $2 — still fires on a quoted mention"
+    bad "$1 · $2: still fires on a quoted mention"
   else
     ok "$1 · $2 (fires pre-migration, silent after)"
   fi

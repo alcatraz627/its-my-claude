@@ -38,7 +38,7 @@ func fetchImage(named name: String) async throws -> UIImage {
 A continuation must be resumed **exactly once**. Resuming zero times leaks the task forever. Resuming twice crashes.
 
 ```swift
-// ❌ Bug — continuation never resumed on timeout
+// ❌ Bug: continuation never resumed on timeout
 func fetchWithTimeout() async throws -> Data {
     try await withCheckedThrowingContinuation { continuation in
         apiClient.fetch { data in
@@ -48,7 +48,7 @@ func fetchWithTimeout() async throws -> Data {
     }
 }
 
-// ❌ Bug — continuation resumed twice
+// ❌ Bug: continuation resumed twice
 func fetchData() async throws -> Data {
     try await withCheckedThrowingContinuation { continuation in
         apiClient.fetch { result in
@@ -278,7 +278,7 @@ do {
 ### Forgetting onTermination Cleanup
 
 ```swift
-// ❌ Resource leak — observer never removed
+// ❌ Resource leak: observer never removed
 AsyncStream<Notification> { continuation in
     let observer = NotificationCenter.default.addObserver(...)
     // No cleanup when stream is cancelled
@@ -296,7 +296,7 @@ AsyncStream<Notification> { continuation in
 ### Capturing Self Strongly in Continuation
 
 ```swift
-// ❌ Retain cycle — continuation holds self, self holds continuation
+// ❌ Retain cycle: continuation holds self, self holds continuation
 class StreamProvider {
     var continuation: AsyncStream<Event>.Continuation?
 
@@ -316,7 +316,7 @@ continuation.onTermination = { @Sendable [weak self] _ in
 ### Using AsyncStream for Single Values
 
 ```swift
-// ❌ Overkill — AsyncStream for a one-shot result
+// ❌ Overkill: AsyncStream for a one-shot result
 func fetchUser() -> AsyncStream<User> {
     AsyncStream { continuation in
         api.getUser { user in

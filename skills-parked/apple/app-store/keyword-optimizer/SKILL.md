@@ -217,11 +217,11 @@ Subtitle: "Pomodoro Timer & Focus Sessions"
 Keywords: "timer,focus,pomodoro,productive,study,work,session,break"
 
 Duplicates:
-  "timer"      — in Title AND Subtitle AND Keywords
-  "focus"      — in Title AND Subtitle AND Keywords
-  "pomodoro"   — in Subtitle AND Keywords
-  "productive" — in Title ("Productive") AND Keywords
-  "session"    — in Subtitle ("Sessions") AND Keywords
+  "timer": in Title AND Subtitle AND Keywords
+  "focus": in Title AND Subtitle AND Keywords
+  "pomodoro": in Subtitle AND Keywords
+  "productive": in Title ("Productive") AND Keywords
+  "session": in Subtitle ("Sessions") AND Keywords
 
 Wasted: 5 keyword slots = ~38 characters lost
 

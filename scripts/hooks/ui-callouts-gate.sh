@@ -77,7 +77,7 @@ matched=$(printf '%s' "$matched" | tr ' ' '\n' | rg -v '^$' | sort -u)
 STATE="/tmp/claude-ui-callouts-gate-${sid8}"
 sig=$(printf '%s' "$matched" | tr '\n' ',')
 if [ -f "$STATE" ] && [ "$(cat "$STATE" 2>/dev/null)" = "$sig" ]; then
-  note "ui-callouts-gate: open call-outs still unmet on: $sig — letting the Stop pass (block fires once). The rows remain open until the owner retires them."
+  note "ui-callouts-gate: open call-outs still unmet on: $sig: letting the Stop pass (block fires once). The rows remain open until the owner retires them."
 fi
 
 CALLOUTS="$HOME/.claude/scripts/callouts/callouts.sh"

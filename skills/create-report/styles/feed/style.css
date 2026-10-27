@@ -1,4 +1,4 @@
-/* ── Feed Style — Social Timeline ────────────────────────────────────────── */
+/* ── Feed Style: Social Timeline ────────────────────────────────────────── */
 
 :root {
   --feed-bg: #15202b;
@@ -30,7 +30,7 @@
   --header-h: 53px;
   --toc-width: 180px;
 
-  /* Syntax highlighting — dark mode */
+  /* Syntax highlighting: dark mode */
   --hl-keyword: #c084fc;
   --hl-string: #86efac;
   --hl-comment: #64748b;
@@ -72,7 +72,7 @@ html.light {
   --quoted-border: #cfd9de;
   --data-card-bg: #f7f9fa;
 
-  /* Syntax highlighting — light mode */
+  /* Syntax highlighting: light mode */
   --hl-keyword: #d73a49;
   --hl-string: #032f62;
   --hl-comment: #6a737d;

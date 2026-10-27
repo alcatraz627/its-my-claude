@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='2' width='4' height='12' rx='1.5' fill='%235b9dff'/%3E%3Crect x='6' y='2' width='4' height='8' rx='1.5' fill='%23e3b341'/%3E%3Crect x='11' y='2' width='4' height='5' rx='1.5' fill='%2334373f'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="/shared.css">
 <style>
-  /* kanban — drafts. Same skin as hub and board; the canvas is an editor rather
+  /* kanban: drafts. Same skin as hub and board; the canvas is an editor rather
      than a list, so the writing column gets the room and everything else gets
      out of its way. */
   *{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--border-2) transparent}
@@ -298,7 +298,7 @@ async function load({ keepBuffer = true } = {}) {
   agents = [...new Set(boards.flatMap((b) => (b.live ?? []).map((p) => p.alias)))].sort();
   if (currentId && !drafts.some((d) => d.id === currentId)) { currentId = null; buf = null; saved = null; }
   if (!keepBuffer || !buf) selectFromUrl();
-  // "A poll must never touch the editor" — the list is worth refreshing, the words
+  // "A poll must never touch the editor": the list is worth refreshing, the words
   // being typed are not the server's to replace. Rebuilding the editor was touching
   // it, however faithfully the text was copied back.
   render({ editor: !(keepBuffer && buf) });

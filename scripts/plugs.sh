@@ -28,12 +28,12 @@ show_mutes() {
     found=1
     printf '    %s  (since %s)\n' "${f#$GCC/}" "$(date -r "$f" '+%Y-%m-%d %H:%M' 2>/dev/null || echo '?')"
   done
-  [ "$found" = 0 ] && echo "    (none — nothing is silenced)"
+  [ "$found" = 0 ] && echo "    (none: nothing is silenced)"
 }
 
 [ "${1:-}" = "--mutes" ] && { show_mutes; exit 0; }
 
-echo "Session plugs — live status   ($(date '+%Y-%m-%d %H:%M'))"
+echo "Session plugs: live status   ($(date '+%Y-%m-%d %H:%M'))"
 echo "Full catalog: features/session-plugs.md"
 hr
 
@@ -47,7 +47,7 @@ if [ "$have_jq" = 1 ] && [ -f "$SETTINGS" ]; then
   laneN=$(rg -c '\.sh"' "$GCC/scripts/session-mgmt/sessionstart-inject.sh" 2>/dev/null || echo '?')
   printf '    %-18s %s injectors (via sessionstart-inject.sh)\n' "  └ start lane" "$laneN"
 else
-  echo "    (jq unavailable — see features/session-plugs.md)"
+  echo "    (jq unavailable: see features/session-plugs.md)"
 fi
 hr
 
@@ -80,7 +80,7 @@ fi
 # Latest backlog triage (the surfacer source).
 if [ "$have_jq" = 1 ] && [ -s "$GCC/.backlog-triage-latest.json" ]; then
   read -r d p w dr < <(jq -r '[.date,(.counts.PROMOTE//0),(.counts.WATCH//0),(.counts["DROP-REVIEW"]//0)]|@tsv' "$GCC/.backlog-triage-latest.json" 2>/dev/null)
-  printf '    backlog triage:      %s — PROMOTE %s · WATCH %s · DROP-REVIEW %s\n' "$d" "$p" "$w" "$dr"
+  printf '    backlog triage:      %s: PROMOTE %s · WATCH %s · DROP-REVIEW %s\n' "$d" "$p" "$w" "$dr"
 fi
 
 # Last consolidate run.
@@ -99,7 +99,7 @@ hr
 # ── Plug firings (the plug-events ledger: the FIRED side of efficacy) ───────
 PE="${LEDGER_DIR:-$GCC/ledger}/plug-events.jsonl"
 sidf="${CLAUDE_CODE_SESSION_ID:-}"
-echo "▸ Plug firings  (ledger/plug-events.jsonl — frequency + token cost, ranked)"
+echo "▸ Plug firings  (ledger/plug-events.jsonl: frequency + token cost, ranked)"
 if [ "$have_jq" = 1 ] && [ -s "$PE" ]; then
   src="$PE"; scope="all-time"
   if [ -n "$sidf" ]; then
@@ -116,10 +116,10 @@ if [ "$have_jq" = 1 ] && [ -s "$PE" ]; then
   ' "$src" 2>/dev/null
   rm -f "/tmp/.pe-filt.$$" 2>/dev/null || true
 else
-  echo "    (none recorded yet — plug-events.jsonl empty/absent)"
+  echo "    (none recorded yet: plug-events.jsonl empty/absent)"
 fi
 hr
 echo "Note: this is the FIRED side (how often + how many tokens each plug spends)."
 echo "The ACTED side (was the injection used / the proposal promoted?) is not yet"
-echo "recorded — it needs a feedback signal + a ledger detector (deferred)."
+echo "recorded: it needs a feedback signal + a ledger detector (deferred)."
 exit 0

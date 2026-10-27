@@ -138,9 +138,9 @@ A project can pin rules that outrank the defaults above. Example shape:
 
 ```
 ### project: versable
-- brand hexes are STRICT: #<hex> and #<hex> — any ΔE > 2 is class-4 "looks-worse",
+- brand hexes are STRICT: #<hex> and #<hex>: any ΔE > 2 is class-4 "looks-worse",
   never neutral, never floored.
-- the primary CTA must keep its dominance — a hierarchy shift on it is class-2, not 3.
+- the primary CTA must keep its dominance: a hierarchy shift on it is class-2, not 3.
 ```
 
 _No project overrides yet. Add them here as you calibrate on real pairs (Phase D)._

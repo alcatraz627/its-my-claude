@@ -65,7 +65,7 @@ Workflow: create a plan entry before non-trivial tasks, append learnings, then p
 
 At session end, prepend a note to `.claude/skills/runtime-notes.md` (project-relative). Skip only for purely read-only sessions.
 
-Format: a `## session: [description] [session-id] — YYYY-MM-DD` heading, a one-line `**Purpose:**`, `**Insights:**` as numbered 2-6 points of reusable observations, and a `---` separator. Use `prepend-runtime-note.sh` if available.
+Format: a `## session: [description] [session-id]: YYYY-MM-DD` heading, a one-line `**Purpose:**`, `**Insights:**` as numbered 2-6 points of reusable observations, and a `---` separator. Use `prepend-runtime-note.sh` if available.
 
 ## Archive cadence
 

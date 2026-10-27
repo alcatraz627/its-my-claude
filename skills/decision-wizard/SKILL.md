@@ -44,7 +44,7 @@ want a picker instead, `AskUserQuestion` and the `mcp__inputs__*` tools both
 work.) Format:
 
 ```
-Quick decisions (reply with your picks, e.g. "1b 3a" — silence = all recommended):
+Quick decisions (reply with your picks, e.g. "1b 3a": silence = all recommended):
   1. <question>?     a) <opt> ✓rec   b) <opt>   c) <opt>
   2. <question>?     a) <opt> ✓rec   b) <opt>
   3. <question>?     a) <opt> ✓rec   b) <opt>
@@ -138,10 +138,10 @@ add `groups`/`accent`/`notes` only when they earn their place.
   "copyHeader": "rework feedback",      // first line of the pasted/submitted answer
   "intro": "Everything is pre-answered; untouched = agreed.",
   "accent": "#7c3aed",                  // OPTIONAL per-page accent color
-  "origin": {                            // OPTIONAL — `new` seeds this; edit topic
+  "origin": {                            // OPTIONAL: `new` seeds this; edit topic
     "session": "dec-wiz-7a", "project": "~/proj",
     "topic": "what this is about", "created": "2026-07-16" },
-  "groups": {                            // OPTIONAL — per-cluster helper context + color
+  "groups": {                            // OPTIONAL: per-cluster helper context + color
     "API":  { "context": "land before the v1 freeze", "color": "#52bd8a" },
     "UI":   { "context": "low-stakes niceties",        "color": "#c084fc" } },
   "decisions": [                         // radio groups → answered D1a D2b …
@@ -169,8 +169,8 @@ You rarely need to configure anything. Two optional levers in `config.json`:
   (renders expanded, so use it when you want to prompt the user for reasoning there).
 - Hard-disable the whole notes surface: top-level `"notes": false` (rare).
 
-Answer-string additions the user may send back: a `D1 note — …` line per noted
-decision, a `— note` suffix on a section line, and a trailing `notes:` block for
+Answer-string additions the user may send back: a `D1 note: …` line per noted
+decision, a `: note` suffix on a section line, and a trailing `notes:` block for
 the end-of-form field. Parse them leniently.
 
 ## Subsystem links (do these on handoff, since they are cheap and they compound)

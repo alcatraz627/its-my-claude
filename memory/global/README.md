@@ -29,7 +29,7 @@ type: {{user, feedback, project, reference}}
 ## MEMORY.md index
 
 `MEMORY.md` in this directory is the index: one line per entry, under 150 chars:
-`- [Title](file.md) — one-line hook`
+`- [Title](file.md): one-line hook`
 
 ## Promoting a per-project memory
 

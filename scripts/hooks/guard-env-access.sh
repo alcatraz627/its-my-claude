@@ -116,9 +116,9 @@ else
 fi
 
 if [ -f "$CONV" ]; then
-  msg="[env-access] new env read in $(basename "$FP"). This project has an established env-access convention — route through it instead of adding a raw read: $CONV  (mute: touch ~/.claude/.env-access-off)"
+  msg="[env-access] new env read in $(basename "$FP"). This project has an established env-access convention: route through it instead of adding a raw read: $CONV  (mute: touch ~/.claude/.env-access-off)"
 else
-  msg="[env-access] new env read in $(basename "$FP"), and this project hasn't established how env access should be done (rules/env-var-config-pattern.md). Establish it ONCE: ask the user how env vars should be accessed here — a central config module? a validated schema (zod/pydantic)? a typed wrapper? — then record the answer + a single accessor at $CONV and route this (and future) reads through that accessor, defined once. (mute: touch ~/.claude/.env-access-off)"
+  msg="[env-access] new env read in $(basename "$FP"), and this project hasn't established how env access should be done (rules/env-var-config-pattern.md). Establish it ONCE: ask the user how env vars should be accessed here: a central config module? a validated schema (zod/pydantic)? a typed wrapper?: then record the answer + a single accessor at $CONV and route this (and future) reads through that accessor, defined once. (mute: touch ~/.claude/.env-access-off)"
 fi
 
 # additionalContext (stdout JSON) → the agent (no non-blocking channel reaches

@@ -94,7 +94,7 @@ print("go")
 PY
 )
   if [[ "$skip" == "skip" ]]; then
-    printf 'guard-newer-than: a fresh core-dump entry exists for %s within %ds — skipping index write\n' "$SESSION_ID" "$GUARD_SECS"
+    printf 'guard-newer-than: a fresh core-dump entry exists for %s within %ds: skipping index write\n' "$SESSION_ID" "$GUARD_SECS"
     # Still write the session-keyed file + back-compat for local consistency.
     # Just skip the index append/replace.
     SKIP_INDEX=1
@@ -124,13 +124,13 @@ except Exception: print("")' "$SESSION_FILE" 2>/dev/null)
     # Covers a uuid-less NEW writer too (headless runs without
     # CLAUDE_CODE_SESSION_ID): "" != old uuid → the old pointer is still preserved.
     /bin/mv -f "$SESSION_FILE" "$CKPT_DIR/$SAFE_SID.${OLD_UUID:0:8}.json"
-    printf 'pointer-collision: slug "%s" was held by uuid %s… — preserved as %s.%s.json\n' \
+    printf 'pointer-collision: slug "%s" was held by uuid %s…: preserved as %s.%s.json\n' \
       "$SESSION_ID" "${OLD_UUID:0:8}" "$SAFE_SID" "${OLD_UUID:0:8}"
   elif [[ -z "$OLD_UUID" && -n "${SESSION_UUID:-}" ]]; then
     # Old pointer predates uuid recording: sessions are indistinguishable, so we
     # overwrite (old checkpoint stays reachable via --pick in the append-only
     # index). Warn so the no-op is legible instead of silent.
-    printf 'pointer-collision-guard: existing "%s" pointer has no session_uuid — cannot distinguish sessions; overwriting (older reachable via --pick)\n' "$SESSION_ID" >&2
+    printf 'pointer-collision-guard: existing "%s" pointer has no session_uuid: cannot distinguish sessions; overwriting (older reachable via --pick)\n' "$SESSION_ID" >&2
   fi
 fi
 

@@ -188,7 +188,7 @@ Authentication: <method>
 | Status | When |
 | ------ | ---- |
 | 401 | Token expired or missing |
-| 422 | Validation failed — see body for field errors |
+| 422 | Validation failed: see body for field errors |
 ```
 
 Group endpoints by resource (Users, Posts, etc.), not by HTTP method.
@@ -238,7 +238,7 @@ Structure:
 example
 ```
 
-<Why this step matters — one sentence>
+<Why this step matters: one sentence>
 
 ### 2. <Next action>
 
@@ -284,7 +284,7 @@ Follow the Michael Nygard ADR format:
 
 ## Context
 
-<What forces are at play. 2-4 sentences. No opinions — just facts.>
+<What forces are at play. 2-4 sentences. No opinions: just facts.>
 
 ## Decision
 
@@ -330,7 +330,7 @@ Save to `docs/adr/` or `docs/decisions/` (create the directory if needed). Numbe
 ### Phase 2: Generate
 
 ```markdown
-# Changelog — <version or date range>
+# Changelog: <version or date range>
 
 ## New Features
 - <description> ([commit-hash])
@@ -339,7 +339,7 @@ Save to `docs/adr/` or `docs/decisions/` (create the directory if needed). Numbe
 - <description> ([commit-hash])
 
 ## Breaking Changes
-- <description> — **Migration:** <what to do>
+- <description>: **Migration:** <what to do>
 
 ## Other
 - <description>
@@ -395,7 +395,7 @@ cp .env.example .env  # Then fill in: <list specific vars>
 <start command>
 ```
 
-Open <url> — you should see <what>.
+Open <url>: you should see <what>.
 
 ## Architecture
 

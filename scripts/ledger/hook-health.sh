@@ -45,7 +45,7 @@ while [ $# -gt 0 ]; do case "$1" in
   --recent)  RECENT="${2:-}"; shift 2;;
   -h|--help)
     cat <<'H'
-hook-health — per-hook health from warn-events telemetry (read-only)
+hook-health: per-hook health from warn-events telemetry (read-only)
 
   hook-health.sh                 table: one row per hook, sorted by fires desc
   hook-health.sh --hook <id>     drill into one hook (recent fires, by-project, mute)
@@ -275,15 +275,15 @@ if hook:
         sys.exit(0)
     win = f"since {since.strftime('%Y-%m-%d %H:%M')}Z" if since else "all time"
     if not hf:
-        print(f"hook: {hook}  —  no fires ({win})")
-        if hard: print("mute: (hard gate — no session mute file)")
+        print(f"hook: {hook}: no fires ({win})")
+        if hard: print("mute: (hard gate: no session mute file)")
         elif mute_path: print(f"mute: ~/.claude/{mute_path}  ({'EXISTS → MUTED' if muted else 'not present'})")
         sys.exit(0)
     print(f"hook: {hook}   ·   {len(hf)} fires   ·   {win}   ·   last {humanize_age(hf and max(hf,key=lambda x:x['ts'])['ts'])}")
     ba = Counter(f["action"] for f in hf)
     print(f"by-action:  {by_action_str(ba)}")
-    if hard:            print(f"mute:       (hard gate — no session mute file)")
-    elif muted:        print(f"mute:       ~/.claude/{mute_path}  ⚠ MUTED (file exists) — still firing")
+    if hard:            print(f"mute:       (hard gate: no session mute file)")
+    elif muted:        print(f"mute:       ~/.claude/{mute_path}  ⚠ MUTED (file exists): still firing")
     elif mute_path:    print(f"mute:       ~/.claude/{mute_path}  (not present → active)")
     print(f"heed:       " + ("no heed data yet" if rate is None else f"{hy}/{hy+hn} = {round(rate*100)}%  (from {hy+hn} heed lines)"))
     print()

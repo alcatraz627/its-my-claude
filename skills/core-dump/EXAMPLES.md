@@ -59,7 +59,7 @@ that schema lives in `~/.claude/skills/catchup/SKILL.md` Phase 3.1.
 
 ```json
 {
-  "todos_done":    [<usually empty — completed tasks sync into the block automatically>],
+  "todos_done":    [<usually empty: completed tasks sync into the block automatically>],
   "todos_new":     [<only human-area todos NOT present in the live Task list>],
   "notes_append":  [<2-3 most load-bearing observations from Phase 2.5>],
   "doclinks_new":  [<URLs / file refs cited this session, deduped>],

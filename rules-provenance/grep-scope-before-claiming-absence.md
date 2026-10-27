@@ -51,10 +51,10 @@ Sentence in your output that reads: *"No existing module for X: proposing to add
 ## Concrete pattern
 
 ```bash
-# Bad — narrow assumption
+# Bad: narrow assumption
 rg -n "ensure_index|create_index" backend/lib/database/
 
-# Good — full tree
+# Good: full tree
 rg -n "ensure_index|create_index" backend/
 
 # Even better when looking for a concept (not exact symbol)

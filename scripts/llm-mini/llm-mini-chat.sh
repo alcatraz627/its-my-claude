@@ -438,7 +438,7 @@ main() {
             /help)
                 _show_chat_help; continue ;;
             /*)
-                gum_warn "Unknown: $input — type /help" >&2; continue ;;
+                gum_warn "Unknown: $input: type /help" >&2; continue ;;
         esac
 
         # Add user message
@@ -449,7 +449,7 @@ main() {
         response=$(_chat_send 2>/dev/null)
 
         if [[ -z "$response" ]]; then
-            gum_error "No response — check connection or try /backend" >&2
+            gum_error "No response: check connection or try /backend" >&2
             _pop_last_message
             continue
         fi

@@ -43,13 +43,13 @@ case "$TOOL" in
        [[ "$FP" == *atone/rca/*.md ]]; then
       bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook protect-atone-raw --action block --heeded unknown >/dev/null 2>&1 || true
       cat >&2 <<EOF
-[protect-atone-raw] BLOCKED — $TOOL targets raw atone path
+[protect-atone-raw] BLOCKED: $TOOL targets raw atone path
   path:   $FP
   reason: raw atone data is append-only
 
 Use the CLI for any modification:
   bash ~/.claude/scripts/atone.sh add ...
-Migration draft (events.jsonl.draft) is writable via Edit/Write — that's by design.
+Migration draft (events.jsonl.draft) is writable via Edit/Write: that's by design.
 Escape hatch (phrase-gated): bash ~/.claude/scripts/atone-unsafe-unlock.sh
 EOF
       exit 2
@@ -122,7 +122,7 @@ EOF
     # Otherwise: block
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook protect-atone-raw --action block --heeded unknown >/dev/null 2>&1 || true
     cat >&2 <<EOF
-[protect-atone-raw] BLOCKED — Bash command targets raw atone path
+[protect-atone-raw] BLOCKED: Bash command targets raw atone path
   reason: raw atone data is append-only; modifications must go through atone.sh
 
 Use the CLI for any modification:

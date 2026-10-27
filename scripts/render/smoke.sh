@@ -36,12 +36,12 @@ echo '{"session_id":"smoke-sparse","goal":"Only a goal here"}' > "$TMP/sparse.js
 # padding is what fixes it, so it stays pinned.
 cat > "$TMP/unicode.json" <<'EOF'
 {"session_id":"smoke-unicode","timestamp":"2026-08-11","status":"testing",
- "goal":"A goal with an em-dash — plus curly quotes “like these”, an ellipsis… and an accent café, long enough to wrap",
- "pipeline":["Handle the em-dash — properly"],
- "interrupts":["BLOCKED: a blocker with — a dash"],
- "stack_trace":["Did — a thing"],
+ "goal":"A goal with an em-dash \u2014 plus curly quotes “like these”, an ellipsis… and an accent café, long enough to wrap",
+ "pipeline":["Handle the em-dash \u2014 properly"],
+ "interrupts":["BLOCKED: a blocker with \u2014 a dash"],
+ "stack_trace":["Did \u2014 a thing"],
  "files":[{"path":"src/café/naïve.ts","change":"+1 / -1"}],
- "coprocessor":{"worked":["Worked — well"],"failed":[]}}
+ "coprocessor":{"worked":["Worked \u2014 well"],"failed":[]}}
 EOF
 cat > "$TMP/catchup.json" <<'EOF'
 {"session_id":"smoke-catchup","timestamp":"2h ago","status":"post-clear FULL",

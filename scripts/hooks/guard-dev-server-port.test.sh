@@ -34,8 +34,8 @@ PORTS="$HOME/.claude/scripts/dev-servers/ports.sh"
 NEUTRAL_CWD="$HOME/.claude"     # no vite/next config here, so no port is sniffed
 
 pass=0; fail=0; skip=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
-skipcase(){ skip=$((skip+1)); echo "  SKIP: $1 — $2"; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
+skipcase(){ skip=$((skip+1)); echo "  SKIP: $1: $2"; }
 
 verdict(){ # verdict <command> [cwd] -> BLOCK|allow
   local out rc cwd="${2:-$NEUTRAL_CWD}"

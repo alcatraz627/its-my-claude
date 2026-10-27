@@ -49,7 +49,7 @@ Track memory growth over repeated operations:
 #### Unbounded Cache Growth
 
 ```swift
-// Bad — cache grows forever
+// Bad: cache grows forever
 class ImageCache {
     var cache: [URL: UIImage] = [:]
 
@@ -58,7 +58,7 @@ class ImageCache {
     }
 }
 
-// Good — use NSCache for automatic eviction
+// Good: use NSCache for automatic eviction
 class ImageCache {
     private let cache = NSCache<NSURL, UIImage>()
 
@@ -81,11 +81,11 @@ class ImageCache {
 #### Large Images Not Downsampled
 
 ```swift
-// Bad — full resolution image loaded into memory
+// Bad: full resolution image loaded into memory
 let image = UIImage(contentsOfFile: photoPath)
 // 4032x3024 photo = ~48 MB in memory
 
-// Good — downsample to display size
+// Good: downsample to display size
 func downsample(imageAt url: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
     let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
     let options: [CFString: Any] = [
@@ -115,7 +115,7 @@ func downsample(imageAt url: URL, to pointSize: CGSize, scale: CGFloat) -> UIIma
 #### Closure Capturing Self
 
 ```swift
-// Bad — retain cycle: self -> timer -> closure -> self
+// Bad: retain cycle: self -> timer -> closure -> self
 class ViewModel {
     var timer: Timer?
 
@@ -126,7 +126,7 @@ class ViewModel {
     }
 }
 
-// Good — weak capture
+// Good: weak capture
 timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
     self?.refresh()
 }
@@ -135,7 +135,7 @@ timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _
 #### Delegate Retain Cycle
 
 ```swift
-// Bad — strong delegate creates cycle
+// Bad: strong delegate creates cycle
 protocol ServiceDelegate: AnyObject {
     func didComplete()
 }
@@ -149,7 +149,7 @@ class ViewModel: ServiceDelegate {
     init() { service.delegate = self }
 }
 
-// Good — weak delegate
+// Good: weak delegate
 class Service {
     weak var delegate: ServiceDelegate?
 }
@@ -158,7 +158,7 @@ class Service {
 #### Closure in Collection
 
 ```swift
-// Bad — closures in array capture self strongly
+// Bad: closures in array capture self strongly
 class Coordinator {
     var handlers: [() -> Void] = []
 
@@ -169,7 +169,7 @@ class Coordinator {
     }
 }
 
-// Good — weak capture in each closure
+// Good: weak capture in each closure
 handlers.append { [weak self] in
     self?.handleEvent()
 }
@@ -181,14 +181,14 @@ handlers.append { [weak self] in
 // Modern iOS/macOS: system auto-removes observers on dealloc
 // But if using block-based API, the token retains the closure:
 
-// Bad — token keeps closure alive
+// Bad: token keeps closure alive
 let token = NotificationCenter.default.addObserver(
     forName: .dataChanged, object: nil, queue: .main
 ) { _ in
     self.reload() // Retained by token
 }
 
-// Good — store and remove, or use weak self
+// Good: store and remove, or use weak self
 let token = NotificationCenter.default.addObserver(
     forName: .dataChanged, object: nil, queue: .main
 ) { [weak self] _ in
@@ -232,7 +232,7 @@ For full allocation backtraces in Memory Graph Debugger:
 In tight loops creating Objective-C bridged objects:
 
 ```swift
-// Bad — autoreleased objects accumulate until loop ends
+// Bad: autoreleased objects accumulate until loop ends
 for item in largeDataSet {
     let string = item.name as NSString       // Autoreleased
     let data = string.data(using: .utf8)     // Autoreleased
@@ -240,7 +240,7 @@ for item in largeDataSet {
 }
 // Memory spikes until loop completes and pool drains
 
-// Good — drain pool each iteration
+// Good: drain pool each iteration
 for item in largeDataSet {
     autoreleasepool {
         let string = item.name as NSString
@@ -248,7 +248,7 @@ for item in largeDataSet {
         process(data)
     }
 }
-// Memory stays flat — pool drains each iteration
+// Memory stays flat: pool drains each iteration
 ```
 
 ### When autoreleasepool Matters

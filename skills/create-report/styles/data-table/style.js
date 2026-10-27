@@ -1,5 +1,5 @@
 /**
- * data-table style — report.js
+ * data-table style: report.js
  * Tab switching, table row filtering/search, numeric cell detection,
  * copy buttons, code expand, theme toggle, color picker, and shared utilities.
  */

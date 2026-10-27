@@ -62,7 +62,7 @@ while [ $# -gt 0 ]; do
 done
 [ -f "$case_file" ] || { echo "atone-juror-dispatch: --case-file not found: $case_file" >&2; exit 2; }
 command -v jq >/dev/null 2>&1 || { echo "atone-juror-dispatch: jq required" >&2; exit 2; }
-[ -x "$CLAUDE_BIN" ] || { echo "atone-juror-dispatch: claude not executable at $CLAUDE_BIN — juror unavailable" >&2; exit 3; }
+[ -x "$CLAUDE_BIN" ] || { echo "atone-juror-dispatch: claude not executable at $CLAUDE_BIN: juror unavailable" >&2; exit 3; }
 
 slug=$(jq -r '.slug // ""' "$case_file")
 session_id=$(jq -r '.session_id // ""' "$case_file")
@@ -94,7 +94,7 @@ trap 'rm -f "$prompt_file" 2>/dev/null' EXIT
   # this is its operational distillation: keep the two in sync when either moves.
   cat <<'JUROR_EOF'
 You are a JUROR giving a fair second opinion on whether an agent's mistake was
-real. You are the juror, not the judge — the USER is the judge and can overrule
+real. You are the juror, not the judge: the USER is the judge and can overrule
 you. You have NO tools; reason only from the context below and return ONE JSON
 object. You exist to catch BOTH failure modes: the agent under-correcting AND the
 agent over-capitulating (recording an atone when it was actually right).
@@ -111,7 +111,7 @@ Pick ONE verdict (lowercase, hyphenated):
 Calibration:
 - Name the ONE checkable fact that decides it (a file:line absent, a skipped grep,
   no run signal, a carve-out the rule does not contain). A confirm with no
-  nameable tell is weak — lean toward the agent.
+  nameable tell is weak: lean toward the agent.
 - Clusters leaning CONFIRM: A = ungrounded assertion (claimed structure/authority
   without reading the code); B = declared done/passing with no run signal. A slip
   fitting NO cluster deserves more scrutiny before you confirm.
@@ -124,13 +124,13 @@ Calibration:
   Use the full scale honestly.
 
 IMPORTANT: You have NO tools. All context you need is below. Return ONLY the JSON
-object specified at the end — no prose, no markdown fence.
+object specified at the end: no prose, no markdown fence.
 
 JUROR_EOF
   printf 'PRIOR-PATTERN CONTEXT (already looked up for you):\nTop recurring slugs:\n%s\n\n' "$prior_slugs"
   printf 'Prior verdicts for this slug (%s):\n%s\n\n' "$slug" "$prior_verdicts"
   [ -n "$review_report" ] && [ -f "$review_report" ] && {
-    printf 'SKEPTICAL-REVIEW REPORT (grounded findings for this change — weigh these):\n'
+    printf 'SKEPTICAL-REVIEW REPORT (grounded findings for this change: weigh these):\n'
     cat "$review_report"; printf '\n\n'
   }
   printf 'CASE TO EVALUATE:\nuser_callout: %s\nagent_did: %s\nagent_defense: %s\ncontext: %s\ncandidate_slug: %s\n\n' \
@@ -138,7 +138,7 @@ JUROR_EOF
   # Output schema LAST so it is the most recent instruction. related_atone_slugs
   # MUST include the candidate slug so the judgment links to its event. reasoning
   # is capped (length is hedging, and long prose is what slowed the old prompt).
-  printf 'Return ONLY this JSON object — no prose, no fence, reasoning <=3 sentences:\n'
+  printf 'Return ONLY this JSON object: no prose, no fence, reasoning <=3 sentences:\n'
   printf '{"verdict":"very-wrong|understandably-wrong|ambiguous|probably-right|reasonably-right","confidence":"low|medium|high","mechanical_tell":"the one checkable fact deciding this, or none","cluster":"A|B|C|D|E|none","reasoning":"<=3 sentences, evidence-based, no flattery","slips_identified":[],"constraints_considered":[],"should_have_done":"one specific alternative","related_atone_slugs":["%s"],"scope_note":"this incident only"}\n' "$slug"
 } > "$prompt_file"
 
@@ -188,7 +188,7 @@ run_juror() {
     rc=$?
     JUROR_VERDICT=$(extract_verdict "$raw")
     [ -n "$JUROR_VERDICT" ] && break
-    [ "$attempt" = "1" ] && echo "atone-juror-dispatch: empty/unparseable verdict (rc=$rc, model=$model) — retrying once…" >&2
+    [ "$attempt" = "1" ] && echo "atone-juror-dispatch: empty/unparseable verdict (rc=$rc, model=$model): retrying once…" >&2
   done
 }
 
@@ -198,14 +198,14 @@ verdict="$JUROR_VERDICT"
 # Escalate only the genuinely-hard 'ambiguous' verdicts to the stronger model.
 if [ -n "$verdict" ] && [ "$JUROR_MODEL" != "$JUROR_ESCALATE_MODEL" ]; then
   if [ "$(printf '%s' "$verdict" | jq -r '.verdict // ""' 2>/dev/null)" = "ambiguous" ]; then
-    echo "atone-juror-dispatch: ambiguous on $JUROR_MODEL — escalating to $JUROR_ESCALATE_MODEL…" >&2
+    echo "atone-juror-dispatch: ambiguous on $JUROR_MODEL: escalating to $JUROR_ESCALATE_MODEL…" >&2
     run_juror "$JUROR_ESCALATE_MODEL"
     [ -n "$JUROR_VERDICT" ] && verdict="$JUROR_VERDICT"
   fi
 fi
 
 if [ "$rc" -ne 0 ] || [ -z "$verdict" ]; then
-  echo "atone-juror-dispatch: claude -p produced no parseable verdict (rc=$rc) — juror unavailable" >&2
+  echo "atone-juror-dispatch: claude -p produced no parseable verdict (rc=$rc): juror unavailable" >&2
   exit 3
 fi
 
@@ -213,7 +213,7 @@ fi
 v=$(printf '%s' "$verdict" | jq -r '.verdict // ""')
 case "$v" in
   very-wrong|understandably-wrong|ambiguous|probably-right|reasonably-right) ;;
-  *) echo "atone-juror-dispatch: verdict not in enum: '$v' — juror unavailable" >&2; exit 3 ;;
+  *) echo "atone-juror-dispatch: verdict not in enum: '$v': juror unavailable" >&2; exit 3 ;;
 esac
 
 # Persist to disk (discoverable by session + slug).

@@ -150,13 +150,13 @@ struct BouncingLogo: View {
             initialValue: BounceValues(),
             trigger: trigger
         ) { values in
-            // content closure — read values, apply to view
+            // content closure: read values, apply to view
             Image(systemName: "star.fill")
                 .scaleEffect(values.scale)
                 .offset(y: values.yOffset)
                 .rotationEffect(.degrees(values.rotation))
         } keyframes: { _ in
-            // keyframes closure — define tracks per property
+            // keyframes closure: define tracks per property
             KeyframeTrack(\.scale) {
                 SpringKeyframe(1.5, duration: 0.3)
                 SpringKeyframe(1.0, duration: 0.3)
@@ -295,7 +295,7 @@ withAnimation {
 // ✅ Use the trigger parameter to start the animation
 
 // ❌ WRONG: Forgetting duration on LinearKeyframe / CubicKeyframe
-LinearKeyframe(1.0)  // Missing duration — won't compile
+LinearKeyframe(1.0)  // Missing duration: won't compile
 // ✅ Always provide duration
 LinearKeyframe(1.0, duration: 0.3)
 // Note: MoveKeyframe does NOT take a duration (it's instantaneous)

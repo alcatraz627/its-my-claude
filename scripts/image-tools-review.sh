@@ -16,7 +16,7 @@ IMAGINE=$(recent "$LM/outputs/imagine-history.jsonl")
 GEM=$(recent "$LM/logs/gem-history.jsonl")
 
 {
-  echo "# Image-tool review — $(date +%Y-%m-%d) (last 21 days)"
+  echo "# Image-tool review: $(date +%Y-%m-%d) (last 21 days)"
   echo
   echo "Decide: is native-read token spend justified where see (free) or gemini (abundant)"
   echo "would do? Reference comparison notes: ~/Code/local-models/docs/08-vision-lenses-design.md"
@@ -49,7 +49,7 @@ GEM=$(recent "$LM/logs/gem-history.jsonl")
   echo "- Standalone 'what does this image say' → see first (free), verify exact strings."
   echo "- If native est-token spend is large AND reads look shape-like (structural), shift to see."
   echo "- Devise the head-to-head test if the data is ambiguous (probe-style: N labeled images,"
-  echo "  recall + fabrication + cost per lane) — see the model-tier proposal §vision."
+  echo "  recall + fabrication + cost per lane): see the model-tier proposal §vision."
 } > "$OUT"
 
 echo "review brief: $OUT"

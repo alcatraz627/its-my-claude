@@ -148,13 +148,13 @@ Read `nomination-template.md` and fill all fields.
 [Metrics, testimonials, or stories showing real-world impact]
 
 ## Design Highlights
-[What makes the visual design noteworthy — animations, interactions, aesthetics]
+[What makes the visual design noteworthy: animations, interactions, aesthetics]
 
 ## Accessibility Features
 [VoiceOver support, Dynamic Type, color accessibility, etc.]
 
 ## Privacy Commitment
-[How the app respects user privacy — on-device processing, minimal data collection, etc.]
+[How the app respects user privacy: on-device processing, minimal data collection, etc.]
 
 ## Media Kit
 [Links to: screenshots, app preview video, press kit, developer photos]

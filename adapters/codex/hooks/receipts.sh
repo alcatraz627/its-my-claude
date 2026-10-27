@@ -13,5 +13,5 @@ f="$GCC_OUTBOX_DIR/$sid.receipts.jsonl"; cur="$GCC_OUTBOX_DIR/$sid.receipts.curs
 seen=0; [ -f "$cur" ] && seen=$(cat "$cur" 2>/dev/null); seen=${seen:-0}
 total=$(wc -l < "$f" | tr -d ' ')
 [ "$total" -gt "$seen" ] || exit 0
-tail -n +"$((seen + 1))" "$f" | jq -r '"  #\(.n) \(.verb): " + (if .exit == 0 then "ok" else "FAILED (exit \(.exit))" end) + (if (.out|length) > 0 then " — " + (.out | gsub("\n"; " ") | .[0:200]) else "" end)'
+tail -n +"$((seen + 1))" "$f" | jq -r '"  #\(.n) \(.verb): " + (if .exit == 0 then "ok" else "FAILED (exit \(.exit))" end) + (if (.out|length) > 0 then ": " + (.out | gsub("\n"; " ") | .[0:200]) else "" end)'
 printf '%s' "$total" > "$cur"

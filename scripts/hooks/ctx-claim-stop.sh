@@ -99,7 +99,7 @@ if ! hook_loop_check "$MARK" "$prose"; then
   exit 0
 fi
 
-msg="⚠ unmeasured context claim — the instrument says context is ~${used}% full, which is below the 70% first band, so no pressure exists to report.
+msg="⚠ unmeasured context claim: the instrument says context is ~${used}% full, which is below the 70% first band, so no pressure exists to report.
 
 Claim(s) in the final message:
 $hit

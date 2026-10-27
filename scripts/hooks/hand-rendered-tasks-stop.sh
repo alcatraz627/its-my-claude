@@ -122,7 +122,7 @@ if ! hook_loop_check "$MARK" "$prose"; then
   exit 0
 fi
 
-msg="⚠ hand-rendered task table — a task list painted by hand, not run through /tasks.
+msg="⚠ hand-rendered task table: a task list painted by hand, not run through /tasks.
 
 This turn presents task rows (a #N-first-column table, or a #N list) and never
 called task-table.sh, task.sh, or the Task tool. A hand-built table is not the

@@ -161,7 +161,7 @@ final class VersionTracker: Sendable {
     /// version silently so it shows on the *next* update.
     func shouldShowWhatsNew() -> Bool {
         guard let lastShown = lastShownVersion else {
-            // First install — mark current version, show onboarding instead
+            // First install: mark current version, show onboarding instead
             markVersionAsShown()
             return false
         }
@@ -174,7 +174,7 @@ final class VersionTracker: Sendable {
         defaults.set(currentVersion, forKey: storageKey)
     }
 
-    /// Resets tracking — useful for debugging and testing.
+    /// Resets tracking: useful for debugging and testing.
     func reset() {
         defaults.removeObject(forKey: storageKey)
     }
@@ -226,7 +226,7 @@ extension WhatsNewProviding {
 
 /// Provides What's New content from hardcoded Swift data.
 ///
-/// This is the simplest approach — define releases directly in code.
+/// This is the simplest approach: define releases directly in code.
 /// No network required, no file parsing, always available.
 ///
 /// Usage:
@@ -363,7 +363,7 @@ actor RemoteWhatsNewProvider: WhatsNewProviding {
             lastFetchDate = Date()
             return container.releases
         } catch {
-            // Network failure — use fallback
+            // Network failure: use fallback
             return try await fallback.allReleases()
         }
     }
@@ -614,7 +614,7 @@ struct WhatsNewSheetModifier: ViewModifier {
                 releaseToShow = release
             }
         } catch {
-            // Silently fail — don't block the user experience
+            // Silently fail: don't block the user experience
         }
     }
 }

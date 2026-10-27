@@ -124,7 +124,7 @@ for gname, g in goals.items():
     if ra is None:
         gproblems.append("missing/unparseable review_after")
     elif now >= ra:
-        gproblems.append(f"review_after {g.get('review_after')} is past due — re-justify or retire the goal")
+        gproblems.append(f"review_after {g.get('review_after')} is past due: re-justify or retire the goal")
     reviewed = parse_date(g.get("reviewed_on"))
     for ref in str(g.get("provenance", "")).split(";"):
         tok = ref.strip().split()[0] if ref.strip() else ""
@@ -136,7 +136,7 @@ for gname, g in goals.items():
         elif reviewed is not None:
             mtime = datetime.datetime.fromtimestamp(os.path.getmtime(cand), tz=datetime.timezone.utc)
             if mtime > reviewed:
-                gproblems.append(f"provenance {tok} changed after reviewed_on {g.get('reviewed_on')} — re-check the goal still matches")
+                gproblems.append(f"provenance {tok} changed after reviewed_on {g.get('reviewed_on')}: re-check the goal still matches")
     if gproblems:
         alerts.append({"detector": "goals-lint", "tier": "find", "kind": "alert", "goal_ref": gname,
                        "actionable": True, "subject": f"goals-lint: {gname}",
@@ -191,7 +191,7 @@ for det in dets:
         if bad:
             alerts.append({"detector": name, "tier": "find", "kind": "alert", "goal_ref": gref,
                            "actionable": True, "subject": f"cursor-lint: {name}",
-                           "instruction": f"detector '{name}' cursor is broken: {bad}. It would go silently quiet on real events — reset the cursor.",
+                           "instruction": f"detector '{name}' cursor is broken: {bad}. It would go silently quiet on real events: reset the cursor.",
                            "idempotence_key": f"cursorlint|{name}|{now.strftime('%Y-%m-%d')}"})
             summary.append(f"CURSOR-FAIL {name}: {bad}")
             st["last_eval_ts"] = nowiso
@@ -269,7 +269,7 @@ for det in dets:
         if not mappings:
             alerts.append({"detector": name, "tier": "find", "kind": "alert", "goal_ref": gref,
                            "actionable": True, "subject": f"efficacy-lint: {name}",
-                           "instruction": f"efficacy detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet — fix the registry.",
+                           "instruction": f"efficacy detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet: fix the registry.",
                            "idempotence_key": f"efflint|{name}|{now.strftime('%Y-%m-%d')}"})
             summary.append(f"{name}: LINT no registry mappings")
         else:
@@ -398,7 +398,7 @@ for det in dets:
         if not mappings:
             alerts.append({"detector": name, "tier": "find", "kind": "alert", "goal_ref": gref,
                            "actionable": True, "subject": f"acted-lint: {name}",
-                           "instruction": f"acted detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet — fix the registry.",
+                           "instruction": f"acted detector '{name}' has no readable registry mappings (registry '{det.get('registry')}' missing/empty/unparseable). It would go silently quiet: fix the registry.",
                            "idempotence_key": f"actlint|{name}|{now.strftime('%Y-%m-%d')}"})
             summary.append(f"{name}: LINT no registry mappings")
         else:

@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 """
-seed-structural-claim.py — build the structural-claim regression fixture set.
+seed-structural-claim.py: build the structural-claim regression fixture set.
 
 Two fixture sources, both registered in the shared fixtures/manifest.json (the
 declared-ready entries are preserved):
 
-  1. REAL corpus captures — pinned by (agent/transcript id substring, turn ordinal,
+  1. REAL corpus captures: pinned by (agent/transcript id substring, turn ordinal,
      a snippet guard). These are the load-bearing regression guards for the VALUED
      behavior: the design-from-memory authoring fires must keep firing (SOFT), and
      grounded/code-read design turns must stay silent.
 
-  2. SYNTHETIC slices — hand-authored single-turn transcripts with controlled
+  2. SYNTHETIC slices: hand-authored single-turn transcripts with controlled
      tool-histories, for the read-gate branches the corpus can't cleanly provide
-     (esp. the blind-authority BLOCK — the corpus has 0). Their prose is faithful
+     (esp. the blind-authority BLOCK: the corpus has 0). Their prose is faithful
      to the empirical-structural-claim.md classified records (person-owns=rec 32,
      meta=rec 13, backtick-path=rec 33/35/44, blind-authority=rec 36 shape).
 
-Each entry carries `expected` (what the hook does now — asserted by run-fixtures.sh)
-and `desired` (the intended class outcome — reported, not asserted).
+Each entry carries `expected` (what the hook does now: asserted by run-fixtures.sh)
+and `desired` (the intended class outcome: reported, not asserted).
 
 Run: python3 seed-structural-claim.py [--hook <path>]   (default: the live hook)
 """

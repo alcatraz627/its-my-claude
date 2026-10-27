@@ -1,4 +1,4 @@
-/* ── Feed Style — Interactive Behaviors ───────────────────────────────────── */
+/* ── Feed Style: Interactive Behaviors ───────────────────────────────────── */
 
 (function () {
   "use strict";

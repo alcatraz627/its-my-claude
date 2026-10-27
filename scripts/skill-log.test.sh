@@ -11,7 +11,7 @@ STORE="$(mktemp "${TMPDIR:-/tmp}/skl-XXXXXX")"; rm -f "$STORE"
 export SKILL_LOG_EVENTS="$STORE"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 last(){ tail -1 "$STORE" 2>/dev/null; }
 
 echo "── record writes a well-formed event (positive read, not just 'a line appeared') ──"

@@ -635,7 +635,7 @@ final class FormDraftManager {
 
     // MARK: - Public API
 
-    /// Save a field value. Debounced — won't write to disk on every keystroke.
+    /// Save a field value. Debounced: won't write to disk on every keystroke.
     func save(key: String, value: String) {
         drafts[key] = value
         scheduleSave()

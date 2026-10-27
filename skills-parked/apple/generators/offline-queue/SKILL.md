@@ -155,7 +155,7 @@ struct ContentView: View {
         NavigationStack {
             FeedView()
         }
-        .offlineQueueBanner()  // Shows "Offline — changes will sync" when disconnected
+        .offlineQueueBanner()  // Shows "Offline: changes will sync" when disconnected
     }
 }
 ```
@@ -250,7 +250,7 @@ await queueManager.enqueue(operation)
 
 ### Process Queue on Connectivity
 ```swift
-// Automatic — OfflineQueueManager observes NetworkMonitor
+// Automatic: OfflineQueueManager observes NetworkMonitor
 // and calls processQueue() when connectivity returns.
 // No manual intervention needed.
 ```

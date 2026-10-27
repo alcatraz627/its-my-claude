@@ -194,7 +194,7 @@ for c in candidates:
         f"**Human feedback on the source insight:** "
         f"{'thumbs-up' if c['user_approved'] else 'none yet'}\n\n"
         f"Filed automatically by propose-config-from-insights.sh. Decide at "
-        f"/backlog-triage like any other proposal — do not hand-edit the store."
+        f"/backlog-triage like any other proposal: do not hand-edit the store."
     )
     tags = [f"link:dream:{c['insight_id']}"] if c['insight_id'] else []
     tags += ["src:dream-consolidation", f"rulehash:{c['rule_hash']}"]

@@ -1,5 +1,5 @@
 """
-aggregate.py — Cross-session analysis from signals.
+aggregate.py: Cross-session analysis from signals.
 
 Queries the signals table to produce ranked findings across sessions.
 """

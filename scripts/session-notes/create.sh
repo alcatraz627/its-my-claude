@@ -54,7 +54,7 @@ if [[ ! -f "$DOC" ]]; then
 
 ## Todos
 
-- [ ] _no todos yet — add as you work_
+- [ ] _no todos yet: add as you work_
 
 ## Notes
 

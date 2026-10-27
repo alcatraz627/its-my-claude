@@ -46,7 +46,7 @@
 #   - atone event: search `bash ~/.claude/scripts/atone.sh search structural-claim`.
 # ============================================================================
 
-echo "atone-to-dream.archived.sh is ARCHIVED — reference only, not for execution." >&2
+echo "atone-to-dream.archived.sh is ARCHIVED: reference only, not for execution." >&2
 echo "See the header for the canonical path (i-dream dream-domain plugin)." >&2
 exit 2
 
@@ -62,7 +62,7 @@ SRC="$ATONE_DIR/derived/.events-view.jsonl"
 MAP="$ATONE_DIR/cluster-map.tsv"
 QUEUE="$HOME/.claude/subconscious/dreams/ingest-queue"
 MARK="$ATONE_DIR/derived/.dream-bridged.tsv"
-[ -d "$(dirname "$QUEUE")" ] || { echo "atone-to-dream: dream queue parent missing — is i-dream installed?"; exit 0; }
+[ -d "$(dirname "$QUEUE")" ] || { echo "atone-to-dream: dream queue parent missing: is i-dream installed?"; exit 0; }
 mkdir -p "$QUEUE" "$(dirname "$MARK")"
 
 command -v jq >/dev/null 2>&1 || { echo "atone-to-dream: jq required"; exit 0; }
@@ -96,7 +96,7 @@ if ! jq -cs --argjson map "$map_json" '
         project:  (.latest.project // ""),
         rca_id:   (.latest.rca_id // null) }
   ' "$SRC" > "$AGG" 2>/dev/null; then
-  echo "atone-to-dream: aggregation failed — marker left untouched, nothing emitted" >&2
+  echo "atone-to-dream: aggregation failed: marker left untouched, nothing emitted" >&2
   exit 1
 fi
 

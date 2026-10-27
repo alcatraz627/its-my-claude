@@ -15,5 +15,5 @@ if [ -f "$KROOT/.mothballed" ] && [ "${KANBAN_UNFREEZE:-0}" != "1" ]; then
        exit 3 ;;
   esac
 fi
-BUN="$(command -v bun)" || { echo "kanban: bun not installed — fix: brew install oven-sh/bun/bun" >&2; exit 1; }
+BUN="$(command -v bun)" || { echo "kanban: bun not installed: fix: brew install oven-sh/bun/bun" >&2; exit 1; }
 exec "$BUN" "$(dirname "${BASH_SOURCE[0]}")/cli.ts" "$@"

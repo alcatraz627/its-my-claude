@@ -58,7 +58,7 @@ enum StreakError: Error, LocalizedError {
     /// Failed to save the activity record.
     case saveFailed(underlying: Error)
 
-    /// Activity for this type already recorded today (not a real error — idempotent).
+    /// Activity for this type already recorded today (not a real error: idempotent).
     case alreadyRecordedToday(activityType: String)
 
     /// No streak freezes available.
@@ -329,10 +329,10 @@ final class StreakManager {
             } else if frozenDays.contains(checkDate) {
                 streak += 1 // Frozen day counts toward streak
             } else if checkDate == today {
-                // Today hasn't been recorded yet — skip but continue checking
+                // Today hasn't been recorded yet: skip but continue checking
                 // (streak is "at risk" but not broken until end of day)
             } else {
-                break // Gap found — streak ends
+                break // Gap found: streak ends
             }
 
             guard let previousDay = calendar.date(byAdding: .day, value: -1, to: checkDate) else {
@@ -813,7 +813,7 @@ struct StreakNotificationScheduler: Sendable {
         case 0:
             return "Start a new streak today! Every journey begins with day one."
         case 1...6:
-            return "You have a \(streak)-day streak going. Don't lose it — check in before midnight!"
+            return "You have a \(streak)-day streak going. Don't lose it: check in before midnight!"
         case 7...29:
             return "Impressive! \(streak) days in a row. Keep the momentum going today!"
         case 30...99:

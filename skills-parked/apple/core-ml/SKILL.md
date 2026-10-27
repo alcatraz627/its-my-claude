@@ -293,16 +293,16 @@ pruner = MagnitudePruner(model, config)
 ```swift
 let config = MLModelConfiguration()
 
-// Best performance — let system choose CPU, GPU, or Neural Engine
+// Best performance: let system choose CPU, GPU, or Neural Engine
 config.computeUnits = .all
 
-// CPU only — predictable latency, no GPU/NE contention
+// CPU only: predictable latency, no GPU/NE contention
 config.computeUnits = .cpuOnly
 
-// CPU + Neural Engine — good balance, avoids GPU contention with UI
+// CPU + Neural Engine: good balance, avoids GPU contention with UI
 config.computeUnits = .cpuAndNeuralEngine
 
-// CPU + GPU — when Neural Engine unavailable
+// CPU + GPU: when Neural Engine unavailable
 config.computeUnits = .cpuAndGPU
 ```
 

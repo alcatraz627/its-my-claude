@@ -349,7 +349,7 @@ Use this checklist format to present the decision:
 - [Item 2]
 
 ### Red Items (Must fix before launch)
-- [Item 1 — or "None"]
+- [Item 1: or "None"]
 
 ### Decision: [GO / NO-GO / CONDITIONAL GO]
 ### Reasoning: [1-2 sentences]

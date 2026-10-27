@@ -104,7 +104,7 @@ as intended:
 
 ```bash
 TMP=$(mktemp -d); qlmanage -t -s 512 -o "$TMP" "<file>.svg" >/dev/null 2>&1
-# → $TMP/<file>.svg.png  — Read this file and judge it visually
+# → $TMP/<file>.svg.png: Read this file and judge it visually
 ```
 
 Escalate to a browser-fidelity render **when the SVG uses features QuickLook
@@ -146,7 +146,7 @@ request on an existing file, run Phase 5 then Phase 4.
 Per GUIDELINES.md:
 
 ```
-What was done:   <one line — what was drawn/edited>
+What was done:   <one line: what was drawn/edited>
 Files created:   <absolute path to the .svg>
 Render-check:    <passed (qlmanage / browser) | needs-look>
 Optimized:       <svgo: N → M bytes | skipped (illustration)>

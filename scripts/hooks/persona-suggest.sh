@@ -47,10 +47,10 @@ m() { printf '%s' "$prompt" | grep -Eq "$1"; }
 persona="" ; msg=""
 if   m 'should (i|we) build|what should (i|we) (do next|build)|prioriti|worth building|trim the (scope|backlog)'; then
   persona="strategic-triad"
-  msg="This is a scope/prioritization call — consider the strategic triad (closer / platform-builder / pragmatist) or /magi, not a single answer."
+  msg="This is a scope/prioritization call: consider the strategic triad (closer / platform-builder / pragmatist) or /magi, not a single answer."
 elif m '\b(review|audit) (my|the|this) (code|change|changes|diff|pr|branch)|is this (right|correct|safe)|check my work|skeptical'; then
   persona="skeptical-reviewer"
-  msg="This looks like a code review — run /skeptical-review (it dispatches the skeptical-reviewer persona: coverage-first, grounded findings)."
+  msg="This looks like a code review: run /skeptical-review (it dispatches the skeptical-reviewer persona: coverage-first, grounded findings)."
 elif m '\b(plan|decompose|sequence|break (this|it) down)\b|how should (i|we) approach|roadmap'; then
   persona="task-goal-planner"
   msg="This is a planning/decomposition task: run /pick-skill, which routes to /plan and can seat the task-goal-planner persona (persona.sh seat, logged)."

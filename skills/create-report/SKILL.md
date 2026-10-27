@@ -132,7 +132,7 @@ Then compute the output directory and check if it already exists.
 
    ```
    ✓ Report already exists: <output_html>
-     Skipping generation — opening existing file.
+     Skipping generation: opening existing file.
    ```
 
 6. **If it does not exist**: continue to the full generation workflow below.
@@ -187,20 +187,20 @@ Walk through the markdown and produce a JSON object matching the schema below. T
 
 ```json
 {
-  "title": "string — from the first # H1 heading",
-  "subtitle": "string — from metadata like **Project:** or the second line under H1, or null",
-  "generated": "string — from **Generated:** metadata line, or today's date",
+  "title": "string: from the first # H1 heading",
+  "subtitle": "string: from metadata like **Project:** or the second line under H1, or null",
+  "generated": "string: from **Generated:** metadata line, or today's date",
   "nav": [
     {
-      "id": "string — slug of heading text",
-      "text": "string — heading text",
+      "id": "string: slug of heading text",
+      "text": "string: heading text",
       "level": 2,
       "children": [{ "id": "string", "text": "string", "level": 3 }]
     }
   ],
   "sections": [
     {
-      "id": "string — slug of heading text",
+      "id": "string: slug of heading text",
       "heading": "string",
       "level": 2,
       "blocks": ["...see block types below..."]
@@ -212,19 +212,19 @@ Walk through the markdown and produce a JSON object matching the schema below. T
 **Block types** (used inside `sections[].blocks` and inside subsection blocks):
 
 ```json
-{ "type": "paragraph", "html": "string — inline markdown converted to HTML spans" }
+{ "type": "paragraph", "html": "string: inline markdown converted to HTML spans" }
 
 { "type": "hr" }
 
-{ "type": "code", "lang": "string — bash/ts/json/etc, or empty string", "content": "string — raw code text" }
+{ "type": "code", "lang": "string: bash/ts/json/etc, or empty string", "content": "string: raw code text" }
 
 { "type": "table", "headers": ["col1", "col2"], "rows": [["a", "b"], ["c", "d"]] }
 
-{ "type": "ul", "items": ["string — may contain inline HTML"] }
+{ "type": "ul", "items": ["string: may contain inline HTML"] }
 
-{ "type": "ol", "items": ["string — may contain inline HTML"] }
+{ "type": "ol", "items": ["string: may contain inline HTML"] }
 
-{ "type": "blockquote", "html": "string — inline markdown converted to HTML" }
+{ "type": "blockquote", "html": "string: inline markdown converted to HTML" }
 
 {
   "type": "subsection",
@@ -246,13 +246,13 @@ Walk through the markdown and produce a JSON object matching the schema below. T
   "type": "tree",
   "nodes": [
     {
-      "label": "string — directory or file name",
-      "desc": "string — optional short description (optional)",
+      "label": "string: directory or file name",
+      "desc": "string: optional short description (optional)",
       "children": ["...recursive TreeNode objects..."]
     }
   ]
 }
-{ "type": "math", "latex": "string — raw LaTeX expression", "display": true }
+{ "type": "math", "latex": "string: raw LaTeX expression", "display": true }
 ```
 
 **Mathematical notation (`math` blocks):**
@@ -381,7 +381,7 @@ After a successful generation, print:
 ```
 ✓ Report generated: <output_html>
 
-  Switch styles without Claude — no re-parse needed:
+  Switch styles without Claude: no re-parse needed:
     bash <output_dir>/restyle.sh terminal
     bash <output_dir>/restyle.sh magazine
     bash <output_dir>/restyle.sh notion

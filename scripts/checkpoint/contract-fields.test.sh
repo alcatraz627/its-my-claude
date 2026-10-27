@@ -103,9 +103,9 @@ case "$OUT" in *"EMPTY"*"Task store"*) ok "a genuinely empty label (next line is
 
 echo "== a lone dash or em dash is an explicit none, not EMPTY =="
 D=$(mk)
-sed -i '' 's/^- \*\*Task store:\*\* value$/- **Task store:** —/; s/^- \*\*Key anchor:\*\* value$/- **Key anchor:** -/; s/^- \*\*Goal record:\*\* value$/- **Goal record:** —/' "$D"
+sed -i '' 's/^- \*\*Task store:\*\* value$/- **Task store:** '$'\xe2\x80\x94''/; s/^- \*\*Key anchor:\*\* value$/- **Key anchor:** -/; s/^- \*\*Goal record:\*\* value$/- **Goal record:** '$'\xe2\x80\x94''/' "$D"
 OUT=$(bash "$V" "$D" 2>&1)
-case "$OUT" in *"EMPTY"*) bad "a dash value was reported EMPTY: $OUT";; *) ok "— and - are read as an explicit none";; esac
+case "$OUT" in *"EMPTY"*) bad "a dash value was reported EMPTY: $OUT";; *) ok "the em-dash and - are both read as an explicit none";; esac
 D2=$(mk)
 sed -i '' 's/^- \*\*Task store:\*\* value$/- **Task store:**/' "$D2"
 OUT=$(bash "$V" "$D2" 2>&1)

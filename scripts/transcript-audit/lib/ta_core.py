@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ta_core — the engine behind `ta query` and `ta mine`.
+"""ta_core: the engine behind `ta query` and `ta mine`.
 
 Answers one question fast and correctly: which turns, across the Claude
 transcript corpus, match a set of content filters? It leans on two things it
@@ -12,7 +12,7 @@ does NOT re-implement:
 
 This module adds only the middle: a ripgrep pre-filter that narrows 100+ files
 to the handful that could possibly match, then a precise per-turn check on those
-few. It streams one transcript at a time — it never loads the whole corpus into
+few. It streams one transcript at a time: it never loads the whole corpus into
 memory.
 """
 
@@ -149,11 +149,11 @@ def _which(name):
 
 def _rg_files(pattern, files, is_tool=False):
     """The subset of `files` whose RAW text contains `pattern`. A fast narrowing
-    pass — the precise per-turn check runs afterward on the survivors.
+    pass: the precise per-turn check runs afterward on the survivors.
 
     Returns None to mean "could not narrow" (rg missing, or the regex is invalid
     for rg): the caller then treats every file as a candidate. This keeps the
-    pre-filter sound — it can only ever shrink the set on a clean match, never
+    pre-filter sound: it can only ever shrink the set on a clean match, never
     silently drop a file it failed to evaluate."""
     if not files:
         return set()
@@ -174,7 +174,7 @@ def _rg_files(pattern, files, is_tool=False):
 def _candidate_files(spec, all_files):
     """Files worth parsing. A matching turn must satisfy every filter, and each
     filter's textual signature (the regex, or `"name":"Tool"`) appears in that
-    turn's file — so the candidate set is the INTERSECTION of each filter's
+    turn's file: so the candidate set is the INTERSECTION of each filter's
     rg-narrowed file set. No pre-filterable filter ⇒ parse everything."""
     if spec.get("no_prefilter"):
         return list(all_files)
@@ -207,7 +207,7 @@ def compile_regexes(spec):
 
 def _snippet(text, span, maxlen):
     """A single-line window of `text` around `span`, ≤ maxlen chars, with … where
-    it was clipped. span == (0,0) means 'no specific hit' — return the head."""
+    it was clipped. span == (0,0) means 'no specific hit': return the head."""
     if not text:
         return ""
     s, e = span
@@ -347,7 +347,7 @@ def run_query(spec):
 # turn resolution (used by `ta tag`)
 
 def resolve_turn(transcript, turn_idx):
-    """Session id + project (the cwd the turn ran in) for one turn — what a
+    """Session id + project (the cwd the turn ran in) for one turn: what a
     bookmark needs. Raises IndexError/ValueError on a bad turn index."""
     idx = int(turn_idx)
     lines = R.load_lines(transcript)
@@ -375,5 +375,5 @@ if __name__ == "__main__":
     if len(sys.argv) >= 4 and sys.argv[1] == "resolve":
         _cli_resolve(sys.argv[2], sys.argv[3])
     else:
-        sys.stderr.write("ta_core: internal helper — use the `ta` dispatcher\n")
+        sys.stderr.write("ta_core: internal helper: use the `ta` dispatcher\n")
         sys.exit(2)

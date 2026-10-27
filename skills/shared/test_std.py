@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""test_std.py — Automated tests for std::claude Python utilities.
+"""test_std.py: Automated tests for std::claude Python utilities.
 
 Run: python3 ~/.claude/skills/shared/test_std.py
 Exit 0 = all pass, exit 1 = failures
@@ -171,7 +171,7 @@ check("empty section renders", ok, "; ".join(errors[:2]))
 # ── Summary ──────────────────────────────────────────────────────
 
 print(f"\n{'='*50}")
-print(f"  std::claude test_std.py — {passed} passed, {failed} failed")
+print(f"  std::claude test_std.py: {passed} passed, {failed} failed")
 print(f"{'='*50}")
 
 sys.exit(1 if failed > 0 else 0)

@@ -72,7 +72,7 @@ def blank_shell(s):
     lines = s.split("\n")
     out_lines = []
     pending = []      # FIFO of (delimiter, strip_tabs); shell fills bodies in order
-    in_quote = None   # None | "'" | '"' | "$'"  — persists across lines
+    in_quote = None   # None | "'" | '"' | "$'": persists across lines
     for line in lines:
         if pending:
             delim, strip_tabs = pending[0]
@@ -139,7 +139,7 @@ def segments(s):
     """Split into statement-position chunks on the separators zsh honours.
 
     { and } delimit brace groups and one-line function bodies, so they split
-    too — except ${, which is parameter expansion, not a group opener.
+    too: except ${, which is parameter expansion, not a group opener.
     """
     return [seg for seg in re.split(r"(?:[;|&\n()]|(?<!\$)\{|\})+", s)]
 

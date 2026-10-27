@@ -74,7 +74,7 @@ Text("Custom").font(.system(size: 24, design: .rounded))
 // Weight
 Text("Bold").fontWeight(.bold)
 
-// Color — prefer foregroundStyle over foregroundColor
+// Color: prefer foregroundStyle over foregroundColor
 Text("Styled").foregroundStyle(.red)
 Text("Gradient").foregroundStyle(
     .linearGradient(colors: [.yellow, .blue], startPoint: .top, endPoint: .bottom)

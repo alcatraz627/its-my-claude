@@ -25,12 +25,12 @@ check "the same need again adds evidence to the open row" "$out" "✓ evidence +
 check "and files nothing new" "$(rows)" "1"
 check "the open row counts its evidence" "$(jq -r '.evidence' "$PROPOSE_STORE")" "2"
 
-bash "$P" add --title "lm self-audit: recurring failure — server_down on qwen3.6:35b-a3b × 14 (last 7d)" \
+bash "$P" add --title "lm self-audit: recurring failure: server_down on qwen3.6:35b-a3b × 14 (last 7d)" \
   --tags "src:lm-self-audit" >/dev/null
-out=$(bash "$P" add --title "lm self-audit: recurring failure — server_down on qwen3.6:35b-a3b × 9 (last 7d)" \
+out=$(bash "$P" add --title "lm self-audit: recurring failure: server_down on qwen3.6:35b-a3b × 9 (last 7d)" \
   --tags "src:lm-self-audit")
 check "a weekly refile with a different count is the same need" "$out" "✓ evidence +1 on prop-"
-out=$(bash "$P" add --title "lm self-audit: recurring failure — timeout on gemma4:27b × 6 (last 7d)" --tags "src:lm-self-audit")
+out=$(bash "$P" add --title "lm self-audit: recurring failure: timeout on gemma4:27b × 6 (last 7d)" --tags "src:lm-self-audit")
 check "a different failure is a different need" "$out" "✓ filed prop-"
 
 bash "$P" add --title "Graduate a recurring pattern to a gate (ledger alert: 2026-09)" --tags "ledger auto-filed graduate-to-mechanism" >/dev/null

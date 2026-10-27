@@ -55,7 +55,7 @@ else
   bad "no session-keyed marker (found: $(ls "$SD" 2>/dev/null | tr '\n' ' '))"
 fi
 if [ -f "$SD/$TODAY.pending-atone" ]; then
-  bad "date-keyed marker still written ($TODAY) — cross-session collision is live"
+  bad "date-keyed marker still written ($TODAY): cross-session collision is live"
 else
   ok "no date-keyed marker written"
 fi
@@ -102,7 +102,7 @@ KEY_READ=$(printf 'hello' | env HOME="$T" CLAUDE_CODE_SESSION_ID="$SID" CLAUDE_S
 if printf '%s' "$KEY_READ" | rg -q "$SID"; then
   ok "breaker resolves the counter to <session-id>.json"
 elif printf '%s' "$KEY_READ" | rg -q "$TODAY"; then
-  bad "breaker reads <date>.json — no counter is ever written there, so it never fires"
+  bad "breaker reads <date>.json: no counter is ever written there, so it never fires"
 else
   bad "could not observe the breaker's counter path (got: '$KEY_READ')"
 fi
@@ -139,7 +139,7 @@ KEY=$(printf '{"session_id":"%s"}' "$SID" | env HOME="$T" bash -x "$FI" 2>&1 \
 if printf '%s' "$KEY" | rg -q "$SID"; then
   ok "atone-fired-and-ignored-check resolves the counter to <session-id>.json"
 elif printf '%s' "$KEY" | rg -q "$TODAY"; then
-  bad "atone-fired-and-ignored-check reads <date>.json — the counter is never written there"
+  bad "atone-fired-and-ignored-check reads <date>.json: the counter is never written there"
 else
   bad "could not observe its counter path (got '$KEY')"
 fi

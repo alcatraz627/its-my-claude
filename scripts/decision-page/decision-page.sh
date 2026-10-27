@@ -84,14 +84,14 @@ ensure_server() {
   # The kanban server owns the pages now. If it is down, revive it through
   # svc.sh (idle bookkeeping) with pm2 as the fallback; the port is the truth.
   if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then
-    printf 'server: up — %s%s/%s\n' "$C" "$BASE" "$R"; return
+    printf 'server: up: %s%s/%s\n' "$C" "$BASE" "$R"; return
   fi
   bash "$HOME/.claude/scripts/dev-servers/svc.sh" up "$NAME" >/dev/null 2>&1 \
     || pm2 restart "$NAME" >/dev/null 2>&1
   local i
   for i in 1 2 3 4 5; do
     lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1 \
-      && { printf 'server: revived — %s%s/%s\n' "$C" "$BASE" "$R"; return; }
+      && { printf 'server: revived: %s%s/%s\n' "$C" "$BASE" "$R"; return; }
     sleep 1
   done
   die "kanban server (port $PORT) never came up" "pm2 logs $NAME --lines 20   # why it dies"
@@ -162,7 +162,7 @@ cmd_new() {
   # with ONE template, so a template fix reaches every page ever made
   # NB: no ${title:-…} here: bash honors quotes INSIDE ${…} even under double
   # quotes, so an apostrophe in the default text breaks the parse of the file.
-  [ -n "$title" ] || title="TITLE — every answer drafted; flip what needs changing"
+  [ -n "$title" ] || title="TITLE: every answer drafted; flip what needs changing"
   # the board whose root IS this directory, so the common case needs no flag
   [ -n "$board" ] || board="$(board_here)"
   T="$title" SLUG="$slug" TOPIC="$topic" SESS="${sess:-${CLAUDE_SESSION_ID:-}}" \
@@ -208,7 +208,7 @@ EOT
 cmd_check() {
   local slug="${1:?usage: decision-page.sh check <slug>}"
   local dir="$REG/$slug"
-  [ -d "$dir" ] || die "no page '$slug'" "existing pages: $(ls "$REG" 2>/dev/null | rg -v '^(index.html|pages.json)$' | tr '\n' ' ')— or scaffold: decision-page.sh new $slug"
+  [ -d "$dir" ] || die "no page '$slug'" "existing pages: $(ls "$REG" 2>/dev/null | rg -v '^(index.html|pages.json)$' | tr '\n' ' '): or scaffold: decision-page.sh new $slug"
   local fails=0
   # 1. config parses + schema-lite, with fix-proposing messages
   python3 - "$dir/config.json" <<'PY' || fails=1
@@ -218,7 +218,7 @@ try:
     c = json.load(open(p))
 except Exception as e:
     print(f"FAIL config.json does not parse: {e}")
-    print(f"  fix: edit {p} — check trailing commas / quotes near the position above")
+    print(f"  fix: edit {p}: check trailing commas / quotes near the position above")
     sys.exit(1)
 probs = []
 if not c.get("title"): probs.append("missing 'title'")
@@ -359,9 +359,9 @@ PY
   else printf 'FAIL not serving (HTTP %s)\n  fix: decision-page.sh serve   # then re-check\n' "$code"; fails=1; fi
   regen_manifest >/dev/null
   if [ "$fails" = 0 ]; then
-    printf '%sREADY%s — hand the human: %s%s/%s/%s%s\n' "$G" "$R" "$C" "$BASE" "$slug" "$VIEW" "$R"
+    printf '%sREADY%s: hand the human: %s%s/%s/%s%s\n' "$G" "$R" "$C" "$BASE" "$slug" "$VIEW" "$R"
   else
-    printf '%sNOT READY%s — fix the FAIL lines above, then: decision-page.sh check %s\n' "$RED" "$R" "$slug"; exit 1
+    printf '%sNOT READY%s: fix the FAIL lines above, then: decision-page.sh check %s\n' "$RED" "$R" "$slug"; exit 1
   fi
 }
 
@@ -376,18 +376,18 @@ cmd_list() {
     printf '%s%-22s%s %-8s %-5s %s%s/%s/%s  %s%s%s\n' "$B" "$s" "$R" "$items" "$(age_of "$d")" "$C" "$BASE" "$s" "$R" "$D" "$title" "$R"
     any=1
   done
-  [ "$any" = 1 ] || printf 'no pages yet — scaffold one: decision-page.sh new <slug>\n'
+  [ "$any" = 1 ] || printf 'no pages yet: scaffold one: decision-page.sh new <slug>\n'
   printf '%shub:%s %s%s%s\n' "$D" "$R" "$C" "$HUB" "$R"
 }
 
 cmd_status() {
   if lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; then printf 'server: %sup%s (kanban, port %s)\n' "$G" "$R" "$PORT"
-  else printf 'server: %sdown%s — start: decision-page.sh serve\n' "$RED" "$R"; fi
+  else printf 'server: %sdown%s: start: decision-page.sh serve\n' "$RED" "$R"; fi
   local n; n=$(ls -d "$REG"/*/ 2>/dev/null | wc -l | tr -d ' ')
   printf 'pages:  %s  ·  hub: %s%s%s\n' "$n" "$C" "$HUB" "$R"
   local pend=0; [ -f "$PEND" ] && pend=$(grep -cv '^[[:space:]]*$' "$PEND" 2>/dev/null); pend=${pend:-0}
   if [ "$pend" -gt 0 ]; then
-    printf 'await:  %s%s awaiting an answer%s — %s\n' "$Y" "$pend" "$R" "$(grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null | tr '\n' ' ')"
+    printf 'await:  %s%s awaiting an answer%s: %s\n' "$Y" "$pend" "$R" "$(grep -v '^[[:space:]]*$' "$PEND" 2>/dev/null | tr '\n' ' ')"
   fi
 }
 
@@ -399,7 +399,7 @@ cmd_prune() {
   esac; done
   [ -n "$days" ] || die "prune needs --older-than <days>" "decision-page.sh prune --older-than 14"
   local victims; victims=$(find "$REG" -mindepth 1 -maxdepth 1 -type d -mtime "+$days" 2>/dev/null)
-  [ -n "$victims" ] || { echo "nothing older than ${days}d — registry is clean"; exit 0; }
+  [ -n "$victims" ] || { echo "nothing older than ${days}d: registry is clean"; exit 0; }
   printf 'would remove:\n%s\n' "$victims"
   if [ -t 0 ] && [ -f "$HOME/.claude/scripts/tui/pick.sh" ]; then
     . "$HOME/.claude/scripts/tui/pick.sh"
@@ -422,11 +422,11 @@ cmd_pending() {
     add)   local slug="${1:?usage: decision-page.sh pending add <slug>}"
            grep -qxF "$slug" "$PEND" || printf '%s\n' "$slug" >> "$PEND"
            rm -f "$REG/$slug/.cleared"
-           printf 'pending: %s%s%s — clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug"
-           printf '  ARM THE WAKE IN THIS TURN — run this exact Bash call with run_in_background: true\n'
+           printf 'pending: %s%s%s: clear once answered: decision-page.sh pending clear %s\n' "$Y" "$slug" "$R" "$slug"
+           printf '  ARM THE WAKE IN THIS TURN: run this exact Bash call with run_in_background: true\n'
            printf '    until [ -f "%s/%s/.answer.json" ]; do sleep 5; done; echo "decision page %s answered"\n' "$REG" "$slug" "$slug"
            printf '  (it exits on submit and re-invokes you; the server also ipcs the origin session as backup.\n'
-           printf '   an unarmed handoff means next-session pickup — say so to the human if you deliberately defer.)\n' ;;
+           printf '   an unarmed handoff means next-session pickup: say so to the human if you deliberately defer.)\n' ;;
     clear) local slug="${1:?usage: decision-page.sh pending clear <slug>}"
            local tmp="$PEND.$$.tmp"
            grep -vxF "$slug" "$PEND" > "$tmp" 2>/dev/null; mv -f "$tmp" "$PEND"
@@ -473,7 +473,7 @@ cmd_answer() {
     *) die "unknown flag for answer: $1" "decision-page.sh answer <slug> [--consume] [--notify]" ;;
   esac; shift; done
   local f="$REG/$slug/.answer.json"
-  [ -f "$f" ] || { printf 'no answer yet for %s%s%s — the human has not hit Submit\n' "$Y" "$slug" "$R" >&2; exit 1; }
+  [ -f "$f" ] || { printf 'no answer yet for %s%s%s: the human has not hit Submit\n' "$Y" "$slug" "$R" >&2; exit 1; }
   python3 - "$f" "$consume" "$notify" <<'PY'
 import json, os, platform, shutil, subprocess, sys
 f, consume, notify = sys.argv[1], sys.argv[2] == "1", sys.argv[3] == "1"
@@ -526,7 +526,7 @@ PY
 
 usage() {
   cat <<EOT
-${B}decision-page.sh${R} — pre-answered feedback pages a human can answer in one paste
+${B}decision-page.sh${R}: pre-answered feedback pages a human can answer in one paste
 
 ${Y}commands${R}
   ${B}new${R} <slug> [--title "…"]   scaffold a page + print the agent TODO

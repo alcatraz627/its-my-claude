@@ -24,7 +24,7 @@ Without TDD:           With TDD:
 Bug reported           Bug reported
   → AI generates fix     → Write failing test (RED)
   → Deploy               → AI generates fix (GREEN)
-  → Hope it works        → Test passes — confirmed fixed
+  → Hope it works        → Test passes: confirmed fixed
   → Bug returns later    → Test prevents regression forever
 ```
 
@@ -63,15 +63,15 @@ import Testing
 @Suite("Bug Fix: [Brief description]")
 struct BugFix_DescriptionTests {
 
-    @Test("should [expected behavior] — was [actual behavior]")
+    @Test("should [expected behavior]: was [actual behavior]")
     func reproduceBug() {
-        // Arrange — set up the conditions that trigger the bug
+        // Arrange: set up the conditions that trigger the bug
         let calculator = PriceCalculator()
 
-        // Act — perform the operation that's broken
+        // Act: perform the operation that's broken
         let result = calculator.applyDiscount(price: 100, percent: 50)
 
-        // Assert — what it SHOULD return (this will FAIL now)
+        // Assert: what it SHOULD return (this will FAIL now)
         #expect(result == 50.0)  // Currently returns 0.5 (bug: divides by 100 twice)
     }
 }
@@ -80,7 +80,7 @@ struct BugFix_DescriptionTests {
 #### Template: Async Bug
 
 ```swift
-@Test("should return cached items when network fails — was crashing")
+@Test("should return cached items when network fails: was crashing")
 func reproduceBug() async throws {
     let mockNetwork = MockNetworkClient(shouldFail: true)
     let mockCache = MockCache(items: [.sample])
@@ -96,7 +96,7 @@ func reproduceBug() async throws {
 #### Template: State Bug
 
 ```swift
-@Test("should update count after deletion — was showing stale count")
+@Test("should update count after deletion: was showing stale count")
 func reproduceBug() {
     let manager = ItemManager()
     manager.addItem(Item(title: "Test"))
@@ -111,7 +111,7 @@ func reproduceBug() {
 #### Template: Edge Case Bug
 
 ```swift
-@Test("should handle empty input — was crashing with index out of range")
+@Test("should handle empty input: was crashing with index out of range")
 func reproduceBug() {
     let parser = CSVParser()
 
@@ -126,7 +126,7 @@ func reproduceBug() {
 #### Template: UI State Bug
 
 ```swift
-@Test("should show error state when API fails — was showing infinite spinner")
+@Test("should show error state when API fails: was showing infinite spinner")
 func reproduceBug() async {
     let failingAPI = MockAPI(shouldFail: true)
     let viewModel = ListViewModel(api: failingAPI)

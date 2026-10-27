@@ -203,7 +203,7 @@ for _ in 1 2 3 4; do stop "$T" "$MINE"; done
   && ok "another session's marker is left untouched" \
   || bad "scored a verdict on a marker this session never armed"
 [ -f "$T/claude-heed-no-task-nudge-$THEIRS" ] \
-  && ok "and is left in place, not deleted — that session may still return" \
+  && ok "and is left in place, not deleted: that session may still return" \
   || bad "deleted another session's pending marker"
 
 echo "== a marker whose session never returns is reaped, not scored =="
@@ -219,7 +219,7 @@ for _ in 1 2 3 4; do stop "$T" "$S"; done
   && ok "an aged-out marker is removed" \
   || bad "aged-out marker survived the reap"
 [ "$(heed_for "$T" "no-task-nudge:$S")" = none ] \
-  && ok "and writes NO ledger line — an unscored fire, not a fabricated miss" \
+  && ok "and writes NO ledger line: an unscored fire, not a fabricated miss" \
   || bad "reaping wrote a verdict: $(heed_for "$T" "no-task-nudge:$S")"
 
 echo "== the reap window does not eat a live marker =="

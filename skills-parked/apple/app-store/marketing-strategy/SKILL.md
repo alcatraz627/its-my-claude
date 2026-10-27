@@ -167,8 +167,8 @@ Present the strategy as:
 
 ## Implementation Order
 
-1. **Week 1-2**: [First actions — quick wins]
-2. **Week 3-4**: [Second wave — moderate effort]
+1. **Week 1-2**: [First actions: quick wins]
+2. **Week 3-4**: [Second wave: moderate effort]
 3. **Month 2**: [Bigger initiatives]
 4. **Ongoing**: [Recurring activities]
 

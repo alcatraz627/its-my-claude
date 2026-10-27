@@ -146,7 +146,7 @@ done < "$vocab"
 [ -z "$hits" ] && exit 0
 
 # ── Block ───────────────────────────────────────────────────────────────────
-reason="⛔ BANNED VOCABULARY — this write to $(basename "$file_path") adds a term this project has explicitly banned:
+reason="⛔ BANNED VOCABULARY: this write to $(basename "$file_path") adds a term this project has explicitly banned:
 ${hits}Rephrase to remove it (or use the suggested replacement) and re-submit.
 This ban is declared by the project at .claude/banned-vocab.txt. Genuinely need the term (e.g. quoting it)? Edit that file to remove the entry, or mute: touch ~/.claude/.no-banned-vocab-gate"
 

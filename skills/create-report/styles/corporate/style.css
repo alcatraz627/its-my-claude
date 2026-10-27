@@ -23,7 +23,7 @@
   --corp-mark-bg: #fff3cd;
   --corp-tree-bg: #fafafa;
 
-  /* Syntax highlighting — subdued, formal palette */
+  /* Syntax highlighting: subdued, formal palette */
   --hl-keyword: #1a3d5c;
   --hl-string: #2d6a4f;
   --hl-comment: #6b7280;
@@ -616,7 +616,7 @@ mark.search-hit {
   display: none;
 }
 
-/* ─── Code Dialog — Corporate overrides ──────────────────────────────────── */
+/* ─── Code Dialog: Corporate overrides ──────────────────────────────────── */
 dialog#code-dialog {
   background: var(--code-dialog-bg);
   color: var(--code-dialog-text);
@@ -645,7 +645,7 @@ dialog#code-dialog .dlg-copy.copied {
   color: #2d6a4f;
 }
 
-/* ─── Theme Toggle — Corporate overrides ──────────────────────────────────── */
+/* ─── Theme Toggle: Corporate overrides ──────────────────────────────────── */
 .theme-toggle {
   font-family: Arial, Helvetica, sans-serif;
   background: var(--corp-bg);

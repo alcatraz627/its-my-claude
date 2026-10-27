@@ -233,14 +233,14 @@ echo
 
 # A briefing is a different document from a record: three tiers ordered by what
 # the reader must DO with them, not six sections of what happened.
-kv() { # label, value, colour — omitted entirely when the value is empty
+kv() { # label, value, colour: omitted entirely when the value is empty
   [ -z "$2" ] && return 0
   local lw=13
   wrap_hang "$2" $((W - lw - 4)) 0 | { first=1; while IFS= read -r ln; do
     if [ "$first" = 1 ]; then printf '  %s%s%s %s\n' "$3" "$(pad "$1" $lw)" "$R" "$ln"; first=0
     else printf '  %s %s\n' "$(pad '' $lw)" "$ln"; fi; done; }
 }
-kvlist() { # label, jq path, colour — one row per element, label on the first
+kvlist() { # label, jq path, colour: one row per element, label on the first
   local n; n=$(jqa "$2 | length"); [ "$n" = "null" ] && n=0
   [ "$n" -eq 0 ] && return 0
   local lbl="$1"

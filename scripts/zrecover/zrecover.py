@@ -107,7 +107,7 @@ def wants_help(a):
 # help
 def help_main():
     cfg = reaper.load_config()
-    print(f"{C.b(SELF)} {C.d('— desktop-session safeguard: reaper, screen mirror, crash resume')}")
+    print(f"{C.b(SELF)} {C.d('desktop-session safeguard: reaper, screen mirror, crash resume')}")
     sec("USAGE")
     print(f"  {C.c(SELF)} <command> [options]        {C.d('--json on any data command · --plain · -h per command')}")
     sec("EXAMPLES")
@@ -174,7 +174,7 @@ def help_topic(t):
 
 
 def examples():
-    print(f"{C.b('zrecover examples')} {C.d('— every line is pasteable')}")
+    print(f"{C.b('zrecover examples')} {C.d('every line is pasteable')}")
     sec("WATCH")
     ex("zrecover status --json | jq .readings", "machine readings as data")
     ex("zrecover top -n 15 --by cpu", "fifteen hottest processes")
@@ -261,7 +261,7 @@ def cmd_plan(a):
         out_json({"would": actions})
         return
     if not actions:
-        print(f"{C.g('nothing to do')} {C.d('— no process over a cap, no pressure, no sustained hog')}")
+        print(f"{C.g('nothing to do')} {C.d('no process over a cap, no pressure, no sustained hog')}")
         return
     print(C.b(f"the reaper would take {len(actions)} action(s) now:"))
     for x in actions:

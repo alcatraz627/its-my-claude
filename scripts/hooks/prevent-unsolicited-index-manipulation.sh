@@ -61,12 +61,12 @@ if echo "$EXEC_ONLY" | grep -qE '(^|[;&|(]|&&|\|\|)\s*git\s+(reset(\s+HEAD|\s+--
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook prevent-unsolicited-index-manipulation --action block --heeded unknown >/dev/null 2>&1 || true
 
   cat >&2 <<EOF
-[prevent-unsolicited-index] BLOCKED — git command modifies the user's curated index
+[prevent-unsolicited-index] BLOCKED: git command modifies the user's curated index
 
   command: $(echo "$CMD" | head -c 200)
 
 This is graduated from atone slug 'unsolicited-index-manipulation' (S3).
-The user's git index is their work — even a "non-destructive" reset wipes
+The user's git index is their work: even a "non-destructive" reset wipes
 minutes of curated staging state.
 
 To bypass this hook for one command (when the user explicitly asked):

@@ -22,7 +22,7 @@ init_notes() {
   cat > "$NOTES" <<'HDR'
 # Guidance: standing directives from the user
 
-Neutral steers the user wants internalized — NOT mistakes (see atone) or
+Neutral steers the user wants internalized: NOT mistakes (see atone) or
 compliments (see affirm). Written rarely, when observing the agent's work.
 Read by the main agent (relevance-gated via the 06-guidance hinter) and by
 dispatch checkers (juror, skeptical-review, future homework-checkers) via
@@ -45,7 +45,7 @@ case "$cmd" in
     # have (e.g. --scope): the real directive would be silently dropped. Two
     # entries were lost exactly this way (2026-06-25, 2026-07-10) pre-guard.
     case "$note" in
-      --*) echo "guidance add: note looks like a flag ('$note') — args are POSITIONAL: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2 ;;
+      --*) echo "guidance add: note looks like a flag ('$note'): args are POSITIONAL: guidance.sh add \"<note>\" [\"<scope-keywords>\"]" >&2; exit 2 ;;
     esac
     mkdir -p "$(dirname "$NOTES")"
     [ -f "$NOTES" ] || init_notes
@@ -54,7 +54,7 @@ case "$cmd" in
     ;;
 
   show)
-    [ -f "$NOTES" ] && cat "$NOTES" || echo "(no guidance notes yet — add with: guidance.sh add \"...\")"
+    [ -f "$NOTES" ] && cat "$NOTES" || echo "(no guidance notes yet: add with: guidance.sh add \"...\")"
     ;;
 
   relevant)

@@ -390,7 +390,7 @@ print(instructionTokens.tokenCount) // 16
 // Measure instructions + tools combined
 let tools = [MoodTool()]
 let combinedTokens = try await model.tokenUsage(for: instructions, tools: tools)
-print(combinedTokens.tokenCount) // 79 — tools add significant overhead!
+print(combinedTokens.tokenCount) // 79: tools add significant overhead!
 
 // Measure a prompt
 let prompt = Prompt("Generate a haiku about Swift")

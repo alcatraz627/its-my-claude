@@ -174,7 +174,7 @@ brew install gum
 **Availability check**: add to any skill that uses gum to fail fast if not installed:
 
 ```bash
-command -v gum >/dev/null 2>&1 || { echo "gum not installed — run: brew install gum" >&2; exit 1; }
+command -v gum >/dev/null 2>&1 || { echo "gum not installed: run: brew install gum" >&2; exit 1; }
 ```
 
 **Core components:**
@@ -320,14 +320,14 @@ After every skill run, the agent must:
 
    ```bash
    cat > /tmp/runtime-note-entry.md << 'ENTRY'
-   [formatted entry — see template below]
+   [formatted entry: see template below]
    ENTRY
 
    bash ~/.claude/skills/shared/prepend-runtime-note.sh "<skill-name>" /tmp/runtime-note-entry.md
    ```
 
 ```markdown
-## [Skill Name]: [Brief description of what was run] — [YYYY-MM-DD HH:MM]
+## [Skill Name]: [Brief description of what was run]: [YYYY-MM-DD HH:MM]
 
 **Purpose:** [One sentence: what this run was trying to accomplish]
 
@@ -369,11 +369,11 @@ Every SKILL.md workflow must begin with this section:
 ```markdown
 ## Step 0: Load Shared Guidelines and Runtime Context
 
-Read the shared guidelines — `<project>/.claude/skills/GUIDELINES.md` if the project
+Read the shared guidelines: `<project>/.claude/skills/GUIDELINES.md` if the project
 has one, otherwise the global default `~/.claude/skills/GUIDELINES.md` (most projects
 have no local copy; use the global one and say so in one line, never skip the rules).
-Apply all rules — forbidden paths, retry logic, tool preferences, verbosity, timeouts,
-post-run insights, and the **file lock protocol** — for the entire duration of this
+Apply all rules: forbidden paths, retry logic, tool preferences, verbosity, timeouts,
+post-run insights, and the **file lock protocol**: for the entire duration of this
 skill run before proceeding.
 
 Also read `.claude/skills/runtime-notes.md` for past run history relevant to this skill.

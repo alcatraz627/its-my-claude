@@ -74,7 +74,7 @@ cmd_retire() {
   case "$(printf '%s' "$evidence" | tr -d '[:space:]')" in "") echo "metabolism retire: --evidence required (the signal that justifies it)" >&2; exit 2;; esac
 
   # The rule file should exist (you cannot retire what is not there): warn, don't block.
-  [ -f "$RULES_DIR/$slug.md" ] || echo "metabolism: warning — no rule file $slug.md at $RULES_DIR (recording anyway)" >&2
+  [ -f "$RULES_DIR/$slug.md" ] || echo "metabolism: warning: no rule file $slug.md at $RULES_DIR (recording anyway)" >&2
   # Capture the current HEAD sha so the retired rule is one `git show <sha>:rules/$slug.md` away.
   local sha; sha=$(git -C "$G" rev-parse --short HEAD 2>/dev/null || echo "unknown")
   [ -n "$session" ] || session="${CLAUDE_CODE_SESSION_ID:-unknown}"
@@ -91,7 +91,7 @@ cmd_retire() {
      | with_entries(select(.value != "" and .value != null))')
   _lock; printf '%s\n' "$line" >> "$LEDGER"; _unlock
   echo "$id"
-  echo "recorded as a PROPOSED retirement — no file removed." >&2
+  echo "recorded as a PROPOSED retirement: no file removed." >&2
   echo "to complete: a human reviews, then git rm rules/$slug.md in a normal commit." >&2
   echo "to undo the record: it is append-only; file a corrective note. the rule is at git show $sha:rules/$slug.md" >&2
 }
@@ -103,12 +103,12 @@ cmd_list() {
     *) echo "metabolism list: unknown flag $1" >&2; exit 2;; esac; done
   [ -f "$LEDGER" ] || { echo "No retirements recorded yet ($LEDGER)"; return 0; }
   jq -R 'fromjson? // empty' "$LEDGER" | jq -rc --arg s "$status" 'select($s=="" or .status==$s)
-    | "\(.ts)  [\(.status)]  \(.rule)  (\(.disposition))  — \(.reason)"'
+    | "\(.ts)  [\(.status)]  \(.rule)  (\(.disposition)): \(.reason)"'
 }
 
 cmd_help() {
   cat <<'EOF'
-metabolism.sh — the config's retirement ceremony (records intent, never deletes)
+metabolism.sh: the config's retirement ceremony (records intent, never deletes)
 
   retire <rule-slug> --disposition <d> --reason <r> --evidence <e> [--into <survivor>]
     --disposition  absorbed | superseded-by-hook | obsoleted-by-change | retired-no-value
@@ -121,7 +121,7 @@ metabolism.sh — the config's retirement ceremony (records intent, never delete
   help
 
 Records a PROPOSED retirement to rules/retired.jsonl with the current HEAD sha as
-restorable_from. Removes NOTHING — a human reviews, then git rm's the rule if they
+restorable_from. Removes NOTHING: a human reviews, then git rm's the rule if they
 agree. Unmeasurable rules (no hook, no atone lineage) are EXEMPT from retired-no-value.
 EOF
 }

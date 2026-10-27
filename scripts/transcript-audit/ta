@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ta — transcript-audit dispatcher.
+# ta: transcript-audit dispatcher.
 #
 # A reusable way for Claude to query, mine, and tag its own transcript corpus,
 # so the recurring forensic digs (session reviews, hook-fire replays, FP
@@ -22,7 +22,7 @@ LIB="$DIR/lib"
 
 ta_help() {
   cat <<'HELP'
-ta — query, tag, and mine the Claude transcript corpus
+ta: query, tag, and mine the Claude transcript corpus
 
 USAGE
   ta query   [scope] [filters] [--format jsonl|table|count|files]
@@ -31,14 +31,14 @@ USAGE
   ta mine    [scope] [filters] --preset NAME [--batch-size N]
   ta help
 
-QUERY — scope
+QUERY: scope
   --project PATH|SUBSTR   substring vs the encoded project-dir name
   --within DAYS           transcripts modified within N days (default 30)
   --since ISO             transcripts since an ISO date
   --all                   the whole corpus, no date bound
   --include-subagents     also scan sub-agent transcripts (default: primary only)
 
-QUERY — turn filters (AND together)
+QUERY: turn filters (AND together)
   --role user|assistant|any   which side --match applies to (default any)
   --tool NAME                 turns that invoked a tool_use of NAME (e.g. Bash)
   --match REGEX               regex over the role-scoped text

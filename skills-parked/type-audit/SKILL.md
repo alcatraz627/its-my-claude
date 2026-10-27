@@ -140,17 +140,17 @@ gum_header "Type Audit: <SCAN_PATH>"
 
 # Render only if errors exist:
 gum_panel "ERRORS (must fix)" \
-  "✗ src/utils/api.ts:42      — \`as any\` cast with no comment" \
-  "✗ src/app/jobs/route.ts:18 — @ts-ignore with no explanation"
+  "✗ src/utils/api.ts:42: \`as any\` cast with no comment" \
+  "✗ src/app/jobs/route.ts:18: @ts-ignore with no explanation"
 
 # Render only if warnings exist:
 gum_panel "WARNINGS (should fix)" \
-  "⚠ src/data/jobs.data.ts:71  — non-null assertion on query result" \
-  "⚠ src/utils/hooks/useQ.ts:9 — param typed as \`any\` — consider generic"
+  "⚠ src/data/jobs.data.ts:71: non-null assertion on query result" \
+  "⚠ src/utils/hooks/useQ.ts:9 (param typed as \`any\`) consider generic"
 
 # Render only if info items exist:
 gum_panel "INFO (review if needed)" \
-  "ℹ src/app/jobs/[id]/page.tsx:5 — Next.js params pattern (ok)"
+  "ℹ src/app/jobs/[id]/page.tsx:5: Next.js params pattern (ok)"
 
 gum_complete "type-audit" \
   "Errors=N" \
@@ -169,9 +169,9 @@ If `FIX_MODE=true` and there are errors or warnings:
 
 ```
 Apply fixes? (yes / select / no)
-  yes    — attempt all auto-fixable issues
-  select — list fixable issues and let you choose
-  no     — exit without changes
+  yes: attempt all auto-fixable issues
+  select: list fixable issues and let you choose
+  no: exit without changes
 →
 ```
 
@@ -191,7 +191,7 @@ For each fix:
 2. Read the file
 3. Apply the Edit
 4. Release lock
-5. Print: `  ✓ Fixed: <file>:<line> — <description of change>`
+5. Print: `  ✓ Fixed: <file>:<line>: <description of change>`
 
 After all fixes:
 

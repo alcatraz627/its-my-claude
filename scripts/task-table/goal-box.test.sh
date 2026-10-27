@@ -25,8 +25,8 @@ mkdir -p "$STORE"
 
 pass=0; fail=0
 ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1"; echo "        got  [$2]"; echo "        want [$3]"; fi; }
-has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — no match for [$2]"; fi; }
-hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1 — unexpected match for [$2]"; else pass=$((pass+1)); fi; }
+has(){ if rg -q -- "$2" "$3" 2>/dev/null; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: no match for [$2]"; fi; }
+hasnt(){ if rg -q -- "$2" "$3" 2>/dev/null; then fail=$((fail+1)); echo "  FAIL: $1: unexpected match for [$2]"; else pass=$((pass+1)); fi; }
 
 # mutate <name> <find> <replace>: a copy of the renderer with one defect planted.
 # It asserts the substitution actually applied, because a mutation that silently
@@ -194,7 +194,7 @@ echo "── 6. CLEAR NOW shows three and counts the rest, each with a closer �
 reset
 for i in 1 2 3 4 5; do
   mk "$i" pending "Ship the thing" "M1" hands opus fix tasks \
-     "USER: clear item $i" "run: bash /tmp/clear-$i.sh — dry-run first"
+     "USER: clear item $i" "run: bash /tmp/clear-$i.sh: dry-run first"
 done
 mk 6 pending "Ship the thing" "M1" hands opus build tasks
 render

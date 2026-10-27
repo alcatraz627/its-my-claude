@@ -1,5 +1,5 @@
 """
-mini.py — Python shim for the mini-model callable.
+mini.py: Python shim for the mini-model callable.
 
 Usage:
     from shared.mini import mini

@@ -79,8 +79,8 @@ re_action_timed_loose = re.compile(r"^\[(\d{2}:\d{2})\]\s+(.*)")
 # Bullet action: - Text or - VERB target: outcome
 re_action_bullet = re.compile(r"^-\s+(.*)")
 
-re_agent_start = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*AGENT\(([^)]+)\)\s+\"?([^\"]*?)\"?\s*(?:—\s*(.*))?$")
-re_agent_done = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*AGENT_DONE\(([^)]+)\)\s*(?:—\s*(.*))?$")
+re_agent_start = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*AGENT\(([^)]+)\)\s+\"?([^\"]*?)\"?\s*(?:\u2014\s*(.*))?$")
+re_agent_done = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*AGENT_DONE\(([^)]+)\)\s*(?:\u2014\s*(.*))?$")
 re_decision = re.compile(r"^\[?(\d{2}:\d{2})?\]?\s*DECISION:\s*(.*)")
 
 # Checkpoint: === CHECKPOINT [HH:MM]? (anything)? ===
@@ -127,7 +127,7 @@ def parse_session_loose(body: str):
     # Remove date from body to find id
     remainder = body
     if date_match:
-        remainder = (body[:date_match.start()] + body[date_match.end():]).strip(" —-–\t")
+        remainder = (body[:date_match.start()] + body[date_match.end():]).strip(" "$'\xe2\x80\x94'"-–\t")
     # Try to find a session-id-like token. Only split on whitespace, em/en-dash,
     # parens: NOT on regular hyphen, since hyphens are part of session IDs.
     sid = None
@@ -149,7 +149,7 @@ def emit_action_from_text(hhmm: str, text: str):
     verb = infer_verb_from_text(text)
     target = text
     outcome = ""
-    parts = re.split(r"\s+—\s+", text, maxsplit=1)
+    parts = re.split(r"\s+\u2014\s+", text, maxsplit=1)
     if len(parts) == 2:
         target, outcome = parts[0].strip(), parts[1].strip()
     # If verb was inferred from first word and it was a known verb, strip it from target
@@ -321,7 +321,7 @@ while i < len(lines):
     if m:
         hhmm, verb, rest = m.group(1), m.group(2).lower(), m.group(3).strip()
         target, outcome = rest, ""
-        parts = re.split(r"\s+—\s+", rest, maxsplit=1)
+        parts = re.split(r"\s+\u2014\s+", rest, maxsplit=1)
         if len(parts) == 2:
             target, outcome = parts[0].strip(), parts[1].strip()
         emit({"ts": ts(hhmm), "kind": "action", "session_id": session["id"] or "unknown", "verb": verb, "target": target, "outcome": outcome})

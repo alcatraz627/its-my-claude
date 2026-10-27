@@ -21,7 +21,7 @@ build_tldr() {
       score=$(_score_for "$sev_int" "$days" "$cnt")
       printf '%s\t%s\t%dx\t%s\t%s\n' "$score" "$sev_str" "$cnt" "$slug" "$title"
     done | sort -rn | head -5 | awk -F'\t' '{
-      printf "  ⚠️  [%s, %s] %s — %s\n", $2, $3, $4, $5
+      printf "  ⚠️  [%s, %s] %s: %s\n", $2, $3, $4, $5
     }'
 
     if [ -f "$AFFIRM_EVENTS" ] && [ -s "$AFFIRM_EVENTS" ]; then
@@ -33,7 +33,7 @@ build_tldr() {
         score=$(_score_for 1 "$days" "$cnt")
         printf '%s\t%dx\t%s\t%s\n' "$score" "$cnt" "$slug" "$title"
       done | sort -rn | head -3 | awk -F'\t' '{
-        printf "  ✓   [%s] %s — %s\n", $2, $3, $4
+        printf "  ✓   [%s] %s: %s\n", $2, $3, $4
       }'
     fi
   } > "$out.tmp" && mv "$out.tmp" "$out"

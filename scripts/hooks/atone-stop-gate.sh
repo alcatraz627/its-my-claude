@@ -95,7 +95,7 @@ _ts_epoch()  { date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$1" '+%s' 2>/dev/null \
 # Stop hook, so it offers the escape unconditionally rather than trap the turn.
 # The mute-file pointer lives ONCE at each block's tail: a scoped-out session
 # cannot touch ~/.claude itself, so here we ask the USER to run (or mute) instead.
-HANDOFF="If you cannot run atone.sh here (shell scoped to a subdir / no access to ~/.claude), tell the user and ask them to run the add — or to mute the gate — for you; do not just re-stop."
+HANDOFF="If you cannot run atone.sh here (shell scoped to a subdir / no access to ~/.claude), tell the user and ask them to run the add (or to mute the gate) for you; do not just re-stop."
 
 _block() {  # $1 = reason. Emit the decision and stop processing.
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook atone-stop-gate --action block --heeded unknown >/dev/null 2>&1 || true
@@ -144,7 +144,7 @@ if [ -f "$FMARK" ]; then
     if [ "$FB" -lt "$MAX_BLOCKS" ]; then
       jq -c --argjson n "$((FB+1))" '.blocks=$n' "$FMARK" > "$FMARK.tmp" 2>/dev/null \
         && mv "$FMARK.tmp" "$FMARK"
-      _block "⚠ atone gate — your last \`atone.sh add\` did NOT record an event: ${FREASON}. The mistake is still UNRECORDED. Fix the cause (most often: the RCA must start with '---' YAML frontmatter on line 1) and re-run the add; or bypass the RCA lint for one event with ATONE_NO_RCA_LINT=1. ${HANDOFF} Mute the gate for this session: touch ~/.claude/atone/.gate-off"
+      _block "⚠ atone gate: your last \`atone.sh add\` did NOT record an event: ${FREASON}. The mistake is still UNRECORDED. Fix the cause (most often: the RCA must start with '---' YAML frontmatter on line 1) and re-run the add; or bypass the RCA lint for one event with ATONE_NO_RCA_LINT=1. ${HANDOFF} Mute the gate for this session: touch ~/.claude/atone/.gate-off"
     else
       _give_up "$FMARK" "unaddressed-failed-atone-add" \
         "atone-stop-gate: atone add stayed failed after ${MAX_BLOCKS} blocks. reason=${FREASON}"
@@ -169,7 +169,7 @@ RECENT=$(jq -r --arg ts "$MTS" 'select(.ts >= $ts) | .id' "$EVENTS" 2>/dev/null 
 if [ -n "$RECENT" ]; then
   # Event landed at/after the /atone marker → the explicit /atone was addressed.
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook atone-stop-gate --heed-of "atone-stop-gate:$SESSION_KEY" --heeded true >/dev/null 2>&1 || true
-  rm -f "$PMARK" 2>/dev/null || true   # recorded — clean close
+  rm -f "$PMARK" 2>/dev/null || true   # recorded: clean close
   exit 0
 fi
 
@@ -178,7 +178,7 @@ BLK=$(jq -r '.turns_unaddressed // 0' "$PMARK" 2>/dev/null)
 if [ "$BLK" -lt "$MAX_BLOCKS" ]; then
   jq -c --argjson n "$((BLK+1))" '.turns_unaddressed=$n' "$PMARK" > "$PMARK.tmp" 2>/dev/null \
     && mv "$PMARK.tmp" "$PMARK"
-  _block "⚠ atone gate — you invoked /atone but NO event was recorded this turn. Do not stop yet: run the /atone flow now (gather context → reuse-or-pick a slug → write the event with ~/.claude/scripts/atone.sh add). If the juror would genuinely clear you, run the add anyway — its exit-5 path resolves this without recording. If it was not a real correction, ask the user to say 'never mind'. ${HANDOFF} Or mute the gate: touch ~/.claude/atone/.gate-off"
+  _block "⚠ atone gate: you invoked /atone but NO event was recorded this turn. Do not stop yet: run the /atone flow now (gather context → reuse-or-pick a slug → write the event with ~/.claude/scripts/atone.sh add). If the juror would genuinely clear you, run the add anyway: its exit-5 path resolves this without recording. If it was not a real correction, ask the user to say 'never mind'. ${HANDOFF} Or mute the gate: touch ~/.claude/atone/.gate-off"
 else
   _give_up "$PMARK" "unaddressed-explicit-atone" \
     "atone-stop-gate: explicit /atone left unrecorded after ${MAX_BLOCKS} blocks. snippet=$(jq -r '.correction_snippet // ""' "$PMARK" 2>/dev/null | head -c 200)"

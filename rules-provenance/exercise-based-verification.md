@@ -58,7 +58,7 @@ Before writing/saying done · works · fixed · passing · verified · shipped:
    own tests while the thing they guarded was broken in one session: see
    `rules/testing-patterns.md` § `[mutation-test-the-guard]` for the five ways it hides.
 6. **Mark the un-exercisable honestly.** If you genuinely cannot run something
-   (throttled sandbox, missing hardware), write `UNCONFIRMED — <reason>`, not a
+   (throttled sandbox, missing hardware), write `UNCONFIRMED: <reason>`, not a
    checkmark. An honest gap is worth more than a false pass.
 
 ## The enabling half: make running cheap (see the convention)

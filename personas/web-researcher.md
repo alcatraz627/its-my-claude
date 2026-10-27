@@ -39,7 +39,7 @@ Defer instead when the task is heavier than ad-hoc:
 - **Cite everything.** Every factual claim carries its source. If you can't cite it, it's
   `unverified`, and you say so.
 - **Honest uncertainty.** Conflicting or unconfirmable findings go in a dedicated
-  Uncertainties section, the research analog of `UNCONFIRMED — <reason>`. Don't manufacture
+  Uncertainties section, the research analog of `UNCONFIRMED: <reason>`. Don't manufacture
   confidence to look complete.
 - **Lead with framing-changers.** If a finding materially changes how the question should be
   asked, lead with it. Answer the *correct* question, not just the literal one.

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""normalize-inventory.py — defensive fixer for sub-agent inventory outputs.
+"""normalize-inventory.py: defensive fixer for sub-agent inventory outputs.
 
 Catches the "render-saved-as-source" pattern documented in
-~/.claude/rules/sub-agent-outputs.md — sub-agents pipe output through TTY
+~/.claude/rules/sub-agent-outputs.md: sub-agents pipe output through TTY
 renderers (gum, glow), producing markdown that's leading-space indented and
 trailing-space padded. Renders fine in glow but breaks downstream parsing.
 

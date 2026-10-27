@@ -65,12 +65,12 @@ export function compose(cfg: Cfg, state: Partial<State> | null): string {
   const decisions = cfg.decisions || [];
   const lines = [(cfg.copyHeader || cfg.title || "answers") + ":"];
   if (decisions.length) lines.push(decisions.map((d) => d.id + (s.d[d.id] || recOf(d) || "?")).join(" "));
-  for (const d of decisions) if (s.dnotes[d.id]) lines.push(`${d.id} note — ${s.dnotes[d.id]}`);
+  for (const d of decisions) if (s.dnotes[d.id]) lines.push(`${d.id} note: ${s.dnotes[d.id]}`);
   let flagged = decisions.some((d) => s.d[d.id] !== recOf(d) || !!s.dnotes[d.id]);
   for (const sec of cfg.sections || []) {
     const v = s.screens[sec.id];
     if (!v.agree || v.note) {
-      lines.push(`${sec.id}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? " — " + v.note : ""}`);
+      lines.push(`${sec.id}: ${v.agree ? "agree" : "DISAGREE"}${v.note ? ": " + v.note : ""}`);
       flagged = true;
     }
   }
@@ -104,9 +104,9 @@ export function parse(answer: string, cfg: Cfg): State {
     const ln = lines[i];
     if (ln === "notes:") { st.endnotes = lines.slice(i + 1).join("\n"); break; }
     if (ln === "all items: agree as drafted") { cur = null; continue; }
-    const dn = decisions.find((d) => ln.startsWith(`${d.id} note — `));
+    const dn = decisions.find((d) => ln.startsWith(`${d.id} note: `) || ln.startsWith(`${d.id} note \u2014 `));
     if (dn) {
-      st.dnotes[dn.id] = ln.slice(`${dn.id} note — `.length);
+      st.dnotes[dn.id] = ln.slice(ln.startsWith(`${dn.id} note: `) ? `${dn.id} note: `.length : `${dn.id} note \u2014 `.length);
       cur = (m) => { st.dnotes[dn.id] += "\n" + m; };
       continue;
     }
@@ -115,7 +115,8 @@ export function parse(answer: string, cfg: Cfg): State {
       const rest = ln.slice(sid.length + 2);
       const agree = rest.startsWith("agree");
       const after = rest.slice(agree ? 5 : 8);
-      st.screens[sid] = { agree, note: after.startsWith(" — ") ? after.slice(3) : "" };
+      const legacy = after.startsWith(" \u2014 ");
+      st.screens[sid] = { agree, note: after.startsWith(": ") ? after.slice(2) : legacy ? after.slice(3) : "" };
       cur = (m) => { st.screens[sid].note += "\n" + m; };
       continue;
     }

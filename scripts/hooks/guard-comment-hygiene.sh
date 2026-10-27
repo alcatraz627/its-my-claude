@@ -104,7 +104,7 @@ longest_run=$(printf '%s\n' "$NEW_CONTENT" | awk '
   END { print max + 0 }')
 long_block=""
 if [ "${longest_run:-0}" -gt 12 ]; then
-  long_block="    [long-comment-block] ${longest_run} consecutive comment lines — consider a doc"
+  long_block="    [long-comment-block] ${longest_run} consecutive comment lines: consider a doc"
 fi
 
 [ -z "$findings" ] && [ -z "$long_block" ] && exit 0
@@ -117,9 +117,9 @@ if [ -n "$blockable" ]; then
   [ -z "$cwd" ] && cwd="$PWD"
   stakes=$(bash "$HOME/.claude/scripts/stakes-tier.sh" "$cwd" 2>/dev/null || echo low)
   if [ "$stakes" = "high" ]; then
-    reason="⛔ COMMENT NOISE IN A HIGH-STAKES WRITE — new content for $(basename "$FP") carries archeology / plan-refs / decorative-rule lines that rules/comments.md forbids in source (they rot and mislead the next reader):
+    reason="⛔ COMMENT NOISE IN A HIGH-STAKES WRITE: new content for $(basename "$FP") carries archeology / plan-refs / decorative-rule lines that rules/comments.md forbids in source (they rot and mislead the next reader):
 $blockable
-Remove them and re-submit. NOT blocked: [claude@] agent-note blocks, em-dash, emoji, long comment blocks — only unambiguous noise. False positive or a sanctioned case? Mute: touch ~/.claude/.comment-hygiene-off"
+Remove them and re-submit. NOT blocked: [claude@] agent-note blocks, em-dash, emoji, long comment blocks: only unambiguous noise. False positive or a sanctioned case? Mute: touch ~/.claude/.comment-hygiene-off"
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-comment-hygiene --action block --heeded unknown >/dev/null 2>&1 || true
     jq -cn --arg r "$reason" '{decision:"block", reason:$r}' 2>/dev/null || true
     exit 0

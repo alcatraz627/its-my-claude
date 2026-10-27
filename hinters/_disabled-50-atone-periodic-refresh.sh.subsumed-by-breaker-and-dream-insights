@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 50-atone-periodic-refresh.sh — fires every N turns (default 12).
+# 50-atone-periodic-refresh.sh: fires every N turns (default 12).
 #
 # Injects a small map of the most-relevant triggers from triggers.json,
 # rotating through high-weight items so nothing stays stale.
@@ -47,14 +47,14 @@ jq -r --argjson n "$TOP_ATONE" --arg wrank "$WEIGHT_RANK" '
   [.[] | select(.from_source == "atone")]
   | sort_by([(.weight | (if . == "high" then 3 elif . == "medium" then 2 else 1 end)), .confidence_score])
   | reverse | .[:$n]
-  | .[] | "  ⚠️  [\(.severity_band), \(.weight)] \(.from_slug) — \(.instruction)"
+  | .[] | "  ⚠️  [\(.severity_band), \(.weight)] \(.from_slug): \(.instruction)"
 ' "$TRIGGERS" 2>/dev/null
 
 jq -r --argjson n "$TOP_AFFIRM" '
   [.[] | select(.from_source == "affirm")]
   | sort_by([(.weight | (if . == "high" then 3 elif . == "medium" then 2 else 1 end)), .confidence_score])
   | reverse | .[:$n]
-  | .[] | "  ✓   [\(.weight)] \(.from_slug) — \(.instruction)"
+  | .[] | "  ✓   [\(.weight)] \(.from_slug): \(.instruction)"
 ' "$TRIGGERS" 2>/dev/null
 
 echo "  bash ~/.claude/scripts/atone.sh triggers <kw>     fetch by topic keyword"

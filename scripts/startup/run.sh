@@ -75,7 +75,7 @@ run_task() {
   if bash "$task_file" ${args[@]+"${args[@]}"} 2>&1 | tee -a "$LOG"; then
     printf '[OK]  %s\n' "$name" | tee -a "$LOG"
   else
-    printf '[FAIL] %s (exit non-zero — see log above)\n' "$name" | tee -a "$LOG"
+    printf '[FAIL] %s (exit non-zero: see log above)\n' "$name" | tee -a "$LOG"
   fi
 }
 

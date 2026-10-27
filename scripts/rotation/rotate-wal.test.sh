@@ -23,7 +23,7 @@ trap 'export HOME="$REAL_HOME"; trash "$T" 2>/dev/null || true' EXIT
 
 # 1. Below threshold: nothing moves.
 printf '{"ts":"2026-09-01T00:00:00Z","kind":"action"}\n' > "$HOME/.claude/wal.jsonl"
-printf '# WAL — ~/.claude cross-project\n<!-- Keep last 2 sessions only -->\n\n[10:00:00] shell: 1 cmd(s)\n' > "$HOME/.claude/wal.md"
+printf '# WAL: ~/.claude cross-project\n<!-- Keep last 2 sessions only -->\n\n[10:00:00] shell: 1 cmd(s)\n' > "$HOME/.claude/wal.md"
 WAL_ROTATE_THRESHOLD=1000000 WAL_MD_ROTATE_THRESHOLD=1000000 bash "$ROTATE" </dev/null 2>/dev/null
 [ "$(wc -l < "$HOME/.claude/wal.jsonl")" -eq 1 ] && ok "small wal.jsonl untouched" || bad "small wal.jsonl was rotated"
 [ "$(wc -l < "$HOME/.claude/wal.md")" -eq 4 ]    && ok "small wal.md untouched"    || bad "small wal.md was rotated"
@@ -37,7 +37,7 @@ md_archives=$(ls "$HOME/.claude/assets/backups/wal-archive"/wal-md-global-*.md.g
 [ "$md_archives" -eq 1 ]    && ok "wal.md archived once"    || bad "wal.md archives: $md_archives"
 [ ! -s "$HOME/.claude/wal.jsonl" ] && ok "wal.jsonl reset to empty" || bad "wal.jsonl not emptied"
 first=$(sed -n '1p' "$HOME/.claude/wal.md"); second=$(sed -n '2p' "$HOME/.claude/wal.md")
-[ "$first" = "# WAL — ~/.claude cross-project" ] && ok "wal.md keeps its title line" || bad "wal.md title line: '$first'"
+[ "$first" = "# WAL: ~/.claude cross-project" ] && ok "wal.md keeps its title line" || bad "wal.md title line: '$first'"
 [ "$second" = "<!-- Keep last 2 sessions only -->" ] && ok "wal.md keeps its policy comment" || bad "wal.md second line: '$second'"
 [ "$(wc -l < "$HOME/.claude/wal.md")" -eq 2 ] && ok "wal.md body cleared" || bad "wal.md still has $(wc -l < "$HOME/.claude/wal.md") lines"
 archived_body=$(gzip -dc "$HOME/.claude/assets/backups/wal-archive"/wal-md-global-*.md.gz | rg -c 'shell: 1 cmd' || true)
@@ -45,7 +45,7 @@ archived_body=$(gzip -dc "$HOME/.claude/assets/backups/wal-archive"/wal-md-globa
 
 # 3. Project-local wal.md from the Stop-hook CWD is rotated too.
 mkdir -p "$T/proj/.claude"
-printf '# WAL — proj\n<!-- Keep last 2 sessions only -->\n\nline\n' > "$T/proj/.claude/wal.md"
+printf '# WAL: proj\n<!-- Keep last 2 sessions only -->\n\nline\n' > "$T/proj/.claude/wal.md"
 printf '{"cwd":"%s"}' "$T/proj" | WAL_ROTATE_THRESHOLD=10 WAL_MD_ROTATE_THRESHOLD=10 bash "$ROTATE" 2>/dev/null
 # Label glob is loose on purpose: the label code (unchanged, pre-existing) maps
 # basename's trailing newline to "_", so the archive is "wal-md-proj_-<date>".

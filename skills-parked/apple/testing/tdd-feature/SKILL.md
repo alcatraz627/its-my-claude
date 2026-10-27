@@ -287,12 +287,12 @@ struct SubscriptionManagerTests {
 ```
 
 ### Tests Written (RED)
-1. `startsEmpty` — Initial state
-2. `addFavorite` — Happy path
-3. `removeFavorite` — State change
-4. `addDuplicate` — Edge case
-5. `removeNonExistent` — Edge case
-6. `storageFullError` — Error handling
+1. `startsEmpty`: Initial state
+2. `addFavorite`: Happy path
+3. `removeFavorite`: State change
+4. `addDuplicate`: Edge case
+5. `removeNonExistent`: Edge case
+6. `storageFullError`: Error handling
 
 ### Implementation (GREEN)
 **File**: `Sources/Features/FavoriteManager.swift`

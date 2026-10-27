@@ -44,7 +44,7 @@ Broadly applicable insights from sessions: not project-specific.
 
 2. **Write a `.build-info` sidecar**: after every successful compile, write `commit=`, `src_hash=`, `built_at=` to a plain text file next to the binary. `.gitignore` both the generated swift file and the sidecar.
 
-3. **Expose in `--status`**: the build/management script's `--status` command reads `.build-info`, computes current source hash, and warns with `⚠ SOURCE HAS CHANGED — binary is stale!` if they diverge.
+3. **Expose in `--status`**: the build/management script's `--status` command reads `.build-info`, computes current source hash, and warns with `⚠ SOURCE HAS CHANGED: binary is stale!` if they diverge.
 
 4. **Expose in running binary**: log build hash at startup and show in tooltip/status so you can cross-check what version is actually live without stopping the process.
 

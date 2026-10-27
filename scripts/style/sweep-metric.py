@@ -125,29 +125,29 @@ def score_all(novelty_on=True):
 cal = score_all(novelty_on=False)
 ranks = {c['term']: i + 1 for i, c in enumerate(cal)}
 # The gate that means anything: discovery == surviving the production cut.
-lines = [f'# Metric calibration — {len(cal)} scored terms, cut = top {TOP}', '']
+lines = [f'# Metric calibration: {len(cal)} scored terms, cut = top {TOP}', '']
 gate_ok = True
 for p in POSITIVES:
     present = p in stats and len(stats[p]['sessions']) >= 3
     if not present:
-        lines.append(f'- positive `{p}`: ABSENT from corpus at >=3 sessions (found in {len(stats[p]["sessions"]) if p in stats else 0}) — cannot calibrate on it, noted honestly')
+        lines.append(f'- positive `{p}`: ABSENT from corpus at >=3 sessions (found in {len(stats[p]["sessions"]) if p in stats else 0}): cannot calibrate on it, noted honestly')
         continue
     r = ranks.get(p)
     ok = r is not None and r <= TOP
     gate_ok &= ok
-    lines.append(f'- positive `{p}`: rank {r} of {len(cal)} — {"PASS (inside cut)" if ok else "FAIL (misses cut)"}')
+    lines.append(f'- positive `{p}`: rank {r} of {len(cal)}: {"PASS (inside cut)" if ok else "FAIL (misses cut)"}')
 for p in POSITIVES_TRACER:
-    lines.append(f'- tracer `{p}`: rank {ranks.get(p, "unscored")} — lexically unreachable by design; planted as P3/P4 ground-truth tracer')
+    lines.append(f'- tracer `{p}`: rank {ranks.get(p, "unscored")}: lexically unreachable by design; planted as P3/P4 ground-truth tracer')
 for p in POSITIVES_INFO:
     ns = len(stats[p]['sessions']) if p in stats else 0
     lines.append(f'- info `{p}`: {ns} session(s) in corpus; rank {ranks.get(p, "unscored")}')
 for p in NEGATIVES_TRACER:
-    lines.append(f'- negative-tracer `{p}`: rank {ranks.get(p, "unscored")} — planted for P4 (must be classified domain-jargon there; user verdict 2026-07-16)')
+    lines.append(f'- negative-tracer `{p}`: rank {ranks.get(p, "unscored")}: planted for P4 (must be classified domain-jargon there; user verdict 2026-07-16)')
 for n in NEGATIVES:
     r = ranks.get(n)
     ok = r is None or r > TOP
     gate_ok &= ok
-    lines.append(f'- negative `{n}`: {"rejected outright" if r is None else f"rank {r}"} — {"PASS (outside cut)" if ok else "FAIL (inside cut)"}')
+    lines.append(f'- negative `{n}`: {"rejected outright" if r is None else f"rank {r}"}: {"PASS (outside cut)" if ok else "FAIL (inside cut)"}')
 lines.append('')
 lines.append(f'## GATE: {"PASS" if gate_ok else "FAIL"}')
 os.makedirs(f'{RUN}/candidates', exist_ok=True)

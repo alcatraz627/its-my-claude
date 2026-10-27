@@ -18,7 +18,7 @@ Full reference for running agent apps with pm2.
 **Both steps required**: `pm2 save` alone is not enough to survive a reboot.
 
 ```bash
-pm2 startup          # prints a sudo command — run it to register the LaunchAgent
+pm2 startup          # prints a sudo command: run it to register the LaunchAgent
 # (run the printed command, then:)
 pm2 save             # snapshot current process list to ~/.pm2/dump.pm2
 ```

@@ -75,11 +75,11 @@ for v in voters:
   for t in voters:
     val = scores.get(v, {}).get(t, {})
     if not val:
-      row.append("—")
+      row.append("-")
     else:
       # weighted by equal axes (no rubric weights here; supervisor can re-weight)
       vals = [val.get(a) for a in axes if isinstance(val.get(a), (int, float))]
-      row.append(f"{avg(vals):.2f}" if vals else "—")
+      row.append(f"{avg(vals):.2f}" if vals else "-")
   matrix_rows.append(row)
 
 # Per-proposal aggregate (across voters)
@@ -124,7 +124,7 @@ with open(os.path.join(vote_dir, "matrix.md"), "w") as f:
     f.write("| " + " | ".join(row) + " |\n")
   f.write("\n## Per-proposal weighted average\n\n")
   for t, sc in sorted(prop_avgs.items(), key=lambda kv: -kv[1]):
-    f.write(f"- **{t}** — {sc:.2f}\n")
+    f.write(f"- **{t}**: {sc:.2f}\n")
   f.write(f"\n**Winner:** {winner[0]} ({winner[1]:.2f})\n")
 
 # Write bias-matrix.md
@@ -148,9 +148,9 @@ with open(os.path.join(vote_dir, "bias-matrix.md"), "w") as f:
   f.write("| Voter | Own→Self | Peers→Voter | Self-bias (Δ) | Read |\n")
   f.write("|---|---|---|---|---|\n")
   for v, own, peer, d in bias:
-    if d > 1.5:    read = "🟥 HIGH — defensive OR unique insight; supervisor must cite specific reasoning"
+    if d > 1.5:    read = "🟥 HIGH: defensive OR unique insight; supervisor must cite specific reasoning"
     elif d > 0.5:  read = "🟨 moderate"
-    elif d < -0.5: read = "🟦 humble — likely well-calibrated"
+    elif d < -0.5: read = "🟦 humble: likely well-calibrated"
     else:          read = "⬜ normal"
     f.write(f"| {v} | {own:.2f} | {peer:.2f} | {d:+.2f} | {read} |\n")
   f.write("\nDelta > +1.5 = potential defense or unique insight. Delta < -0.5 = humble; high-info if peer scores high. Supervisor MUST cite reasoning when ruling in favor of a high-bias voter.\n")
@@ -173,7 +173,7 @@ out = {
   "scope_dissent_flagged": scope_std is not None and scope_std > 1.5,
   "matrix_path": os.path.join(vote_dir, "matrix.md"),
   "bias_matrix_path": os.path.join(vote_dir, "bias-matrix.md"),
-  "warnings": (["DROPPED %d voter(s) — see stderr" % voters_dropped] if voters_dropped else []),
+  "warnings": (["DROPPED %d voter(s): see stderr" % voters_dropped] if voters_dropped else []),
 }
 print(json.dumps(out, indent=2))
 PY

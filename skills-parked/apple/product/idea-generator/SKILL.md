@@ -107,14 +107,14 @@ Final output is a ranked list of 3-5 ideas, each with:
       "problem_statement": "Gym-goers either rest too long (wasting time) or too short (risking injury). No app uses real-time HR data to personalize rest periods.",
       "target_user": "Regular gym-goers who wear Apple Watch during workouts",
       "feasibility": {
-        "solo_dev_scope": "STRONG (6 weeks — HealthKit + WatchKit + simple UI)",
+        "solo_dev_scope": "STRONG (6 weeks: HealthKit + WatchKit + simple UI)",
         "platform_api_fit": "EXCELLENT (HealthKit, WorkoutKit, Live Activities)",
-        "monetization_viability": "STRONG (subscription $3.99/mo — fitness users pay for tools)",
+        "monetization_viability": "STRONG (subscription $3.99/mo: fitness users pay for tools)",
         "competition_density": "STRONG (few apps focus specifically on HR-based rest timing)",
         "technical_fit": "EXCELLENT (matches HealthKit + Core Motion skills)"
       },
       "overall_score": 8.4,
-      "monetization_model": "Freemium — free with 3 workouts/week, $3.99/mo unlimited + insights",
+      "monetization_model": "Freemium: free with 3 workouts/week, $3.99/mo unlimited + insights",
       "competition_notes": "Strong Timer+ and Intervals Pro exist but focus on pre-set timers, not adaptive HR-based rest",
       "mvp_scope": "Watch app with HR monitoring during rest, vibration alert when ready, basic iOS companion for history",
       "next_step": "Run the product-agent skill with idea: 'Apple Watch app that tracks heart rate recovery between sets and suggests optimal rest periods based on real-time HR data' for watchOS + iOS"
@@ -123,12 +123,12 @@ Final output is a ranked list of 3-5 ideas, each with:
       "rank": 2,
       "idea": "Walking Meetings Tracker",
       "lens": "problem_first",
-      "one_liner": "Track steps, route, and calories during meetings — share walking meeting summaries with attendees",
+      "one_liner": "Track steps, route, and calories during meetings: share walking meeting summaries with attendees",
       "platform": "iOS + watchOS",
       "problem_statement": "Walking meetings are popular for health but there's no way to track the health benefit or share it. Calendar apps don't connect to HealthKit.",
       "target_user": "Knowledge workers and managers who take walking meetings",
       "feasibility": {
-        "solo_dev_scope": "STRONG (5 weeks — HealthKit + MapKit + Calendar integration)",
+        "solo_dev_scope": "STRONG (5 weeks: HealthKit + MapKit + Calendar integration)",
         "platform_api_fit": "EXCELLENT (HealthKit, MapKit, EventKit, WidgetKit)",
         "monetization_viability": "MODERATE (niche audience, $2.99 one-time or $1.99/mo)",
         "competition_density": "EXCELLENT (no dedicated walking meeting app exists)",
@@ -144,19 +144,19 @@ Final output is a ranked list of 3-5 ideas, each with:
       "rank": 3,
       "idea": "Gym Equipment Wait Time",
       "lens": "market_gap",
-      "one_liner": "Crowdsourced gym equipment availability — see which machines are free before you go",
+      "one_liner": "Crowdsourced gym equipment availability: see which machines are free before you go",
       "platform": "iOS",
       "problem_statement": "Gyms are crowded at peak hours. No way to know if the squat rack is free without going. Leads to wasted time and frustration.",
       "target_user": "Gym members at commercial gyms (Planet Fitness, LA Fitness, Equinox)",
       "feasibility": {
-        "solo_dev_scope": "MODERATE (8 weeks — needs crowdsource mechanics and gym database)",
+        "solo_dev_scope": "MODERATE (8 weeks: needs crowdsource mechanics and gym database)",
         "platform_api_fit": "MODERATE (MapKit for gym location, but core logic is custom)",
         "monetization_viability": "STRONG (subscription or gym partnership revenue)",
-        "competition_density": "STRONG (no quality solution exists — GymBook is workout logging, not availability)",
-        "technical_fit": "MODERATE (needs backend for crowdsource data — outside current skills)"
+        "competition_density": "STRONG (no quality solution exists: GymBook is workout logging, not availability)",
+        "technical_fit": "MODERATE (needs backend for crowdsource data: outside current skills)"
       },
       "overall_score": 6.8,
-      "monetization_model": "Freemium — free for 1 gym, $2.99/mo for multiple gyms + predictions",
+      "monetization_model": "Freemium: free for 1 gym, $2.99/mo for multiple gyms + predictions",
       "competition_notes": "Some gyms have their own capacity apps but no cross-gym equipment-level tracking exists",
       "mvp_scope": "Single gym support, manual check-in/check-out for equipment, peak time predictions",
       "next_step": "Run the product-agent skill with idea: 'Crowdsourced gym equipment availability app that shows which machines are free at your gym' for iOS"
@@ -171,7 +171,7 @@ Final output is a ranked list of 3-5 ideas, each with:
     {
       "idea": "Sleep Architecture Analyzer",
       "lens": "trend_based",
-      "reason": "Apple's own sleep tracking in watchOS 10+ covers most of this. Failed competition_density filter — competing with platform owner."
+      "reason": "Apple's own sleep tracking in watchOS 10+ covers most of this. Failed competition_density filter: competing with platform owner."
     }
   ],
   "recommendation": "Start with Rank 1 (Workout Recovery Timer). It scores highest, leverages your exact skills (HealthKit + Core Motion), has a clear monetization path, and can ship in 6 weeks. Run the product-agent skill to validate the problem before committing."

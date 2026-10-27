@@ -25,7 +25,7 @@ trip() { # trip <sid8> <reply>: run the real gate so the tripped file is the rea
 one_line_ctx() { printf '%s' "$1" | jq -e '.hookSpecificOutput.hookEventName == "UserPromptSubmit" and (.hookSpecificOutput.additionalContext | type == "string" and (contains("\n") | not))' >/dev/null 2>&1; }
 ctx() { printf '%s' "$1" | jq -r '.hookSpecificOutput.additionalContext // empty'; }
 long=$(printf 'This sentence is plain prose that keeps going to make the reply long. %.0s' $(seq 1 45))
-D='—'
+D=$'\xe2\x80\x94'
 
 echo "== clean session =="
 out=$(ups fgu00001); [ -z "$out" ] && ok "no trip, zero output" || bad "no trip, zero output: $out"

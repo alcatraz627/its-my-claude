@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ta tags — list the bookmarks recorded by `ta tag`.
+"""ta tags: list the bookmarks recorded by `ta tag`.
 
 Reads the bookmarks ledger (TA_BOOKMARKS_STORE, else ~/.claude/ledger/
 bookmarks.jsonl) and prints them newest-first, optionally filtered to one label.

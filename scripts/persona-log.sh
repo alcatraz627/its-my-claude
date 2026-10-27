@@ -63,7 +63,7 @@ cmd_record() {
     esac
   done
   [ -n "$session" ] || session="${CLAUDE_CODE_SESSION_ID:-unknown}"
-  _persona_exists "$persona" || echo "persona-log: warning — no persona file ${persona}.md (logging anyway)" >&2
+  _persona_exists "$persona" || echo "persona-log: warning: no persona file ${persona}.md (logging anyway)" >&2
 
   local id; id="puse-$(date -u +%Y%m%dT%H%M%SZ)-${RANDOM}"
   local line
@@ -125,7 +125,7 @@ cmd_list() {
 
 cmd_help() {
   cat <<'EOF'
-persona-log.sh — usage residue trail for ~/.claude/personas
+persona-log.sh: usage residue trail for ~/.claude/personas
 
   record <persona> [flags]   append one usage event (prints the event id)
     --mode adopted|dispatched     how the persona ran

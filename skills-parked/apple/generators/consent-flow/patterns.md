@@ -72,14 +72,14 @@ func syncATTWithConsent(
 ) {
     switch attStatus {
     case .authorized:
-        // User allowed tracking at OS level — check app-level consent too
+        // User allowed tracking at OS level: check app-level consent too
         // Both ATT AND app consent must be granted
         break
     case .denied:
-        // User denied at OS level — must deny marketing regardless of app consent
+        // User denied at OS level: must deny marketing regardless of app consent
         consentManager.updateConsent(for: .marketing, granted: false)
     case .restricted:
-        // Device management or parental controls — cannot track
+        // Device management or parental controls: cannot track
         consentManager.updateConsent(for: .marketing, granted: false)
     case .notDetermined:
         // Haven't asked yet
@@ -149,7 +149,7 @@ These practices violate GDPR and lead to App Store rejection:
 ### Equal Prominence for Accept/Reject
 
 ```swift
-// ❌ Wrong — "Accept" is prominent, "Reject" is a text link
+// ❌ Wrong: "Accept" is prominent, "Reject" is a text link
 Button("Accept All") { acceptAll() }
     .buttonStyle(.borderedProminent)
     .controlSize(.large)
@@ -158,7 +158,7 @@ Button("Reject") { rejectAll() }
     .font(.caption)
     .foregroundStyle(.secondary)
 
-// ✅ Right — Both actions have clear, tappable buttons
+// ✅ Right: Both actions have clear, tappable buttons
 Button("Accept All") { acceptAll() }
     .buttonStyle(.borderedProminent)
     .controlSize(.large)
@@ -177,10 +177,10 @@ HStack(spacing: 10) {
 ### Consent Language
 
 ```swift
-// ❌ Wrong — Vague, manipulative
+// ❌ Wrong: Vague, manipulative
 "We need your data to give you the best experience. Please accept to continue."
 
-// ✅ Right — Specific, neutral
+// ✅ Right: Specific, neutral
 "We use analytics to understand how the app is used and improve it.
 Marketing data helps show relevant ads. You can change these choices anytime in Settings."
 ```
@@ -247,7 +247,7 @@ func handleDeletionRequest(consentManager: ConsentManager) async {
     // 5. Notify backend to delete server-side data
     try? await APIClient.shared.requestDataDeletion()
 
-    // Note: Keep the audit log — it proves you had consent and then deleted data
+    // Note: Keep the audit log: it proves you had consent and then deleted data
 }
 ```
 
@@ -317,22 +317,22 @@ Use ISO 8601 dates, JSON structure, and include all fields:
 
 ### Pre-Checked Consent Boxes
 ```swift
-// ❌ Wrong — Pre-checked violates GDPR
+// ❌ Wrong: Pre-checked violates GDPR
 @State private var analyticsEnabled = true   // Default to true
 @State private var marketingEnabled = true   // Default to true
 
-// ✅ Right — Default to not determined
+// ✅ Right: Default to not determined
 // ConsentManager initializes non-essential categories as .notDetermined
 ```
 
 ### Consent Wall (Blocking App Usage)
 ```swift
-// ❌ Wrong — App is unusable without consent
+// ❌ Wrong: App is unusable without consent
 if !consentManager.hasConsent(for: .analytics) {
     ConsentRequiredView() // Blocks all functionality
 }
 
-// ✅ Right — App works without consent, features degrade gracefully
+// ✅ Right: App works without consent, features degrade gracefully
 ContentView()
     .overlay(alignment: .bottom) {
         if consentManager.needsConsent {
@@ -343,12 +343,12 @@ ContentView()
 
 ### Nagging After Rejection
 ```swift
-// ❌ Wrong — Re-showing consent banner every launch after rejection
+// ❌ Wrong: Re-showing consent banner every launch after rejection
 .onAppear {
     showConsentBanner = true // Always shows, even after explicit rejection
 }
 
-// ✅ Right — Only show when not yet determined
+// ✅ Right: Only show when not yet determined
 .onAppear {
     // needsConsent is false once user has made a decision (grant or deny)
 }
@@ -356,13 +356,13 @@ ContentView()
 
 ### Ignoring ATT Denial
 ```swift
-// ❌ Wrong — Tracking despite ATT denial
+// ❌ Wrong: Tracking despite ATT denial
 func trackEvent(_ event: Event) {
-    // No ATT check — Apple will reject this
+    // No ATT check: Apple will reject this
     analyticsSDK.track(event)
 }
 
-// ✅ Right — Check both ATT and app consent
+// ✅ Right: Check both ATT and app consent
 func trackEvent(_ event: Event) {
     #if os(iOS)
     guard ATTrackingManager.trackingAuthorizationStatus == .authorized else { return }
@@ -374,10 +374,10 @@ func trackEvent(_ event: Event) {
 
 ### Storing Consent Without Audit Trail
 ```swift
-// ❌ Wrong — Only stores current state, no history
+// ❌ Wrong: Only stores current state, no history
 UserDefaults.standard.set(true, forKey: "analyticsConsent")
 
-// ✅ Right — Records decision with full audit metadata
+// ✅ Right: Records decision with full audit metadata
 consentManager.updateConsent(for: .analytics, granted: true)
 // Internally logs to ConsentAuditLog with timestamp, regulation, app version
 ```
@@ -502,7 +502,7 @@ extension ConsentManager {
     /// Reset consent state for testing. Only available in debug builds.
     func resetForTesting() {
         resetAllConsent()
-        // ATT cannot be programmatically reset — requires app reinstall
+        // ATT cannot be programmatically reset: requires app reinstall
     }
 }
 #endif

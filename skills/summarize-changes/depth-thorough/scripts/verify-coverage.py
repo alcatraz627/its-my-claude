@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""verify-coverage.py — count `## File:` headers per inventory chunk vs expected.
+"""verify-coverage.py: count `## File:` headers per inventory chunk vs expected.
 
 Flags under-reported chunks for V2 themes agent to cross-check.
 

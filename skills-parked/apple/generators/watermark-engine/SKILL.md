@@ -280,11 +280,11 @@ class PhotoExporter {
 ### Retina Resolution Handling
 CoreGraphics contexts must account for screen scale. A 1000x1000pt image on a @3x device has 3000x3000 pixels. Always use `UIGraphicsImageRenderer` (which handles scale automatically) or explicitly set `CGContext` scale:
 ```swift
-// Wrong — blurry watermark on Retina
+// Wrong: blurry watermark on Retina
 let size = image.size
 UIGraphicsBeginImageContext(size)
 
-// Right — crisp at all scales
+// Right: crisp at all scales
 let renderer = UIGraphicsImageRenderer(size: size)
 // Or for CGContext:
 UIGraphicsBeginImageContextWithOptions(size, false, image.scale)

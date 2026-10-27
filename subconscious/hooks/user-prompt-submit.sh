@@ -2,7 +2,7 @@
 # i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
 # not feed the daemon (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
-# i-dream: UserPromptSubmit hook — sentiment signals only.
+# i-dream: UserPromptSubmit hook: sentiment signals only.
 # NOTE: this script emits NOTHING to stdout; it runs async, so any output
 #       would never reach the session. Hints are delivered by the separate
 #       synchronous user-prompt-hint.sh.
@@ -28,7 +28,7 @@ except Exception:
 if not prompt:
     sys.exit(0)
 
-# ALL-CAPS words (≥2 letters) — proxy for emphasis or frustration
+# ALL-CAPS words (≥2 letters): proxy for emphasis or frustration
 uppercase_words = len(re.findall(r"\b[A-Z]{2,}\b", prompt))
 
 # Frustration and swear word detection
@@ -48,7 +48,14 @@ correction_re = re.compile(
     r"that.?s\s+wrong|no\s+no\b|stop\s+doing|i\s+didn.?t\s+ask)",
     re.IGNORECASE
 )
-correction = bool(correction_re.search(prompt))
+# A question asks; it does not correct or praise. Judge only the statements.
+statements = " ".join(
+    s for s in re.split(r"(?<=[.!?\n])\s+", prompt) if not s.rstrip().endswith("?")
+)
+correction = bool(correction_re.search(statements))
+
+# The prompt's distinct content words, so a vote lands only on rules it is about.
+prompt_words = sorted({w.lower() for w in re.findall(r"[A-Za-z][A-Za-z-]{3,}", prompt)})[:120]
 
 # Positive feedback signals
 positive_re = re.compile(
@@ -59,7 +66,7 @@ positive_re = re.compile(
     r"awesome|fantastic|spot\s+on)",
     re.IGNORECASE
 )
-positive = bool(positive_re.search(prompt))
+positive = bool(positive_re.search(statements))
 
 # Composite frustration score [0.0, 1.0]
 score = 0.0
@@ -78,7 +85,8 @@ payload = json.dumps({
     "positive": positive,
     "frustration_score": frustration_score,
     "session_id": data.get("session_id") or None,
-    "entrypoint": os.environ.get("CLAUDE_CODE_ENTRYPOINT") or None
+    "entrypoint": os.environ.get("CLAUDE_CODE_ENTRYPOINT") or None,
+    "prompt_words": prompt_words
 }).encode()
 
 try:
@@ -89,5 +97,5 @@ try:
 except Exception:
     pass
 PYEOF
-# Touch activity signal (best-effort — dir may not exist on first install)
+# Touch activity signal (best-effort: dir may not exist on first install)
 touch "/Users/alcatraz627/.claude/subconscious/.last-activity" 2>/dev/null || true

@@ -21,7 +21,7 @@
 #                        [--project-root PATH]
 #
 # `--session-uuid` is the Claude Code transcript UUID and becomes the entry's
-# `id` — the contract-required canonical id (docs/20 §2) that lets the drain
+# `id`: the contract-required canonical id (docs/20 §2) that lets the drain
 # dedup against dreams/processed.json, whose keys are transcript UUIDs. The
 # friendly `--session-id` stays for display; it lives in a different namespace
 # and can never join the transcript lane.

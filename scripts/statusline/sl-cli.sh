@@ -29,7 +29,7 @@ case "$CMD" in
     ;;
   help|--help|-h|"")
     echo ""
-    printf "${bold}statusline${rst} — Statusline CLI\n"
+    printf "${bold}statusline${rst}: Statusline CLI\n"
     printf "${dim}Scripts: %s${rst}\n\n" "$SCRIPT_DIR"
     printf "  ${cyn}%-12s${rst}  %s\n" "config"     "Show active profile config (all segment on/off/auto values)"
     printf "  ${cyn}%-12s${rst}  %s\n" "explain"    "Explain each widget: what it shows, when it fires"

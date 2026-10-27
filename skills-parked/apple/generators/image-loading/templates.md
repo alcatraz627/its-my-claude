@@ -435,7 +435,7 @@ struct ImageProcessor: Sendable {
         #endif
     }
 
-    // MARK: - Thumbnail (ImageIO — most efficient)
+    // MARK: - Thumbnail (ImageIO: most efficient)
 
     private func generateThumbnail(from image: PlatformImage, maxPixelSize: Int) throws -> PlatformImage {
         #if canImport(UIKit)

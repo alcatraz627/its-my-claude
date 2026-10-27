@@ -29,7 +29,7 @@ cat > "$INDEX" << 'EOF'
 ## Template Registry
 | Template file | Use-case | Created |
 |---|---|---|
-| topic-template.md | Default — general research / Q&A / analysis | — |
+| topic-template.md | Default (general research / Q&A / analysis |) |
 
 ## Files
 | File | Created | Interactions | Summary |

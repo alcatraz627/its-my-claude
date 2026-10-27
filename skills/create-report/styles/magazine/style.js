@@ -1,4 +1,4 @@
-/* style.js — Magazine style interactive behaviours */
+/* style.js: Magazine style interactive behaviours */
 (function () {
   'use strict';
 

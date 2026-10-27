@@ -61,7 +61,7 @@ except Exception: print("")' "$f" 2>/dev/null)
       [[ -z "$newest" ]] && newest="$f"
     done
     if [[ -n "$newest" ]]; then
-      (( n > 1 )) && printf 'note: %s collision-preserved pointers exist for "%s" — use --pick to reach older ones\n' "$n" "$SESSION_ID" >&2
+      (( n > 1 )) && printf 'note: %s collision-preserved pointers exist for "%s": use --pick to reach older ones\n' "$n" "$SESSION_ID" >&2
       cat "$newest"; exit 0
     fi
     # Fallback: maybe legacy holds it

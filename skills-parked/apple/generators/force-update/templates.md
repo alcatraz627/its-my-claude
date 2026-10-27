@@ -10,7 +10,7 @@ import Foundation
 /// Semantic version representation (major.minor.patch) with comparison support.
 ///
 /// Parses version strings like "2.1.3" and provides `Comparable` conformance
-/// for safe numeric comparison — never compare version strings lexicographically.
+/// for safe numeric comparison: never compare version strings lexicographically.
 ///
 /// Usage:
 /// ```swift
@@ -74,7 +74,7 @@ extension AppVersion: CustomStringConvertible {
 ```swift
 import Foundation
 
-/// The result of a version check — determines what UI to show.
+/// The result of a version check: determines what UI to show.
 ///
 /// - `none`: App is up to date, no action needed.
 /// - `softUpdate`: A recommended update is available. User can dismiss or skip.
@@ -155,7 +155,7 @@ protocol VersionChecking: Sendable {
 
 /// Checks app version against a JSON endpoint you control.
 ///
-/// This is the recommended approach — you have full control over the response
+/// This is the recommended approach: you have full control over the response
 /// format, rate limits, and can update requirements without an app release.
 ///
 /// Expected JSON format: see `RemoteVersionConfig`.
@@ -194,7 +194,7 @@ actor RemoteJSONVersionChecker: VersionChecking {
 
 /// Checks app version against the App Store using the iTunes Search API.
 ///
-/// No server infrastructure needed — queries Apple's public API.
+/// No server infrastructure needed: queries Apple's public API.
 ///
 /// **Limitations:**
 /// - Undocumented rate limits (avoid calling too frequently)
@@ -440,7 +440,7 @@ import SwiftUI
 /// Full-screen blocking view shown when a hard (mandatory) update is required.
 ///
 /// Displays an icon, title, message, and an "Update Now" button that opens
-/// the App Store. There is no dismiss option — the user must update.
+/// the App Store. There is no dismiss option: the user must update.
 ///
 /// Usage:
 /// ```swift

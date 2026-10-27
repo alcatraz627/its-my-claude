@@ -113,18 +113,18 @@ Based on the distribution purpose, design:
 ### Message Template
 
 #### For Influencers/Reviewers
-Subject: [App Name] — Complimentary Pro Access
+Subject: [App Name]: Complimentary Pro Access
 
 > Hi [Name],
 >
-> I'd love to offer you complimentary Pro access to [App Name] — [one-line description].
+> I'd love to offer you complimentary Pro access to [App Name]: [one-line description].
 >
 > Your personal code: **[CODE]**
 >
 > Redeem: Open the App Store → Account → Redeem Gift Card or Code → Enter code
 > Or direct link: [redemption URL]
 >
-> This gives you [offer details — e.g., 3 months free Pro].
+> This gives you [offer details: e.g., 3 months free Pro].
 >
 > If you enjoy the app, we'd love an honest review or mention. No obligation at all.
 >
@@ -132,7 +132,7 @@ Subject: [App Name] — Complimentary Pro Access
 > [Your name]
 
 #### For Email Re-engagement
-Subject: We've missed you — here's [X] free on us
+Subject: We've missed you: here's [X] free on us
 
 > Hi [Name],
 >
@@ -160,7 +160,7 @@ Subject: We've missed you — here's [X] free on us
 >
 > Redeem: [Link]
 >
-> Limited time — expires [date]. [Emoji]
+> Limited time: expires [date]. [Emoji]
 
 ## In-App Redemption
 

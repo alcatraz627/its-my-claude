@@ -49,7 +49,7 @@ if [[ ! -f "$INDEX" ]]; then
     done
     (( found == 1 )) && exit 0
   fi
-  printf '(no checkpoint index yet — run /core-dump first)\n'; exit 0
+  printf '(no checkpoint index yet: run /core-dump first)\n'; exit 0
 fi
 
 python3 - "$INDEX" "$LIMIT" "$SESSION_FILTER" "$PROJECT_FILTER" "$JSON_OUT" "$WITHIN_H" "$CWD" <<'PY'

@@ -70,7 +70,7 @@ final class AccountDeletionManager {
         }
     }
 
-    /// Begin the deletion flow — transitions to confirming state.
+    /// Begin the deletion flow: transitions to confirming state.
     func initiateDeletion() async {
         deletionState = .confirming
     }
@@ -145,7 +145,7 @@ final class AccountDeletionManager {
         deletionState = .none
     }
 
-    /// Execute the account deletion — cleans up all local and remote data.
+    /// Execute the account deletion: cleans up all local and remote data.
     ///
     /// This is the final, irreversible step. Call only after confirmation.
     func executeDeletion() async throws {
@@ -190,7 +190,7 @@ final class AccountDeletionManager {
         guard let scheduledDate = scheduledDeletionDate else { return }
 
         if Date() >= scheduledDate {
-            // Grace period expired — execute deletion
+            // Grace period expired: execute deletion
             try? await executeDeletion()
         }
     }
@@ -999,7 +999,7 @@ struct KeychainCleanup: Sendable {
 
             let status = SecItemDelete(query as CFDictionary)
 
-            // errSecItemNotFound is fine — means nothing to delete
+            // errSecItemNotFound is fine: means nothing to delete
             if status != errSecSuccess && status != errSecItemNotFound {
                 errors.append(status)
             }

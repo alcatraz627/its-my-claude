@@ -2,7 +2,7 @@
 /**
  * generate-table.ts
  * Generates a fully self-contained interactive HTML table page from structured JSON data.
- * All CSS, JS, and data are inlined — no external dependencies, no server required.
+ * All CSS, JS, and data are inlined: no external dependencies, no server required.
  *
  * Usage:
  *   npx tsx .claude/skills/create-report/table/generate-table.ts \
@@ -53,23 +53,23 @@
  *
  *   --column-types '{"Col":"type"}'
  *       JSON object mapping column names to display types:
- *         "text"    — plain left-aligned text (default)
- *         "number"  — right-align, apply --number-format
- *         "date"    — format via --date-format
- *         "boolean" — render as ✓ or ✗ icon
- *         "badge"   — colored pill, color auto-assigned by value hash
- *         "url"     — clickable link (<a href>)
- *         "email"   — mailto: link
- *         "code"    — monospace pre-formatted text
+ *         "text": plain left-aligned text (default)
+ *         "number": right-align, apply --number-format
+ *         "date": format via --date-format
+ *         "boolean": render as ✓ or ✗ icon
+ *         "badge": colored pill, color auto-assigned by value hash
+ *         "url": clickable link (<a href>)
+ *         "email": mailto: link
+ *         "code": monospace pre-formatted text
  *
  *   --number-format "pattern"
  *       Supported patterns:
- *         "0,0"      — integer with thousands separator (1,234)
- *         "0,0.00"   — fixed 2 decimal places (1,234.56)
- *         "0,0.##"   — up to 2 decimals, trailing zeros stripped (1,234.5)
- *         "0%"       — percentage (45%)
- *         "0.00%"    — percentage with 2 decimals (45.67%)
- *         "$0,0.00"  — currency prefix ($ 1,234.56)
+ *         "0,0": integer with thousands separator (1,234)
+ *         "0,0.00": fixed 2 decimal places (1,234.56)
+ *         "0,0.##": up to 2 decimals, trailing zeros stripped (1,234.5)
+ *         "0%": percentage (45%)
+ *         "0.00%": percentage with 2 decimals (45.67%)
+ *         "$0,0.00": currency prefix ($ 1,234.56)
  *       Default: raw value.
  *
  *   --date-format "YYYY-MM-DD"
@@ -188,7 +188,7 @@ function parseArgs(): { dataPath: string; outputPath: string; config: TableConfi
     try {
       return JSON.parse(raw) as T;
     } catch {
-      console.error(`${flag}: invalid JSON — ${raw}`);
+      console.error(`${flag}: invalid JSON: ${raw}`);
       process.exit(1);
     }
   }

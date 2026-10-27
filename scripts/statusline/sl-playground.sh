@@ -36,7 +36,7 @@ case "$ACTION" in
 
   --open|open)
     if is_running; then
-      printf "${grn}✓${rst}  Server running — opening playground in browser\n"
+      printf "${grn}✓${rst}  Server running: opening playground in browser\n"
       open "http://localhost:${PORT}" 2>/dev/null || \
         printf "${dim}   open http://localhost:%d${rst}\n" "$PORT"
     else

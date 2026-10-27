@@ -105,7 +105,7 @@ import GameplayKit
 final class RewardPool: Sendable {
 
     /// Rarity weights controlling probability distribution.
-    /// Values are relative — they don't need to sum to 100.
+    /// Values are relative: they don't need to sum to 100.
     struct RarityWeights: Sendable {
         let common: Double
         let uncommon: Double

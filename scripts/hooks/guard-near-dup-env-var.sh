@@ -135,7 +135,7 @@ done <<< "$new_names"
 [ -z "$hits" ] && exit 0
 
 msg="[near-dup-env] this edit to $(basename "$file_path") introduces an env var name that near-duplicates an existing one:
-${hits}Near-duplicate env names (KEY vs TOKEN, reordered words) cause silent config drift — two names for one secret, one never populated. Confirm you want a genuinely new var, or reuse the existing name. (mute: touch ~/.claude/.no-near-dup-env-gate)
+${hits}Near-duplicate env names (KEY vs TOKEN, reordered words) cause silent config drift: two names for one secret, one never populated. Confirm you want a genuinely new var, or reuse the existing name. (mute: touch ~/.claude/.no-near-dup-env-gate)
 →→ SURFACE this to the user in your reply as a bordered callout (rules/surface-hook-nudges-to-user.md)."
 
 bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook near-dup-env-var --action nudge --heeded unknown --cwd "$(printf '%s' "$INPUT" | jq -r '.cwd//empty' 2>/dev/null)" --target "$file_path" >/dev/null 2>&1 || true

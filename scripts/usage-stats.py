@@ -4,12 +4,12 @@
 Answers "what did my Claude usage look like" from the local session index
 (~/.claude/assets/scan-sessions/index.db, refreshed daily at 05:00): totals,
 per-model and per-project breakdowns, daily trend, and week-over-week
-comparison — each with an API-equivalent dollar figure.
+comparison: each with an API-equivalent dollar figure.
 
 Costs are cache-aware: cache reads bill at 0.1x the input rate, 5-minute
 cache writes at 1.25x, 1-hour writes at 2x (rates per the Claude API docs,
 2026-07). Sessions run on a subscription, so dollars here are what the same
-tokens WOULD cost on the API — a comparison metric, not a bill.
+tokens WOULD cost on the API: a comparison metric, not a bill.
 """
 
 import argparse
@@ -155,7 +155,7 @@ def cmd_summary(con, args):
     print(f"  cache read  {fmt_tok(tot[2]):>9}   (billed at 0.1x input)")
     print(f"  cache write {fmt_tok(tot[3] + tot[4]):>9}   (5m {fmt_tok(tot[3])} @1.25x · 1h {fmt_tok(tot[4])} @2x)")
     print(f"  API-equivalent cost: ${tot[5]:,.2f}")
-    print("  (subscription usage — dollars show what these tokens would cost on the API)")
+    print("  (subscription usage: dollars show what these tokens would cost on the API)")
 
 
 def cmd_models(con, args):
@@ -174,7 +174,7 @@ def cmd_projects(con, args):
 def cmd_daily(con, args):
     since = (date.today() - timedelta(days=args.days)).isoformat()
     agg = grouped(con, "substr(ts,1,10)", since=since)
-    print(f"\nDaily usage — last {args.days} days")
+    print(f"\nDaily usage: last {args.days} days")
     print(f"{'day':<12} {'out-tok':>9} {'$ api-eq':>10}")
     peak = max((v[5] for v in agg.values()), default=1) or 1
     for day, v in sorted(agg.items()):
@@ -323,7 +323,7 @@ def main():
         return 0
     dbp = Path(args.db)
     if not dbp.exists():
-        print(f"index not found: {dbp} — run refresh-session-index.sh first", file=sys.stderr)
+        print(f"index not found: {dbp}: run refresh-session-index.sh first", file=sys.stderr)
         return 1
     con = sqlite3.connect(f"file:{dbp}?mode=ro", uri=True)
     args.db = str(dbp)

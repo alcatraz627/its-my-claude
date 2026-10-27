@@ -19,7 +19,7 @@ HITLOG="${GLOSSARY_HITLOG:-$HOME/.claude/style/glossary-hit-log.tsv}"
 
 [ -f "$HINTS" ] || { echo "no hints table at $HINTS"; exit 0; }
 if [ ! -s "$HITLOG" ]; then
-    echo "no usage telemetry yet (hit-log empty) — dormancy unjudgeable; skipping"
+    echo "no usage telemetry yet (hit-log empty): dormancy unjudgeable; skipping"
     exit 0
 fi
 
@@ -34,7 +34,7 @@ OLDEST=$(cut -f1 "$HITLOG" | sort | head -1)
 COVERED=1
 if [[ "$OLDEST" > "$CUTOFF" ]]; then
     COVERED=0
-    echo "note: telemetry starts $OLDEST (< ${WINDOW}d of coverage) — counts shown, dormancy verdicts withheld"
+    echo "note: telemetry starts $OLDEST (< ${WINDOW}d of coverage): counts shown, dormancy verdicts withheld"
 fi
 
 awk -F'\t' -v hints="$HINTS" -v cutoff="$CUTOFF" -v now="$NOW" -v covered="$COVERED" '
@@ -60,7 +60,7 @@ END {
     for (i = 1; i <= n; i++) if (hits[term[i]] > 0)
         printf "%4dx /%2d  %s%s\n", hits[term[i]], nsess[term[i]], term[i], (pin[i] ? "  [pin]" : "")
     if (covered) {
-        print "-- dormant, unpinned (0 hits in window — retire or pin?) --"
+        print "-- dormant, unpinned (0 hits in window: retire or pin?) --"
         d = 0
         for (i = 1; i <= n; i++) if (!hits[term[i]] && !pin[i]) { print "     " term[i]; d++ }
         if (!d) print "     (none)"

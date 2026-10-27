@@ -118,7 +118,7 @@ For each variant, specify:
 
 | Variant | Description | Key Difference from Control |
 |---------|-------------|---------------------------|
-| Control (A) | [Current design] | — |
+| Control (A) | [Current design] |: |
 | Treatment B | [Description] | [What's different] |
 | Treatment C | [Description] | [What's different] |
 
@@ -135,7 +135,7 @@ For each variant, specify:
 ---
 
 ## Test 2: [Next Element]
-[Same format — run after Test 1 concludes]
+[Same format: run after Test 1 concludes]
 
 ---
 

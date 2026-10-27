@@ -501,7 +501,7 @@ hr {
 /* Ordered lists */
 ol { padding-left: 20px; margin-bottom: 12px; }
 
-/* Expand dialog — base styles from shared-base.css; override bg vars */
+/* Expand dialog: base styles from shared-base.css; override bg vars */
 dialog {
   background: var(--bg-card);
   border: 1px solid var(--border);

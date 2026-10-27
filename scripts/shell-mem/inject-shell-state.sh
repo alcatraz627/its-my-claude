@@ -64,9 +64,9 @@ fi
 
 if [ -n "$ORPHANED_ENTRIES" ]; then
   if [ -n "$CONTEXT" ]; then
-    CONTEXT="${CONTEXT}\n\n## Orphaned background shells (PID no longer running — mark done)\n${ORPHANED_ENTRIES}"
+    CONTEXT="${CONTEXT}\n\n## Orphaned background shells (PID no longer running: mark done)\n${ORPHANED_ENTRIES}"
   else
-    CONTEXT="## Orphaned background shells (PID no longer running — mark done)\n${ORPHANED_ENTRIES}"
+    CONTEXT="## Orphaned background shells (PID no longer running: mark done)\n${ORPHANED_ENTRIES}"
   fi
 fi
 

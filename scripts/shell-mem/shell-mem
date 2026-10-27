@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shell-mem — unified entry point for diy-claude-mem
+# shell-mem: unified entry point for diy-claude-mem
 # Usage: shell-mem <command> [args...] | shell-mem -h
 
 SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -8,7 +8,7 @@ case "$1" in
   -h|--help)
     # TL;DR first
     cat <<'EOF'
-shell-mem — Claude shell command memory system
+shell-mem: Claude shell command memory system
 
   Logs every Bash command Claude runs. Tracks background processes.
   Survives /compact. One log file per day at ~/.claude/shell-logs/.
@@ -25,7 +25,7 @@ Commands:
   file [YYYY-MM-DD]                  Print path to a log file
 
 EOF
-    # Then full details from PLAN.md — extract the Scripts section
+    # Then full details from PLAN.md: extract the Scripts section
     PLAN="$SCRIPTS_DIR/../PLAN.md"
     if [ -f "$PLAN" ]; then
       echo "--- Full reference (from PLAN.md) ---"

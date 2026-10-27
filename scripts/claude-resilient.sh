@@ -26,7 +26,7 @@ set -uo pipefail
 # Loud, non-fatal: anyone who runs this should know it's deprecated and broken
 # for its stated purpose. Goes to stderr so it never pollutes captured stdout.
 printf '%s\n' \
-  '[claude-resilient] DEPRECATED & non-functional for its stated purpose — see' \
+  '[claude-resilient] DEPRECATED & non-functional for its stated purpose: see' \
   '[claude-resilient] assets/reports/20260618-api-error-48h-analysis/findings.md' >&2
 
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
@@ -60,7 +60,7 @@ RETRY=0
 SLEEP="$BASE_SLEEP"
 while [ "$RETRY" -lt "$MAX_RETRIES" ]; do
   RETRY=$((RETRY + 1))
-  log "exit=$EXIT — retry $RETRY/$MAX_RETRIES in ${SLEEP}s (via --continue)"
+  log "exit=$EXIT: retry $RETRY/$MAX_RETRIES in ${SLEEP}s (via --continue)"
   sleep "$SLEEP"
   "$CLAUDE_BIN" --continue
   EXIT=$?
@@ -76,5 +76,5 @@ while [ "$RETRY" -lt "$MAX_RETRIES" ]; do
   SLEEP=$((SLEEP * BACKOFF))
 done
 
-log "exhausted $MAX_RETRIES retries — final exit=$EXIT"
+log "exhausted $MAX_RETRIES retries: final exit=$EXIT"
 exit "$EXIT"

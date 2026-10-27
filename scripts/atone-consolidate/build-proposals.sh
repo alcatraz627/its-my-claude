@@ -73,7 +73,7 @@ command shape or file path the mistake shows up in; the slug words alone are
 not a pattern (joined with \`|\` they match almost any command).
 
 **Injection / block message:**
-${precheck:-(precheck field empty — review the latest event for actionable text)}
+${precheck:-(precheck field empty: review the latest event for actionable text)}
 
 **Source events:** \`atone.sh search $slug\`
 **Latest event:** $latest_id
@@ -89,7 +89,7 @@ Auto-drafted from atone pattern (slug: $slug, severity: $sev_str, recurrences: $
 $(echo "$tags_json" | jq -r 'join(", ")')
 
 **Behavior to add to the skills pre-action checks:**
-${precheck:-(precheck empty — derive from \`atone.sh show $latest_id\`)}
+${precheck:-(precheck empty: derive from \`atone.sh show $latest_id\`)}
 
 **Source events:** \`atone.sh search $slug\`
 EOF
@@ -103,7 +103,7 @@ Auto-drafted from atone pattern (slug: $slug, severity: $sev_str, recurrences: $
 **Suggested target:** ${project}/.claude/CLAUDE.md (project-level rules section).
 
 **Content to add:**
-${precheck:-(precheck empty — derive from \`atone.sh show $latest_id\`)}
+${precheck:-(precheck empty: derive from \`atone.sh show $latest_id\`)}
 
 **Source events:** \`atone.sh search $slug\`
 EOF
@@ -117,7 +117,7 @@ Auto-drafted from atone pattern (slug: $slug, severity: $sev_str, recurrences: $
 **Suggested placement:** ~/.claude/CLAUDE.md Tier-0 (always-load).
 
 **Proposed rule (≤3 sentences):**
-${precheck:-${title:-(no rule text yet — review and write)}}
+${precheck:-${title:-(no rule text yet: review and write)}}
 
 **Source events:** \`atone.sh search $slug\`
 EOF
@@ -131,7 +131,7 @@ Auto-drafted from atone pattern (slug: $slug, severity: $sev_str, recurrences: $
 **Suggested target:** ~/.claude/rules/$slug.md (or merge into an existing rules file).
 
 **Body (expand from precheck/what-not-to-do):**
-${precheck:-(precheck empty — read latest event for context)}
+${precheck:-(precheck empty: read latest event for context)}
 
 **Source events:** \`atone.sh search $slug\`
 EOF

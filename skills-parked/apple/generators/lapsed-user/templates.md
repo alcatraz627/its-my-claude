@@ -703,7 +703,7 @@ final class LapsedUserManager {
         case .moderatelyLapsed:
             return ReturnExperience(
                 headline: "We missed you!",
-                subtitle: "A lot has changed — take a quick look at what's new.",
+                subtitle: "A lot has changed: take a quick look at what's new.",
                 highlights: highlights,
                 ctaTitle: "See what's new",
                 category: category
@@ -779,7 +779,7 @@ final class LapsedUserManager {
     private func buildWinBackOffer() -> WinBackOffer {
         // Customize these values based on your subscription tiers.
         WinBackOffer(
-            headline: "Welcome back — here's a gift!",
+            headline: "Welcome back: here's a gift!",
             bodyText: "We'd love to have you back. Enjoy a special returning member discount.",
             discount: .percentage(30),
             originalPrice: "$9.99/mo",

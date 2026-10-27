@@ -5,7 +5,7 @@ atone-migrate-v1-to-events.py
 Smart, guided migration of ~/.claude/mistake-patterns.md (v1) to JSONL events.
 
 This is NOT just a heuristic parser. It carries a CLASSIFICATION TABLE that
-maps each slug to its hand-judged severity, cluster, and tags — built from
+maps each slug to its hand-judged severity, cluster, and tags: built from
 agent reading of each pattern body. The classification table is the
 "guided" half; the regex parsing is the "structural" half.
 
@@ -136,7 +136,7 @@ def extract_sections(body: str) -> dict[str, str]:
 
 def parse_slug_title(header: str) -> tuple[str, str]:
     h = header.replace("## Pattern:", "", 1).strip()
-    for sep in [" — ", " – ", " - ", "—"]:
+    for sep in [" \u2014 ", " – ", " - ", "\u2014"]:
         if sep in h:
             slug_part, title = h.split(sep, 1)
             slug_part, title = slug_part.strip(), title.strip()
@@ -181,9 +181,9 @@ def build_fields(body: str, slug: str) -> dict[str, str]:
     if not issue:
         issue = general_clean[:600] or "(see source body in v1 mistake-patterns.md)"
     if not cause:
-        cause = "(parser could not isolate cause — see issue field; user-review)"
+        cause = "(parser could not isolate cause: see issue field; user-review)"
     if not fix:
-        fix = "(no explicit fix recorded — see issue field; user-review)"
+        fix = "(no explicit fix recorded: see issue field; user-review)"
     if not what_not:
         # Derive what-not from precheck or first paragraph
         what_not = precheck[:300] if precheck else \
@@ -283,7 +283,7 @@ def main():
 
     # Report
     with REPORT.open("w", encoding="utf-8") as r:
-        r.write(f"atone migration report — {datetime.now(timezone.utc).isoformat()}\n")
+        r.write(f"atone migration report: {datetime.now(timezone.utc).isoformat()}\n")
         r.write(f"source:  {SRC}\n")
         r.write(f"draft:   {DST}\n\n")
         r.write(f"patterns parsed:    {len(blocks)}\n")
@@ -316,9 +316,9 @@ def main():
     print(f"    severity: {dict(severity_counts)}")
     print(f"    clusters: {dict(cluster_counts)}")
     if unclassified:
-        print(f"    NOTE: {len(unclassified)} slug(s) unclassified — defaulted to S2/none")
+        print(f"    NOTE: {len(unclassified)} slug(s) unclassified: defaulted to S2/none")
     else:
-        print(f"    NOTE: 100% slugs classified — no defaults applied")
+        print(f"    NOTE: 100% slugs classified: no defaults applied")
 
 
 if __name__ == "__main__":

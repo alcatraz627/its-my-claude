@@ -1745,7 +1745,7 @@ Prepares the macOS desktop environment for clean screenshot capture. Sets clock 
 #   ./macos-screenshot-env.sh --restore   # Force restore saved state
 #
 # This script saves original settings, applies screenshot-friendly configuration,
-# and restores everything on exit via trap — even on Ctrl+C or failure.
+# and restores everything on exit via trap: even on Ctrl+C or failure.
 
 set -euo pipefail
 
@@ -1825,7 +1825,7 @@ apply_screenshot_env() {
     # Hide desktop icons (Finder's "CreateDesktop" setting)
     defaults write com.apple.finder CreateDesktop -bool false
 
-    # Set clock to canonical time (9:41 — Apple's standard)
+    # Set clock to canonical time (9:41: Apple's standard)
     # Note: This changes the display format, not the actual time.
     # For the menu bar clock, we hide seconds and use a clean format.
     defaults write com.apple.menuextra.clock DateFormat -string "h:mm"

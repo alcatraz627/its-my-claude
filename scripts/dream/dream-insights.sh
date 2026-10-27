@@ -81,7 +81,7 @@ if dream_enabled and part_mode != 'ranked' and os.path.isfile(digest_path):
             elif brief and not brief.endswith('.'):
                 brief += '.'
             if brief:
-                parts.append("# Insight Digest (dieted — full: " + digest_path + ")\n"
+                parts.append("# Insight Digest (dieted: full: " + digest_path + ")\n"
                              + brief)
     except Exception:
         pass
@@ -208,7 +208,7 @@ if dream_enabled:
                      if part_mode == 'ranked'
                      else "## Lessons ranked for this session (dream consolidation)")
             cite = ("_When a lesson above changes what you do, cite its "
-                    "[L:xxxxxxxx] tag in your reply — cited lessons are "
+                    "[L:xxxxxxxx] tag in your reply: cited lessons are "
                     "reinforced; silent ones decay._")
             parts.append(title + "\n" + "\n".join(lines) + "\n" + cite)
             # Entropy health signal (docs/25 item 15): log WHICH lessons were
@@ -315,7 +315,7 @@ if not parts:
 header = (
     "## Dream Insights + Atone (i-dream + atone)\n"
     "_High-confidence rules from background memory consolidation, plus mistake/affirmation "
-    "patterns from the atone system. Behavioral directives — read once per session._\n\n"
+    "patterns from the atone system. Behavioral directives: read once per session._\n\n"
 )
 
 # The prompt lane emits only its own section: the SessionStart block already

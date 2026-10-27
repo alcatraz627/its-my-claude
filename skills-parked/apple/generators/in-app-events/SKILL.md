@@ -195,10 +195,10 @@ Write a markdown document with all metadata ready for copy/paste into App Store 
 | ... | ... | ... | ... | ... |
 
 ## Seasonal Themes
-- **Q1 (Jan-Mar)**: [Theme — e.g., New Year motivation]
-- **Q2 (Apr-Jun)**: [Theme — e.g., Spring refresh, WWDC tie-in]
-- **Q3 (Jul-Sep)**: [Theme — e.g., Summer activities, back to school]
-- **Q4 (Oct-Dec)**: [Theme — e.g., Halloween, holiday season]
+- **Q1 (Jan-Mar)**: [Theme: e.g., New Year motivation]
+- **Q2 (Apr-Jun)**: [Theme: e.g., Spring refresh, WWDC tie-in]
+- **Q3 (Jul-Sep)**: [Theme: e.g., Summer activities, back to school]
+- **Q4 (Oct-Dec)**: [Theme: e.g., Halloween, holiday season]
 ```
 
 ## References

@@ -16,7 +16,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 . "$HERE/hook-common.sh"
 
 pass=0; fail=0
-ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1 — got [$2] want [$3]"; fi; }
+ok(){ if [ "$2" = "$3" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "  FAIL: $1: got [$2] want [$3]"; fi; }
 
 # ── hook_sid8 ────────────────────────────────────────────────────────────────
 ok "sid8 normal (16-char uuid head)" "$(hook_sid8 '86f5f8bd-fc06-44d0')" "86f5f8bd"
@@ -140,7 +140,7 @@ if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&
   export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/hc-warnlog2-XXXXXX")"
   PT="$(mktemp "${TMPDIR:-/tmp}/hc-prose-XXXXXX")"
   # Trips em-dash + bold-spam + Label:fragment = 3 block-tier categories.
-  jq -cn '{type:"assistant",message:{content:[{type:"text",text:"Here is the summary — it covers everything.\n\n**One**: the loader resolves correctly and returns the parsed value now.\n**Two**: the cache was invalidated on every write which caused the stall.\n**Three**: the retry path is bounded so a failure cannot spin forever.\n**Four**: logging moved behind a flag to keep the hot path quiet here.\n**Five**: the tests cover the empty and the overflow case end to end.\n**Six**: documentation was regenerated to match the reference exactly.\n"}]}}' > "$PT"
+  jq -cn '{type:"assistant",message:{content:[{type:"text",text:"Here is the summary \u2014 it covers everything.\n\n**One**: the loader resolves correctly and returns the parsed value now.\n**Two**: the cache was invalidated on every write which caused the stall.\n**Three**: the retry path is bounded so a failure cannot spin forever.\n**Four**: logging moved behind a flag to keep the hot path quiet here.\n**Five**: the tests cover the empty and the overflow case end to end.\n**Six**: documentation was regenerated to match the reference exactly.\n"}]}}' > "$PT"
   # 9 chars, so sid8 truncates to a known 8: a sid of exactly 8 makes the
   # marker path the whole string and a hand-written cleanup path silently misses.
   PSID="hcbox001x"; rm -f "/tmp/claude-prose-smell-hcbox001"

@@ -90,7 +90,7 @@ if [[ -f "$CONF" ]]; then
     key="${line%%=*}"; val="${line#*=}"
     [[ ! "$key" =~ ^[a-z_]+$ ]] && continue
     if ! echo "$known_keys" | grep -q " $key "; then
-      warn "Unknown key: $key" "Not a recognized segment — may be ignored"
+      warn "Unknown key: $key" "Not a recognized segment: may be ignored"
       (( unknown_count++ )) || true
     fi
     if ! [[ "$val" =~ ^(0|1|auto|nerd)$ ]]; then
@@ -122,7 +122,7 @@ if [[ $stats_fresh -eq 1 ]]; then
   elif (( _best_age < 120 )); then
     warn "Daemon data ${stats_age} old" "Daemon may be slow; normal under light use"
   else
-    warn "Daemon data stale (${stats_age} old)" "Daemon may not be running — check process-stats-daemon.sh"
+    warn "Daemon data stale (${stats_age} old)" "Daemon may not be running: check process-stats-daemon.sh"
   fi
 else
   warn "No daemon stats file at /tmp/claude-statusline-*" "System metrics (mem/disk/cpu) won't show until Claude session starts"
@@ -142,7 +142,7 @@ fi
 # head -5 cap on tool summary
 if grep -qE 'tool_summary_wide.*\|.*head\s+-[0-9]' "$SL" 2>/dev/null || \
    grep -E 'head -[0-9]' "$SL" 2>/dev/null | grep -q 'tool_summary'; then
-  warn "tool_summary_wide has a head -N cap" "Remove it — budget system handles truncation naturally"
+  warn "tool_summary_wide has a head -N cap" "Remove it: budget system handles truncation naturally"
 else
   pass "tool_summary_wide is uncapped (budget handles truncation)"
 fi
@@ -177,7 +177,7 @@ section "Render Server"
 if command -v nc &>/dev/null && nc -z -G 1 localhost 5081 2>/dev/null; then
   pass "Render server running (localhost:5081)"
 else
-  info "Render server not running (port 5081) — optional for testing"
+  info "Render server not running (port 5081): optional for testing"
   info "Start: node ~/.claude/assets/static/statusline-server.mjs"
 fi
 
@@ -223,9 +223,9 @@ fi
 echo ""
 printf "${bold}────────────────────────────────────────${rst}\n"
 if [[ $_failures -eq 0 && $_warnings -eq 0 ]]; then
-  printf "${grn}${bold}✓ Clean — no issues found${rst}\n"
+  printf "${grn}${bold}✓ Clean: no issues found${rst}\n"
 elif [[ $_failures -eq 0 ]]; then
-  printf "${ylw}${bold}⚠ ${_warnings} warning(s) — no critical failures${rst}\n"
+  printf "${ylw}${bold}⚠ ${_warnings} warning(s): no critical failures${rst}\n"
 else
   printf "${red}${bold}✗ ${_failures} failure(s), ${_warnings} warning(s)${rst}\n"
 fi

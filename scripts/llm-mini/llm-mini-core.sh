@@ -99,9 +99,9 @@ show_help() {
     if $HAS_GUM; then
         gum style --foreground 212 --border-foreground 212 --border double \
             --align center --width 58 --margin "0 0" --padding "0 2" \
-            "llm-mini — Fast AI Queries"
+            "llm-mini: Fast AI Queries"
     else
-        printf '  %b%bllm-mini — Fast AI Queries%b\n' "$C_BOLD" "$C_MAGENTA" "$C_RESET"
+        printf '  %b%bllm-mini: Fast AI Queries%b\n' "$C_BOLD" "$C_MAGENTA" "$C_RESET"
     fi
 
     printf '\n  %bLocal-first AI queries: Ollama (<500ms) + Haiku fallback (~1-2s).%b\n' \
@@ -181,8 +181,8 @@ show_help() {
 
     _section "BACKENDS"
     _opt 'auto'   'Local first, cloud fallback (default)'
-    _opt 'local'  'Ollama only — fast, free, private'
-    _opt 'cloud'  'Haiku — via CLI (subscription) or API (credits)'
+    _opt 'local'  'Ollama only: fast, free, private'
+    _opt 'cloud'  'Haiku: via CLI (subscription) or API (credits)'
 
     _section "CONFIGURATION"
     printf '  %bFile:%b  %s\n' "$C_DIM" "$C_RESET" "$CONF_FILE"
@@ -223,7 +223,7 @@ _cmd_config() {
                 $HAS_GUM && gum_info "Config: $CONF_FILE" && echo
                 cat "$CONF_FILE"
             else
-                gum_warn "No config — creating default"
+                gum_warn "No config: creating default"
                 cat > "$CONF_FILE" <<'DEFCFG'
 default_backend=auto
 default_model=llama3.2

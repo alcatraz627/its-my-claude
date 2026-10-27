@@ -122,8 +122,8 @@ Conflict:
   WAL @ 15:39 says: "fixed task-claimer race"
   But no commit touches lib/tasks/claimer.py.
 
-  1. Treat WAL as authoritative — include as uncommitted fix
-  2. Treat git as authoritative — drop the WAL signal
+  1. Treat WAL as authoritative: include as uncommitted fix
+  2. Treat git as authoritative: drop the WAL signal
   3. Mark as ambiguous in output
   4. Investigate further
   5. Skip the entry

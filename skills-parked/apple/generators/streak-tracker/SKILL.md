@@ -182,7 +182,7 @@ struct StatsView: View {
 ```swift
 Button("Use Streak Freeze") {
     if streakManager.useStreakFreeze() {
-        // Freeze applied — streak preserved
+        // Freeze applied: streak preserved
     } else {
         // No freezes available
     }
@@ -264,7 +264,7 @@ func streakFreezePreservesStreak() async throws {
     let manager = StreakManager(modelContext: context)
 
     let calendar = Calendar.current
-    // Record 2 days ago and today — gap of 1 day
+    // Record 2 days ago and today: gap of 1 day
     let twoDaysAgo = calendar.date(byAdding: .day, value: -2, to: .now)!
     try await manager.recordActivity(type: "workout", date: twoDaysAgo)
     manager.addStreakFreeze(count: 1)
@@ -283,7 +283,7 @@ func streakFreezePreservesStreak() async throws {
 ```swift
 // Record a single check-in per day (idempotent)
 try await streakManager.recordActivity(type: "daily-check-in")
-// StreakManager deduplicates — calling twice on the same day is safe
+// StreakManager deduplicates: calling twice on the same day is safe
 ```
 
 ### Query Streak State

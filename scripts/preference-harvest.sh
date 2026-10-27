@@ -32,19 +32,19 @@ have() { command -v "$1" >/dev/null 2>&1; }
 emit() { printf '%s\n' "$1" >> "$OUT"; }
 
 : > "$OUT"
-emit "# Preference candidates — $DATE"
+emit "# Preference candidates: $DATE"
 emit ""
 emit "> Auto-surfaced by \`scripts/preference-harvest.sh\` from the post-insight streams"
-emit "> for **human review**. Nothing here is baked yet — triage real signals into"
+emit "> for **human review**. Nothing here is baked yet: triage real signals into"
 emit "> GLOSSARY / memory / rules per \`conventions/preference-graduation.md\`."
-emit "> (Already-baked terms — efficacy, one-shotting, work-routing triad — will recur"
+emit "> (Already-baked terms (efficacy, one-shotting, work-routing triad) will recur"
 emit "> here; ignore those.)"
 emit ""
 
 scan_jsonl() {  # $1 path  $2 label  $3 jq-text-expr
   local f="$1" label="$2" expr="$3" hits
   [ -f "$f" ] || return 0
-  have jq || { emit "_(jq missing — skipped $label)_"; return 0; }
+  have jq || { emit "_(jq missing: skipped $label)_"; return 0; }
   hits="$(jq -r "$expr" "$f" 2>/dev/null | rg -iN "$PAT" 2>/dev/null | tail -40)"
   [ -n "$hits" ] || return 0
   emit "## $label"; emit ""

@@ -31,7 +31,7 @@ if [[ -f "$STATE" ]]; then
   since=$(grep   '^since='   "$STATE" 2>/dev/null | cut -d= -f2); since=${since:-0}
   nudged=$(grep  '^nudged='  "$STATE" 2>/dev/null | cut -d= -f2); nudged=${nudged:-0}
 fi
-[[ "$nudged" == "1" ]] && exit 0   # already nudged this session — cheap exit
+[[ "$nudged" == "1" ]] && exit 0   # already nudged this session: cheap exit
 
 tool=$(printf '%s' "$input" | jq -r '.tool_name // empty')
 path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // .tool_input.path // empty')

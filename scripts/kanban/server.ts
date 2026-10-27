@@ -27,7 +27,7 @@ import { compose as dpCompose, parse as dpParse, configOf as dpConfigOf } from "
 const portArg = process.argv.indexOf("--port");
 const PORT = portArg >= 0 ? Number(process.argv[portArg + 1]) : NaN;
 if (!Number.isInteger(PORT)) {
-  console.error("server: --port <claimed-port> is required — fix: ports.sh claim kanban --tier 2, then pass the printed port");
+  console.error("server: --port <claimed-port> is required: fix: ports.sh claim kanban --tier 2, then pass the printed port");
   process.exit(1);
 }
 
@@ -346,7 +346,7 @@ function resolveDocPath(reqPath: string): { real: string } | { error: string; st
   // gates: came back "doc viewer renders .md/.txt only". A confident, specific
   // sentence about a file type, for a request that named no file. The two cases
   // that were being swallowed now answer for themselves, first.
-  if (!reqPath.trim()) return { error: "no document asked for — /doc needs ?path=<file>", status: 400 };
+  if (!reqPath.trim()) return { error: "no document asked for: /doc needs ?path=<file>", status: 400 };
   // ~ is how a path is written everywhere else in this app: in card bodies, in
   // decision why fields, in notes, in the docs themselves. path.resolve does not
   // expand it, so every one of those was unopenable until now. rootMissing has
@@ -614,7 +614,7 @@ const server = Bun.serve({
           : rel.endsWith(".html") ? "text/html; charset=utf-8" : "application/octet-stream";
         return new Response(fs.readFileSync(real), { headers: { "content-type": type, "cache-control": "no-store" } });
       }
-      if (p.startsWith("/b/")) return boardDirOf(p.slice(3)) ? html("board.html") : json({ error: `unknown board ${p.slice(3)} — kanban.sh status lists boards` }, 404);
+      if (p.startsWith("/b/")) return boardDirOf(p.slice(3)) ? html("board.html") : json({ error: `unknown board ${p.slice(3)}: kanban.sh status lists boards` }, 404);
       // every note on every board, so the hub can answer "what did I ask for"
       if (p === "/api/notes") {
         const reg = registry();
@@ -1107,7 +1107,7 @@ const server = Bun.serve({
       const body = (await req.json().catch(() => null)) as
         { slug?: string; cardId?: string; note?: string; noteId?: string; title?: string; all?: boolean } | null;
       if (!body?.slug || !body.cardId || typeof body.note !== "string") {
-        return json({ error: "need {slug, cardId, note} — empty note deletes" }, 400);
+        return json({ error: "need {slug, cardId, note}: empty note deletes" }, 400);
       }
       const dir = boardDirOf(body.slug);
       if (!dir) return json({ error: `unknown board ${body.slug}` }, 404);
@@ -1303,7 +1303,7 @@ const server = Bun.serve({
           else {
             const bad = body.to.find((t) => !/^(agent|board):.+$/.test(t)
               || (t.startsWith("board:") && !registry().boards[t.slice(6)]));
-            if (bad) { out = { error: `"${bad}" is not a recipient — use agent:<alias> or board:<slug>` }; return; }
+            if (bad) { out = { error: `"${bad}" is not a recipient: use agent:<alias> or board:<slug>` }; return; }
             d.to = [...new Set(body.to)];
           }
           d.updatedAt = now;
@@ -2013,7 +2013,7 @@ const server = Bun.serve({
         // Refused rather than broadcast. A draft addressed to nobody in
         // particular is not a thing to shout; it is already waiting for whoever
         // sweeps, which is what "addressed to anyone" means.
-        return json({ error: "this draft names no agent — address it first: kanban.sh to "
+        return json({ error: "this draft names no agent: address it first: kanban.sh to "
           + d.id + " agent:<alias>" }, 400);
       }
       const ipcBin = [path.join(os.homedir(), ".local", "bin", "claude-ipc"), "/usr/local/bin/claude-ipc"]
@@ -2051,7 +2051,7 @@ const server = Bun.serve({
       // Silence is the failure this reports on. "Offered" with nobody reached is
       // the exact shape that hid the owner's feedback for a day.
       return json({ ok: true, sent, asleep, addressed: r.agents,
-        reason: sent.length ? "" : (reason || (asleep.length ? "nobody live — it is waiting in their inbox" : "")) });
+        reason: sent.length ? "" : (reason || (asleep.length ? "nobody live: it is waiting in their inbox" : "")) });
     }
 
     // "Send to agent": the selection, rendered, pushed at whoever is live in

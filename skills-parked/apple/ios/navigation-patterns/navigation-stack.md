@@ -33,7 +33,7 @@ Key elements:
 ### Value-Based Links (Modern)
 
 ```swift
-// ✅ Modern — type-safe, works with programmatic navigation
+// ✅ Modern: type-safe, works with programmatic navigation
 NavigationLink(value: item) {
     Label(item.name, systemImage: item.icon)
 }
@@ -47,7 +47,7 @@ NavigationLink(value: item) {
 ### Destination-Based Links (Legacy)
 
 ```swift
-// ❌ Legacy — no programmatic navigation support, eager view creation
+// ❌ Legacy: no programmatic navigation support, eager view creation
 NavigationLink(destination: ItemDetailView(item: item)) {
     Label(item.name, systemImage: item.icon)
 }
@@ -122,7 +122,7 @@ NavigationStack {
 // ❌ NavigationStack inside a pushed view
 struct DetailView: View {
     var body: some View {
-        NavigationStack {  // Wrong — creates a second stack
+        NavigationStack {  // Wrong: creates a second stack
             Text("Detail")
         }
     }
@@ -140,7 +140,7 @@ struct DetailView: View {
 ### Missing navigationDestination
 
 ```swift
-// ❌ NavigationLink pushes a value but no destination registered — tap does nothing
+// ❌ NavigationLink pushes a value but no destination registered: tap does nothing
 NavigationStack {
     NavigationLink(value: item) { Text(item.name) }
     // Forgot .navigationDestination(for: Item.self) { ... }
@@ -150,7 +150,7 @@ NavigationStack {
 ### navigationDestination Outside NavigationStack
 
 ```swift
-// ❌ Destination registered outside the stack — never matched
+// ❌ Destination registered outside the stack: never matched
 VStack {
     NavigationStack {
         NavigationLink(value: item) { Text(item.name) }
@@ -172,7 +172,7 @@ NavigationStack {
 ### Duplicate Destination Registrations
 
 ```swift
-// ❌ Two registrations for same type — undefined behavior
+// ❌ Two registrations for same type: undefined behavior
 NavigationStack {
     content
         .navigationDestination(for: Item.self) { item in ViewA(item: item) }

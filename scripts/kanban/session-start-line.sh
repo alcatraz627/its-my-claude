@@ -101,7 +101,7 @@ if [ -f "$SELF" ]; then
   scounts=$(jq -r '[ (.cards // [] | length), (.notes // [] | length) ] | @tsv' "$SELF" 2>/dev/null || printf '0\t0')
   scards=${scounts%%$'\t'*}; snotes=${scounts#*$'\t'}
   if [ "${scards:-0}" -gt 0 ] 2>/dev/null || [ "${snotes:-0}" -gt 0 ] 2>/dev/null; then
-    picked=" · the owner has SELECTED ${scards:-0} card(s) and ${snotes:-0} note(s) — that is their working set: bash ~/.claude/scripts/kanban/kanban.sh selected"
+    picked=" · the owner has SELECTED ${scards:-0} card(s) and ${snotes:-0} note(s): that is their working set: bash ~/.claude/scripts/kanban/kanban.sh selected"
   fi
 fi
 
@@ -160,8 +160,8 @@ if [ -n "$dbroken" ]; then
 elif [ "${dpend:-0}" -gt 0 ] 2>/dev/null || [ "${dagent:-0}" -gt 0 ] 2>/dev/null; then
   dbits="$dpend waiting"
   [ "${doffer:-0}" -gt 0 ] 2>/dev/null && dbits="$dbits, $doffer OFFERED TO A SESSION"
-  [ "${dagent:-0}" -gt 0 ] 2>/dev/null && dbits="$dbits, $dagent addressed to a named agent (this line cannot tell whether that is you — the CLI can)"
-  drafted=" · the owner has drafts ($dbits) — documents they wrote for you, above an ask. Read before planning: bash ~/.claude/scripts/kanban/kanban.sh drafts"
+  [ "${dagent:-0}" -gt 0 ] 2>/dev/null && dbits="$dbits, $dagent addressed to a named agent (this line cannot tell whether that is you: the CLI can)"
+  drafted=" · the owner has drafts ($dbits): documents they wrote for you, above an ask. Read before planning: bash ~/.claude/scripts/kanban/kanban.sh drafts"
 fi
 
 # D9a: a decision waiting on the owner is attention the same way an unread note
@@ -201,9 +201,9 @@ fi
 
 if [ "${unread:-0}" -gt 0 ] 2>/dev/null; then
   extra=""; [ "${actionable:-0}" -gt 0 ] 2>/dev/null && extra=" ($actionable marked !now)"
-  line="[kanban] board \"$name\" — $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted$decided · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\": $unread unread human note(s)$extra. Pull them before working: bash ~/.claude/scripts/kanban/kanban.sh notes --unread --ack$asks$picked$drafted$decided · board: http://localhost:5106/b/$slug"
 else
-  line="[kanban] board \"$name\" — no unread notes$asks$picked$drafted$decided · frozen, sync only on request · board: http://localhost:5106/b/$slug"
+  line="[kanban] board \"$name\": no unread notes$asks$picked$drafted$decided · frozen, sync only on request · board: http://localhost:5106/b/$slug"
 fi
 
 jq -nc --arg c "$line" '{additionalContext: $c}'

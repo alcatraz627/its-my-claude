@@ -1,11 +1,11 @@
 /*
- * colors.css — a drop-in colour system for a generated HTML page.
+ * colors.css: a drop-in colour system for a generated HTML page.
  *
  * Copy this into a <style> block (or link it) and the page has a full palette,
  * a dark and a light mode, and the five variables the dark/light toggle in
  * conventions/html-output.md expects. Dark is the default, per that rule.
  *
- * HOW IT IS PUT TOGETHER — two layers, and the split is the whole point:
+ * HOW IT IS PUT TOGETHER: two layers, and the split is the whole point:
  *
  *   Layer 0   the ramps. Raw colour, every family 50 -> 950. Nothing outside
  *             this file's Layer 1 should ever name a ramp step directly.
@@ -16,7 +16,7 @@
  *
  * TO REBRAND: change the hue numbers in Layer 0 and stop. Every slot, both
  * modes, and every element follow, because nothing downstream hardcodes a
- * colour. That is the property worth protecting — the moment a page writes
+ * colour. That is the property worth protecting: the moment a page writes
  * `color: #4a9` somewhere, dark mode has a hole in it.
  *
  * The hues here are deliberate placeholders (brand 250, accent 190), not any
@@ -27,9 +27,9 @@
  * 50 from looking muddy and a 950 from looking neon.
  */
 
-/* ── Layer 0 — ramps (never name these in your markup) ─────────────────── */
+/* ── Layer 0: ramps (never name these in your markup) ─────────────────── */
 :root {
-  /* neutral — chrome, text, borders, surfaces */
+  /* neutral: chrome, text, borders, surfaces */
   --p-neutral-50: oklch(0.985 0.002 255);
   --p-neutral-100: oklch(0.96 0.004 255);
   --p-neutral-200: oklch(0.92 0.006 255);
@@ -42,7 +42,7 @@
   --p-neutral-900: oklch(0.22 0.022 255);
   --p-neutral-950: oklch(0.15 0.016 255);
 
-  /* brand — the one colour a reader should associate with the page */
+  /* brand: the one colour a reader should associate with the page */
   --p-brand-50: oklch(0.97 0.02 250);
   --p-brand-100: oklch(0.94 0.04 250);
   --p-brand-200: oklch(0.88 0.07 250);
@@ -55,7 +55,7 @@
   --p-brand-900: oklch(0.33 0.078 252);
   --p-brand-950: oklch(0.25 0.05 252);
 
-  /* accent — a second voice, for highlights the brand shouldn't claim */
+  /* accent: a second voice, for highlights the brand shouldn't claim */
   --p-accent-50: oklch(0.97 0.02 190);
   --p-accent-100: oklch(0.94 0.042 190);
   --p-accent-200: oklch(0.89 0.068 190);
@@ -121,7 +121,7 @@
   --p-info-950: oklch(0.25 0.045 230);
 }
 
-/* ── Layer 1 — slots, dark (the default) ───────────────────────────────── */
+/* ── Layer 1: slots, dark (the default) ───────────────────────────────── */
 :root {
   /* The five the toggle in html-output.md depends on. Keep these names. */
   --bg: var(--p-neutral-950);
@@ -165,7 +165,7 @@
   color-scheme: dark;
 }
 
-/* ── Layer 1 — slots, light ────────────────────────────────────────────── */
+/* ── Layer 1: slots, light ────────────────────────────────────────────── */
 /* `body.light` is the toggle's contract (html-output.md). The [data-theme]
    selector is here too so this file also works on pages that theme from the
    root element; drop whichever one your page doesn't use. */

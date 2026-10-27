@@ -116,10 +116,10 @@ automatically if the server has no submit endpoint.
   "storageKey": "unique-slug",          // localStorage key
   "copyHeader": "rework feedback",      // first line of the pasted answer
   "intro": "one-line contract note",
-  "notes": false,                        // OPTIONAL — omit for the default (notes on-demand);
+  "notes": false,                        // OPTIONAL: omit for the default (notes on-demand);
                                          // false hard-disables the whole notes surface
-  "accent": "#7c3aed",                   // OPTIONAL — per-page accent color
-  "origin": {                            // OPTIONAL — `new` seeds this; shown on page + hub
+  "accent": "#7c3aed",                   // OPTIONAL: per-page accent color
+  "origin": {                            // OPTIONAL: `new` seeds this; shown on page + hub
     "session": "dec-wiz-7a", "project": "~/proj",
     "topic": "what this is about", "created": "2026-07-16",
     // What the page BELONGS to, so the answer can be read back at the work.
@@ -132,7 +132,7 @@ automatically if the server has no submit endpoint.
     // shows on the answered banner. Free-text goals are shown, never written to.
     "board": "-claude-244ec6", "card": "98fc85065372",
     "goal": "81fdf3de0595", "row": "16", "milestone": "aug24-ergonomics" },
-  "groups": {                            // OPTIONAL — per-cluster helper context + color tint
+  "groups": {                            // OPTIONAL: per-cluster helper context + color tint
     "API": { "context": "land before v1 freeze", "color": "#52bd8a" } },
   "decisions": [                         // radio groups, answered as D1a D2b …
     { "id": "D1", "question": "…", "context": "…",
@@ -147,7 +147,7 @@ automatically if the server has no submit endpoint.
       "options": [ { "code": "a", "label": "…", "rec": true, "images": ["v-a.png"] },
                    { "code": "b", "label": "…", "images": ["v-b.png"] } ] }
   ],
-  "sections": [                          // item cards, answered as id: agree/DISAGREE — note
+  "sections": [                          // item cards, answered as id: agree/DISAGREE: note
     { "id": "wm-01", "group": "Walmart", "title": "Dashboard", "prio": "MUST",
       "read": "my read…", "images": ["wm-01.png"], "note": "…",   // note OPTIONAL
       "slots": { "KEEP": "…", "CHANGE": "…", "VISUAL": "…" } }
@@ -160,8 +160,8 @@ Answer string shape (what the human pastes back; parse it leniently):
 ```
 rework feedback:
 D1a D2a D3c D4a
-D2 note — a free-text aside on a decision (only when the human wrote one)
-wm-01: agree — exception note…
+D2 note: a free-text aside on a decision (only when the human wrote one)
+wm-01: agree: exception note…
 sw-03: DISAGREE
 notes:
 end-of-form notes for Claude, when the human filled that field

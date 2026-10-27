@@ -2,7 +2,7 @@
 # i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
 # not feed the daemon (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
-# i-dream: SessionStart hook — injects subconscious signals
+# i-dream: SessionStart hook: injects subconscious signals
 SOCKET="/Users/alcatraz627/.claude/subconscious/daemon.sock"
 # D6: send the working directory so the daemon can inject a per-project brief,
 # and the session id so a later correction blames only this session's rules.
@@ -17,7 +17,7 @@ else
 fi
 if [ -S "$SOCKET" ]; then
     # The daemon reads with read_line: the trailing newline is what lets it
-    # parse BEFORE this client's 2s recv timeout, instead of only at EOF —
+    # parse BEFORE this client's 2s recv timeout, instead of only at EOF:
     # without it every briefing died as a broken pipe (root-caused 2026-07-18).
     RESPONSE=$(printf '%s\n' "$PAYLOAD" \
         | python3 -c "

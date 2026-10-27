@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-seed-fixtures.py — build the declared-ready regression fixture set from the corpus.
+seed-fixtures.py: build the declared-ready regression fixture set from the corpus.
 
 A fixture is a captured single-turn transcript slice plus a manifest entry saying
 what the hook should do with it. This seeder extracts the specific TP/FP fires
-that empirical-declared-ready.md §2 classified — pinned by (transcript id, turn
-ordinal within that transcript) so extraction is deterministic — verifies each
+that empirical-declared-ready.md §2 classified: pinned by (transcript id, turn
+ordinal within that transcript) so extraction is deterministic: verifies each
 still fires the CURRENT hook, saves the turn's slice, and writes manifest.json.
 
 It also auto-selects a couple of SILENT negative controls (source edited + a
@@ -38,19 +38,19 @@ SPEC = [
     ("781e356c", 21, "ruff", "TP",
      "ruff lint substituted for runtime exercise of an async/event-loop perf fix; body self-discloses the runtime effect is NOT verified"),
     ("b40f9d66", 0, "remains unverified", "TP",
-     "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified' — the interaction tsc cannot see is never exercised"),
+     "type-check only on a browser drag-scroll hook; agent flags 'what remains unverified': the interaction tsc cannot see is never exercised"),
     ("b40f9d66", 1, "Type-checks clean", "TP",
-     "'Done. Type-checks clean.' on a drag/modifier hook — the cursor/keyboard interaction a type-check cannot see"),
+     "'Done. Type-checks clean.' on a drag/modifier hook: the cursor/keyboard interaction a type-check cannot see"),
     ("b40f9d66", 3, "type-check clean", "TP",
      "'both fixes applied, type-check clean' on a cursor-correctness fix; drag interaction unexercised"),
     ("b40f9d66", 4, "Comment pass complete", "FP",
-     "comment-only .tsx edit — nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"),
+     "comment-only .tsx edit: nothing executable changed; Gate0 cannot tell a comment-only diff from a behavioral one"),
     ("1c86d512", 108, "compiling at every step", "TP",
-     "swift menubar rebuild 'complete and compiling at every step' — compile-checked to /tmp, never deployed/run"),
+     "swift menubar rebuild 'complete and compiling at every step': compile-checked to /tmp, never deployed/run"),
     ("1c86d512", 2, "i-dream widget status", "FP",
      "agent DID run the changed CLI ('Verified by running i-dream widget status'); Det2's allow-list has no i-dream/project-CLI entry"),
     ("1c86d512", 128, "awaiting you", "FP",
-     "verifiable half verified live; the remaining half is a user-only observation ('awaiting you') — a hedge, not an over-claim"),
+     "verifiable half verified live; the remaining half is a user-only observation ('awaiting you'): a hedge, not an over-claim"),
     ("5da7133c", 59, "scenarios pass", "FP",
      "4-scenario smoke test with observed per-row results in assistant prose; the tool_result pass/fail scan missed the table"),
     ("dc7f8071", 1, "What changed", "TP",
@@ -86,11 +86,11 @@ def main():
     used_transcripts = set()
     for tid, tif, snippet, klass, note in SPEC:
         if tid not in turns_by_tid:
-            print(f"[skip] {tid} tif={tif} — transcript gone", file=sys.stderr)
+            print(f"[skip] {tid} tif={tif}: transcript gone", file=sys.stderr)
             continue
         path, turns = turns_by_tid[tid]
         if tif >= len(turns):
-            print(f"[skip] {tid} tif={tif} — only {len(turns)} turns", file=sys.stderr)
+            print(f"[skip] {tid} tif={tif}: only {len(turns)} turns", file=sys.stderr)
             continue
         turn = turns[tif]
         res = rl.run_turn(HOOK, turn, idx, os.path.join(rl.HOME, ".claude"), RUN_DIR)
@@ -98,10 +98,10 @@ def main():
         rl.cleanup_sid(res["sid8"])
         ftext = res["final_text"]
         if snippet.lower() not in ftext.lower():
-            print(f"[WARN] {tid} tif={tif}: snippet {snippet!r} not in final text — corpus shifted?", file=sys.stderr)
+            print(f"[WARN] {tid} tif={tif}: snippet {snippet!r} not in final text: corpus shifted?", file=sys.stderr)
             continue
         if res["outcome"] != "BLOCK":
-            print(f"[WARN] {tid} tif={tif}: expected BLOCK, got {res['outcome']} — skipping", file=sys.stderr)
+            print(f"[WARN] {tid} tif={tif}: expected BLOCK, got {res['outcome']}: skipping", file=sys.stderr)
             continue
         name = f"{klass.lower()}-{tid}-t{tif}"
         fixture_file = os.path.join(FIX_DIR, f"{name}.jsonl")
@@ -153,7 +153,7 @@ def main():
                     "cwd": res["cwd"],
                     "source_transcript": os.path.basename(path),
                     "turn_in_file": tif,
-                    "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent — a redesign must not start blocking this",
+                    "note": "negative control: source edited + success claim, but a run was detected so the hook correctly stays silent: a redesign must not start blocking this",
                 })
                 controls += 1
                 print(f"[fixture] {name}  (CONTROL, expected=silent)", file=sys.stderr)
