@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# lifecycle: tune-able hook (owner 2026-09-18); the mechanical guards carry no such header
-# instrument: none-yet
-# review-by: 2026-10-16
-# retire-if: no instrument by review-by: retire or instrument
+# lifecycle: retired 2026-10-27 by the owner (no instrument by its review date);
+# unregistered from settings.json, kept on disk for reference.
 # guard-duplicate-symbol.sh: PreToolUse[Write|Edit|MultiEdit], SYNCHRONOUS.
 #
 # The mechanical `infra-before-grep` / reinvent-the-wheel killer. When an edit

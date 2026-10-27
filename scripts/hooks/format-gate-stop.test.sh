@@ -204,7 +204,7 @@ out=$(run fgt00034 "The export is fixed and the suite is green. $pad" "$T/dense.
 # The python verdict reads the transcript's own last assistant text, so seed it.
 jq -cn --arg a "Done. The export is fixed and the suite is green. $pad" '{type:"assistant", message:{role:"assistant", content:[{type:"text", text:$a}]}}' >> "$T/dense.jsonl"
 out=$(run fgt00035 "Done. The export is fixed and the suite is green. $pad" "$T/dense.jsonl")
-advises "$out" && printf '%s' "$out" | rg -q 'dense-briefing' && ok "dense-briefing shape 3 is an advisory" || bad "dense-briefing advisory: $out"
+printf '%s' "$out" | rg -q 'dense-briefing' && bad "dense-briefing is retired but still advised: $out" || ok "dense-briefing is retired: the same reply draws no advisory"
 
 echo "== loop safety =="
 run fgt00040 "Small $D change." "$EMPTY" >/dev/null

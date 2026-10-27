@@ -8,8 +8,9 @@
 # back one after another.
 #
 # It replaces filename-dot-stop.sh, emdash-stop.sh, terse-reply-stop.sh,
-# prose-smell-stop.sh, relpath-stop.sh and dense-briefing-shapes-stop.sh. Those
-# scripts stay on disk, unregistered. The pattern bodies below are moved from
+# prose-smell-stop.sh and relpath-stop.sh. Those scripts stay on disk,
+# unregistered. The dense-briefing check was retired by the owner on
+# 2026-10-27: its own readout found 1 real catch in 10. The pattern bodies below are moved from
 # them, not rewritten, except where a ruling changed the rule (marked D7).
 #
 # Blocking classes (one block, one reason line, every span and its fix):
@@ -23,8 +24,7 @@
 #                 absolute path of it appears nowhere in the reply.
 #   prose-smell   two or more block-tier tells, only while policy gates.prose_smell
 #                 is enforce; fewer tells, or policy warn, only advise.
-# Advisory classes (systemMessage only): dense-briefing, the remaining prose-smell
-# tells, and the terse-reply warn tier between TERSE_WARN (1500) and the cap.
+# Advisory classes (systemMessage only): the remaining prose-smell tells, and the terse-reply warn tier between TERSE_WARN (1500) and the cap.
 #
 # Loop safety: marker /tmp/claude-format-gate-<sid8> holds "<signature> <blocks> <classes>".
 # An identical reply, three blocks in a row, or stop_hook_active (a block already
@@ -327,25 +327,6 @@ chk_prose_smell() {
   add_adv "prose-smell (advisory):${tells#;}"
 }
 
-# -------------------------------------------------------------- dense-briefing
-chk_dense() {
-  [ "${DENSE_SHAPES_OFF:-0}" = "1" ] && return
-  [ -f "$HOME/.claude/.no-dense-shapes-gate" ] && return
-  command -v python3 >/dev/null 2>&1 || return
-  [ -n "$tp" ] && [ -f "$tp" ] || return
-  [ -r "$HERE/dense-briefing-shapes-stop.py" ] || return
-  snoozed dense-briefing-shapes && return
-  local verdict h state at
-  verdict=$(python3 "$HERE/dense-briefing-shapes-stop.py" "$tp" 2>/dev/null)
-  [ -n "$verdict" ] || return
-  h=$(printf '%s' "$verdict" | shasum | cut -c1-12)
-  state="/tmp/claude-dense-shapes-$sid8"; mkdir -p "$state" 2>/dev/null
-  [ -f "$state/$h" ] && return; touch "$state/$h" 2>/dev/null
-  at=$(wc -l < "$tp" 2>/dev/null | tr -d ' ')
-  bash "$LOG" --hook dense-briefing-shapes --action soft --heeded unknown --cwd "$cwd" --target "$tp" --detail "${verdict:0:64} @L${at:-?}" >/dev/null 2>&1 || true
-  add_adv "dense-briefing (advisory): $verdict"
-}
-
 # ------------------------------------------------------------------------ main
 TURN_FILES=$(turn_files)
 
@@ -383,7 +364,6 @@ emit() { # emit <json-filter-args...> via jq; prints nothing on failure
   jq -cn "$@" 2>/dev/null || true
 }
 advisories() {
-  chk_dense
   [ -n "$TERSE_SOFT" ] && ! in_classes terse-reply && {
     bash "$LOG" --hook terse-reply --action soft --heeded unknown >/dev/null 2>&1 || true
     add_adv "$TERSE_SOFT"
