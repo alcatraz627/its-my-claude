@@ -49,7 +49,7 @@ function listing(dpRoot: string, base: string): Response {
     pages.push({ slug, title, pending: pending.has(slug), mtime: fs.statSync(cfg).mtimeMs });
   }
   pages.sort((a, b) => Number(b.pending) - Number(a.pending) || b.mtime - a.mtime);
-  const rows = pages.map((p) => `<li${p.pending ? ' class="pending"' : ""}><a href="${base}/dp/${encodeURIComponent(p.slug)}/">${esc(p.title)}</a>` +
+  const rows = pages.map((p) => `<li${p.pending ? ' class="pending"' : ""}><a href="${base}/dp/${encodeURIComponent(p.slug)}/?view=bfb">${esc(p.title)}</a>` +
     `${p.pending ? " <span>waiting on you</span>" : ""}</li>`).join("\n");
   return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Decision pages</title>

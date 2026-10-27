@@ -32,6 +32,8 @@ PEND="$REG/.pending.txt"          # one slug per line = "handed off, awaiting th
 PORT=5106
 NAME="kanban"
 BASE="http://localhost:$PORT/dp"
+# Pages are handed out in bfb's view; the bare /dp/<slug>/ still serves the classic page.
+VIEW="?view=bfb"
 HUB="http://localhost:$PORT/?view=decisions"
 
 # TTY-gated palette (std::claude::tui) — vars are empty when piped, so callsites never branch.
@@ -198,7 +200,7 @@ ${B}agent TODO:${R}
   1. Write the real $dir/config.json  (schema: features/decision-pages.md)
   2. Drop referenced images into $dir/
   3. ${B}Verify:${R} decision-page.sh check $slug     ${D}(one call: schema + images + render)${R}
-  4. Hand the human: ${C}$BASE/$slug/${R}   ${D}(hub: $HUB)${R}
+  4. Hand the human: ${C}$BASE/$slug/$VIEW${R}   ${D}(hub: $HUB)${R}
 EOT
 }
 
@@ -354,7 +356,7 @@ PY
   else printf 'FAIL not serving (HTTP %s)\n  fix: decision-page.sh serve   # then re-check\n' "$code"; fails=1; fi
   regen_manifest >/dev/null
   if [ "$fails" = 0 ]; then
-    printf '%sREADY%s — hand the human: %s%s/%s/%s\n' "$G" "$R" "$C" "$BASE" "$slug" "$R"
+    printf '%sREADY%s — hand the human: %s%s/%s/%s%s\n' "$G" "$R" "$C" "$BASE" "$slug" "$VIEW" "$R"
   else
     printf '%sNOT READY%s — fix the FAIL lines above, then: decision-page.sh check %s\n' "$RED" "$R" "$slug"; exit 1
   fi
@@ -535,7 +537,7 @@ ${Y}commands${R}
 
 ${Y}surfaces${R}
   hub   ${C}$HUB${R}   every page, pending first (the kanban Decisions view)
-  page  ${C}$BASE/<slug>/${R}   keyboard-first: press ${B}?${R} on the page for shortcuts
+  page  ${C}$BASE/<slug>/$VIEW${R}   keyboard-first: press ${B}?${R} on the page for shortcuts
 
 ${D}schema + answer-string shape: features/decision-pages.md${R}
 EOT
@@ -548,7 +550,7 @@ case "${1:-help}" in
   list)   cmd_list ;;
   status) cmd_status ;;
   open)   ensure_server >/dev/null; regen_manifest >/dev/null
-          if [ -n "${2:-}" ]; then open "$BASE/$2/"; else open "$HUB"; fi ;;
+          if [ -n "${2:-}" ]; then open "$BASE/$2/$VIEW"; else open "$HUB"; fi ;;
   pending) shift; cmd_pending "$@" ;;
   band)   shift; cmd_band "$@" ;;
   answer) shift; cmd_answer "$@" ;;

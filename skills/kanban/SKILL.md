@@ -107,8 +107,8 @@ they use that view for, and it is written for you to read.
 
 ## Decision pages
 
-Decision pages live in this app now: every page renders at
-`http://localhost:5106/dp/<slug>/` and the Decisions view
+Decision pages live in this app now: every page renders in bfb's view at
+`http://localhost:5106/dp/<slug>/?view=bfb` (the bare URL is the classic page) and the Decisions view
 (`:5106/?view=decisions`) is the hub, pending first. Authoring stays with
 `decision-page.sh` (see /decision-wizard); this server just serves them.
 

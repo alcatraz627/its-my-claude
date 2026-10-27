@@ -53,7 +53,8 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new <slug> [--title "…"]
 bash …/decision-page.sh check <slug>     # THE verification call before handoff
 # → schema-lint (ids unique, exactly one rec:true per decision, images exist) +
 #   HTTP-200 render check; every failure prints a "fix:" line; exits non-zero
-#   until READY. Then hand the human http://localhost:5106/dp/<slug>/
+#   until READY. Then hand the human http://localhost:5106/dp/<slug>/?view=bfb
+#   (bfb's view; the bare /dp/<slug>/ is the classic page, kept reachable)
 ```
 
 Full command set (each failure proposes its fix, agent-first per

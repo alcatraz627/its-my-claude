@@ -96,7 +96,7 @@ bash ~/.claude/scripts/decision-page/decision-page.sh new "$S" \
    ```bash
    bash ~/.claude/scripts/decision-page/decision-page.sh pending add "$S"
    ```
-   Give the user the URL `http://localhost:5106/dp/$S/` (hub: `:5106/?view=decisions`) and tell them
+   Give the user the URL `http://localhost:5106/dp/$S/?view=bfb`, which opens the page in bfb's view (hub: `:5106/?view=decisions`) and tell them
    to skim, flip what's wrong, then hit **Submit to Claude** (or **Copy answers**
    to paste it themselves). Also set the tab-title (Subsystem links below).
 5. **Get the answer back, by one of two paths:**
