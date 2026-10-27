@@ -15,7 +15,8 @@ better or fixed. If the agent ends the turn anyway, the owner is told.
 
 A third failure is a doc that is hard to skim: dense paragraphs, lines spliced
 with semicolons, runs of sentences that only name code and paths. Those checks
-are shared with the GitHub prose gate (prose_readability.py), with a few more
+are shared with the GitHub prose gate through the prose engine
+(scripts/style/prose-lint.py, surface "doc"), with a few more
 allowed here because a doc is longer than a comment.
 
 Runtime contract:
@@ -37,14 +38,27 @@ Mute: touch ~/.claude/.no-doc-voice-gate · One-shot: DOC_VOICE_OFF=1
 Test: bash ~/.claude/scripts/hooks/doc-voice-gate.test.sh
 """
 import fnmatch
+import importlib.util
 import json
 import os
 import re
 import subprocess
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import prose_readability  # noqa: E402
+HERE = os.path.dirname(os.path.abspath(__file__))
+SURFACE = "doc"          # the style/profiles.json row for documents
+SKIM_TELLS = ("dense-block", "spliced-line", "mechanism-run")
+_ENGINE = None
+
+
+def engine():
+    """The prose engine (scripts/style/prose-lint.py), loaded on first use."""
+    global _ENGINE
+    if _ENGINE is None:
+        spec = importlib.util.spec_from_file_location("prose_lint", os.path.join(HERE, "..", "style", "prose-lint.py"))
+        _ENGINE = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_ENGINE)
+    return _ENGINE
 
 # Planning shorthand alone (V1, T3) is common and mild; the ledger voice shows
 # as several kinds at once (ids plus shas, file:line or dated rulings).
@@ -55,7 +69,7 @@ MIN_KINDS = 2
 # owner approved has 2 long cells, so one or two are allowed.
 LONG_CELL, LONG_BLOCK, HUGE_BLOCK = 160, 400, 900
 MAX_LONG_CELLS, MAX_LONG_BLOCKS = 3, 2
-# Skim checks (prose_readability.py). Across the docs/ folders on this machine
+# Skim checks (the engine's dense-block, spliced-line and mechanism-run tells). Across the docs/ folders on this machine
 # the approved plain docs have none of the three, and the ledger-style ones have
 # several, so a few of each are allowed before the doc is called hard to skim.
 MAX_DENSE, MAX_SPLICED, MAX_MECHANISM = 2, 2, 2
@@ -194,7 +208,15 @@ def skim(text):
     """Dense paragraphs, semicolon-spliced lines and internals-only runs in the
     doc body. Dashes are left to guard-prose-quality.sh, which already stops them
     at write time."""
-    return prose_readability.analyze(body_of(text), dashes=False)
+    found = {"dense": [], "spliced": [], "mechanism": []}
+    for f in engine().lint(body_of(text), SURFACE, only=SKIM_TELLS)["findings"]:
+        if f["tell"] == "dense-block":
+            found["dense"].append(f["snippet"])
+        elif f["tell"] == "spliced-line":
+            found["spliced"].append("semicolon: " + f["snippet"])
+        elif f["tell"] == "mechanism-run":
+            found["mechanism"].append(f["snippet"])
+    return {k: v for k, v in found.items() if v}
 
 
 def skim_fires(found):

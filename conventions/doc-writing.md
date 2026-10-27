@@ -465,7 +465,7 @@ Before presenting a doc as finished:
 - [ ] Find-and-flag pass run (§4); every hit either justified or rewritten.
 - [ ] Every anchor `[text](#slug)` resolves to an actual heading in the doc.
 - [ ] No section relies on "as described above."
-- [ ] No sentence exceeds 25 words without justification.
+- [ ] No sentence exceeds the cap for its surface in `style/profiles.json` (`caps.sentence_words`; 25 for docs today) without justification.
 - [ ] No metaphors for mechanical processes.
 
 ## 12. Common failure modes during iteration

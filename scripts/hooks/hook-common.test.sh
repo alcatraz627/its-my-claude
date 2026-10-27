@@ -70,7 +70,7 @@ fi
 # ── repeat-path integration: real migrated hook, twice on one message ─────────
 # filename-dot-stop.sh (Family A): first fire blocks, identical message steps
 # aside. This is the exact path the replay corpus cannot reach.
-HOOK="$HERE/filename-dot-stop.sh"
+HOOK="$HERE/retired/filename-dot-stop.sh"
 if [ -x "$HOOK" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&1; then
   export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/hc-warnlog-XXXXXX")"
   TS="$(mktemp "${TMPDIR:-/tmp}/hc-transcript-XXXXXX")"
@@ -135,7 +135,7 @@ ok "box: square at another width" \
 ok "box: honours that width too" "$(boxw "$(printf '%s\n' "$G2" | head -1)")" "66"
 
 # ── integration: prose-smell-stop.sh emits a BOXED block reason ───────────────
-PS="$HERE/prose-smell-stop.sh"
+PS="$HERE/retired/prose-smell-stop.sh"
 if [ -f "$PS" ] && command -v jq >/dev/null 2>&1 && command -v rg >/dev/null 2>&1; then
   export WARN_LOG_STORE="$(mktemp "${TMPDIR:-/tmp}/hc-warnlog2-XXXXXX")"
   PT="$(mktemp "${TMPDIR:-/tmp}/hc-prose-XXXXXX")"

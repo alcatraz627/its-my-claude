@@ -110,20 +110,24 @@ UI copy follows the same rules as prose (conventions/language-quality.md): no co
   exit 0
 fi
 
-report=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/prose-lint.py" --json - 2>/dev/null) || exit 0
-dashes=$(printf '%s' "$report" | jq -r '.violations.two_split_dash // 0' 2>/dev/null)
-verdict=$(printf '%s' "$report" | jq -r '.violations.verdict_first_opener // 0' 2>/dev/null)
+# The prose engine decides which tells block on a document (style/profiles.json,
+# surface "doc"); this gate keeps the added-lines filter, the mute and the message.
+report=$(printf '%s' "$content" | python3 "$HOME/.claude/scripts/style/prose-lint.py" --profile doc - 2>/dev/null) || exit 0
+nblock() { printf '%s' "$report" | jq -r --arg t "$1" '[.findings[]? | select(.tell==$t and .action=="block")] | length' 2>/dev/null; }
+dashes=$(nblock em-dash)
+verdict=$(nblock verdict-opener)
+over=$(nblock lint-score-block)
 score=$(printf '%s' "$report" | jq -r '.score // 0' 2>/dev/null)
+limit=$(printf '%s' "$report" | jq -r '[.findings[]? | select(.tell=="lint-score-block") | .text][0] // 8' 2>/dev/null)
 
 fail=""
 [ "${dashes:-0}" -gt 0 ] 2>/dev/null && fail="$fail ${dashes} connective em/en-dash(es) in earnest prose (owner budget: zero; quotes/code/tables are already excluded)."
 [ "${verdict:-0}" -gt 0 ] 2>/dev/null && fail="$fail Verdict-first opener (facts before conclusions; the done-verdict is the owner's)."
-over=$(python3 -c "print(1 if float('${score:-0}' or 0) > 8 else 0)" 2>/dev/null)
-[ "${over:-0}" = "1" ] && fail="$fail prose-lint score ${score}/100w (block line: 8)."
+[ "${over:-0}" -gt 0 ] 2>/dev/null && fail="$fail prose-lint score ${score}/100w (block line: ${limit})."
 
 if [ -n "$fail" ]; then
   blocked
-  spans=$(printf '%s' "$report" | jq -r '[.spans.two_split_dash[]?, .spans.verdict_first_opener[]?] | .[:3] | map("  > " + .) | join("\n")' 2>/dev/null)
+  spans=$(printf '%s' "$report" | jq -r '[.findings[]? | select((.tell=="em-dash" or .tell=="verdict-opener") and .action=="block") | .snippet] | .[:3] | map("  > " + .) | join("\n")' 2>/dev/null)
   jq -n --arg r "PROSE BLOCKED for $fp:$fail
 $spans
 Rewrite per conventions/language-quality.md (short sentences, no two-split chains, facts first), then retry. Check any draft: python3 ~/.claude/scripts/style/prose-lint.py" '{decision:"block", reason:$r}'

@@ -279,7 +279,7 @@ v=$(env HOME="$T" POLICY_LIMITS="$T/limits.json" bash "$REAL/scripts/policy.sh" 
 [ "$v" = "STRONG" ] && ok "fable is STRONG at 85% with policy strong 80" || bad "fable strong ($v)"
 
 echo "== prose gate =="
-PSM="$H/prose-smell-stop.sh"
+PSM="$H/retired/prose-smell-stop.sh"
 smelly="Great question! Here is the thing, it works and it is great, really. **One** **two** **three** **four** **five** **six** **seven**. This paragraph keeps going so that it is well over two hundred characters long, which is the floor the gate uses before it looks at anything at all in the prose. Run $(basename "$T")."
 jq -nc --arg t "$smelly" '{type:"assistant", message:{content:[{type:"text", text:$t}]}}' > "$T/ps.jsonl"
 psp=$(jq -nc --arg tp "$T/ps.jsonl" '{session_id:"prosetest-1", transcript_path:$tp}')

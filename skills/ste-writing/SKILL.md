@@ -58,7 +58,8 @@ VERBS
 SENTENCES
 
 - One instruction per sentence. Maximum 20 words for an instruction, 25 for
-  descriptive text.
+  descriptive text (the `procedure` and `doc` caps in `~/.claude/style/profiles.json`,
+  which win if they ever differ from this line).
 - No contractions in strict mode. Keep the articles a, an, and the.
 
 PUNCTUATION, stricter here than STE itself

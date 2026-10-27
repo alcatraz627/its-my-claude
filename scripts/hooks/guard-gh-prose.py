@@ -5,7 +5,7 @@ Looks at the text an agent is about to post through gh (pr, issue, release and
 gh api calls that carry a body) or the GitHub MCP, and refuses a wall: a dense
 paragraph, a long line spliced with an em-dash or semicolon, or a run of
 sentences that only name code and numbers. The checks are the ones doc-voice-gate
-applies to docs (prose_readability.py). Slash-command triggers ("/clanky review")
+applies to docs, all through the prose engine (scripts/style/prose-lint.py, surface "github"). Slash-command triggers ("/clanky review")
 and the owner's attribution line are not prose and never judged; the prose next
 to them is. The marker itself stays guard-github-agent-marker.sh's business.
 
@@ -22,8 +22,7 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-import prose_readability as pr  # noqa: E402
+SURFACE = "github"       # the style/profiles.json row that decides what blocks here
 
 MUTE = os.path.expanduser("~/.claude/.no-gh-prose-gate")
 STATE_DIR = os.environ.get("GH_PROSE_STATE", "/tmp")
@@ -239,11 +238,42 @@ ADVICE = """Rewrite the body so a person skimming it gets the point:
 Then run the same command again."""
 
 
+_ENGINE = None
+
+
+def engine():
+    """The prose engine (scripts/style/prose-lint.py), loaded on first use."""
+    global _ENGINE
+    if _ENGINE is None:
+        spec = importlib.util.spec_from_file_location("prose_lint", os.path.join(HERE, "..", "style", "prose-lint.py"))
+        _ENGINE = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_ENGINE)
+    return _ENGINE
+
+
+def analyze(body):
+    """{dense, spliced, mechanism: [snippets]} for one body: the engine's blocking
+    findings on the github surface, in the shape describe() reports."""
+    found = {"dense": [], "spliced": [], "mechanism": []}
+    for f in engine().lint(body, SURFACE)["findings"]:
+        if f["action"] != "block":
+            continue
+        if f["tell"] == "dense-block":
+            found["dense"].append(f["snippet"])
+        elif f["tell"] == "em-dash":
+            found["spliced"].append("dash: " + f["snippet"])
+        elif f["tell"] == "spliced-line":
+            found["spliced"].append("semicolon: " + f["snippet"])
+        elif f["tell"] == "mechanism-run":
+            found["mechanism"].append(f["snippet"])
+    return {k: v for k, v in found.items() if v}
+
+
 def judge(posts):
     """The readability findings across all posts, or {} when every body reads fine."""
     merged = {}
     for _label, body in posts:
-        for k, v in pr.analyze(body).items():
+        for k, v in analyze(body).items():
             merged.setdefault(k, []).extend(v)
     return merged
 

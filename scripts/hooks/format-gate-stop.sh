@@ -102,6 +102,30 @@ snoozed() {
 }
 trunc() { printf '%s' "$1" | cut -c1-"$2"; }
 
+# ---------------------------------------------------------------------- engine
+# The chat tells (em-dash, decoration emoji, Label:fragment, bold spam, praise and
+# verdict openers, not-X-but-Y, star boxes, option-menu closers) are defined once, in
+# the prose engine, and the chat row of style/profiles.json says what each one does.
+ENGINE="$HERE/../style/prose-lint.py"
+# eng_weight <action>: what one tell counts toward the two-tell block.
+eng_weight() { case "$1" in block-pair) echo 1 ;; block) echo 2 ;; *) echo 0 ;; esac; }
+# load_engine: ask the engine once, then expose each tell as E_N_<tell> (hits),
+# E_A_<tell> (its profile action) and E_C_<tell> (the line of the first hit).
+# An engine that cannot run leaves them unset, so the checks that read them stay quiet.
+load_engine() {
+  local json rows t n a c v
+  command -v python3 >/dev/null 2>&1 && [ -r "$ENGINE" ] || return 0
+  json=$(printf '%s' "$text" | python3 "$ENGINE" --profile chat - 2>/dev/null) || return 0
+  rows=$(printf '%s' "$json" | jq -r '.findings // [] | group_by(.tell)[] | [.[0].tell, (length|tostring), .[0].action, ((.[0].context // "") | gsub("[\t\n\r]"; " "))] | @tsv' 2>/dev/null) || return 0
+  while IFS=$'\t' read -r t n a c; do
+    [ -n "$t" ] || continue
+    v="${t//-/_}"
+    printf -v "E_N_$v" '%s' "$n"; printf -v "E_A_$v" '%s' "$a"; printf -v "E_C_$v" '%s' "$c"
+  done <<EOF
+$rows
+EOF
+}
+
 # ---------------------------------------------------------------- filename-dot
 EXT='md|markdown|py|sh|bash|ts|tsx|js|jsx|mjs|cjs|html|htm|css|scss|json|jsonl|ya?ml|toml|swift|go|rs|rb|c|h|hpp|cpp|cc|java|kt|sql|txt|log|plist|xml|svg|conf|cfg|ini|env'
 # Terminals link `foo.ts:42` and `foo.ts:42:8` as ONE target, so a :line[:col]
@@ -133,14 +157,19 @@ chk_filename_dot() {
 chk_emdash() {
   [ "${EMDASH_OFF:-0}" = "1" ] && return
   [ -f "$HOME/.claude/.no-emdash-gate" ] && return
-  local n first
-  n=$(printf '%s' "$P2" | rg -o $'\xe2\x80\x94' 2>/dev/null | wc -l | tr -d ' ')
-  [ "${n:-0}" -ge 1 ] || return
+  # The engine found the dashes (style/profiles.json, surface chat); this check keeps
+  # the mute, the snooze and the message.
+  local n="${E_N_em_dash:-0}" first
+  [ "${n:-0}" -ge 1 ] 2>/dev/null || return
   snoozed emdash && return
-  first=$(printf '%s\n' "$P2" | rg -m1 $'\xe2\x80\x94' 2>/dev/null | cut -c1-30)
-  # The owner's words (backlog-triage-1019): ban the em-dash itself, never hyphens,
-  # slugs or file names, and let the agent keep one it truly needs.
-  add_block emdash "emdash x${n}, first in \"${first}\": using em dashes brings disgrace upon your existence. Use commas, periods or parentheses. Hyphens, slugs and file names are fine. If one is truly needed, re-send as is" "$n"
+  first=$(printf '%s' "${E_C_em_dash:-}" | cut -c1-30)
+  case "${E_A_em_dash:-off}" in
+    block|block-pair)
+      # The owner's words (backlog-triage-1019): ban the em-dash itself, never hyphens,
+      # slugs or file names, and let the agent keep one it truly needs.
+      add_block emdash "emdash x${n}, first in \"${first}\": using em dashes brings disgrace upon your existence. Use commas, periods or parentheses. Hyphens, slugs and file names are fine. If one is truly needed, re-send as is" "$n" ;;
+    warn) add_adv "emdash (advisory): x${n}, first in \"${first}\". Use commas, periods or parentheses." ;;
+  esac
 }
 
 # ----------------------------------------------------------------- terse-reply
@@ -268,29 +297,33 @@ chk_prose_smell() {
   local prose="$P3" tells="" label_n bold_n first_line contra_n star_n closer tail_json last_user opener
   tail_json=$(tail -n 400 "$tp" 2>/dev/null) || return
 
+  # The engine found these tells (style/profiles.json, surface chat): its action says
+  # whether a tell counts toward the two-tell block (block-pair; block counts double)
+  # or only advises (warn). This check keeps the mutes, the snooze, the policy and the text.
   # decoration-emoji headers / traffic-light status lines
-  if printf '%s\n' "$prose" | rg -q '^[[:space:]]*(#{1,6}[[:space:]]*)?(🔴|🟡|🟢|🟠|🚦|🎯|🚀|🔥|💡|📊|🧠|✨|🛑|📌|⚡|❗|✅|⚠️|❌)' 2>/dev/null; then
-    tells="${tells}; decoration-emoji header/status lines"; bt=$((bt + 1))
+  if [ "${E_N_decoration_emoji:-0}" -ge 1 ]; then
+    tells="${tells}; decoration-emoji header/status lines"; bt=$((bt + $(eng_weight "$E_A_decoration_emoji")))
   fi
   # "**Label**: fragment" bullet armies
-  label_n=$(printf '%s\n' "$prose" | rg -c '^[[:space:]]*[-*•]?[[:space:]]*\*\*[^*]{2,40}\*\*[[:space:]]*:' 2>/dev/null || true)
-  if [ "${label_n:-0}" -ge 3 ] 2>/dev/null; then tells="${tells}; Label:fragment rows x${label_n}"; bt=$((bt + 1)); fi
+  label_n="${E_N_label_fragment:-0}"
+  if [ "$label_n" -ge 1 ]; then tells="${tells}; Label:fragment rows x${label_n}"; bt=$((bt + $(eng_weight "$E_A_label_fragment"))); fi
   # bold-spam
-  bold_n=$(printf '%s' "$prose" | rg -o '\*\*[^*]+\*\*' 2>/dev/null | wc -l | tr -d ' ')
-  if [ "${bold_n:-0}" -gt 5 ] 2>/dev/null; then tells="${tells}; bold spans x${bold_n}"; bt=$((bt + 1)); fi
+  bold_n="${E_N_bold_spam:-0}"
+  if [ "$bold_n" -ge 1 ]; then tells="${tells}; bold spans x${bold_n}"; bt=$((bt + $(eng_weight "$E_A_bold_spam"))); fi
   # self-grading opener
-  first_line=$(printf '%s\n' "$prose" | rg -m1 '\S' 2>/dev/null | head -1)
-  if printf '%s' "$first_line" | rg -qi "^(you'?re (absolutely |completely |exactly )?right|great (question|point|idea|catch)|excellent|perfect[.!]|fair question|what a )" 2>/dev/null; then
-    tells="${tells}; praise opener (\"${first_line:0:40}\")"; bt=$((bt + 1))
-  elif printf '%s' "$first_line" | rg -qiP "^\\W*(\\*\\*)?((Done|Perfect|Excellent|Awesome|Fantastic|Beautiful|Completed|Shipped)\\s*[.!:\x{2014}]|All (done|set|good)\\b|Everything (is|works)\\b|Release is live\\b)" 2>/dev/null; then
+  if [ "${E_N_praise_opener:-0}" -ge 1 ]; then
+    first_line="${E_C_praise_opener:-}"
+    tells="${tells}; praise opener (\"${first_line:0:40}\")"; bt=$((bt + $(eng_weight "$E_A_praise_opener")))
+  elif [ "${E_N_verdict_opener:-0}" -ge 1 ]; then
+    first_line="${E_C_verdict_opener:-}"
     tells="${tells}; verdict opener (\"${first_line:0:40}\"), the done-verdict is the owner's"
   fi
   # not-X-but-Y contrastive frame
-  contra_n=$(printf '%s' "$prose" | rg -coiP "\\bnot\\s+[^.;,]{2,40},?\\s+but\\s+" 2>/dev/null || true)
-  if [ "${contra_n:-0}" -ge 1 ] 2>/dev/null; then tells="${tells}; not-X-but-Y frame x${contra_n}"; fi
+  contra_n="${E_N_contrastive_scaffold:-0}"
+  if [ "$contra_n" -ge 1 ]; then tells="${tells}; not-X-but-Y frame x${contra_n}"; fi
   # star boxes
-  star_n=$(printf '%s' "$prose" | rg -c '★' 2>/dev/null || true)
-  if [ "${star_n:-0}" -ge 1 ] 2>/dev/null; then tells="${tells}; star decoration x${star_n}"; fi
+  star_n="${E_N_star_decoration:-0}"
+  if [ "$star_n" -ge 1 ]; then tells="${tells}; star decoration x${star_n}"; fi
   # a short question answered with a title instead of a sentence
   last_user=$(printf '%s\n' "$tail_json" | jq -c 'select(.type=="user")' 2>/dev/null | jq -rs '
     map(if (.message.content|type)=="string" then .message.content
@@ -309,8 +342,7 @@ chk_prose_smell() {
     fi
   fi
   # option-menu closer
-  closer=$(printf '%s\n' "$prose" | rg '\S' 2>/dev/null | tail -3)
-  if printf '%s' "$closer" | rg -qi '(would you like me to|do you want me to|shall i|want me to) .+ or .+\?' 2>/dev/null; then
+  if [ "${E_N_option_menu_closer:-0}" -ge 1 ]; then
     tells="${tells}; option-menu closer"
   fi
   if [ -z "$tells" ]; then
@@ -329,6 +361,7 @@ chk_prose_smell() {
 
 # ------------------------------------------------------------------------ main
 TURN_FILES=$(turn_files)
+load_engine
 
 # relpath first: its fix carries the path to paste, so it must survive any clipping.
 chk_relpath

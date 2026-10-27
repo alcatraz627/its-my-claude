@@ -178,7 +178,14 @@ The same tell is defined in many places, each with its own wording and sometimes
 
 ## Ways to consolidate
 
-Status 2026-10-27: option 1 shipped for disagreements 1 to 6, 9 and 10 and every stale reference except the parked thesaurus and `guard-banned-vocab.sh` (both in option 5). Option 6 shipped: `scripts/hooks/settings-registration.test.sh` now fails if any of 11 prose gates is unbound. The owner ruled on the rest the same day (D1a D2a D3a D4a D5c, recorded in `~/.claude/assets/reports/20261027-prose-capability-scour/consolidation-plan.md`), which settles disagreements 7, 8, 11 and 12. Shipped from those rulings: `style/profiles.json` (per-surface treatment and caps), `conventions/doc-writing.md` as the standard for every human-facing doc with the old report contract as its §16, em-dash findings in `guard-comment-hygiene.sh`, and a zero-budget sweep (`scripts/style/emdash-sweep.py`) of all tracked markdown prose and code comments. Dashes inside code fences, inline code and code strings, and the engine itself (plan phases P2 to P5), are still to do.
+Status 2026-10-27: option 1 shipped for disagreements 1 to 6, 9 and 10 and every stale reference except the parked thesaurus and `guard-banned-vocab.sh` (both in option 5). Option 6 shipped: `scripts/hooks/settings-registration.test.sh` now fails if any of 11 prose gates is unbound. The owner ruled on the rest the same day (D1a D2a D3a D4a D5c, recorded in `~/.claude/assets/reports/20261027-prose-capability-scour/consolidation-plan.md`), which settles disagreements 7, 8, 11 and 12. Shipped from those rulings: `style/profiles.json` (per-surface treatment and caps), `conventions/doc-writing.md` as the standard for every human-facing doc with the old report contract as its §16, em-dash findings in `guard-comment-hygiene.sh`, and a zero-budget sweep (`scripts/style/emdash-sweep.py`) of all tracked markdown prose and code comments. The rest of the plan shipped later the same day:
+
+- Em-dashes are gone from code strings, code examples and data too. Only ledgers, migrations and past run records keep theirs.
+- `scripts/style/prose-lint.py` is now the shared engine. It reads `style/profiles.json` per surface.
+- Five gates ask the engine: guard-prose-quality, git-prose-gate, guard-gh-prose, doc-voice-gate and format-gate. Parity evidence is in `~/.claude/assets/reports/20261027-prose-capability-scour/engine-build-report.md`.
+- The six Stop scripts that format-gate replaced now live in `scripts/hooks/retired/`.
+- `guard-banned-vocab.sh` stays bound as an opt-in list per project.
+- The thesaurus skill stays parked. Its ledger stays live through `scripts/style/thesaurus.sh`.
 
 These are options for the owner to rule on, roughly from cheapest to largest.
 

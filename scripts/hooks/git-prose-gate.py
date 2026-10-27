@@ -19,7 +19,7 @@ Exit 0 = commit may proceed, 1 = refused.
 """
 import importlib.util, os, re, subprocess, sys
 
-BLOCK_SCORE = 8.0
+SURFACE = "commit"       # the style/profiles.json row that decides what blocks here
 BYPASS_VAR = "PROSE_GATE_BYPASS"
 IN_SCOPE = re.compile(r"^(?:rules|features|conventions|personas)/.+\.md$|^skills/(?!synced/).+\.md$|^CLAUDE\.md$")
 EXEMPT = re.compile(r"(?:^|/)(?:style|atone|i-dream|sweep|derived|node_modules|ste-writing)/|language-quality|thesaurus"
@@ -85,21 +85,30 @@ def main():
         rows = added_prose(f)
         if not rows:
             continue
-        r = lint.lint("\n".join(t for _, t in rows))
+        try:
+            r = lint.lint("\n".join(t for _, t in rows), SURFACE)
+        except Exception as e:      # a broken profile file must not make every commit fail
+            print(f"prose-gate: skipped {f} ({e})", file=sys.stderr)
+            continue
         if "skipped" in r:
             continue
-        v = r.get("violations", {})
+        # The engine's commit profile (style/profiles.json) decides which tells block.
+        hits = {}
+        for fnd in r["findings"]:
+            if fnd["action"] == "block":
+                hits.setdefault(fnd["tell"], []).append(fnd)
         why = []
-        if v.get("two_split_dash"):
-            why.append(f"{v['two_split_dash']} em/en-dash(es) in earnest prose (budget: zero)")
-        if v.get("verdict_first_opener"):
+        if hits.get("em-dash"):
+            why.append(f"{len(hits['em-dash'])} em/en-dash(es) in earnest prose (budget: zero)")
+        if hits.get("verdict-opener"):
             why.append("verdict-first opener")
-        if v.get("contrast_list"):
-            why.append(f"{v['contrast_list']} contrast list(s) (\"not X, not Y, but Z\")")
-        if r.get("score", 0) > BLOCK_SCORE:
-            why.append(f"prose-lint score {r['score']}/100w (block line {BLOCK_SCORE:g})")
+        if hits.get("contrast-list"):
+            why.append(f"{len(hits['contrast-list'])} contrast list(s) (\"not X, not Y, but Z\")")
+        if hits.get("lint-score-block"):
+            why.append(f"prose-lint score {r['score']}/100w (block line {float(hits['lint-score-block'][0]['text']):g})")
         if why:
-            first = next((n for n, t in rows if re.search(r"[\u2014–]", t)), rows[0][0])
+            dash_line = hits["em-dash"][0]["line"] if hits.get("em-dash") else None
+            first = rows[dash_line - 1][0] if dash_line and dash_line <= len(rows) else rows[0][0]
             refusals.append(f"  {f} (e.g. line {first}): " + "; ".join(why))
     if not refusals:
         return 0
