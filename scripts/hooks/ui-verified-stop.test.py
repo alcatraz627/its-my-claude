@@ -172,6 +172,47 @@ else:
     failed += 1
     print(f"FAIL heed false when the shortfall repeats (true={heed_count('true')} false={heed_count('false')})")
 
+# ---- review turns: a visual verdict with no UI edit and no look ----
+def tool(name, **inp):
+    return {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": name, "input": inp}]}}
+
+
+rv = user("review the landing page across widths 360 to 1600")
+LA = "/Users/alcatraz627/Code/Versable/landing-app"
+# Reconstructed from the 2026-10-20 landing-app width review (atone mist-20261020-120344-a4):
+# the verdict came from CSS and computed styles, with no render looked at.
+css_only = [rv, tool("Bash", command=f"rg -n '@media|@container|grid-template' {LA}/src/styles/base.css"),
+            tool("Read", file_path=f"{LA}/src/styles/base.css"),
+            tool("Read", file_path=f"{LA}/src/components/module-extraction.tsx")]
+verdict = "The layout holds up at 360, 390 and 400px: the extraction module looks right and nothing overflows."
+run("review: verdict from CSS alone", "block", css_only + [say(verdict)], "uiv00040")
+run("review: same reply again", "pass", css_only + [say(verdict)], "uiv00040")
+run("review: after reading a screenshot file", "pass",
+    css_only + [tool("Read", file_path=f"{LA}/.claude/output/shots/extraction-360.png"), say(verdict)], "uiv00041")
+run("review: after an image came back", "pass", css_only + [image(), say(verdict)], "uiv00042")
+run("review: after a browser screenshot tool", "pass",
+    css_only + [tool("mcp__plugin_playwright_playwright__browser_take_screenshot"), say(verdict)], "uiv00043")
+run("review: after a devtools screenshot", "pass",
+    css_only + [tool("mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot"), say(verdict)], "uiv00044")
+run("review: after lm see", "pass",
+    css_only + [tool("Bash", command="lm see /x/extraction-360.png --crop 400x300+0+0 'are the values cut off?'"), say(verdict)], "uiv00045")
+run("review: an accessibility snapshot is not a look", "block",
+    css_only + [tool("mcp__plugin_playwright_playwright__browser_snapshot"), say(verdict)], "uiv00046")
+run("review: lm see only in a past turn", "block",
+    [tool("Bash", command="lm see /x/a.png 'q'"), user("now the tablet widths")] + css_only[1:] + [say(verdict)], "uiv00047")
+run("review: UI mentioned, no verdict", "pass",
+    css_only + [say("The extraction module has a compact grid below 768px at base.css:1291 and the sweep covers 400 to 1600px.")], "uiv00048")
+run("review: verdict about something that is not a UI", "pass",
+    [rv, tool("Bash", command="pytest -q"), say("Verified: the migration ran and the tests pass.")], "uiv00049")
+# Real message from the same session (turn that only read CSS and said where it expected trouble).
+run("review: 'fixed in pixels' describes CSS, it is no verdict", "pass",
+    css_only + [say("While it runs I read the responsive CSS for the animated visuals. These are where I expect "
+                    "phone-width trouble, because their layouts are fixed in pixels: the hero graphic below 1024px.")], "uiv00053")
+run("review: honest about not looking", "pass",
+    css_only + [say("The CSS suggests it holds up at 360px, but I have not looked at a render, so this is not verified.")], "uiv00050")
+run("review: stop hook already active", "pass", css_only + [say(verdict)], "uiv00051", active=True)
+run("review: input reply is judged", "block", css_only + [say("Read base.css.")], "uiv00052", lam=verdict)
+
 clear_state()
 print(f"{passed} passed, {failed} failed")
 sys.exit(1 if failed else 0)

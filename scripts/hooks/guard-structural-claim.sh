@@ -85,7 +85,12 @@ WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
 #               adversarial flagged framework-behavior prose ("React renders").
 #               -i bug fixed (matched case-sensitively). Enable to test.
 #   manifest  : HOLD (default-off). 0 corpus fires; "dependency" homograph risk.
-SHAPES_ENABLED="${STRUCTCLAIM_SHAPES:-authority}"
+#   deploy    : SHIP. Catches "X can't go live / must wait / won't work because the
+#               deploy, CI or pipeline works this way". Added after a real miss
+#               (atone mist-20261021-121619-a1): three finished features were
+#               reported as stuck until 1 Nov on a claim about the deploy path that
+#               was never read. Its read-gate is deploy-aware, see DEPLOYREAD_RX.
+SHAPES_ENABLED="${STRUCTCLAIM_SHAPES:-authority,deploy}"
 is_enabled() { case ",$SHAPES_ENABLED," in *",$1,"*) return 0 ;; *) return 1 ;; esac; }
 
 # ── Turn boundary: slice the tail at the LAST REAL USER MESSAGE (steal from
@@ -116,6 +121,19 @@ text=$(hook_last_assistant_text "$input" "$tp")
 #    authoring fires the philosophy values). E5 PERSON_RX + the authoring read-gate
 #    are what tame the owns/mints homograph, not deletion of the branch.
 AUTHORITY_RX='\bis the (authority|source of truth|final (check|word|authority|arbiter)|only (writer|owner|source)|hot path|canonical (source|owner)|single source of truth)\b|\b(owns|mints|minted|is the only thing that writes) the\b|\bis the only (writer|owner|authority) (of|for|on)\b|\b(is|are)\s+(just|merely|only)\s+a\s+(jwt|cookie|cache( hit| lookup)?|single (function|call|query)|thin wrapper|getter|setter|no-?op)\b'
+
+# ①e DEPLOY — a limit asserted about deploys, CI, pipelines or infrastructure.
+#    Three forms, each needing a blocker word so a plain mention of deploying
+#    ("I'll deploy after review") never matches:
+#      A  can't / must wait / blocked ... deploy|go live|ship|release ... because|until|needs
+#      B  not|nothing|none of it ... live|deployed|shipped ... because|until|due to
+#      C  deploying|a push|the pipeline ... would|will|must|needs to ... use|spend|trigger|need CI/Actions/minutes
+DEPLOY_RX='\b(can(no|'\''?)t|cannot|won'\''t|will not|unable to|must wait|have to wait|needs? to wait|waits? (for|on|until)|blocked (on|by|until)|stuck until)\b[^.\n]{0,60}\b(deploy\w*|go(es)? live|going live|ship\w*|releas\w*|publish\w*|roll(s|ed)? out|rollout)\b[^.\n]{0,100}\b(because|since|until|due to|needs?|requires?|uses?|spends?|consumes?|triggers?|runs? (on|through))\b|\b(not|isn'\''t|aren'\''t|nothing|none of (it|them|this|these)( is| are)?)\b[^.\n]{0,25}\b(live|deployed|deploys?|shipped|released)\b[^.\n]{0,120}\b(because|until|due to|since|waiting (for|on))\b|\b(deploy(ing|s|ment)?|pushing|a push|the (deploy|pipeline|build|ci))\b[^.\n]{0,60}\b(would|will|must|has to|needs? to|requires?)\b[^.\n]{0,40}\b(use|spend|consume|burn|trigger|start|run|need|require)\w*\b[^.\n]{0,40}\b(actions|minutes|ci|pipeline|workflows?|runners?|builds?|quota)\b'
+
+# What counts as having read the deploy subject this turn: a Read/Grep/Glob/Edit
+# target, or a Bash command, that touches deploy or CI material. A generic code
+# read does not ground a claim about how the deploy path works.
+DEPLOYREAD_RX='deploy|cloudbuild|\.github/|workflows?/|dockerfile|makefile|terraform|\.tf\b|pipeline|\.gitlab-ci|circleci|render\.ya?ml|fly\.toml|procfile|cicd|\bci\b|release|gcloud|kubectl|helm|wrangler|vercel|netlify'
 
 # ①b CALLCHAIN — SUBJECT + flow verb + a CHECKABLE object (backtick span /
 #    snake_case / path / file.ext). Two restrictions vs the design draft, both from
@@ -179,10 +197,11 @@ segs_file=$(mktemp 2>/dev/null) || segs_file="/tmp/sc-segs-$$"
 printf '%s' "$text" | rg -oP '[^.!?\n]+[.!?]?' > "$segs_file" 2>/dev/null || true
 
 klass=""; claim_sentence=""
-for shape in authority callchain extmech manifest; do
+for shape in authority deploy callchain extmech manifest; do
   is_enabled "$shape" || continue
   case "$shape" in
     authority) s=$(rg -m1 -iP "$AUTHORITY_RX" "$segs_file" 2>/dev/null || true) ;;
+    deploy)    s=$(rg -m1 -iP "$DEPLOY_RX" "$segs_file" 2>/dev/null || true) ;;
     callchain) s=$(rg -m1 -iP "$CALLCHAIN_RX" "$segs_file" 2>/dev/null || true) ;;
     extmech)   s=$(rg -m1 -P  "$EXTMECH_RX"  "$segs_file" 2>/dev/null || true) ;;  # case-sensitive
     manifest)  s=$(rg -m1 -iP "$MANIFEST_RX" "$segs_file" 2>/dev/null || true) ;;
@@ -251,7 +270,16 @@ if [ "$authoring" = 1 ]; then
   fire_kind="authoring"
 else
   # non-authoring read-gate
+  if [ "$klass" = deploy ]; then
+    # A cited path only grounds a deploy claim when it is deploy/CI material, and
+    # the subject counts as read only when a deploy/CI file or command was touched.
+    printf '%s' "$text" | rg -oP "$BTPATH_RX" 2>/dev/null | rg -qiP "$DEPLOYREAD_RX" 2>/dev/null && exit 0
+    printf '%s\n' "$read_targets" | rg -qiP "$DEPLOYREAD_RX" 2>/dev/null && exit 0
+    subject="the deploy path"
+    fire_kind="blind"
+  else
   printf '%s' "$text" | rg -qP "$BTPATH_RX" 2>/dev/null && exit 0          # E2
+  fi
   [ "$klass" = extmech ]  && [ "$web_lookup" = 1 ]    && exit 0            # M9
   [ "$klass" = manifest ] && [ "$manifest_read" = 1 ] && exit 0           # manifest-file read
   # subject extraction from the matched sentence
@@ -260,6 +288,7 @@ else
   [ -z "$subject" ] && subject=$(printf '%s' "$claim_sentence" | rg -oP -m1 '\b[A-Za-z0-9_]+/[A-Za-z0-9_./-]+\b' 2>/dev/null || true)
   [ -z "$subject" ] && subject=$(printf '%s' "$claim_sentence" | rg -oP -m1 '\b[a-zA-Z0-9_-]+\.(py|ts|tsx|js|jsx|go|rs|swift|rb|sh|json|md)\b' 2>/dev/null || true)
   [ "$klass" = extmech ] && subject=$(printf '%s' "$claim_sentence" | rg -oP -m1 '\b[A-Z][a-zA-Z0-9]{2,}' 2>/dev/null || true)
+  [ "$klass" = deploy ] && subject="the deploy path"
   # subject read/edited this turn → grounding done → silent
   if [ -n "$subject" ] && printf '%s' "$read_targets" | rg -qiF -- "$subject" 2>/dev/null; then
     exit 0
@@ -291,6 +320,8 @@ MARK="/tmp/claude-structural-claim-${sid8}"
 
 if [ "$fire_kind" = "authoring" ]; then
   body="you're assigning ownership/authority in a design ($klass shape) but this turn shows no Read/Grep/Edit of any code file — designing over code from memory is exactly how structural-claim (S3) recurs. Ground the design: read the modules you're designing over, then state the ownership. False positive (you read code / verified out-of-band)? Say so and proceed — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
+elif [ "$klass" = deploy ]; then
+  body="you're saying work can't go live or has to wait because of how deploys, CI or infrastructure behave, but this turn shows no read of the deploy path (deploy script, pipeline or workflow file) and no file:line cite. A 'must wait until X' that rests on an unread deploy path is how three finished features sat undeployed for a day. Read the deploy script or workflow first, or name its file:line, or tag it [UNVERIFIED]; and if a route avoids the blocked mechanism, offer it. False positive (you read it / verified out-of-band)? Say so — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
 else
   body="your message states how '${subject:-a subsystem}' works ($klass) but this turn shows no Read/Grep of it and no in-message file:line/backtick-path cite. Pattern-matching is not evidence. Read ${subject:-the subject} (or name its file:line), or tag it [UNVERIFIED]. False positive (you read it / verified out-of-band)? Say so — this won't re-block the same claim. Mute: touch ~/.claude/.no-structural-claim-gate"
 fi

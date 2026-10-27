@@ -13,16 +13,25 @@ the turn ends, on the file as it stands. While a doc written this turn still
 fails, the turn may not end (twice), and never on a reply that calls that doc
 better or fixed. If the agent ends the turn anyway, the owner is told.
 
+A third failure is a doc that is hard to skim: dense paragraphs, lines spliced
+with semicolons, runs of sentences that only name code and paths. Those checks
+are shared with the GitHub prose gate (prose_readability.py), with a few more
+allowed here because a doc is longer than a comment.
+
 Runtime contract:
   doc-voice-gate.py          PostToolUse on Write/Edit/MultiEdit: note + record
   doc-voice-gate.py stop     Stop: re-check this turn's docs, block or tell
 Scope: .md files under a `docs/` folder, or any .md whose frontmatter names a
-non-agent `reader:`. Skips anything under `.claude/` or `archive/`, and
-changelogs, RCAs and ADRs. `reader: agent` exempts a file outside `docs/`
-only; under `docs/` only the owner's list does
+non-agent `reader:` (that includes a file under `.claude/`). Skips `archive/`,
+other `.claude/` files, and changelogs, RCAs and ADRs. `reader: agent` exempts
+a file outside `docs/` only; under `docs/` only the owner's list does
 (~/.claude/doc-voice-exempt.txt, one path glob per line). Fenced code and
 everything after a final Sources / References / Appendix heading are not
 counted.
+A doc under `.claude/output/` that names no reader is judged only when the
+reply at the end of the turn points the owner at it by its full path, because
+that is the moment it becomes something a person reads. A seat's own output is
+never judged this way. `reader: agent` at the top of the file clears it.
 
 Mute: touch ~/.claude/.no-doc-voice-gate · One-shot: DOC_VOICE_OFF=1
 Test: bash ~/.claude/scripts/hooks/doc-voice-gate.test.sh
@@ -34,6 +43,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import prose_readability  # noqa: E402
+
 # Planning shorthand alone (V1, T3) is common and mild; the ledger voice shows
 # as several kinds at once (ids plus shas, file:line or dated rulings).
 THRESHOLD = 8
@@ -43,6 +55,10 @@ MIN_KINDS = 2
 # owner approved has 2 long cells, so one or two are allowed.
 LONG_CELL, LONG_BLOCK, HUGE_BLOCK = 160, 400, 900
 MAX_LONG_CELLS, MAX_LONG_BLOCKS = 3, 2
+# Skim checks (prose_readability.py). Across the docs/ folders on this machine
+# the approved plain docs have none of the three, and the ledger-style ones have
+# several, so a few of each are allowed before the doc is called hard to skim.
+MAX_DENSE, MAX_SPLICED, MAX_MECHANISM = 2, 2, 2
 MAX_STOP_BLOCKS = 2
 
 STATE_DIR = os.environ.get("DOC_VOICE_STATE", "/tmp")
@@ -58,6 +74,13 @@ SIGNALS = {
         r"|\b(?:accepted|decided|ruled|agreed) (?:on )?\d{4}-\d{2}-\d{2}"
         r"|\bpreviously\b|\bno longer\b|\bused to\b|\bpre-fix\b|\bpost-fix\b|\bsuperseded\b"
         r"|\bcontrary to\b|\bthe (?:spec|doc|cprd|prd|plan|source|brief) (?:says|said|claims|asked)\b",
+        re.IGNORECASE,
+    ),
+    # A living status doc is rewritten to be current, so "Updated 20:15" or
+    # "Status at ~22:10" is an audit trail about the doc, not information in it.
+    "update stamp": re.compile(
+        r"\b(?:updated|status at|as of|refreshed|checked at|verified at)\s*(?:on\s+|at\s+)?~?\s*"
+        r"(?:\d{4}-\d{2}-\d{2}|\d{1,2}:\d{2})",
         re.IGNORECASE,
     ),
 }
@@ -89,16 +112,35 @@ def owner_exempt(path):
     return any(fnmatch.fnmatch(path, os.path.expanduser(g)) for g in globs)
 
 
+def skippable(path):
+    return (not path.endswith(".md") or "/archive/" in path
+            or SKIP_NAME.search(os.path.basename(path)) or owner_exempt(path))
+
+
 def in_scope(path, text):
-    if (not path.endswith(".md") or "/.claude/" in path or "/archive/" in path
-            or SKIP_NAME.search(os.path.basename(path)) or owner_exempt(path)):
+    if skippable(path):
         return False
     reader = reader_of(text)
     under_docs = "/docs/" in path
     if reader is not None and reader.startswith("agent"):
         # An agent can write that line itself, so it does not exempt a doc under docs/.
-        return under_docs
+        return under_docs and "/.claude/" not in path
+    if "/.claude/" in path:
+        # Agent working folders are skipped unless the file promises a human reader.
+        return reader is not None
     return reader is not None or under_docs
+
+
+def handover_candidate(path, text):
+    """A doc under .claude/output/ that names no reader. It is judged only if the
+    reply hands it to the owner (see stop)."""
+    if skippable(path) or "/.claude/output/" not in path or in_scope(path, text):
+        return False
+    return reader_of(text) is None
+
+
+def cited(path, reply):
+    return path in reply or path.replace(os.path.expanduser("~"), "~", 1) in reply
 
 
 def body_of(text):
@@ -148,13 +190,30 @@ def wall_fires(long_cells, long_blocks):
             or any(len(b) > HUGE_BLOCK for b in long_blocks))
 
 
+def skim(text):
+    """Dense paragraphs, semicolon-spliced lines and internals-only runs in the
+    doc body. Dashes are left to guard-prose-quality.sh, which already stops them
+    at write time."""
+    return prose_readability.analyze(body_of(text), dashes=False)
+
+
+def skim_fires(found):
+    limits = {"dense": MAX_DENSE, "spliced": MAX_SPLICED, "mechanism": MAX_MECHANISM}
+    return any(len(v) > limits[k] for k, v in found.items())
+
+
 def measure(text):
     """The doc's faults as numbers, for telling worse from better: ledger marks
-    (0 unless the ledger check fires), long cells, long paragraphs."""
+    (0 unless the ledger check fires), long cells, long paragraphs, and the
+    three skim counts."""
     hits = score(text)
     cells, blocks = wall(text)
+    found = skim(text)
     return {"ledger": sum(len(v) for v in hits.values()) if fires(hits) else 0,
-            "cells": len(cells), "blocks": len(blocks), "fails": bool(fires(hits) or wall_fires(cells, blocks))}
+            "cells": len(cells), "blocks": len(blocks),
+            "dense": len(found.get("dense", [])), "spliced": len(found.get("spliced", [])),
+            "mechanism": len(found.get("mechanism", [])),
+            "fails": bool(fires(hits) or wall_fires(cells, blocks) or skim_fires(found))}
 
 
 def committed_text(path):
@@ -175,17 +234,19 @@ def worse(base, now):
         return False
     if base is None or not base["fails"]:
         return True
-    return any(now[k] > base[k] for k in ("ledger", "cells", "blocks"))
+    return any(now[k] > base.get(k, 0) for k in ("ledger", "cells", "blocks", "dense", "spliced", "mechanism"))
 
 
-def findings(path):
-    """What is wrong with the doc as it stands now, as sentences; empty when it reads fine."""
+def findings(path, force=False):
+    """What is wrong with the doc as it stands now, as sentences; empty when it
+    reads fine. `force` judges a doc that is out of scope by location, because
+    the reply handed it to the owner."""
     try:
         with open(path, encoding="utf-8", errors="replace") as f:
             text = f.read()
     except OSError:
         return []
-    if not in_scope(path, text):
+    if not force and not in_scope(path, text):
         return []
     out = []
     hits = score(text)
@@ -200,8 +261,24 @@ def findings(path):
         out.append("it is a wall of text (%d table cells over %d characters, %d paragraphs over %d; e.g. \"%s...\"). "
                    "One short fact per cell and per bullet; detail goes to Sources or its own section"
                    % (len(cells), LONG_CELL, len(blocks), LONG_BLOCK, sample))
+    found = skim(text)
+    if skim_fires(found):
+        parts = []
+        if len(found.get("dense", [])) > MAX_DENSE:
+            parts.append("%d dense paragraphs or bullets (e.g. \"%s\")" % (len(found["dense"]), found["dense"][0]))
+        if len(found.get("spliced", [])) > MAX_SPLICED:
+            parts.append("%d long lines joined with a semicolon (e.g. \"%s\")" % (len(found["spliced"]), found["spliced"][0].split(": ", 1)[-1]))
+        if len(found.get("mechanism", [])) > MAX_MECHANISM:
+            parts.append("%d runs of three or more sentences that only name code, paths and numbers (e.g. \"%s\")"
+                         % (len(found["mechanism"]), found["mechanism"][0]))
+        out.append("it is hard to skim: %s. Split each into short sentences, lead with what it means for the reader, "
+                   "and keep the names and numbers for a Details or Sources section" % "; ".join(parts))
     if out and reader_of(text) is None:
-        out.append("name the reader in one line first (frontmatter `reader: <who>`)")
+        if force:
+            out.append("you pointed the owner at this file. If it is for agents, put `reader: agent` at the top; "
+                       "if it is for the owner, name them (`reader: <who>`) and fix the points above")
+        else:
+            out.append("name the reader in one line first (frontmatter `reader: <who>`)")
     return out
 
 
@@ -227,12 +304,36 @@ def save(sid, st):
         json.dump(st, f)
 
 
+def note_candidate(data, path):
+    """Remember a doc written by the main agent that is out of scope by location
+    but might be handed to the owner in the closing reply. A sub-agent's file is
+    for the agent that dispatched it, so it is never remembered."""
+    if data.get("agent_id") or not path.endswith(".md"):
+        return
+    try:
+        with open(path, encoding="utf-8", errors="replace") as f:
+            text = f.read()
+    except OSError:
+        return
+    if not handover_candidate(path, text):
+        return
+    sid = data.get("session_id")
+    st = load(sid)
+    if path not in st.setdefault("cands", []):
+        st["cands"].append(path)
+    if path not in st.setdefault("base", {}):
+        old = committed_text(path)
+        st["base"][path] = measure(old) if old is not None else None
+    save(sid, st)
+
+
 def post(data):
     if data.get("tool_name") not in ("Write", "Edit", "MultiEdit"):
         return 0
     path = (data.get("tool_input") or {}).get("file_path") or ""
     found = findings(path)
     if not found:
+        note_candidate(data, path)
         return 0
     st = load(data.get("session_id"))
     if path not in st["docs"]:
@@ -256,11 +357,21 @@ def post(data):
 def stop(data):
     sid = data.get("session_id")
     st = load(sid)
-    if not st["docs"]:
-        return 0
-    failing = {p: findings(p) for p in st["docs"]}
-    failing = {p: f for p, f in failing.items() if f}
     reply = data.get("last_assistant_message") or ""
+    # A doc written this turn under .claude/output/ becomes something a person reads
+    # when the reply names its path.
+    cands = st.pop("cands", [])
+    for p in cands:
+        if cited(p, reply) and p not in st["docs"]:
+            st["docs"].append(p)
+            st.setdefault("forced", []).append(p)
+    if not st["docs"]:
+        if cands and os.path.exists(state_path(sid)):
+            os.remove(state_path(sid))
+        return 0
+    forced = st.get("forced", [])
+    failing = {p: findings(p, force=p in forced) for p in st["docs"]}
+    failing = {p: f for p, f in failing.items() if f}
     names = [os.path.splitext(os.path.basename(p))[0] for p in failing]
     claims = bool(CLAIM.search(reply) and not ADMIT.search(reply)
                   and any(n.lower() in reply.lower() for n in names))

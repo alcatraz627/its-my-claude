@@ -27,6 +27,14 @@ render-not-read siblings. A frame description is, before the claim, at least 80
 characters of prose that carries a seeing word (screenshot, frame, on screen, I see,
 shows, displays, visible, rendered).
 
+Third check (review turns): a turn with no UI edit can still give a visual verdict, such
+as a review that says a page "holds up at 360px" after reading CSS and computed styles.
+When the reply gives such a verdict about a UI and the turn never looked (no Read of an
+image file, no image returned by a tool, no screenshot tool call, no `lm see` or
+`claude-see` Bash call), it blocks once per distinct reply. A turn that looked passes,
+and so does a reply that names what it did not look at. The edit turns above keep their
+own rules.
+
 Heed: a later UI claim that carries the image, or a frame description, after a fire
 records heeded:true; the same shortfall again records heeded:false.
 Mute: touch ~/.claude/.no-ui-verified-gate
@@ -85,12 +93,27 @@ UI = re.compile(r"\.(html?|css|scss|jsx|tsx|vue|svelte)$"
                 r"|/(src|components|pages|public|static|app|web|ui|frontend|views|kanban)/[^/]*\.js$", re.I)
 # A shell command that rewrites a markup or style file: sed -i, a redirect, tee.
 BASH_WRITE = re.compile(r"(sed\s+-i\S*\s[^;&|]*|>{1,2}\s*|\btee\s+(-a\s+)?)\S*\.(html?|css|scss|jsx|tsx|vue|svelte)\b", re.I)
+IMAGE_FILE = re.compile(r"\.(png|jpe?g|gif|webp|bmp|tiff?|heic)$", re.I)
+# A look at the render without an image coming back: the local vision model.
+VISION_CMD = re.compile(r"(^|[\s;&|(])(lm\s+(gemini\s+)?see|claude-see)\b")
 last_edit, last_seen, reply = -1, -1, ""
+looked = False   # anything this turn that put a render in front of the model or the vision model
 for i, r in enumerate(recs[start:], start):
     for b in content_of(r):
         if not isinstance(b, dict):
             continue
         kind = (r.get("type"), b.get("type"))
+        if kind == ("assistant", "tool_use"):
+            name, args = b.get("name") or "", b.get("input") or {}
+            if (name == "Read" and IMAGE_FILE.search(args.get("file_path") or "")) \
+                    or "screenshot" in name.lower() \
+                    or (name.endswith("__computer") and args.get("action") in ("screenshot", "zoom")) \
+                    or (name == "Bash" and VISION_CMD.search(args.get("command") or "")):
+                looked = True
+        elif kind == ("user", "tool_result"):
+            c = b.get("content")
+            if isinstance(c, list) and any(isinstance(x, dict) and x.get("type") == "image" for x in c):
+                looked = True
         if kind == ("assistant", "tool_use") and b.get("name") in ("Edit", "Write", "MultiEdit") \
                 and UI.search((b.get("input") or {}).get("file_path") or ""):
             last_edit = i
@@ -106,13 +129,29 @@ for i, r in enumerate(recs[start:], start):
 # The Stop input carries the reply that just ended the turn; the transcript tail lags
 # one message at Stop time, so a reply read from it is the previous one.
 reply = inp.get("last_assistant_message") or reply
-if last_edit < 0 or not reply:
+if not reply:
+    sys.exit(0)
+review_turn = last_edit < 0     # no UI file edited: only a visual verdict can trip the hook
+if review_turn and looked:
     sys.exit(0)
 
 prose = re.sub(r"`[^`\n]*`", "", re.sub(r"```.*?```", "", reply, flags=re.S))
-claim = re.search(r"\b((?<!not )(?<!un)verified|(it|this|that|now|everything) works|works now|is working"
-                  r"|(is|are|now) fixed|fixed (it|the|this|that)|fixed(?=[.!])|looks (right|good|correct)"
-                  r"|renders (correctly|fine))\b", prose, re.I)
+if review_turn:
+    # A verdict about how a UI looks, paired with a sign the reply is about a UI, so
+    # "verified the migration" or "the tests pass" do not count.
+    verdict = re.search(r"\b((?<!not )(?<!un)verified|looks? (right|good|correct|clean|fine|great|intended|balanced|aligned)"
+                        r"|renders? (correctly|cleanly|fine|properly)|reads? (cleanly|fine|well)|holds? up"
+                        r"|(is|are|now) (fixed(?! (in|at|to|width|height|size|position|by)\b)|aligned|centred|centered)|(layout|alignment) (is |are )?(fixed|clean|correct)"
+                        r"|no (overflow|clipping|truncation|sideways scroll|horizontal scroll|layout shift)"
+                        r"|(fine|clean|correct|fits?|passes) (at|on|across) )", prose, re.I)
+    ui_sign = re.search(r"(\b\d{3,4} ?px|\b(breakpoints?|viewports?|responsive|layouts?|alignment|overflow|navbar"
+                        r"|(mobile|phone|tablet|desktop) (view|width|layout|screen)|on screen|rendered|css|ui|visual(ly)?"
+                        r"|screenshots?|widths?)\b)", prose, re.I)
+    claim = verdict if (verdict and ui_sign) else None
+else:
+    claim = re.search(r"\b((?<!not )(?<!un)verified|(it|this|that|now|everything) works|works now|is working"
+                      r"|(is|are|now) fixed|fixed (it|the|this|that)|fixed(?=[.!])|looks (right|good|correct)"
+                      r"|renders (correctly|fine))\b", prose, re.I)
 honest = re.search(r"not looked at|UNCONFIRMED|not (yet )?(verified|looked|checked)|unverified"
                    r"|ha(ve|s)( not|n't) (been )?(verified|looked|checked)", prose, re.I)
 if not claim or honest:
@@ -148,6 +187,23 @@ def remember(path):
     with open(path, "w") as f:
         f.write(reply_hash)
 
+
+if review_turn:
+    # A visual verdict with no look this turn: block once per distinct reply.
+    if already_said(state):
+        sys.exit(0)
+    remember(state)
+    if os.path.exists(fired):
+        record_heed("false")
+    open(fired, "w").write("block")
+    log_row("--action", "block", "--heeded", "unknown", "--detail", "review turn, no look")
+    print(json.dumps({"decision": "block", "reason":
+        f"[ui-verified] The reply gives a visual verdict (\"{claim.group(0)}\") about a UI, but this turn never looked at "
+        "a render: no image file was read, no screenshot was taken and `lm see` was not run. CSS and computed styles "
+        "do not show how it looks. Take a screenshot, read it, and run `lm see <png> \"<pointed question>\"` as a "
+        "second reader (crop first), then give the verdict from what you saw; or say \"not looked at\" beside it. "
+        "rules/ui-visual-verification.md. Mute: touch ~/.claude/.no-ui-verified-gate"}))
+    sys.exit(0)
 
 if last_seen <= last_edit:
     # Nobody looked. Unchanged: block once per distinct reply.

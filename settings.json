@@ -581,12 +581,24 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-github-agent-marker.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/guard-gh-prose.py"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-pr-title-tags.sh"
           }
         ]
       },
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-env-capture-test.sh"
+          },
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-near-dup-env-var.sh"
@@ -863,6 +875,10 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/guard-github-agent-marker.sh"
+          },
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/scripts/hooks/guard-gh-prose.py"
           }
         ]
       },
