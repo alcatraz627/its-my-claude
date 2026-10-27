@@ -17,6 +17,7 @@
 - [Proactive question ownership](feedback_proactive_question_ownership.md) — Own meta-questions (project ceiling, user-stories, safety nets); ASK + RE-ASK + save answers; user explicitly endorses re-asking
 
 ## Feedback — Task Framing & Scope
+- [Asks keep their context](feedback_asks_keep_context.md) — Never surface an owner ask stripped of its context or merged across work; "I am not a dumb meat proxy"
 - [Maximalist ≠ ambitious](feedback_ambitious_vs_maximalist.md) — Wide-and-flat works for agents; tall-stacked dependent layers fail (tower without spine)
 - [Propose safety nets](feedback_propose_safety_nets.md) — Surface missing safety nets (idempotency, dry-runs, diff previews, undo) ASAP, even on existing projects; over-suggesting is fine, missing is regrettable
 

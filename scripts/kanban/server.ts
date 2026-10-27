@@ -37,14 +37,13 @@ const html = (name: string) => new Response(fs.readFileSync(path.join(HERE, name
 const asset = (name: string, type: string) =>
   new Response(fs.readFileSync(path.join(HERE, name)), { headers: { "content-type": `${type}; charset=utf-8`, "cache-control": "no-store" } });
 const json = (obj: unknown, status = 200) => Response.json(obj, { status });
-// The classic decision page, with a link to bfb's view of the same page, which
-// is the one agents hand out now.
+// The classic decision page (?view=classic), with a link back to bfb's view.
 const NEW_VIEW_LINK = `<a href="?view=bfb" title="The same page in bfb's view" style="position:fixed;top:10px;right:12px;z-index:50;padding:4px 10px;border-radius:999px;font:500 12px/1.6 system-ui,sans-serif;text-decoration:none;color:var(--blue);background:var(--blue-bg);border:1px solid var(--blue-br)">Open in the new view</a>`;
 const classicPage = () => new Response(fs.readFileSync(path.join(HERE, "decision.html"), "utf8").replace("</body>", `${NEW_VIEW_LINK}</body>`),
   { headers: { "content-type": "text/html; charset=utf-8" } });
-// bfb's render of a decision page (its B8 bundle), at ?view=bfb beside the
-// classic decision.html. Agents and the board hand out the bfb view; the bare
-// URL stays the classic page until the cutover (G7). bfb owns these files.
+// bfb's render of a decision page (its B8 bundle) is what /dp/<slug>/ serves;
+// the classic decision.html stays reachable at ?view=classic, and ?view=bfb
+// still works for links handed out before the cutover. bfb owns these files.
 const BFB_DP_WEB = path.join(os.homedir(), "Code/better-file-browser/assets/dp-web");
 const bfbAsset = (name: string, type: string) => {
   const f = path.join(BFB_DP_WEB, name);
@@ -599,8 +598,9 @@ const server = Bun.serve({
           if (!p.endsWith("/"))
             return new Response(null, { status: 301,
               headers: { location: `/dp/${encodeURIComponent(slug)}/${url.search}` } });
-          if (url.searchParams.get("view") === "bfb") return bfbAsset("index.html", "text/html");
-          return classicPage();
+          // bfb's view is the page (owner ruling, 2026-10-27); the classic one stays at ?view=classic.
+          if (url.searchParams.get("view") === "classic") return classicPage();
+          return bfbAsset("index.html", "text/html");
         }
         // an asset inside the page dir (config.json, images) — no traversal
         const rel = parts.slice(1).join("/");
@@ -753,7 +753,7 @@ const server = Bun.serve({
             out.decisions.push({
               kind: "decision", slug,
               name: cfg.title ?? slug,
-              href: `/dp/${slug}/?view=bfb`,   // bfb's view; the bare URL is the classic page
+              href: `/dp/${slug}/?view=bfb`,
               origin: cfg.origin?.project ?? null,
               // what this ruling belongs to, so the hub can link an answer back
               // to the work rather than only naming the project it came from

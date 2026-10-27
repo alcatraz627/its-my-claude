@@ -219,7 +219,11 @@ got=$(code "$S/dp/zz-no-such-page/")
 # The page-level guard, independent of the redirect. curl cannot run the JS, so
 # assert the guards are present in what the server serves; their behaviour is
 # mutation-tested in the browser.
-pg=$(body "$S/dp/$dpslug/")
+case "$(body "$S/dp/$dpslug/")" in
+  *"/dp-assets/dp-web.js"*) ok "the bare page URL serves bfb's view" ;;
+  *) no "the bare page URL serves bfb's view" "the cutover (owner ruling 2026-10-27) is not in effect" ;;
+esac
+pg=$(body "$S/dp/$dpslug/?view=classic")
 case "$pg" in
   *"config.json returned"*) ok "the page checks the config response status" ;;
   *) no "the page checks the config response status" "no status guard in decision.html" ;;
