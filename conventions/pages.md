@@ -95,6 +95,33 @@ It opens the page in headless Chrome and fails on any of these:
 
 It saves a screenshot of each theme. Read both before calling the page done (`rules/ui-visual-verification.md`). A pass means the page works. It does not mean the page reads well.
 
+## Diagrams
+
+A mermaid flowchart on a page becomes a viewer you can pan, zoom, search and walk through, from `scripts/pages/diagram/`. Use it whenever a page shows a mermaid diagram; better-file-browser draws every diagram with the same code.
+
+```
+python3 ~/.claude/scripts/pages/diagram/diagram.py doc.md out.html     # one doc's diagram, full window
+```
+
+Inside a `pagekit.page()` page, `diagram.assets()` gives the CSS and JS and `diagram.block(src, md=..., file=...)` gives the element. The mermaid bundle (about 5 MB) is cached in `~/.cache/gcc/mermaid` and inlined; never commit it.
+
+What the reader gets: Layout (Tidy is ELK, fewer crossings; Compact is mermaid's usual layout), Flow, Lines (Curved or Square), Colour and Shapes; Navigate, Focus and Walkthrough; find, legend, minimap; drag a box to move it; copy the mermaid, save SVG or PNG. The file's mermaid is never changed: every choice is a view choice, kept in the browser.
+
+`MermaidLab.mount(el, opts)` options, for a host app:
+
+| Option | What it does |
+|---|---|
+| `src`, `md`, `file`, `name` | The mermaid text; the markdown around it (its tables and text path fill the side panel); that file's URL; the export file name |
+| `mermaid` | The mermaid object, or an async function that loads it (default `window.mermaid`) |
+| `store`, `cache` | Where view choices live (default localStorage); a cache so a diagram seen before draws without mermaid |
+| `compact` | A diagram inside a document: one slim bar, no modes or panel, the page keeps its wheel, sized to fit |
+| `expand` | `true` for the built-in modal, or a function that opens the host's own with the full viewer |
+| `tools`, `onTool` | Extra bar buttons and their handler |
+| `themeHost` | The element whose `data-theme="light"` means light (default `<html>`) |
+| `onReady`, `onError` | Called once drawn, or when the source does not parse |
+
+A diagram that is not a flowchart (sequence, gantt, pie) is drawn as mermaid draws it, with zoom and export. After changing the library, run `npm run sync:diagram` in better-file-browser so its copy matches.
+
 ## What is on the kit, and what is not yet
 
 | Surface | State |
