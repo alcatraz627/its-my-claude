@@ -105,7 +105,7 @@ python3 ~/.claude/scripts/pages/diagram/diagram.py doc.md out.html     # one doc
 
 Inside a `pagekit.page()` page, `diagram.assets()` gives the CSS and JS and `diagram.block(src, md=..., file=...)` gives the element. The mermaid bundle (about 5 MB) is cached in `~/.cache/gcc/mermaid` and inlined; never commit it.
 
-What the reader gets: Layout (Tidy is ELK, fewer crossings; Compact is mermaid's usual layout), Flow, Lines (Curved or Square), Colour and Shapes; Navigate, Focus and Walkthrough; find, legend, minimap; drag a box to move it; copy the mermaid, save SVG or PNG. The file's mermaid is never changed: every choice is a view choice, kept in the browser.
+The reader gets one bar of icons. Layout picks Tidy (ELK, fewer crossings) or Compact (mermaid's own). Flow and Lines are toggles. A menu holds colour and shapes. Navigate, Focus and Walk change how you read it. The side panel hides and drags wider. A toggle shows the raw text. Download offers SVG, PNG, PDF, Markdown and text, with a done toast. Pointing at a line lights it and both its steps. The file's mermaid never changes. Every choice is a view choice, kept in the browser.
 
 `MermaidLab.mount(el, opts)` options, for a host app:
 
@@ -117,6 +117,7 @@ What the reader gets: Layout (Tidy is ELK, fewer crossings; Compact is mermaid's
 | `compact` | A diagram inside a document: one slim bar, no modes or panel, the page keeps its wheel, sized to fit |
 | `expand` | `true` for the built-in modal, or a function that opens the host's own with the full viewer |
 | `tools`, `onTool` | Extra bar buttons and their handler |
+| `title`, `subtitle`, `icon`, `onClose` | Put the name, a subtitle (the step and link counts are added) and a close button in the bar, so a host's dialog needs no bar of its own |
 | `themeHost` | The element whose `data-theme="light"` means light (default `<html>`) |
 | `onReady`, `onError` | Called once drawn, or when the source does not parse |
 
