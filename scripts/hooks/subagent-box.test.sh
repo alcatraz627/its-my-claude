@@ -66,8 +66,17 @@ printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' 
 
 # A batch: three dispatches together share one fleet box, and their landings
 # fill in one fleet landing box.
+jq -cn --arg sid "$SID" --arg p "[seat s-fleettest-9] role=reader output=$T/x.md
+Read one file." '{hook_event_name:"PreToolUse",session_id:$sid,tool_name:"Agent",tool_input:{subagent_type:"general-purpose",model:"haiku",description:"named seat",prompt:$p}}' > "$T/named.json"
+d=$(ev < "$T/named.json")
+printf '%s' "$d" | rg -q "role=reader" && ko "a lettered seat id leaked its header into the goal: $d" || ok "a lettered seat id is read as a seat"
+
+# A batch: three dispatches together share one fleet box, and their landings
+# fill in one fleet landing box. No seat has an estimate here (empty cache).
+echo '{}' > "$T/est.json"; export SEAT_COST_CACHE="$T/est.json"
 export SUBAGENT_BURST_GAP=20
 : > "/tmp/claude-agentbox-$S8/burst"
+: > "/tmp/claude-agentbox-$S8/dispatch-queue"
 mkdir -p "$T/out"
 for k in 1 2 3; do
   jq -cn --arg sid "$SID" --arg p "[seat s-1-$k] output=$T/out/seat$k.md
@@ -78,6 +87,7 @@ done
 printf '%s' "$f" | rg -q "🛫 fleet · 3 seats" && ok "the third dispatch shows one fleet box" || ko "no fleet box: $f"
 [ "$(printf '%s\n' "$f" | rg -c '^│  🔵 [123] +sonnet ')" = "3" ] && ok "the fleet box lists all three seats" || ko "fleet rows: $f"
 printf '%s' "$f" | rg -q "replaces the separate dispatch boxes" && ok "it tells the agent to show only the fleet box" || ko "no replace note: $f"
+printf '%s' "$f" | rg -q 'est ~' && ko "a fleet with no estimates claims one: $f" || ok "a fleet with no estimates shows no total"
 echo x > "$T/out/seat1.md"; echo x > "$T/out/seat2.md"
 for k in 1 2 3; do printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"fa%s","agent_type":"general-purpose"}' "$SID" "$k" | bash "$BX" >/dev/null; done
 printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"fa1","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null

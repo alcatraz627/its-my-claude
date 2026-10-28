@@ -42,14 +42,18 @@ emit_ctx() {  # <event-name> <box-text>
 
 # fleet_out <bid>: the dispatch box for a whole batch, one row per seat.
 fleet_out() {
-  local bid="$1" args=() n=0 total=0 ts b i model est desc
+  local bid="$1" args=() n=0 total=0 known=0 ts b i model est desc
   while IFS='|' read -r ts b i model est desc; do
     [ "$b" = "$bid" ] || continue
     n=$((n + 1))
-    [ -n "$est" ] && total=$(awk -v a="$total" -v b="$est" 'BEGIN{printf "%.2f", a+b}')
+    [ -n "$est" ] && { total=$(awk -v a="$total" -v b="$est" 'BEGIN{printf "%.2f", a+b}'); known=$((known + 1)); }
     args+=(--row "info:$i" "$(printf '%-6s  %-6s  %s' "$model" "${est:+~\$$est}" "$desc")")
   done < "$STASH_DIR/burst"
-  bash "$BOXSH" fleet-out "$n seats" --attr "est ~\$$total" "${args[@]}" 2>/dev/null
+  # No estimate at all says nothing; a partial one says it is a floor.
+  local attr=""
+  [ "$known" -gt 0 ] && attr="est ~\$$total"
+  [ "$known" -gt 0 ] && [ "$known" -lt "$n" ] && attr="$attr+"
+  bash "$BOXSH" fleet-out "$n seats" ${attr:+--attr "$attr"} "${args[@]}" 2>/dev/null
 }
 
 # fleet_in <bid>: the landing box for a batch; seats still out show as waiting.
@@ -105,7 +109,7 @@ case "$event" in
     read -r seat out goal < <(ti prompt | python3 -c '
 import re, sys
 p = sys.stdin.read()
-m = re.match(r"\s*\[seat (s-[0-9a-f-]+)\][^\n]*", p)
+m = re.match(r"\s*\[seat (s-[0-9a-z-]+)\][^\n]*", p)
 seat = m.group(1) if m else "-"
 o = re.search(r"\boutput=(\S+)", m.group(0)) if m else None
 body = " ".join((p[m.end():] if m else p).split())
