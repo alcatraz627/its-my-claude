@@ -527,6 +527,51 @@ describe('mail', () => {
   })
 })
 
+describe('the dumped row', () => {
+  const INDEX = CWD + '/checkpoints/index.jsonl'
+  const DUMP = CWD + '/_20261028-polish-cd.claude.md'
+  const row = (uuid: string, kind = 'core-dump') => JSON.stringify({ session_uuid: uuid, kind, name: 'polish-cd', checkpoint_path: DUMP, project_root: CWD })
+  const dumped = (w: World, uuid = 'test-session-0001', kind?: string) => {
+    w.files[INDEX] = row(uuid, kind) + '\n'
+    w.exists.add(DUMP)
+  }
+
+  test('once this session dumps, the band offers both resume lines as copy buttons', ON, async ($, on) => {
+    const w = world(on)
+    await $.classic.SessionStart({ source: 'startup' })
+    expect(await (await mountBand($)).find({ key: 'dump-catchup' })).toBeUndefined()
+    dumped(w)
+    await $.classic.Stop({} as any)
+    const band = await mountBand($)
+    expect(await band.find({ key: 'row-dumped' })).toBeDefined()
+    await band.press({ key: 'dump-catchup' })
+    await band.press({ key: 'dump-clo' })
+    expect(w.copies).toEqual(['/catchup at ' + DUMP, 'clo -n polish-cd "/catchup at ' + DUMP + '"'])
+  })
+
+  test("another session's dump, or a session-end snapshot, offers nothing", ON, async ($, on) => {
+    const w = world(on)
+    await $.classic.SessionStart({ source: 'startup' })
+    dumped(w, 'other-session')
+    await $.classic.Stop({} as any)
+    expect(await (await mountBand($)).find({ key: 'row-dumped' })).toBeUndefined()
+    dumped(w, 'test-session-0001', 'session-end')
+    await $.classic.Stop({} as any)
+    expect(await (await mountBand($)).find({ key: 'row-dumped' })).toBeUndefined()
+  })
+
+  test('a /clear drops the row, and skip keeps it away', ON, async ($, on) => {
+    const w = world(on)
+    await $.classic.SessionStart({ source: 'startup' })
+    dumped(w)
+    await $.classic.Stop({} as any)
+    await (await mountBand($)).press({ key: 'skip-dumped' })
+    expect(await (await mountBand($)).find({ key: 'row-dumped' })).toBeUndefined()
+    await $.classic.SessionStart({ source: 'clear' })
+    expect(await (await mountBand($)).find({ key: 'row-dumped' })).toBeUndefined()
+  })
+})
+
 describe('/hub on across /clear', () => {
   const END = { sessionId: 'test-session-0001', resume: { kind: 'id', value: 'x' } } as any
   const clearEnd = ($: any) => $.session.end({ reason: 'clear', ...END })

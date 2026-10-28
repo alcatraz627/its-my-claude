@@ -106,7 +106,7 @@ cmd_list() {
   cat <<'EOF'
 
 compose  box <kind> <name> --body "…" --action "…" [--ref <abs-path>]…
-         [--attr "…"] [--kv "k:v"]… [--count N] [--seal "…"] [--block|--light]
+         [--copy "<line printed bare under the box>"]… [--attr "…"] [--kv "k:v"]… [--count N] [--seal "…"] [--block|--light]
 tag      box tag <kind> "<text>"     tag-tier kinds never grow rails
 skeleton box <kind> --template
 rules    the 👉 action line is what makes it a box · body caps ~6 lines, digest +
@@ -183,6 +183,13 @@ render_box() {
   else
     printf '%s%s\n' "$BL" "$(rep $((WIDTH - 1)) "$H")"
   fi
+
+  # Copy lines sit below the box with no rail, so a triple-click in the
+  # terminal selects the command alone.
+  local c
+  for c in ${COPIES[@]+"${COPIES[@]}"}; do
+    printf '%s\n' "$c"
+  done
 }
 
 # ── main ────────────────────────────────────────────────────────────────────
@@ -214,6 +221,7 @@ shift
 
 BODY='' ACTION='' ATTR='' KV='' COUNT='' SEAL='' FORCE_RAIL=''
 REFS=()
+COPIES=()
 US=$(printf '\x1f')
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -223,12 +231,13 @@ while [ $# -gt 0 ]; do
     --attr)   ATTR="${2:-}"; shift 2 ;;
     --kv)     KV="${KV:+$KV$US}${2:-}"; shift 2 ;;
     --ref)    REFS[${#REFS[@]}]="${2:-}"; shift 2 ;;
+    --copy)   COPIES[${#COPIES[@]}]="${2:-}"; shift 2 ;;
     --count)  COUNT="${2:-}"; shift 2 ;;
     --seal)   SEAL="${2:-}"; shift 2 ;;
     --block)  FORCE_RAIL='heavy'; shift ;;
     --light)  FORCE_RAIL='light'; shift ;;
     --width)  WIDTH="${2:-72}"; shift 2 ;;
-    *) die "unknown flag '$1'" "flags: --body --action --attr --kv --ref --count --seal --block --light --width" ;;
+    *) die "unknown flag '$1'" "flags: --body --action --attr --kv --ref --copy --count --seal --block --light --width" ;;
   esac
 done
 

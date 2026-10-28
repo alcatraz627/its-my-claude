@@ -108,6 +108,8 @@ declare module 'claude-code' {
       view: View
       goals: GoalsSnap | null
       catchup: Catchup | null
+      // The checkpoint this session's own /core-dump wrote.
+      dump: { name: string; path: string } | null
       meter: Meter
       seats: Seat[]
       mail: Mail

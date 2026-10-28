@@ -12,7 +12,7 @@ import type { EngineInterface, Register, UiPressArgument } from 'claude-code'
 import type { Catchup, Decide, DecideSet, SidePage, GoalView, GoalsSnap, Images, McpRow, Meter, Msg, Preset, Seat, Side, SideTab, SideTask, TaskRow } from '../types'
 import {
   CLAUDE_BIN, DP_REG, DP_URL, GCC, HOME, IMAGE_ID, PATH_RE, SIDE_ID, SIDE_TABS, TRAIL_RE, VIEWS,
-  BAR_COLS, abs, ago, agoPhrase, alignRows, blockBar, clip, contextCategoryRows, topMemoryFiles, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sharePct, sid8, summarizeFires, switchesOf, taskView, tilde,
+  BAR_COLS, abs, ago, agoPhrase, resumeLines, alignRows, blockBar, clip, contextCategoryRows, topMemoryFiles, costFrom, cut, deliveryStateOf, dur, emptyDecide, emptyIdle, emptyImages, emptyMail, emptyMeter, emptySide, estTokens, firstLine, goalCounts, hookScripts, human, imageNumsOf, initialView, isNewMail, isSideTab, jsonOr, linkFor, mcpFileMap, overviewItems, parseMcpList, plural, pluginCost, pluginRows, serverCost, sharePct, sid8, summarizeFires, switchesOf, taskView, tilde,
 } from './lib'
 import type { El, Switches } from './lib'
 
@@ -32,6 +32,8 @@ const sideAtom = atom({ plugin: 'gcc-mods', key: 'side' } as const, emptySide)
 const imagesAtom = atom({ plugin: 'gcc-mods', key: 'images' } as const, emptyImages)
 // Main-agent turns finished in this session; the resume offer lives only in the first few.
 const turnsAtom = atom({ plugin: 'gcc-mods', key: 'turns' } as const, 0)
+// The checkpoint this session's own /core-dump wrote, offered as copy lines.
+const dumpAtom = atom({ plugin: 'gcc-mods', key: 'dump' } as const, null as { name: string; path: string } | null)
 // Band rows skipped for the rest of this session, as '<kind>:<what>' keys.
 const skipAtom = atom({ plugin: 'gcc-mods', key: 'skipped' } as const, [] as string[])
 // The per-session master switch. Off, every hook is a pass-through and the
@@ -282,6 +284,20 @@ async function offerCheckpoint($: $T, force = false) {
   const mine = (await aliasesOf($)).filter(a => a.length >= 6)
   const base = found ? (found.path.split('/').pop() ?? '') : ''
   await update($, catchupAtom, () => (found && mine.some(a => base.includes(a)) ? null : found))
+}
+
+// The checkpoint this session dumped, from the index row carrying its uuid. A
+// /clear or a fresh start has a new uuid, so neither finds one.
+async function refreshDump($: $T) {
+  const sid = await $.session.id().catch(() => '')
+  const idx = sid ? await readText($, GCC + '/checkpoints/index.jsonl') : null
+  let found: { name: string; path: string } | null = null
+  for (const line of (idx ?? '').trim().split('\n').slice(-200)) {
+    const j = jsonOr<IndexRow & { session_uuid?: string }>(line, {})
+    if (j.session_uuid === sid && j.kind === 'core-dump' && j.checkpoint_path) found = { name: j.name || 'session', path: j.checkpoint_path }
+  }
+  if (found && !(await fileExists($, found.path))) found = null
+  await update($, dumpAtom, () => found)
 }
 
 // Tasks: counts from the goal record, and the stopped-with-open-rows offer.
@@ -540,10 +556,11 @@ async function refreshStatus($: $T) {
 // (one line); S2 and S3 stay selectable with `/hub preset`. See
 // conventions/mods-handbook.md for the look and why.
 
-type Kind = 'decide' | 'resume' | 'continue' | 'context' | 'owed' | 'images'
+type Kind = 'decide' | 'dumped' | 'resume' | 'continue' | 'context' | 'owed' | 'images'
 
 const KINDS: Record<Kind, { glyph: string; word: string; color: string }> = {
   decide: { glyph: '⚖', word: 'decide', color: '#7dcfff' },
+  dumped: { glyph: '💾', word: 'dumped', color: '#9ece6a' },
   resume: { glyph: '↺', word: 'resume', color: '#9ece6a' },
   continue: { glyph: '▶', word: 'continue', color: '#9ece6a' },
   context: { glyph: '◔', word: 'context', color: '#e0af68' },
@@ -670,6 +687,7 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
   const { Box } = el
   const view = await read($, viewAtom)
   const catchup = await read($, catchupAtom)
+  const dump = await read($, dumpAtom)
   const idle = await read($, idleAtom)
   const meter = await read($, meterAtom)
   const d = await read($, decideAtom)
@@ -697,6 +715,24 @@ async function band($: $T, el: El, now: number, sw: Switches, cwd: string) {
       detail: plural(mine.calls, 'call') + ' drafted for you' + (more > 0 ? ' · ' + more + ' more waiting' : '') + ' · /hub dismiss hides it for good',
       link: more > 0 ? { label: 'open all', icon: '🔗', href: DP_URL.replace(/dp\/$/, '') + '?view=decisions' } : { label: 'open page', icon: '🔗', href: DP_URL + mine.slug + '/' },
       skip: skipKey('decide:' + mine.slug),
+      hide,
+    }
+  } else if (sw.continuity && dump && !skipped.includes('dump:' + dump.path)) {
+    const lines = resumeLines(dump.name, dump.path)
+    const copy = (text: string) => async (press: UiPressArgument) => {
+      const r = await $.ui.copy({ text, surface: press.surface })
+      $.ui.toast(r.isCopied ? 'Copied ' + text : 'Could not copy: ' + r.reason)
+    }
+    offer = {
+      kind: 'dumped',
+      title: dump.name,
+      detail: 'checkpoint ready to resume',
+      link: { label: 'view', icon: '📄', href: linkFor(dump.path) },
+      skip: skipKey('dump:' + dump.path),
+      actions: [
+        { key: 'dump-catchup', label: 'copy /catchup', icon: '📋', primary: true, onPress: copy(lines.catchup) },
+        { key: 'dump-clo', label: 'copy clo', icon: '📋', onPress: copy(lines.clo) },
+      ],
       hide,
     }
   } else if (sw.continuity && catchup?.state === 'offered' && turns < RESUME_TURNS) {
@@ -1264,6 +1300,7 @@ export const register: Register = (on, options) => {
       // A new conversation: the resume offer gets its first turns again, and skips reset.
       await update($, turnsAtom, () => 0)
       await update($, skipAtom, () => [])
+      await update($, dumpAtom, () => null)
     }
     if (await isOn($)) await startUp($, sw, e.source !== 'startup')
     return next(e)
@@ -1470,6 +1507,7 @@ export const register: Register = (on, options) => {
     if (!r.block) await update($, turnsAtom, n => n + 1)
     if (sw.hygiene && r.block) logStopBlock($, r.block)
     if (sw.tasks) await noteMainStop($, (e.background_tasks?.length ?? 0) > 0, r.block !== undefined)
+    if (sw.continuity) await refreshDump($)
     await refreshStatus($)
     return r
   })

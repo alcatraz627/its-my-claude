@@ -91,6 +91,13 @@ export function jsonOr<T>(text: string | null | undefined, fallback: T): T {
 
 export const sid8 = (sid: string) => sid.slice(0, 8)
 
+// The two ways to pick a dumped session back up: /catchup after a /clear here,
+// or a fresh opus session (clo is the owner's alias) named after this one.
+export const resumeLines = (name: string, path: string) => ({
+  catchup: '/catchup at ' + path,
+  clo: 'clo -n ' + name + ' "/catchup at ' + path + '"',
+})
+
 export function plural(n: number, one: string, many = one + 's') {
   return n + ' ' + (n === 1 ? one : many)
 }

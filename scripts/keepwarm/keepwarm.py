@@ -76,7 +76,8 @@ UPKEEP = {
              "Reply with exactly one word: warm. Start nothing else."),
     "dump": ("Keep-warm wake {n}, the last: the owner is away and the cache is still warm. Run the "
              "full /core-dump now (not mini), so the owner can /clear and /catchup later instead "
-             "of paying a cold cache. Then reply with one line. Start nothing else. Keep-warm "
+             "of paying a cold cache. Close with its Phase 4 dump box in a code fence, the two "
+             "copy lines under it included, and nothing else. Start nothing else. Keep-warm "
              "stops here until the owner returns."),
 }
 
