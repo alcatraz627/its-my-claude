@@ -153,15 +153,13 @@ def main():
     except OSError:
         pass
     log({"ts": time.time(), "session": sid, "action": "block", "missing": miss})
-    kinds = sorted({k for k, _ in miss})
-    # box.sh has atone and affirm kinds; a proposal or pin is reported as done.
-    kind = "atone" if "atone" in kinds else "affirm" if kinds == ["affirm"] else "done"
+    # record-box.py draws every one of these kinds from the stored record, so
+    # the fix is one command per id; the reason stays one line because the
+    # harness clips a block reason.
+    cmds = " ; ".join(f"python3 ~/.claude/scripts/box/record-box.py {i}" for _, i in miss)
     print(json.dumps({"decision": "block", "reason": (
-        f"This turn recorded {names}, but the reply does not show it. The owner never sees tool output. "
-        "Re-send the reply with each one in the standard box, naming its id and the details "
-        "(for an atone: slug, severity and the precheck; for a proposal: title and why). "
-        f"Render it with: bash ~/.claude/scripts/box/box.sh {kind} \"<title>\" "
-        "--body \"<id and details>\" --action \"<what the owner should know>\", and paste the output into the reply.")},
+        f"This turn recorded {names}, but the reply does not show it (the owner never sees tool output). "
+        f"Run {cmds}, then paste each box and the line under it into the reply.")},
         ensure_ascii=False))
 
 

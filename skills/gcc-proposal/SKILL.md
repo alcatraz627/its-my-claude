@@ -79,9 +79,15 @@ the only writer.
 
 ## Phase 4: Verify
 
-`propose.sh` prints the receipt (`✓ filed prop-…`). That IS the verification. Echo the
-id and title back to the user. If the script exited non-zero, show its stderr verbatim
-and stop; do not retry blind.
+`propose.sh` prints the receipt (`✓ filed prop-…`). That IS the verification. Show it
+to the user as the box drawn from the stored record, pasted into the reply in a code
+fence with the line under it:
+
+```bash
+python3 ~/.claude/scripts/box/record-box.py <prop id>
+```
+
+If the script exited non-zero, show its stderr verbatim and stop; do not retry blind.
 
 ## Notes
 

@@ -74,10 +74,11 @@ Cluster letters for affirm (F-J, distinct from atone's A-E):
 bash ~/.claude/scripts/atone-consolidate.sh --triggers-only
 ```
 
-Then report:
+Then report with the box drawn from the stored record, pasted into the reply in
+a code fence with the line under it:
 
-```
-Affirmed <id>. Trigger added to triggers.json: "<instruction-summary>"
+```bash
+python3 ~/.claude/scripts/box/record-box.py <id>
 ```
 
 ## Notes

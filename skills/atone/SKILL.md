@@ -284,13 +284,17 @@ bash ~/.claude/scripts/atone.sh feedback \
 
 This is the feedback loop for L2 dream integration: over time the system learns which triggers actually work vs which are noise.
 
-**Then report to the user:**
+**Then report to the user** with the box drawn from the stored record, pasted
+into the reply in a code fence with the line under it:
 
+```bash
+python3 ~/.claude/scripts/box/record-box.py <the-id-from-add>
 ```
-Logged <id> (severity S2, slug recurrence #3).
-What-not-to-do appended to top-20 curated view.
-[For S3:] RCA: ~/.claude/atone/rca/<id>.md
-```
+
+It shows the slip, your defense, the juror's ruling and the fix, with the show
+command (and the RCA path for S3) printed bare under the box. When `add` exited
+5 (the juror cleared you), pass the judgment id instead (`judg-…`): the box then
+says nothing was recorded and that the owner can overrule.
 
 ## Conversational guardrail: when invited to debate, actually debate
 

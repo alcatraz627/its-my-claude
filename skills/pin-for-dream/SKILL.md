@@ -105,22 +105,17 @@ Capture the proposal id it prints.
 
 ### 6. Confirm to the user
 
-Close with the house 🏁 done box (`~/.claude/conventions/callout-boxes.md`
-v2; compose by hand or via `box done`):
+Close with the two boxes drawn from the stored records, pasted into the reply
+in one code fence with the lines under them:
 
-```
-┌─ 🏁 done · pinned and filed to the backlog ──────── <framing> ──
-│ pin      <id>
-│ proposal <prop id>
-│ files    <count> referenced
-│ ▸ <absolute path of each referenced file, one per line>
-│ → read by backlog triage and the monthly i-dream audit
-└─────────────────────────────────────────────────────────────────
+```bash
+python3 ~/.claude/scripts/box/record-box.py <pin id>
+python3 ~/.claude/scripts/box/record-box.py <prop id>
 ```
 
-If anything in steps 1-5 failed gracefully, name what was missing in the
-body (e.g. `degraded: no transcript path; pinned without it`), never
-outside the box.
+(Two Bash calls, one per id.) If anything in steps 1-5 failed gracefully, say
+what was missing in one line under the boxes (e.g. `degraded: no transcript
+path; pinned without it`).
 
 ## When NOT to invoke
 
