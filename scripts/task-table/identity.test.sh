@@ -220,7 +220,7 @@ echo "== I6: back-compatible with rows that predate metadata.project =="
 
 LR=$(freshrepo legacy)
 S6="id100006-0000-0000-0000-000000000006"
-task_run "$LR" "$S6" store >/dev/null 2>&1   # force-create the store via a real invocation, stamped LR
+task_run "$LR" "$S6" add "stamp seed" >/dev/null 2>&1   # a write stamps the store with LR (reads such as `store` never stamp); row 1 is overwritten by the legacy row below
 write_legacy_row "$S6" 1 "legacy row, no project field" gcc
 legacyOut=$(table_human "$S6" 2>&1)
 if printf '%s' "$legacyOut" | rg -q "legacy row, no project field"; then

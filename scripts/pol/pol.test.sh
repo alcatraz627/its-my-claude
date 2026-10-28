@@ -135,7 +135,7 @@ echo "== session-start line =="
 inj=$(printf '{"cwd":"%s"}' "$T/repo" | bash "$POL" inject)
 eq "inject emits additionalContext" "$(jq -r 'has("additionalContext")' <<<"$inj")" "true"
 eq "inject names a changed value" "$(jq -r '.additionalContext | contains("github.comment=block")' <<<"$inj")" "true"
-eq "inject says allowed needs no approval" "$(jq -r '.additionalContext | contains("needs no approval request")' <<<"$inj")" "true"
+eq "inject says allowed needs no approval" "$(jq -r '.additionalContext | contains("Allowed: just do it, no approval request")' <<<"$inj")" "true"
 p set model.codex encourage >/dev/null
 eq "inject carries the codex nudge" "$(printf '{}' | bash "$POL" inject | jq -r '.additionalContext | contains("Codex is encouraged")')" "true"
 

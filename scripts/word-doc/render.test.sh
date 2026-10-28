@@ -69,7 +69,11 @@ has 'w:rStyle w:val="DiagramStroke"' "$gdoc" "diagram strokes carry the lighter 
 has 'w:rStyle w:val="VerbatimPad"' "$gdoc" "inline code is padded"
 has 'w:pStyle w:val="TableText"' "$gdoc" "table cells use Table Text"
 has 'w:firstColumn="1"' "$gdoc" "first-column look is on"
-has 'w:type="firstCol"' "$gsty" "table style fills the first column"
+if [ "$(python3 -c "import json,sys;print(json.load(open(sys.argv[1]))['gdoc']['table']['first_col'])" "$HERE/../shared/doc-style.json")" = "True" ]; then
+  has 'w:type="firstCol"' "$gsty" "table style fills the first column (spec first_col is true)"
+else
+  lacks 'w:type="firstCol"' "$gsty" "table style leaves the first column unfilled (spec first_col is false)"
+fi
 has 'w:rFonts w:ascii="Comfortaa"' "$gsty" "headings in the spec's heading font"
 lacks 'CalloutNoteHead' "$gdoc" "no separate callout head paragraph"
 

@@ -216,16 +216,20 @@ if [ -n "${CLAUDE_CODE_SESSION_ID:-}" ]; then
   # And the other half, which nothing asserted: a run that CANNOT resolve must
   # speak. Silence there is the defect the script's comment was written about.
   #
-  # This case has to clear the LIVE session's pin to reach the refusal path, and
-  # that pin belongs to the person running the suite. An earlier version simply
-  # deleted it, so running the tests left the owner's own /tasks refusing until
-  # somebody re-pinned by hand. A test that damages live state is worse than the
-  # false green it was written to fix. Borrow it and put it back.
-  rm -f "$CACHE/$_sid8" "$CACHE_LEGACY/$_sid8" 2>/dev/null || true
-  bash "$R" >/dev/null 2>/tmp/rs-test-refuse
+  # The refusal is reached with a synthetic session id that has no store, no
+  # pin and no transcript, run from an empty temp directory so no project stamp
+  # can match. Clearing the LIVE session's pin was not enough: once the live
+  # session owns a populated store, rung 1 resolves it and the run never
+  # refuses, so the case depended on the runner's state. The synthetic id also
+  # leaves the owner's real pin alone.
+  _refuse_dir=$(mktemp -d)
+  ( cd "$_refuse_dir" && CLAUDE_CODE_SESSION_ID="00000000-test-refuse-0000" bash "$R" >/dev/null 2>/tmp/rs-test-refuse )
+  rc2=$?
   n2=$(wc -c < /tmp/rs-test-refuse | tr -d ' ')
+  [ "$rc2" = 4 ] || bad "the unresolvable run did not refuse (exit $rc2), so the case below tests nothing"
   [ "${n2:-0}" -gt 0 ] && ok "a refusing bare run says why" \
                        || bad "a refusal was silent, which reads as a crash"
+  trash "$_refuse_dir"
   if [ -n "$_saved" ]; then
     mkdir -p "$_saved_from"
     printf '%s' "$_saved" > "$_saved_from/$_sid8"

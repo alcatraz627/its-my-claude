@@ -106,7 +106,7 @@ tbl=${tbl:-0}; lst=${lst:-0}
 
 if [ "$tbl" -lt 2 ] && [ "$lst" -lt 3 ]; then
   # No hand-rendered table this turn: clear any prior mark and log a heed.
-  MARK="/tmp/claude-handtasks-${sid8}"
+  MARK="${HANDTASKS_MARK_DIR:-/tmp}/claude-handtasks-${sid8}"
   if [ -f "$MARK" ]; then
     bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook hand-rendered-tasks \
       --heed-of "hand-tasks:$sid8" --heeded true >/dev/null 2>&1 || true
@@ -115,7 +115,7 @@ if [ "$tbl" -lt 2 ] && [ "$lst" -lt 3 ]; then
   exit 0
 fi
 
-MARK="/tmp/claude-handtasks-${sid8}"
+MARK="${HANDTASKS_MARK_DIR:-/tmp}/claude-handtasks-${sid8}"
 if ! hook_loop_check "$MARK" "$prose"; then
   bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook hand-rendered-tasks \
     --heed-of "hand-tasks:$sid8" --heeded false >/dev/null 2>&1 || true

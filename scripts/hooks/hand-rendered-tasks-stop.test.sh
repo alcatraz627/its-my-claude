@@ -5,6 +5,9 @@ set -uo pipefail
 HOOK="$HOME/.claude/scripts/hooks/hand-rendered-tasks-stop.sh"
 TMP=$(mktemp -d "${TMPDIR:-/tmp}/handtasks-XXXXXX")
 trap 'trash "$TMP" 2>/dev/null || rm -rf "$TMP"' EXIT
+# Loop-safety markers go in the temp dir, so a prior run's marker (sid8 of the
+# fake ids collides across runs) cannot make the hook treat a fresh claim as a repeat.
+export HANDTASKS_MARK_DIR="$TMP"
 pass=0; fail=0
 ok(){ echo "  ok    $1"; pass=$((pass+1)); }
 bad(){ echo "  FAIL  $1"; fail=$((fail+1)); }
