@@ -41,6 +41,10 @@ relative shade. What the owner ruled on 2026-09-29, each a key in that section:
   knows, markdown included; pandoc uses the same palette in Word). Diagrams share the box
   without the bar; their strokes and arrowheads are drawn in a lighter gray and weight.
   Two boxed blocks in a row get a small spacer, because Google fuses matching borders.
+- **mermaid**: a code fence tagged `mermaid` becomes an image. The script renders it with
+  mermaid-cli (cached in `~/.cache/gdoc-mermaid`), uploads the PNG to the Doc's folder
+  with link sharing, inserts it at page width, then trashes the upload; the Doc keeps
+  its own copy.
 - **rich content**: `![alt](https://…png)` inserts an image (public PNG, JPEG or GIF;
   local files and SVG get their alt text), `text[^1]` with a `[^1]: note` line makes a
   footnote, `[Name](mailto:…)` a person chip, `[Oct 1, 2026](date:2026-10-01)` a date

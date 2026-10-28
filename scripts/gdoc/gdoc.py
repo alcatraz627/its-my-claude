@@ -6,7 +6,8 @@ The markdown is the source of truth. The first run creates the Doc in the named
 Drive folder; every run rewrites the Cover tab (the README, with its links to the
 other files turned into links to their tabs) and one tab per file. Headings,
 paragraphs, bullets, numbered lists, tables, code blocks, callouts, quotes, bold,
-italic, inline code and links are recreated through the Docs API, in the fonts,
+italic, inline code and links are recreated through the Docs API, and Mermaid
+diagrams become images (rendered locally, briefly hosted in the Doc's folder), in the fonts,
 sizes, colours and table look of ~/.claude/scripts/shared/doc-style.json ("gdoc").
 
 Auth is the signed-in gcloud account with a Drive scope (`gcloud auth login
@@ -170,9 +171,12 @@ def place_objects(tok, doc_id, tid):
         loc = {"index": idx, "tabId": tid}
         reqs.append({"deleteContentRange": {"range": {"startIndex": idx, "endIndex": idx + n, "tabId": tid}}})
         if kind == "image":
-            ok = o["uri"].startswith(("http://", "https://")) and o["uri"].lower().split("?")[0].endswith((".png", ".jpg", ".jpeg", ".gif"))
+            ok = o.get("hosted") or (o["uri"].startswith(("http://", "https://")) and o["uri"].lower().split("?")[0].endswith((".png", ".jpg", ".jpeg", ".gif")))
             if ok:
-                reqs.append({"insertInlineImage": {"location": loc, "uri": o["uri"]}})
+                img = {"location": loc, "uri": o["uri"]}
+                if o.get("width_pt"):
+                    img["objectSize"] = {"width": {"magnitude": o["width_pt"], "unit": "PT"}}
+                reqs.append({"insertInlineImage": img})
             else:
                 print(f"  note: image {o['uri']!r} is not a public PNG, JPEG or GIF URL; its alt text stands in")
                 reqs.append({"insertText": {"location": loc, "text": f"[{o['alt'] or 'image'}]"}})
@@ -193,6 +197,76 @@ def place_objects(tok, doc_id, tid):
         batch(tok, doc_id, [{"insertText": {"endOfSegmentLocation": {"segmentId": fid, "tabId": tid}, "text": text}}
                             for fid, text in zip(ids, notes)])
     return len(found)
+
+
+# Mermaid diagrams become images. The Docs API cannot take image bytes: it fetches a URL once, when it
+# inserts the image, and keeps its own copy. So each diagram is rendered to a PNG, uploaded to the
+# Doc's Drive folder, shared by link only for the length of the run, inserted, then trashed.
+MERMAID_CACHE = pathlib.Path.home() / ".cache" / "gdoc-mermaid"
+CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+PAGE_WIDTH_PT = 468  # a Letter page less one-inch margins
+
+
+def render_mermaid(src):
+    """Render one Mermaid diagram to a PNG at twice its size, cached by its source."""
+    import hashlib
+    MERMAID_CACHE.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha256(src.encode()).hexdigest()[:16]
+    png, mmd = MERMAID_CACHE / f"{key}.png", MERMAID_CACHE / f"{key}.mmd"
+    if png.exists(): return png
+    mmd.write_text(src)
+    cmd = ["npx", "-y", "-p", "@mermaid-js/mermaid-cli@11.4.2", "mmdc", "-i", str(mmd), "-o", str(png), "-s", "2", "-b", "white"]
+    if pathlib.Path(CHROME).exists():
+        cfg = MERMAID_CACHE / "puppeteer.json"
+        cfg.write_text(json.dumps({"executablePath": CHROME, "headless": "new"}))
+        cmd += ["-p", str(cfg)]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode or not png.exists():
+        raise SystemExit(f"mermaid render failed for diagram {key}: {r.stderr.strip()[-600:]}")
+    return png
+
+
+def png_width_pt(png):
+    """The width a 2x render should show at, in points, never wider than the page."""
+    w = int.from_bytes(png.read_bytes()[16:20], "big")
+    return min(PAGE_WIDTH_PT, round(w / 2 * 0.75))
+
+
+def drive_upload_shared(tok, folder, png, name):
+    """Upload a PNG into the folder, share it by link, and return (file id, a URL the Docs API can fetch)."""
+    boundary = "gdocmermaid"
+    meta = json.dumps({"name": name, "parents": [folder]})
+    body = (f"--{boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n{meta}\r\n"
+            f"--{boundary}\r\nContent-Type: image/png\r\n\r\n").encode() + png.read_bytes() + f"\r\n--{boundary}--\r\n".encode()
+    req = urllib.request.Request("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true",
+                                 data=body, method="POST")
+    req.add_header("Authorization", f"Bearer {tok}")
+    req.add_header("Content-Type", f"multipart/related; boundary={boundary}")
+    with urllib.request.urlopen(req, timeout=120) as r:
+        fid = json.load(r)["id"]
+    gapi(tok, f"https://www.googleapis.com/drive/v3/files/{fid}/permissions?supportsAllDrives=true", "POST",
+         {"role": "reader", "type": "anyone"})
+    return fid, f"https://drive.google.com/uc?export=view&id={fid}"
+
+
+def mermaid_to_images(tok, folder, blocks, uploaded):
+    """Swap each Mermaid block for a paragraph holding its image; record each upload to clean up later."""
+    out = []
+    for b in blocks:
+        if b[0] != "mermaid":
+            out.append(b); continue
+        png = render_mermaid(b[1])
+        fid, uri = drive_upload_shared(tok, folder, png, f"gdoc-diagram-{png.stem}.png")
+        uploaded.append(fid)
+        out.append(("p", [(obj_marker("image", {"uri": uri, "alt": "diagram", "hosted": True,
+                                                "width_pt": png_width_pt(png)}), set())]))
+    return out
+
+
+def drive_cleanup(tok, file_ids):
+    """Trash the uploaded diagram files. The Doc keeps its own copy of each image."""
+    for fid in file_ids:
+        gapi(tok, f"https://www.googleapis.com/drive/v3/files/{fid}?supportsAllDrives=true", "PATCH", {"trashed": True})
 
 
 def strip_md(text):
@@ -275,7 +349,9 @@ class Blocks(HTMLParser):
             if self.list_stack: self.list_stack.pop()
         elif tag == "pre":
             self.in_pre = False
-            if self.pre_lang in ("", "diagram", "ascii", "text"):
+            if self.pre_lang == "mermaid":
+                self.blocks.append(("mermaid", self.pre_text.rstrip("\n")))
+            elif self.pre_lang in ("", "diagram", "ascii", "text"):
                 self.blocks.append(("diagram", self.pre_text.rstrip("\n")))
             else:
                 self.blocks.append(("code", self.pre_text.rstrip("\n"), self.pre_lang))
@@ -888,7 +964,7 @@ def main():
         m = re.search(r"^# (.+)$", text, flags=re.M)
         parsed.append((p.name, m.group(1).strip() if m else p.stem, md_blocks(text)))
         kinds = [b[0] for b in parsed[-1][2]]
-        print(f"  {p.name:28} {len(kinds):4} blocks  h {kinds.count('h')}  p {kinds.count('p')}  li {kinds.count('li')}  table {kinds.count('table')}  code {kinds.count('code')}  diagram {kinds.count('diagram')}  callout {kinds.count('callout')}")
+        print(f"  {p.name:28} {len(kinds):4} blocks  h {kinds.count('h')}  p {kinds.count('p')}  li {kinds.count('li')}  table {kinds.count('table')}  code {kinds.count('code')}  diagram {kinds.count('diagram')}  mermaid {kinds.count('mermaid')}  callout {kinds.count('callout')}")
     if a.dry_run: return 0
 
     tok = sh("gcloud", "auth", "print-access-token")
@@ -948,9 +1024,15 @@ def main():
     cfg_path.write_text(json.dumps(cfg, indent=2) + "\n")
 
     link_map = {name: f"https://docs.google.com/document/d/{doc_id}/edit?tab={tid}" for name, tid, _ in plan}
-    for name, tid, blocks in plan:
-        n, t = write_tab(tok, doc_id, tid, relink(blocks, link_map))
-        print(f"  wrote   {name:28} {n:5} requests, {t} tables")
+    uploaded = []
+    try:
+        for name, tid, blocks in plan:
+            blocks = mermaid_to_images(tok, cfg["folder"], blocks, uploaded)
+            n, t = write_tab(tok, doc_id, tid, relink(blocks, link_map))
+            print(f"  wrote   {name:28} {n:5} requests, {t} tables")
+    finally:
+        drive_cleanup(tok, uploaded)
+        if uploaded: print(f"  images  {len(uploaded)} diagrams inserted; their upload copies are trashed")
     print(f"url      https://docs.google.com/document/d/{doc_id}/edit")
     return 0
 
