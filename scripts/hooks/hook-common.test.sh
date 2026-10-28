@@ -169,7 +169,7 @@ fi
 K="$(printf 'body\n→ act\n' | hook_box_kind gate prose-smell)"
 printf '%s' "$K" | head -1 | grep -q '⛔ gate · prose-smell'; ok "kind: vocab title composed"   "$?" "0"
 printf '%s' "$K" | head -1 | grep -q '^┏━';                   ok "kind: gate gets heavy rails"  "$?" "0"
-printf '%s' "$K" | grep -q '^┃ body$';                        ok "kind: body behind heavy rail" "$?" "0"
+printf '%s' "$K" | grep -q '^┃  body$';                       ok "kind: body behind heavy rail" "$?" "0"
 K2="$(printf 'body\n→ act\n' | hook_box_kind landing probe 'ran 2m')"
 printf '%s' "$K2" | head -1 | grep -q '🛬 subagent · probe';  ok "kind: landing vocab title"    "$?" "0"
 printf '%s' "$K2" | head -1 | grep -q 'ran 2m ──$';           ok "kind: attr right-anchored"    "$?" "0"

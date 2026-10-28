@@ -19,3 +19,7 @@ kanban	📋	kanban	-	tag	unread board notes; line-tag only
 catchup	🧭	catchup	light	box	a session resumed from a checkpoint: what was done, what is next, what waits on the owner
 dump	💾	core-dump	light	box	session state saved for a later /catchup: where it went, what it carries, what to paste
 goal	🎯	goal	light	box	a session goal armed / re-armed / awaiting the owner; the paste line follows the box, bare
+fleet-out	🛫	fleet	light	box	three or more seats dispatched together; one row per seat with its cost estimate
+fleet-in	🛬	fleet	light	box	the same fleet landing; one row per seat with time, cost and whether it wrote its output
+proposal	📝	proposal	light	box	gcc improvement proposal filed; the show command follows the box, bare
+pin	📌	pin	light	box	i-dream insight pinned; the show command follows the box, bare

@@ -128,18 +128,23 @@ briefing cites them one line each.
 
 ## Phase 3: the briefing, status first
 
-The briefing is one 🧭 catchup box, 72 wide and colourless, so it survives being
-pasted into the reply (owner, 2026-10-26: the old render was a raw tool-output
-dump the TUI truncated). Compose it with `box.sh`, one fact per body line:
+The briefing is one 🧭 catchup box pasted into the reply (owner, 2026-10-26: the
+old render was a raw tool-output dump the TUI truncated). Compose it with
+`box.sh`, one row per fact, each row with its marker (owner, 2026-10-28):
 
 ```bash
-bash ~/.claude/scripts/box/box.sh catchup "<checkpoint name>" --attr "<N open · M for you>" \
-  --body "$(printf 'resumed from  <name>, dumped <age>, <N> done\nnext          <next action>\nwaits on you  <owner gate, or nothing>\ndrift         <branch, dirty, commits since>\nauth carried  <verbatim grant · target now>')" \
-  --ref "<absolute checkpoint path>" --action "<what you are starting; say stop to redirect>"
+bash ~/.claude/scripts/box/box.sh catchup "<checkpoint name>" --attr "dumped <age> · <N> done" \
+  --row done "<the done list in one line, as of dump>" \
+  --row next "<next action>" \
+  --row you "<owner gate; drop the row when nothing waits>" \
+  --row note:drift "<branch, dirty, commits since>" \
+  --row info:auth "<verbatim grant · target now; drop when none>" \
+  --ref "<absolute checkpoint path>"
 ```
 
-Keep the body to about six lines; anything past that (the full done list, every
-fence) goes in plain lines under the box. The trace.sh render
+Keep it to about six rows; anything past that (the full done list, every
+fence) goes in plain lines under the box. The Phase 4 line says what you are
+starting, so the box carries no "say stop" hint. The trace.sh render
 (`~/.claude/scripts/render/trace.sh <data.json> --kind catchup`) stays available
 for the long form when the owner asks for it.
 

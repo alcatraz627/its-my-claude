@@ -175,7 +175,7 @@ PY
 # The callout the owner asked for (2026-08-18): whenever a goal is armed, by hand or by
 # catchup, one structured box (conventions/callout-boxes.md, kind goal); when the
 # harness /goal is NOT armed and only the gcc goal holds, the same box with the heavy
-# rail as the warning. The paste line sits OUTSIDE the box between two double rules,
+# rail as the warning. The paste line sits OUTSIDE the box after one blank line,
 # on a line of its own with no rail character, so a terminal selection of that one
 # line copies clean text. Owner: "make sure the selection wrap copy does not have any
 # structure characters".
@@ -187,11 +187,11 @@ box_state() {
     text=$(echo "$h" | jq -r .text); rail="--light"; seal="armed"
     why="harness /goal ARMED since $(echo "$h" | jq -r '.ts // "?"' | cut -c1-16)"
     [ "$gs" = true ] || why="$why · not yet in the gcc store (goal.sh set keeps it across /clear)"
-    action="nothing to do now; the line between the double rules re-arms it after a /clear"
+    action="nothing to do now; the /goal line under the box re-arms it after a /clear"
   elif [ "$gs" = true ]; then
     text=$(echo "$g" | jq -r .text); rail="--block"; seal=""
     why="gcc goal set by $(echo "$g" | jq -r .by) at $(echo "$g" | jq -r .set_at | cut -c1-16) · harness /goal NOT armed (only you can arm the Stop hook, in the TUI)"
-    action="paste the line between the double rules (select that line only)"
+    action="paste the /goal line under the box"
   else
     echo "no goal to box" >&2; return 1
   fi
@@ -201,16 +201,13 @@ box_state() {
   js=$(bash "$HOME/.claude/scripts/task-table/task-table.sh" --json 2>/dev/null)
   nxt=$(printf '%s' "$js" | jq -r -f "$HOME/.claude/scripts/task-table/agent-ready.jq" 2>/dev/null | jq -r 'first | select(.!=null) | "next agent-ready row: #\(.id) \(.subject)"' 2>/dev/null)
   [ -n "$nxt" ] || nxt="no agent-ready row; state your state: session-state.sh set blocked|finished --reason <why>"
-  why="$why"$'\n'"$nxt"
   local B="$HOME/.claude/scripts/box/box.sh"
   if [ -x "$B" ]; then
-    bash "$B" goal "${SID:0:8}" --body "$text"$'\n'"$why" --action "$action" $rail ${seal:+--seal "$seal"} 2>/dev/null || true
+    bash "$B" goal "${SID:0:8}" --row info:goal "$text" --row note:state "$why" --row next "$nxt" \
+      --row you "$action" $rail ${seal:+--seal "$seal"} --copy "/goal $text" 2>/dev/null || true
   else
-    printf '┌─ 🎯 goal · %s ─\n│ %s\n│ %s\n└─\n' "${SID:0:8}" "$text" "$why"
+    printf '┌─ 🎯 goal · %s ─\n│ %s\n│ %s\n└─\n\n/goal %s\n' "${SID:0:8}" "$text" "$why" "$text"
   fi
-  printf '═══════════════════════════════════════════════════════════════════════\n'
-  printf '/goal %s\n' "$text"
-  printf '═══════════════════════════════════════════════════════════════════════\n'
 }
 
 gcc_json() { [ -f "$FILE" ] && cat "$FILE" || { echo '{"set":false}'; return 1; }; }

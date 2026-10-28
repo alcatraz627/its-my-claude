@@ -709,15 +709,18 @@ the closing record only when the reply carries it (owner, 2026-10-26). Close wit
 one 💾 dump box pasted into the reply in a code fence:
 
 ```bash
-bash ~/.claude/scripts/box/box.sh dump "<session id> · <alias>" --attr "<context %>" \
-  --body "$(printf 'carries       <commits, open tasks, rulings>\nnext action   <the Resume Contract next action>\nwaits on you  <owner gate, or nothing>')" \
-  --action "Copy a line below: the first after /clear here, the second in a new terminal" \
+bash ~/.claude/scripts/box/box.sh dump "<session id>" --attr "<dump time, e.g. 13:05>" \
+  --row next "<the Resume Contract next action>" \
+  --row you "<owner gate; drop the row when nothing waits>" \
+  --row note "<the one caveat that matters; drop when none>" \
+  --foot "📋 ① after /clear here  ② in a new terminal" \
   --copy "/catchup at <absolute checkpoint path>" \
   --copy "clo -n <session name> \"/catchup at <absolute checkpoint path>\""
 ```
 
 The two `--copy` lines print bare under the box so the owner can select either
-whole. `<session name>` is `ARG_NAME` when given, else the session id. `clo` is
+whole. Commit and task counts and the context % stay out: they do not help a
+resume, and the checkpoint carries them (owner, 2026-10-28). `<session name>` is `ARG_NAME` when given, else the session id. `clo` is
 the owner's alias for `claude` on opus. A keep-warm dump closes with the same box;
 the owner reads it on return, so it is the whole reply. With gcc-mods on, the band offers the
 same two lines as copy buttons once the session ends (`mods/gcc-mods`, resume
