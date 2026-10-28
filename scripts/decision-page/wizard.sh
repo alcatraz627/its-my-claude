@@ -172,14 +172,14 @@ if [ "$DRY" = 1 ]; then
   exit 0
 fi
 if ! tui_confirm "send this to the session?"; then
-  echo "not sent. Re-run when ready, or answer in the browser: http://localhost:5106/dp/$SLUG/?view=bfb"
+  echo "not sent. Re-run when ready, or answer it in bfb: file://$HOME/.claude/assets/decision-pages/$SLUG/"
   exit 1
 fi
 
 printf '%s' "$answer" | bash "$DP" submit "$SLUG" --via wizard >/dev/null
 case $? in
   0) printf '%ssent.%s The session picks it up the same way it would a browser Submit.\n' "${TUI_GREEN:-}" "${TUI_RESET:-}" ;;
-  3) printf '%sthis page is already answered.%s Answer it in the browser to replace the ruling: http://localhost:5106/dp/%s/?view=bfb\n' \
+  3) printf '%sthis page is already answered.%s Answer it in bfb to replace the ruling: file://'"$HOME"'/.claude/assets/decision-pages/%s/\n' \
        "${TUI_YELLOW:-}" "${TUI_RESET:-}" "$SLUG"; exit 1 ;;
   *) printf '%scould not send it.%s Nothing was written. Paste this into the chat instead:\n\n%s\n' \
        "${TUI_YELLOW:-}" "${TUI_RESET:-}" "$answer"; exit 1 ;;

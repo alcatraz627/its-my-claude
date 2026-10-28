@@ -107,9 +107,11 @@ they use that view for, and it is written for you to read.
 
 ## Decision pages
 
-Decision pages live in this app now: every page renders in bfb's view at
-`http://localhost:5106/dp/<slug>/?view=bfb` (the bare URL is the classic page) and the Decisions view
-(`:5106/?view=decisions`) is the hub, pending first. Authoring stays with
+Decision pages open inside bfb at their folder,
+`file:///Users/alcatraz627/.claude/assets/decision-pages/<slug>/`, which is the link to hand
+the owner. This server keeps `/dp/<slug>/` (bfb's components over http) for the phone on the
+tailnet, `?view=classic` for the old page, and the Decisions view
+(`:5106/?view=decisions`) as a hub, pending first. Authoring stays with
 `decision-page.sh` (see /decision-wizard); this server just serves them.
 
 ## Plans
