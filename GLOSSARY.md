@@ -21,7 +21,7 @@
 | Abbrev | Full form | Notes |
 |---|---|---|
 | **GCC** | Global Claude Config | The entire `~/.claude/` directory tree: all config, skills, scripts, memory, hooks, and assets that persist across projects and sessions |
-| **gcc::** | `std::claude::` (informal shortcut) | `gcc::<cluster>` ≡ `std::claude::<cluster>`: same referent; `std::claude` is the formal name, `gcc::` is the user's shorthand. E.g. `gcc::logging` = `std::claude::logging`. Bare `gcc` (no `::`) = `~/.claude`. See NAMESPACE.md preamble. |
+| **gcc::** | optional prefix | `gcc::<word>` is one of the 14 words in NAMESPACE.md with a prefix (`gcc::gates` = gates). Bare `gcc` (no `::`) = `~/.claude`. Old `std::claude::<label>` and `gcc::<label>` forms map to a word via NAMESPACE.md "Old labels". |
 | **WAL** | Write-Ahead Log | Append-only session journal (`.claude/wal.jsonl`). JSONL format since v2; legacy markdown `.claude/wal.md` still read by `/catchup` |
 | **MCP** | Model Context Protocol | Server protocol for extending Claude's tool access (databases, APIs, services). Config: `.mcp.json` (active) vs `mcp-catalog.json` (available) |
 | **TUI** | Terminal User Interface | Styled terminal output via `gum`. Source `gum-tui.sh`; never call raw `gum style` |
@@ -55,7 +55,7 @@
 
 | Term | Definition |
 |---|---|
-| **Facet** | A namespace whose artifacts are deliberately distributed across multiple directories. Marked `[facet]` in NAMESPACE.md. Never "consolidate" a facet into one directory: the distribution is intentional |
+| **Facet** | Retired 2026-10-28. It meant an old namespace label whose files sat in several folders; every word in NAMESPACE.md now works that way, so the term is no longer needed. Never "consolidate" a word's folders into one |
 | **Surface type** | One of four artifact kinds: **Reference** (docs/specs), **Executable** (scripts/hooks), **Behavior** (SKILL.md/CLAUDE.md rules), **State** (JSONL logs, registries). Each cluster leans toward one surface type |
 | **Two-artifact threshold** | Naming convention: don't create a namespace until at least 2 files want the label. Prevents speculative taxonomy |
 | **Migration** | A documented structural change (path move, label rename, directory restructure). Tracked in `~/.claude/migrations/MIGRATIONS.md` with zero-padded 4-digit IDs |
@@ -82,7 +82,7 @@
 |---|---|
 | **CLAUDE.md** | Per-project or global instructions file, auto-loaded by the harness every session. The primary behavior control surface |
 | **LOOKUP.md** | Address book / index for all config files under `~/.claude/`. The "where does this rule live?" reference |
-| **NAMESPACE.md** | Conceptual tree of `std::claude::*` labels. The "what is this thing called?" reference |
+| **NAMESPACE.md** | The gcc vocabulary: 14 words in five groups (know, work, guard, show, keep). The "what is this part called?" reference |
 | **GLOSSARY.md** | This file: the "what does this term mean?" reference |
 | **GUIDELINES.md** | Mandatory rules for all skills (at `~/.claude/skills/GUIDELINES.md`) |
 | **SKILL.md** | Prompt definition for a skill: title, steps, tools, argument hints |
@@ -161,6 +161,6 @@ transcript base-rates: the stronger evidence: not from generic signal theory.
 
 When the user or an agent introduces a new term:
 1. Add it to the appropriate table above
-2. If it's a namespace label, also update NAMESPACE.md
+2. If it names a whole part of the gcc that none of the 14 words covers, see "Adding a word" in NAMESPACE.md
 3. If it's an abbreviation the user uses casually, add it to "User Shorthand"
 4. Keep definitions under 2 sentences: point to the canonical doc for details

@@ -88,7 +88,7 @@ A change is **structural** (and requires a migration entry under `~/.claude/migr
 1. **A top-level `~/.claude/` directory is created, renamed, or deleted**
 2. **A canonical file is moved, renamed, or its format changes** (anything other agents or scripts read by path)
 3. **Settings.json hook architecture changes** (new event handler, removal, orchestrator introduction)
-4. **A namespace cluster is added, renamed, or removed** (NAMESPACE.md tree change)
+4. **A vocabulary word is added, renamed, or retired** (NAMESPACE.md change)
 5. **A skill or script's path moves** AND any external caller (hook, script, doc) references it by path
 6. **A data store schema changes** (events.jsonl, index.jsonl, MEMORY.md format)
 

@@ -99,7 +99,7 @@ ls its-my-claude/skills                                       # one folder per s
 | [ADOPT.md](ADOPT.md) | How an agent picks pieces of this repo and adapts them to your config |
 | [CLAUDE.md](CLAUDE.md) | The always-loaded instructions: core rules, mechanisms, and pointers to everything else |
 | [LOOKUP.md](LOOKUP.md) | Address book for scripts, skills, features and data files |
-| [NAMESPACE.md](NAMESPACE.md) | Groups related files into named clusters |
+| [NAMESPACE.md](NAMESPACE.md) | Fourteen words for the parts of the system, with a cheat sheet |
 | [GLOSSARY.md](GLOSSARY.md) | Terms used across the rules and skills |
 | [PLACEMENT.md](PLACEMENT.md) | Where a new rule, feature or convention should go |
 | [FOLDERS.md](FOLDERS.md) | Per-folder map: owner, purpose, what belongs there |

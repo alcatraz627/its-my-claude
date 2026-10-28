@@ -26,4 +26,4 @@ Body: open with what the thing IS (code-agnostic), then how to invoke and config
 
 - `PLACEMENT.md` for placement rules
 - `LOOKUP.md`, the global address book
-- `NAMESPACE.md` for std::claude::\* clusters that often touch features
+- `NAMESPACE.md` for the word that names the part a feature belongs to

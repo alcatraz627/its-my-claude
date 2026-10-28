@@ -1,6 +1,6 @@
 # FOLDERS.md: Top-level folder index for `~/.claude/`
 
-> Generated index of every top-level directory under `~/.claude/`. Companion to `LOOKUP.md` (address book), `NAMESPACE.md` (logical clusters), `PLACEMENT.md` (placement rules), `GLOSSARY.md` (terms).
+> Generated index of every top-level directory under `~/.claude/`. Companion to `LOOKUP.md` (address book), `NAMESPACE.md` (the fourteen words for the parts of the gcc), `PLACEMENT.md` (placement rules), `GLOSSARY.md` (terms).
 >
 > **Regenerate:** `bash ~/.claude/scripts/folders-index.sh` (rewrites in place; preserves the policy section above the marker; add `--stdout` to preview). Never redirect with `> FOLDERS.md`: the shell truncates the file before the script reads it, destroying the policy section.
 >
@@ -26,7 +26,7 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 | `file-history/` | Per-session file snapshots (UUID-keyed) | Drives undo/external-edit detection. Large (~123 MB at 6 mo) but normal |
 | `ide/` | Claude Code IDE integration state | |
 | `plugins/` | Installed plugin marketplace data | ~1 GB: biggest single dir, normal |
-| `projects/` | Per-session conversation transcripts (UUID-keyed jsonl) | ~790 MB: pruned by `std::claude::startup` (gzip at 6 mo, delete at 12 mo) |
+| `projects/` | Per-session conversation transcripts (UUID-keyed jsonl) | ~790 MB: pruned by `scripts/startup/` (gzip at 6 mo, delete at 12 mo) |
 | `session-env/` | Per-session env captures (UUID subdirs) | 880 subdirs, mostly empty: Anthropic cleanup expected |
 | `sessions/` | Session metadata | |
 | `tasks/` | TaskCreate/TaskList persistence (UUID-keyed) | |
@@ -34,6 +34,7 @@ These folders are created and maintained by Claude Code itself. Touching them ri
 | `telemetry/` | Anonymized usage metrics | |
 | `daemon/` | Background-session daemon state: `roster.json` (supervisor pid, worker sessions, pty/rendezvous sockets), `dispatch/`, `attach-journal`, `control.key` | Owns the `bg` sessions `ListAgents` shows; sockets live under `/tmp/cc-daemon-<uid>/` |
 | `jobs/` | Per-job `state.json` + `tmp/` keyed by an 8-char hash, plus `pins.json` | Harness job persistence; appeared 2026-09 |
+| `chrome/` | `chrome-native-host`, a generated launcher for `claude --chrome-native-host` | Written by Claude Code's Chrome integration; do not edit |
 
 **Plus root files:** `config.json`, `settings.local.json` (Anthropic-managed); session state files like `wal.jsonl`/`wal.md` are co-owned (Claude writes, user reads/edits).
 
@@ -67,8 +68,8 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `atone-snapshots/` | atone | Periodic snapshots of events.jsonl for recovery |
 | `backups/` | misc | Manual or scripted backups of single files (e.g., settings.json.pre-atone.bak) |
 | `cache/` | misc | Short-lived cached lookups |
-| `checkpoints/` | `/core-dump` + `/catchup` | Session-keyed checkpoint pointers + chronological `index.jsonl` for picker. See `std::claude::checkpoints` in NAMESPACE.md |
-| `assets/magi/<YYYYMMDD-HHMM-slug>/` | `/magi` skill | Per-task MAGI archive: voter prompts, proposals, votes, supervisor nomination, final artifact, meta.json. See `std::claude::magi` in NAMESPACE.md and design doc 20260518-magi-design.md |
+| `checkpoints/` | `/core-dump` + `/catchup` | Session-keyed checkpoint pointers + chronological `index.jsonl` for picker. Part of **checkpoints** in NAMESPACE.md |
+| `assets/magi/<YYYYMMDD-HHMM-slug>/` | `/magi` skill | Per-task MAGI archive: voter prompts, proposals, votes, supervisor nomination, final artifact, meta.json. Part of **seats** in NAMESPACE.md; design doc 20260518-magi-design.md |
 | `claudew/` | `claudew` CLI wrapper | Plugin source for the claude-wrapper CLI |
 | `code/` | unclear | 2 files; check before touching |
 | `llm-mini-state/` | `mini` skill / Ollama | Cache + Ollama log for the local fast model |
@@ -110,10 +111,27 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `dev-servers/` | `scripts/dev-servers/ports.sh` + `svc.sh` (mig 0029, 0043) | The port ledger (`port-registry.md`, `port-events.jsonl`) and the pm2 idle-lifecycle state (`svc-state.json`, `svc-events.jsonl`), plus `logs/`. Policy: `features/dev-servers.md` |
 | `fiber-actions/` | fiber-snatcher (`features/fiber-snatcher.md`) | Per-run action bundles for React dev-app dispatches, hash-keyed |
 | `guidance/` | guidance channel | `notes.md`: standing owner directives ("note this for the future"), surfaced relevance-gated by `hinters/06-guidance.sh` |
-| `hooks/` | `std::claude::ledger` | Hook telemetry streams: `warn-events.jsonl` (advisory fires) and `feedback.jsonl` (hook feedback records). Hook SCRIPTS live in `scripts/hooks/`, not here |
+| `hooks/` | `scripts/hooks/warn-log.sh` (the **ledger** word) | Hook telemetry streams: `warn-events.jsonl` (advisory fires) and `feedback.jsonl` (hook feedback records). Hook SCRIPTS live in `scripts/hooks/`, not here |
 | `run/` | `features/tmp-jail.md` | Runtime state for session-scoped confinement (`tmpjail/`); managed by `scripts/tmp-jail` and its guard/cleanup hooks |
-| `style/` | `std::claude::style` (mig 0033, 0035) | The prose-quality control plane: `thesaurus.jsonl`, `derived/` verdict ledgers, `friction-ledger.jsonl`, glossary hint tables, `sweep/`. Readers: `scripts/style/` |
+| `style/` | `scripts/style/` (mig 0033, 0035; the **gates** word) | The prose-quality control plane: `thesaurus.jsonl`, `derived/` verdict ledgers, `friction-ledger.jsonl`, glossary hint tables, `sweep/`. Readers: `scripts/style/` |
 | `warden/` | `warden/warden-beat.sh` + `ward-revive.sh` | The watcher lane's runtime: `PROMPT.md`, `WATCH.md`, `ledger.jsonl`, `revive.jsonl`, `spend.jsonl`, `beat.log`, `state/`. Guide `features/warden.md` |
+| `checkpoints-domain/` | i-dream domain feed, `checkpoints-domain/extract-events.py` | Session checkpoint summaries as an event stream: `events.jsonl`, `_seen.json`, `derived/`, `dream/` |
+| `compact-gate/` | `scripts/session-mgmt/compact-gate.sh` | The compact gate's decision log (`events.jsonl`) |
+| `dev-mods/` | unclear | Four session-named folders, one holding a `gcc-mock/`; no script or doc names this path. Check before touching |
+| `handoffs/` | `scripts/schedule/handoff.sh` (`features/weekly-tags.md`) | Notes queued for the Tuesday gcc session: one file per tag in `tags/`, plus `history.jsonl` and the `.json` cards Switchboard reads |
+| `keepwarm/` | `scripts/keepwarm/keepwarm.py` | One state file per session for keep-warm; the status line reads it too |
+| `ledger-archive/` | `scripts/ledger/ledger-prune.py` (`scripts/ledger/ledger-retention.json`) | Gzipped monthly archives of old ledger lines, one folder per ledger, plus `_prune-log.jsonl`. Kept, never deleted |
+| `mods/` | `features/gcc-mods.md` | Source of the gcc-mods mod (`gcc-mods/`: hooks, types, README) |
+| `node_modules/` | unclear | Only a `.vite/` cache; nothing names this path |
+| `policy/` | `scripts/pol/` (`features/agent-policy.md`) | Switchboard's live `policy.json`, five numbered backups and `registry.json`. Only the owner writes it |
+| `rules-provenance/` | `rules/` | The full reasoning and lived cases behind each rule, one file per rule |
+| `seats/` | `scripts/seats/seat` | Sub-agent dispatch ledger: `dispatch.jsonl`, `refusals.jsonl`, and one `s-<id>.json` plus prompt per seat |
+| `seats-domain/` | `scripts/seats/seat` (i-dream manifest, consolidation off) | Event stream of seats (role, model, outcome, caller feedback) |
+| `skill-usage-domain/` | i-dream domain feed, `skill-usage-domain/extract-events.py` | Skill invocations per session, from `skills/usage/invocations.jsonl` |
+| `snippets/` | none (likely left from the gcc-mods snippets store, removed 2026-10-15) | Three nearly empty JSONL files; candidate for removal |
+| `transcripts/` | unclear | One opencode-style `ses_*.jsonl` from 2026-09-25; `archive-transcripts.sh` writes to `archive/transcripts/`, not here |
+| `usage5h/` | `scripts/usage/usage5h.py` (`features/usage-speedbumps.md`) | The 5-hour usage tracker: per-session lock files and `events.jsonl` |
+| `zrecover/` | `scripts/zrecover/zrecover.py` (`features/zrecover.md`) | Session recovery state: `bundles/`, `screens/`, `wraps/`, `sessions.json`, `daemon.json`, `grants.json`, logs |
 
 ---
 
@@ -133,81 +151,101 @@ A common decision when writing files inside `~/.claude/`:
 
 <!-- AUTO-GENERATED BELOW: regenerated by scripts/folders-index.sh; do not hand-edit -->
 
-## Census (auto-generated 2026-09-05 13:44)
+## Census (auto-generated 2026-10-28 03:28)
 
 | Folder | Size | Files | Subdirs | Last touched |
 |---|---|---|---|---|
-| `adapters/` | 20K | 0 | 1 | 2026-08-15 |
-| `affirm/` | 656K | 4 | 3 | 2026-08-25 |
+| `adapters/` | 712K | 0 | 1 | 2026-10-27 |
+| `affirm/` | 780K | 4 | 3 | 2026-10-06 |
 | `agents/` | 16K | 3 | 0 | 2026-08-11 |
-| `archive/` | 4.8G | 1 | 1 | 2026-09-05 |
-| `assets/` | 944M | 4 | 19 | 2026-09-05 |
-| `atone-snapshots/` | 7.9M | 1 | 16 | 2026-05-26 |
-| `atone/` | 186M | 14 | 7 | 2026-09-05 |
+| `archive/` | 14G | 1 | 1 | 2026-10-27 |
+| `assets/` | 1.9G | 4 | 20 | 2026-10-28 |
+| `atone-snapshots/` | 191M | 1 | 18 | 2026-10-28 |
+| `atone/` | 358M | 15 | 7 | 2026-10-27 |
 | `auto-continue/` | 0B | 0 | 0 | empty |
-| `backups/` | 1.1M | 5 | 0 | 2026-09-05 |
-| `cache/` | 700K | 3 | 2 | 2026-09-05 |
-| `checkpoints/` | 17M | 428 | 1 | 2026-09-05 |
-| `claudew/` | 164K | 12 | 3 | 2026-09-03 |
+| `backups/` | 33M | 9 | 5 | 2026-10-28 |
+| `cache/` | 1.2M | 3 | 3 | 2026-10-28 |
+| `checkpoints-domain/` | 652K | 4 | 2 | 2026-10-27 |
+| `checkpoints/` | 42M | 3807 | 5 | 2026-10-28 |
+| `chrome/` | 4.0K | 1 | 0 | 2026-10-27 |
+| `claudew/` | 164K | 12 | 3 | 2026-10-06 |
 | `code/` | 44K | 2 | 2 | 2026-05-01 |
-| `conventions/` | 296K | 27 | 1 | 2026-09-01 |
-| `cron-duties/` | 48K | 12 | 0 | 2026-09-05 |
-| `daemon/` | 12K | 2 | 2 | 2026-09-05 |
+| `compact-gate/` | 240K | 1 | 0 | 2026-10-27 |
+| `conventions/` | 340K | 31 | 1 | 2026-10-27 |
+| `cron-duties/` | 64K | 16 | 0 | 2026-09-25 |
+| `daemon/` | 8.0K | 2 | 2 | 2026-09-09 |
 | `deployq/` | 24K | 0 | 4 | 2026-08-27 |
-| `dev-servers/` | 72K | 5 | 1 | 2026-09-05 |
-| `features/` | 232K | 33 | 0 | 2026-09-02 |
-| `feedback/` | 0B | 0 | 0 | empty |
+| `dev-mods/` | 1.9M | 0 | 4 | 2026-10-06 |
+| `dev-servers/` | 136K | 6 | 1 | 2026-10-28 |
+| `features/` | 348K | 45 | 0 | 2026-10-27 |
+| `feedback/` | 8.0K | 0 | 1 | 2026-10-01 |
 | `fiber-actions/` | 24K | 0 | 2 | 2026-07-04 |
-| `file-history/` | 244M | 0 | 346 | 2026-09-05 |
-| `git-hooks/` | 44K | 11 | 0 | 2026-07-28 |
-| `goals/` | 208K | 52 | 0 | 2026-09-05 |
+| `file-history/` | 1.0G | 0 | 644 | 2026-10-28 |
+| `git-hooks/` | 44K | 11 | 0 | 2026-10-27 |
+| `goals/` | 1.4M | 185 | 3 | 2026-10-27 |
 | `groups/` | 0B | 0 | 0 | empty |
 | `guidance/` | 4.0K | 1 | 0 | 2026-07-10 |
-| `hinters/` | 112K | 24 | 0 | 2026-09-05 |
-| `hooks-feedback-domain/` | 176K | 2 | 2 | 2026-09-03 |
-| `hooks/` | 5.8M | 3 | 0 | 2026-09-05 |
-| `i-dream/` | 15M | 9 | 8 | 2026-09-05 |
+| `handoffs/` | 16K | 3 | 1 | 2026-10-27 |
+| `hinters/` | 132K | 28 | 0 | 2026-10-27 |
+| `hooks-feedback-domain/` | 252K | 3 | 2 | 2026-10-27 |
+| `hooks/` | 8.4M | 4 | 0 | 2026-10-28 |
+| `i-dream/` | 38M | 10 | 9 | 2026-10-28 |
 | `ide/` | 4.0K | 1 | 0 | 2026-08-31 |
-| `jobs/` | 148K | 2 | 2 | 2026-09-05 |
-| `kanban/` | 5.7M | 70 | 2 | 2026-09-05 |
-| `ledger/` | 2.8M | 10 | 0 | 2026-09-05 |
+| `jobs/` | 88K | 1 | 2 | 2026-09-09 |
+| `kanban/` | 6.2M | 71 | 2 | 2026-10-27 |
+| `keepwarm/` | 7.5M | 1844 | 0 | 2026-10-28 |
+| `ledger-archive/` | 528K | 1 | 6 | 2026-10-15 |
+| `ledger/` | 2.1M | 10 | 0 | 2026-10-28 |
 | `llm-mini-state/` | 108K | 2 | 0 | 2026-05-04 |
-| `logs/` | 21M | 24 | 1 | 2026-09-05 |
-| `memory-domain/` | 200K | 5 | 2 | 2026-09-05 |
-| `memory/` | 108K | 0 | 1 | 2026-07-09 |
-| `migrations/` | 340K | 58 | 0 | 2026-09-04 |
+| `logs/` | 39M | 43 | 1 | 2026-10-28 |
+| `memory-domain/` | 212K | 5 | 2 | 2026-10-28 |
+| `memory/` | 120K | 0 | 1 | 2026-10-27 |
+| `migrations/` | 360K | 61 | 0 | 2026-10-27 |
 | `mistakes/` | 32K | 3 | 0 | 2026-05-13 |
+| `mods/` | 1.2M | 1 | 1 | 2026-10-28 |
+| `node_modules/` | 24K | 0 | 1 | 2026-10-11 |
 | `output/` | 2.3M | 0 | 13 | 2026-05-24 |
-| `paste-cache/` | 1.1M | 178 | 0 | 2026-09-05 |
-| `personas/` | 392K | 25 | 2 | 2026-09-05 |
-| `pinned/` | 440K | 4 | 3 | 2026-09-05 |
+| `paste-cache/` | 1.3M | 232 | 0 | 2026-10-27 |
+| `personas/` | 456K | 26 | 2 | 2026-10-27 |
+| `pinned/` | 616K | 4 | 3 | 2026-10-27 |
 | `plans/` | 72K | 2 | 1 | 2026-08-31 |
-| `plugins/` | 1.1G | 5 | 3 | 2026-09-05 |
-| `projects/` | 5.4G | 1 | 118 | 2026-09-05 |
-| `proposals-domain/` | 72K | 1 | 2 | 2026-09-05 |
+| `plugins/` | 472M | 6 | 5 | 2026-10-28 |
+| `policy/` | 32K | 7 | 0 | 2026-10-24 |
+| `projects/` | 15G | 1 | 189 | 2026-10-28 |
+| `proposals-domain/` | 80K | 1 | 2 | 2026-10-26 |
+| `review-lane/` | 4.0K | 1 | 0 | 2026-10-26 |
 | `review/` | 8.0K | 2 | 0 | 2026-08-21 |
-| `rules/` | 408K | 64 | 0 | 2026-09-04 |
+| `rules-provenance/` | 188K | 30 | 0 | 2026-10-27 |
+| `rules/` | 356K | 67 | 0 | 2026-10-27 |
 | `run/` | 0B | 0 | 1 | empty |
-| `scheduled/` | 312K | 10 | 28 | 2026-09-05 |
-| `scratchpad/` | 24M | 6 | 4 | 2026-09-04 |
-| `scripts/` | 81M | 97 | 50 | 2026-09-05 |
+| `scheduled/` | 652K | 19 | 26 | 2026-10-28 |
+| `scratchpad/` | 24M | 15 | 4 | 2026-10-26 |
+| `scripts/` | 97M | 102 | 72 | 2026-10-28 |
+| `seats-domain/` | 36K | 3 | 0 | 2026-10-27 |
+| `seats/` | 400K | 53 | 0 | 2026-10-28 |
 | `secrets/` | 4.0K | 1 | 0 | 2026-08-28 |
-| `session-env/` | 6.4M | 0 | 1633 | 2026-09-05 |
-| `session-notes/` | 172K | 41 | 0 | 2026-09-03 |
-| `session-state/` | 52K | 13 | 0 | 2026-09-05 |
-| `sessions-domain/` | 2.0M | 5 | 2 | 2026-08-06 |
-| `sessions/` | 56K | 14 | 0 | 2026-09-05 |
-| `shell-logs/` | 29M | 157 | 0 | 2026-09-05 |
-| `shell-snapshots/` | 2.6M | 19 | 0 | 2026-09-05 |
-| `skills-parked/` | 5.7M | 3 | 32 | 2026-08-27 |
-| `skills/` | 80M | 8 | 74 | 2026-09-05 |
-| `style/` | 58M | 251 | 2 | 2026-09-05 |
-| `subconscious/` | 545M | 7 | 9 | 2026-09-05 |
-| `tasks-pins/` | 16K | 4 | 0 | 2026-09-05 |
-| `tasks/` | 49M | 5781 | 327 | 2026-09-05 |
-| `teams/` | 272K | 0 | 22 | 2026-09-05 |
-| `telemetry/` | 3.4M | 16 | 0 | 2026-08-12 |
+| `session-env/` | 11M | 0 | 2721 | 2026-10-28 |
+| `session-notes/` | 220K | 53 | 0 | 2026-10-28 |
+| `session-state/` | 84K | 21 | 0 | 2026-10-27 |
+| `sessions-domain/` | 4.4M | 5 | 3 | 2026-10-28 |
+| `sessions/` | 40K | 10 | 0 | 2026-10-28 |
+| `shell-logs/` | 70M | 209 | 0 | 2026-10-28 |
+| `shell-snapshots/` | 4.0M | 29 | 0 | 2026-10-28 |
+| `skill-usage-domain/` | 144K | 4 | 2 | 2026-10-27 |
+| `skills-parked/` | 5.7M | 3 | 32 | 2026-10-27 |
+| `skills/` | 84M | 10 | 85 | 2026-10-28 |
+| `snippets/` | 4.0K | 3 | 0 | 2026-10-06 |
+| `state/` | 5.6M | 1 | 2 | 2026-10-28 |
+| `style/` | 88M | 550 | 2 | 2026-10-28 |
+| `subconscious/` | 382M | 8 | 10 | 2026-10-28 |
+| `tasks-pins/` | 1.1M | 269 | 0 | 2026-10-27 |
+| `tasks/` | 72M | 10043 | 559 | 2026-10-28 |
+| `teams/` | 372K | 0 | 53 | 2026-10-28 |
+| `telemetry/` | 7.2M | 20 | 0 | 2026-10-27 |
 | `tools/` | 14M | 0 | 1 | 2026-08-24 |
-| `topics/` | 752K | 88 | 0 | 2026-09-05 |
+| `topics/` | 1.3M | 128 | 0 | 2026-10-27 |
+| `transcripts/` | 20K | 1 | 0 | 2026-09-25 |
+| `usage5h/` | 48K | 556 | 0 | 2026-10-28 |
 | `warden/` | 1.2M | 15 | 3 | 2026-09-02 |
-| `widgets/` | 776M | 5 | 2 | 2026-09-05 |
+| `widgets/` | 36M | 5 | 2 | 2026-10-28 |
+| `zrecover/` | 3.1M | 5 | 4 | 2026-10-28 |

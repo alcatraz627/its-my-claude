@@ -40,7 +40,7 @@ A structural change is not complete until the maps that describe the tree agree 
 
 - [ ] `MIGRATIONS.md` row added
 - [ ] `FOLDERS.md`: census regenerated (`scripts/folders-index.sh`) AND an Intent row for any new or renamed top-level directory
-- [ ] `NAMESPACE.md`: the cluster that claims any new path, or the "not yet clustered" list
+- [ ] `NAMESPACE.md`: only if a part was added, renamed or retired (a new folder goes in `FOLDERS.md`)
 - [ ] `LOOKUP.md`: a row for any new doc, script, or hook a reader would look up
 - [ ] `rules/00-index.md` / `skills/00-index.md` regenerated if a rule or skill moved
 

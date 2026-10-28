@@ -64,7 +64,7 @@ Establish what is real before reading any claim about it.
 
 Now read the indices and extract what they CLAIM: CLAUDE.md (the router + tiers), LOOKUP
 (the address book), FOLDERS (per-dir owner + census), PLACEMENT (category x tier + the
-loading reality), NAMESPACE (clusters), GLOSSARY (terms). Extract the claimed graph:
+loading reality), NAMESPACE (the 14-word vocabulary), GLOSSARY (terms). Extract the claimed graph:
 what points to what, what tier each thing claims, what each index says exists.
 
 ## Phase 3: Diverge (the primary finding source)
