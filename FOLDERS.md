@@ -93,7 +93,7 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `pinned/` | `/pin-for-dream` | Insights pinned for the next dream cycle; `consolidate.sh` decays them after ~2 cycles |
 | `scheduled/` | `gcc-schedule` / routines | Cron/launchd routine registry (`registry.json` + `history.jsonl`) that runs the domain consolidations + dream passes |
 | `session-notes/` | `/workspace` + `/core-dump` + `/catchup` | Per-session workspace docs (`<session-id>.md`: Todos / Notes / Doc Links / Decisions); `_active.md` points to the current session |
-| `adapters/` | `features/codex-adapter.md` | Adapter code for driving a non-Claude model seat (today: `codex/`) from this config |
+| `adapters/` | `features/codex-adapter.md` | Adapter code for driving a non-Claude model seat (`codex/`) from this config, and `claude-app/`, the skills-only plugin for claude.ai chat that `.claude-plugin/marketplace.json` at the root lists |
 | `archive/` | `scripts/archive-transcripts.sh` | Archived session transcripts plus `archive.log`; the cold tier for `projects/` JSONL that `/revive` no longer needs hot |
 | `cron-duties/` | `scripts/cron/cron-duty.sh` | One JSON per recurring session-scoped duty (heartbeats, warden check-ins): stable slug, arming process, liveness verdict, so a resume does not re-arm a duty whose process is still alive |
 | `deployq/` | `scripts/deployq/deployq.sh` + `worker.sh` | Deploy queue: `pending/` → `running/` → `done/`, with `reports/`. The worker is a cron duty |

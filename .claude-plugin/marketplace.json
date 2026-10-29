@@ -1,0 +1,14 @@
+{
+  "name": "its-my-claude",
+  "description": "A portable cut of this config for claude.ai chat, the desktop app and Claude Code",
+  "owner": {
+    "name": "alcatraz627"
+  },
+  "plugins": [
+    {
+      "name": "gcc-chat",
+      "source": "./adapters/claude-app",
+      "description": "Working rules, plain writing, and planning skills that need no local scripts"
+    }
+  ]
+}

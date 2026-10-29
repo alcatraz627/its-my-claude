@@ -33,6 +33,9 @@
 # 2026-09-11, so the whole Codex adapter was never tracked. Runtime state and
 # generated dream data under it stay ignored.
 !/adapters/
+# claude.ai plugin marketplace: the root manifest and the chat plugin's own.
+!/.claude-plugin/
+!/adapters/claude-app/.claude-plugin/
 /adapters/codex/state/
 /adapters/codex/i-dream/events.jsonl
 /adapters/codex/i-dream/events.tmp
