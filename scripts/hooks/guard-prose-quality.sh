@@ -30,6 +30,10 @@ case "$fp" in
   *) exit 0 ;;
 esac
 case "$fp" in
+  # A page under docs/ about testing is still a doc a person reads (docs/tech/testing/,
+  # a test-set guide), so only fixtures and mocks inside docs/ are skipped.
+  */docs/*fixture*|*/docs/*mock*) exit 0 ;;
+  */docs/*) ;;
   *test*|*spec*|*__tests__*|*fixture*|*mock*|*probe*|*/hooks/replay/*) exit 0 ;;
   # A checkpoint is an agent-facing record with its own parse contract: the
   # mini dump REQUIRES "**Done:**", which this gate read as a verdict-first

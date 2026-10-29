@@ -34,6 +34,10 @@ allowed "$T/proj/src/messages.test.py" "$CODE" "a *.test.* file"
 allowed "$T/proj/src/fixtures/messages.py" "$CODE" "a fixture path"
 allowed "$T/proj/scripts/hooks/replay/replay-copy.py" "$CODE" "a replay script"
 allowed "$T/proj/assets/stop_probe.py" "$CODE" "a probe script"
+# A docs page about testing is a doc, not a test file; a fixture under docs/ is still a fixture.
+blocked "$T/proj/docs/tech/testing/how-the-suite-runs.md" "$PROSE" "a docs page under a testing folder"
+blocked "$T/proj/docs/plan/clanky-test-set/test-set.md" "$PROSE" "a test-set guide under docs/"
+allowed "$T/proj/docs/fixtures/sample.md" "$PROSE" "a fixture folder under docs/"
 
 echo "---- pass=$pass fail=$fail"
 trash "$T" 2>/dev/null || true

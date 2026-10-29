@@ -356,6 +356,29 @@ Do not:
 - Make prose tables (tables with paragraph-length cells).
 - Make table-shaped prose (bulleted lists where every bullet starts with a noun + colon + clause, so use a table instead).
 
+## 6b. Shape before sentences
+
+Fix a hard-to-read doc by changing its shape, not by trimming words. Six habits set the direction:
+
+1. Name one reader and their first question. The opening two sentences answer it.
+2. Write in three layers: what is true and what to do, then how it works, then a `## Sources` section for ids, file:line, shas and dates.
+3. Say what a thing does, then where it lives.
+4. One idea per unit: a paragraph makes one point, a bullet states one fact, a cell holds one value.
+5. Translate agent codes (S3, A4, D2, CR-8) into what they mean. Keep a code only where a reader looks it up.
+6. Pick the shape first: a table for items that share attributes, numbered steps for order, a section for anything over three sentences.
+
+Size signals (restructure when one trips): a sentence over 35 words, a paragraph over 120 words, a bullet with two sentences, a cell with a full clause, a section over 500 words, a page over about 2,000 words.
+
+| Symptom | Move |
+|---|---|
+| Dense paragraph | Split by layer: claim stays, mechanism becomes steps, evidence goes to Sources |
+| Long table cell | Short value in the cell, explanation in a subsection named after the row |
+| Semicolon or dash chain | One clause per sentence, or a list when the clauses are parallel |
+| Sentences that only name code | One sentence on what it means, then a table: what it is, where it lives |
+| History of rulings and dates | Today's rule, one "why" sentence, the history in Sources |
+
+Never pass a check by deleting a fact, or by swapping one splice mark for another. Worked examples: `~/Code/Versable/slack-automation/.claude/output/20261029-doc-gate-diagnosis/diagnosis.md`, section "How to write instead".
+
 ## 7. Diagram rules
 
 **Edges must carry:**
@@ -450,6 +473,26 @@ Items are inserted unordered so a single failing document does not abort the bat
 ```
 
 Every `[VERIFY]` should name the concrete check a future session can run. Do not use vague markers like `TODO: check`.
+
+## 10b. Unknown facts go in one "Unresolved questions" section
+
+A page never carries "Open questions", "Not yet known", "TBD" or similar
+sections. The owner calls them AI smell (2026-10-29): they invite padding and
+chores dressed as facts. When a page truly lacks a fact a reader would want, it
+gets exactly one section, last before Related, in this shape:
+
+```markdown
+## Unresolved questions
+
+| Question | Affects |
+|---|---|
+| Which data store versable-harness-26 uses | Data stored table |
+```
+
+- One short question per row, no explanation.
+- "Affects" names the section, table or page whose content depends on the answer.
+- A task ("nobody opened the billing report") is never a row. Only a fact a reader wants.
+- No unresolved facts: no section.
 
 ## 11. Self-check before handoff
 

@@ -74,19 +74,46 @@ MAX_LONG_CELLS, MAX_LONG_BLOCKS = 3, 2
 # several, so a few of each are allowed before the doc is called hard to skim.
 MAX_DENSE, MAX_SPLICED, MAX_MECHANISM = 2, 2, 2
 MAX_STOP_BLOCKS = 2
+# Shape signals from doc-writing.md section 6b. Agent codes in running text are a
+# ledger on their own once there are this many (a table's id column does not count).
+MAX_PROSE_CODES = 10
+# Sentences over this many words, more than this many times.
+LONG_SENTENCE_WORDS, MAX_LONG_SENTENCES = 40, 3
+# A page this long needs a heading at least this often, or it is one flat wall.
+FLAT_PAGE_WORDS, WORDS_PER_HEADING = 2000, 600
 
 STATE_DIR = os.environ.get("DOC_VOICE_STATE", "/tmp")
 EXEMPT = os.environ.get("DOC_VOICE_EXEMPT", os.path.expanduser("~/.claude/doc-voice-exempt.txt"))
 MUTE = os.path.expanduser("~/.claude/.no-doc-voice-gate")
 
+# Names a reader already knows, which the id pattern would otherwise count as an
+# agent's code: cloud services, percentiles, encodings, hashes and paper sizes.
+# Codes agents use with each other (A4, D2, S1, V1) stay counted.
+KNOWN_TOKENS = {"S3", "EC2", "P50", "P90", "P95", "P99", "UTF-8", "UTF-16", "SHA-1", "SHA-256", "SHA-512",
+                "ISO-8601", "IPV4", "IPV6", "H1", "H2", "H3", "H4", "H5", "H6", "MP3", "MP4", "K8S", "E2E"}
+# The source-file extensions a file:line can point into, so host:port and times do not count.
+CODE_EXT = (r"(?:py|pyi|ts|tsx|js|jsx|mjs|cjs|go|rs|rb|java|kt|swift|c|h|cc|cpp|hpp|cs|php|sh|bash|zsh|sql|"
+            r"ya?ml|json|toml|md|mdx|html|css|scss|vue|svelte|tf|lua|ex|exs)")
+_ID = re.compile(r"\b[A-Z]{2,5}-\d{1,4}\b|\b[A-Z]\d{1,2}[a-z]?\b(?=[\s,.;:)\]|])")
+
+
+class _Ids:
+    """The internal-id pattern, minus tokens a reader already knows (S3, P95, UTF-8)."""
+
+    def findall(self, text):
+        return [t for t in _ID.findall(text) if t.upper() not in KNOWN_TOKENS]
+
+
 SIGNALS = {
-    "internal id": re.compile(r"\b[A-Z]{2,5}-\d{1,4}\b|\b[A-Z]\d{1,2}[a-z]?\b(?=[\s,.;:)\]|])"),
+    "internal id": _Ids(),
     "commit sha": re.compile(r"\b(?=[0-9a-f]*\d)(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\b"),
-    "file:line": re.compile(r"[\w./-]+\.[a-z]{1,5}:\d+|`:\d+`"),
+    "file:line": re.compile(r"[\w./\[\]-]+\." + CODE_EXT + r":\d+\b|`:\d+`"),
+    # "Used to", "no longer" and "previously" read as plain history in ordinary prose
+    # ("the key used to sign"), so only dated rulings and spec-arguing count here.
     "ledger framing": re.compile(
         r"\(\d{4}-\d{2}-\d{2}\b|\b(?:standing|owner) (?:decision|ruling)s?\b|\bruling\b"
         r"|\b(?:accepted|decided|ruled|agreed) (?:on )?\d{4}-\d{2}-\d{2}"
-        r"|\bpreviously\b|\bno longer\b|\bused to\b|\bpre-fix\b|\bpost-fix\b|\bsuperseded\b"
+        r"|\bpre-fix\b|\bpost-fix\b|\bsuperseded\b"
         r"|\bcontrary to\b|\bthe (?:spec|doc|cprd|prd|plan|source|brief) (?:says|said|claims|asked)\b",
         re.IGNORECASE,
     ),
@@ -99,14 +126,39 @@ SIGNALS = {
     ),
 }
 TAIL = re.compile(r"^#{1,6}\s*(sources|references|appendix|evidence)\b", re.IGNORECASE | re.MULTILINE)
-FENCE = re.compile(r"^```.*?^```", re.DOTALL | re.MULTILINE)
+# A fence may be indented under a list item and may use tildes, as in readability_core.
+FENCE = re.compile(r"^[ \t]*(```|~~~).*?^[ \t]*\1", re.DOTALL | re.MULTILINE)
+SEPARATOR_CELL = re.compile(r"^:?-+:?$")
 SKIP_NAME = re.compile(r"changelog|(^|[-_/])rca([-_./]|$)|(^|[-_/])adr([-_./]|$)", re.IGNORECASE)
 LIST_ITEM = re.compile(r"[-*+]\s|\d+[.)]\s|>\s?")
 # A reply that tells the owner a doc got better, and one that admits it still fails.
 CLAIM = re.compile(r"\b(better|cleaner|clearer|plainer|tighter|shorter|rewrote|rewritten|reworked|fixed|"
                    r"simplified|readable|reads (?:well|cleanly|better))\b", re.IGNORECASE)
-ADMIT = re.compile(r"\bstill (?:fails|flagged|reads like|has)|\bdoc(?:-| )voice\b|\bwall of text\b|\bfails the doc check\b",
-                   re.IGNORECASE)
+ADMIT = re.compile(r"\bstill (?:fails?|flagged|reads like|has|have)|\bdoc(?:-| )voice\b|\bwall of text\b"
+                   r"|\bfails? the doc check\b", re.IGNORECASE)
+SENTENCE = re.compile(r"(?<=[.!?])\s+|\n+")
+
+
+def sentences_naming(reply, path):
+    """The reply's sentences that name this doc. The file name with its extension
+    always counts. The bare stem counts as a whole word only when it cannot be an
+    ordinary word (DIRECTIONS, user-org-access, ADR-004), so "testing" in "fixed the
+    testing job" does not name testing.md."""
+    name = os.path.basename(path)
+    stem = os.path.splitext(name)[0]
+    distinct = bool(re.search(r"[A-Z0-9_-]", stem))
+    stem_rx = re.compile(r"(?<![\w.-])%s(?![\w-])" % re.escape(stem)) if distinct else None
+    return [s for s in SENTENCE.split(reply) if name.lower() in s.lower() or (stem_rx and stem_rx.search(s))]
+
+
+def claims_better(reply, path):
+    """A sentence that names the doc and says it got better, without admitting it still fails."""
+    return any(CLAIM.search(s) and not ADMIT.search(s) for s in sentences_naming(reply, path))
+
+
+def admits(reply, path):
+    """A sentence that names the doc and says plainly that it still fails."""
+    return any(ADMIT.search(s) for s in sentences_naming(reply, path))
 
 
 def reader_of(text):
@@ -157,11 +209,59 @@ def cited(path, reply):
     return path in reply or path.replace(os.path.expanduser("~"), "~", 1) in reply
 
 
-def body_of(text):
+def body_of(text, keep_tail=False):
+    """The text a reader reads, without front matter, code, and the final Sources
+    section, which is the right home for ids and file:line (keep_tail=True keeps it)."""
     text = re.sub(r"^---\n.*?\n---\n", "", text, count=1, flags=re.DOTALL)
     text = FENCE.sub("", text)
+    if keep_tail:
+        return text
     tails = list(TAIL.finditer(text))
     return text[: tails[-1].start()] if tails else text
+
+
+WORD = re.compile(r"[A-Za-z0-9][\w'’-]*")
+SENT_SPLIT = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9`\"'(\[*])")
+
+
+def prose_lines(text):
+    """Body lines that are running text: not tables, headings or blank lines."""
+    return [ln.strip() for ln in body_of(text).splitlines()
+            if ln.strip() and not ln.strip().startswith(("|", "#"))]
+
+
+def shape(text):
+    """The doc-level shape signals: agent codes in running text, long sentences,
+    a long page with too few headings, and no opening sentence before the first
+    table or list."""
+    lines = prose_lines(text)
+    codes = [t for ln in lines for t in SIGNALS["internal id"].findall(ln)]
+    long_sents = []
+    for ln in lines:
+        plain = re.sub(r"`[^`]*`|\[([^\]]*)\]\([^)]*\)", r" \1 ", LIST_ITEM.sub("", ln, count=1))
+        for s in SENT_SPLIT.split(plain):
+            if len(WORD.findall(s)) > LONG_SENTENCE_WORDS:
+                long_sents.append(s.strip())
+    body = body_of(text, keep_tail=True)
+    words = len(WORD.findall(body))
+    headings = len(re.findall(r"^#{2,6}\s", body, re.MULTILINE))
+    flat = words > FLAT_PAGE_WORDS and headings < words // WORDS_PER_HEADING
+    # A `>` summary line is an opening. An index page is a list by nature.
+    first = next((ln.strip() for ln in body.splitlines() if ln.strip() and not ln.strip().startswith("#")), "")
+    no_opening = bool(first) and (first.startswith("|") or bool(re.match(r"[-*+]\s|\d+[.)]\s", first)))
+    # A Sources section is for citations. When it outweighs the page, the page has
+    # been moved into it to get past the checks above.
+    page = len(WORD.findall(body_of(text)))
+    tails = list(TAIL.finditer(body))
+    # A page whose own title is "Appendix" or "References" is not hiding anything.
+    tail = words - page if tails and not tails[-1].group(0).startswith("# ") else 0
+    return {"codes": codes, "long_sentences": long_sents, "flat": (words, headings) if flat else None,
+            "no_opening": no_opening, "heavy_tail": (tail, page) if tail > 150 and tail > 2 * page else None}
+
+
+def shape_fires(sh):
+    return (len(sh["codes"]) > MAX_PROSE_CODES or len(sh["long_sentences"]) > MAX_LONG_SENTENCES
+            or bool(sh["flat"]) or bool(sh["heavy_tail"]))
 
 
 def score(text):
@@ -184,7 +284,7 @@ def wall(text):
             if cur:
                 blocks.append(" ".join(cur))
                 cur = []
-            cells += [c.strip() for c in s.strip("|").split("|")]
+            cells += [c.strip() for c in s.strip("|").split("|") if not SEPARATOR_CELL.match(c.strip())]
             continue
         if not s or s.startswith("#") or LIST_ITEM.match(s):
             if cur:
@@ -205,11 +305,14 @@ def wall_fires(long_cells, long_blocks):
 
 
 def skim(text):
-    """Dense paragraphs, semicolon-spliced lines and internals-only runs in the
-    doc body. Dashes are left to guard-prose-quality.sh, which already stops them
-    at write time."""
+    """Dense paragraphs, spliced lines and internals-only runs in the doc body.
+    A line glued with an em-dash counts the same as one glued with a semicolon,
+    so swapping one mark for the other is never an improvement."""
     found = {"dense": [], "spliced": [], "mechanism": []}
-    for f in engine().lint(body_of(text), SURFACE, only=SKIM_TELLS)["findings"]:
+    body = body_of(text)
+    for kind, snip, _b in engine().core().spliced_findings(body, dashes=True, semicolons=False):
+        found["spliced"].append("dash: " + snip)
+    for f in engine().lint(body, SURFACE, only=SKIM_TELLS)["findings"]:
         if f["tell"] == "dense-block":
             found["dense"].append(f["snippet"])
         elif f["tell"] == "spliced-line":
@@ -231,11 +334,14 @@ def measure(text):
     hits = score(text)
     cells, blocks = wall(text)
     found = skim(text)
+    sh = shape(text)
     return {"ledger": sum(len(v) for v in hits.values()) if fires(hits) else 0,
             "cells": len(cells), "blocks": len(blocks),
             "dense": len(found.get("dense", [])), "spliced": len(found.get("spliced", [])),
             "mechanism": len(found.get("mechanism", [])),
-            "fails": bool(fires(hits) or wall_fires(cells, blocks) or skim_fires(found))}
+            "codes": len(sh["codes"]), "sentences": len(sh["long_sentences"]),
+            "flat": 1 if sh["flat"] else 0, "tail": 1 if sh["heavy_tail"] else 0,
+            "fails": bool(fires(hits) or wall_fires(cells, blocks) or skim_fires(found) or shape_fires(sh))}
 
 
 def committed_text(path):
@@ -256,7 +362,8 @@ def worse(base, now):
         return False
     if base is None or not base["fails"]:
         return True
-    return any(now[k] > base.get(k, 0) for k in ("ledger", "cells", "blocks", "dense", "spliced", "mechanism"))
+    return any(now[k] > base.get(k, 0) for k in ("ledger", "cells", "blocks", "dense", "spliced", "mechanism",
+                                                 "codes", "sentences", "flat", "tail"))
 
 
 def findings(path, force=False):
@@ -275,13 +382,15 @@ def findings(path, force=False):
     if fires(hits):
         parts = ", ".join("%d %s" % (len(v), k) for k, v in hits.items())
         examples = "; ".join(str(v[0]) if isinstance(v[0], str) else "".join(v[0]) for v in hits.values())
-        out.append("it reads like an internal ledger (%s; e.g. %s). Say what is true now in plain sentences; "
-                   "move ids, shas and file:line to a Sources section at the end" % (parts, examples))
+        out.append("it reads like an internal ledger (%s; e.g. %s). Write it in layers: what is true now and what to "
+                   "do, then how it works, then a final `## Sources` section that holds the ids, shas, file:line and "
+                   "dates. Say what each code means rather than deleting it" % (parts, examples))
     cells, blocks = wall(text)
     if wall_fires(cells, blocks):
         sample = (cells or blocks)[0][:90]
         out.append("it is a wall of text (%d table cells over %d characters, %d paragraphs over %d; e.g. \"%s...\"). "
-                   "One short fact per cell and per bullet; detail goes to Sources or its own section"
+                   "Change the shape, not the wording: keep a short value in each cell and move its explanation to a "
+                   "subsection named after the row, and split a long paragraph into a claim, steps and evidence"
                    % (len(cells), LONG_CELL, len(blocks), LONG_BLOCK, sample))
     found = skim(text)
     if skim_fires(found):
@@ -289,12 +398,36 @@ def findings(path, force=False):
         if len(found.get("dense", [])) > MAX_DENSE:
             parts.append("%d dense paragraphs or bullets (e.g. \"%s\")" % (len(found["dense"]), found["dense"][0]))
         if len(found.get("spliced", [])) > MAX_SPLICED:
-            parts.append("%d long lines joined with a semicolon (e.g. \"%s\")" % (len(found["spliced"]), found["spliced"][0].split(": ", 1)[-1]))
+            parts.append("%d lines glued with a semicolon or dash (e.g. \"%s\")" % (len(found["spliced"]), found["spliced"][0].split(": ", 1)[-1]))
         if len(found.get("mechanism", [])) > MAX_MECHANISM:
             parts.append("%d runs of three or more sentences that only name code, paths and numbers (e.g. \"%s\")"
                          % (len(found["mechanism"]), found["mechanism"][0]))
-        out.append("it is hard to skim: %s. Split each into short sentences, lead with what it means for the reader, "
-                   "and keep the names and numbers for a Details or Sources section" % "; ".join(parts))
+        out.append("it is hard to skim: %s. Restructure rather than trim: a dense block becomes one claim plus a list "
+                   "or steps, a glued line becomes separate sentences (never a different splice mark), and a run of "
+                   "code names opens with what it means, then a table of what each thing is and where it lives"
+                   % "; ".join(parts))
+    sh = shape(text)
+    if len(sh["codes"]) > MAX_PROSE_CODES and not fires(hits):
+        out.append("its running text leans on %d agent codes (e.g. %s). Say what each one is; keep a code only in "
+                   "a table's id column or in Sources, where a reader looks it up"
+                   % (len(sh["codes"]), ", ".join(list(dict.fromkeys(sh["codes"]))[:6])))
+    if len(sh["long_sentences"]) > MAX_LONG_SENTENCES:
+        out.append("%d sentences run past %d words (e.g. \"%s...\"). Break each at its \"and then\": one action "
+                   "per sentence, or numbered steps when the actions happen in order"
+                   % (len(sh["long_sentences"]), LONG_SENTENCE_WORDS, sh["long_sentences"][0][:90]))
+    if sh["flat"]:
+        out.append("it is %d words with %d section headings. Give each topic its own `##` section, about one per "
+                   "400 words, or split it into an overview page and detail pages" % sh["flat"])
+    if sh["heavy_tail"]:
+        out.append("its Sources section (%d words) outweighs the page (%d words). Sources is for citations; the "
+                   "explanation belongs above it, in layers" % sh["heavy_tail"])
+    # An index page may open with a list, so a missing opening is only advice
+    # alongside a real fault, never a fault on its own.
+    if out and sh["no_opening"]:
+        out.append("it also opens with a table or list. Start with two sentences: who the page is for and what "
+                   "they get from it")
+    if out:
+        out.append("the moves and size signals are in ~/.claude/conventions/doc-writing.md section 6b. Keep every fact")
     if out and reader_of(text) is None:
         if force:
             out.append("you pointed the owner at this file. If it is for agents, put `reader: agent` at the top; "
@@ -357,6 +490,13 @@ def post(data):
     if not found:
         note_candidate(data, path)
         return 0
+    if data.get("agent_id"):
+        # A sub-agent's write: the seat gets the note in its own context, but the
+        # parent's turn is never held for a doc the parent did not write.
+        warn_log("nudge")
+        msg = "%s does not read as a doc for a person: %s." % (os.path.basename(path), "; ".join(found))
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": msg}}))
+        return 0
     st = load(data.get("session_id"))
     if path not in st["docs"]:
         st["docs"].append(path)
@@ -394,17 +534,25 @@ def stop(data):
     forced = st.get("forced", [])
     failing = {p: findings(p, force=p in forced) for p in st["docs"]}
     failing = {p: f for p, f in failing.items() if f}
-    names = [os.path.splitext(os.path.basename(p))[0] for p in failing]
-    claims = bool(CLAIM.search(reply) and not ADMIT.search(reply)
-                  and any(n.lower() in reply.lower() for n in names))
+    claims = any(claims_better(reply, p) for p in failing)
     # Only the agent's own doing holds the turn: a doc it made fail or made worse, or a claim it is better.
     if not claims:
         failing = {p: f for p, f in failing.items() if worse(st.get("base", {}).get(p), measure(open(p, errors="replace").read()))}
+    # A doc the reply names and says plainly still fails is the agent's decision to
+    # leave it. The turn may end, and the owner hears it from the hook.
+    admitted = {p: f for p, f in failing.items() if admits(reply, p) and not claims_better(reply, p)}
+    failing = {p: f for p, f in failing.items() if p not in admitted}
+    detail = " ".join("%s: %s." % (os.path.basename(p), "; ".join(f)) for p, f in failing.items())
     if not failing:
         os.remove(state_path(sid)) if os.path.exists(state_path(sid)) else None
-        warn_log("cleared")
+        if admitted:
+            warn_log("declined")
+            print(json.dumps({"systemMessage": "doc check: the agent left %s failing on purpose and said so. %s"
+                              % (", ".join(os.path.basename(p) for p in admitted),
+                                 " ".join("%s: %s." % (os.path.basename(p), "; ".join(f)) for p, f in admitted.items()))}))
+        else:
+            warn_log("cleared")
         return 0
-    detail = " ".join("%s: %s." % (os.path.basename(p), "; ".join(f)) for p, f in failing.items())
     if st["blocks"] < MAX_STOP_BLOCKS or (claims and st["blocks"] < MAX_STOP_BLOCKS + 1):
         st["blocks"] += 1
         save(sid, st)

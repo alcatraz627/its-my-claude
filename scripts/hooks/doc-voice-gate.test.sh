@@ -40,8 +40,10 @@ expect "the owner's exempt list does" silent "$(run "$T/docs/plan/agent.md")"
 : > "$DOC_VOICE_EXEMPT"
 cp "$FIX/cprd-parity-before.md" "$T/proj/.claude/docs/x.md"
 expect "agent folders are skipped" silent "$(run "$T/proj/.claude/docs/x.md")"
-{ printf 'Plain intro.\n\n## Sources\n'; cat "$FIX/cprd-parity-before.md" | grep -v '^#'; } > "$T/docs/plan/tail.md"
+{ cat "$FIX/cprd-parity-after.md"; printf '\n## Sources\n'; grep -v '^#' "$FIX/cprd-parity-before.md" | head -12; } > "$T/docs/plan/tail.md"
 expect "ids inside a final Sources section do not count" silent "$(run "$T/docs/plan/tail.md")"
+{ printf 'Plain intro.\n\n## Sources\n'; grep -v '^#' "$FIX/cprd-parity-before.md"; } > "$T/docs/plan/tail-dump.md"
+expect "but a page moved wholesale into Sources is called out" "outweighs the page" "$(run "$T/docs/plan/tail-dump.md")"
 
 # The wall of text: DIRECTIONS.md as the owner called it a wall, and as rewritten.
 cp "$WALL/directions-wall.md" "$T/docs/plan/DIRECTIONS.md"
@@ -90,7 +92,7 @@ expect "making it worse does" '"decision": "block"' "$(stop s2 'Added a row.')"
 git -C "$R" checkout -q -- docs/legacy.md
 printf '\nOne more short line.\n' >> "$R/docs/legacy.md"
 run "$R/docs/legacy.md" s1b >/dev/null
-expect "calling it better while it fails does too" "tells the owner the doc is better" "$(stop s1b 'Made legacy much clearer.')"
+expect "calling it better while it fails does too" "tells the owner the doc is better" "$(stop s1b 'Made legacy.md much clearer.')"
 cp "$WALL/directions-plain.md" "$R/docs/good.md"
 git -C "$R" add docs/good.md
 git -C "$R" -c user.email=t@t -c user.name=t commit -q -m good
@@ -143,10 +145,60 @@ S1='Phases run in order; within a phase the items are independent of each other,
 printf 'Intro.\n\n%s\n\n%s\n\n%s\n\nEnd.\n' "$P1" "$P1 More." "$P1 Again." > "$T/docs/plan/dense.md"
 expect "dense paragraphs in a doc are called hard to skim" "hard to skim" "$(run "$T/docs/plan/dense.md" r10)"
 printf '%s\n\n%s\n\n%s\n' "$S1" "$S1 Yes." "$S1 Always." > "$T/docs/plan/semis.md"
-expect "semicolon-spliced long lines are called out" "joined with a semicolon" "$(run "$T/docs/plan/semis.md" r11)"
+expect "semicolon-spliced long lines are called out" "glued with a semicolon or dash" "$(run "$T/docs/plan/semis.md" r11)"
 printf '%s\n\n%s\n\n%s\n' "$P2" "$P2 One." "$P2 Two." > "$T/docs/plan/mech.md"
 expect "runs of internals-only sentences are called out" "only name code" "$(run "$T/docs/plan/mech.md" r13)"
 printf 'Intro.\n\n%s\n\n%s\n\n%s\n' "$P1" "$S1" "$P2" > "$T/docs/plan/few.md"
 expect "one such block of each kind in a doc is allowed" silent "$(run "$T/docs/plan/few.md" r12)"
+
+# Fixes from the 2026-10-29 gate diagnosis.
+# A sub-agent's write gets the note in its own context but never holds the parent's turn.
+cp "$WALL/directions-wall.md" "$T/docs/plan/seat.md"
+got=$(printf '{"session_id":"q1","agent_id":"a-seat","tool_name":"Write","tool_input":{"file_path":"%s"}}' "$T/docs/plan/seat.md" | python3 "$H")
+expect "a sub-agent's write still gets the note" "does not read as a doc" "$got"
+expect "but the parent's turn is not held for it" silent "$(stop q1 'The seat is still working.')"
+# A plain decline that names the doc ends the turn on the first stop, and the owner is told.
+cp "$WALL/directions-wall.md" "$T/docs/plan/DIRECTIONS.md"
+run "$T/docs/plan/DIRECTIONS.md" q2 >/dev/null
+got=$(stop q2 'DIRECTIONS.md still fails the doc check, because a seat is rewriting it now.')
+expect "an honest decline ends the turn at once" '"systemMessage"' "$got"
+expect "and tells the owner it was left on purpose" "on purpose" "$got"
+# Two docs admitted in one sentence both count.
+cp "$WALL/directions-wall.md" "$T/docs/plan/one.md"; cp "$WALL/directions-wall.md" "$T/docs/plan/two.md"
+run "$T/docs/plan/one.md" q3 >/dev/null; run "$T/docs/plan/two.md" q3 >/dev/null
+expect "a plural admission covers both docs" '"systemMessage"' "$(stop q3 'one.md and two.md still fail the doc check.')"
+# A claim word elsewhere in the reply, or a plain-word stem, does not count as calling the doc better.
+cp "$WALL/directions-wall.md" "$T/docs/plan/testing.md"
+run "$T/docs/plan/testing.md" q4 >/dev/null
+expect "fixing a testing job is not a claim about testing.md" '"decision": "block"' \
+  "$(stop q4 'Merged it. I also fixed the flaky testing job in CI.')"
+stop q4 'Merged it.' >/dev/null
+expect "and it is not treated as a claim, so the third stop lets go" '"systemMessage"' \
+  "$(stop q4 'Merged it. I also fixed the flaky testing job in CI.')"
+# Real names are not agent codes; separator rows are not long cells; indented fences are code.
+printf 'Logs land in Amazon S3 as UTF-8 text. The P95 latency is 40 ms and P99 is 90 ms. EC2 hosts read them.\n\nCache is on redis.svc:6379 and the key used to sign is rotated. It is no longer cached.\n\nS3 and EC2 again, P95 and UTF-8, SHA-256 hashes, as of 2026-10-26.\n' > "$T/docs/plan/aws.md"
+expect "common tech names and host:port are not ledger marks" silent "$(run "$T/docs/plan/aws.md" q5)"
+SEP=$(printf -- '-%.0s' $(seq 1 170))
+printf '| a | b |\n|%s|%s|\n| x | y |\n| x | y |\n|%s|%s|\n|%s|%s|\n' "$SEP" "$SEP" "$SEP" "$SEP" "$SEP" "$SEP" > "$T/docs/plan/sep.md"
+expect "table separator rows are not long cells" silent "$(run "$T/docs/plan/sep.md" q6)"
+printf '1. Run it:\n\n   ```bash\n   git show 943e257 a/b.py:12 c/d.py:40 943e258 943e259 e/f.py:9 g/h.py:3 1a2b3c4d\n   ```\n\nDone.\n' > "$T/docs/plan/fence.md"
+expect "an indented fence is code, not prose" silent "$(run "$T/docs/plan/fence.md" q7)"
+# Swapping dashes for semicolons is not an improvement: both count as glued lines.
+D1='Phases run in order — within a phase the items are independent of each other, so any order inside one works.'
+printf '%s\n\n%s\n\n%s\n' "$D1" "$D1 Yes." "$D1 Always." > "$T/docs/plan/dashes.md"
+expect "dash-glued lines count like semicolon ones" "glued with a semicolon or dash" "$(run "$T/docs/plan/dashes.md" q8)"
+# The note names the move, not just the count.
+expect "the note points at the restructuring moves" "section 6b" "$(run "$T/docs/plan/dense.md" q9)"
+# Shape: agent codes alone, long sentences, a long page with no sections.
+{ printf 'Status for the owner.\n\n'; for i in 1 2 3 4; do printf 'S%d closed A%d and D%d holds per R%d, so the next step waits.\n\n' $i $i $i $i; done; } > "$T/docs/plan/codes.md"
+expect "agent codes in running text are called out on their own" "agent codes" "$(run "$T/docs/plan/codes.md" q10)"
+expect "and a new doc failing only on shape holds the turn" '"decision": "block"' "$(stop q10 'Wrote the status page.')"
+printf '| id | what |\n|---|---|\n| A1 | x |\n| A2 | y |\n| A3 | z |\n| A4 | w |\n| A5 | v |\n| A6 | u |\n| A7 | t |\n| A8 | s |\n| A9 | r |\n| A10 | q |\n| A11 | p |\n' > "$T/docs/plan/idcol.md"
+expect "codes in a table's id column are fine" silent "$(run "$T/docs/plan/idcol.md" q11)"
+L='When a seller uploads a file the importer reads every column and maps it to a field and then checks the values against the catalog and then writes the rows it trusts and holds back the rest for review by a person.'
+printf 'Intro.\n\n%s\n\n%s\n\n%s\n\n%s\n' "$L" "$L" "$L" "$L" > "$T/docs/plan/longs.md"
+expect "a run of very long sentences is called out" "run past 40 words" "$(run "$T/docs/plan/longs.md" q12)"
+{ printf 'Intro.\n\n'; for i in $(seq 1 90); do printf 'The sync job copies each row once a night. It skips rows that did not change. A failed row is retried the next night.\n\n'; done; } > "$T/docs/plan/flat.md"
+expect "a long page with no sections is called out" "section headings" "$(run "$T/docs/plan/flat.md" q13)"
 trash "$T" 2>/dev/null
 exit $fail
