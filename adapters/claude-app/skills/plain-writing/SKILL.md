@@ -81,6 +81,7 @@ Check the draft against `references/ai-tells.md`. A list of tells is a
 detector, not a ban list: a doc can pass every entry and still read
 generated. The test is whether a reader who distrusts AI-written docs would
 take the page seriously.
+Then check `references/language-quality.md` for structural defects.
 
 You cannot see your own voice. If a fresh reviewer (a new chat, or another
 person) is available for a voice pass, use one.

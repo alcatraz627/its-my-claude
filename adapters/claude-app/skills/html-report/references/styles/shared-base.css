@@ -1,0 +1,570 @@
+/* shared-base.css: rules every report style builds on.
+ *
+ * Inline this first, then the chosen style's CSS, in one <style> block.
+ * Styles override any variable or class defined here.
+ */
+
+/* ── Syntax Highlighting Tokens ─────────────────────────────────────────── */
+/* Override these custom properties in your template's CSS to change colors */
+:root {
+  --hl-keyword: #c084fc;
+  --hl-string: #86efac;
+  --hl-comment: #64748b;
+  --hl-number: #fbbf24;
+  --hl-type: #67e8f9;
+  --hl-attr: #fb923c;
+  --hl-operator: #94a3b8;
+  --hl-function: #60a5fa;
+}
+.kw {
+  color: var(--hl-keyword);
+}
+.st {
+  color: var(--hl-string);
+}
+.cm {
+  color: var(--hl-comment);
+  font-style: italic;
+}
+.nm {
+  color: var(--hl-number);
+}
+.tp {
+  color: var(--hl-type);
+}
+.at {
+  color: var(--hl-attr);
+}
+.op {
+  color: var(--hl-operator);
+}
+.fn {
+  color: var(--hl-function);
+}
+
+/* ── Code Dialog ────────────────────────────────────────────────────────── */
+dialog#code-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(90vw, 900px);
+  max-height: 85vh;
+  border: 1px solid var(--border, #333);
+  border-radius: 12px;
+  background: var(--code-dialog-bg, #1a1a2e);
+  color: var(--code-dialog-text, #e2e8f0);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+dialog#code-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+dialog#code-dialog[open] {
+  animation: dlg-in 0.2s ease-out;
+}
+dialog#code-dialog[data-closing] {
+  animation: dlg-out 0.15s ease-in forwards;
+}
+@keyframes dlg-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes dlg-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+dialog#code-dialog .dlg-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border, #333);
+  font-size: 0.85rem;
+}
+dialog#code-dialog .dlg-lang {
+  background: var(--hl-keyword, #c084fc);
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+dialog#code-dialog .dlg-title {
+  flex: 1;
+  opacity: 0.7;
+}
+dialog#code-dialog .dlg-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+dialog#code-dialog .dlg-lines {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+dialog#code-dialog .dlg-copy,
+dialog#code-dialog .dlg-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: inherit;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+dialog#code-dialog .dlg-copy:hover,
+dialog#code-dialog .dlg-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+dialog#code-dialog .dlg-copy.copied {
+  color: var(--hl-string, #86efac);
+}
+dialog#code-dialog .dlg-body {
+  overflow: auto;
+  max-height: calc(85vh - 52px);
+  padding: 0;
+}
+dialog#code-dialog .dlg-body pre {
+  margin: 0;
+  padding: 16px 20px;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ── Search Highlight ───────────────────────────────────────────────────── */
+mark {
+  background: rgba(250, 204, 21, 0.3);
+  color: inherit;
+  border-radius: 2px;
+  padding: 1px 0;
+}
+mark.search-active {
+  background: rgba(250, 204, 21, 0.7);
+  outline: 2px solid rgba(250, 204, 21, 0.9);
+  outline-offset: 1px;
+}
+.hidden-search {
+  display: none !important;
+}
+.search-reveal {
+  animation: search-fade 0.3s ease-out;
+}
+@keyframes search-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Search Nav Buttons (Chrome-like prev/next) ─────────────────────────── */
+.search-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  margin-left: 4px;
+}
+.search-prev,
+.search-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--border, #333);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted, #888);
+  cursor: pointer;
+  font-size: 0.6rem;
+  line-height: 1;
+  transition: all 0.1s;
+  padding: 0;
+}
+.search-prev {
+  border-radius: 4px 0 0 4px;
+}
+.search-next {
+  border-radius: 0 4px 4px 0;
+  border-left: none;
+}
+.search-prev:hover,
+.search-next:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text, #eee);
+}
+
+/* ── Width Picker ───────────────────────────────────────────────────────── */
+.width-picker {
+  display: inline-flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 2px;
+}
+.width-btn {
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  color: inherit;
+  opacity: 0.5;
+  transition: all 0.15s;
+}
+.width-btn:hover {
+  opacity: 0.8;
+}
+.width-btn.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Width Classes (shared defaults: styles can override these) ────────── */
+/* Applied by the shared toolbar JS via class toggling on the content container.
+   Individual style CSS files can define their own values for these classes. */
+.width-sm {
+  max-width: 640px !important;
+}
+.width-md {
+  max-width: 960px !important;
+}
+.width-lg {
+  max-width: 1200px !important;
+}
+.width-xl {
+  max-width: 100% !important;
+}
+
+/* ── Theme Toggle Button ────────────────────────────────────────────────── */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border, #333);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.15s;
+}
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── Print Media ────────────────────────────────────────────────────────── */
+@media print {
+  /* ── Page setup ────────────────────────────────────────────────────── */
+  @page {
+    margin: 1.5cm 1.3cm;
+    size: A4;
+  }
+
+  /* ── Hide interactive UI ───────────────────────────────────────────── */
+  .theme-toggle,
+  .width-picker,
+  .search-wrap,
+  #search,
+  #search-count,
+  dialog#code-dialog,
+  .tool-btn,
+  .font-picker,
+  .color-picker,
+  .style-picker,
+  .search-nav,
+  .copy-btn,
+  .code-expand,
+  .code-line-count,
+  .floating-toolbar,
+  .scroll-top-btn,
+  .reading-progress,
+  button:not(.tab-btn) {
+    display: none !important;
+  }
+
+  /* ── Color fidelity ────────────────────────────────────────────────── */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Typography & readability ──────────────────────────────────────── */
+  body {
+    font-size: 11pt;
+    line-height: 1.6;
+  }
+  p,
+  li,
+  td,
+  th,
+  blockquote {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* ── Code blocks: prevent horizontal overflow ──────────────────────── */
+  pre {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    overflow-x: visible !important;
+    font-size: 9pt !important;
+    line-height: 1.45 !important;
+  }
+  pre code {
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    font-size: 9pt !important;
+  }
+  .code-wrap {
+    break-inside: avoid;
+    cursor: default !important;
+  }
+  .code-header {
+    break-after: avoid;
+  }
+
+  /* ── Tables: prevent split rows ────────────────────────────────────── */
+  .table-wrap {
+    break-inside: auto;
+    overflow: visible !important;
+  }
+  table {
+    font-size: 9pt;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr {
+    break-inside: avoid;
+  }
+
+  /* ── Section headings: keep with following content, reduce print sizes */
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 14pt !important;
+    margin-top: 1.2rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  h3 {
+    font-size: 12pt !important;
+    margin-top: 0.8rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  h4 {
+    font-size: 11pt !important;
+    margin-top: 0.6rem !important;
+    margin-bottom: 0.3rem !important;
+  }
+  /* Don't prevent page breaks inside sections/cards: long sections
+     would leave previous pages half-empty. Let content flow naturally. */
+
+  /* ── Blockquotes ───────────────────────────────────────────────────── */
+  blockquote {
+    break-inside: avoid;
+  }
+
+  /* ── Tree blocks: force all details open for print ─────────────────── */
+  details.tree-node {
+    open: true;
+  }
+  details.tree-node > summary {
+    list-style: none;
+  }
+  details.tree-node > summary::before {
+    content: "▾" !important;
+    transform: none !important;
+  }
+  .tree-wrap {
+    break-inside: avoid;
+  }
+
+  /* ── Links: show URL after link text ───────────────────────────────── */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    color: #666;
+    font-weight: normal;
+  }
+  /* Don't show URL for anchor links (internal nav) */
+  a[href^="#"]::after {
+    content: none;
+  }
+
+  /* ── Search highlights: clean up ───────────────────────────────────── */
+  mark {
+    background: transparent !important;
+    outline: none !important;
+    color: inherit !important;
+  }
+}
+
+/* ── Code Line Numbers ──────────────────────────────────────────────────── */
+pre.has-line-nums {
+  padding: 0 !important;
+}
+pre.has-line-nums code {
+  display: block;
+  padding: 12px 0;
+}
+.line-row {
+  display: block;
+  /* NOTE(by human): Line height of 1.35 makes the lines very scattered, updated to 0.25 */
+  line-height: 0.25;
+  padding: 0 16px 0 0;
+}
+.line-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.line-num {
+  display: inline-block;
+  width: 3.5em;
+  padding: 0 12px 0 12px;
+  text-align: right;
+  color: var(--hl-comment, #64748b);
+  opacity: 0.5;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  pointer-events: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  margin-right: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.line-content {
+  display: inline;
+}
+.code-line-count {
+  font-size: 0.72rem;
+  opacity: 0.45;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Inline Code Path Coloring ──────────────────────────────────────────── */
+code.code-path .code-path-file {
+  color: var(--hl-function, #60a5fa);
+}
+code.code-path .code-path-line {
+  color: var(--hl-number, #fbbf24);
+  opacity: 0.7;
+}
+
+/* ── Reading Progress Bar ──────────────────────────────────────────────── */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: var(--accent, #818cf8);
+  z-index: 99999;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+/* ── Text Size Controls ────────────────────────────────────────────────── */
+.text-size-picker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.text-size-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border, #333);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted, #888);
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+.text-size-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text, #e2e8f0);
+}
+.text-size-label {
+  font-size: 0.7rem;
+  color: var(--text-muted, #888);
+  min-width: 32px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Scroll to Top ─────────────────────────────────────────────────────── */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border, rgba(128, 128, 128, 0.3));
+  background: var(--surface, rgba(15, 15, 25, 0.9));
+  color: var(--text-muted, #888);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px);
+  z-index: 9000;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.25s,
+    transform 0.25s,
+    background 0.15s;
+  pointer-events: none;
+}
+.scroll-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.scroll-top-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text, #e2e8f0);
+}
+html.light .scroll-top-btn {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #555;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+html.light .scroll-top-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #1f2328;
+}
