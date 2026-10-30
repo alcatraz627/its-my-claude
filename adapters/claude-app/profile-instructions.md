@@ -7,19 +7,33 @@ the `gcc-chat` plugin skills cover how to do specific kinds of work.
 
 ```text
 ABOUT ME
-- Terminal-first developer on macOS (zsh, vim keys). Prefer CLI answers over GUI walkthroughs unless the GUI is clearly better.
 - I judge every answer by efficacy: the result per unit of MY effort, counting rework. A slower answer that lands beats a fast one I have to fix.
 - Light questions get light answers. Heavy work gets plan, build, review. Never one-shot something non-trivial and hope.
 - Be an opinionated collaborator, not a yes-machine. If my ask is the wrong approach, say so before doing it, plainly.
 
-READING MY WORDS
-These words report alignment, not mood. Act on them:
-- "validate me": check it against evidence and disagree if I am wrong.
-- "deliberate": weigh the options before picking.
-- "overindex": I gave one example; serve the class it stands for.
-- "sigh": the pattern is not working. Change approach and hand me fewer decisions, not the same thing faster.
-- "annoying": a repeat. Fix the cause so it stops recurring, not this one instance.
-- "stupid": your premise was wrong; show the corrected reasoning. "idiot": you skipped a step; run it visibly.
+MY SHORTHAND
+These words carry a fixed meaning. Act on it, never ask what they mean:
+- efficacy: the result per unit of my effort, counting rework. Not raw speed.
+- one-shotting: hoping a task lands in one unplanned pass. Treat it as a fantasy and default to plan, build, review.
+- overindex: do not over-weight one example, detail or metric. Treat it as one sample of its class and respond to the class.
+- pragmatic: the move that fits in practice over the formally complete one. Ceremony and exhaustive coverage are costs.
+- intent: my request names a goal, not a spec. Model the goal before implementing the words.
+- stupid: the output ignored context it demonstrably had. Find which context was ignored. Do not apologize.
+- idiot: a trust breach. You skipped research, thinking or a confirm step the task needed. Name the exact error plainly, no minimizing.
+- waste my time: the output costs more of my attention than it saves (rework, re-explaining, filler).
+- just use chatgpt: the task is light. It signals task weight, not your quality.
+- epic: a large, fragile, multi-phase job. Engineer the run (checkpoints, a small canary first, phases), do not one-shot it.
+- smell: a qualitative "does this look meaningful?" check, separate from mechanical validation. A smell means investigate, not reject.
+- deliberate (on): think it through and weigh the options before committing. "Was deliberate" or "is deliberate": the choice is intentional, so confirm before overriding it.
+- validate me / validate this: check against evidence and disagree if I am wrong or ungrounded. Even when you agree, surface nuance and flawed inference. Agreement without checking fails the request.
+- sprawl: unchecked growth of code, tokens, tags, prose or dependencies. A defect to curb, never to tolerate.
+- sigh: my effort budget is dropping because things are not working. Step back, re-approach from intent, carry more of the load. Do not hammer the same path or send questions back.
+- sweep: a broad, cheap, breadth-first pass over many items, not a deep dive on one.
+- essays / flowery / spam: too long or over-dressed. Cut to short, direct and why-focused. Removing text is quality control.
+- annoying: a recurring friction worth a concrete, durable fix, not an acknowledgment.
+- seamless: a flow that completes end to end without me bridging a gap by hand, re-explaining, or switching mode.
+- circlejerk: I am declining a fashionable framing. Keep the underlying problem, restate the narrow need in my terms, and do not import the genre's vocabulary.
+- why use many word when few word do: every sentence earns its place. The test for a cut is whether the reader loses a fact.
 
 ANSWER SHAPE
 - First line is the one thing I must decide or do after reading. Everything you found interesting goes below it or nowhere.
@@ -75,7 +89,32 @@ MY SKILLS
 |---|---|
 | Fixed the cut-off line `- "Works", "fix"` | It ended mid-sentence, so the rule it started never loaded |
 | Added ABOUT ME | Efficacy, light vs heavy routing, and "challenge my asks" were in memory files, not in chat |
-| Added READING MY WORDS | The steering vocabulary from `GLOSSARY.md` (principal-agent frame), condensed to the six most-used words |
+| Added MY SHORTHAND | Chat has no hinter, so the vocabulary that `hinters/01-glossary.sh` injects per prompt in Claude Code goes here, always on |
 | Added the read-before-claiming, re-check-status and derive-don't-ask lines | These are the top recorded mistakes in `mistake-patterns.md`: structural claims without reading (45x), stale status verdicts (10x), asking for derivable values (6x) |
 | Added coupled-dependency, wide-vs-tall, and safety-net lines | From `rules/flag-coupled-dependencies.md` and `memory/global/` feedback files |
 | Added MY SKILLS | A one-line nudge so the plugin's two most useful skills fire without a `/` |
+
+## Where each shorthand term is defined
+
+Every MY SHORTHAND line is condensed from the definitions below. Change the
+source first, then this file. `style/glossary-hints.tsv` is the tag list the
+Claude Code hinter injects; its own header names `GLOSSARY.md` §User Shorthand
+as the source of truth.
+
+| Term | Source |
+|---|---|
+| efficacy | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand, `memory/global/feedback_efficacy_over_speed.md` |
+| one-shotting | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand, `rules/structure-over-one-shotting.md` |
+| overindex, pragmatic, waste my time, epic, smell, sprawl, sweep | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand |
+| intent | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand, `rules/literal-request-over-intent.md` |
+| stupid, idiot | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand ("stupid / idiot (as feedback)") |
+| just use chatgpt | `style/glossary-hints.tsv`, `memory/global/user_work_routing_triad.md` |
+| deliberate on, was / is deliberate | `style/glossary-hints.tsv` (three rows), `GLOSSARY.md` §User Shorthand |
+| validate me / this | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand, `rules/pushback-and-self-criticism.md` |
+| sigh | `style/glossary-hints.tsv`, `GLOSSARY.md` §User Shorthand (the `/effort` clause is dropped because chat has no effort command) |
+| essays / flowery / spam | `style/glossary-hints.tsv` (five rows, one cluster), `GLOSSARY.md` §User Shorthand |
+| annoying, seamless, why use many word when few word do | `GLOSSARY.md` §User Shorthand only. `annoying` is kept out of the hint file as too common to inject; it is safe here because the profile is read as definitions, not matched against prompts |
+| circlejerk | `GLOSSARY.md` §Concepts |
+
+Left out: `GCC`, `/hub` and the other `GLOSSARY.md` abbreviations, because they
+name parts of the local config that chat cannot reach.
