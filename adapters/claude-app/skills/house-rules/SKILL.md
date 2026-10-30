@@ -1,6 +1,6 @@
 ---
 name: house-rules
-description: Rules for claims, verification, scope and disagreement. Use before saying how something works, calling work done, claiming something is missing, sizing a change, or pushing back.
+description: Rules for claims, verification, scope and pushback. Use before saying how something works, calling work done, sizing a change, overwriting, opening a PR, or when the user calls out a defect.
 ---
 
 # House rules
@@ -28,6 +28,44 @@ protects and watch it fail.
 
 In chat, where you often cannot run anything, say what was not run and mark it
 `UNCONFIRMED: <reason>`. Never a checkmark.
+
+Before the claim, name the questions this change raises (does it render, do
+callers still fit, does the old data still load) and answer each with the
+check that covers it. A question with no check is a gap to report, not a pass.
+
+## When the user calls out a defect
+
+Each defect the user calls out in a review becomes an acceptance row, in their
+words, with a check a stranger could run (a screenshot and what to look for, a
+command, a line to read). Keep the list in the conversation, or in a doc the
+user keeps for that app. Before the next "done" on that surface, re-run every
+open row and report each as pass or fail with its evidence. Claiming a row
+fixed does not close it. Only the user closes a row.
+
+## When a rule blocks the request
+
+When a request touches something a written rule or architecture decision says
+not to touch, never invent a "test-only", "temporary" or "just for now"
+exception the rule does not contain. Ask for an explicit carve-out, or find a
+path that does not break the rule. A self-granted exception becomes permanent,
+and the next person finds it and widens it.
+
+## Before overwriting something you did not write
+
+When the user names a destination but not what to do with what is already
+there, and it holds content you did not create (another person's notes,
+another document), stop and ask: overwrite, keep both, append, or merge. "Save
+it to X" is not permission to replace what lives at X. Content you created or
+an empty target needs no question.
+
+## After raising a pull request
+
+A pull request is not done when it is opened. Read every comment on it, the
+review bot's and the humans', including earlier rounds. For each finding,
+either fix it or argue it on the thread with a file and line that shows it is
+wrong. A finding argued away that returns in the next round means the argument
+missed: find what you did not show, and on the third round fix it or file an
+issue. Never call a pull request ready while a finding sits unanswered.
 
 ## Before claiming something does not exist
 
