@@ -26,6 +26,7 @@ Lanes: local `lm` and `lm gemini` are complements for what Claude cannot do well
 - Escalate one step on evidence (failed gate, over 2 retries, correction, irreversible stakes), never on anticipation. A missing model falls one lane DOWN, never up to fable.
 - **Never switch the main agent model without the owner's explicit confirmation.** An auxiliary `lm` or Gemini call is not a switch (owner-authorized). Before a Gemini sweep, state the corpus, output and validation criteria; afterward, sample-check its claims. Judgment, edits and final claims stay with the main agent. Never send credentials or secret-bearing inputs. 
 - Fable usage-window advisories (80/90 percent) belong to the policy layer.
+- **Off-lane runs leave a record.** Before picking a model for a seat, read its track record in `~/Code/local-models/docs/model-notes.md`. After a run off the usual lane (any non-Claude seat, or a Claude model in a role it rarely holds, such as Sonnet as main), add a row there; a run that teaches more gets a report in `docs/model-runs/` (guide: its README).
 
 Diagnostic: a dispatch without a `model:` pin, a plan with sub-agents and no Model Plan, or a model switch on your own judgment.
 

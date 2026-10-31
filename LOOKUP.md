@@ -86,6 +86,7 @@
 | `features/fiber-snatcher.md` | React/Next.js dev-app debugging daemon | `tool:fiber-snatcher`, `topic:react-debugging` |
 | `features/tab-title.md` | Modular Ghostty tab-title composer: mode / intent / base / focus / status slots | `tool:tab-title`, `topic:terminal-title` |
 | `features/local-models.md` | Local-model CLI suite: q (quick LLM), imagine (image gen), see (VLM), lm / warm | `tool:lm`, `topic:local-models`, `topic:ollama` |
+| `~/Code/local-models/docs/model-notes.md` + `docs/model-runs/` | Track record of off-lane model runs (non-Claude seats, Claude in a rare role); read before a model pick, file after one | `topic:model-tier`, `phrase:"which model"` |
 | `features/tmp-jail.md` | Session-scoped /tmp write-jail; hook-gated, user-lifted only | `topic:tmp-jail`, `phrase:"only write to tmp"` |
 | `features/session-plugs.md` | Registry of context-injecting + learning-capturing plugs across the session lifecycle | `skill:plugs`, `topic:session-lifecycle` |
 | `features/persona-activation.md` | How personas get picked up + each usage logged for efficacy review | `topic:personas`, `topic:persona-activation` |
