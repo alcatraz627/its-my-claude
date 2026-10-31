@@ -19,3 +19,10 @@
 {"cluster":"c-e291f233","title":"Presented a reply list as complete without sweeping all open threads","outcome":"filed","detail":"prop-20261021-140437-6d","ts":"2026-10-21T14:04:37.117211Z"}
 {"cluster":"c-72f6b097","title":"Process-inspection commands printed live secrets into the conversation","outcome":"filed","detail":"prop-20261021-140437-95","ts":"2026-10-21T14:04:37.117211Z"}
 {"cluster":"c-aca399ad","title":"New document written as a comparison against an existing sibling instead of standing on its own","outcome":"filed","detail":"prop-20261021-140437-78","ts":"2026-10-21T14:04:37.117211Z"}
+{"cluster":"c-2d8458a5","title":"Written output uses a dense internal-mechanism voice instead of yours","outcome":"already-filed","detail":"prop-20261006-103353-28","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-e62697ed","title":"Internal bookkeeping added to documents you read as a status surface","outcome":"already-filed","detail":"prop-20261021-140437-e8","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-10c85680","title":"Claimed a deploy step worked a certain way without reading the code first","outcome":"filed","detail":"prop-20261027-103835-74","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-755b139d","title":"Closing replies cited bare issue and commit numbers without naming what they were","outcome":"filed","detail":"prop-20261027-103835-58","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-b8727f09","title":"Visual UI reviews run without using the local vision model","outcome":"already-filed","detail":"prop-20261021-140437-58","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-72f6b097","title":"Commands that print live tokens ran without redirecting their output","outcome":"already-filed","detail":"prop-20261021-140437-95","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-754aa69a","title":"Pull requests opened without the required title flag","outcome":"filed","detail":"prop-20261027-103835-89","ts":"2026-10-27T10:38:35.512583Z"}

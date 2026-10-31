@@ -26,7 +26,9 @@ in the background, as the owner asks) is already watching.
 
 No review for the head five minutes after the push means the bot's own
 refresh is held (its half-hour spam guard) or never coming, so the gate asks
-for `/claude-bot review`, which runs at once. Skipped: closed, merged and
+for a local `clanky-review.py` run, which starts at once and posts nothing to
+the PR. A `/claude-bot review` comment also works but is discouraged (owner,
+2026-10-30). Skipped: closed, merged and
 draft PRs, and titles carrying [nobot] or [no-bot]. Each block fires at most
 twice per PR, head and phase, then becomes a note to the owner.
 
@@ -330,7 +332,7 @@ def check_pr(k, info, st):
         return (f"{k}: Clanky has not reviewed head {head7} yet. Run {SELF} wait {k} "
                 f"(polls up to {WAIT_MAX_S // 60} min), then disposition what it raises."), "wait", head7
     return (f"{k}: no Clanky review for head {head7} {int(age // 60)} min after the push. Retrigger it once, then wait:\n"
-            f"  gh pr comment {ref[2]} --repo {ref[0]}/{ref[1]} --body $'/claude-bot review\\n(via 🤖claude)'\n"
+            f"  python3 ~/Code/Versable/slack-automation/scripts/clanky-review.py {k} --notify <your ipc alias>\n"
             f"  {SELF} wait {k}"), "retrigger", head7
 
 

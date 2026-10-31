@@ -1,3 +1,17 @@
+## bloop: Ghostty settings window, engine plus front end [556b1dee] 2026-10-31
+
+**Purpose:** build the settings window from an approved build-ui plan on a repo outside the gcc, with a builder seat for the front end and one validator.
+
+**Insights:**
+
+1. `isolation: "worktree"` cuts the worktree from the session's own repo (here `~/.claude`), not the repo being built. The validator caught it and stopped. For work in another repo, `git clone -b <branch>` into the scratchpad and say so in the brief.
+2. A green suite of 142 tests did not guard the page layer. Four mutations (page stages by writing, Apply drops its base hash, Undo writes wrong bytes, Raw save drops its hash) all survived. Ask the builder for page-level guard tests that run the real page code against a fake server recording calls, and make the checks script a deliverable of the build, not of the plan.
+3. A missing optional argument is a skipped guard: the server treated an absent `baseHash` as "no stale check". Make safety inputs required at the route, then test the 400.
+4. Delegating the largest unit to one fresh builder with the mocks, plan and engine contract as spec worked (26 minutes). Resuming the same builder for the fix round was cheaper than a new seat because it knew its modules.
+5. The validator's best finds were everyday flows, not input fuzz: double-click Undo, and Cmd+Enter with a field still focused. Brief the validator to use real key events and real double-clicks, not scripted calls.
+
+---
+
 ## bloop: /quiz skill plus the Clanky PR review gate [gcc-all b3c49297] 2026-10-24
 
 **Purpose:** build /quiz from a fable-seat plan and gate it together with a same-day Stop hook in one sonnet validator.

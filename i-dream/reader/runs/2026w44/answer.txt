@@ -1,0 +1,2 @@
+idream reader 2026w44:
+1: agree — Need to go deeper with this voice/prose checking, if the agents write a dense single paragraphs with 3 lines / 3 bullet points / em-dash or semicolon separate long line; its still failing the same basic readability annoyance check

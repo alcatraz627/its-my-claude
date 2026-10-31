@@ -739,18 +739,3 @@ Insights:
 
 ---
 
-## catchup: resume pause-credits mini dump into pause-credit-a3 (2026-09-23 19:20)
-
-**Purpose:** Resume PR #81 pause/cancel/metering work from _20260923-speedway-pause-credits.claude.md after /clear.
-
-**Insights:**
-
-1. The workspace _active.md in this project points at an August session (workspace switcher); it is not this work stream. Resolve by session id and ignore _active.md when the header date is stale.
-2. The checkpoint's "rg finds no weight/share/basis/scale" check matches ordinary English across app/; narrow it to workflow_delivered_parts and to `weight` inside app/lib/usage before treating a hit as drift.
-3. usage.server.ts:515 still spreads e.weight though nothing sets it; a leftover of the abandoned weights design, cheap to remove.
-4. No goal record existed for this stream (gs list empty); propose one rather than arming.
-
----
-
----
-

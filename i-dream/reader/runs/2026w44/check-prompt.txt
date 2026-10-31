@@ -1,0 +1,615 @@
+These problems were named from evidence alone, without reading the checks they credit. Below them is the source header of each credited check.
+
+## The problems as named
+```json
+[
+  {
+    "cluster": "c-2d8458a5",
+    "merged": [
+      "c-f4548156"
+    ],
+    "kind": "repeat",
+    "title": "Wrote explanations as mechanism lists rather than clear, reader-first prose",
+    "why": "atone:mist-20261020-163710-c0, atone:mist-20261005-094856-da, and atone:mist-20260930-222509-5b show the same pattern across three projects over four weeks, with a correction signal in the landing-app session confirming it reached you.",
+    "evidence_ids": [
+      "atone:mist-20261020-163710-c0",
+      "atone:mist-20261005-094856-da",
+      "atone:mist-20260930-222509-5b",
+      "proposals:prop-20261020-170018-1e",
+      "proposals:prop-20261009-220054-ee",
+      "proposals:prop-20260930-222530-a3",
+      "checkpoints:ckpt-2514a881184ed0de",
+      "signals:165c6e34-ce19-47f5-899b-82af68c0724c-1792512950"
+    ],
+    "proposal": {
+      "target": "hooks/doc-voice-gate.py",
+      "change": "Add a pattern that blocks when an owner-facing document's first substantive paragraph begins with a technical implementation noun (cache, memoization, hash, sha, id, token) and no plain summary sentence precedes it in the same section."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261020-163710-c0",
+        "what": "Wrote the pull request description for the performance work as a series of implementation paragraphs — memoization, cache keys, CSS calculations — with no plain-language summary or reader-facing framing."
+      },
+      {
+        "evidence_id": "atone:mist-20261005-094856-da",
+        "what": "Wrote an external root-cause document using invented actors and anonymised facts instead of the real, known details that were available."
+      },
+      {
+        "evidence_id": "atone:mist-20260930-222509-5b",
+        "what": "Used em-dashes in replies to you despite a standing rule against them."
+      }
+    ],
+    "why_repeats": "The prose check catches punctuation and vocabulary signals but not structural patterns — a document that opens with implementation-detail paragraphs rather than a plain-language summary passes through because no check looks at what the document's opening is doing.",
+    "fix": "Extend the prose check to require that owner-facing and external documents open with a plain-language summary sentence before any list of implementation details.",
+    "guard": {
+      "hook_id": "doc-voice-gate",
+      "plain": "A check on AI prose patterns in owner-facing writing",
+      "verdict": "partly",
+      "gap": "Documents that open with implementation mechanism paragraphs rather than a plain summary pass through; the check catches vocabulary and punctuation signals, not document structure"
+    }
+  },
+  {
+    "cluster": "c-e62697ed",
+    "kind": "repeat",
+    "title": "Added internal tracking details to documents meant for outside readers",
+    "why": "atone:mist-20261020-165604-12 and atone:mist-20261019-004432-39 show the same failure — internal tracking details reaching a reader-facing surface — across two different projects within two days.",
+    "evidence_ids": [
+      "atone:mist-20261020-165604-12",
+      "atone:mist-20261019-004432-39",
+      "proposals:prop-20261020-165630-be",
+      "proposals:prop-20261019-004456-14"
+    ],
+    "proposal": {
+      "target": "hooks/doc-voice-gate.py",
+      "change": "Add patterns that block 'Updated HH:MM', commit-hash strings matching [a-f0-9]{7,}, and 'filename.ext:NNN' file-line citations in files under docs/, plan/, or spec/ paths that do not carry an .internal suffix."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261020-165604-12",
+        "what": "Added timestamped update lines and internal status markers to a live PR-status document you use as a clean reader-facing surface, without updating the underlying status colours those markers implied."
+      },
+      {
+        "evidence_id": "atone:mist-20261019-004432-39",
+        "what": "Wrote a neutral capability document as an internal ledger of commit hashes, file references, and task identifiers — internal bookkeeping that should not appear in a document an outside reader sees."
+      }
+    ],
+    "why_repeats": "Nothing checks whether a document is intended for an outside reader before allowing internal references; timestamped update lines, commit hashes, and file-path citations pass through because no check is positioned to stop them in reader-facing files.",
+    "fix": "Add a check that blocks commit hashes, file-path citations, and dated update lines from appearing in documents that are tagged or named as reader-facing.",
+    "guard": {
+      "hook_id": null,
+      "plain": "",
+      "verdict": "no",
+      "gap": ""
+    }
+  },
+  {
+    "cluster": "c-10c85680",
+    "kind": "structural-need",
+    "title": "Stated what a feature needed based on assumption rather than reading the actual path it uses",
+    "why": "atone:mist-20261021-121619-a1 shows a consequential wrong claim about deployment timing that led you to believe finished work was blocked for two weeks.",
+    "evidence_ids": [
+      "atone:mist-20261021-121619-a1",
+      "proposals:prop-20261022-045927-e7",
+      "checkpoints:ckpt-294218a10f9d23a5",
+      "checkpoints:ckpt-54dab68635bf45f1",
+      "checkpoints:ckpt-faa4edb53c14e343",
+      "checkpoints:ckpt-eef2ab472c5caedd",
+      "signals:6b32d198-4cdc-46a2-84c3-578bae6b4f4b-1792631335"
+    ],
+    "proposal": {
+      "target": "hooks/guard-structural-claim.sh",
+      "change": "Add a pattern that fires when the reply contains 'needs', 'requires', or 'won't work until' in a sentence about deployment, CI, or infrastructure without a file path or commit reference cited in the same sentence."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261021-121619-a1",
+        "what": "Told you three finished features were not live and would not be until November because deploys need CI minutes — without reading the deploy path, which uses a separate mechanism that was not under the CI ban at all."
+      }
+    ],
+    "why_repeats": "The check on factual claims fires on explicit stated certainty but not on infrastructure constraint claims framed as implications — a sentence saying 'this requires X' passes through without a source check because it reads as inference rather than assertion.",
+    "fix": "Extend the factual-claim check to require a file or configuration reference for any sentence that states a deploy, cost, or timing constraint as a reason something cannot happen.",
+    "guard": {
+      "hook_id": "structural-claim",
+      "plain": "A check on factual claims made without reading the relevant code first",
+      "verdict": "partly",
+      "gap": "Constraint claims framed as implications — 'this requires CI minutes', 'this won't be live until' — pass through without a source check because they are not phrased as direct assertions"
+    }
+  },
+  {
+    "cluster": "c-b8727f09",
+    "kind": "structural-need",
+    "title": "Judged visual UI work by reading code instead of looking at the actual rendered result",
+    "why": "atone:mist-20261020-120344-a4 and proposals:prop-20261020-120408-26 both flag the same gap: visual conclusions delivered from code reading alone, with the vision tool not called.",
+    "evidence_ids": [
+      "atone:mist-20261020-120344-a4",
+      "proposals:prop-20261020-120408-26"
+    ],
+    "proposal": {
+      "target": "hooks/ui-verified-stop.py",
+      "change": "Extend the check to require at least one vision-model tool call before any message containing 'looks correct', 'visually', 'renders as', or 'layout is' in a UI review session."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261020-120344-a4",
+        "what": "Evaluated the landing page across a wide range of screen widths by reading CSS class names and property values rather than using the local vision tool to look at the rendered pages."
+      }
+    ],
+    "why_repeats": "Nothing stops a visual verdict from being delivered based on code reading alone; no check requires the vision tool to have been called before a UI review conclusion is stated.",
+    "fix": "Add a check that blocks a visual review verdict unless the vision tool has been invoked at least once in the same session.",
+    "guard": {
+      "hook_id": null,
+      "plain": "",
+      "verdict": "no",
+      "gap": ""
+    }
+  },
+  {
+    "cluster": "c-72f6b097",
+    "merged": [
+      "c-cf31c956"
+    ],
+    "kind": "repeat",
+    "title": "Printed live credentials into the session transcript",
+    "why": "atone:mist-20261023-070330-ea, atone:mist-20261022-110235-d2, atone:mist-20261014-204739-3c, and atone:mist-20261010-102728-94 each show a token reaching the transcript via a command whose normal output happens to include credentials, not via environment-variable printing, so the env-dump check did not fire.",
+    "evidence_ids": [
+      "atone:mist-20261023-070330-ea",
+      "atone:mist-20261022-110235-d2",
+      "atone:mist-20261014-204739-3c",
+      "atone:mist-20261010-102728-94",
+      "proposals:prop-20261022-115157-ae",
+      "proposals:prop-20261010-133204-5a",
+      "signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792664456",
+      "signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792656487"
+    ],
+    "proposal": {
+      "target": "hooks/guard-env-dump.sh",
+      "change": "Add a blocklist of stdout-token-emitting commands — 'print-access-token', 'pm2 jlist', 'ps.*args', 'ps.*cmd', 'ps.*-eo.*args' — and block any Bash tool call whose command string matches these patterns before execution."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261023-070330-ea",
+        "what": "Ran a command to print a Google Cloud access token and let the live token appear directly in the transcript instead of redirecting or suppressing the output."
+      },
+      {
+        "evidence_id": "atone:mist-20261022-110235-d2",
+        "what": "Wrote a test fixture that captured the full process environment including API tokens; when an assertion failed, the error output included those live tokens."
+      },
+      {
+        "evidence_id": "atone:mist-20261014-204739-3c",
+        "what": "Ran a process-listing command that prints each process's launch environment, putting Slack and other tokens into the transcript."
+      },
+      {
+        "evidence_id": "atone:mist-20261010-102728-94",
+        "what": "Ran a full-argument process listing on a remote server; a tunnel process carries its token in its arguments, so the token appeared in the output."
+      }
+    ],
+    "why_repeats": "The check that catches environment-printing commands does not cover commands whose normal output happens to include tokens — credential-printing CLI subcommands, process listers that include launch arguments, and test fixtures that capture the process environment all produce token output without triggering it.",
+    "fix": "Add the specific commands and patterns that emit tokens via standard output to the blocked-command list, separately from the existing check on environment-variable printing.",
+    "guard": {
+      "hook_id": "guard-env-dump",
+      "plain": "A check that stops commands from printing the session environment variables",
+      "verdict": "partly",
+      "gap": "Commands that emit tokens via standard output — credential-printing CLI subcommands, process listers that include launch arguments — are not caught"
+    }
+  },
+  {
+    "cluster": "c-754aa69a",
+    "merged": [
+      "c-b1b645d3"
+    ],
+    "kind": "repeat",
+    "title": "Opened pull requests without the required title flag and without running the local review step",
+    "why": "atone:mist-20261023-182027-f1, atone:mist-20261013-095552-b7, and atone:mist-20261006-115527-88 show the same pair of required steps skipped at PR-open time across five weeks and multiple projects.",
+    "evidence_ids": [
+      "atone:mist-20261023-182027-f1",
+      "atone:mist-20261013-095552-b7",
+      "atone:mist-20261006-115527-88",
+      "proposals:prop-20261013-095815-3e",
+      "checkpoints:ckpt-c474c3c69b2baffc",
+      "checkpoints:ckpt-0067d14232e85045",
+      "signals:e815d840-8fb8-4acd-a8e2-a559add633d8-1792786102"
+    ],
+    "proposal": {
+      "target": "hooks/guard-pr-title-tags",
+      "change": "Before allowing gh pr create or gh pr edit, check session history for a local codex-review invocation in the same working directory within the current session and block if none is found."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261023-182027-f1",
+        "what": "Opened two pull requests with titles missing the required notification-suppression flag and skipped the local code review step for both."
+      },
+      {
+        "evidence_id": "atone:mist-20261013-095552-b7",
+        "what": "Raised several pull requests across multiple repositories without the required ticket links or links to related PRs in the titles."
+      },
+      {
+        "evidence_id": "atone:mist-20261006-115527-88",
+        "what": "Opened pull requests across six repositories without the required notification-suppression flag, triggering 37 Slack messages in the review channel."
+      }
+    ],
+    "why_repeats": "The title check enforces the flag requirement but does not enforce the local review step; both must pass before a pull request is opened, and only one of the two has any enforcement.",
+    "fix": "Add a condition to the pull-request check that verifies the local review step was completed in the current session before allowing a PR to be created.",
+    "guard": {
+      "hook_id": "guard-pr-title-tags",
+      "plain": "A check on pull request titles for required flags before a PR is opened",
+      "verdict": "partly",
+      "gap": "The check enforces the title flag but not the local review step; a PR that passes the title check can still be opened without review having run"
+    }
+  },
+  {
+    "cluster": "c-461be27e",
+    "kind": "repeat",
+    "title": "Ran a review of only the new code and dropped the standing full-surface audit you had asked for",
+    "why": "atone:mist-20261022-061117-82 and signals:ea931f9b-4604-42f9-a1d6-94351f226770-1792649276 show the standing audit was dropped and you had to re-state the requirement.",
+    "evidence_ids": [
+      "atone:mist-20261022-061117-82",
+      "proposals:prop-20261022-075206-f6",
+      "signals:ea931f9b-4604-42f9-a1d6-94351f226770-1792649276"
+    ],
+    "proposal": {
+      "target": "hooks/session-start.sh",
+      "change": "At session start, emit any open checkpoint entries whose text contains 'full audit', 'whole surface', or 'consistency check' as a visible pre-turn reminder before the first agent response."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261022-061117-82",
+        "what": "You had asked across multiple sessions for a full consistency audit of the whole application surface; this session's adversarial review covered only the code added in that session and never ran the standing audit."
+      }
+    ],
+    "why_repeats": "Standing instructions from prior sessions are not surfaced at the start of a new session, so the narrower in-session request is all that gets actioned and the accumulated standing task is silently dropped each time.",
+    "fix": "Surface open standing-task entries — those asking for whole-surface audits or cross-session consistency checks — in the session start context so they cannot be silently overridden by a narrower in-session request.",
+    "guard": {
+      "hook_id": null,
+      "plain": "",
+      "verdict": "no",
+      "gap": ""
+    }
+  }
+]
+```
+
+## The credited checks
+### doc-voice-gate (/Users/alcatraz627/.claude/scripts/hooks/doc-voice-gate.py)
+```
+#!/usr/bin/env python3
+"""Holds a document written for people to the shape a person can read.
+
+Two failures it catches. A doc meant for a person (a plan, a spec, a
+directions file) comes out as the agent's own ledger: internal ids, commit
+shas, file:line references, dated rulings, "the spec says X, but". Or it comes
+out as a wall of text: table cells and paragraphs hundreds of characters long.
+
+A note during an edit was not enough: clanky-opus got it three times on
+DIRECTIONS.md (2026-10-22), decided the file was for agents, kept writing, and
+told the owner it had written a better doc. So the check now runs again when
+the turn ends, on the file as it stands. While a doc written this turn still
+fails, the turn may not end (twice), and never on a reply that calls that doc
+better or fixed. If the agent ends the turn anyway, the owner is told.
+
+A third failure is a doc that is hard to skim: dense paragraphs, lines spliced
+with semicolons, runs of sentences that only name code and paths. Those checks
+are shared with the GitHub prose gate (prose_readability.py), with a few more
+allowed here because a doc is longer than a comment.
+
+Runtime contract:
+  doc-voice-gate.py          PostToolUse on Write/Edit/MultiEdit: note + record
+  doc-voice-gate.py stop     Stop: re-check this turn's docs, block or tell
+Scope: .md files under a `docs/` folder, or any .md whose frontmatter names a
+non-agent `reader:` (that includes a file under `.claude/`). Skips `archive/`,
+other `.claude/` files, and changelogs, RCAs and ADRs. `reader: agent` exempts
+a file outside `docs/` only; under `docs/` only the owner's list does
+(~/.claude/doc-voice-exempt.txt, one path glob per line). Fenced code and
+everything after a final Sources / References / Appendix heading are not
+counted.
+A doc under `.claude/output/` that names no reader is judged only when the
+reply at the end of the turn points the owner at it by its full path, because
+that is the moment it becomes something a person reads. A seat's own output is
+never judged this way. `reader: agent` at the top of the file clears it.
+
+Mute: touch ~/.claude/.no-doc-voice-gate · One-shot: DOC_VOICE_OFF=1
+Test: bash ~/.claude/scripts/hooks/doc-voice-gate.test.sh
+"""
+import fnmatch
+import json
+import os
+import re
+import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import prose_readability  # noqa: E402
+
+# Planning shorthand alone (V1, T3) is common and mild; the ledger voice shows
+# as several kinds at once (ids plus shas, file:line or dated rulings).
+THRESHOLD = 8
+MIN_KINDS = 2
+# Measured on DIRECTIONS.md: the wall version had 13 table cells over 160
+# characters and 2 paragraphs over 400; its rewrite had none. A plain doc the
+# owner approved has 2 long cells, so one or two are allowed.
+LONG_CELL, LONG_BLOCK, HUGE_BLOCK = 160, 400, 900
+MAX_LONG_CELLS, MAX_LONG_BLOCKS = 3, 2
+# Skim checks (prose_readability.py). Across the docs/ folders on this machine
+# the approved plain docs have none of the three, and the ledger-style ones have
+# several, so a few of each are allowed before the doc is called hard to skim.
+MAX_DENSE, MAX_SPLICED, MAX_MECHANISM = 2, 2, 2
+MAX_STOP_BLOCKS = 2
+
+STATE_DIR = os.environ.get("DOC_VOICE_STATE", "/tmp")
+EXEMPT = os.environ.get("DOC_VOICE_EXEMPT", os.path.expanduser("~/.claude/doc-voice-exempt.txt"))
+MUTE = os.path.expanduser("~/.claude/.no-doc-voice-gate")
+
+SIGNALS = {
+    "internal id": re.compile(r"\b[A-Z]{2,5}-\d{1,4}\b|\b[A-Z]\d{1,2}[a-z]?\b(?=[\s,.;:)\]|])"),
+    "commit sha": re.compile(r"\b(?=[0-9a-f]*\d)(?=[0-9a-f]*[a-f])[0-9a-f]{7,40}\b"),
+    "file:line": re.compile(r"[\w./-]+\.[a-z]{1,5}:\d+|`:\d+`"),
+    "ledger framing": re.compile(
+        r"\(\d{4}-\d{2}-\d{2}\b|\b(?:standing|owner) (?:decision|ruling)s?\b|\bruling\b"
+        r"|\b(?:accepted|decided|ruled|agreed) (?:on )?\d{4}-\d{2}-\d{2}"
+        r"|\bpreviously\b|\bno longer\b|\bused to\b|\bpre-fix\b|\bpost-fix\b|\bsuperseded\b"
+        r"|\bcontrary to\b|\bthe (?:spec|doc|cprd|prd|plan|source|brief) (?:says|said|claims|asked)\b",
+        re.IGNORECASE,
+    ),
+    # A living status doc is rewritten to be current, so "Updated 20:15" or
+    # "Status at ~22:10" is an audit trail about the doc, not information in it.
+```
+
+### structural-claim (/Users/alcatraz627/.claude/scripts/hooks/guard-structural-claim.sh)
+```
+#!/usr/bin/env bash
+# guard-structural-claim.sh — Stop hook: a GROUNDING GATE, not an error detector.
+#
+# When the agent's final message asserts how a subsystem works — authority /
+# source-of-truth / call-chain / an external tool's behavior / a dependency claim —
+# and this turn shows NO grounding (no in-message cite AND no Read/Grep of the named
+# subject), the gate fires. A fire forces the agent to SYNC WITH THE FILESYSTEM
+# before proceeding.
+#
+# Philosophy (the user's, verbatim): "the extra time or tool calls are worthwhile
+# for correctness even if nothing comes out of the procedure, because it's much
+# worse when things are MISSED." So this gate's value is FORCED GROUNDING, not
+# true-positive yield:
+#   - A false FIRE (the claim was actually right) is ACCEPTABLE when a grounding
+#     read was possible and simply wasn't done — the sync is the point.
+#   - A fire is BAD only when grounding is IMPOSSIBLE (person/team owns; external
+#     behavior already looked up) or ALREADY DONE (subject read/edited this turn,
+#     a file:line cited, a run verified). Those are the carve-outs.
+# Anti-paralysis comes from LOOP-SAFETY (block once per claim sentence, then step
+# aside) — NOT from silencing. The block is kept because a nudge forces nothing.
+#
+# Backstop for atone `structural-claim-without-reading-code` (S3, #1 recurring).
+#
+# Detection pipeline (all must hold to fire):
+#   ①  a claim-shape matches the final message (authority incl owns/mints; and the
+#      ship-gated callchain/extmech/manifest shapes when enabled)
+#   ②  no clearing carve-out in the message: file:line/[UNVERIFIED] (E1), a
+#      verify-verb+runtime (E3), person/team-owns homograph (E5), or a meta-quote
+#      of the pattern/hook itself (META)
+#   ③  read-gate (this turn only):
+#       - AUTHORING frame (ownership table / arrow-assignment / "should own" /
+#         state-ownership map): cleared by ANY substantive code interaction this
+#         turn (Read/Grep/Glob/Edit/Write of a code file). If the turn was pure
+#         prose-from-memory → FIRE with an authoring-specific message (the value is
+#         designing-WITH-grounding).
+#       - else: E2 backtick-path cite clears; extmech cleared by a web lookup;
+#         manifest cleared by a manifest-file read; otherwise the claim SUBJECT
+#         must have been read/edited this turn, or it fires.
+#
+# Response (stakes-scaled, loop-safe on the MATCHED CLAIM SENTENCE):
+#   - docs-only turn (no code edited)      → systemMessage (never a block, never
+#                                            silent — grounding still valued in design)
+#   - high-stakes repo + code edited       → decision:block once, then step aside
+#   - low-stakes                           → systemMessage
+# Mute: touch ~/.claude/.no-structural-claim-gate
+#
+# Shapes are gated by STRUCTCLAIM_SHAPES (comma list). Default ships only the
+# shapes that passed a full-corpus groundable-fire replay; the rest are computed
+# but default-off. See the SHIP-GATE RESULTS block below for the measured numbers.
+
+set -uo pipefail
+[ -f "$HOME/.claude/.no-structural-claim-gate" ] && exit 0
+
+input=$(cat 2>/dev/null) || exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
+[ -r "$HOOK_COMMON" ] || exit 0
+. "$HOOK_COMMON"
+
+sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
+tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
+[ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
+sid8=$(hook_sid8 "$sid")
+cwd=$(printf '%s' "$input" | jq -r '.cwd // empty' 2>/dev/null)
+[ -z "$cwd" ] && cwd="$PWD"
+
+WARN="$HOME/.claude/scripts/hooks/warn-log.sh"
+
+# ── SHIP-GATE RESULTS (full-corpus replay over 923 transcripts / 2958 turns,
+# 2026-07-02; see assets/reports/20260702-hook-lanes/lane4-structural-claim.md).
+# Baseline (old live hook): 31 fires (27 BLOCK / 4 SOFT), ~0 TP by error-detection.
+#   authority : SHIP. Final corpus: 4 fires (0 BLOCK / 4 SOFT) — all 4 hand-read as
+#               GROUNDABLE (0% pointless); the person/meta/verified/grounded subset
+#               correctly drops, the design-from-memory authoring fires stay. The
+#               owns/mints branch is KEPT (drives those valued authoring fires).
+#               (BLOCK is reachable — proven by fixtures — but no high-stakes
+#               blind-in-code turn exists in this corpus, consistent with the
+#               empirical 0/48-TP finding.)
+#   callchain : HOLD (default-off). Restricted (subject+verb+checkable object,
+#               "calls" dropped as a noun homograph) it fires 0 MARGINAL times on
+```
+
+### guard-env-dump (/Users/alcatraz627/.claude/scripts/hooks/guard-env-dump.sh)
+```
+#!/usr/bin/env bash
+# Stops an agent from printing the whole shell environment into a transcript.
+#
+# The owner keeps live API tokens exported (Render, Linear, GitHub, Slack) so
+# tools work without setup. A bare `env` or `printenv` copies every one of them
+# into the session log. Reading one named variable stays allowed; only the
+# whole-environment dump is refused (owner ruling 2026-10-14).
+#
+# PreToolUse on Bash. Refuses: env, printenv, set, export, export -p,
+# declare -x/-p, typeset -x with no further arguments, alone or piped; pm2 and
+# ps and docker inspect views that show process environments; gcloud commands
+# that print an access or identity token, unless captured in $( ) or a file;
+# and any of the process views when run on another machine through ssh.
+# Mute: touch ~/.claude/.no-env-dump-gate
+
+set -uo pipefail
+
+[ -f "$HOME/.claude/.no-env-dump-gate" ] && exit 0
+input=$(cat 2>/dev/null)
+cmd=$(printf '%s' "$input" | jq -r 'select(.tool_name == "Bash") | .tool_input.command // empty' 2>/dev/null)
+[ -n "$cmd" ] || exit 0
+
+raw="$cmd"
+
+# Quoted text and heredoc bodies are prose, not commands.
+SCAN="$HOME/.claude/scripts/hooks/strip-payloads.py"
+if [ -x "$SCAN" ]; then
+  scanned=$(printf '%s' "$cmd" | python3 "$SCAN" 2>/dev/null)
+  [ -n "$scanned" ] && cmd="$scanned"
+fi
+
+# A segment that is only the dump verb (plus a listing flag), ending at a
+# separator, a pipe, a redirect or the end of the command.
+DUMP='(^|[;&|(]|\n)[[:space:]]*(/usr/bin/)?(env|printenv|set|export([[:space:]]+-p)?|declare[[:space:]]+-[xp]+|typeset[[:space:]]+-x)[[:space:]]*($|[;&|)>]|\n)'
+# Process inspectors that print each process's environment: pm2's detail
+# verbs, ps with the macOS environment flags (-e, -E or the e keyword), and
+# docker inspect.
+PROC='(^|[;&|(]|\n)[[:space:]]*(pm2[[:space:]]+(jlist|prettylist|env|show|describe)|ps[[:space:]]+(-[a-zA-Z]*[eE][a-zA-Z]*|[a-z]*e[a-z]*)([[:space:]]|$)|docker[[:space:]]+(container[[:space:]]+)?inspect)'
+
+# gcloud commands whose whole output is a credential. Fine when the token is
+# captured, in $( ) or backticks or redirected to a file; refused when it
+# would print.
+TOKEN_CMD='(print-[a-z]+-token|config-helper)'
+# A gcloud token command at a command position. `$(` is not a command
+# position: that is the captured form.
+GCLOUD_AT="(^|[;&|]|\n|[^\$]\()[[:space:]]*gcloud[[:space:]][^;&|)]*${TOKEN_CMD}[^;&|)]*"
+# Standard output sent to a file (not stderr alone, not a descriptor).
+STDOUT_TO_FILE='(^|[[:space:]]|1)>>?[[:space:]]*[^&>[:space:]]'
+
+leaks_token() {
+  local seg
+  while IFS= read -r seg; do
+    [ -n "$seg" ] || continue
+    printf '%s' "$seg" | grep -qE "$STDOUT_TO_FILE" || return 0
+  done < <(printf '%s' "$cmd" | sed -E 's/&>/ 1>/g' | grep -oE "$GCLOUD_AT")
+  # A captured token handed straight to echo or printf is printed anyway.
+  printf '%s' "$raw" | grep -qE "(^|[;&|(]|\n)[[:space:]]*(echo|printf)[[:space:]][^;&|]*(\\\$\(|\`)[[:space:]]*gcloud[[:space:]][^)\`]*${TOKEN_CMD}" && return 0
+  return 1
+}
+
+# The command ssh runs on the other machine is a command like any other, even
+# though it is quoted in the local line.
+remote_dumps() {
+  local remote
+  while IFS= read -r remote; do
+    [ -n "$remote" ] || continue
+    printf '%s' "$remote" | grep -qE "$DUMP|$PROC" && return 0
+  done < <(printf '%s' "$raw" | python3 "$HOME/.claude/scripts/hooks/ssh-remote-cmd.py" 2>/dev/null)
+  return 1
+}
+
+if printf '%s' "$cmd" | grep -qE "$DUMP|$PROC"; then :
+elif leaks_token; then :
+elif remote_dumps; then :
+else exit 0
+fi
+
+reason="[env-dump] Refused: this prints the whole environment, which can still hold live secrets (the Claude process inherits the owner's terminal). A dump copies them into the transcript. Read one variable instead: printenv NAME, or check it exists without printing it: [ -n \"\$NAME\" ] && echo set. Agent shells carry no Linear, Render, Slack or GitHub token by design; when a command needs one, run it as: with-token NAME -- <command> (see ~/.claude/features/api-tokens.md). Owner ruling 2026-10-14. If this blocks real work, tell the owner rather than working around it."
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guard-env-dump --action block --heeded unknown >/dev/null 2>&1 || true
+jq -nc --arg r "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$r}}'
+```
+
+### guard-pr-title-tags (/Users/alcatraz627/.claude/scripts/hooks/guard-pr-title-tags.sh)
+```
+#!/usr/bin/env bash
+# guard-pr-title-tags.sh — refuses a `gh pr create` (or `gh pr edit --title`)
+# whose title lacks the tags the repo asks for.
+#
+# Agent-raised PRs cost Slack noise and bot-review money, so the owner wants a
+# tag in the title ([noslack], sometimes [nobot]) at the moment the PR opens,
+# when it is too late to take the notice back (rules/pr-nobot-noslack-codex-review.md).
+# The tags are a per-repo call, so the hook asks the repo first:
+#
+#   1. A line `PR-TITLE-TAGS: [noslack] [nobot]` in the repo's .claude/pr-title-tags,
+#      CLAUDE.md or AGENTS.md (first file that has one wins). `none` means the
+#      repo wants no tag. `allow-fill` lets `--fill` through without a title.
+#   2. Otherwise the global default: [noslack] only. [nobot] stays a judgment
+#      call per PR, so it is never demanded by default.
+#
+# The repo is the command's own: `-R/--repo owner/name` (found as a local clone
+# under ~/Code by its origin remote) or the working directory, after any
+# `cd` earlier in the command. A repo with no local clone gets the default.
+# Any spelling of a tag counts ([no-slack], [NoSlack]). `--fill` without
+# `--title` is refused because the title then comes from the commit message and
+# the tag cannot be promised.
+#
+# PreToolUse on Bash. Fails open if jq, python3 or the shell scanner is missing.
+# Mute: touch ~/.claude/.no-pr-title-tags-gate  (machine-wide)  or PR_TITLE_TAGS_OFF=1
+# Test: bash ~/.claude/scripts/hooks/guard-pr-title-tags.test.sh
+set -u
+[ -f "$HOME/.claude/.no-pr-title-tags-gate" ] && exit 0
+[ "${PR_TITLE_TAGS_OFF:-}" = "1" ] && exit 0
+command -v jq >/dev/null 2>&1 || exit 0
+command -v python3 >/dev/null 2>&1 || exit 0
+input=$(cat 2>/dev/null) || exit 0
+[ "$(printf '%s' "$input" | jq -r '.tool_name // empty' 2>/dev/null)" = "Bash" ] || exit 0
+printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null | grep -q 'gh' || exit 0
+
+HOOK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
+export HOOK_INPUT="$input" HOOK_DIR
+exec python3 -I - <<'PY'
+import glob, importlib.util, json, os, re, subprocess, sys
+
+DEFAULT_TAGS = ["[noslack]"]
+RULE_FILES = [".claude/pr-title-tags", "CLAUDE.md", "AGENTS.md"]
+DIRECTIVE = re.compile(r"PR-TITLE-TAGS:\s*(.*)")
+CODE_ROOT = os.environ.get("GUARD_PR_TAGS_CODE_ROOT", os.path.expanduser("~/Code"))
+
+
+def allow():
+    sys.exit(0)
+
+
+def load_scanner():
+    spec = importlib.util.spec_from_file_location(
+        "shell_scan", os.path.join(os.environ["HOOK_DIR"], "shell-scan.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def git(d, *args):
+    try:
+        r = subprocess.run(["git", "-C", d, *args], capture_output=True, text=True, timeout=5)
+        return r.stdout.strip() if r.returncode == 0 else ""
+    except Exception:
+        return ""
+
+
+def toplevel(d):
+    return git(d, "rev-parse", "--show-toplevel") if os.path.isdir(d) else ""
+
+
+def origin_slug(d):
+    url = git(d, "remote", "get-url", "origin")
+    m = re.search(r"([\w.-]+/[\w.-]+?)(?:\.git)?/?$", url)
+    return m.group(1).lower() if m else ""
+
+
+def clone_for(repo_arg, cwd):
+    """The local checkout of owner/name, or "" when there is none."""
+    parts = repo_arg.strip().split("/")
+    name = parts[-1].lower()
+    slug = "/".join(parts[-2:]).lower() if len(parts) >= 2 else ""
+```
+
+## What to do
+For each problem:
+- Correct `why_repeats`, `fix` and `guard` wherever the check's source contradicts them: what it looks at, where it runs, whether it blocks or only warns. If the credited check cannot see this problem at all, say that plainly, and aim `fix` at what is actually missing.
+- If a case in `happened` is a different problem from the others, list it in `drop` with one sentence on why.
+- Leave a field out when it is already right.
+Keep the same voice rules as before: owner-facing fields are plain sentences about what Claude did, with no hook ids, script names, slugs or numbers.
+
+Answer with one ```json block: {"items": [{"cluster": "...", "why_repeats": "...", "fix": "...", "guard": {"hook_id": "..." or null, "plain": "...", "verdict": "yes|partly|no", "gap": "..."}, "drop": [{"evidence_id": "...", "why": "..."}]}]}

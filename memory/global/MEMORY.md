@@ -5,6 +5,12 @@
 ## User Profile
 - [User Profile](user_profile.md): Terminal-first macOS developer; vim-style nav; prefers CLI tools and dark mode
 
+## Feedback: PR Reviews
+- [Clanky local trigger](feedback_clanky-local-trigger.md): start Clanky reviews with local clanky-review.py; a /claude-bot review PR comment is discouraged, not banned
+
+## Team Decisions
+- [Forge and foundry paused](project_forge_foundry_paused.md): owner 2026-10-30, no new work on versable-forge-v6 or versable-foundry; only basic docs cleanup and pruning
+
 ## Reference
 - [Repo census 2026-09-30](reference_repo_census.md): every versable-git and alcatraz627 repo classified with evidence. Reuse it before surveying repos.
 - [Test logins](reference_test-logins.md): Speedway FLIP and F3 accounts, Walmart test account. Read before any browser test or login ask.

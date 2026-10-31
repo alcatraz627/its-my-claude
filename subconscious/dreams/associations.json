@@ -2320,10 +2320,10 @@
       "c24fa198-6bd9-4326-b7d5-041ff9121ad9"
     ],
     "hypothesis": "The agent systematically treats stating intent as equivalent to completing the action, whether the gap is between proposal and tool call, edit and execution, URL claim and browser visit, or listed next-steps and actual work: all are instances of a single 'declaration-as-completion' bias.",
-    "confidence": 0.65,
+    "confidence": 0.45000000000000007,
     "actionable": true,
     "suggested_rule": "Always execute the action in the same turn you name it; never end a turn on an intention without either completing it or marking it explicitly blocked with the missing input.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2342,10 +2342,10 @@
       "5dfb3762-3ecd-4ae4-a63b-be9bfef034be"
     ],
     "hypothesis": "Style-gate violations (em-dashes, AI-smell prose) persist across consecutive corrections within a single session because the agent's generation defaults are stronger than single-shot negative feedback: the correction doesn't update the sampling distribution, it just patches one output while the next draw from the same distribution reproduces the violation.",
-    "confidence": 0.52,
+    "confidence": 0.32000000000000006,
     "actionable": true,
     "suggested_rule": "Always re-read all active style constraints immediately before generating any prose output, treating them as hard pre-generation filters rather than post-generation corrections.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2364,10 +2364,10 @@
       "fdb45861-3e1a-48fe-b128-ffd308e3e29e"
     ],
     "hypothesis": "Four distinct rules about file-path formatting in output all stem from the same root cause: the agent treats paths as semantic content but the user's toolchain treats them as parseable tokens at render boundaries: any rule about path presentation is really a rule about machine-readability of output, not human readability.",
-    "confidence": 0.5800000000000001,
+    "confidence": 0.3800000000000001,
     "actionable": true,
     "suggested_rule": "Always emit file paths as standalone plain-text tokens with trailing whitespace or punctuation other than period, never inside Markdown link syntax, treating paths as machine-parsed elements rather than prose.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2386,10 +2386,10 @@
       "65650d83-b0f8-4719-8e26-c5add633fa59"
     ],
     "hypothesis": "The agent's default verbosity is a cross-domain problem appearing as inline prose bloat, PR description spam, jargon-laden summaries, and decorative framing: all are the same underlying tendency to over-generate text, manifesting in whichever output channel is active.",
-    "confidence": 0.62,
+    "confidence": 0.42,
     "actionable": true,
     "suggested_rule": "Always draft output at half the length that feels natural, then cut further; when detail is needed, write it to a file rather than expanding inline.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2408,10 +2408,10 @@
       "41a91d38-b062-4f61-8cf3-4966bd6e004b"
     ],
     "hypothesis": "The agent consistently substitutes a cheaper verification proxy for the real one (syntax check for runtime, a11y snapshot for screenshot, one environment for two) revealing a systematic tendency to satisfice on verification by picking the easiest available check rather than the one that actually tests the claim.",
-    "confidence": 0.6000000000000001,
+    "confidence": 0.40000000000000013,
     "actionable": true,
     "suggested_rule": "Always verify a completion claim using the same medium and scope the user would use to check it; never substitute a proxy verification method unless the real one is unavailable and you say so explicitly.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2429,10 +2429,10 @@
       "deb2807b-986f-4cc7-a8fa-18525e3a6273"
     ],
     "hypothesis": "False-ready declarations recur across UI surfaces, PR merges, and background-task completions because the agent's 'done' signal is triggered by finishing its own action list rather than checking external completion gates: it conflates 'I have no more steps' with 'the system is ready'.",
-    "confidence": 0.5700000000000001,
+    "confidence": 0.3700000000000001,
     "actionable": true,
     "suggested_rule": "Always query the external state (merge status, running processes, open callouts) before declaring any deliverable complete; internal task-list exhaustion is not a completion signal.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2449,10 +2449,10 @@
       "256894f1-fb54-4569-8025-dd5d51ced89c"
     ],
     "hypothesis": "The agent fabricates structural claims about codebases, invents ticket numbers, and trusts AI-generated specs without validation: all are instances of generating plausible-sounding references instead of grounding claims in verified sources, a hallucination pattern that crosses from code to project management to document intake.",
-    "confidence": 0.55,
+    "confidence": 0.3500000000000001,
     "actionable": true,
     "suggested_rule": "Always read the source (file, tracker, spec) before referencing it in output; never cite an identifier, location, or claim about external state from memory alone.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2506,10 +2506,10 @@
       "939866a0-afe6-43f0-a5a0-205c40be4c99"
     ],
     "hypothesis": "The agent leaks its internal framing into externally shared documents: adversarial tone in planning docs and private banter in stakeholder-facing docs are both failures to separate the conversational register from the deliverable register, risking real reputational harm when documents leave the session.",
-    "confidence": 0.5,
+    "confidence": 0.4,
     "actionable": true,
     "suggested_rule": "Always write documents destined for external readers in a neutral, standalone voice, treating them as if the surrounding conversation context will never be seen.",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2578,7 +2578,7 @@
       "d431ead9-2125-482c-ae45-34676488fe61"
     ],
     "hypothesis": "Both patterns punish the agent for injecting unsolicited content: whether re-raising deferred topics or appending safety warnings to factual answers: revealing a general boundary: the agent must not expand the scope of a response beyond what was asked, even when it believes the addition is helpful.",
-    "confidence": 0.62,
+    "confidence": 0.52,
     "actionable": true,
     "suggested_rule": "Avoid adding evaluative commentary, risk warnings, or previously deferred topics to a response unless the user explicitly requests them.",
     "promoted": true,
@@ -2659,10 +2659,10 @@
       "22a8ae07-962e-41a6-aa13-1af799a4cc09"
     ],
     "hypothesis": "The agent's default written register optimizes for sounding impressive over being understood: abstract jargon in PRs, adversarial framing in docs, and verbose descriptions all serve the same latent goal of performing competence rather than transferring information.",
-    "confidence": 0.68,
+    "confidence": 0.4800000000000001,
     "actionable": true,
     "suggested_rule": "Always write external-facing text (PRs, docs, plans) as if the reader has zero context and needs to act on it, never as if they need to be impressed by it",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2679,10 +2679,10 @@
       "256894f1-fb54-4569-8025-dd5d51ced89c"
     ],
     "hypothesis": "The agent treats indirect evidence as direct observation across multiple domains: inferring codebase structure without reading files, treating a11y snapshots as visual verification, and treating AI-generated docs as validated specs are all the same epistemic shortcut of accepting a proxy for ground truth.",
-    "confidence": 0.75,
+    "confidence": 0.4500000000000002,
     "actionable": true,
     "suggested_rule": "Always distinguish between 'I inferred X from metadata' and 'I observed X in the primary source' and only make claims at the level you actually verified",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2719,10 +2719,10 @@
       "32dbce4d-e4d8-4cb1-b0bd-2ef1654261f2"
     ],
     "hypothesis": "The agent fails to model audience boundaries: private banter leaks into stakeholder docs, bot authorship is not disclosed in team channels, and attribution markers are omitted: all reflect the same blindness to the fact that outputs cross social boundaries the agent cannot see.",
-    "confidence": 0.7,
+    "confidence": 0.45,
     "actionable": true,
     "suggested_rule": "Always ask 'who besides the user will see this output?' before writing any content destined for a shared platform, and apply audience-appropriate constraints before the first draft",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2739,10 +2739,10 @@
       "41a91d38-b062-4f61-8cf3-4966bd6e004b"
     ],
     "hypothesis": "The agent treats bookkeeping obligations (task list reconciliation, budget tracking, multi-arm condition checking) as secondary to forward progress, causing drift between claimed state and actual state: a 'do first, reconcile never' bias that compounds over long sessions.",
-    "confidence": 0.62,
+    "confidence": 0.42,
     "actionable": true,
     "suggested_rule": "Always reconcile tracking artifacts (task lists, budget counters, completion checklists) immediately after each substantive action, never defer reconciliation to a batch pass",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2795,10 +2795,10 @@
       "53fe4f23-978b-4ec0-8b47-4376c099f138"
     ],
     "hypothesis": "The agent poorly tracks temporal obligations: it fails to answer IPC messages within the required window, fails to arm keep-warm before the user leaves, and fails to respect repeated deferral signals: all are failures to maintain a mental model of time-sensitive conversational state across turns.",
-    "confidence": 0.55,
+    "confidence": 0.3500000000000001,
     "actionable": true,
     "suggested_rule": "Always maintain an explicit list of time-sensitive obligations (pending IPC replies, user-away preparations, deferred topics) and check it before ending each turn",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
     "patterns_linked_stable": [
@@ -2821,7 +2821,11 @@
     "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "14bc70f57af69141",
+      "e85095d791f077c0",
+      "48a913d8e8e85edb"
+    ]
   },
   {
     "id": "0aaa7d8f-caf8-477d-8c7c-5ce3396f442b",
@@ -2832,13 +2836,18 @@
       "b7d77f58-dcb7-4ac3-85ce-2e3426c985af"
     ],
     "hypothesis": "The agent systematically conflates 'authored the artifact' with 'verified the artifact works' across every output modality (code, URLs, PRs), suggesting a structural bias toward treating generation as completion rather than generation-plus-validation as completion.",
-    "confidence": 0.82,
+    "confidence": 0.4700000000000001,
     "actionable": true,
     "suggested_rule": "Always execute a runtime or state check matching the claim's modality before any 'done' or 'ready' declaration",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "4fec59fcb649fe56",
+      "58ec32d44c50d1c9",
+      "1133590d31e85031",
+      "dbff467dcc437cb9"
+    ]
   },
   {
     "id": "e1314802-2887-4507-a541-59c015232c09",
@@ -2854,7 +2863,11 @@
     "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "ae12c7bc1ead557a",
+      "48a913d8e8e85edb",
+      "f685d025a7a48e60"
+    ]
   },
   {
     "id": "90b036ef-74df-465f-a48a-f8733f4698d3",
@@ -2865,13 +2878,18 @@
       "939866a0-afe6-43f0-a5a0-205c40be4c99"
     ],
     "hypothesis": "Documents intended for external audiences consistently leak the agent's internal framing (ledger IDs, adversarial tone, abstract jargon, private banter) because the agent defaults to writing for its own reasoning context rather than switching to the reader's context at the output boundary.",
-    "confidence": 0.75,
+    "confidence": 0.40000000000000013,
     "actionable": true,
     "suggested_rule": "Always identify the document's intended audience before drafting and purge any term, reference, or tone that only makes sense inside the agent-user conversation",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "b5fca580817b88fd",
+      "ae98f3ef5e93dfd0",
+      "cf83f2b00945bbc9",
+      "367cb6df9918a92c"
+    ]
   },
   {
     "id": "2e4609fb-0d83-4cde-9f19-555e57661eae",
@@ -2888,7 +2906,12 @@
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "4d894ab8c1cded78",
+      "65ce513978d96fdc",
+      "6d793973f122295c",
+      "14bc70f57af69141"
+    ]
   },
   {
     "id": "6a4a2816-7691-496c-b619-a0a93d34d777",
@@ -2898,13 +2921,17 @@
       "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4"
     ],
     "hypothesis": "Multi-arm completion conditions (multiple environments, multiple background tasks, multiple checklist items) share a common failure where the agent treats partial satisfaction as full satisfaction, suggesting it evaluates compound predicates with an implicit OR rather than the required AND.",
-    "confidence": 0.7,
+    "confidence": 0.40000000000000013,
     "actionable": true,
     "suggested_rule": "Always enumerate each arm of a compound stop condition as a separate checklist item and mark each independently before declaring the condition met",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "9125c1d4465f62d7",
+      "26c2a0944ac5e873",
+      "3b43a554f20ce8c0"
+    ]
   },
   {
     "id": "cdde49d9-d3cb-46ea-bca1-59ab94b51cb5",
@@ -2920,7 +2947,11 @@
     "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "cab740dfd60d7c54",
+      "4150862173f7781b",
+      "1599038879619491"
+    ]
   },
   {
     "id": "989105d0-3e1d-47f9-b4b5-5566daa7a26d",
@@ -2936,7 +2967,11 @@
     "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "8ff7fb42ca42f4b6",
+      "c0dbd1870659d980",
+      "34f0594fa479422a"
+    ]
   },
   {
     "id": "ceb27074-3d34-41eb-a8e9-78a8d17bcc95",
@@ -2946,13 +2981,17 @@
       "fc8d58f9-b04d-40dc-af41-27c17abc4e80"
     ],
     "hypothesis": "The user treats operational governance as a documentation and audit problem rather than an automation problem: budgets become doctrine, healing ops need logs, spending needs tracking. The agent should default to producing observable records of policy compliance rather than silent enforcement.",
-    "confidence": 0.6,
+    "confidence": 0.45,
     "actionable": true,
     "suggested_rule": "Always produce a human-readable log entry when enforcing any policy constraint, budget cap, or automated operation rather than silently complying",
-    "promoted": true,
+    "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "cb87931cb48361d8",
+      "0773d43f86dd929a",
+      "13d717936df352be"
+    ]
   },
   {
     "id": "ebbe0ba2-e611-4262-b159-507571d1c086",
@@ -2969,7 +3008,12 @@
     "promoted": false,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "aa2961a6cd578ece",
+      "1ffc271961852714",
+      "828facdfbc369075",
+      "dff26ce5bcaa6801"
+    ]
   },
   {
     "id": "55f67f2b-9f3a-4e34-aa2b-2fa1f932f688",
@@ -2978,12 +3022,953 @@
       "ba1cce16-f058-4351-b530-127c53a104f7"
     ],
     "hypothesis": "The agent scopes both code changes and planning documents too narrowly to the immediate request, missing that the user consistently wants global-scope awareness (all pages for a UI component, full project for a planning doc) even when the prompt names only one element.",
-    "confidence": 0.68,
+    "confidence": 0.4800000000000001,
     "actionable": true,
     "suggested_rule": "Always audit the full blast radius of a change (all consumers of a component, all pages of an app, full project scope for docs) before scoping the implementation to the requested slice",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "d3c4790d5c18a071",
+      "3b2279b668c6c9bc"
+    ]
+  },
+  {
+    "id": "fc5e0436-7e59-41f8-b037-79735caaa711",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "5e971719-da44-45f6-ac69-2d7eec62e393",
+      "22d28d47-c9cd-4037-b0d1-4f7c91b408a2"
+    ],
+    "hypothesis": "The agent has a systemic single-correction-is-not-learning problem: whether it's prose style (em-dash tells), formatting (file-path-period), or action sequencing (proposal without tool call), a single correction within a session fails to durably alter behavior, suggesting the agent treats each turn as a fresh context rather than accumulating intra-session constraints.",
+    "confidence": 0.6200000000000001,
+    "actionable": true,
+    "suggested_rule": "Always re-check the last three hook or user corrections before emitting any prose or ending any turn; treat intra-session corrections as constraints that compound, not as one-off feedback",
     "promoted": true,
     "dismissed": false,
     "auto_intention_id": null,
-    "patterns_linked_stable": []
+    "patterns_linked_stable": [
+      "14bc70f57af69141",
+      "e85095d791f077c0",
+      "ae12c7bc1ead557a"
+    ]
+  },
+  {
+    "id": "e1a7b659-d4d4-4d06-bf89-45d648709684",
+    "patterns_linked": [
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "9fa76cc2-3e1f-42bd-a0b5-1bf807000fa0",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "b7d77f58-dcb7-4ac3-85ce-2e3426c985af"
+    ],
+    "hypothesis": "The agent consistently confuses 'constructed the artifact' with 'verified the artifact works in its target environment', a category error that recurs across code execution, URL liveness, UI rendering, and PR merge-readiness — all are instances of declaring victory at the write step instead of the read-back step.",
+    "confidence": 0.82,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4fec59fcb649fe56",
+      "58ec32d44c50d1c9",
+      "1133590d31e85031",
+      "dbff467dcc437cb9"
+    ]
+  },
+  {
+    "id": "17e2ef1a-e5b9-46f3-8835-25d6db298c1f",
+    "patterns_linked": [
+      "0a8756bc-a51f-451d-954d-56cad897784c",
+      "8c98642d-2293-43ff-a90d-5fcc41267624",
+      "54421a50-5d9a-439a-baa0-1d527826a5f6",
+      "939866a0-afe6-43f0-a5a0-205c40be4c99"
+    ],
+    "hypothesis": "Documents the agent writes for external consumption carry internal-agent artifacts (ledger IDs, adversarial framing, jargon, private banter) because the agent fails to model the actual audience of the document, defaulting to its own operational context as the voice.",
+    "confidence": 0.6000000000000001,
+    "actionable": true,
+    "suggested_rule": "Always identify the intended reader of any document before drafting; if the reader is not the user or the agent, strip all internal references, evaluative framing, and jargon in the first pass, not as a cleanup step",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "b5fca580817b88fd",
+      "ae98f3ef5e93dfd0",
+      "cf83f2b00945bbc9",
+      "367cb6df9918a92c"
+    ]
+  },
+  {
+    "id": "9fa9c1bb-d7a6-490d-84bd-4d1035e95fd7",
+    "patterns_linked": [
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273",
+      "41a91d38-b062-4f61-8cf3-4966bd6e004b",
+      "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b",
+      "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4"
+    ],
+    "hypothesis": "The agent treats completion conditions as scalar (done/not-done) rather than as conjunctions over enumerated sub-conditions, leading to premature declaration when any single arm finishes — whether it's background tasks, multi-environment gates, open callouts, or task list reconciliation.",
+    "confidence": 0.55,
+    "actionable": true,
+    "suggested_rule": "Always enumerate all sub-conditions of a stop gate as a checklist before declaring completion, and verify each independently",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "26c2a0944ac5e873",
+      "9125c1d4465f62d7",
+      "f685d025a7a48e60",
+      "3b43a554f20ce8c0"
+    ]
+  },
+  {
+    "id": "7f5ad5d0-5cab-49c5-95bb-c4c61ed81b20",
+    "patterns_linked": [
+      "dca6219e-7312-4fd0-829c-f1dc49f52c99",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
+      "65650d83-b0f8-4719-8e26-c5add633fa59",
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c"
+    ],
+    "hypothesis": "Verbosity and decorative formatting (bold spans, em-dashes, long prose, PR boilerplate) share a common root: the agent defaults to a high-ceremony register that optimizes for appearing thorough rather than being useful, and this default reasserts itself even after explicit correction.",
+    "confidence": 0.68,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4d894ab8c1cded78",
+      "65ce513978d96fdc",
+      "6d793973f122295c",
+      "14bc70f57af69141"
+    ]
+  },
+  {
+    "id": "2188ae33-8273-4556-894f-7d921cc754b8",
+    "patterns_linked": [
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "256894f1-fb54-4569-8025-dd5d51ced89c"
+    ],
+    "hypothesis": "The agent has a merge-bias: when presented with two independent inputs (plans, agent outputs, external docs), it collapses them into a single synthesized view rather than preserving their independence for comparison or skeptical evaluation — the same instinct that makes it treat external AI docs as authoritative specs.",
+    "confidence": 0.55,
+    "actionable": true,
+    "suggested_rule": "Always preserve independent inputs as separate artifacts for comparison unless the user explicitly requests a merge or synthesis",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "cab740dfd60d7c54",
+      "4150862173f7781b",
+      "1599038879619491"
+    ]
+  },
+  {
+    "id": "714925a3-1cb1-40d0-859f-a6536fdedcf1",
+    "patterns_linked": [
+      "fc8d58f9-b04d-40dc-af41-27c17abc4e80",
+      "f0ebad7c-654e-4701-861d-2ab16d627df3",
+      "f5e78194-35a8-4dd9-8efa-75fd07c8a442"
+    ],
+    "hypothesis": "The user treats operational constraints (budgets, thresholds, audit trails) as living doctrine that must be tracked and reported, not as one-time configuration — the agent must internalize that acknowledging a constraint is not the same as actively enforcing and logging it.",
+    "confidence": 0.4300000000000001,
+    "actionable": true,
+    "suggested_rule": "Always produce a visible log entry or status line when enforcing any user-defined threshold or policy, even if no violation occurred",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "13d717936df352be",
+      "cb87931cb48361d8",
+      "0773d43f86dd929a"
+    ]
+  },
+  {
+    "id": "024ecec1-a1ed-4e59-bb8f-13b2b9646cfb",
+    "patterns_linked": [
+      "65879bfc-ccdc-44d4-b384-799b1679fa4d",
+      "b63ec70f-5930-4d2a-9689-770ffdab0942",
+      "2725037c-e822-4e97-9623-188f967a7194"
+    ],
+    "hypothesis": "The agent fabricates state knowledge (codebase structure, rendered UI appearance, ticket numbers) from plausible inference rather than direct observation, and each domain-specific instance is the same underlying shortcut: substituting a mental model for a read operation.",
+    "confidence": 0.78,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "8ff7fb42ca42f4b6",
+      "c0dbd1870659d980",
+      "34f0594fa479422a"
+    ]
+  },
+  {
+    "id": "b8e56e21-3424-4760-8d4f-e6b6e527d6dc",
+    "patterns_linked": [
+      "26287c1d-7182-4229-83c8-fd003cfe2429",
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e",
+      "835e624b-d5fe-41ae-86d5-0c87cb79fa73"
+    ],
+    "hypothesis": "Terminal and reader-boundary formatting rules share a structural pattern: the agent treats 'information is technically present in the output' as sufficient, but the user's actual requirement is 'information is accessible in the specific rendering context' (Ghostty linking, visible paths, clickable URLs).",
+    "confidence": 0.65,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "aa2961a6cd578ece",
+      "dff26ce5bcaa6801",
+      "828facdfbc369075"
+    ]
+  },
+  {
+    "id": "b8bb3872-b93a-441f-983f-1eab6f097996",
+    "patterns_linked": [
+      "d3691add-19d6-42ed-a0df-9977d5c837d3",
+      "64b242ba-6942-4c9b-8792-98a25649d6ea",
+      "12a84358-2c88-49fe-a8d2-bf219a68786d"
+    ],
+    "hypothesis": "The agent fails to anticipate what will be needed after a handoff point (user departure, PR push, IPC message arrival), treating its own turn boundary as the end of responsibility rather than proactively setting up the next required state.",
+    "confidence": 0.45000000000000007,
+    "actionable": true,
+    "suggested_rule": "Always identify the next expected event after any handoff (user return, CI run, review cycle) and arm any prerequisite action before ending the turn",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "1b57463ab619f4b1",
+      "b5341d52939cc77e",
+      "5398cdda6153a543"
+    ]
+  },
+  {
+    "id": "b448668e-664d-415a-b033-486c029283bd",
+    "patterns_linked": [
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
+      "7b48ca3d-941e-48a6-9429-742fcfcdfa04",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15"
+    ],
+    "hypothesis": "UI work fails at the gestalt level because the agent reasons about UI components in isolation (per-page, per-widget) rather than as a coherent visual system; the same local-reasoning failure that produces inconsistent visual hierarchy also produces per-page variants of global components.",
+    "confidence": 0.4700000000000001,
+    "actionable": true,
+    "suggested_rule": "Always audit the global visual context (other pages, sibling components, shared shell) before modifying any single UI surface",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "ca82efc1a26d2202",
+      "b953c0740743065e",
+      "d3c4790d5c18a071"
+    ]
+  },
+  {
+    "id": "f187eb13-069f-4718-b785-92622d2a18e5",
+    "patterns_linked": [
+      "2c202315-f4df-4c74-80f1-c16b59f8d72e",
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "b7d77f58-dcb7-4ac3-85ce-2e3426c985af"
+    ],
+    "hypothesis": "The agent has a systemic 'declaration without verification' failure mode where stating intent, editing code, or labeling status substitutes for actually executing the relevant action, manifesting identically across proposals (stating not doing), code changes (editing not running), bug fixes (claiming not testing), and PR readiness (labeling not checking).",
+    "confidence": 0.85,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "a81891628dce93a4",
+      "4fec59fcb649fe56",
+      "1133590d31e85031",
+      "dbff467dcc437cb9"
+    ]
+  },
+  {
+    "id": "b75c09ef-a04a-4c64-a99c-ffd5dedaf5d1",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "5dfb3762-3ecd-4ae4-a63b-be9bfef034be",
+      "f09bdbaa-0de8-4d15-acaf-a032dc87997a",
+      "65650d83-b0f8-4719-8e26-c5add633fa59"
+    ],
+    "hypothesis": "Em-dash and decorative-prose violations persist across multiple correction cycles because the offending tokens are generated during decoding before the constraint is checked, indicating a deep generative prior that single-turn feedback cannot override; the pattern requires a pre-generation rewrite of the stylistic frame, not post-generation editing.",
+    "confidence": 0.55,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "14bc70f57af69141",
+      "df2a6001eba23b42",
+      "ff2d9ae6abc844a9",
+      "6d793973f122295c"
+    ]
+  },
+  {
+    "id": "1dcdd611-dfc8-419b-b9af-00c60fd8985f",
+    "patterns_linked": [
+      "0a8756bc-a51f-451d-954d-56cad897784c",
+      "8c98642d-2293-43ff-a90d-5fcc41267624",
+      "54421a50-5d9a-439a-baa0-1d527826a5f6",
+      "939866a0-afe6-43f0-a5a0-205c40be4c99"
+    ],
+    "hypothesis": "Documents intended for external or stakeholder consumption consistently fail because the agent defaults to its own internal framing (ledger IDs, adversarial voice, abstract jargon, private banter) rather than adopting the reader's perspective, revealing a systematic inability to model the document's actual audience.",
+    "confidence": 0.62,
+    "actionable": true,
+    "suggested_rule": "Always identify the intended reader of a document before drafting and strip any term, reference, or tone that reader would not recognize or expect",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "b5fca580817b88fd",
+      "ae98f3ef5e93dfd0",
+      "cf83f2b00945bbc9",
+      "367cb6df9918a92c"
+    ]
+  },
+  {
+    "id": "2f55cdfd-0dcc-49c7-a0ad-9aef80de146a",
+    "patterns_linked": [
+      "9fa76cc2-3e1f-42bd-a0b5-1bf807000fa0",
+      "b63ec70f-5930-4d2a-9689-770ffdab0942",
+      "41a91d38-b062-4f61-8cf3-4966bd6e004b"
+    ],
+    "hypothesis": "The agent treats indirect evidence (server should be running, a11y snapshot exists, one arm passed) as equivalent to direct observation, applying the same shortcut across network services, rendered UI, and multi-environment deployments; the underlying failure is substituting inference for observation at verification boundaries.",
+    "confidence": 0.68,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "58ec32d44c50d1c9",
+      "c0dbd1870659d980",
+      "9125c1d4465f62d7"
+    ]
+  },
+  {
+    "id": "c18aa08d-7f58-4fa9-883e-2273bda17148",
+    "patterns_linked": [
+      "dca6219e-7312-4fd0-829c-f1dc49f52c99",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e",
+      "835e624b-d5fe-41ae-86d5-0c87cb79fa73"
+    ],
+    "hypothesis": "The agent's output formatting defaults optimize for information density (long prose, Markdown links, compact references) rather than for the user's actual consumption interface (terminal with character limits, no hover previews, linear reading), indicating a mismatch between the agent's implicit output model and the real rendering context.",
+    "confidence": 0.52,
+    "actionable": true,
+    "suggested_rule": "Always format output for a plain terminal reader who cannot hover, click, or scroll sideways, treating visible plain text as the only reliable channel",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4d894ab8c1cded78",
+      "65ce513978d96fdc",
+      "dff26ce5bcaa6801",
+      "828facdfbc369075"
+    ]
+  },
+  {
+    "id": "3c2c0b86-c212-493a-b0d9-c612ddba6b75",
+    "patterns_linked": [
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273",
+      "64b242ba-6942-4c9b-8792-98a25649d6ea",
+      "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4"
+    ],
+    "hypothesis": "Async bookkeeping obligations (waiting for background tasks, answering IPC messages, reconciling task lists) share a common failure: the agent treats turn boundaries as natural completion points and drops in-flight obligations that span turns, revealing that its 'done' heuristic is turn-scoped rather than task-scoped.",
+    "confidence": 0.48,
+    "actionable": true,
+    "suggested_rule": "Always enumerate in-flight obligations before ending a turn and explicitly resolve or carry forward each one",
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "26c2a0944ac5e873",
+      "b5341d52939cc77e",
+      "3b43a554f20ce8c0"
+    ]
+  },
+  {
+    "id": "4f72235a-0831-48e2-b2b9-524d01a66849",
+    "patterns_linked": [
+      "65879bfc-ccdc-44d4-b384-799b1679fa4d",
+      "2725037c-e822-4e97-9623-188f967a7194"
+    ],
+    "hypothesis": "The agent fabricates structural claims (code location, ticket numbers) from plausible reasoning rather than source-of-truth lookups, and the fabrication is indistinguishable in confidence from verified facts, making both codebase claims and backlog references instances of the same confabulation failure at different data sources.",
+    "confidence": 0.75,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "8ff7fb42ca42f4b6",
+      "34f0594fa479422a"
+    ]
+  },
+  {
+    "id": "784d6b05-cb13-4d2e-9dc2-c21ca22e8d1d",
+    "patterns_linked": [
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "256894f1-fb54-4569-8025-dd5d51ced89c"
+    ],
+    "hypothesis": "The user maintains a deliberate epistemic hygiene practice: keep independent sources independent (two-agent review stays separate, comparison stays side-by-side, AI docs get skepticism), and the agent's default to merge/synthesize/trust violates this principle uniformly across all three contexts.",
+    "confidence": 0.65,
+    "actionable": true,
+    "suggested_rule": "Avoid merging, synthesizing, or treating as authoritative any two independent sources unless the user explicitly requests synthesis",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "cab740dfd60d7c54",
+      "4150862173f7781b",
+      "1599038879619491"
+    ]
+  },
+  {
+    "id": "59ddd785-6a25-4d0b-906b-cc790d031bd6",
+    "patterns_linked": [
+      "f22e7974-dbe3-4051-ad5d-666239d02f2c",
+      "32dbce4d-e4d8-4cb1-b0bd-2ef1654261f2",
+      "b7bda082-d213-4c83-b8e4-06d01f950652"
+    ],
+    "hypothesis": "Actions taken under the user's identity on shared platforms (GitHub comments, PR posts, Slack notifications) require specific attribution and suppression metadata that the agent consistently omits, treating the content as the deliverable while ignoring the identity and notification context in which it lands.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "Always apply all required identity markers and notification suppression tags before posting to any shared platform under the user's account",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "f1b4ee2165ccf3a0",
+      "310d9244467e118b",
+      "1eadab474f5ddd8c"
+    ]
+  },
+  {
+    "id": "0448dbcd-f211-4152-94e1-15a5b95e266d",
+    "patterns_linked": [
+      "fc8d58f9-b04d-40dc-af41-27c17abc4e80",
+      "f0ebad7c-654e-4701-861d-2ab16d627df3",
+      "f5e78194-35a8-4dd9-8efa-75fd07c8a442"
+    ],
+    "hypothesis": "The user treats operational constraints (budgets, policies, audit trails) as living governance documents rather than code-level checks, preferring transparent logged enforcement over silent automated guards; the agent should default to documented-and-logged over hardcoded-and-silent for any policy mechanism.",
+    "confidence": 0.55,
+    "actionable": true,
+    "suggested_rule": "Always implement resource constraints and operational policies as logged, documented doctrine rather than silent automated enforcement unless the user specifies otherwise",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "13d717936df352be",
+      "cb87931cb48361d8",
+      "0773d43f86dd929a"
+    ]
+  },
+  {
+    "id": "26d31a68-01df-4f3c-bc06-575366553d01",
+    "patterns_linked": [
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15",
+      "ba1cce16-f058-4351-b530-127c53a104f7"
+    ],
+    "hypothesis": "The agent scopes both code changes and planning documents to the immediate request rather than auditing the full surface area first, producing per-page UI variants instead of shared components and per-feature plans instead of project-wide ones; the underlying failure is defaulting to local scope when global scope is required.",
+    "confidence": 0.6,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "d3c4790d5c18a071",
+      "3b2279b668c6c9bc"
+    ]
+  },
+  {
+    "id": "e4818eb1-b6dc-4351-8c22-9809a5d8def1",
+    "patterns_linked": [
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
+      "7b48ca3d-941e-48a6-9429-742fcfcdfa04"
+    ],
+    "hypothesis": "UI output that is informationally correct but visually incoherent is rejected in both data display and progress indicators, revealing that the user evaluates UI quality on perceptual coherence (does it communicate one clear signal?) rather than data accuracy alone.",
+    "confidence": 0.6,
+    "actionable": true,
+    "suggested_rule": "Always ensure a UI surface communicates a single coherent visual signal before verifying data correctness, since perceptual contradictions override factual accuracy in the user's quality assessment",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "ca82efc1a26d2202",
+      "b953c0740743065e"
+    ]
+  },
+  {
+    "id": "e20ffc78-6ac3-42e1-8eb4-c91a9a97ecda",
+    "patterns_linked": [
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "9fa76cc2-3e1f-42bd-a0b5-1bf807000fa0",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "b63ec70f-5930-4d2a-9689-770ffdab0942"
+    ],
+    "hypothesis": "The agent has a systematic 'verification theater' failure mode where it substitutes a cheaper proxy check (syntax check, a11y snapshot, assuming a server is up) for the actual end-state observation, across code, UI, and infrastructure domains alike.",
+    "confidence": 0.85,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4fec59fcb649fe56",
+      "58ec32d44c50d1c9",
+      "1133590d31e85031",
+      "c0dbd1870659d980"
+    ]
+  },
+  {
+    "id": "68612bfa-68c0-49c9-838f-79f395cac4b3",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "65650d83-b0f8-4719-8e26-c5add633fa59",
+      "f09bdbaa-0de8-4d15-acaf-a032dc87997a"
+    ],
+    "hypothesis": "LLM-register prose tells (em-dashes, bold spans, contrast scaffolding) are not independent stylistic choices but a single latent 'default voice' that resurfaces as a bundle; correcting one tell without suppressing the underlying register causes whack-a-mole across tells within the same session.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always regenerate the entire paragraph from scratch when a style-gate fires, rather than patching only the flagged tell, because the surrounding prose likely shares the same register.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "14bc70f57af69141",
+      "6d793973f122295c",
+      "ff2d9ae6abc844a9"
+    ]
+  },
+  {
+    "id": "474abd04-fdfe-46ee-8928-77c4186a03c1",
+    "patterns_linked": [
+      "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273",
+      "64b242ba-6942-4c9b-8792-98a25649d6ea"
+    ],
+    "hypothesis": "The agent confuses declaring intent with completing work: proposing a goal, claiming a stop condition is met, and leaving background tasks running are all instances of treating a verbal assertion as equivalent to an observed state transition.",
+    "confidence": 0.78,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "beedd341c12d17b6",
+      "26c2a0944ac5e873",
+      "b5341d52939cc77e"
+    ]
+  },
+  {
+    "id": "efa517ca-7ffc-4979-83c3-e9e4926cc154",
+    "patterns_linked": [
+      "0a8756bc-a51f-451d-954d-56cad897784c",
+      "8c98642d-2293-43ff-a90d-5fcc41267624",
+      "54421a50-5d9a-439a-baa0-1d527826a5f6",
+      "939866a0-afe6-43f0-a5a0-205c40be4c99"
+    ],
+    "hypothesis": "Documents the agent writes for external consumption inherit the agent's internal framing (adversarial tone, ledger IDs, jargon, conversational banter) because the agent fails to model the document's actual audience; the error is a single audience-modeling failure expressed across tone, vocabulary, and metadata leakage.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Always identify the document's end reader before writing the first line, and strip any term or reference that only makes sense inside the agent-user conversation.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "b5fca580817b88fd",
+      "ae98f3ef5e93dfd0",
+      "cf83f2b00945bbc9",
+      "367cb6df9918a92c"
+    ]
+  },
+  {
+    "id": "6d31a998-91fd-4ee5-87a0-64ccb937fcbc",
+    "patterns_linked": [
+      "dca6219e-7312-4fd0-829c-f1dc49f52c99",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e"
+    ],
+    "hypothesis": "The agent's output length and information-hiding tendencies are inversely correlated with usability: verbose replies overwhelm, while over-compressed replies (short link labels, hidden paths) withhold critical information; both stem from lacking a model of what the user needs to act on immediately versus later.",
+    "confidence": 0.63,
+    "actionable": true,
+    "suggested_rule": "Always separate output into an action line (what the user must do or know right now, with full paths visible) and an optional detail block, rather than choosing globally between verbose and terse.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4d894ab8c1cded78",
+      "65ce513978d96fdc",
+      "dff26ce5bcaa6801"
+    ]
+  },
+  {
+    "id": "03cc2600-f55b-4f47-906e-0a7cea7ef3b8",
+    "patterns_linked": [
+      "b7d77f58-dcb7-4ac3-85ce-2e3426c985af",
+      "12a84358-2c88-49fe-a8d2-bf219a68786d",
+      "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b"
+    ],
+    "hypothesis": "The agent has a recurring 'premature done' pattern specifically at workflow gates (PR merge-readiness, PR review scripts, open callouts) where it declares completion at the penultimate step rather than after the final verification, suggesting the agent treats 'I submitted the thing' as 'the thing is done'.",
+    "confidence": 0.82,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "dbff467dcc437cb9",
+      "5398cdda6153a543",
+      "f685d025a7a48e60"
+    ]
+  },
+  {
+    "id": "7b715a4e-adf2-4cee-8f02-2a228e0d9ddd",
+    "patterns_linked": [
+      "65879bfc-ccdc-44d4-b384-799b1679fa4d",
+      "2725037c-e822-4e97-9623-188f967a7194",
+      "0e36269d-00d6-4fa2-bffe-015ac51ed931"
+    ],
+    "hypothesis": "The agent fabricates or misrepresents structural facts (codebase claims without reading, nonexistent ticket numbers, bare IDs without glosses) when it operates from cached belief rather than grounded lookup; all three are instances of asserting reference-level facts without dereferencing.",
+    "confidence": 0.7,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "8ff7fb42ca42f4b6",
+      "34f0594fa479422a",
+      "928090e2326a6c88"
+    ]
+  },
+  {
+    "id": "a414e769-79ad-4cb6-ba89-b075f6e8dee9",
+    "patterns_linked": [
+      "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4",
+      "fc8d58f9-b04d-40dc-af41-27c17abc4e80",
+      "d3691add-19d6-42ed-a0df-9977d5c837d3"
+    ],
+    "hypothesis": "The agent neglects ongoing bookkeeping obligations (task list reconciliation, budget tracking, keep-warm mechanisms) that require proactive maintenance between primary work items, suggesting a failure mode where 'background state hygiene' is deprioritized whenever foreground tasks are active.",
+    "confidence": 0.6,
+    "actionable": true,
+    "suggested_rule": "Always reconcile bookkeeping state (task lists, budget counters, keep-warm timers) at the start and end of every tool-use sequence, not only when prompted.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "3b43a554f20ce8c0",
+      "13d717936df352be",
+      "1b57463ab619f4b1"
+    ]
+  },
+  {
+    "id": "e9eeea53-5043-459a-8560-ce769143a520",
+    "patterns_linked": [
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "256894f1-fb54-4569-8025-dd5d51ced89c"
+    ],
+    "hypothesis": "The agent defaults to synthesizing and merging inputs into a single coherent output, which conflicts with workflows that require preserving independent perspectives (peer review, side-by-side comparison, skeptical validation); the agent's merge reflex destroys the epistemic diversity the user is deliberately creating.",
+    "confidence": 0.65,
+    "actionable": true,
+    "suggested_rule": "Avoid merging or synthesizing multiple independent inputs unless the user explicitly says 'merge' or 'combine'; default to preserving each input's identity and boundaries.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "cab740dfd60d7c54",
+      "4150862173f7781b",
+      "1599038879619491"
+    ]
+  },
+  {
+    "id": "dc687a8f-984f-4000-81ca-eeafb3a90083",
+    "patterns_linked": [
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
+      "7b48ca3d-941e-48a6-9429-742fcfcdfa04",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15"
+    ],
+    "hypothesis": "UI failures cluster around the agent treating components as locally correct units rather than perceptually coherent wholes: correct counts with contradictory progress bars, correct drawer on one page but broken on another, and correct data with poor visual hierarchy are all 'locally right, globally incoherent' errors.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always audit the full visual context (all pages, all states, overall hierarchy) of a UI change before marking it complete, because local correctness does not imply perceptual coherence.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "ca82efc1a26d2202",
+      "b953c0740743065e",
+      "d3c4790d5c18a071"
+    ]
+  },
+  {
+    "id": "ad29cc24-a207-4ca9-80ad-8dafe9e55036",
+    "patterns_linked": [
+      "f22e7974-dbe3-4051-ad5d-666239d02f2c",
+      "32dbce4d-e4d8-4cb1-b0bd-2ef1654261f2",
+      "b7bda082-d213-4c83-b8e4-06d01f950652"
+    ],
+    "hypothesis": "When acting on shared platforms under the user's identity, the agent systematically omits required metadata (agent attribution markers, suppression tags, format-specified identifiers) because it optimizes for content quality and treats metadata as optional decoration rather than as mandatory protocol.",
+    "confidence": 0.73,
+    "actionable": true,
+    "suggested_rule": "Always apply all required platform metadata (attribution markers, suppression tags, notification flags) before composing the content body of any shared-platform post.",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "f1b4ee2165ccf3a0",
+      "310d9244467e118b",
+      "1eadab474f5ddd8c"
+    ]
+  },
+  {
+    "id": "59128d3c-f35b-4e52-b9a6-636bda36253d",
+    "patterns_linked": [
+      "5d0bde8a-621a-4034-ae93-731b3653ac7c",
+      "65650d83-b0f8-4719-8e26-c5add633fa59",
+      "f09bdbaa-0de8-4d15-acaf-a032dc87997a",
+      "5dfb3762-3ecd-4ae4-a63b-be9bfef034be"
+    ],
+    "hypothesis": "The agent's style-correction failures are not isolated formatting mistakes but evidence of a deep generative prior that reasserts itself after single-turn corrections, requiring a multi-turn suppression strategy rather than per-instance fixes.",
+    "confidence": 0.45,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "14bc70f57af69141",
+      "6d793973f122295c",
+      "ff2d9ae6abc844a9",
+      "df2a6001eba23b42"
+    ]
+  },
+  {
+    "id": "36329781-0afd-4204-a17e-a5440c96bf94",
+    "patterns_linked": [
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "9fa76cc2-3e1f-42bd-a0b5-1bf807000fa0",
+      "b0f92cff-426e-40e9-a742-316b5f747588",
+      "b63ec70f-5930-4d2a-9689-770ffdab0942"
+    ],
+    "hypothesis": "The agent systematically conflates 'constructed the artifact' with 'verified the artifact works', substituting cheaper proxies (syntax checks, a11y snapshots, existence checks) for actual runtime/render verification across code, URLs, and UI surfaces alike.",
+    "confidence": 0.85,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "4fec59fcb649fe56",
+      "58ec32d44c50d1c9",
+      "1133590d31e85031",
+      "c0dbd1870659d980"
+    ]
+  },
+  {
+    "id": "9648aebc-c0be-46e0-9dbe-3bcbec9e0bf4",
+    "patterns_linked": [
+      "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
+      "64b242ba-6942-4c9b-8792-98a25649d6ea",
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273"
+    ],
+    "hypothesis": "The agent treats verbal acknowledgment of a commitment as partial fulfillment of that commitment, whether the commitment is a goal statement, a code change, or a stop condition; the underlying failure is equating declaration with execution.",
+    "confidence": 0.72,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "beedd341c12d17b6",
+      "b5341d52939cc77e",
+      "26c2a0944ac5e873"
+    ]
+  },
+  {
+    "id": "b530c276-52d6-449c-b2de-61be7fc30bc8",
+    "patterns_linked": [
+      "54421a50-5d9a-439a-baa0-1d527826a5f6",
+      "8c98642d-2293-43ff-a90d-5fcc41267624",
+      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
+      "0a8756bc-a51f-451d-954d-56cad897784c"
+    ],
+    "hypothesis": "Across PR descriptions, planning docs, and documentation files, the agent defaults to a self-aggrandizing or internal-jargon register that serves the agent's reasoning process rather than the reader's comprehension, a single audience-modeling failure manifesting in every written artifact type.",
+    "confidence": 0.68,
+    "actionable": true,
+    "suggested_rule": "Always re-read any written artifact from the perspective of someone with no session context before finalizing it, and strip any term that requires insider knowledge to parse",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "cf83f2b00945bbc9",
+      "ae98f3ef5e93dfd0",
+      "65ce513978d96fdc",
+      "b5fca580817b88fd"
+    ]
+  },
+  {
+    "id": "7797f001-c24d-4558-ab10-e34e3f777f35",
+    "patterns_linked": [
+      "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4",
+      "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b",
+      "41a91d38-b062-4f61-8cf3-4966bd6e004b"
+    ],
+    "hypothesis": "The agent's completion-tracking degrades proportionally to the number of concurrent obligations: task lists drift, multi-arm conditions get partially checked, and open callouts get forgotten, all pointing to a working-set overflow where the agent loses track of open items as they accumulate.",
+    "confidence": 0.62,
+    "actionable": true,
+    "suggested_rule": "Always enumerate all open obligations in a scratch list before declaring any completion condition met when more than two concurrent work items exist",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "3b43a554f20ce8c0",
+      "f685d025a7a48e60",
+      "9125c1d4465f62d7"
+    ]
+  },
+  {
+    "id": "981bf8b9-d4d5-4f6c-96c0-956e21a69f9d",
+    "patterns_linked": [
+      "65879bfc-ccdc-44d4-b384-799b1679fa4d",
+      "2725037c-e822-4e97-9623-188f967a7194"
+    ],
+    "hypothesis": "The agent confabulates structural facts about both codebases and project metadata when it skips verification reads, producing phantom ticket numbers and incorrect architectural claims through the same underlying mechanism of generating plausible-sounding references without grounding.",
+    "confidence": 0.7,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "8ff7fb42ca42f4b6",
+      "34f0594fa479422a"
+    ]
+  },
+  {
+    "id": "e721b253-6880-40f3-b503-3524d8acca84",
+    "patterns_linked": [
+      "c504de59-e425-4b9a-b808-d1697aaae11d",
+      "3dbdfc3c-1511-4d09-b563-21fd6b76a771",
+      "256894f1-fb54-4569-8025-dd5d51ced89c"
+    ],
+    "hypothesis": "The agent has a strong convergence prior that collapses distinct inputs into unified outputs; this fights the user's explicit multi-perspective workflows where independent plans must stay separate, external documents must stay untrusted, and comparisons must stay side-by-side.",
+    "confidence": 0.58,
+    "actionable": true,
+    "suggested_rule": "Avoid merging, synthesizing, or reconciling two independent inputs unless the user explicitly says 'merge' or 'combine'",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "cab740dfd60d7c54",
+      "4150862173f7781b",
+      "1599038879619491"
+    ]
+  },
+  {
+    "id": "9fa17375-7b86-4df9-a380-f931e7b2231a",
+    "patterns_linked": [
+      "64b242ba-6942-4c9b-8792-98a25649d6ea",
+      "7fdb76a5-1dd7-4500-8f52-f323e3d991e5",
+      "fdb45861-3e1a-48fe-b128-ffd308e3e29e"
+    ],
+    "hypothesis": "The agent systematically fails to account for the gap between its own internal state and what the user can actually observe: it treats tool-call results as user-visible, treats code edits as tested, and treats hidden link targets as readable, all instances of projecting its own information access onto the user.",
+    "confidence": 0.75,
+    "actionable": true,
+    "suggested_rule": "Always ask 'can the user see and verify this from their side right now?' before treating any internal operation as complete or communicated",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "b5341d52939cc77e",
+      "2d3051cb4df81dcb",
+      "dff26ce5bcaa6801"
+    ]
+  },
+  {
+    "id": "2626b230-5093-4fb7-96b4-abcc9ebcd76d",
+    "patterns_linked": [
+      "f22e7974-dbe3-4051-ad5d-666239d02f2c",
+      "32dbce4d-e4d8-4cb1-b0bd-2ef1654261f2",
+      "b7bda082-d213-4c83-b8e4-06d01f950652"
+    ],
+    "hypothesis": "Actions taken under the user's identity on shared platforms (GitHub comments, PR posts, notifications) form a high-stakes category where the agent repeatedly fails to apply required metadata (attribution markers, suppression tags), suggesting it treats platform actions as private tool calls rather than public speech acts on the user's behalf.",
+    "confidence": 0.73,
+    "actionable": true,
+    "suggested_rule": "Always apply all required identity and notification metadata before any platform action that will be visible to people other than the user",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "f1b4ee2165ccf3a0",
+      "310d9244467e118b",
+      "1eadab474f5ddd8c"
+    ]
+  },
+  {
+    "id": "8a5285a3-dda4-49b3-921b-492436633104",
+    "patterns_linked": [
+      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
+      "7b48ca3d-941e-48a6-9429-742fcfcdfa04",
+      "856b8d58-30cb-4025-b7b4-5e7a70de9b15"
+    ],
+    "hypothesis": "The agent treats UI as a container for correct data rather than a communication medium with its own coherence requirements; visual hierarchy failures, contradictory signals, and per-page component variants all stem from optimizing for data correctness while ignoring perceptual coherence.",
+    "confidence": 0.65,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "ca82efc1a26d2202",
+      "b953c0740743065e",
+      "d3c4790d5c18a071"
+    ]
+  },
+  {
+    "id": "805f8637-d16c-4ad2-9ac7-a896232806af",
+    "patterns_linked": [
+      "fc8d58f9-b04d-40dc-af41-27c17abc4e80",
+      "c5947f6a-560b-4221-8741-af83cc834f48",
+      "d3691add-19d6-42ed-a0df-9977d5c837d3"
+    ],
+    "hypothesis": "Resource management (token budgets, sub-agent scoping, keep-warm mechanisms) requires proactive monitoring and preemptive action, but the agent defaults to reactive mode, only addressing resource constraints after they bite rather than instrumenting them upfront.",
+    "confidence": 0.55,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "13d717936df352be",
+      "5e4c6658210d5a07",
+      "1b57463ab619f4b1"
+    ]
+  },
+  {
+    "id": "b256fa9c-ff59-49ed-a121-c69bdb09d848",
+    "patterns_linked": [
+      "53fe4f23-978b-4ec0-8b47-4376c099f138",
+      "d431ead9-2125-482c-ae45-34676488fe61",
+      "939866a0-afe6-43f0-a5a0-205c40be4c99"
+    ],
+    "hypothesis": "The agent has a compulsive additive instinct that manifests as re-raising deferred topics, appending unsolicited judgments, and leaking private commentary into formal documents; all three are instances of generating content the user did not ask for in contexts where silence or restraint is correct.",
+    "confidence": 0.6,
+    "actionable": true,
+    "suggested_rule": "Avoid adding any content to a response or document that was not requested or directly implied by the user's instruction, especially in contexts flagged as externally visible",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "671c212e8883c950",
+      "86c1bbbe73cd6f54",
+      "367cb6df9918a92c"
+    ]
   }
 ]

@@ -1,0 +1,50 @@
+```json
+{
+  "items": [
+    {
+      "cluster": "c-2d8458a5",
+      "drop": [
+        {
+          "evidence_id": "atone:mist-20261005-094856-da",
+          "why": "Writing a document with invented actors instead of real known details is an accuracy failure, not a structural problem with how implementation mechanisms are ordered relative to a plain summary."
+        },
+        {
+          "evidence_id": "atone:mist-20260930-222509-5b",
+          "why": "Using em-dashes despite a standing rule is a punctuation style violation; it shares no structure with the mechanism-list-before-summary failure the cluster is about."
+        }
+      ]
+    },
+    {
+      "cluster": "c-e62697ed",
+      "why_repeats": "The check that catches internal references in documents already has patterns for commit hashes, file-line citations, and timestamped update lines, but its scope is limited to files inside a docs/ directory or files that carry an explicit reader-facing frontmatter tag; a reader-facing document that lives elsewhere and lacks that tag is never examined, so internal references inside it pass through unchallenged.",
+      "fix": "The detection patterns already exist; extend the check's scope to cover files that are demonstrably reader-facing by their path or context — live status pages, PR-adjacent documents, spec files outside docs/ — rather than requiring docs/ placement or an explicit frontmatter tag.",
+      "guard": {
+        "hook_id": "doc-voice-gate",
+        "plain": "A check on AI prose patterns in owner-facing writing",
+        "verdict": "partly",
+        "gap": "The patterns for commit hashes, file-line citations, and timestamped update lines are present, but the check only runs on files inside docs/ or files with an explicit reader: frontmatter entry; documents that are reader-facing by location or context but without that placement or tag are never checked"
+      }
+    },
+    {
+      "cluster": "c-72f6b097",
+      "why_repeats": "The check already covers some of these paths — gcloud token-printing commands are handled by a dedicated function, and process listers using standard environment flags are caught by an explicit pattern — but specific command forms bypass the existing rules: ps invocations that request launch-argument columns using format specifiers rather than environment flag letters, and gcloud subcommand variants whose exact spelling does not match the token-command regex.",
+      "fix": "Extend the existing blocklist to cover ps invocations that include an args or cmd format specifier regardless of flag spelling, and verify that gcloud subcommand variants such as beta auth print-access-token are matched by the token-command pattern.",
+      "drop": [
+        {
+          "evidence_id": "atone:mist-20261022-110235-d2",
+          "why": "Credentials appearing in test assertion failure output are emitted inside the running process after the command starts, not by the command's own structure; a pre-execution command-pattern hook cannot intercept output produced by a failing assertion."
+        }
+      ]
+    },
+    {
+      "cluster": "c-754aa69a",
+      "drop": [
+        {
+          "evidence_id": "atone:mist-20261013-095552-b7",
+          "why": "Missing ticket links and links to related PRs are a different kind of required title element from the notification-suppression tag the check enforces; tag-presence validation does not cover link formats and the check is not designed to."
+        }
+      ]
+    }
+  ]
+}
+```

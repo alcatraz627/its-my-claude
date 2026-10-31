@@ -12,7 +12,8 @@
     "CLAUDE_CODE_PLUGIN_DIRS": "/Users/alcatraz627/.claude/mods/gcc-mods",
     "PATH": "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/alcatraz627/.cargo/bin:/Users/alcatraz627/.pyenv/shims:/Users/alcatraz627/.pyenv/bin:/Users/alcatraz627/.bun/bin:/Users/alcatraz627/.codeium/windsurf/bin:/Users/alcatraz627/Code/my-gcp-tools:/Users/alcatraz627/.local/bin",
     "PROSE_SMELL_ENFORCE": "1",
-    "STATUSLINE_PROFILE": "custom"
+    "STATUSLINE_PROFILE": "custom",
+    "CLAUDE_CODE_SCROLL_SPEED": "3"
   },
   "permissions": {
     "allow": [

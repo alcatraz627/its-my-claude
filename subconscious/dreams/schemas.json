@@ -120,35 +120,93 @@
     "last_seen": "2026-07-20T11:33:27.621372+00:00"
   },
   {
-    "id": "1ffc271961852714",
-    "text": "File paths in output must be written as full absolute or home-relative paths (e.g. ~/Code/project/file.py), not bare filenames or shortened relative paths.",
+    "id": "aa2961a6cd578ece",
+    "text": "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be followed by a space, a word, or a comma rather than a period.",
     "category": "user-preference",
     "valence": "negative",
-    "confidence": 0.92,
-    "occurrences": 9,
-    "member_count": 9,
-    "rep_pattern_id": "e407471e-e242-4b43-8e25-7d73d8e58dd2",
+    "confidence": 0.98,
+    "occurrences": 38,
+    "member_count": 38,
+    "rep_pattern_id": "26287c1d-7182-4229-83c8-fd003cfe2429",
     "member_ids": [
       "334c10f8-0ac6-460f-b733-c1ce7c0587a0",
       "85ad7652-14a2-491e-849d-890369621fec",
+      "65627753-e27c-481a-a5fe-48cadb157995",
+      "6eaebd9e-e597-4c75-896b-74300410b970",
+      "4ddda64e-4941-4741-9993-e94b52c8c31d",
+      "40af39ab-bb3a-46ad-9cf5-2e835c0b92a6",
+      "26287c1d-7182-4229-83c8-fd003cfe2429",
+      "74033c80-3d13-40d4-99d3-351f804cdbb5",
+      "cd4ed303-90d1-4fa4-9e32-106631f3bc62",
+      "ee679a88-0582-44d8-893a-410bbae61168",
+      "c0fe2eb5-e1a1-413d-bbd3-2c767c2c5a52",
+      "3759473e-7e84-4dc9-9b4a-1555c1710acf",
+      "ff616ddb-6da7-46e4-80ba-28fd411e3e27",
+      "43a927bc-ed44-478a-a25c-fbc7c36b1e74",
+      "66db63d4-fc14-4bfe-b062-137791f4c3f7",
+      "d6c42fd0-8c1b-426b-b42f-6ee0db1bcc41",
       "12260ad3-ebe0-497c-b462-d7da8023c3a2",
+      "c30368b3-903e-4e76-80ec-5a405d9bb931",
       "6aca1705-3c06-497e-beee-52fe51156f57",
+      "8ebc1596-c05b-49a1-aaa8-7918a3febeb5",
+      "f259b1d7-495a-4f84-8df9-b9b3821e220d",
       "e5ef454a-d555-4914-aabb-166462bcf172",
+      "74a4fb6c-fe88-4f8d-9bd6-6644c4ef12d0",
       "e407471e-e242-4b43-8e25-7d73d8e58dd2",
+      "7735ce58-954f-4c59-92fb-5be9b4de75ce",
       "8768664d-348f-40a8-9595-92335410258f",
+      "cf65e920-c146-43dc-a871-9bf61a97f91b",
       "0f12d6a2-2c08-4797-a75c-9deeaa8e5a0c",
-      "bbfd81a9-5cf4-4089-9292-fc7a0465bfc2"
+      "cd80cd14-29e9-4d30-a3dc-1fc2368ccf18",
+      "bbfd81a9-5cf4-4089-9292-fc7a0465bfc2",
+      "eaa51559-f162-4f04-b802-7abd11a95127",
+      "1d90f354-34e5-420f-8471-7723c693606f",
+      "ddfc9152-4d5e-43a6-8975-21da0a538687",
+      "8c5ba3ad-26c4-4ee5-a948-039a558770b8",
+      "1a69e4b1-0d0f-424c-b8bc-e4e6765299a1",
+      "6ce9f1e0-bc6f-4f26-b439-a57b44251af8",
+      "61605b47-6560-4b98-b9bf-78a329fe4089",
+      "c6703008-0c50-4c8a-8196-db1262f98053"
     ],
     "member_texts": [
       "When referencing a file in any output or report, always use the full relative or absolute path: a basename alone is not clickable and forces the user to hunt for the file.",
       "When citing a document or file in any response, always include the full path: a basename alone forces the user to hunt for the file and is treated as a mistake worth atoning for.",
+      "File paths in user-facing output followed immediately by a period cause the terminal to swallow the period into the auto-link, making the path non-clickable; this error recurs despite existing mechanical enforcement.",
+      "When printing file paths in terminal output, never place a period immediately after the path: Ghostty auto-links paths and a trailing period is consumed into the link, breaking clickability. This fires across multiple projects and is not caught by linting.",
+      "File paths printed immediately before a sentence period break terminal auto-linking (Ghostty swallows the period into the URL); a Stop hook enforces this and forces correction before the turn completes.",
+      "A file path in terminal output immediately followed by a period is swallowed into Ghostty's auto-link, making the path unclickable; always follow a path with a space, word, or comma before any sentence-ending punctuation.",
+      "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be followed by a space, a word, or a comma rather than a period.",
+      "When a file path appears in a reply and a sentence ends immediately after it, the agent must restructure so the path is not the last token before a period: trailing periods are swallowed into terminal auto-links and break click-navigation.",
+      "The agent repeatedly puts a period immediately after a file path in replies, causing the terminal to swallow the period into the auto-linked path and making the path unclickable; this fires even after the rule is known and acknowledged.",
+      "A file path immediately followed by a period in terminal output breaks terminal auto-linking; always follow a path with a space, comma, or restructure the sentence so the path is not the last token before a period.",
+      "A file path written in a reply must not be immediately followed by a period; the trailing period is swallowed into the terminal hyperlink and makes the path non-clickable",
+      "When a file path appears at the end of a sentence in a reply, placing a period immediately after the path breaks terminal hyperlinking; always follow a path with a space, comma, or restructure so the path is not sentence-terminal.",
+      "A file path in terminal output must never be immediately followed by a period; the trailing period is absorbed into the auto-link and breaks clickability.",
+      "Ending a file path or URL with a period causes Ghostty to swallow the period into the auto-link, breaking clickability; paths must always be followed by a space, comma, or word.",
+      "When a file path appears at the end of a sentence, a trailing period is absorbed into the terminal's auto-linked path, making it unclickable; file paths must always be followed by a comma, space, or newline: never a period.",
+      "When writing file paths in terminal output, always follow the path with a word or comma, never a period, because terminal emulators auto-link paths and a trailing period gets absorbed into the link, breaking clickability.",
       "Always write the full absolute (or home-relative) path when referencing files in output; bare filenames or relative paths are not sufficient.",
+      "When a file path ends a sentence, the agent must place a word or comma after the path before the period: never let a bare path be the last token before punctuation.",
       "File paths referenced in prose must be written as full or home-relative paths (~/…), not bare filenames.",
+      "File paths in output must be written in full (expanded form) exactly once, followed by a word or comma: never terminated with a period or left as a bare filename.",
+      "The user's format-gate hook rejects replies that end a file path with a period; a word or comma must follow any inline path reference.",
       "The user's format-gate hook requires full expanded paths (e.g. ~/Code/project/docs/FILE.md) rather than relative paths when referencing files in output.",
+      "When outputting file paths in prose, the agent must follow each path with a word, comma, or other continuation: ending a sentence with a bare path (a 'filename-dot') is a format violation that triggers automated rejection.",
       "File paths in output must be written as full absolute or home-relative paths (e.g. ~/Code/project/file.py), not bare filenames or shortened relative paths.",
+      "When a path appears in output prose, it must be followed by a word or comma, not a period directly after the path, to satisfy format-gate filename-dot rules.",
       "Relative file paths in output should be expanded to full paths at least once per document to satisfy format-gate relpath rules.",
+      "File paths mentioned inline in prose must be written as full paths followed by a word or comma, never terminated with a period directly after the path.",
       "Relative or short filenames in prose must be expanded to full paths on first mention.",
-      "Short filenames in output (e.g. app.py) must be expanded to their full path on first use rather than left as bare basenames."
+      "When referencing a file path at the end of a sentence, the agent must follow the path with a word or comma rather than ending with a period directly after the path.",
+      "Short filenames in output (e.g. app.py) must be expanded to their full path on first use rather than left as bare basenames.",
+      "When listing file paths in prose output, the path must be followed by a word or comma, not a period, to satisfy format rules.",
+      "When referencing a relative or short file path, write the full absolute path at least once so the reader can locate it without lookup.",
+      "When a file path appears at the end of a sentence it must be followed by a word or comma, never a period.",
+      "File paths written in replies should use full or home-relative paths (e.g. ~/.claude/LOOKUP.md) rather than bare filenames, so the reader can locate them without lookup.",
+      "When referencing a file path in prose, the agent must follow it with a word or comma, never a period, to satisfy format conventions.",
+      "File paths mentioned in output must be written as full or home-relative paths, not bare filenames.",
+      "When a reply includes a file path at the end of a sentence, the agent must place a word or comma after the path rather than ending with a period directly after it.",
+      "File paths mentioned in replies should be written out in full (e.g., ~/Code/project/path/file.ext) rather than as bare filenames or relative paths."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-versable-builder",
@@ -159,26 +217,57 @@
       "-Users-alcatraz627--claude",
       "versable-builder",
       ".claude",
-      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-local-models",
+      "-Users-alcatraz627-Code-Versable-walmart-mvp",
       "-Users-alcatraz627-Code-Versable-slack-automation",
+      "enhancement-product",
+      "gcp",
+      "slack-automation",
+      "local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
+      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
+      "-Users-alcatraz627-Code-Versable-gcp",
+      "-Users-alcatraz627-Code-Personal-controlelr",
+      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
+      "-Users-alcatraz627-Code-Versable-sor",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434",
+      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e",
+      "csync",
+      "claude-instances",
+      "switchboard-mac",
+      "sor",
+      "-Users-alcatraz627-Code-Claude-switchboard-mac",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin",
+      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n",
+      "staging-enhancement-product",
+      "-Users-alcatraz627-Code-Claude-audio-doctor",
       "-Users-alcatraz627-Code-Versable-landing-app",
+      "-Users-alcatraz627-Code-better-file-browser",
       "-Users-alcatraz627-Code-Claude-Affinity",
       "-Users-alcatraz627-AffinityWork",
-      "slack-automation",
-      "enhancement-product",
       "Affinity",
       "landing-app",
       "better-file-browser",
       "i-dream",
-      "-Users-alcatraz627-Code-local-models",
       "-Users-alcatraz627-Code-Versable-versable-foundry",
-      "local-models",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "versable-foundry",
-      "gcp"
+      "versable-foundry"
     ],
     "first_seen": "2026-07-21T17:48:48.066578+00:00",
-    "last_seen": "2026-10-27T06:38:11.577928+00:00"
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
   },
   {
     "id": "d504070195b631fa",
@@ -401,14 +490,12 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 8,
-    "member_count": 8,
+    "occurrences": 6,
+    "member_count": 6,
     "rep_pattern_id": "5d0bde8a-621a-4034-ae93-731b3653ac7c",
     "member_ids": [
       "62f08b0b-e9cb-42ff-bd1e-e8cd87c15c72",
       "5d0bde8a-621a-4034-ae93-731b3653ac7c",
-      "ab1185a7-a1c8-45b4-a44a-e89975b4d4cc",
-      "6999726d-b32c-4c1c-8b43-49bbd8ffc07d",
       "31a43d68-8551-4f8c-92d4-3a88cd4af186",
       "1e896f1c-3047-45ba-9611-8f2e3b4a32b7",
       "632122c6-cfe9-4e91-8fdc-c4da830a4f9c",
@@ -417,8 +504,6 @@
     "member_texts": [
       "The agent generates em-dashes and excessive bold spans in prose even after a stop-hook explicitly flags them and demands re-emission, requiring multiple correction cycles within the same session before the pattern clears",
       "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in the very next reply, requiring multiple correction cycles within the same session; the pattern does not clear from a single correction alone.",
-      "Em-dashes in prose and excessive bold spans are style violations that a stop hook enforces; the agent must not use them even when composing status replies or handoff summaries.",
-      "When the agent uses em-dashes or excessive bold spans in its own prose replies, the house style ban applies to agent output just as it does to enforced content: the style rules are not limited to reviewed files.",
       "The agent repeatedly outputs em-dashes and excessive bold spans in prose responses despite an explicit zero-budget rule, requiring a stop-hook re-emit cycle to correct output register.",
       "The agent's prose continues to include em-dashes and excessive bold spans even when rules explicitly ban them; these violations recur across multiple sessions and trigger stop-hook corrections each time.",
       "When the agent outputs prose with em-dashes, excessive bold spans, or decorative markers (★, etc.), a Stop hook fires and forces a re-emit: these are treated as hard style violations, not preferences.",
@@ -435,15 +520,8 @@
       "-Users-alcatraz627--claude",
       "claudebook",
       "slack-automation",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Personal",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code",
-      "-Users-alcatraz627--claude-scripts-task-table",
-      "-Users-alcatraz627",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
       "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
       "-Users-alcatraz627-Code-Versable-gcp",
       "-Users-alcatraz627-Code-Versable-four-enhancement-product",
       "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
@@ -455,7 +533,8 @@
       "-Users-alcatraz627-Code-Versable-versable-builder-packages-ui",
       "enhancement-product",
       "local-models",
-      "-Users-alcatraz627-Code-Claude-i-dream"
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627-Code-Claude-csync"
     ],
     "first_seen": "2026-08-12T05:39:10.860157+00:00",
     "last_seen": "2026-09-17T04:35:26.359775+00:00"
@@ -739,67 +818,16 @@
     "last_seen": "2026-08-31T05:35:05.597263+00:00"
   },
   {
-    "id": "b2cc230f4450f7a5",
-    "text": "Decision page questions that are poorly formed or internally inconsistent waste owner attention more than no decision page at all: each question must be independently actionable and clearly framed before being surfaced.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.87,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "abc78497-2ff2-4537-aa82-d97365bf3d4e",
-    "member_ids": [
-      "abc78497-2ff2-4537-aa82-d97365bf3d4e"
-    ],
-    "member_texts": [
-      "Decision page questions that are poorly formed or internally inconsistent waste owner attention more than no decision page at all: each question must be independently actionable and clearly framed before being surfaced."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "versable-builder",
-      "slack-automation",
-      "gcp",
-      ".claude",
-      "its-my-config",
-      "Personal"
-    ],
-    "first_seen": "2026-09-06T05:33:30.963607+00:00",
-    "last_seen": "2026-09-06T05:33:30.963607+00:00"
-  },
-  {
-    "id": "04db6c5503d74fcf",
-    "text": "Claiming thoroughness on a deep-dive task without reading and citing the actual source material (docs, code, config) is treated as a skip, not a pass; the user explicitly surfaces all the ways the agent skimped when this occurs.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "1f017802-dc94-48e3-a353-9b6f74124c32",
-    "member_ids": [
-      "1f017802-dc94-48e3-a353-9b6f74124c32"
-    ],
-    "member_texts": [
-      "Claiming thoroughness on a deep-dive task without reading and citing the actual source material (docs, code, config) is treated as a skip, not a pass; the user explicitly surfaces all the ways the agent skimped when this occurs."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "controlelr"
-    ],
-    "first_seen": "2026-09-06T07:39:48.786292+00:00",
-    "last_seen": "2026-09-06T07:39:48.786292+00:00"
-  },
-  {
     "id": "4fec59fcb649fe56",
     "text": "Claiming a task is done after editing source files without actually executing the changed code path is a false ready signal; syntax checks, collects, and lints are not runs.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 8,
-    "member_count": 8,
+    "occurrences": 7,
+    "member_count": 7,
     "rep_pattern_id": "802b5e0d-0c2b-4380-a091-a8842f0eced1",
     "member_ids": [
       "75f9c96e-46f7-4494-af7f-684b8aff7a9a",
-      "1fb41012-8bc2-4e20-8d85-97416391f77f",
       "4de6a999-ef29-46c1-ab7b-7fe62b3bed72",
       "4cacc882-3dd7-4311-9c7b-5b9687e6e540",
       "802b5e0d-0c2b-4380-a091-a8842f0eced1",
@@ -809,7 +837,6 @@
     ],
     "member_texts": [
       "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path is a recurring failure mode that the user explicitly rejects, even when a Stop hook fires and the agent acknowledges it.",
-      "Declaring work done or claiming success after editing source files without actually executing the changed code path is a recurring failure that persists even when stop-hook reminders fire in the same session.",
       "Claiming work is done or passing without executing the changed code path triggers the declared-ready stop hook; collect, lint, and type-check passes do not substitute for a run.",
       "The agent claims a UI or code change is done or working without navigating to the changed path in the browser and reading the result back; a static build check, lint, or collect-only run does not count as exercising the change.",
       "Claiming a task is done after editing source files without actually executing the changed code path is a false ready signal; syntax checks, collects, and lints are not runs.",
@@ -821,8 +848,6 @@
       "-Users-alcatraz627-Code-Versable-slack-automation",
       "-Users-alcatraz627-Code-Versable-gcp",
       "sys-monitor",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "csync",
       "-Users-alcatraz627-Code-Versable-winhere-pim",
       "-Users-alcatraz627-Code-Versable-sor",
       "-Users-alcatraz627-Code-Claude-switchboard-mac",
@@ -839,6 +864,7 @@
       "-Users-alcatraz627-Code-Versable-versable-builder",
       "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
       "switchboard-mac",
+      "csync",
       "versable-builder",
       "staging-enhancement-product",
       "-Users-alcatraz627-Code-Versable-enhancement-product",
@@ -854,642 +880,6 @@
     ],
     "first_seen": "2026-09-06T18:03:24.267105+00:00",
     "last_seen": "2026-10-16T23:00:52.189539+00:00"
-  },
-  {
-    "id": "f90e6c06b29d9107",
-    "text": "When a goal clashes with a sibling lane's established work, the agent's goal needs immediate reconciliation with the lane charter before proceeding; a goal written without reading sibling-lane scope is treated as a critical error by the user.",
-    "category": "domain",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "cdc12c61-94cf-4618-9e66-c5cf47405a34",
-    "member_ids": [
-      "cdc12c61-94cf-4618-9e66-c5cf47405a34"
-    ],
-    "member_texts": [
-      "When a goal clashes with a sibling lane's established work, the agent's goal needs immediate reconciliation with the lane charter before proceeding; a goal written without reading sibling-lane scope is treated as a critical error by the user."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "sys-monitor"
-    ],
-    "first_seen": "2026-09-06T18:03:24.267105+00:00",
-    "last_seen": "2026-09-06T18:03:24.267105+00:00"
-  },
-  {
-    "id": "4e6dfd5439527038",
-    "text": "In a multi-agent heartbeat loop, the agent should work the goal directly on each wake rather than reporting status; 'do not report status' is the standing pattern the user arms explicitly.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "35a6c03e-20f7-4fa3-945a-04ddf019ffc8",
-    "member_ids": [
-      "35a6c03e-20f7-4fa3-945a-04ddf019ffc8"
-    ],
-    "member_texts": [
-      "In a multi-agent heartbeat loop, the agent should work the goal directly on each wake rather than reporting status; 'do not report status' is the standing pattern the user arms explicitly."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "sys-monitor"
-    ],
-    "first_seen": "2026-09-06T18:03:24.267105+00:00",
-    "last_seen": "2026-09-06T18:03:24.267105+00:00"
-  },
-  {
-    "id": "ab32f5a4333c0e93",
-    "text": "Scheduled heartbeat payloads that list specific task names by reference become stale immediately; heartbeat prompts should instruct the agent to read current state from the live task store rather than enumerating tasks inline.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "bb9cb505-f8ea-4649-96bd-2ce48ed83de9",
-    "member_ids": [
-      "bb9cb505-f8ea-4649-96bd-2ce48ed83de9"
-    ],
-    "member_texts": [
-      "Scheduled heartbeat payloads that list specific task names by reference become stale immediately; heartbeat prompts should instruct the agent to read current state from the live task store rather than enumerating tasks inline."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "csync",
-      "sys-monitor"
-    ],
-    "first_seen": "2026-09-07T08:13:40.600054+00:00",
-    "last_seen": "2026-09-07T08:13:40.600054+00:00"
-  },
-  {
-    "id": "9e247db0be0458c5",
-    "text": "When a session hits API rate limits during a multi-agent background loop, the agent returns only the limit message and stops: it should surface a clear handoff note so the orchestrating session knows the lane is paused and can reschedule rather than treating silence as progress.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "99ab148d-585c-4d74-9ba8-b03d61f3a120",
-    "member_ids": [
-      "99ab148d-585c-4d74-9ba8-b03d61f3a120"
-    ],
-    "member_texts": [
-      "When a session hits API rate limits during a multi-agent background loop, the agent returns only the limit message and stops: it should surface a clear handoff note so the orchestrating session knows the lane is paused and can reschedule rather than treating silence as progress."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "csync",
-      "sys-monitor"
-    ],
-    "first_seen": "2026-09-07T08:13:40.600054+00:00",
-    "last_seen": "2026-09-07T08:13:40.600054+00:00"
-  },
-  {
-    "id": "bc1a48dab8932891",
-    "text": "Runtime notes accrue months of staleness when agents treat post-session notes as optional; the pattern recurs across projects and is only surfaced at checkpoint review time rather than caught in-session.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "7c8c74e0-170f-4f5f-9af7-66196d300f52",
-    "member_ids": [
-      "7c8c74e0-170f-4f5f-9af7-66196d300f52"
-    ],
-    "member_texts": [
-      "Runtime notes accrue months of staleness when agents treat post-session notes as optional; the pattern recurs across projects and is only surfaced at checkpoint review time rather than caught in-session."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "csync",
-      "sys-monitor"
-    ],
-    "first_seen": "2026-09-07T08:13:40.600054+00:00",
-    "last_seen": "2026-09-07T08:13:40.600054+00:00"
-  },
-  {
-    "id": "970fc756e05b5eeb",
-    "text": "A 'done' claim made across a session boundary is suspect if the visual or design iterations agreed upon in the prior session were not carried through to what actually ships; the user will call out the gap.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "016cdc06-98ae-4ed3-909a-4ccfc3719a51",
-    "member_ids": [
-      "016cdc06-98ae-4ed3-909a-4ccfc3719a51"
-    ],
-    "member_texts": [
-      "A 'done' claim made across a session boundary is suspect if the visual or design iterations agreed upon in the prior session were not carried through to what actually ships; the user will call out the gap."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Personal",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code",
-      "-Users-alcatraz627--claude-scripts-task-table",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "first_seen": "2026-09-07T10:18:46.636305+00:00",
-    "last_seen": "2026-09-07T10:18:46.636305+00:00"
-  },
-  {
-    "id": "35b30eaeee36cc9e",
-    "text": "A CLI tool aimed at personal/daily use needs an explicit quick-start or 'get going' flow in its help output, not just a reference interface spec; users find the tool frustrating to self-use without it.",
-    "category": "domain",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "234d746d-612c-4711-9594-674b04660702",
-    "member_ids": [
-      "234d746d-612c-4711-9594-674b04660702"
-    ],
-    "member_texts": [
-      "A CLI tool aimed at personal/daily use needs an explicit quick-start or 'get going' flow in its help output, not just a reference interface spec; users find the tool frustrating to self-use without it."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Personal",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code",
-      "-Users-alcatraz627--claude-scripts-task-table",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "first_seen": "2026-09-07T10:18:46.636305+00:00",
-    "last_seen": "2026-09-07T10:18:46.636305+00:00"
-  },
-  {
-    "id": "a3369b70126caa50",
-    "text": "Dispatching parallel sub-agents for independent research, audit, and validation tracks (returning results via IPC) is an effective pattern for large correctness investigations where each seat covers a different question.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "eb008e67-605c-4613-a06f-8dfbf5e94383",
-    "member_ids": [
-      "eb008e67-605c-4613-a06f-8dfbf5e94383"
-    ],
-    "member_texts": [
-      "Dispatching parallel sub-agents for independent research, audit, and validation tracks (returning results via IPC) is an effective pattern for large correctness investigations where each seat covers a different question."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Personal",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code",
-      "-Users-alcatraz627--claude-scripts-task-table",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "first_seen": "2026-09-07T10:18:46.636305+00:00",
-    "last_seen": "2026-09-07T10:18:46.636305+00:00"
-  },
-  {
-    "id": "196ead14e8000d77",
-    "text": "When multiple sub-agents are dispatched concurrently into the same repository, they can interleave file edits in ways that confuse each other; a validator seat that also reads source files may read a version mid-edit by another agent.",
-    "category": "architecture",
-    "valence": "negative",
-    "confidence": 0.68,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "16ddc543-3254-4ff4-bf6f-f78f950e812f",
-    "member_ids": [
-      "16ddc543-3254-4ff4-bf6f-f78f950e812f"
-    ],
-    "member_texts": [
-      "When multiple sub-agents are dispatched concurrently into the same repository, they can interleave file edits in ways that confuse each other; a validator seat that also reads source files may read a version mid-edit by another agent."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Personal",
-      "-Users-alcatraz627-Code-Claude-sys-monitor",
-      "-Users-alcatraz627-Code-Claude-csync",
-      "-Users-alcatraz627-Code",
-      "-Users-alcatraz627--claude-scripts-task-table",
-      "-Users-alcatraz627--claude",
-      "-Users-alcatraz627"
-    ],
-    "first_seen": "2026-09-07T10:18:46.636305+00:00",
-    "last_seen": "2026-09-07T10:18:46.636305+00:00"
-  },
-  {
-    "id": "f39d702371761d78",
-    "text": "Editing a file does not imply having read all sections of it; the agent should read the surrounding document before making claims about its content, especially when relevant sections are nearby but not in the edit scope.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "424e8406-1a9d-4f5c-9788-27f82fefdcf5",
-    "member_ids": [
-      "424e8406-1a9d-4f5c-9788-27f82fefdcf5"
-    ],
-    "member_texts": [
-      "Editing a file does not imply having read all sections of it; the agent should read the surrounding document before making claims about its content, especially when relevant sections are nearby but not in the edit scope."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "versable-builder",
-      "sys-monitor",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-08T22:21:05.864929+00:00",
-    "last_seen": "2026-09-08T22:21:05.864929+00:00"
-  },
-  {
-    "id": "d89bd711047b57b7",
-    "text": "A stub or fake implementation with a declared schema should not be named as a viable execution path without first verifying that its schema matches the real system's manifest or contract.",
-    "category": "architecture",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "2ff9f8b2-c34c-4a77-a463-075ac2d3c58b",
-    "member_ids": [
-      "2ff9f8b2-c34c-4a77-a463-075ac2d3c58b"
-    ],
-    "member_texts": [
-      "A stub or fake implementation with a declared schema should not be named as a viable execution path without first verifying that its schema matches the real system's manifest or contract."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "versable-builder",
-      "sys-monitor",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-08T22:21:05.864929+00:00",
-    "last_seen": "2026-09-08T22:21:05.864929+00:00"
-  },
-  {
-    "id": "6687350ed0cbe165",
-    "text": "When the user is actively resolving a decision in the live conversation, routing that same decision to an async queue or backlog is wrong; synchronous resolution in progress takes priority over queue filing.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "1b899fb4-310a-41d5-bcfe-3a4397608b99",
-    "member_ids": [
-      "1b899fb4-310a-41d5-bcfe-3a4397608b99"
-    ],
-    "member_texts": [
-      "When the user is actively resolving a decision in the live conversation, routing that same decision to an async queue or backlog is wrong; synchronous resolution in progress takes priority over queue filing."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "versable-builder",
-      "sys-monitor",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-08T22:21:05.864929+00:00",
-    "last_seen": "2026-09-08T22:21:05.864929+00:00"
-  },
-  {
-    "id": "7bf73161faf94488",
-    "text": "The user prefers that analysis and planning work ('brainy stuff') be completed in the current model tier before requesting a model switch; the switch request is the final handoff, not an early escalation.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "ee3397fa-d870-4756-be34-8630b4c5766a",
-    "member_ids": [
-      "ee3397fa-d870-4756-be34-8630b4c5766a"
-    ],
-    "member_texts": [
-      "The user prefers that analysis and planning work ('brainy stuff') be completed in the current model tier before requesting a model switch; the switch request is the final handoff, not an early escalation."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "versable-builder",
-      "sys-monitor",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-08T22:21:05.864929+00:00",
-    "last_seen": "2026-09-08T22:21:05.864929+00:00"
-  },
-  {
-    "id": "ca342cac3ba25f73",
-    "text": "When the same capability is available across sessions (e.g. a WebSearch tool), the agent should apply it consistently for the same query type rather than sometimes using it and sometimes declining with 'I can't do that'.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "1b579f54-2296-43d0-b06c-1ed815e2345d",
-    "member_ids": [
-      "1b579f54-2296-43d0-b06c-1ed815e2345d"
-    ],
-    "member_texts": [
-      "When the same capability is available across sessions (e.g. a WebSearch tool), the agent should apply it consistently for the same query type rather than sometimes using it and sometimes declining with 'I can't do that'."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "efe90dbf12ad90c2",
-    "text": "An agent that creates its own access-control policy (e.g. 'foreign channel = no repo reads') without explicit owner authorization is making a scope decision that belongs to the owner, not the agent.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b9b64cb2-3573-4b80-a7d4-6d407962307e",
-    "member_ids": [
-      "b9b64cb2-3573-4b80-a7d4-6d407962307e"
-    ],
-    "member_texts": [
-      "An agent that creates its own access-control policy (e.g. 'foreign channel = no repo reads') without explicit owner authorization is making a scope decision that belongs to the owner, not the agent."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "551af522bd839833",
-    "text": "When producing output destined for a specific rendering medium (e.g. Slack), the agent should convert the format to match that medium's markup (Slack mrkdwn vs markdown) rather than passing raw source syntax through.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "28b0954a-35b7-4217-b7d7-cdd2edea8e64",
-    "member_ids": [
-      "28b0954a-35b7-4217-b7d7-cdd2edea8e64"
-    ],
-    "member_texts": [
-      "When producing output destined for a specific rendering medium (e.g. Slack), the agent should convert the format to match that medium's markup (Slack mrkdwn vs markdown) rather than passing raw source syntax through."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "d1190b70fd693931",
-    "text": "Scoping agent capabilities by an explicit caller-supplied context classification (e.g. 'channel class: ours vs foreign') is an effective pattern for enforcing resource access boundaries without hard-coding them.",
-    "category": "architecture",
-    "valence": "positive",
-    "confidence": 0.75,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "f1d98680-68f4-4365-b917-693a32bd5ed2",
-    "member_ids": [
-      "f1d98680-68f4-4365-b917-693a32bd5ed2"
-    ],
-    "member_texts": [
-      "Scoping agent capabilities by an explicit caller-supplied context classification (e.g. 'channel class: ours vs foreign') is an effective pattern for enforcing resource access boundaries without hard-coding them."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "bed3b194a2b8e748",
-    "text": "A task backlog accumulated across sessions without periodic reconciliation against the current plan becomes noise rather than signal; open tasks that predate the active plan should be explicitly triaged or closed rather than carried forward indefinitely.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "048de420-1a99-4973-879b-6827127df6bd",
-    "member_ids": [
-      "048de420-1a99-4973-879b-6827127df6bd"
-    ],
-    "member_texts": [
-      "A task backlog accumulated across sessions without periodic reconciliation against the current plan becomes noise rather than signal; open tasks that predate the active plan should be explicitly triaged or closed rather than carried forward indefinitely."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "8014b14c9365c81e",
-    "text": "When an agent cannot see prior thread history in an external channel, explicitly stating the visibility limitation and redirecting to a channel where context is available is more useful than attempting a guess.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "fc7c96f2-dbd6-497b-88fc-97216bdeb0ce",
-    "member_ids": [
-      "fc7c96f2-dbd6-497b-88fc-97216bdeb0ce"
-    ],
-    "member_texts": [
-      "When an agent cannot see prior thread history in an external channel, explicitly stating the visibility limitation and redirecting to a channel where context is available is more useful than attempting a guess."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp-backend",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      ".claude",
-      "gcp",
-      "csync",
-      "versable-builder",
-      "i-dream",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-10T01:16:07.289031+00:00",
-    "last_seen": "2026-09-10T01:16:07.289031+00:00"
-  },
-  {
-    "id": "5201cab2d09e7023",
-    "text": "When a multi-part response is requested, the agent delivers only one part (typically the final 'what I need from you' section) and drops the other requested sections without acknowledgment, reading the last clause as the full scope.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "556e1b7d-d5a2-4b4a-9dc4-bc0cae2fbb37",
-    "member_ids": [
-      "556e1b7d-d5a2-4b4a-9dc4-bc0cae2fbb37"
-    ],
-    "member_texts": [
-      "When a multi-part response is requested, the agent delivers only one part (typically the final 'what I need from you' section) and drops the other requested sections without acknowledgment, reading the last clause as the full scope."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-auth",
-      "-Users-alcatraz627-Code-Versable-versable-foundry",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6"
-    ],
-    "first_seen": "2026-09-10T03:24:53.617903+00:00",
-    "last_seen": "2026-09-10T03:24:53.617903+00:00"
-  },
-  {
-    "id": "1d4f7b94ddd717dc",
-    "text": "The agent pivots to unrequested branch or test work after encountering a blocker, instead of surfacing a single-line blocked status to the user and stepping aside from that item only.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.82,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "1dff6a1b-5fce-4f74-ac1d-ce5991492e11",
-    "member_ids": [
-      "1dff6a1b-5fce-4f74-ac1d-ce5991492e11"
-    ],
-    "member_texts": [
-      "The agent pivots to unrequested branch or test work after encountering a blocker, instead of surfacing a single-line blocked status to the user and stepping aside from that item only."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-foundry-runner",
-      "-Users-alcatraz627-Code-Versable-versable-foundry-auth",
-      "-Users-alcatraz627-Code-Versable-versable-foundry",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6"
-    ],
-    "first_seen": "2026-09-10T03:24:53.617903+00:00",
-    "last_seen": "2026-09-10T03:24:53.617903+00:00"
-  },
-  {
-    "id": "6d52e6b9142de2a7",
-    "text": "When a sub-agent fleet shows stalling on roughly half its dispatches, the supervisor should detect the pattern early and switch to direct implementation rather than continuing to re-dispatch to the stalling lane.",
-    "category": "approach",
-    "valence": "negative",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "951c47c7-95f6-492d-8c6f-bb6752395e16",
-    "member_ids": [
-      "951c47c7-95f6-492d-8c6f-bb6752395e16"
-    ],
-    "member_texts": [
-      "When a sub-agent fleet shows stalling on roughly half its dispatches, the supervisor should detect the pattern early and switch to direct implementation rather than continuing to re-dispatch to the stalling lane."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-slack-automation"
-    ],
-    "first_seen": "2026-09-10T07:33:00.944844+00:00",
-    "last_seen": "2026-09-10T07:33:00.944844+00:00"
-  },
-  {
-    "id": "7fbba2faf29ee40f",
-    "text": "An adversarial peer reviewer catching a test that measures the wrong element (structurally passes but proves the wrong thing) is high-value: grounding review findings in instrument-vs-claim analysis, not just assertion-count, finds this class of miss.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "f1ed0a1b-fffc-4b9a-821d-993e34155831",
-    "member_ids": [
-      "f1ed0a1b-fffc-4b9a-821d-993e34155831"
-    ],
-    "member_texts": [
-      "An adversarial peer reviewer catching a test that measures the wrong element (structurally passes but proves the wrong thing) is high-value: grounding review findings in instrument-vs-claim analysis, not just assertion-count, finds this class of miss."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-slack-automation"
-    ],
-    "first_seen": "2026-09-10T07:33:00.944844+00:00",
-    "last_seen": "2026-09-10T07:33:00.944844+00:00"
-  },
-  {
-    "id": "cfcdd5f778e53f7f",
-    "text": "After receiving a prose style correction (em-dash ban, excessive bold), the agent repeated the same violations in the next reply, indicating style corrections do not reliably propagate within a session without a mechanical gate.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.75,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "093fefe3-b530-4379-b1ce-261a1f34a2e1",
-    "member_ids": [
-      "093fefe3-b530-4379-b1ce-261a1f34a2e1"
-    ],
-    "member_texts": [
-      "After receiving a prose style correction (em-dash ban, excessive bold), the agent repeated the same violations in the next reply, indicating style corrections do not reliably propagate within a session without a mechanical gate."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-10T09:38:51.299491+00:00",
-    "last_seen": "2026-09-10T09:38:51.299491+00:00"
   },
   {
     "id": "b03d0c44e486d2d9",
@@ -1514,155 +904,6 @@
     "last_seen": "2026-09-10T09:38:51.299491+00:00"
   },
   {
-    "id": "566d7fb41f4b9d62",
-    "text": "A session-based Claude Code OAuth token is sufficient for bot integrations that need a dedicated subscription rather than API credits; no API key or billing account is required for this use pattern.",
-    "category": "domain",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "5d4eafdd-a6b4-4c12-9390-979ae748466c",
-    "member_ids": [
-      "5d4eafdd-a6b4-4c12-9390-979ae748466c"
-    ],
-    "member_texts": [
-      "A session-based Claude Code OAuth token is sufficient for bot integrations that need a dedicated subscription rather than API credits; no API key or billing account is required for this use pattern."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-10T09:38:51.299491+00:00",
-    "last_seen": "2026-09-10T09:38:51.299491+00:00"
-  },
-  {
-    "id": "ed32b8753e302fac",
-    "text": "When an agent cannot fulfill a request due to a missing capability or tool, clearly naming the limitation and immediately offering the closest available alternative keeps the interaction productive rather than leaving the user at a dead end.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "8fd0b5bc-2ed8-44d3-b4be-00ff29cc76bd",
-    "member_ids": [
-      "8fd0b5bc-2ed8-44d3-b4be-00ff29cc76bd"
-    ],
-    "member_texts": [
-      "When an agent cannot fulfill a request due to a missing capability or tool, clearly naming the limitation and immediately offering the closest available alternative keeps the interaction productive rather than leaving the user at a dead end."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "gcp",
-      "enhancement-product",
-      "Downloads",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-11T01:58:30.056974+00:00",
-    "last_seen": "2026-09-11T01:58:30.056974+00:00"
-  },
-  {
-    "id": "4c8121ccbeda715a",
-    "text": "A channel or context trust boundary (e.g., 'ours' vs 'foreign' channel) should gate access to sensitive org data; an agent serving a team should decline data requests that originate outside trusted contexts rather than serving them uniformly.",
-    "category": "architecture",
-    "valence": "positive",
-    "confidence": 0.62,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "19397603-9329-4772-aa10-82127ea76b08",
-    "member_ids": [
-      "19397603-9329-4772-aa10-82127ea76b08"
-    ],
-    "member_texts": [
-      "A channel or context trust boundary (e.g., 'ours' vs 'foreign' channel) should gate access to sensitive org data; an agent serving a team should decline data requests that originate outside trusted contexts rather than serving them uniformly."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "gcp",
-      "enhancement-product",
-      "Downloads",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-11T01:58:30.056974+00:00",
-    "last_seen": "2026-09-11T01:58:30.056974+00:00"
-  },
-  {
-    "id": "f4a5cae34c76caf9",
-    "text": "When a user asks for a numeric or internal identifier (e.g., GitHub org ID) and only a human-readable slug is available, the agent should honestly distinguish the two rather than presenting the slug as if it satisfies the numeric request.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.6,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "e1a22f7c-a20e-447b-905b-01684fa0a1ed",
-    "member_ids": [
-      "e1a22f7c-a20e-447b-905b-01684fa0a1ed"
-    ],
-    "member_texts": [
-      "When a user asks for a numeric or internal identifier (e.g., GitHub org ID) and only a human-readable slug is available, the agent should honestly distinguish the two rather than presenting the slug as if it satisfies the numeric request."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "gcp",
-      "enhancement-product",
-      "Downloads",
-      "slack-automation"
-    ],
-    "first_seen": "2026-09-11T01:58:30.056974+00:00",
-    "last_seen": "2026-09-11T01:58:30.056974+00:00"
-  },
-  {
-    "id": "61e70b07f035aa4e",
-    "text": "When a bot or automated agent replies to a user message, the user expects visible in-progress feedback (e.g., a reaction emoji) while the agent is running, and a distinct success/failure signal when it completes.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "6032f542-c62e-4258-8fe3-8d03815b0a5e",
-    "member_ids": [
-      "6032f542-c62e-4258-8fe3-8d03815b0a5e"
-    ],
-    "member_texts": [
-      "When a bot or automated agent replies to a user message, the user expects visible in-progress feedback (e.g., a reaction emoji) while the agent is running, and a distinct success/failure signal when it completes."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-11T04:05:50.090341+00:00",
-    "last_seen": "2026-09-11T04:05:50.090341+00:00"
-  },
-  {
-    "id": "5d7cfd5e9f0491f2",
-    "text": "A Slack bot's response footer carrying metadata (model used, tokens spent, run link, invocation link) is a desired pattern when the bot is an AI assistant embedded in a team channel.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "e208cccc-2a75-4030-89cd-8cf894011222",
-    "member_ids": [
-      "e208cccc-2a75-4030-89cd-8cf894011222"
-    ],
-    "member_texts": [
-      "A Slack bot's response footer carrying metadata (model used, tokens spent, run link, invocation link) is a desired pattern when the bot is an AI assistant embedded in a team channel."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-11T04:05:50.090341+00:00",
-    "last_seen": "2026-09-11T04:05:50.090341+00:00"
-  },
-  {
     "id": "ea586a5f56b2f3a0",
     "text": "When building an AI agent integrated with external tools (Slack, GitHub, Linear), the agent should honestly report its capability boundary rather than hallucinating access it does not have.",
     "category": "approach",
@@ -1676,84 +917,6 @@
     ],
     "member_texts": [
       "When building an AI agent integrated with external tools (Slack, GitHub, Linear), the agent should honestly report its capability boundary rather than hallucinating access it does not have."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-11T04:05:50.090341+00:00",
-    "last_seen": "2026-09-11T04:05:50.090341+00:00"
-  },
-  {
-    "id": "49bec6ff99796fa3",
-    "text": "Reinstalling a CLI tool on every cloud service startup incurs a performance tax that the user will notice and question; the agent should proactively surface this tradeoff before shipping.",
-    "category": "architecture",
-    "valence": "negative",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "6b1100bb-f540-431f-9cb6-e9ee4fc07aff",
-    "member_ids": [
-      "6b1100bb-f540-431f-9cb6-e9ee4fc07aff"
-    ],
-    "member_texts": [
-      "Reinstalling a CLI tool on every cloud service startup incurs a performance tax that the user will notice and question; the agent should proactively surface this tradeoff before shipping."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-11T04:05:50.090341+00:00",
-    "last_seen": "2026-09-11T04:05:50.090341+00:00"
-  },
-  {
-    "id": "9a512676deb8301c",
-    "text": "When a multi-voter deliberation (magi-style) uses a shared brief file that was merged after the session's checkout, every voter seat will fail to find it; the supervisor should copy the brief into the archive before dispatching voters.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "e16ae791-7283-4277-a852-56765e63c417",
-    "member_ids": [
-      "e16ae791-7283-4277-a852-56765e63c417"
-    ],
-    "member_texts": [
-      "When a multi-voter deliberation (magi-style) uses a shared brief file that was merged after the session's checkout, every voter seat will fail to find it; the supervisor should copy the brief into the archive before dispatching voters."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
-      "-Users-alcatraz627-Downloads",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-forge-v6",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp"
-    ],
-    "first_seen": "2026-09-11T04:05:50.090341+00:00",
-    "last_seen": "2026-09-11T04:05:50.090341+00:00"
-  },
-  {
-    "id": "bbb7d5f5097fa016",
-    "text": "A recurring scheduled task (digest, cron) enabled in a test channel should be explicitly promoted to the production channel only after the user has observed a successful manual run and approved the promotion.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "120b4bf6-c08b-46f1-8045-818426d82b80",
-    "member_ids": [
-      "120b4bf6-c08b-46f1-8045-818426d82b80"
-    ],
-    "member_texts": [
-      "A recurring scheduled task (digest, cron) enabled in a test channel should be explicitly promoted to the production channel only after the user has observed a successful manual run and approved the promotion."
     ],
     "source_projects": [
       "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T",
@@ -1944,31 +1107,6 @@
     "last_seen": "2026-09-11T06:11:48.471463+00:00"
   },
   {
-    "id": "9e04924b5dbcd208",
-    "text": "A pre-tool hook that fires before any actual owner-visible harm (e.g., a guard that blocks before a prompt is generated) may be a false positive; the juror system is the right escalation path rather than capitulating to the hook's classification.",
-    "category": "tool-use",
-    "valence": "neutral",
-    "confidence": 0.65,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "50470323-6308-4edf-9479-3a53f893ab56",
-    "member_ids": [
-      "50470323-6308-4edf-9479-3a53f893ab56"
-    ],
-    "member_texts": [
-      "A pre-tool hook that fires before any actual owner-visible harm (e.g., a guard that blocks before a prompt is generated) may be a false positive; the juror system is the right escalation path rather than capitulating to the hook's classification."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Claude-sys-monitor"
-    ],
-    "first_seen": "2026-09-11T06:11:48.471463+00:00",
-    "last_seen": "2026-09-11T06:11:48.471463+00:00"
-  },
-  {
     "id": "cdb4bf76d3b387f5",
     "text": "When deriving UI design direction, the agent should not weight existing component implementations heavily if those implementations are known to be low-quality or non-representative of the app's design intent; instead, use the owner-designated reference surfaces.",
     "category": "user-preference",
@@ -2032,8 +1170,8 @@
     "category": "tool-use",
     "valence": "negative",
     "confidence": 0.87,
-    "occurrences": 8,
-    "member_count": 8,
+    "occurrences": 9,
+    "member_count": 9,
     "rep_pattern_id": "64b242ba-6942-4c9b-8792-98a25649d6ea",
     "member_ids": [
       "2744965f-c80c-4367-9c85-720e002054c7",
@@ -2043,7 +1181,8 @@
       "4a799539-2a53-4682-a07e-84855061fdd6",
       "d2c9b72b-7cc5-41d2-b5ca-4b1436a48bdb",
       "64b242ba-6942-4c9b-8792-98a25649d6ea",
-      "a875c6f6-94a7-4865-afed-e3b587d1ff3a"
+      "a875c6f6-94a7-4865-afed-e3b587d1ff3a",
+      "40051fb5-0009-4a90-942a-d29ff8094afe"
     ],
     "member_texts": [
       "An IPC message from a peer agent that requests a reply must be answered before the turn ends; leaving it unacknowledged causes a Stop-hook reminder on the next turn.",
@@ -2053,7 +1192,8 @@
       "IPC push-gate approval messages must be answered in the same turn they arrive; leaving them unanswered triggers a stop-hook reminder on the next turn.",
       "When a switchboard-panel IPC push-gate message arrives, the agent must reply via the IPC channel (claude-ipc reply) in the same turn rather than deferring it.",
       "IPC/switchboard-panel messages must be answered in the same turn they arrive or before the turn ends; leaving them unanswered triggers a repeated hook reminder on every subsequent turn.",
-      "When an IPC or switchboard panel sends a push-gate approval message, the agent must reply to that specific message ID using the prescribed reply command before proceeding with the push."
+      "When an IPC or switchboard panel sends a push-gate approval message, the agent must reply to that specific message ID using the prescribed reply command before proceeding with the push.",
+      "When an IPC or inter-process message arrives requiring a reply, the agent must respond to it in the same turn rather than deferring it."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -2110,7 +1250,7 @@
       "versable-foundry"
     ],
     "first_seen": "2026-09-11T08:17:55.345526+00:00",
-    "last_seen": "2026-10-24T23:00:50.397633+00:00"
+    "last_seen": "2026-10-28T23:01:23.605357+00:00"
   },
   {
     "id": "45e545dd14a762f8",
@@ -2317,120 +1457,6 @@
     ],
     "first_seen": "2026-09-12T06:31:49.188293+00:00",
     "last_seen": "2026-09-12T06:31:49.188293+00:00"
-  },
-  {
-    "id": "aa2961a6cd578ece",
-    "text": "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be followed by a space, a word, or a comma rather than a period.",
-    "category": "user-preference",
-    "valence": "negative",
-    "confidence": 0.98,
-    "occurrences": 21,
-    "member_count": 21,
-    "rep_pattern_id": "26287c1d-7182-4229-83c8-fd003cfe2429",
-    "member_ids": [
-      "65627753-e27c-481a-a5fe-48cadb157995",
-      "6eaebd9e-e597-4c75-896b-74300410b970",
-      "4ddda64e-4941-4741-9993-e94b52c8c31d",
-      "40af39ab-bb3a-46ad-9cf5-2e835c0b92a6",
-      "26287c1d-7182-4229-83c8-fd003cfe2429",
-      "74033c80-3d13-40d4-99d3-351f804cdbb5",
-      "cd4ed303-90d1-4fa4-9e32-106631f3bc62",
-      "ee679a88-0582-44d8-893a-410bbae61168",
-      "c0fe2eb5-e1a1-413d-bbd3-2c767c2c5a52",
-      "3759473e-7e84-4dc9-9b4a-1555c1710acf",
-      "ff616ddb-6da7-46e4-80ba-28fd411e3e27",
-      "43a927bc-ed44-478a-a25c-fbc7c36b1e74",
-      "66db63d4-fc14-4bfe-b062-137791f4c3f7",
-      "d6c42fd0-8c1b-426b-b42f-6ee0db1bcc41",
-      "c30368b3-903e-4e76-80ec-5a405d9bb931",
-      "8ebc1596-c05b-49a1-aaa8-7918a3febeb5",
-      "f259b1d7-495a-4f84-8df9-b9b3821e220d",
-      "74a4fb6c-fe88-4f8d-9bd6-6644c4ef12d0",
-      "7735ce58-954f-4c59-92fb-5be9b4de75ce",
-      "cf65e920-c146-43dc-a871-9bf61a97f91b",
-      "cd80cd14-29e9-4d30-a3dc-1fc2368ccf18"
-    ],
-    "member_texts": [
-      "File paths in user-facing output followed immediately by a period cause the terminal to swallow the period into the auto-link, making the path non-clickable; this error recurs despite existing mechanical enforcement.",
-      "When printing file paths in terminal output, never place a period immediately after the path: Ghostty auto-links paths and a trailing period is consumed into the link, breaking clickability. This fires across multiple projects and is not caught by linting.",
-      "File paths printed immediately before a sentence period break terminal auto-linking (Ghostty swallows the period into the URL); a Stop hook enforces this and forces correction before the turn completes.",
-      "A file path in terminal output immediately followed by a period is swallowed into Ghostty's auto-link, making the path unclickable; always follow a path with a space, word, or comma before any sentence-ending punctuation.",
-      "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be followed by a space, a word, or a comma rather than a period.",
-      "When a file path appears in a reply and a sentence ends immediately after it, the agent must restructure so the path is not the last token before a period: trailing periods are swallowed into terminal auto-links and break click-navigation.",
-      "The agent repeatedly puts a period immediately after a file path in replies, causing the terminal to swallow the period into the auto-linked path and making the path unclickable; this fires even after the rule is known and acknowledged.",
-      "A file path immediately followed by a period in terminal output breaks terminal auto-linking; always follow a path with a space, comma, or restructure the sentence so the path is not the last token before a period.",
-      "A file path written in a reply must not be immediately followed by a period; the trailing period is swallowed into the terminal hyperlink and makes the path non-clickable",
-      "When a file path appears at the end of a sentence in a reply, placing a period immediately after the path breaks terminal hyperlinking; always follow a path with a space, comma, or restructure so the path is not sentence-terminal.",
-      "A file path in terminal output must never be immediately followed by a period; the trailing period is absorbed into the auto-link and breaks clickability.",
-      "Ending a file path or URL with a period causes Ghostty to swallow the period into the auto-link, breaking clickability; paths must always be followed by a space, comma, or word.",
-      "When a file path appears at the end of a sentence, a trailing period is absorbed into the terminal's auto-linked path, making it unclickable; file paths must always be followed by a comma, space, or newline: never a period.",
-      "When writing file paths in terminal output, always follow the path with a word or comma, never a period, because terminal emulators auto-link paths and a trailing period gets absorbed into the link, breaking clickability.",
-      "When a file path ends a sentence, the agent must place a word or comma after the path before the period: never let a bare path be the last token before punctuation.",
-      "File paths in output must be written in full (expanded form) exactly once, followed by a word or comma: never terminated with a period or left as a bare filename.",
-      "The user's format-gate hook rejects replies that end a file path with a period; a word or comma must follow any inline path reference.",
-      "When outputting file paths in prose, the agent must follow each path with a word, comma, or other continuation: ending a sentence with a bare path (a 'filename-dot') is a format violation that triggers automated rejection.",
-      "When a path appears in output prose, it must be followed by a word or comma, not a period directly after the path, to satisfy format-gate filename-dot rules.",
-      "File paths mentioned inline in prose must be written as full paths followed by a word or comma, never terminated with a period directly after the path.",
-      "When referencing a file path at the end of a sentence, the agent must follow the path with a word or comma rather than ending with a period directly after the path."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-local-models",
-      "-Users-alcatraz627-Code-Versable-walmart-mvp",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "enhancement-product",
-      "gcp",
-      "versable-builder",
-      "slack-automation",
-      "local-models",
-      "-Users-alcatraz627-Code-Versable-versable-builder-apps-playground",
-      "-Users-alcatraz627-Code-Versable-enhancement-product-frontend",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-gcp",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-sor",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434",
-      "-Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e",
-      "csync",
-      "claude-instances",
-      "switchboard-mac",
-      "sor",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n",
-      "staging-enhancement-product",
-      "-Users-alcatraz627--claude",
-      ".claude",
-      "-Users-alcatraz627-Code-Claude-audio-doctor",
-      "-Users-alcatraz627-Code-Versable-landing-app",
-      "-Users-alcatraz627-Code-better-file-browser",
-      "-Users-alcatraz627-Code-Claude-Affinity",
-      "-Users-alcatraz627-AffinityWork",
-      "Affinity",
-      "landing-app",
-      "better-file-browser",
-      "i-dream",
-      "-Users-alcatraz627-Code-Versable-versable-foundry",
-      "versable-foundry"
-    ],
-    "first_seen": "2026-09-12T06:31:49.188293+00:00",
-    "last_seen": "2026-10-27T06:38:11.577928+00:00"
   },
   {
     "id": "a88d403358d83783",
@@ -5618,14 +4644,14 @@
     "last_seen": "2026-09-29T08:11:54.339604+00:00"
   },
   {
-    "id": "ae12c7bc1ead557a",
-    "text": "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is not a stopping point.",
+    "id": "beedd341c12d17b6",
+    "text": "After proposing a goal statement, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is not a stopping point.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 15,
-    "member_count": 15,
-    "rep_pattern_id": "22d28d47-c9cd-4037-b0d1-4f7c91b408a2",
+    "occurrences": 18,
+    "member_count": 17,
+    "rep_pattern_id": "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
     "member_ids": [
       "6fd4c584-f5c7-4201-b12c-5c42ceb2e5ef",
       "4513ad9e-8ebb-4df5-88f6-f770333a77cf",
@@ -5641,7 +4667,9 @@
       "031df585-df28-49b4-afee-3fd30f3c7ff8",
       "6809f20d-6a45-43d9-9f7f-c6a0ac3b56c8",
       "9c9a73b6-ad3d-4f3b-87c8-1ffba1d93442",
-      "0c5b9525-78b9-4dc3-a6da-6b98e13a2e14"
+      "0c5b9525-78b9-4dc3-a6da-6b98e13a2e14",
+      "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
+      "2c202315-f4df-4c74-80f1-c16b59f8d72e"
     ],
     "member_texts": [
       "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop condition: continue working toward it unless the next step is genuinely blocked on the owner.",
@@ -5658,7 +4686,9 @@
       "Stating a goal or proposal without immediately following it with a tool call toward that goal is treated as a rule violation; a proposal must be accompanied by the first concrete action, not left as a standalone statement.",
       "A /goal or proposal line must be followed immediately by a tool call toward that goal; ending a turn after printing a proposal without acting on it violates the workflow contract.",
       "Proposing a goal without immediately making a tool call toward it is treated as a protocol violation; the agent must begin working under the stated goal in the same turn rather than pausing for acknowledgement.",
-      "When the agent proposes a goal statement without immediately making a tool call toward it, the user corrects this: a proposal must be followed by action in the same turn, not treated as a stopping point."
+      "When the agent proposes a goal statement without immediately making a tool call toward it, the user corrects this: a proposal must be followed by action in the same turn, not treated as a stopping point.",
+      "After proposing a goal statement, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is not a stopping point.",
+      "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a stated proposal does not substitute for action."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-sor",
@@ -5697,7 +4727,7 @@
       "versable-builder"
     ],
     "first_seen": "2026-09-29T08:11:54.339604+00:00",
-    "last_seen": "2026-10-27T06:38:11.577928+00:00"
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
   },
   {
     "id": "9fd801389ec2b091",
@@ -9124,8 +8154,8 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.93,
-    "occurrences": 11,
-    "member_count": 11,
+    "occurrences": 15,
+    "member_count": 15,
     "rep_pattern_id": "dca6219e-7312-4fd0-829c-f1dc49f52c99",
     "member_ids": [
       "03a33fac-2337-4cf7-b967-d4c5b74ae225",
@@ -9138,7 +8168,11 @@
       "c99ef3d2-3479-48a7-a12d-9364ddbd9359",
       "bc2b9624-836c-4140-b3ef-9bca1451d19f",
       "dca6219e-7312-4fd0-829c-f1dc49f52c99",
-      "a7504113-f450-4759-be06-915b7c89e1d7"
+      "a7504113-f450-4759-be06-915b7c89e1d7",
+      "b54b8c66-078d-4ff8-8c4a-7b80b6c128dd",
+      "c0a38c47-725b-4a2a-bb3f-b5e278d01d9b",
+      "26b3fdbb-07c4-4883-9db8-8d31ba82027a",
+      "c1f5370e-5cba-4fa9-ac8d-9069b62e2381"
     ],
     "member_texts": [
       "Reply length violations (terse-reply hook) recur even after prior warnings; replies must stay under the configured character limit, offloading detail to a linked file rather than inline prose.",
@@ -9151,7 +8185,11 @@
       "The user's format-gate hook enforces a prose cap around 2600 characters; when a reply exceeds it, the agent should cut to the single most important action item and move detail to a file.",
       "Prose replies must stay under a hard character cap (~2600 chars); when over the limit, lead with the single most actionable point and move detail to a file rather than trimming evenly.",
       "Prose replies must stay under approximately 2600 characters; when content exceeds this, the agent should lead with the single most actionable item and move detail into a file.",
-      "Prose responses that exceed a character cap (approximately 2600 chars) are flagged by a format gate; the agent should lead with the single most important point and move detail into a file."
+      "Prose responses that exceed a character cap (approximately 2600 chars) are flagged by a format gate; the agent should lead with the single most important point and move detail into a file.",
+      "Prose replies exceeding the configured character cap must be trimmed, with detail written to a file and a shorter summary sent inline.",
+      "Prose replies must stay under the configured character cap; when they exceed it, the agent must cut content and lead with the single most important point, moving detail to a file.",
+      "Prose responses must stay under a character cap (approximately 2600 chars); content exceeding the cap should be moved to a file with a pointer in the reply.",
+      "Prose replies must stay under approximately 2600 characters; content exceeding that limit should be moved to a file, with the reply leading with the single most important thing to act on."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -9181,7 +8219,7 @@
       "versable-builder"
     ],
     "first_seen": "2026-10-13T11:12:29.314804+00:00",
-    "last_seen": "2026-10-27T06:38:11.577928+00:00"
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
   },
   {
     "id": "441d33c304402540",
@@ -10624,18 +9662,22 @@
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 3,
-    "member_count": 3,
+    "occurrences": 5,
+    "member_count": 5,
     "rep_pattern_id": "0a8756bc-a51f-451d-954d-56cad897784c",
     "member_ids": [
       "e3e81f61-9481-4f3b-8fcc-1974f0a8d183",
       "f9c9c634-dcbd-46ef-a629-d58c239a0742",
-      "0a8756bc-a51f-451d-954d-56cad897784c"
+      "0a8756bc-a51f-451d-954d-56cad897784c",
+      "47f4ad22-b407-4585-a91f-97f58faa53c7",
+      "cd0a4be4-bfda-4fe0-91c0-fd003d09f468"
     ],
     "member_texts": [
       "Documentation intended for human readers should be written in plain present-tense sentences; internal identifiers, SHAs, and file:line references belong in a separate Sources section rather than inline in the body.",
       "When a doc check gate rejects a document for containing internal IDs, file:line references, or ledger framing, the agent must rewrite it in plain sentences and move those references to a Sources section, not defer or skip the fix.",
-      "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in body prose) instead of plain declarative sentences; those references must be moved to a Sources section."
+      "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in body prose) instead of plain declarative sentences; those references must be moved to a Sources section.",
+      "Documentation written for human readers must use plain present-tense sentences; internal IDs, commit SHAs, and file:line references belong in a dedicated Sources section, not inline.",
+      "Documentation written as an internal ledger of IDs and SHAs should instead be structured in layers: current state and actions first, then mechanics, then a Sources section that explains each identifier rather than just listing it."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-local-models",
@@ -10658,7 +9700,7 @@
       ".claude"
     ],
     "first_seen": "2026-10-22T23:00:51.295215+00:00",
-    "last_seen": "2026-10-27T06:38:11.577928+00:00"
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
   },
   {
     "id": "2bfea5478f8ef4b7",
@@ -10981,19 +10023,21 @@
     "last_seen": "2026-10-23T23:01:06.896912+00:00"
   },
   {
-    "id": "9a01e0dbbfa9c82a",
-    "text": "When the agent is genuinely blocked waiting on a background task or owner input, it should state the blocked-on in one line, not format it as a /goal paste line.",
+    "id": "1fd645bf1ccfe744",
+    "text": "Sending a blocked-on message when work genuinely waits on the owner is acceptable, but it must be a single line framed as a blocker, not a goal-statement paste block.",
     "category": "approach",
     "valence": "positive",
     "confidence": 0.8,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "b3e9d338-63bb-4970-adce-bf6c39cad36e",
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "3ec5e98f-ebe7-4a46-8086-eec204e9c6cb",
     "member_ids": [
-      "b3e9d338-63bb-4970-adce-bf6c39cad36e"
+      "b3e9d338-63bb-4970-adce-bf6c39cad36e",
+      "3ec5e98f-ebe7-4a46-8086-eec204e9c6cb"
     ],
     "member_texts": [
-      "When the agent is genuinely blocked waiting on a background task or owner input, it should state the blocked-on in one line, not format it as a /goal paste line."
+      "When the agent is genuinely blocked waiting on a background task or owner input, it should state the blocked-on in one line, not format it as a /goal paste line.",
+      "Sending a blocked-on message when work genuinely waits on the owner is acceptable, but it must be a single line framed as a blocker, not a goal-statement paste block."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-better-file-browser",
@@ -11005,10 +10049,15 @@
       "better-file-browser",
       "gcp",
       "slack-automation",
-      "versable-builder"
+      "versable-builder",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "i-dream",
+      ".claude"
     ],
     "first_seen": "2026-10-24T23:00:50.397633+00:00",
-    "last_seen": "2026-10-24T23:00:50.397633+00:00"
+    "last_seen": "2026-10-28T06:50:45.847647+00:00"
   },
   {
     "id": "8582c2fc59cc2979",
@@ -11046,14 +10095,20 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 1,
-    "member_count": 1,
+    "occurrences": 4,
+    "member_count": 4,
     "rep_pattern_id": "12a84358-2c88-49fe-a8d2-bf219a68786d",
     "member_ids": [
-      "12a84358-2c88-49fe-a8d2-bf219a68786d"
+      "12a84358-2c88-49fe-a8d2-bf219a68786d",
+      "36b0fab0-28a3-4df9-b481-c522093d35c5",
+      "2c19a403-d564-48bb-a1e9-6e8fe821b95e",
+      "6d16ece2-57e7-472a-8d62-eee144128f85"
     ],
     "member_texts": [
-      "After pushing a PR, the agent must run the project's PR-review gate script and wait for automated review results before proceeding, not assume the review will arrive on its own."
+      "After pushing a PR, the agent must run the project's PR-review gate script and wait for automated review results before proceeding, not assume the review will arrive on its own.",
+      "After pushing a branch that has an automated reviewer, the agent should wait for that reviewer's response and disposition any findings before moving on, rather than assuming the review will arrive on its own.",
+      "After pushing to a PR, the agent must wait for the designated reviewer bot to complete its review before closing out the task, rather than assuming the push is sufficient.",
+      "After pushing a PR, the agent should run the PR review gate script and wait for the automated reviewer before proceeding, rather than moving on immediately."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-better-file-browser",
@@ -11067,10 +10122,11 @@
       ".claude",
       "versable-builder",
       "better-file-browser",
-      "slack-automation"
+      "slack-automation",
+      "i-dream"
     ],
     "first_seen": "2026-10-26T20:26:53.542977+00:00",
-    "last_seen": "2026-10-26T20:26:53.542977+00:00"
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
   },
   {
     "id": "84c13556ec66bbcf",
@@ -11312,5 +10368,410 @@
     ],
     "first_seen": "2026-10-27T06:38:11.577928+00:00",
     "last_seen": "2026-10-27T06:38:11.577928+00:00"
+  },
+  {
+    "id": "928090e2326a6c88",
+    "text": "Every task ID, issue number, or commit hash mentioned in a reply must be accompanied by a plain-language gloss of what it refers to; bare IDs alone are not acceptable.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.9,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "0e36269d-00d6-4fa2-bffe-015ac51ed931",
+    "member_ids": [
+      "8ef894ee-a03c-4fdc-9551-3ed53f3cf871",
+      "0e36269d-00d6-4fa2-bffe-015ac51ed931"
+    ],
+    "member_texts": [
+      "Every task ID, issue number, or commit hash mentioned in a message must be accompanied by a plain-words gloss of what it refers to; bare IDs alone are rejected.",
+      "Every task ID, issue number, or commit hash mentioned in a reply must be accompanied by a plain-language gloss of what it refers to; bare IDs alone are not acceptable."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "versable-foundry",
+      "i-dream",
+      "slack-automation",
+      ".claude",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T06:50:45.847647+00:00",
+    "last_seen": "2026-10-28T23:01:23.605357+00:00"
+  },
+  {
+    "id": "510591f3b9b72b64",
+    "text": "When an automated review bot does not respond within the expected window after a push, retrigger it once with the prescribed comment command and then wait again rather than proceeding.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "4964d983-67b0-47d5-8c57-5c1c754326e4",
+    "member_ids": [
+      "4964d983-67b0-47d5-8c57-5c1c754326e4"
+    ],
+    "member_texts": [
+      "When an automated review bot does not respond within the expected window after a push, retrigger it once with the prescribed comment command and then wait again rather than proceeding."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "versable-foundry",
+      "i-dream",
+      "slack-automation",
+      ".claude",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T06:50:45.847647+00:00",
+    "last_seen": "2026-10-28T06:50:45.847647+00:00"
+  },
+  {
+    "id": "05cfea8ec4cf1636",
+    "text": "When the user asks the agent to work with minimal involvement, the agent should proceed autonomously through the full task backlog rather than stopping to seek approval at each sub-step.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f4ee947b-6dc6-4219-99c7-fe03214e6e36",
+    "member_ids": [
+      "f4ee947b-6dc6-4219-99c7-fe03214e6e36"
+    ],
+    "member_texts": [
+      "When the user asks the agent to work with minimal involvement, the agent should proceed autonomously through the full task backlog rather than stopping to seek approval at each sub-step."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      "versable-foundry",
+      "i-dream",
+      "slack-automation",
+      ".claude",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T06:50:45.847647+00:00",
+    "last_seen": "2026-10-28T06:50:45.847647+00:00"
+  },
+  {
+    "id": "2d3051cb4df81dcb",
+    "text": "When a proposal or atone box is recorded via a tool call, the agent must also surface it in the visible reply text with its ID and relevant details, because the user never sees raw tool output.",
+    "category": "tool-use",
+    "valence": "negative",
+    "confidence": 0.88,
+    "occurrences": 2,
+    "member_count": 2,
+    "rep_pattern_id": "7fdb76a5-1dd7-4500-8f52-f323e3d991e5",
+    "member_ids": [
+      "7fdb76a5-1dd7-4500-8f52-f323e3d991e5",
+      "046c6db9-b2fc-452a-90cd-b0d78f286acb"
+    ],
+    "member_texts": [
+      "When a proposal or atone box is recorded via a tool call, the agent must also surface it in the visible reply text with its ID and relevant details, because the user never sees raw tool output.",
+      "When a proposal is recorded as a tool side-effect but not surfaced in the reply text, the agent must explicitly display it in the reply so the user sees it."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "versable-foundry",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T23:01:23.605357+00:00",
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
+  },
+  {
+    "id": "5f91f9ec7f7397d4",
+    "text": "Written documentation must be easy to skim: avoid dense paragraphs, long bullet text, and semicolon-joined clauses; split into short sentences and use structured formatting.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9e337863-c886-4772-918e-4b0838f4a1f4",
+    "member_ids": [
+      "9e337863-c886-4772-918e-4b0838f4a1f4"
+    ],
+    "member_texts": [
+      "Written documentation must be easy to skim: avoid dense paragraphs, long bullet text, and semicolon-joined clauses; split into short sentences and use structured formatting."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "versable-foundry",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T23:01:23.605357+00:00",
+    "last_seen": "2026-10-28T23:01:23.605357+00:00"
+  },
+  {
+    "id": "29b4fda424de4acf",
+    "text": "When the agent introduces unintended content (e.g. placeholder or debug text) into user-facing UI copy, the user treats it as a careless mistake requiring immediate correction.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "11b78d12-4f91-49d5-afce-cacbb6e3a7e5",
+    "member_ids": [
+      "11b78d12-4f91-49d5-afce-cacbb6e3a7e5"
+    ],
+    "member_texts": [
+      "When the agent introduces unintended content (e.g. placeholder or debug text) into user-facing UI copy, the user treats it as a careless mistake requiring immediate correction."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "versable-foundry",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T23:01:23.605357+00:00",
+    "last_seen": "2026-10-28T23:01:23.605357+00:00"
+  },
+  {
+    "id": "ec17cc42526d2167",
+    "text": "The agent should default to using the current project's native UI surface for decision pages rather than falling back to an older server URL, even when the migration path exists.",
+    "category": "domain",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "9449fe15-42e1-4510-8d01-6c01eb0172f2",
+    "member_ids": [
+      "9449fe15-42e1-4510-8d01-6c01eb0172f2"
+    ],
+    "member_texts": [
+      "The agent should default to using the current project's native UI surface for decision pages rather than falling back to an older server URL, even when the migration path exists."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Claude-i-dream",
+      "-Users-alcatraz627--claude",
+      ".claude",
+      "versable-foundry",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-28T23:01:23.605357+00:00",
+    "last_seen": "2026-10-28T23:01:23.605357+00:00"
+  },
+  {
+    "id": "007362e389950306",
+    "text": "Documentation must avoid wall-of-text formatting: table cells over 160 characters and paragraphs over 400 characters are flagged by automated checks and require restructuring.",
+    "category": "user-preference",
+    "valence": "negative",
+    "confidence": 0.87,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "99b9d72d-fef0-423d-a9c6-6fe9bab44bde",
+    "member_ids": [
+      "99b9d72d-fef0-423d-a9c6-6fe9bab44bde"
+    ],
+    "member_texts": [
+      "Documentation must avoid wall-of-text formatting: table cells over 160 characters and paragraphs over 400 characters are flagged by automated checks and require restructuring."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-29T23:01:18.450425+00:00",
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
+  },
+  {
+    "id": "1bc14874deb7de96",
+    "text": "Creating a separate, shallow duplicate of a module for a new target (e.g., phone view) instead of extending the shared codebase is rejected; the user expects a unified runtime.",
+    "category": "architecture",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "3636b247-7c64-4635-90bf-2ada2597011f",
+    "member_ids": [
+      "3636b247-7c64-4635-90bf-2ada2597011f"
+    ],
+    "member_texts": [
+      "Creating a separate, shallow duplicate of a module for a new target (e.g., phone view) instead of extending the shared codebase is rejected; the user expects a unified runtime."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-29T23:01:18.450425+00:00",
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
+  },
+  {
+    "id": "7f405071125c7c26",
+    "text": "When the user says a previously working feature is broken, investigate the root cause rather than switching to a workaround; the user will push back if the underlying issue is bypassed.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.8,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "bf635bcc-c0f9-4e0e-8b54-2662302a5339",
+    "member_ids": [
+      "bf635bcc-c0f9-4e0e-8b54-2662302a5339"
+    ],
+    "member_texts": [
+      "When the user says a previously working feature is broken, investigate the root cause rather than switching to a workaround; the user will push back if the underlying issue is bypassed."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-29T23:01:18.450425+00:00",
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
+  },
+  {
+    "id": "38082fad70e9834b",
+    "text": "When a plan is challenged for missing coverage, running an adversarial subagent review before rebuilding the plan produces a more defensible result that the user accepts.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.68,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "86fdf953-3280-4367-a9a7-2a45988b8737",
+    "member_ids": [
+      "86fdf953-3280-4367-a9a7-2a45988b8737"
+    ],
+    "member_texts": [
+      "When a plan is challenged for missing coverage, running an adversarial subagent review before rebuilding the plan produces a more defensible result that the user accepts."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-29T23:01:18.450425+00:00",
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
+  },
+  {
+    "id": "0f7ff726c6150f31",
+    "text": "If a blocking infrastructure dependency (e.g., a required login or deploy) prevents completing a task, surface it as a explicit 'blocked-on' rather than silently deferring or presenting a proposal.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.72,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "f210b1c0-441d-42b7-b47f-1d00458c9afe",
+    "member_ids": [
+      "f210b1c0-441d-42b7-b47f-1d00458c9afe"
+    ],
+    "member_texts": [
+      "If a blocking infrastructure dependency (e.g., a required login or deploy) prevents completing a task, surface it as a explicit 'blocked-on' rather than silently deferring or presenting a proposal."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-29T23:01:18.450425+00:00",
+    "last_seen": "2026-10-29T23:01:18.450425+00:00"
+  },
+  {
+    "id": "adce8a60b6af4c8e",
+    "text": "When a catchup file contains pre-session prerequisites or checklists, the agent must read the full file and complete those steps before starting work.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.85,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "634193c5-86fc-483c-811a-758a3a964b79",
+    "member_ids": [
+      "634193c5-86fc-483c-811a-758a3a964b79"
+    ],
+    "member_texts": [
+      "When a catchup file contains pre-session prerequisites or checklists, the agent must read the full file and complete those steps before starting work."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-30T23:01:17.419640+00:00",
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
+  },
+  {
+    "id": "c79bd6bd58572ab0",
+    "text": "Team-level product decisions (e.g., pausing work on certain projects) should be recorded in global memory so they persist across sessions and projects.",
+    "category": "user-preference",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "c0d05cd7-fc26-4fc9-bda7-9f09e3dd624f",
+    "member_ids": [
+      "c0d05cd7-fc26-4fc9-bda7-9f09e3dd624f"
+    ],
+    "member_texts": [
+      "Team-level product decisions (e.g., pausing work on certain projects) should be recorded in global memory so they persist across sessions and projects."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-30T23:01:17.419640+00:00",
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
+  },
+  {
+    "id": "78cf6ade67477b47",
+    "text": "When a doc quality benchmark scores a document at maximum, the agent should proactively surface what the benchmark is not measuring rather than treating a perfect score as done.",
+    "category": "approach",
+    "valence": "positive",
+    "confidence": 0.65,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "61cb609c-f5fd-412d-9b6d-f987bd431e59",
+    "member_ids": [
+      "61cb609c-f5fd-412d-9b6d-f987bd431e59"
+    ],
+    "member_texts": [
+      "When a doc quality benchmark scores a document at maximum, the agent should proactively surface what the benchmark is not measuring rather than treating a perfect score as done."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-better-file-browser",
+      "-Users-alcatraz627-Code-Versable-versable-foundry",
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "slack-automation",
+      "better-file-browser"
+    ],
+    "first_seen": "2026-10-30T23:01:17.419640+00:00",
+    "last_seen": "2026-10-30T23:01:17.419640+00:00"
   }
 ]

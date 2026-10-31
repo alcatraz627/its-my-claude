@@ -1,0 +1,229 @@
+Week 2026w44. `kind` is one of repeat, structural-need, drift or noise; a cluster's 'found by' label says how the join found it and is not its kind. The clusters:
+
+## c-f4548156 (found by session cluster, score 14.7)
+Session 165c6e34 in landing-app: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (PR #60 body written as a dense mechanism dump, no skill or fresh voice pass)
+- checkpoints:ckpt-2514a881184ed0de | checkpoints | human | 2026-10-20 | landing-app | pending: - Owner: review and merge PR #60 into main; later release PRs use "Create a merge commit". - Agent: respond to review comments on #60 if any. - Optional, not asked: "Push live now" (`src/app/…
+- proposals:prop-20261020-170018-1e | proposals | agent | 2026-10-20 | - | Attach visual proof to PR descriptions for visible changes
+- atone:mist-20261020-163710-c0 | atone | human | 2026-10-20 | landing-app | PR #60 body written as a dense mechanism dump, no skill or fresh voice pass: The PR #60 body on vista-website packed each finding into a paragraph of mechanism (memoization, cache keys, a CSS min/max …
+- signals:165c6e34-ce19-47f5-899b-82af68c0724c-1792512950 | signals | human | 2026-10-20 | - | the owner corrected the agent
+
+## c-2d8458a5 (found by repeat, score 13.5)
+'ai-smell-prose-against-stored-voice' came up 6 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-170018-1e | proposals | agent | 2026-10-20 | - | Attach visual proof to PR descriptions for visible changes
+- atone:mist-20261020-163710-c0 | atone | human | 2026-10-20 | landing-app | PR #60 body written as a dense mechanism dump, no skill or fresh voice pass: The PR #60 body on vista-website packed each finding into a paragraph of mechanism (memoization, cache keys, a CSS min/max …
+- proposals:prop-20261009-220054-ee | proposals | agent | 2026-10-09 | - | Gate em dashes in user-facing string literals that agents write into code
+- atone:mist-20261005-094856-da | atone | human | 2026-10-05 | enhancement-product | External RCA written as vague euphemism with invented actors and anonymized facts: The extractor blank-jobs RCA (frontend/.claude/notes/20261005-extractor-blank-jobs-rca.md) anonymized known customers…
+- proposals:prop-20260930-222530-a3 | proposals | agent | 2026-09-30 | - | Make a single em-dash in an owner-facing reply a blocking Stop-hook tell
+- atone:mist-20260930-222509-5b | atone | human | 2026-09-30 | slack-automation | Em-dashes in owner-facing replies despite the zero em-dash rule: Owner-facing replies in the slack-automation Cloud Run test window carried em-dashes (owner quotes 'works now — Clanky', 'successfully …
+
+## c-b1ad26a2 (found by session cluster, score 12.4)
+Session 0f4b8d0d in versable-builder: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-6feb6ef02d262f7b | checkpoints | human | 2026-10-23 | versable-builder | pending: - USER: `approve push c0ea1a0f` for 765fe50 and 95e28cc. - USER: tenth law "anatomy" (the same thing looks the same: card headers, labels, edges, species, state frames), recommended yes. - US…
+- proposals:prop-20261023-111536-69 | proposals | agent | 2026-10-23 | - | Stop a stale cached weekly usage figure from beating the live reading
+- signals:0f4b8d0d-fb28-447f-a338-6d5e4475a595-1792754121 | signals | human | 2026-10-23 | - | the owner corrected the agent
+
+## c-e62697ed (found by repeat, score 11.0)
+'internal-process-leaked-into-reader-facing-doc' came up 4 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-165630-be | proposals | agent | 2026-10-20 | - | Block dated-update lines and history sections in living status docs
+- atone:mist-20261020-165604-12 | atone | human | 2026-10-20 | enhancement-product | Status doc grew dated update lines while its status colours stayed stale: In review.md (the owner's PR status surface) I added 'Updated ~20:15' and 'Status at ~22:10' lines and 'updated 20:15' cells i…
+- proposals:prop-20261019-004456-14 | proposals | agent | 2026-10-19 | - | Gate reader-facing docs against internal ids, shas and file:line in the body
+- atone:mist-20261019-004432-39 | atone | human | 2026-10-19 | slack-automation | Neutral CPRD spec written as an internal ledger of ids, shas and file:line: Asked for a neutral doc mapping the CEO's CPRD to each ask's capabilities, behaviours and work plan, I wrote docs/plan/2026-…
+
+## c-10c85680 (found by session cluster, score 11.0)
+Session 6b32d198 in slack-automation: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Said deploy needed Actions minutes without reading the deploy path)
+- proposals:prop-20261022-045927-e7 | proposals | echo | 2026-10-22 | - | Flesh out gcc friction from session 6b32d198 (auto-stub: structural-claim-without-reading-code)
+- checkpoints:ckpt-294218a10f9d23a5 | checkpoints | human | 2026-10-22 | slack-automation | pending: - Confirm `/health` reads 662d17b. - H7: one-click Undo on a Ledger row (needs a writes record with each write's inverse). - The 🕳 gap: one failure result shape for every connector. - H10: PR…
+- checkpoints:ckpt-54dab68635bf45f1 | checkpoints | human | 2026-10-22 | slack-automation | pending: - Confirm `/health` reads 662d17b. - H7: one-click Undo on a Ledger row (needs a writes record with each write's inverse). - The 🕳 gap: one failure result shape for every connector. - H10: PR…
+- signals:6b32d198-4cdc-46a2-84c3-578bae6b4f4b-1792631335 | signals | human | 2026-10-22 | - | the owner corrected the agent
+- checkpoints:ckpt-faa4edb53c14e343 | checkpoints | human | 2026-10-21 | slack-automation | pending: - Confirm `/health` reads 662d17b. - H7: one-click Undo on a Ledger row (needs a writes record with each write's inverse). - The 🕳 gap: one failure result shape for every connector. - H10: PR…
+- checkpoints:ckpt-eef2ab472c5caedd | checkpoints | human | 2026-10-21 | slack-automation | pending: - Confirm `/health` reads 662d17b. - H7: one-click Undo on a Ledger row (needs a writes record with each write's inverse). - The 🕳 gap: one failure result shape for every connector. - H10: PR…
+- atone:mist-20261021-121619-a1 | atone | human | 2026-10-21 | slack-automation | Said deploy needed Actions minutes without reading the deploy path: Under the owner's ban on Actions runs until Nov 1, I reported three finished features as not live until Nov 1, as if a deploy needed…
+
+## c-755b139d (found by session cluster, score 10.5)
+Session 87a62e3c in slack-automation: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Asked the owner to decide on bare issue and task numbers)
+- proposals:prop-20261023-165130-51 | proposals | echo | 2026-10-23 | - | Flesh out gcc friction from session 87a62e3c (auto-stub: bare-identifier-where-the-name-belongs)
+- checkpoints:ckpt-8a78b70a38cd6ec3 | checkpoints | human | 2026-10-23 | slack-automation | pending: - Read /health for 3812a0c. - Extend events.py to record GitHub, Linear and ledger writes, then live-check: issues, labels, Linear writes, schedules, triggers, runbooks, prompt override, feed…
+- signals:87a62e3c-7c27-4586-a959-16b92d6fe0b6-1792755670 | signals | human | 2026-10-23 | - | the owner corrected the agent
+- signals:87a62e3c-7c27-4586-a959-16b92d6fe0b6-1792755073 | signals | human | 2026-10-23 | - | the owner corrected the agent
+- atone:mist-20261023-111201-f4 | atone | human | 2026-10-23 | slack-automation | Asked the owner to decide on bare issue and task numbers: Closing replies in the slack-automation catchup asked 'Close #487, #488 and #489?' and cited commit shas and task ids (#54, #138) with no line…
+
+## c-cf31c956 (found by session cluster, score 10.3)
+Session a48a6eeb in local-models: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Test stub recorded subprocess env; failure line dumped live API tokens)
+- proposals:prop-20261022-115157-ae | proposals | echo | 2026-10-22 | - | Flesh out gcc friction from session a48a6eeb (auto-stub: printed-secret-values-into-transcript)
+- checkpoints:ckpt-ec9a4b4bcd03a871 | checkpoints | human | 2026-10-22 | local-models | pending: AGENT: - After the owner restarts Claude Code, confirm the Slack, GitHub and Render MCP servers still authenticate. OWNER: - Rotate GitHub, Linear, Slack and Render tokens; store with `token-…
+- checkpoints:ckpt-36ac98dd531f7052 | checkpoints | human | 2026-10-22 | local-models | pending: AGENT: - After the owner restarts Claude Code, confirm the Slack, GitHub and Render MCP servers still authenticate. OWNER: - Rotate GitHub, Linear, Slack and Render tokens; store with `token-…
+- atone:mist-20261022-110235-d2 | atone | human | 2026-10-22 | local-models | Test stub recorded subprocess env; failure line dumped live API tokens: probe/fixtures/verbs-drift.py (sub-agent written) stubbed subprocess.run storing **kw including env; a failing check printed str…
+- signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792664456 | signals | human | 2026-10-22 | - | the owner corrected the agent
+- signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792656487 | signals | human | 2026-10-22 | - | the owner corrected the agent
+
+## c-b1b645d3 (found by session cluster, score 8.8)
+Session e815d840 in versable-foundry: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Opened two PRs without [noslack] and without the local codex review)
+- checkpoints:ckpt-c474c3c69b2baffc | checkpoints | human | 2026-10-23 | versable-foundry | pending: - Clanky dispositions on #117 and #118, then merge #117, retarget and merge #118 (task #50). - Rulings, defaults in brackets: Walmart unknown headers [accept, model's key]; non-PIES/ACES XML …
+- checkpoints:ckpt-0067d14232e85045 | checkpoints | human | 2026-10-23 | versable-foundry | pending: - Clanky dispositions on #117 and #118, then merge #117, retarget and merge #118 (task #50). - Rulings, defaults in brackets: Walmart unknown headers [accept, model's key]; non-PIES/ACES XML …
+- signals:e815d840-8fb8-4acd-a8e2-a559add633d8-1792786102 | signals | human | 2026-10-23 | - | the owner corrected the agent
+- atone:mist-20261023-193439-69 | atone | human | 2026-10-23 | speedway-ingest-wt | Asked the owner for a Speedway login that was in the project's own notes: Listed 'a speedway-dev login, or a go to sign up' as an owner ask, and created a new Walmart test account, while Speedway's FL…
+- atone:mist-20261023-193413-ac | atone | human | 2026-10-23 | versable-ingest | Asked the owner to rule on R1 to R3 by id, without the questions: versable-ingest DIRECTIONS.md and the reply listed 'Rule on R1 to R3 (report section 4)' with only my picks; the three questions, opti…
+- atone:mist-20261023-182027-f1 | atone | human | 2026-10-23 | versable-foundry | Opened two PRs without [noslack] and without the local codex review: Opened walmart-mvp #118 and speedway #115 via gh pr create with titles lacking [noslack], and skipped the local codex review. Slack…
+
+## c-b8727f09 (found by repeat, score 8.4)
+'visual-review-without-local-vision-model' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261020-120408-26 | proposals | agent | 2026-10-20 | - | Nudge visual UI reviews and dispatches to use the local vision model
+- atone:mist-20261020-120344-a4 | atone | human | 2026-10-20 | landing-app | Visual UI review run without the local vision model, on me and on dispatched reviewers: During the landing-app width review (sweep 360-1600, owner-graded review page) I judged sections by reading doze…
+
+## c-72f6b097 (found by repeat, score 8.3)
+'printed-secret-values-into-transcript' came up 4 times from 1 independent source(s) across atone
+- atone:mist-20261023-070330-ea | atone | human | 2026-10-23 | versable-foundry | Printed a live gcloud access token while checking ADC validity: During a /catchup resume I ran gcloud auth application-default print-access-token without redirecting stdout, and a live ADC access toke…
+- proposals:prop-20261022-115157-ae | proposals | echo | 2026-10-22 | - | Flesh out gcc friction from session a48a6eeb (auto-stub: printed-secret-values-into-transcript)
+- atone:mist-20261022-110235-d2 | atone | human | 2026-10-22 | local-models | Test stub recorded subprocess env; failure line dumped live API tokens: probe/fixtures/verbs-drift.py (sub-agent written) stubbed subprocess.run storing **kw including env; a failing check printed str…
+- atone:mist-20261014-204739-3c | atone | human | 2026-10-14 | .claude | pm2 jlist printed exported tokens into the transcript: Ran pm2 jlist --silent to find the kanban server before restarting it. pm2 keeps each process's launch environment and jlist prints it, so the Sl…
+- proposals:prop-20261010-133204-5a | proposals | echo | 2026-10-10 | - | Flesh out gcc friction from session 8a775608 (auto-stub: printed-secret-values-into-transcript)
+- atone:mist-20261010-102728-94 | atone | human | 2026-10-10 | enhancement-product | Full-args ps on the extractor VM printed the cloudflared tunnel token: During the D8 port-8000 investigation I ran ssh extractor-vm 'sudo ps -eo pid,user,lstart,args'; the cloudflared process carries …
+
+## c-754aa69a (found by repeat, score 7.1)
+'pr-title-missing-required-flag' came up 3 times from 1 independent source(s) across atone
+- atone:mist-20261023-182027-f1 | atone | human | 2026-10-23 | versable-foundry | Opened two PRs without [noslack] and without the local codex review: Opened walmart-mvp #118 and speedway #115 via gh pr create with titles lacking [noslack], and skipped the local codex review. Slack…
+- proposals:prop-20261013-095815-3e | proposals | echo | 2026-10-13 | - | [atone] rules/pr-title-missing-required-flag.md entry
+- atone:mist-20261013-095552-b7 | atone | human | 2026-10-13 | enhancement-product | New PRs raised without their Linear ticket or links to sibling PRs: Applying the 2026-10-13 rulings, enhancement-product #350, #351, #354, #355, extractor-webserver #36 to #38 and data-extraction #10 …
+- atone:mist-20261006-115527-88 | atone | human | 2026-10-06 | slack-automation | Runner PRs in six repos opened without [noslack], 37 messages in #pr-review: Mechanical-run PRs across enhancement-product, forge, foundry, speedway, winhere-pim and walmart-mvp were opened without [n…
+
+## c-461be27e (found by session cluster, score 5.6)
+Session ea931f9b in better-file-browser: the owner corrected the agent, a mistake was recorded (Reviewed only new code; the owner's standing whole-surface consistency audit never ran)
+- proposals:prop-20261022-075206-f6 | proposals | echo | 2026-10-22 | - | Flesh out gcc friction from session ea931f9b (auto-stub: repeat-request-dropped-across-sessions)
+- atone:mist-20261022-061117-82 | atone | human | 2026-10-22 | better-file-browser | Reviewed only new code; the owner's standing whole-surface consistency audit never ran: Owner asked across sessions for a full consistency audit. This session's adversarial review covered only the new…
+- signals:ea931f9b-4604-42f9-a1d6-94351f226770-1792649276 | signals | human | 2026-10-22 | - | the owner corrected the agent
+
+## c-e291f233 (found by session cluster, score 5.5)
+Session 13cd89cd in enhancement-product: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Reply list presented as complete; never swept all PR threads for unanswered ones)
+- checkpoints:ckpt-761c9ccf0e21d41e | checkpoints | human | 2026-10-20 | enhancement-product | pending: - Agent, when a review lands: update #343, #347, #354, #358, ex #29 against their bases (method in Next action); ws #31 now carries ws #38. - Agent, housekeeping: delete branch `e2e-severity-…
+- checkpoints:ckpt-79f3e0187600fb99 | checkpoints | human | 2026-10-20 | enhancement-product | pending: - Agent, when a review lands: update #343, #347, #354, #358, ex #29 against their bases (method in Next action); ws #31 now carries ws #38. - Agent, housekeeping: delete branch `e2e-severity-…
+- signals:13cd89cd-8060-4566-b343-2ea6d21278e1-1792499389 | signals | human | 2026-10-20 | - | the owner corrected the agent
+- atone:mist-20261020-122528-43 | atone | human | 2026-10-20 | enhancement-product | Reply list presented as complete; never swept all PR threads for unanswered ones: The PR review doc's 'Replies still to post' list (frontend/.claude/output/20261019-pr-replies/review.md) was rebuilt f…
+
+## c-ea4bf10c (found by session cluster, score 5.4)
+Session f889a4e4 in better-file-browser: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-a80b5e6c2a6d06c1 | checkpoints | human | 2026-10-22 | better-file-browser | pending: - USER: `approve push 384908b1`. - USER: decision page answers: D1 spacing, D2 listener check, D3 ask-quote (task #21), and the look sign-off. - AGENT, after the answers: apply D1 (add --sp t…
+- signals:f889a4e4-fa3a-40fc-820e-9d147aada8eb-1792684745 | signals | human | 2026-10-22 | - | the owner corrected the agent
+- checkpoints:ckpt-d9c6d1a1b3d180c4 | checkpoints | human | 2026-10-22 | better-file-browser | Build the component system in /Users/alcatraz627/Code/better-file-browser/docs/…
+- checkpoints:ckpt-ff1fb276ec23fd9b | checkpoints | human | 2026-10-22 | better-file-browser | Build the component system in /Users/alcatraz627/Code/better-file-browser/docs/…
+- checkpoints:ckpt-bbfce29c8ea1d175 | checkpoints | human | 2026-10-22 | better-file-browser | Build the component system in /Users/alcatraz627/Code/better-file-browser/docs/…
+- signals:f889a4e4-fa3a-40fc-820e-9d147aada8eb-1792660716 | signals | human | 2026-10-22 | - | the owner corrected the agent
+
+## c-79476590 (found by session cluster, score 4.3)
+Session ba6c10c0 in affinity: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-8141ee2731758036 | checkpoints | human | 2026-10-21 | affinity | pending: AGENT: - Done in b6d4dfc: vision helper on demand via launchd socket activation, 20-minute idle stop, guard/test/vision_idle.test.mjs. - Optional later: per-preview press token for the card b…
+- signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792582476 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792581045 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792579934 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792579482 | signals | human | 2026-10-21 | - | the owner corrected the agent
+
+## c-5894dcff (found by session cluster, score 4.3)
+Session b5820d65 in versable-builder: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-5b15e2e37a6321ff | checkpoints | human | 2026-10-23 | versable-builder | pending: - AGENT: 0.6.1: fix Table bleed inside a Modal (IN-20261024-01), verify on :5104 both themes, changelog section, then ask to publish. - AGENT: close goal a1c3811e27c5 row 7 with the publish-k…
+- signals:b5820d65-2c5c-4afb-8254-d662eedcaa81-1792794611 | signals | human | 2026-10-23 | - | the owner corrected the agent
+- signals:b5820d65-2c5c-4afb-8254-d662eedcaa81-1792794562 | signals | human | 2026-10-23 | - | the owner corrected the agent
+
+## c-ed285c38 (found by session cluster, score 4.3)
+Session b3c49297 in versable-foundry: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-8735986c7074ed35 | checkpoints | human | 2026-10-23 | .claude | pending: - bfb hub (goal 613e5cfa46df): write gcc-synthesis.md; third voter seat; vote with bfb; build the gcc end (dp verbs compose, parse, submit, seen; wizard.sh; open via Chrome; golden fixture in…
+- checkpoints:ckpt-08cc3b9a5d0b0da4 | checkpoints | human | 2026-10-23 | .claude | pending: - bfb hub (goal 613e5cfa46df): write gcc-synthesis.md; third voter seat; vote with bfb; build the gcc end (dp verbs compose, parse, submit, seen; wizard.sh; open via Chrome; golden fixture in…
+- signals:b3c49297-ef32-4cb3-81e1-829b5c315e54-1792781271 | signals | human | 2026-10-23 | - | the owner corrected the agent
+
+## c-4d0c16fc (found by session cluster, score 3.9)
+Session 82b9438a in enhancement-product: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-6c01799b930fa393 | checkpoints | human | 2026-10-21 | enhancement-product | pending: - Agent: two-site browser test on prod for app, Speedway, Walmart (#47), leaving the uncovered site's build gate parked. - Agent, post-release: Slack messaging review and redo across products…
+- checkpoints:ckpt-711b23690cf892b3 | checkpoints | human | 2026-10-21 | enhancement-product | pending: - Agent: two-site browser test on prod for app, Speedway, Walmart (#47), leaving the uncovered site's build gate parked. - Agent, post-release: Slack messaging review and redo across products…
+- signals:82b9438a-b569-4acc-ba0b-a61611bef619-1792577502 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:82b9438a-b569-4acc-ba0b-a61611bef619-1792572262 | signals | human | 2026-10-21 | - | the owner corrected the agent
+
+## c-4325cafe (found by session cluster, score 3.9)
+Session eab1fd1e in affinity: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-11817b71da26e17f | checkpoints | human | 2026-10-21 | affinity | pending: AGENT (in order; proposed defaults from the adversarial review dispositions): 1. Update path (findings 1, 6, 11): install packages into a temp folder and swap in only on success; every guard …
+- signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792576392 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792574262 | signals | human | 2026-10-21 | - | the owner corrected the agent
+- signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792573444 | signals | human | 2026-10-21 | - | the owner corrected the agent
+
+## c-1f725c61 (found by repeat, score 3.6)
+'asked-owner-for-a-value-already-derivable' came up 4 times from 1 independent source(s) across atone
+- atone:mist-20261023-193439-69 | atone | human | 2026-10-23 | speedway-ingest-wt | Asked the owner for a Speedway login that was in the project's own notes: Listed 'a speedway-dev login, or a go to sign up' as an owner ask, and created a new Walmart test account, while Speedway's FL…
+- atone:mist-20261008-145106-69 | atone | human | 2026-10-08 | enhancement-product | Asked owner for the backend pairing and shipped a literal '?' placeholder: Asked the owner which backend pairs with each e2e frontend target, with an unfinished '?' in the question. The app's backend …
+- atone:mist-20261005-131656-d2 | atone | human | 2026-10-05 | slack-automation | Owner blocker list built from session observations, not my own notes (repeat): Listed two owner blockers that stored context contradicts: keep or stop the clanky-box VM (memory: GCP hosting is credit-…
+- atone:mist-20261005-102858-a4 | atone | human | 2026-10-05 | slack-automation | Asked owner for a staging alias the standard already defines as branches.dev: In a 3-question owner menu on the hotfix rule, question 3 proposed adding a new 'staging' key to .github/pr-context.config…
+
+
+
+## Hook scripts already registered in settings.json
+allow-claude-ipc.py, api-recovery-nudge.sh, atone-stop-gate.sh, auto-base.sh, auto-continue-stop.sh, auto-format.sh, bare-id-cluster-stop.sh, bash-wal.sh, block-curl-post-auth.sh, block-nested-claude.sh, check-human-comments.sh, cleanup-comments-nudge.sh, compact-gate.sh, counter-gate-stop.sh, creation-box-stop.py, credential-ask-stop.sh, ctx-claim-stop.sh, ctx-pressure-nudge.sh, ctx-signal-nudge.sh, decision-surface-nudge.sh, declared-ready-stop.sh, diff-preview.sh, directions.py, doc-voice-gate.py, dream-insights-prompt.sh, edit-tracker.sh, emit-event.sh, enqueue-auto-coredump.sh, exit-code-hook.sh, file-changed.sh, format-gate-stop.sh, format-reminder-ups.sh, gate-cli-actions.sh, gcc-signal-capture.sh, gcloud-auth-hook.py, gemini-mode-inject.sh, goal-gate-note-stop.sh, goal-proposal-stop.sh, guard-absence-claim.sh, guard-ai-signature.sh, guard-anthropic-credentials.sh, guard-artifact-unasked.sh, guard-banned-vocab.sh, guard-cd-relative-path.sh, guard-cluster-e-smells.sh, guard-command-chaining.sh, guard-comment-hygiene.sh, guard-comment-verbosity.sh, guard-commit-signature.sh, guard-cron-prompt.sh, guard-db-target.py, guard-dev-server-port.sh, guard-duplicate-symbol.sh, guard-env-access.sh, guard-env-dump.sh, guard-extension-root.sh, guard-git-push.sh, guard-github-agent-marker.sh, guard-lazy-question.sh, guard-model-tier.sh, guard-near-dup-env-var.sh, guard-policy-store.sh, guard-policy.sh, guard-prose-quality.sh, guard-repo-visibility.sh, guard-rg-replace-bundle.sh, guard-secret-file-read.sh, guard-settings-write.py, guard-structural-claim.sh, guard-subagent-output.sh, guard-system-dir-writes.sh, guard-user-commit.sh, guard-zsh-path-var.sh, hand-rendered-tasks-stop.sh, heartbeat.sh, heed-writeback.sh, hhmm-drift-post.py, hint-injector.sh, keepwarm.py, log-image-reads.sh, memory-reach.py, migrate-hint.sh, named-next-work-stop.sh, notification-context.sh, owner-ask-content-stop.py, parked-skills-nudge.sh, permission-ask.py, permission-notify.sh, persona-log-nudge.sh, persona-suggest.sh, plan-gate-pre.sh, plan-gate-ups.sh, policy-approve-ask.sh, policy-ask-prompt.sh, post-compact-recovery.sh, post-tool-use.sh, post-tool.sh, pr-review-gate.py, pre-compact-checkpoint.sh, pre-tool-use.sh, pre-tool.sh, prefer-ripgrep.sh, prefer-tmp-py-over-inline.sh, prevent-unsolicited-index-manipulation.sh, protect-atone-raw.sh, push-approve-ask.sh, push-approve-prompt.sh, queue-stop.sh, quoted-text-is-not-a-command.py, raw-guard.sh, render-mcp-gate.py, review-nudge-stop.sh, run.sh, safe-delete.sh, seat-hook.py, secret-leak-scan.py, session-end-checkpoint.sh, session-start.sh, sessionstart-inject.sh, shell-mem.sh, skill-invocation-log.sh, snapshot-pre-edit.sh, speculative-atone-hint.sh, speculative-atone-stop.sh, stop-sync.sh, stop.sh, style-watch-stop.sh, subagent-box.sh, subagent-tracker.sh, task-table-inject.sh, test-status-hook.sh, tmp-jail-cleanup.sh, tmp-jail-guard.sh, tool-counter.sh, track-edits-session.sh, turn-counter.sh, turn-start.sh, ui-callouts-gate.sh, ui-verified-hint.sh, ui-verified-stop.py, ups.sh, usage5h.py, user-prompt-hint.sh, user-prompt-submit.sh, wake-breaker.sh, warn-git-add-enumeration.sh
+
+Never propose registering one of these. If one exists and its mistake still repeats, name what it fails to catch, or that it only warns instead of blocking.
+
+## What each hook did in the last 14 days
+block = stopped the turn or tool call; block-dry = would have blocked but runs in dry-run; soft and nudge = advisory only; muted = suppressed by a mute file. Base any claim about whether a hook blocks on these counts, not on its name.
+- doc-voice-gate: 188 block, 514 nudge, 134 unlabelled
+- push-gate: 61 allow-approved, 76 block, 430 unlabelled
+- prose-smell: 11 block, 552 nudge
+- terse-reply: 81 block, 455 soft
+- review-nudge: 456 nudge
+- format-gate: 386 block
+- emdash: 175 block
+- guard-env-access: 175 nudge
+- safe-delete: 175 block
+- declared-ready: 56 block, 109 soft
+- filename-dot: 162 block
+- guard-command-chaining: 152 block
+- guard-env-dump: 145 block
+- persona-suggest: 144 nudge
+- guard-cluster-e-smells: 2 block, 129 nudge
+- relpath: 90 block, 30 nudge
+- warn-git-add-enumeration: 120 nudge
+- block-nested-claude: 87 block
+- prefer-tmp-py-over-inline: 71 nudge
+- ui-callouts-gate: 19 block, 49 soft
+- guard-rg-replace-bundle: 67 block
+- bare-id-cluster: 8 block, 52 nudge
+- guard-duplicate-symbol: 54 unlabelled
+- guard-prose-quality: 49 block
+- structural-claim: 34 block, 15 soft
+- dense-briefing-shapes: 47 soft
+- prefer-ripgrep: 40 nudge
+- prevent-unsolicited-index-manipulation: 39 block
+- guard-comment-verbosity: 36 nudge
+- guard-pr-title-tags: 35 block
+- guard-extension-root: 26 block
+- ui-verified: 16 block, 6 nudge
+- block-curl-post-auth: 10 block, 8 unlabelled
+- guard-env-capture-test: 15 block
+- guard-cd-relative-path: 12 block
+- decision-surface-nudge: 11 nudge
+- guard-ai-signature: 10 block
+- guard-policy: 7 unlabelled
+- reply-lede: 7 soft
+- wake-breaker: 5 unlabelled
+
+
+## Who reads this
+The owner reads this page as the person Claude worked for, not as an engineer of the
+gcc. Write every owner-facing field (title, happened[].what, why_repeats, fix,
+guard.plain, guard.gap, summary) as plain sentences about what Claude did to them.
+Never put an evidence id, cluster id, hook id, script or file name, slug, or the
+words "gcc", "backlog", "atone", "gate" or "cluster" in those fields. Counts are added
+by the page; do not write numbers in guard.gap.
+
+`happened` lists the times it happened, one per cited evidence row, each a sentence
+about what Claude did. The page adds the date and project from the evidence row.
+`guard.hook_id` is a hook id from the 14-day list above, or null when nothing tries
+to stop it; `guard.verdict` is yes, partly or no.
+
+## Merge
+If two clusters are the same problem seen two ways, name it once and list the other
+cluster ids in "merged". A cluster is named or merged, never both.
+
+## Answer with JSON only
+{"summary": "…",
+ "items": [{"cluster": "c-…", "merged": ["c-…"], "kind": "repeat",
+   "title": "Said it works without checking where you would see it",
+   "happened": [{"evidence_id": "atone:…", "what": "told you the deploy script was simplest and certain; it had never been run, and it failed when you ran it."}],
+   "why_repeats": "…", "fix": "…",
+   "guard": {"hook_id": "declared-ready", "plain": "A check on \"done\" and \"works\" claims", "verdict": "partly", "gap": "\"proven on the Pi\" and \"green on the laptop\" get through"},
+   "why": "…", "evidence_ids": ["atone:…"],
+   "proposal": {"target": "…", "change": "…"}}],
+ "process_note": null}

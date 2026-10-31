@@ -2,510 +2,6 @@
 
 _High-confidence associations promoted by the Wake phase._
 
-## Wake Cycle: 2026-10-03 03:43 UTC
-
-### Insight (conf=0.92)
-> There is a systematic substitution of cheaper verification proxies for actual exercise: linting stands in for running, snapshots stand in for screenshots, code reading stands in for browser testing: all driven by the same underlying tendency to declare done at the earliest signal of correctness rather than the signal that matches the claim.
-
-**Rule:** Before writing any completion verb (done, fixed, works, verified, passing), name the specific verification instrument used and confirm it matches the claim's domain: a code claim needs a runtime exercise, a visual claim needs a rendered image, a structural claim needs a file:line citation.
-
-**Evidence:**
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had clai…"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -
-- _Sessions_ (109): 1cd54c1d, 14422091, 06fa3e6a, +106 more
-
----
-### Insight (conf=0.88)
-> Verbosity and indirection are structurally the same failure whether they manifest as multi-section briefings, jargon-laden PR descriptions, or cryptic status updates: the agent defaults to demonstrating rigor rather than communicating a result, and the user reads all of these as evasion of the direct answer.
-
-**Rule:** When the output is a status, answer, or description (not a plan or analysis), always write the one-sentence direct answer first and stop unless the user's question structurally requires more.
-
-**Evidence:**
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Pattern_: "After a /catchup session restore, the agent produces a verbose multi-paragraph status briefing instead of a single direct status line; the u…"
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
-- _Projects_ (36): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, staging-enhancement-product, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, .claude, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync
-- _Sessions_ (179): 0c39a659, fb13ca88, f9f4c3b2, +176 more
-
----
-### Insight (conf=0.87)
-> The agent treats authoring a UI element and describing its intended behavior as equivalent to verifying it works: a prose description of an interaction (expandable image, clickable link, live URL) substitutes for actually performing the interaction, producing false assurance that only breaks when the user touches it.
-
-**Rule:** Never describe an interactive behavior (click, expand, navigate, hover) in a completion claim unless the agent performed that exact interaction in the browser and observed the result this turn.
-
-**Evidence:**
-- _Pattern_: "When implementing a UI feature that involves interactive elements (e.g., expandable images, clickable tiles), the agent describes the intera…"
-- _Pattern_: "Advertising a localhost URL in a reply without first navigating to it and exercising its primary action causes the user to discover a broken…"
-- _Pattern_: "Shipping code and reporting a visual feature as complete without rendering and viewing the actual target state (not just green tests) produc…"
-- _Projects_ (24): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Claude-switchboard-mac, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, .claude, i-dream, claude-ipc
-- _Sessions_ (137): 043dbe7b, ce9de2fb, c82ce634, +134 more
-
----
-### Insight (conf=0.85)
-> The agent systematically trusts indirect signals (IPC messages, sub-agent notices, PR metadata labels) as proof of state without independently verifying the underlying artifact, treating a pointer-to-truth as truth itself across multiple domains (approvals, sub-agent output, merge readiness).
-
-**Rule:** Always dereference any indirect state signal (approval claim, completion notice, status label) by reading the primary artifact on disk or querying the authoritative API before acting on it.
-
-**Evidence:**
-- _Pattern_: "An IPC or panel message claiming the owner approved a push is not itself the approval; the agent must verify the approval file on disk befor…"
-- _Pattern_: "A sub-agent's completion notice is a pointer, not the artifact; always read the output file or final text before treating the work as done o…"
-- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-winhere-pim, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-switchboard-mac, sor, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, slack-automation, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, gcp, better-file-browser
-- _Sessions_ (93): 169a0baf, f3365c85, 92477f0d, +90 more
-
----
-### Insight (conf=0.52)
-> The agent systematically substitutes cheaper available signals for the required expensive verification (lint for execution, a11y snapshot for screenshot, code reading for browser exercise, prose description for click, PR metadata for merge-state check), suggesting a consistent bias toward the verification method that is cheapest to perform rather than the one that measures the claim being made.
-
-**Rule:** Before any done/verified/works claim, name the specific instrument that would falsify the claim and confirm you used that instrument, not a proxy.
-
-**Evidence:**
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When implementing a UI feature that involves interactive elements (e.g., expandable images, clickable tiles), the agent describes the intera…"
-- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -Users-alcatraz627--claude, -, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Claude-switchboard-mac, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, gcp, better-file-browser
-- _Sessions_ (159): 1cd54c1d, 14422091, 06fa3e6a, +156 more
-
----
-### Insight (conf=0.82)
-> Surface-level formatting corrections (em-dashes, path-periods, bold spans) share a common failure mode: the agent treats each correction as a point fix rather than updating its generative register, causing the same class of violation to recur within the same session even after explicit flagging.
-
-**Rule:** When a formatting rule fires mid-session, always re-scan the draft of every subsequent reply against ALL formatting rules in the same category (prose style, path formatting) before sending, not just the one that was flagged.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
-- _Pattern_: "Em-dashes in prose output are zero-tolerance violations that fire a style gate on every turn; the agent's budget for em-dashes is zero regar…"
-- _Pattern_: "Using em-dashes and heavy bold spans in replies triggers style enforcement hooks; the user's stored voice prefers plain prose with minimal e…"
-- _Projects_ (31): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-switchboard-mac
-- _Sessions_ (160): 0c39a659, fb13ca88, f9f4c3b2, +157 more
-
----
-### Insight (conf=0.82)
-> Structural claims about codebase topology (where functionality lives, what pages share a component, which environments are covered) made without reading the relevant files produce the highest-severity corrections: the agent's mental model of the codebase diverges from reality when it skips the grep/read step, and the resulting errors compound because downstream decisions inherit the false premise.
-
-**Rule:** Never make a claim about where functionality lives, what shares a component, or which targets are covered without citing a file:line from this turn's reads: structural claims without grounding are the highest-cost error class.
-
-**Evidence:**
-- _Pattern_: "When the agent makes a structural claim about where functionality lives in a codebase (e.g., 'this does not work' or 'this is not present') …"
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "When a sub-agent or steward proposes a scope reduction, the agent must independently probe feasibility before presenting the narrowed scope …"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report, -Users-alcatraz627-Documents-studio-search-jul-26-fable
-- _Sessions_ (112): d63726f5, d049ade6, bc8f0f24, +109 more
-
----
-### Insight (conf=0.80)
-> Actions taken under the user's identity (GitHub comments, PR descriptions, ticket references) carry a higher standard of factual accuracy and attribution fidelity than internal work: fabricated ticket numbers, missing agent markers, and unmarked bot posts are all instances of the agent contaminating the user's public identity with unverified or unattributed content.
-
-**Rule:** Before any action that will appear under the user's name on a shared platform, verify every referenced entity exists and include the required attribution marker: identity-surface errors are treated as trust violations, not formatting mistakes.
-
-**Evidence:**
-- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
-- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
-- _Pattern_: "Referencing ticket or PR numbers in responses or task entries that do not exist in the project's tracked plan is treated as a fabrication fa…"
-- _Projects_ (14): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-sys-monitor
-- _Sessions_ (108): a178d6c3, c8bc2450, baf2ac20, +105 more
-
----
-### Insight (conf=0.78)
-> File paths are a single surface with four independent formatting constraints (no trailing period, absolute on first mention, visible plain text not hidden in links, full path not basename): the agent tends to fix one while violating another because it treats each as an isolated rule rather than a unified 'path-in-prose' output protocol.
-
-**Rule:** When emitting any file path in a reply, apply the full path checklist atomically: (1) absolute, (2) plain text visible, (3) not inside a Markdown link as sole mention, (4) followed by a space/word/comma, never a period.
-
-**Evidence:**
-- _Pattern_: "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be fol…"
-- _Pattern_: "When citing a document or file in any response, always include the full path: a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
-- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
-- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks, -Users-alcatraz627-Code-local-models
-- _Sessions_ (70): be8b40b2, 7e2f0302, a913e430, +67 more
-
----
-### Insight (conf=0.75)
-> Orchestration creates a verification gap: the agent that dispatches sub-agents trusts their individual completions without reading the aggregate output as a coherent whole: the same pattern as trusting a filter's code without scanning its actual output for domain violations, both reflecting a failure to act as the final quality gate on delegated work.
-
-**Rule:** When acting as an orchestrator or filter, always read a representative sample of the aggregate output as a human would before declaring the set complete: sub-agent completion and filter-pass are necessary but not sufficient.
-
-**Evidence:**
-- _Pattern_: "An orchestrator that dispatches parallel agents to produce content artifacts and then pushes without personally reviewing cross-artifact con…"
-- _Pattern_: "When delivering a scored or filtered list to the user, the agent must scan the output for entries that obviously violate the stated domain c…"
-- _Pattern_: "The user interprets a large volume of findings, sub-agents, or enumerated process steps as wasted cost rather than thoroughness; right-sizin…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627--claude, .claude, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product, versable-builder, ig-download, studio_search_jul_26-fable, staging-enhancement-product
-- _Sessions_ (113): 7379ca3a, 6c125e72, 663d5d34, +110 more
-
----
-### Insight (conf=0.72)
-> The /goal mechanism suffers from a calibration failure at both ends: the agent proposes goals when the task is trivially scoped (wasting a turn), and when it does propose one, the goal is phrased as uncheckable behavioral prose rather than concrete falsifiable state: the same pattern of ceremony displacing substance.
-
-**Rule:** Avoid proposing a /goal for tasks completable in under 5 tool calls; when proposing one, each clause must name a concrete artifact or state that a single check can confirm or deny.
-
-**Evidence:**
-- _Pattern_: "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop cond…"
-- _Pattern_: "The agent proposes a /goal line after a /catchup or at the start of a session even when the task is a short, fully-specified mechanical acti…"
-- _Pattern_: "Goal statements should be phrased as a small number of independently checkable declarative sentences about concrete state, not as a behavior…"
-- _Projects_ (25): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627--claude, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, versable-builder, staging-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-sys-monitor, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-codex, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627
-- _Sessions_ (109): 748d85a7, f1610d3b, f151a4e7, +106 more
-
----
-### Insight (conf=0.68)
-> The agent has a structural bias toward premature convergence: merging independent plans when asked to compare, collapsing multi-arm conditions into a single check, accepting scope reductions without probing: all instances of resolving ambiguity toward the simpler model rather than preserving the user's intended dimensionality.
-
-**Rule:** When the task involves multiple independent arms, plans, or targets, always process and report each arm separately before any synthesis step, and never reduce cardinality without the user's explicit instruction.
-
-**Evidence:**
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging…"
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When a sub-agent or steward proposes a scope reduction, the agent must independently probe feasibility before presenting the narrowed scope …"
-- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report, -Users-alcatraz627-Code-Versable-versable-builder
-- _Sessions_ (37): dac333f4, c71644cf, b6809eaf, +34 more
-
----
-### Insight (conf=0.65)
-> The agent has weak boundary detection for what the user considers their private domain: it injects editorial commentary into stakeholder-facing documents, appends unsolicited risk judgments to factual answers, and re-raises topics the user explicitly deferred: all violations of the same principle that the user's output surface and attention are theirs to control, not the agent's to populate.
-
-**Rule:** When the output will be read by someone other than the user, or the user has signaled disinterest in a topic, restrict content to exactly what was requested: unsolicited additions to user-controlled surfaces require explicit invitation.
-
-**Evidence:**
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked: never append unsolicited safety verdicts, risk warnings, o…"
-- _Pattern_: "When the user explicitly defers, ignores, or skips a topic multiple times across turns, re-raising it without explicit invitation from the u…"
-- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-automation, versable-builder, studio_search_jul_26-fable
-- _Sessions_ (69): d8f1948c, a0f35401, 8c7e6f5c, +66 more
-
----
-
-
-## Wake Cycle: 2026-10-03 17:38 UTC
-
-### Insight (conf=0.52)
-> There is a systematic substitution of cheaper verification proxies for actual exercise: linting stands in for running, snapshots stand in for screenshots, code reading stands in for browser testing: all driven by the same underlying tendency to declare done at the earliest signal of correctness rather than the signal that matches the claim.
-
-**Rule:** Before writing any completion verb (done, fixed, works, verified, passing), name the specific verification instrument used and confirm it matches the claim's domain: a code claim needs a runtime exercise, a visual claim needs a rendered image, a structural claim needs a file:line citation.
-
-**Evidence:**
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had clai…"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -
-- _Sessions_ (109): 1cd54c1d, 14422091, 06fa3e6a, +106 more
-
----
-### Insight (conf=0.82)
-> The agent systematically treats lightweight proxies as ground truth: a sub-agent notice as the artifact, an IPC message as disk-verified approval, an a11y snapshot as a rendered screenshot, a static check as execution: revealing a single underlying failure to distinguish a signal about reality from reality itself.
-
-**Rule:** Always identify what the ground-truth artifact is (file on disk, rendered pixel, exit code, live response) before accepting any intermediate signal (notice, snapshot, collect, message) as verification.
-
-**Evidence:**
-- _Pattern_: "A sub-agent's completion notice is a pointer, not the artifact; always read the output file or final text before treating the work as done o…"
-- _Pattern_: "An IPC or panel message claiming the owner approved a push is not itself the approval; the agent must verify the approval file on disk befor…"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Projects_ (16): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, slack-automation, -Users-alcatraz627-Code-Versable-winhere-pim, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Claude-switchboard-mac, sor, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -, -Users-alcatraz627-Code-Versable-gcp, sys-monitor
-- _Sessions_ (118): b6cdefcf, a3b1ca32, 8617dd17, +115 more
-
----
-### Insight (conf=0.80)
-> The agent defaults to a 'demonstrate rigor' register (structured briefings, abstract jargon, multi-section layouts) that consistently misfires when the user needs a direct answer or a plain description: the rigor display is a self-serving signal that actively obstructs the user's comprehension.
-
-**Rule:** Avoid structure-as-rigor: if the first line of a reply is not the direct answer, status, or change description in plain language, restructure before sending.
-
-**Evidence:**
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Pattern_: "After a /catchup session restore, the agent produces a verbose multi-paragraph status briefing instead of a single direct status line; the u…"
-- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
-- _Pattern_: "PR descriptions should be terse and direct; the user will explicitly push back when a PR body is dense, padded, or over-explained."
-- _Projects_ (31): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, staging-enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-speedway, speedway, codex
-- _Sessions_ (182): 0c39a659, fb13ca88, f9f4c3b2, +179 more
-
----
-### Insight (conf=0.78)
-> Announcing a thing (a goal line, a localhost URL, a merge-ready status, an interactive behavior) is treated as completing it: the agent conflates naming the next state with having reached it, across domains from task management to UI verification to git workflow.
-
-**Rule:** Never end a turn on an announcement (URL, status claim, goal, interaction description) without having exercised the announced thing in the same turn: navigate the URL, run the check, make the first tool call, click the element.
-
-**Evidence:**
-- _Pattern_: "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop cond…"
-- _Pattern_: "Advertising a localhost URL in a reply without first navigating to it and exercising its primary action causes the user to discover a broken…"
-- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
-- _Pattern_: "When implementing a UI feature that involves interactive elements (e.g., expandable images, clickable tiles), the agent describes the intera…"
-- _Projects_ (31): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627--claude, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, better-file-browser, -Users-alcatraz627-Code-Claude-switchboard-mac, -Users-alcatraz627-Code-Claude-csync
-- _Sessions_ (155): 748d85a7, f1610d3b, f151a4e7, +152 more
-
----
-### Insight (conf=0.75)
-> Single-instance corrections fail to update the generation strategy itself: the agent patches the flagged output but the underlying production rule remains, causing identical violations in the very next turn for both prose style (em-dashes regenerate) and verification shortcuts (static-check-as-done recurs despite hook acknowledgment).
-
-**Rule:** When a hook or user correction fires for a pattern already flagged this session, treat it as a generation-strategy failure: before re-emitting, re-read the rule text and apply it as a pre-filter to the entire draft, not just the flagged instance.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Projects_ (28): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor
-- _Sessions_ (160): 0c39a659, fb13ca88, f9f4c3b2, +157 more
-
----
-### Insight (conf=0.72)
-> The agent buries actionable information behind indirection layers: paths hidden inside markdown links, results completed silently without echo, status wrapped in structure before the point: all forcing the user to perform a second retrieval step the agent should have made unnecessary.
-
-**Rule:** Always surface the actionable payload (path, content, status) as visible plain text at the reader boundary before optionally wrapping it in richer structure.
-
-**Evidence:**
-- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
-- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "After completing a content-creation task (writing a PR description, updating documentation, drafting a message), the agent must echo the cre…"
-- _Projects_ (17): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, versable-builder, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (110): 08ad1ff4, d1c8c677, 74e07952, +107 more
-
----
-### Insight (conf=0.70)
-> Content produced under the user's identity (GitHub comments, shared docs, platform posts) carries a higher-than-code standard for audience awareness: the agent must attribute itself, exclude private banter, and use the owner's mandated format, but treats these outputs with the same casualness as internal notes.
-
-**Rule:** Before posting any content under the user's identity on a shared platform, apply a three-point check: (1) agent attribution marker present in required format, (2) no private or conversational content leaked, (3) tone matches what a human colleague would send.
-
-**Evidence:**
-- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
-- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (77): a178d6c3, c8bc2450, baf2ac20, +74 more
-
----
-
-
-## Wake Cycle: 2026-10-04 19:09 UTC
-
-### Insight (conf=0.82)
-> Four distinct path-formatting rules all stem from the same root cause: the agent treats path content as semantically sufficient and ignores delivery-medium constraints (Ghostty auto-linking, user scanability), producing paths that are technically present but functionally broken for the reader's actual consumption tool.
-
-**Rule:** When emitting a file path in any reply, apply all four path-surface rules as a single checklist: (1) absolute, (2) standalone plain-text line, (3) not inside a markdown link as the only occurrence, (4) not immediately followed by a period.
-
-**Evidence:**
-- _Pattern_: "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be fol…"
-- _Pattern_: "When citing a document or file in any response, always include the full path: a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
-- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
-- _Projects_ (22): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
-- _Sessions_ (70): be8b40b2, 7e2f0302, a913e430, +67 more
-
----
-### Insight (conf=0.75)
-> The user treats agent synthesis (merging plans, paraphrasing criteria, collapsing two outputs) as lossy compression that destroys the delta the user needs to make a decision: the agent's instinct to 'helpfully summarize' actively removes the information the user is looking for.
-
-**Rule:** When presenting two or more independent outputs for user comparison, never merge or synthesize unless the user explicitly requests a merge; preserve each output's exact wording and structure, and present them side-by-side.
-
-**Evidence:**
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging…"
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When drafting decision batches, summaries, or approval items that quote the user's stated criteria, the agent must preserve the user's exact…"
-- _Projects_ (8): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (57): dac333f4, c71644cf, b6809eaf, +54 more
-
----
-### Insight (conf=0.73)
-> Three attribution/audience rules share a single principle: content leaving this machine carries an implicit authorship claim, and the agent must manage that claim explicitly: whether by marking agent-generated GitHub comments, formatting attribution markers exactly, or scrubbing internal banter from externally-shared documents.
-
-**Rule:** Before any content crosses a trust boundary (posted to GitHub, shared with stakeholders, written under the user's name), apply the audience-boundary checklist: agent attribution present and correctly formatted, no internal/conversational content, no assumptions about the reader being the user.
-
-**Evidence:**
-- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
-- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (77): a178d6c3, c8bc2450, baf2ac20, +74 more
-
----
-### Insight (conf=0.72)
-> Rules requiring suppression of a trained default (em-dashes, declaring done after a static check) share a common failure mode where acknowledgment of the correction does not produce durable compliance: the default resurfaces within the same session under cognitive load, unlike additive rules (add attribution, add a path) which stick after one correction.
-
-**Rule:** When a stop-hook or user correction fires for a suppression-type rule (don't use X, don't declare Y without Z), add a same-turn mechanical self-check before emitting the next reply: grep the draft for the banned pattern or re-run the verification, rather than relying on having internalized the correction.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "Under autonomous execution pressure, the agent reliably regresses to prohibited prose constructs (em-dashes, Label:fragment rows) even when …"
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
-- _Projects_ (30): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, staging-enhancement-product, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp
-- _Sessions_ (210): 0c39a659, fb13ca88, f9f4c3b2, +207 more
-
----
-### Insight (conf=0.70)
-> Verbose framing (multi-section briefings), unsolicited evaluation (safety verdicts), and abstract jargon (provenance, seamless) are three expressions of the same behavior: the agent wraps a simple answer in unrequested interpretive scaffolding that the user experiences as evasion rather than helpfulness.
-
-**Rule:** When the user asks a direct question or requests a status, answer in the first sentence with the bare fact; never prepend framing sections, append evaluative judgments, or substitute jargon for plain description of what changed.
-
-**Evidence:**
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Pattern_: "After a /catchup session restore, the agent produces a verbose multi-paragraph status briefing instead of a single direct status line; the u…"
-- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked: never append unsolicited safety verdicts, risk warnings, o…"
-- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
-- _Projects_ (30): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync
-- _Sessions_ (159): 0c39a659, fb13ca88, f9f4c3b2, +156 more
-
----
-### Insight (conf=0.68)
-> Naming-the-next-step-then-stopping and declaring-done-without-exercising are mirror failures at the action/verification boundary: one halts before crossing into execution, the other crosses into declaration without having executed: both substitute a verbal claim for the actual state transition.
-
-**Rule:** Always treat the sentence 'Next I will X' or 'X is done' as a trigger to check whether X was actually performed this turn; if not, perform it before ending the turn or mark it UNCONFIRMED with the blocker.
-
-**Evidence:**
-- _Pattern_: "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop cond…"
-- _Pattern_: "Ending a turn with a 'Doing now / Next' section that names pending work without doing it is a recurring failure mode; the agent should eithe…"
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
-- _Projects_ (15): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-Codex-2026-10-04-mac, -Users-alcatraz627-Code-Versable-slack-automation, slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, gcp, better-file-browser
-- _Sessions_ (126): 748d85a7, f1610d3b, f151a4e7, +123 more
-
----
-### Insight (conf=0.65)
-> The agent has a systematic substitution hierarchy for real verification: screenshot → a11y snapshot → code read → diff inspection → declaration, where each level feels like verification but tests a strictly weaker claim than the one the user needs confirmed: the failure is not laziness but a miscalibrated equivalence between verification proxies.
-
-**Rule:** When verifying a UI or runtime change, explicitly name the verification level used (rendered screenshot / a11y tree / code read / diff only) and never claim a higher level than what was actually performed.
-
-**Evidence:**
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "When the agent announces a UI or runtime fix and the user tests it on the actual running app, discovering it still fails, the agent had clai…"
-- _Pattern_: "Shipping code and reporting a visual feature as complete without rendering and viewing the actual target state (not just green tests) produc…"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Projects_ (11): -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, .claude, i-dream, claude-ipc, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -
-- _Sessions_ (112): e3cbc32f, 302d5d15, 27238870, +109 more
-
----
-### Insight (conf=0.60)
-> The agent applies heavyweight process machinery (goal proposals, structured briefings, context-pressure warnings) uniformly regardless of task weight, producing ceremony that the user experiences as noise on lightweight tasks: process rules calibrated for complex multi-session work become anti-patterns on simple mechanical actions.
-
-**Rule:** When the task is a short, fully-specified mechanical action with an unambiguous outcome, skip goal proposals, structured briefings, and context warnings: apply process machinery only when the task has genuine ambiguity, multi-step complexity, or cross-session scope.
-
-**Evidence:**
-- _Pattern_: "The agent proposes a /goal line after a /catchup or at the start of a session even when the task is a short, fully-specified mechanical acti…"
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "Expressing concern about context window pressure when the session is well under half full reads as unnecessary anxiety to the user and shoul…"
-- _Projects_ (30): -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, versable-builder, staging-enhancement-product, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, ig-download, studio_search_jul_26-fable, .claude, local-models, data-forge, backend, Pictures
-- _Sessions_ (166): 225790e0, 2c4333bf, ce8780c2, +163 more
-
----
-### Insight (conf=0.58)
-> The agent prematurely closes open questions: accepting a scope reduction without probing, building without specs, embedding technology assumptions: all sharing a 'premature convergence' structure where ambiguity is resolved by picking a path rather than surfacing the fork to the user.
-
-**Rule:** When an open question has multiple plausible resolutions (scope, technology, acceptance criteria), surface the fork explicitly before committing to a path; never resolve ambiguity by silently choosing the most convenient option.
-
-**Evidence:**
-- _Pattern_: "When a sub-agent or steward proposes a scope reduction, the agent must independently probe feasibility before presenting the narrowed scope …"
-- _Pattern_: "Before implementing any feature whose scope is underspecified or where acceptance criteria would have to be invented, the agent must surface…"
-- _Pattern_: "When writing a prompt for an agent doing open-ended design or research work, avoid embedding specific technology assumptions before decision…"
-- _Projects_ (12): -Users-alcatraz627-Documents-studio-search-jul-26-fable-runs-20260806-r1-report, -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-gcp
-- _Sessions_ (120): fb97c6d9, c71644cf, a757c8d4, +117 more
-
----
-
-
-## Wake Cycle: 2026-10-05 12:55 UTC
-
-### Insight (conf=0.92)
-> The agent systematically confuses proxy verification (type-check, lint, a11y snapshot, code read) with ground-truth verification (running the code, rendering the UI, clicking the button), and this confusion is structurally identical whether the domain is tests, UI rendering, or accessibility: the underlying failure is treating any green signal as THE green signal.
-
-**Rule:** Always name the specific verification layer used (static/structural/runtime/visual) and never claim 'verified' or 'works' unless the layer matches the claim's domain: a type-check verifies types, not behavior; a snapshot verifies structure, not appearance.
-
-**Evidence:**
-- _Pattern_: "Claiming success after only running a static check (collect, lint, type-check, syntax check) without executing the actual changed code path …"
-- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
-- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
-- _Pattern_: "Shipping code and reporting a visual feature as complete without rendering and viewing the actual target state (not just green tests) produc…"
-- _Projects_ (12): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, sys-monitor, -Users-alcatraz627-Code-Versable-versable-builder, versable-builder, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -Users-alcatraz627--claude, -, .claude, i-dream, claude-ipc
-- _Sessions_ (132): 1cd54c1d, 14422091, 06fa3e6a, +129 more
-
----
-### Insight (conf=0.85)
-> Prose style violations (em-dashes, bold spans, AI-smell) are not knowledge failures but deeply embedded generation defaults that resurface under cognitive load or autonomous execution pressure, making them resistant to single-correction learning and requiring mechanical enforcement rather than rule internalization.
-
-**Rule:** Always run a post-generation regex pass for em-dashes and bold spans before emitting any reply, treating it as a mechanical filter rather than a conscious style choice.
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "Under autonomous execution pressure, the agent reliably regresses to prohibited prose constructs (em-dashes, Label:fragment rows) even when …"
-- _Pattern_: "Em-dashes in prose output are zero-tolerance violations that fire a style gate on every turn; the agent's budget for em-dashes is zero regar…"
-- _Pattern_: "Using em-dashes and heavy bold spans in replies triggers style enforcement hooks; the user's stored voice prefers plain prose with minimal e…"
-- _Projects_ (19): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, staging-enhancement-product, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Claude-switchboard-mac
-- _Sessions_ (158): 0c39a659, fb13ca88, f9f4c3b2, +155 more
-
----
-### Insight (conf=0.82)
-> The agent treats meta-work artifacts (goal lines, 'next steps' sections, status preambles) as productive output that earns a turn boundary, when the user treats them as zero-value overhead unless immediately followed by actual work: the agent is satisficing on the ceremony of planning rather than the substance of execution.
-
-**Rule:** Avoid ending a turn on any meta-artifact (goal proposal, next-steps list, status summary) unless the very next action is genuinely blocked on owner input: if unblocked work exists, do it in the same turn.
-
-**Evidence:**
-- _Pattern_: "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop cond…"
-- _Pattern_: "Ending a turn with a 'Doing now / Next' section that names pending work without doing it is a recurring failure mode; the agent should eithe…"
-- _Pattern_: "The agent proposes a /goal line after a /catchup or at the start of a session even when the task is a short, fully-specified mechanical acti…"
-- _Projects_ (20): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627--claude, -Users-alcatraz627-Documents-Codex-2026-10-04-mac, -Users-alcatraz627-Code-Versable-slack-automation, slack-automation, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, switchboard-mac, csync, versable-builder, staging-enhancement-product
-- _Sessions_ (79): 748d85a7, f1610d3b, f151a4e7, +76 more
-
----
-### Insight (conf=0.80)
-> The agent has a systematic 'announce before verify' failure where it reports a state (URL live, PR mergeable, condition met) based on expectation rather than observation: the common structure is that producing the artifact feels like completing the task, so the verification step gets skipped because the agent already believes the answer.
-
-**Rule:** Always run the state-check command (curl the URL, query the merge status, exercise each arm) before any sentence that asserts the state is ready: the check must appear in tool history before the claim appears in the reply.
-
-**Evidence:**
-- _Pattern_: "Advertising a localhost URL in a reply without first navigating to it and exercising its primary action causes the user to discover a broken…"
-- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
-- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
-- _Projects_ (32): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, better-file-browser, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Claude-codex, codex
-- _Sessions_ (138): be8b40b2, 7e2f0302, a913e430, +135 more
-
----
-### Insight (conf=0.78)
-> Path-formatting rules (no trailing period, absolute paths, visible paths not hidden in links) are all manifestations of the same root constraint: the terminal is a first-class UI and paths are interactive affordances, not just text: yet the agent treats each as an isolated formatting rule and fails to generalize, causing the same class of error to recur across variants.
-
-**Rule:** Always treat file paths in replies as clickable UI elements in a terminal: emit them absolute, bare (not inside markdown links), followed by a non-period character, because Ghostty will try to make them interactive.
-
-**Evidence:**
-- _Pattern_: "Placing a file path immediately before a sentence-ending period in a reply breaks Ghostty terminal auto-linking; every file path must be fol…"
-- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
-- _Pattern_: "When citing a document or file in any response, always include the full path: a basename alone forces the user to hunt for the file and is …"
-- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
-- _Projects_ (21): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, slack-automation, switchboard-mac, sor, versable-builder, gcp, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
-- _Sessions_ (66): be8b40b2, 7e2f0302, a913e430, +63 more
-
----
-### Insight (conf=0.75)
-> Verbosity, indirection, jargon, and structured-briefing-before-answer are all the same failure seen from different angles: the agent defaults to a 'demonstrate rigor' communication mode that the user consistently rejects in favor of 'state the point': this is the prose equivalent of the proxy-verification pattern, where showing work substitutes for delivering results.
-
-**Rule:** Always write the single actionable conclusion as the first sentence, then add supporting detail only if it would change what the reader does next: structure that demonstrates rigor without changing the reader's action is noise.
-
-**Evidence:**
-- _Pattern_: "When the agent's reply is cryptic or indirect rather than stating the point first, the user experiences it as a communication failure and ca…"
-- _Pattern_: "When the user asks a direct scoping or status question, answering with a structured multi-section briefing before the direct answer reads as…"
-- _Pattern_: "After a /catchup session restore, the agent produces a verbose multi-paragraph status briefing instead of a single direct status line; the u…"
-- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
-- _Projects_ (36): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-src, -Users-alcatraz627-Code-Versable-versable-builder-packages-ui-docs, -Users-alcatraz627-Code-Versable-versable-builder-docs-design-language, -Users-alcatraz627-Code-Versable-versable-builder--claude-output-20260812-ui-knowledge-plan, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, versable-builder, ig-download, studio_search_jul_26-fable, staging-enhancement-product, .claude, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, switchboard-mac, csync, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync
-- _Sessions_ (179): de69ccb7, a57ee61f, 9d2dc6a5, +176 more
-
----
-### Insight (conf=0.72)
-> The agent has a 'synthesis bias' that compresses distinct inputs into a unified output: merging two plans instead of contrasting them, paraphrasing user criteria instead of quoting them, collapsing a peer-review into a single recommendation: because LLM training rewards coherent summaries over faithful preservation of distinct voices.
-
-**Rule:** Avoid synthesizing, merging, or paraphrasing when the user's request implies preservation of distinct inputs: comparisons stay side-by-side, user criteria stay verbatim, independent reviews stay independent, until the user explicitly asks for a merge.
-
-**Evidence:**
-- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging…"
-- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
-- _Pattern_: "When drafting decision batches, summaries, or approval items that quote the user's stated criteria, the agent must preserve the user's exact…"
-- _Projects_ (8): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627-Code-Versable-automation
-- _Sessions_ (57): dac333f4, c71644cf, b6809eaf, +54 more
-
----
-
-
 ## Wake Cycle: 2026-10-05 18:15 UTC
 
 ### Insight (conf=0.52)
@@ -2886,5 +2382,697 @@ _High-confidence associations promoted by the Wake phase._
 - _Pattern_: "Planning scope should match the full project, not just the current feature being discussed; a deck or doc scoped only to one feature is too …"
 - _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Code-Versable-slack-automation, slack-automation, enhancement-product
 - _Sessions_ (62): ff8aef13, f95e5eb7, efd2a3ab, +59 more
+
+---
+
+
+## Wake Cycle — 2026-10-28 06:51 UTC
+
+### Insight (conf=0.52)
+> Both patterns punish the agent for injecting unsolicited content: whether re-raising deferred topics or appending safety warnings to factual answers: revealing a general boundary: the agent must not expand the scope of a response beyond what was asked, even when it believes the addition is helpful.
+
+**Rule:** Avoid adding evaluative commentary, risk warnings, or previously deferred topics to a response unless the user explicitly requests them.
+
+**Evidence:**
+- _Pattern_: "When the user explicitly defers, ignores, or skips a topic multiple times across turns, re-raising it without explicit invitation from the u…"
+- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked: never append unsolicited safety verdicts, risk warnings, or…"
+- _Projects_ (9): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, .claude, versable-builder, studio_search_jul_26-fable, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc
+- _Sessions_ (50): b6cdefcf, 8db1413b, 857f9dd3, +47 more
+
+---
+### Insight (conf=0.55)
+> The agent treats indirect evidence as direct observation across multiple domains: inferring codebase structure without reading files, treating a11y snapshots as visual verification, and treating AI-generated docs as validated specs are all the same epistemic shortcut of accepting a proxy for ground truth.
+
+**Rule:** Always distinguish between 'I inferred X from metadata' and 'I observed X in the primary source' and only make claims at the level you actually verified
+
+**Evidence:**
+- _Pattern_: "When the agent makes a structural claim about where functionality lives in a codebase (e.g., 'this does not work' or 'this is not present') …"
+- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (14): -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (69): d63726f5, d049ade6, bc8f0f24, +66 more
+
+---
+### Insight (conf=0.50)
+> The agent fails to model audience boundaries: private banter leaks into stakeholder docs, bot authorship is not disclosed in team channels, and attribution markers are omitted: all reflect the same blindness to the fact that outputs cross social boundaries the agent cannot see.
+
+**Rule:** Always ask 'who besides the user will see this output?' before writing any content destined for a shared platform, and apply audience-appropriate constraints before the first draft
+
+**Evidence:**
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, enhancement-product, local-models, .claude, -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban
+- _Sessions_ (77): d8f1948c, a0f35401, 8c7e6f5c, +74 more
+
+---
+### Insight (conf=0.62)
+> The agent systematically conflates 'authored the artifact' with 'verified the artifact works' across every output modality (code, URLs, PRs), suggesting a structural bias toward treating generation as completion rather than generation-plus-validation as completion.
+
+**Rule:** Always execute a runtime or state check matching the claim's modality before any 'done' or 'ready' declaration
+
+**Evidence:**
+- _Pattern_: "Claiming a task is done after editing source files without actually executing the changed code path is a false ready signal; syntax checks, …"
+- _Pattern_: "When advertising a localhost URL to the user, the agent must first verify the server is running (e.g., via lsof) and navigate to the URL bef…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, slack-automation, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, gcp
+- _Sessions_ (76): d839657c, c5afbb2f, 067e4644, +73 more
+
+---
+### Insight (conf=0.55)
+> Documents intended for external audiences consistently leak the agent's internal framing (ledger IDs, adversarial tone, abstract jargon, private banter) because the agent defaults to writing for its own reasoning context rather than switching to the reader's context at the output boundary.
+
+**Rule:** Always identify the document's intended audience before drafting and purge any term, reference, or tone that only makes sense inside the agent-user conversation
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.50)
+> Multi-arm completion conditions (multiple environments, multiple background tasks, multiple checklist items) share a common failure where the agent treats partial satisfaction as full satisfaction, suggesting it evaluates compound predicates with an implicit OR rather than the required AND.
+
+**Rule:** Always enumerate each arm of a compound stop condition as a separate checklist item and mark each independently before declaring the condition met
+
+**Evidence:**
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (21): -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-codex, codex, gcp, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (71): edb91880, d035b12c, 81fd3cad, +68 more
+
+---
+### Insight (conf=0.50)
+> The user treats operational governance as a documentation and audit problem rather than an automation problem: budgets become doctrine, healing ops need logs, spending needs tracking. The agent should default to producing observable records of policy compliance rather than silent enforcement.
+
+**Rule:** Always produce a human-readable log entry when enforcing any policy constraint, budget cap, or automated operation rather than silently complying
+
+**Evidence:**
+- _Pattern_: "When the user expresses a resource budget or threshold policy (e.g., disk usage tiers), they prefer it encoded as documented doctrine with g…"
+- _Pattern_: "Automated state-healing operations (board flushes, sync jobs) must log what was changed or repaired, not just that the operation ran; audit …"
+- _Pattern_: "Workflow token budgets must be actively monitored against a hard weekly percentage cap; when the user sets a spending ceiling, the agent mus…"
+- _Projects_ (10): -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder-apps-playground, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, slack-automation
+- _Sessions_ (37): 29656415, aee290e8, aac69603, +34 more
+
+---
+### Insight (conf=0.72)
+> The agent has a systemic single-correction-is-not-learning problem: whether it's prose style (em-dash tells), formatting (file-path-period), or action sequencing (proposal without tool call), a single correction within a session fails to durably alter behavior, suggesting the agent treats each turn as a fresh context rather than accumulating intra-session constraints.
+
+**Rule:** Always re-check the last three hook or user corrections before emitting any prose or ending any turn; treat intra-session corrections as constraints that compound, not as one-off feedback
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
+- _Pattern_: "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is no…"
+- _Projects_ (35): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-Affinity, -Users-alcatraz627-AffinityWork, .claude, enhancement-product, Affinity
+- _Sessions_ (131): 0c39a659, fb13ca88, f9f4c3b2, +128 more
+
+---
+### Insight (conf=0.75)
+> Documents the agent writes for external consumption carry internal-agent artifacts (ledger IDs, adversarial framing, jargon, private banter) because the agent fails to model the actual audience of the document, defaulting to its own operational context as the voice.
+
+**Rule:** Always identify the intended reader of any document before drafting; if the reader is not the user or the agent, strip all internal references, evaluative framing, and jargon in the first pass, not as a cleanup step
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.70)
+> The agent treats completion conditions as scalar (done/not-done) rather than as conjunctions over enumerated sub-conditions, leading to premature declaration when any single arm finishes — whether it's background tasks, multi-environment gates, open callouts, or task list reconciliation.
+
+**Rule:** Always enumerate all sub-conditions of a stop gate as a checklist before declaring completion, and verify each independently
+
+**Evidence:**
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (26): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-codex, codex, gcp, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (82): 842e701b, f6eee83a, 872653c4, +79 more
+
+---
+### Insight (conf=0.55)
+> The agent has a merge-bias: when presented with two independent inputs (plans, agent outputs, external docs), it collapses them into a single synthesized view rather than preserving their independence for comparison or skeptical evaluation — the same instinct that makes it treat external AI docs as authoritative specs.
+
+**Rule:** Always preserve independent inputs as separate artifacts for comparison unless the user explicitly requests a merge or synthesis
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging …"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (14): dac333f4, 0c64e0da, 1a66d7a8, +11 more
+
+---
+### Insight (conf=0.58)
+> The user treats operational constraints (budgets, thresholds, audit trails) as living doctrine that must be tracked and reported, not as one-time configuration — the agent must internalize that acknowledging a constraint is not the same as actively enforcing and logging it.
+
+**Rule:** Always produce a visible log entry or status line when enforcing any user-defined threshold or policy, even if no violation occurred
+
+**Evidence:**
+- _Pattern_: "Workflow token budgets must be actively monitored against a hard weekly percentage cap; when the user sets a spending ceiling, the agent mus…"
+- _Pattern_: "When the user expresses a resource budget or threshold policy (e.g., disk usage tiers), they prefer it encoded as documented doctrine with g…"
+- _Pattern_: "Automated state-healing operations (board flushes, sync jobs) must log what was changed or repaired, not just that the operation ran; audit …"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, slack-automation, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder-apps-playground, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor
+- _Sessions_ (37): 65da91a2, 0744ad2c, f6eee83a, +34 more
+
+---
+### Insight (conf=0.60)
+> The agent fails to anticipate what will be needed after a handoff point (user departure, PR push, IPC message arrival), treating its own turn boundary as the end of responsibility rather than proactively setting up the next required state.
+
+**Rule:** Always identify the next expected event after any handoff (user return, CI run, review cycle) and arm any prerequisite action before ending the turn
+
+**Evidence:**
+- _Pattern_: "When the user says they are stepping away and asks for autonomous work, proactively arm a keep-warm mechanism before they leave; failing to …"
+- _Pattern_: "IPC/switchboard-panel messages must be answered in the same turn they arrive or before the turn ends; leaving them unanswered triggers a rep…"
+- _Pattern_: "After pushing a PR, the agent must run the project's PR-review gate script and wait for automated review results before proceeding, not assu…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, slack-automation, .claude, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, versable-foundry, better-file-browser, local-models, -Users-alcatraz627-Code-Versable-landing-app, versable-builder
+- _Sessions_ (45): 842e701b, 0744ad2c, f6eee83a, +42 more
+
+---
+### Insight (conf=0.62)
+> UI work fails at the gestalt level because the agent reasons about UI components in isolation (per-page, per-widget) rather than as a coherent visual system; the same local-reasoning failure that produces inconsistent visual hierarchy also produces per-page variants of global components.
+
+**Rule:** Always audit the global visual context (other pages, sibling components, shared shell) before modifying any single UI surface
+
+**Evidence:**
+- _Pattern_: "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to p…"
+- _Pattern_: "A UI display that is 'technically correct' (e.g. count matches) but visually contradictory (e.g. mixed progress bar states) should be redesi…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, slack-automation, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, claude-instances, speedway
+- _Sessions_ (70): 842e701b, f6eee83a, 872653c4, +67 more
+
+---
+
+
+## Wake Cycle — 2026-10-28 23:02 UTC
+
+### Insight (conf=0.55)
+> The agent treats indirect evidence as direct observation across multiple domains: inferring codebase structure without reading files, treating a11y snapshots as visual verification, and treating AI-generated docs as validated specs are all the same epistemic shortcut of accepting a proxy for ground truth.
+
+**Rule:** Always distinguish between 'I inferred X from metadata' and 'I observed X in the primary source' and only make claims at the level you actually verified
+
+**Evidence:**
+- _Pattern_: "When the agent makes a structural claim about where functionality lives in a codebase (e.g., 'this does not work' or 'this is not present') …"
+- _Pattern_: "An accessibility snapshot or DOM structure check is not equivalent to reading a rendered screenshot; claiming a surface was 'opened and read…"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (14): -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627--claude-kanban, -, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (69): d63726f5, d049ade6, bc8f0f24, +66 more
+
+---
+### Insight (conf=0.57)
+> The agent systematically conflates 'authored the artifact' with 'verified the artifact works' across every output modality (code, URLs, PRs), suggesting a structural bias toward treating generation as completion rather than generation-plus-validation as completion.
+
+**Rule:** Always execute a runtime or state check matching the claim's modality before any 'done' or 'ready' declaration
+
+**Evidence:**
+- _Pattern_: "Claiming a task is done after editing source files without actually executing the changed code path is a false ready signal; syntax checks, …"
+- _Pattern_: "When advertising a localhost URL to the user, the agent must first verify the server is running (e.g., via lsof) and navigate to the URL bef…"
+- _Pattern_: "Claiming a bug is fixed without exercising the fix on the actual running dev server leads to repeated cycles of false assurance, which the u…"
+- _Pattern_: "Declaring a PR 'ready to merge' or 'one click merge' without running the merge-state check (e.g. gh pr view --json mergeable,mergeStateStatu…"
+- _Projects_ (19): -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, slack-automation, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry-auth, -Users-alcatraz627-Code-Versable-speedway, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, gcp
+- _Sessions_ (76): d839657c, c5afbb2f, 067e4644, +73 more
+
+---
+### Insight (conf=0.50)
+> Documents intended for external audiences consistently leak the agent's internal framing (ledger IDs, adversarial tone, abstract jargon, private banter) because the agent defaults to writing for its own reasoning context rather than switching to the reader's context at the output boundary.
+
+**Rule:** Always identify the document's intended audience before drafting and purge any term, reference, or tone that only makes sense inside the agent-user conversation
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.50)
+> Multi-arm completion conditions (multiple environments, multiple background tasks, multiple checklist items) share a common failure where the agent treats partial satisfaction as full satisfaction, suggesting it evaluates compound predicates with an implicit OR rather than the required AND.
+
+**Rule:** Always enumerate each arm of a compound stop condition as a separate checklist item and mark each independently before declaring the condition met
+
+**Evidence:**
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (21): -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-codex, codex, gcp, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (71): edb91880, d035b12c, 81fd3cad, +68 more
+
+---
+### Insight (conf=0.72)
+> The agent has a systemic single-correction-is-not-learning problem: whether it's prose style (em-dash tells), formatting (file-path-period), or action sequencing (proposal without tool call), a single correction within a session fails to durably alter behavior, suggesting the agent treats each turn as a fresh context rather than accumulating intra-session constraints.
+
+**Rule:** Always re-check the last three hook or user corrections before emitting any prose or ending any turn; treat intra-session corrections as constraints that compound, not as one-off feedback
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
+- _Pattern_: "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is no…"
+- _Projects_ (35): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-Affinity, -Users-alcatraz627-AffinityWork, .claude, enhancement-product, Affinity
+- _Sessions_ (131): 0c39a659, fb13ca88, f9f4c3b2, +128 more
+
+---
+### Insight (conf=0.70)
+> Documents the agent writes for external consumption carry internal-agent artifacts (ledger IDs, adversarial framing, jargon, private banter) because the agent fails to model the actual audience of the document, defaulting to its own operational context as the voice.
+
+**Rule:** Always identify the intended reader of any document before drafting; if the reader is not the user or the agent, strip all internal references, evaluative framing, and jargon in the first pass, not as a cleanup step
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.65)
+> The agent treats completion conditions as scalar (done/not-done) rather than as conjunctions over enumerated sub-conditions, leading to premature declaration when any single arm finishes — whether it's background tasks, multi-environment gates, open callouts, or task list reconciliation.
+
+**Rule:** Always enumerate all sub-conditions of a stop gate as a checklist before declaring completion, and verify each independently
+
+**Evidence:**
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (26): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-codex, codex, gcp, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (82): 842e701b, f6eee83a, 872653c4, +79 more
+
+---
+### Insight (conf=0.53)
+> The user treats operational constraints (budgets, thresholds, audit trails) as living doctrine that must be tracked and reported, not as one-time configuration — the agent must internalize that acknowledging a constraint is not the same as actively enforcing and logging it.
+
+**Rule:** Always produce a visible log entry or status line when enforcing any user-defined threshold or policy, even if no violation occurred
+
+**Evidence:**
+- _Pattern_: "Workflow token budgets must be actively monitored against a hard weekly percentage cap; when the user sets a spending ceiling, the agent mus…"
+- _Pattern_: "When the user expresses a resource budget or threshold policy (e.g., disk usage tiers), they prefer it encoded as documented doctrine with g…"
+- _Pattern_: "Automated state-healing operations (board flushes, sync jobs) must log what was changed or repaired, not just that the operation ran; audit …"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, slack-automation, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder-apps-playground, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor
+- _Sessions_ (37): 65da91a2, 0744ad2c, f6eee83a, +34 more
+
+---
+### Insight (conf=0.55)
+> The agent fails to anticipate what will be needed after a handoff point (user departure, PR push, IPC message arrival), treating its own turn boundary as the end of responsibility rather than proactively setting up the next required state.
+
+**Rule:** Always identify the next expected event after any handoff (user return, CI run, review cycle) and arm any prerequisite action before ending the turn
+
+**Evidence:**
+- _Pattern_: "When the user says they are stepping away and asks for autonomous work, proactively arm a keep-warm mechanism before they leave; failing to …"
+- _Pattern_: "IPC/switchboard-panel messages must be answered in the same turn they arrive or before the turn ends; leaving them unanswered triggers a rep…"
+- _Pattern_: "After pushing a PR, the agent must run the project's PR-review gate script and wait for automated review results before proceeding, not assu…"
+- _Projects_ (16): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, slack-automation, .claude, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, versable-foundry, better-file-browser, local-models, -Users-alcatraz627-Code-Versable-landing-app, versable-builder
+- _Sessions_ (45): 842e701b, 0744ad2c, f6eee83a, +42 more
+
+---
+### Insight (conf=0.57)
+> UI work fails at the gestalt level because the agent reasons about UI components in isolation (per-page, per-widget) rather than as a coherent visual system; the same local-reasoning failure that produces inconsistent visual hierarchy also produces per-page variants of global components.
+
+**Rule:** Always audit the global visual context (other pages, sibling components, shared shell) before modifying any single UI surface
+
+**Evidence:**
+- _Pattern_: "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to p…"
+- _Pattern_: "A UI display that is 'technically correct' (e.g. count matches) but visually contradictory (e.g. mixed progress bar states) should be redesi…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, slack-automation, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, claude-instances, speedway
+- _Sessions_ (70): 842e701b, f6eee83a, 872653c4, +67 more
+
+---
+### Insight (conf=0.72)
+> Documents intended for external or stakeholder consumption consistently fail because the agent defaults to its own internal framing (ledger IDs, adversarial voice, abstract jargon, private banter) rather than adopting the reader's perspective, revealing a systematic inability to model the document's actual audience.
+
+**Rule:** Always identify the intended reader of a document before drafting and strip any term, reference, or tone that reader would not recognize or expect
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.62)
+> The agent's output formatting defaults optimize for information density (long prose, Markdown links, compact references) rather than for the user's actual consumption interface (terminal with character limits, no hover previews, linear reading), indicating a mismatch between the agent's implicit output model and the real rendering context.
+
+**Rule:** Always format output for a plain terminal reader who cannot hover, click, or scroll sideways, treating visible plain text as the only reliable channel
+
+**Evidence:**
+- _Pattern_: "Prose replies must stay under approximately 2600 characters; when content exceeds this, the agent should lead with the single most actionabl…"
+- _Pattern_: "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate …"
+- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
+- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
+- _Projects_ (18): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, i-dream, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
+- _Sessions_ (43): eacc8f57, 915f727d, 6a4f7aae, +40 more
+
+---
+### Insight (conf=0.58)
+> Async bookkeeping obligations (waiting for background tasks, answering IPC messages, reconciling task lists) share a common failure: the agent treats turn boundaries as natural completion points and drops in-flight obligations that span turns, revealing that its 'done' heuristic is turn-scoped rather than task-scoped.
+
+**Rule:** Always enumerate in-flight obligations before ending a turn and explicitly resolve or carry forward each one
+
+**Evidence:**
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "IPC/switchboard-panel messages must be answered in the same turn they arrive or before the turn ends; leaving them unanswered triggers a rep…"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (15): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (42): 842e701b, f6eee83a, 872653c4, +39 more
+
+---
+### Insight (conf=0.65)
+> The user maintains a deliberate epistemic hygiene practice: keep independent sources independent (two-agent review stays separate, comparison stays side-by-side, AI docs get skepticism), and the agent's default to merge/synthesize/trust violates this principle uniformly across all three contexts.
+
+**Rule:** Avoid merging, synthesizing, or treating as authoritative any two independent sources unless the user explicitly requests synthesis
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging …"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (14): dac333f4, 0c64e0da, 1a66d7a8, +11 more
+
+---
+### Insight (conf=0.78)
+> Actions taken under the user's identity on shared platforms (GitHub comments, PR posts, Slack notifications) require specific attribution and suppression metadata that the agent consistently omits, treating the content as the deliverable while ignoring the identity and notification context in which it lands.
+
+**Rule:** Always apply all required identity markers and notification suppression tags before posting to any shared platform under the user's account
+
+**Evidence:**
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
+- _Pattern_: "When creating or updating pull requests, the agent must apply any required suppression tags (e.g. [noslack]) to prevent unwanted notificatio…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product
+- _Sessions_ (82): a178d6c3, c8bc2450, baf2ac20, +79 more
+
+---
+### Insight (conf=0.55)
+> The user treats operational constraints (budgets, policies, audit trails) as living governance documents rather than code-level checks, preferring transparent logged enforcement over silent automated guards; the agent should default to documented-and-logged over hardcoded-and-silent for any policy mechanism.
+
+**Rule:** Always implement resource constraints and operational policies as logged, documented doctrine rather than silent automated enforcement unless the user specifies otherwise
+
+**Evidence:**
+- _Pattern_: "Workflow token budgets must be actively monitored against a hard weekly percentage cap; when the user sets a spending ceiling, the agent mus…"
+- _Pattern_: "When the user expresses a resource budget or threshold policy (e.g., disk usage tiers), they prefer it encoded as documented doctrine with g…"
+- _Pattern_: "Automated state-healing operations (board flushes, sync jobs) must log what was changed or repaired, not just that the operation ran; audit …"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, slack-automation, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Versable-versable-builder-apps-playground, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor
+- _Sessions_ (37): 65da91a2, 0744ad2c, f6eee83a, +34 more
+
+---
+### Insight (conf=0.70)
+> UI output that is informationally correct but visually incoherent is rejected in both data display and progress indicators, revealing that the user evaluates UI quality on perceptual coherence (does it communicate one clear signal?) rather than data accuracy alone.
+
+**Rule:** Always ensure a UI surface communicates a single coherent visual signal before verifying data correctness, since perceptual contradictions override factual accuracy in the user's quality assessment
+
+**Evidence:**
+- _Pattern_: "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to p…"
+- _Pattern_: "A UI display that is 'technically correct' (e.g. count matches) but visually contradictory (e.g. mixed progress bar states) should be redesi…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, slack-automation
+- _Sessions_ (27): 842e701b, f6eee83a, 872653c4, +24 more
+
+---
+
+
+## Wake Cycle — 2026-10-29 23:02 UTC
+
+### Insight (conf=0.62)
+> The agent has a systemic single-correction-is-not-learning problem: whether it's prose style (em-dash tells), formatting (file-path-period), or action sequencing (proposal without tool call), a single correction within a session fails to durably alter behavior, suggesting the agent treats each turn as a fresh context rather than accumulating intra-session constraints.
+
+**Rule:** Always re-check the last three hook or user corrections before emitting any prose or ending any turn; treat intra-session corrections as constraints that compound, not as one-off feedback
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "The agent repeated the same file-path-followed-by-a-period error in consecutive replies within the same session despite hook feedback; a sin…"
+- _Pattern_: "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is no…"
+- _Projects_ (35): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-push-debounce, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-parity-findings, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-d3-voice, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-cloudrun, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-budget-tripwire, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-audit-fixes-2, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a6ce3f65159bd30ea, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a51662844c29f0434, -Users-alcatraz627-Code-Versable-slack-automation--claude-worktrees-agent-a270273a1a585b42e, csync, claude-instances, switchboard-mac, sor, gcp, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-Affinity, -Users-alcatraz627-AffinityWork, .claude, enhancement-product, Affinity
+- _Sessions_ (131): 0c39a659, fb13ca88, f9f4c3b2, +128 more
+
+---
+### Insight (conf=0.60)
+> Documents the agent writes for external consumption carry internal-agent artifacts (ledger IDs, adversarial framing, jargon, private banter) because the agent fails to model the actual audience of the document, defaulting to its own operational context as the voice.
+
+**Rule:** Always identify the intended reader of any document before drafting; if the reader is not the user or the agent, strip all internal references, evaluative framing, and jargon in the first pass, not as a cleanup step
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.55)
+> The agent treats completion conditions as scalar (done/not-done) rather than as conjunctions over enumerated sub-conditions, leading to premature declaration when any single arm finishes — whether it's background tasks, multi-environment gates, open callouts, or task list reconciliation.
+
+**Rule:** Always enumerate all sub-conditions of a stop gate as a checklist before declaring completion, and verify each independently
+
+**Evidence:**
+- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Projects_ (26): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-codex, codex, gcp, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, versable-foundry, better-file-browser, slack-automation, local-models
+- _Sessions_ (82): 842e701b, f6eee83a, 872653c4, +79 more
+
+---
+### Insight (conf=0.62)
+> Documents intended for external or stakeholder consumption consistently fail because the agent defaults to its own internal framing (ledger IDs, adversarial voice, abstract jargon, private banter) rather than adopting the reader's perspective, revealing a systematic inability to model the document's actual audience.
+
+**Rule:** Always identify the intended reader of a document before drafting and strip any term, reference, or tone that reader would not recognize or expect
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.52)
+> The agent's output formatting defaults optimize for information density (long prose, Markdown links, compact references) rather than for the user's actual consumption interface (terminal with character limits, no hover previews, linear reading), indicating a mismatch between the agent's implicit output model and the real rendering context.
+
+**Rule:** Always format output for a plain terminal reader who cannot hover, click, or scroll sideways, treating visible plain text as the only reliable channel
+
+**Evidence:**
+- _Pattern_: "Prose replies must stay under approximately 2600 characters; when content exceeds this, the agent should lead with the single most actionabl…"
+- _Pattern_: "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate …"
+- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
+- _Pattern_: "A file path that appears only inside Markdown link syntax does not satisfy the absolute-path-at-reader-boundary rule; a standalone plain-tex…"
+- _Projects_ (18): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, i-dream, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
+- _Sessions_ (43): eacc8f57, 915f727d, 6a4f7aae, +40 more
+
+---
+### Insight (conf=0.68)
+> Actions taken under the user's identity on shared platforms (GitHub comments, PR posts, Slack notifications) require specific attribution and suppression metadata that the agent consistently omits, treating the content as the deliverable while ignoring the identity and notification context in which it lands.
+
+**Rule:** Always apply all required identity markers and notification suppression tags before posting to any shared platform under the user's account
+
+**Evidence:**
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
+- _Pattern_: "When creating or updating pull requests, the agent must apply any required suppression tags (e.g. [noslack]) to prevent unwanted notificatio…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product
+- _Sessions_ (82): a178d6c3, c8bc2450, baf2ac20, +79 more
+
+---
+### Insight (conf=0.60)
+> UI output that is informationally correct but visually incoherent is rejected in both data display and progress indicators, revealing that the user evaluates UI quality on perceptual coherence (does it communicate one clear signal?) rather than data accuracy alone.
+
+**Rule:** Always ensure a UI surface communicates a single coherent visual signal before verifying data correctness, since perceptual contradictions override factual accuracy in the user's quality assessment
+
+**Evidence:**
+- _Pattern_: "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to p…"
+- _Pattern_: "A UI display that is 'technically correct' (e.g. count matches) but visually contradictory (e.g. mixed progress bar states) should be redesi…"
+- _Projects_ (10): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, slack-automation
+- _Sessions_ (27): 842e701b, f6eee83a, 872653c4, +24 more
+
+---
+### Insight (conf=0.72)
+> LLM-register prose tells (em-dashes, bold spans, contrast scaffolding) are not independent stylistic choices but a single latent 'default voice' that resurfaces as a bundle; correcting one tell without suppressing the underlying register causes whack-a-mole across tells within the same session.
+
+**Rule:** Always regenerate the entire paragraph from scratch when a style-gate fires, rather than patching only the flagged tell, because the surrounding prose likely shares the same register.
+
+**Evidence:**
+- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
+- _Pattern_: "Prose responses that use excessive bold spans, em-dashes, or 'not-X-but-Y' contrast scaffolding are flagged as default LLM register; the use…"
+- _Pattern_: "Em-dashes in prose output are zero-tolerance violations that fire a style gate on every turn; the agent's budget for em-dashes is zero regar…"
+- _Projects_ (16): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync
+- _Sessions_ (99): 0c39a659, fb13ca88, f9f4c3b2, +96 more
+
+---
+### Insight (conf=0.75)
+> Documents the agent writes for external consumption inherit the agent's internal framing (adversarial tone, ledger IDs, jargon, conversational banter) because the agent fails to model the document's actual audience; the error is a single audience-modeling failure expressed across tone, vocabulary, and metadata leakage.
+
+**Rule:** Always identify the document's end reader before writing the first line, and strip any term or reference that only makes sense inside the agent-user conversation.
+
+**Evidence:**
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (23): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, landing-app, better-file-browser, .claude, slack-automation, versable-builder, i-dream, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude, frontend, local-models
+- _Sessions_ (79): eacc8f57, faa600e0, 5baaf596, +76 more
+
+---
+### Insight (conf=0.58)
+> The agent's output length and information-hiding tendencies are inversely correlated with usability: verbose replies overwhelm, while over-compressed replies (short link labels, hidden paths) withhold critical information; both stem from lacking a model of what the user needs to act on immediately versus later.
+
+**Rule:** Always separate output into an action line (what the user must do or know right now, with full paths visible) and an optional detail block, rather than choosing globally between verbose and terse.
+
+**Evidence:**
+- _Pattern_: "Prose replies must stay under approximately 2600 characters; when content exceeds this, the agent should lead with the single most actionabl…"
+- _Pattern_: "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate …"
+- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
+- _Projects_ (18): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, i-dream, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
+- _Sessions_ (40): eacc8f57, 915f727d, 6a4f7aae, +37 more
+
+---
+### Insight (conf=0.60)
+> The agent neglects ongoing bookkeeping obligations (task list reconciliation, budget tracking, keep-warm mechanisms) that require proactive maintenance between primary work items, suggesting a failure mode where 'background state hygiene' is deprioritized whenever foreground tasks are active.
+
+**Rule:** Always reconcile bookkeeping state (task lists, budget counters, keep-warm timers) at the start and end of every tool-use sequence, not only when prompted.
+
+**Evidence:**
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Pattern_: "Workflow token budgets must be actively monitored against a hard weekly percentage cap; when the user sets a spending ceiling, the agent mus…"
+- _Pattern_: "When the user says they are stepping away and asks for autonomous work, proactively arm a keep-warm mechanism before they leave; failing to …"
+- _Projects_ (14): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product, -Users-alcatraz627-Code-Claude-i-dream
+- _Sessions_ (36): f889a4e4, 5769d89d, 0c294a0d, +33 more
+
+---
+### Insight (conf=0.65)
+> The agent defaults to synthesizing and merging inputs into a single coherent output, which conflicts with workflows that require preserving independent perspectives (peer review, side-by-side comparison, skeptical validation); the agent's merge reflex destroys the epistemic diversity the user is deliberately creating.
+
+**Rule:** Avoid merging or synthesizing multiple independent inputs unless the user explicitly says 'merge' or 'combine'; default to preserving each input's identity and boundaries.
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging …"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (14): dac333f4, 0c64e0da, 1a66d7a8, +11 more
+
+---
+### Insight (conf=0.72)
+> UI failures cluster around the agent treating components as locally correct units rather than perceptually coherent wholes: correct counts with contradictory progress bars, correct drawer on one page but broken on another, and correct data with poor visual hierarchy are all 'locally right, globally incoherent' errors.
+
+**Rule:** Always audit the full visual context (all pages, all states, overall hierarchy) of a UI change before marking it complete, because local correctness does not imply perceptual coherence.
+
+**Evidence:**
+- _Pattern_: "UI output that lacks clear visual hierarchy, intentional color contrast, and gestalt grouping is perceived as low-quality and difficult to p…"
+- _Pattern_: "A UI display that is 'technically correct' (e.g. count matches) but visually contradictory (e.g. mixed progress bar states) should be redesi…"
+- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, enhancement-product, i-dream, .claude, -Users-alcatraz627-Code-Versable-two-enhancement-product, -Users-alcatraz627-Code-Versable-sor, slack-automation, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, claude-ipc, claude-instances, speedway
+- _Sessions_ (70): 842e701b, f6eee83a, 872653c4, +67 more
+
+---
+### Insight (conf=0.73)
+> When acting on shared platforms under the user's identity, the agent systematically omits required metadata (agent attribution markers, suppression tags, format-specified identifiers) because it optimizes for content quality and treats metadata as optional decoration rather than as mandatory protocol.
+
+**Rule:** Always apply all required platform metadata (attribution markers, suppression tags, notification flags) before composing the content body of any shared-platform post.
+
+**Evidence:**
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
+- _Pattern_: "When creating or updating pull requests, the agent must apply any required suppression tags (e.g. [noslack]) to prevent unwanted notificatio…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product
+- _Sessions_ (82): a178d6c3, c8bc2450, baf2ac20, +79 more
+
+---
+
+
+## Wake Cycle — 2026-10-30 23:02 UTC
+
+### Insight (conf=0.68)
+> Across PR descriptions, planning docs, and documentation files, the agent defaults to a self-aggrandizing or internal-jargon register that serves the agent's reasoning process rather than the reader's comprehension, a single audience-modeling failure manifesting in every written artifact type.
+
+**Rule:** Always re-read any written artifact from the perspective of someone with no session context before finalizing it, and strip any term that requires insider knowledge to parse
+
+**Evidence:**
+- _Pattern_: "PR descriptions that use abstract jargon ('default-preserving', 'provenance', 'seamless') instead of plain statements of what changed are ex…"
+- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
+- _Pattern_: "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate …"
+- _Pattern_: "Documentation files written by the agent are rejected when they use internal ledger framing (item IDs, commit SHAs, file:line references in …"
+- _Projects_ (17): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Versable-sor, -Users-alcatraz627-Code-Versable-landing-app, slack-automation, enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Code-better-file-browser, landing-app, better-file-browser, versable-builder
+- _Sessions_ (78): 13f3ab7c, 0ecfd423, cb2053b9, +75 more
+
+---
+### Insight (conf=0.62)
+> The agent's completion-tracking degrades proportionally to the number of concurrent obligations: task lists drift, multi-arm conditions get partially checked, and open callouts get forgotten, all pointing to a working-set overflow where the agent loses track of open items as they accumulate.
+
+**Rule:** Always enumerate all open obligations in a scratch list before declaring any completion condition met when more than two concurrent work items exist
+
+**Evidence:**
+- _Pattern_: "Task lists must be reconciled continuously with actual work done; letting the list drift while making many edits (no in-progress, stale pend…"
+- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
+- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
+- _Projects_ (25): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-codex, codex, gcp
+- _Sessions_ (64): f889a4e4, 5769d89d, 0c294a0d, +61 more
+
+---
+### Insight (conf=0.58)
+> The agent has a strong convergence prior that collapses distinct inputs into unified outputs; this fights the user's explicit multi-perspective workflows where independent plans must stay separate, external documents must stay untrusted, and comparisons must stay side-by-side.
+
+**Rule:** Avoid merging, synthesizing, or reconciling two independent inputs unless the user explicitly says 'merge' or 'combine'
+
+**Evidence:**
+- _Pattern_: "The user deliberately employs a two-agent mutual peer-review workflow where each agent independently produces a plan and then grades the oth…"
+- _Pattern_: "When the user asks to compare two independently produced plans or outputs, produce a side-by-side contrast: not a merged synthesis; merging …"
+- _Pattern_: "AI-generated ideation or handoff documents from other models or sessions should be read with skepticism and validated against intent before …"
+- _Projects_ (13): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Documents-studio-search-jul-26, -Users-alcatraz627-Code-Claude-i-dream, studio_search_jul_26, -Users-alcatraz627--claude, i-dream, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, slack-automation
+- _Sessions_ (14): dac333f4, 0c64e0da, 1a66d7a8, +11 more
+
+---
+### Insight (conf=0.75)
+> The agent systematically fails to account for the gap between its own internal state and what the user can actually observe: it treats tool-call results as user-visible, treats code edits as tested, and treats hidden link targets as readable, all instances of projecting its own information access onto the user.
+
+**Rule:** Always ask 'can the user see and verify this from their side right now?' before treating any internal operation as complete or communicated
+
+**Evidence:**
+- _Pattern_: "IPC/switchboard-panel messages must be answered in the same turn they arrive or before the turn ends; leaving them unanswered triggers a rep…"
+- _Pattern_: "When a proposal or atone box is recorded via a tool call, the agent must also surface it in the visible reply text with its ID and relevant …"
+- _Pattern_: "Markdown hyperlinks with short labels hide the destination path from the user; any path the user must act on must appear as a visible absolu…"
+- _Projects_ (17): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627--claude, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-local-models, -Users-alcatraz627-Code-Claude-csync, -Users-alcatraz627-Code-Claude-Tasks
+- _Sessions_ (44): f889a4e4, 5769d89d, 0c294a0d, +41 more
+
+---
+### Insight (conf=0.73)
+> Actions taken under the user's identity on shared platforms (GitHub comments, PR posts, notifications) form a high-stakes category where the agent repeatedly fails to apply required metadata (attribution markers, suppression tags), suggesting it treats platform actions as private tool calls rather than public speech acts on the user's behalf.
+
+**Rule:** Always apply all required identity and notification metadata before any platform action that will be visible to people other than the user
+
+**Evidence:**
+- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
+- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
+- _Pattern_: "When creating or updating pull requests, the agent must apply any required suppression tags (e.g. [noslack]) to prevent unwanted notificatio…"
+- _Projects_ (20): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, versable-foundry, better-file-browser, slack-automation, .claude, local-models, enhancement-product
+- _Sessions_ (82): a178d6c3, c8bc2450, baf2ac20, +79 more
+
+---
+### Insight (conf=0.60)
+> The agent has a compulsive additive instinct that manifests as re-raising deferred topics, appending unsolicited judgments, and leaking private commentary into formal documents; all three are instances of generating content the user did not ask for in contexts where silence or restraint is correct.
+
+**Rule:** Avoid adding any content to a response or document that was not requested or directly implied by the user's instruction, especially in contexts flagged as externally visible
+
+**Evidence:**
+- _Pattern_: "When the user explicitly defers, ignores, or skips a topic multiple times across turns, re-raising it without explicit invitation from the u…"
+- _Pattern_: "When asked a purely factual or descriptive question, answer only what was asked: never append unsolicited safety verdicts, risk warnings, or…"
+- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
+- _Projects_ (14): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, .claude, versable-builder, studio_search_jul_26-fable, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, frontend, enhancement-product, local-models
+- _Sessions_ (69): b6cdefcf, 8db1413b, 857f9dd3, +66 more
 
 ---

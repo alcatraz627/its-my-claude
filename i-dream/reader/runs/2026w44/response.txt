@@ -1,0 +1,471 @@
+```json
+{
+  "summary": "Credentials printing into the session transcript and making factual claims without reading the relevant code continue despite existing checks, because both checks miss the specific forms the mistakes take. The check designed to stop unnecessary owner questions shows no activity at all while the same pattern recurs four times this week and needs diagnostic work before any other improvement to owner questions will land.",
+  "items": [
+    {
+      "cluster": "c-72f6b097",
+      "merged": ["c-cf31c956"],
+      "kind": "repeat",
+      "title": "Printed live credentials into the session transcript",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261023-070330-ea",
+          "what": "Ran a command to print a Google Cloud access token and let the live token appear directly in the transcript instead of redirecting or suppressing the output."
+        },
+        {
+          "evidence_id": "atone:mist-20261022-110235-d2",
+          "what": "Wrote a test fixture that captured the full process environment including API tokens; when an assertion failed, the error output included those live tokens."
+        },
+        {
+          "evidence_id": "atone:mist-20261014-204739-3c",
+          "what": "Ran a process-listing command that prints each process's launch environment, putting Slack and other tokens into the transcript."
+        },
+        {
+          "evidence_id": "atone:mist-20261010-102728-94",
+          "what": "Ran a full-argument process listing on a remote server; a tunnel process carries its token in its arguments, so the token appeared in the output."
+        }
+      ],
+      "why_repeats": "The check that catches environment-printing commands does not cover commands whose normal output happens to include tokens — credential-printing CLI subcommands, process listers that include launch arguments, and test fixtures that capture the process environment all produce token output without triggering it.",
+      "fix": "Add the specific commands and patterns that emit tokens via standard output to the blocked-command list, separately from the existing check on environment-variable printing.",
+      "guard": {
+        "hook_id": "guard-env-dump",
+        "plain": "A check that stops commands from printing the session environment variables",
+        "verdict": "partly",
+        "gap": "Commands that emit tokens via standard output — credential-printing CLI subcommands, process listers that include launch arguments — are not caught"
+      },
+      "why": "atone:mist-20261023-070330-ea, atone:mist-20261022-110235-d2, atone:mist-20261014-204739-3c, and atone:mist-20261010-102728-94 each show a token reaching the transcript via a command whose normal output happens to include credentials, not via environment-variable printing, so the env-dump check did not fire.",
+      "evidence_ids": [
+        "atone:mist-20261023-070330-ea",
+        "atone:mist-20261022-110235-d2",
+        "atone:mist-20261014-204739-3c",
+        "atone:mist-20261010-102728-94",
+        "proposals:prop-20261022-115157-ae",
+        "proposals:prop-20261010-133204-5a",
+        "signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792664456",
+        "signals:a48a6eeb-34f8-4fed-9269-015afa95b460-1792656487"
+      ],
+      "proposal": {
+        "target": "hooks/guard-env-dump.sh",
+        "change": "Add a blocklist of stdout-token-emitting commands — 'print-access-token', 'pm2 jlist', 'ps.*args', 'ps.*cmd', 'ps.*-eo.*args' — and block any Bash tool call whose command string matches these patterns before execution."
+      }
+    },
+    {
+      "cluster": "c-2d8458a5",
+      "merged": ["c-f4548156"],
+      "kind": "repeat",
+      "title": "Wrote explanations as mechanism lists rather than clear, reader-first prose",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261020-163710-c0",
+          "what": "Wrote the pull request description for the performance work as a series of implementation paragraphs — memoization, cache keys, CSS calculations — with no plain-language summary or reader-facing framing."
+        },
+        {
+          "evidence_id": "atone:mist-20261005-094856-da",
+          "what": "Wrote an external root-cause document using invented actors and anonymised facts instead of the real, known details that were available."
+        },
+        {
+          "evidence_id": "atone:mist-20260930-222509-5b",
+          "what": "Used em-dashes in replies to you despite a standing rule against them."
+        }
+      ],
+      "why_repeats": "The prose check catches punctuation and vocabulary signals but not structural patterns — a document that opens with implementation-detail paragraphs rather than a plain-language summary passes through because no check looks at what the document's opening is doing.",
+      "fix": "Extend the prose check to require that owner-facing and external documents open with a plain-language summary sentence before any list of implementation details.",
+      "guard": {
+        "hook_id": "doc-voice-gate",
+        "plain": "A check on AI prose patterns in owner-facing writing",
+        "verdict": "partly",
+        "gap": "Documents that open with implementation mechanism paragraphs rather than a plain summary pass through; the check catches vocabulary and punctuation signals, not document structure"
+      },
+      "why": "atone:mist-20261020-163710-c0, atone:mist-20261005-094856-da, and atone:mist-20260930-222509-5b show the same pattern across three projects over four weeks, with a correction signal in the landing-app session confirming it reached you.",
+      "evidence_ids": [
+        "atone:mist-20261020-163710-c0",
+        "atone:mist-20261005-094856-da",
+        "atone:mist-20260930-222509-5b",
+        "proposals:prop-20261020-170018-1e",
+        "proposals:prop-20261009-220054-ee",
+        "proposals:prop-20260930-222530-a3",
+        "checkpoints:ckpt-2514a881184ed0de",
+        "signals:165c6e34-ce19-47f5-899b-82af68c0724c-1792512950"
+      ],
+      "proposal": {
+        "target": "hooks/doc-voice-gate.py",
+        "change": "Add a pattern that blocks when an owner-facing document's first substantive paragraph begins with a technical implementation noun (cache, memoization, hash, sha, id, token) and no plain summary sentence precedes it in the same section."
+      }
+    },
+    {
+      "cluster": "c-e62697ed",
+      "merged": [],
+      "kind": "repeat",
+      "title": "Added internal tracking details to documents meant for outside readers",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261020-165604-12",
+          "what": "Added timestamped update lines and internal status markers to a live PR-status document you use as a clean reader-facing surface, without updating the underlying status colours those markers implied."
+        },
+        {
+          "evidence_id": "atone:mist-20261019-004432-39",
+          "what": "Wrote a neutral capability document as an internal ledger of commit hashes, file references, and task identifiers — internal bookkeeping that should not appear in a document an outside reader sees."
+        }
+      ],
+      "why_repeats": "Nothing checks whether a document is intended for an outside reader before allowing internal references; timestamped update lines, commit hashes, and file-path citations pass through because no check is positioned to stop them in reader-facing files.",
+      "fix": "Add a check that blocks commit hashes, file-path citations, and dated update lines from appearing in documents that are tagged or named as reader-facing.",
+      "guard": {
+        "hook_id": null,
+        "plain": null,
+        "verdict": "no",
+        "gap": null
+      },
+      "why": "atone:mist-20261020-165604-12 and atone:mist-20261019-004432-39 show the same failure — internal tracking details reaching a reader-facing surface — across two different projects within two days.",
+      "evidence_ids": [
+        "atone:mist-20261020-165604-12",
+        "atone:mist-20261019-004432-39",
+        "proposals:prop-20261020-165630-be",
+        "proposals:prop-20261019-004456-14"
+      ],
+      "proposal": {
+        "target": "hooks/doc-voice-gate.py",
+        "change": "Add patterns that block 'Updated HH:MM', commit-hash strings matching [a-f0-9]{7,}, and 'filename.ext:NNN' file-line citations in files under docs/, plan/, or spec/ paths that do not carry an .internal suffix."
+      }
+    },
+    {
+      "cluster": "c-1f725c61",
+      "merged": ["c-755b139d"],
+      "kind": "structural-need",
+      "title": "Asked you to answer questions whose answers were already in the project's own notes",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261023-193439-69",
+          "what": "Listed a Speedway login as something you needed to provide and created a new test account, while the credentials were documented in the project's notes the whole time."
+        },
+        {
+          "evidence_id": "atone:mist-20261023-111201-f4",
+          "what": "Asked you to rule on issue numbers and task identifiers presented as bare references with no question text — the context needed to answer was in the existing notes."
+        },
+        {
+          "evidence_id": "atone:mist-20261008-145106-69",
+          "what": "Asked which backend pairs with each frontend target, then left a literal placeholder in the document; the mapping was in the application's own configuration files."
+        },
+        {
+          "evidence_id": "atone:mist-20261005-131656-d2",
+          "what": "Listed two items as things blocking you that the stored project memory already resolved."
+        }
+      ],
+      "why_repeats": "The check designed to catch this pattern has fired zero times in the last two weeks while the pattern recurs four times in that window — it is registered and running but not matching the actual forms the unnecessary questions take.",
+      "fix": "Diagnose why the check that catches unnecessary owner questions produces no activity and repair the matching logic; the pattern is occurring at the same rate as before the check was written.",
+      "guard": {
+        "hook_id": "guard-lazy-question",
+        "plain": "A check on questions that ask you for information already available in the project's files or notes",
+        "verdict": "no",
+        "gap": "The check produces no activity at all despite the pattern occurring repeatedly this week — it is either not receiving the text it should match against, or its matching patterns do not cover the phrasings actually used"
+      },
+      "why": "atone:mist-20261023-193439-69, atone:mist-20261023-111201-f4, atone:mist-20261008-145106-69, and atone:mist-20261005-131656-d2 all name the same pattern; the check for this pattern shows zero fires in the same window.",
+      "evidence_ids": [
+        "atone:mist-20261023-193439-69",
+        "atone:mist-20261023-111201-f4",
+        "atone:mist-20261008-145106-69",
+        "atone:mist-20261005-131656-d2",
+        "proposals:prop-20261023-165130-51",
+        "signals:87a62e3c-7c27-4586-a959-16b92d6fe0b6-1792755670",
+        "signals:87a62e3c-7c27-4586-a959-16b92d6fe0b6-1792755073"
+      ],
+      "proposal": {
+        "target": "hooks/guard-lazy-question.sh",
+        "change": "Add debug logging that emits the input text and match result on every run, then inspect the last 14 days of logs to determine whether the check receives input and fails to match, or does not receive input at all."
+      }
+    },
+    {
+      "cluster": "c-754aa69a",
+      "merged": ["c-b1b645d3"],
+      "kind": "repeat",
+      "title": "Opened pull requests without the required title flag and without running the local review step",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261023-182027-f1",
+          "what": "Opened two pull requests with titles missing the required notification-suppression flag and skipped the local code review step for both."
+        },
+        {
+          "evidence_id": "atone:mist-20261013-095552-b7",
+          "what": "Raised several pull requests across multiple repositories without the required ticket links or links to related PRs in the titles."
+        },
+        {
+          "evidence_id": "atone:mist-20261006-115527-88",
+          "what": "Opened pull requests across six repositories without the required notification-suppression flag, triggering 37 Slack messages in the review channel."
+        }
+      ],
+      "why_repeats": "The title check enforces the flag requirement but does not enforce the local review step; both must pass before a pull request is opened, and only one of the two has any enforcement.",
+      "fix": "Add a condition to the pull-request check that verifies the local review step was completed in the current session before allowing a PR to be created.",
+      "guard": {
+        "hook_id": "guard-pr-title-tags",
+        "plain": "A check on pull request titles for required flags before a PR is opened",
+        "verdict": "partly",
+        "gap": "The check enforces the title flag but not the local review step; a PR that passes the title check can still be opened without review having run"
+      },
+      "why": "atone:mist-20261023-182027-f1, atone:mist-20261013-095552-b7, and atone:mist-20261006-115527-88 show the same pair of required steps skipped at PR-open time across five weeks and multiple projects.",
+      "evidence_ids": [
+        "atone:mist-20261023-182027-f1",
+        "atone:mist-20261013-095552-b7",
+        "atone:mist-20261006-115527-88",
+        "proposals:prop-20261013-095815-3e",
+        "checkpoints:ckpt-c474c3c69b2baffc",
+        "checkpoints:ckpt-0067d14232e85045",
+        "signals:e815d840-8fb8-4acd-a8e2-a559add633d8-1792786102"
+      ],
+      "proposal": {
+        "target": "hooks/guard-pr-title-tags",
+        "change": "Before allowing gh pr create or gh pr edit, check session history for a local codex-review invocation in the same working directory within the current session and block if none is found."
+      }
+    },
+    {
+      "cluster": "c-10c85680",
+      "merged": [],
+      "kind": "structural-need",
+      "title": "Stated what a feature needed based on assumption rather than reading the actual path it uses",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261021-121619-a1",
+          "what": "Told you three finished features were not live and would not be until November because deploys need CI minutes — without reading the deploy path, which uses a separate mechanism that was not under the CI ban at all."
+        }
+      ],
+      "why_repeats": "The check on factual claims fires on explicit stated certainty but not on infrastructure constraint claims framed as implications — a sentence saying 'this requires X' passes through without a source check because it reads as inference rather than assertion.",
+      "fix": "Extend the factual-claim check to require a file or configuration reference for any sentence that states a deploy, cost, or timing constraint as a reason something cannot happen.",
+      "guard": {
+        "hook_id": "structural-claim",
+        "plain": "A check on factual claims made without reading the relevant code first",
+        "verdict": "partly",
+        "gap": "Constraint claims framed as implications — 'this requires CI minutes', 'this won't be live until' — pass through without a source check because they are not phrased as direct assertions"
+      },
+      "why": "atone:mist-20261021-121619-a1 shows a consequential wrong claim about deployment timing that led you to believe finished work was blocked for two weeks.",
+      "evidence_ids": [
+        "atone:mist-20261021-121619-a1",
+        "proposals:prop-20261022-045927-e7",
+        "checkpoints:ckpt-294218a10f9d23a5",
+        "checkpoints:ckpt-54dab68635bf45f1",
+        "checkpoints:ckpt-faa4edb53c14e343",
+        "checkpoints:ckpt-eef2ab472c5caedd",
+        "signals:6b32d198-4cdc-46a2-84c3-578bae6b4f4b-1792631335"
+      ],
+      "proposal": {
+        "target": "hooks/guard-structural-claim.sh",
+        "change": "Add a pattern that fires when the reply contains 'needs', 'requires', or 'won't work until' in a sentence about deployment, CI, or infrastructure without a file path or commit reference cited in the same sentence."
+      }
+    },
+    {
+      "cluster": "c-b8727f09",
+      "merged": [],
+      "kind": "structural-need",
+      "title": "Judged visual UI work by reading code instead of looking at the actual rendered result",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261020-120344-a4",
+          "what": "Evaluated the landing page across a wide range of screen widths by reading CSS class names and property values rather than using the local vision tool to look at the rendered pages."
+        }
+      ],
+      "why_repeats": "Nothing stops a visual verdict from being delivered based on code reading alone; no check requires the vision tool to have been called before a UI review conclusion is stated.",
+      "fix": "Add a check that blocks a visual review verdict unless the vision tool has been invoked at least once in the same session.",
+      "guard": {
+        "hook_id": null,
+        "plain": null,
+        "verdict": "no",
+        "gap": null
+      },
+      "why": "atone:mist-20261020-120344-a4 and proposals:prop-20261020-120408-26 both flag the same gap: visual conclusions delivered from code reading alone, with the vision tool not called.",
+      "evidence_ids": [
+        "atone:mist-20261020-120344-a4",
+        "proposals:prop-20261020-120408-26"
+      ],
+      "proposal": {
+        "target": "hooks/ui-verified-stop.py",
+        "change": "Extend the check to require at least one vision-model tool call before any message containing 'looks correct', 'visually', 'renders as', or 'layout is' in a UI review session."
+      }
+    },
+    {
+      "cluster": "c-461be27e",
+      "merged": [],
+      "kind": "repeat",
+      "title": "Ran a review of only the new code and dropped the standing full-surface audit you had asked for",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261022-061117-82",
+          "what": "You had asked across multiple sessions for a full consistency audit of the whole application surface; this session's adversarial review covered only the code added in that session and never ran the standing audit."
+        }
+      ],
+      "why_repeats": "Standing instructions from prior sessions are not surfaced at the start of a new session, so the narrower in-session request is all that gets actioned and the accumulated standing task is silently dropped each time.",
+      "fix": "Surface open standing-task entries — those asking for whole-surface audits or cross-session consistency checks — in the session start context so they cannot be silently overridden by a narrower in-session request.",
+      "guard": {
+        "hook_id": null,
+        "plain": null,
+        "verdict": "no",
+        "gap": null
+      },
+      "why": "atone:mist-20261022-061117-82 and signals:ea931f9b-4604-42f9-a1d6-94351f226770-1792649276 show the standing audit was dropped and you had to re-state the requirement.",
+      "evidence_ids": [
+        "atone:mist-20261022-061117-82",
+        "proposals:prop-20261022-075206-f6",
+        "signals:ea931f9b-4604-42f9-a1d6-94351f226770-1792649276"
+      ],
+      "proposal": {
+        "target": "hooks/session-start.sh",
+        "change": "At session start, emit any open checkpoint entries whose text contains 'full audit', 'whole surface', or 'consistency check' as a visible pre-turn reminder before the first agent response."
+      }
+    },
+    {
+      "cluster": "c-e291f233",
+      "merged": [],
+      "kind": "repeat",
+      "title": "Presented a reply list as complete without reading all the threads it was drawn from",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261020-122528-43",
+          "what": "Rebuilt a list of outstanding PR replies from memory rather than reading every open thread; the list looked complete but missed replies that were still outstanding, and you acted on it."
+        }
+      ],
+      "why_repeats": "A completeness claim on a list generated from memory passes through without any verification step; the factual-claim check triggers on explicit certainty phrases, not on a list that is implicitly presented as exhaustive.",
+      "fix": "Require a live read of all open PR review threads before any message presents a reply list as ready to action.",
+      "guard": {
+        "hook_id": "structural-claim",
+        "plain": "A check on factual claims made without reading the relevant source",
+        "verdict": "partly",
+        "gap": "Lists rebuilt from memory and implicitly presented as complete pass through; the check triggers on explicit certainty phrases, not on the structural implication that a list is exhaustive"
+      },
+      "why": "atone:mist-20261020-122528-43 and signals:13cd89cd-8060-4566-b343-2ea6d21278e1-1792499389 show you acted on an incomplete list that was presented as ready to action.",
+      "evidence_ids": [
+        "atone:mist-20261020-122528-43",
+        "signals:13cd89cd-8060-4566-b343-2ea6d21278e1-1792499389",
+        "checkpoints:ckpt-761c9ccf0e21d41e",
+        "checkpoints:ckpt-79f3e0187600fb99"
+      ],
+      "proposal": {
+        "target": "hooks/guard-structural-claim.sh",
+        "change": "Add a pattern that fires when a reply includes 'all', 'complete', 'nothing left', or 'ready to action' in the context of PR threads or review comments without a cited gh CLI read step in the same session."
+      }
+    },
+    {
+      "cluster": "c-b1ad26a2",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; session-correction cluster with pending items only — resolves to noise under the requirement for a named mistake to qualify.",
+      "evidence_ids": [
+        "checkpoints:ckpt-6feb6ef02d262f7b",
+        "proposals:prop-20261023-111536-69",
+        "signals:0f4b8d0d-fb28-447f-a338-6d5e4475a595-1792754121"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-ea4bf10c",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction and pending-items signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-a80b5e6c2a6d06c1",
+        "checkpoints:ckpt-d9c6d1a1b3d180c4",
+        "checkpoints:ckpt-ff1fb276ec23fd9b",
+        "checkpoints:ckpt-bbfce29c8ea1d175",
+        "signals:f889a4e4-fa3a-40fc-820e-9d147aada8eb-1792684745",
+        "signals:f889a4e4-fa3a-40fc-820e-9d147aada8eb-1792660716"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-79476590",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-8141ee2731758036",
+        "signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792582476",
+        "signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792581045",
+        "signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792579934",
+        "signals:ba6c10c0-0fac-4f18-b6c8-fdc3ad6cffaa-1792579482"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-5894dcff",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-5b15e2e37a6321ff",
+        "signals:b5820d65-2c5c-4afb-8254-d662eedcaa81-1792794611",
+        "signals:b5820d65-2c5c-4afb-8254-d662eedcaa81-1792794562"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-ed285c38",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-8735986c7074ed35",
+        "checkpoints:ckpt-08cc3b9a5d0b0da4",
+        "signals:b3c49297-ef32-4cb3-81e1-829b5c315e54-1792781271"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-4d0c16fc",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-6c01799b930fa393",
+        "checkpoints:ckpt-711b23690cf892b3",
+        "signals:82b9438a-b569-4acc-ba0b-a61611bef619-1792577502",
+        "signals:82b9438a-b569-4acc-ba0b-a61611bef619-1792572262"
+      ],
+      "proposal": null
+    },
+    {
+      "cluster": "c-4325cafe",
+      "merged": [],
+      "kind": "noise",
+      "title": "Session with corrections but no recorded mistake",
+      "happened": [],
+      "why_repeats": null,
+      "fix": null,
+      "guard": { "hook_id": null, "plain": null, "verdict": null, "gap": null },
+      "why": "No named mistake type; correction signals only — resolves to noise.",
+      "evidence_ids": [
+        "checkpoints:ckpt-11817b71da26e17f",
+        "signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792576392",
+        "signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792574262",
+        "signals:eab1fd1e-9115-4213-84b5-647b782aaefd-1792573444"
+      ],
+      "proposal": null
+    }
+  ],
+  "process_note": "Seven of seventeen clusters this week resolve to noise for lack of a named mistake type, confirming the 2026w43 amendment reduces noise when applied consistently. The lazy-question pattern (c-1f725c61) recurs four times while guard-lazy-question shows zero fires in the same 14-day window — a weekly diagnostic listing registered checks with zero fires alongside the atone entries they were meant to stop would have flagged this without manual cross-reference; this week it required reading the hook-fire table and the atone list side by side. The exit-1 vs exit-0 vs muted column requested in 2026w42 remains absent; c-72f6b097 shows guard-env-dump fires 145 times but the specific stdout-token-emitting commands are not caught — a muted vs advisory breakdown would clarify whether those 145 fires represent a scope gap or a deliberately narrowed check, and would accelerate the proposal decision for that cluster."
+}
+```

@@ -6,6 +6,15 @@
         "hooks": [
           {
             "type": "command",
+            "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
+            "timeout": 45
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "bash ~/.claude/adapters/codex/hooks/session-start.sh",
             "timeout": 20,
             "additionalContextLimit": 6000,
@@ -27,6 +36,16 @@
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
+            "timeout": 45
+          }
+        ]
+      },
       {
         "matcher": "Bash",
         "hooks": [

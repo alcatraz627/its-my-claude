@@ -77,7 +77,7 @@ p = sys.argv[1]; st = json.load(open(p))
 for v in st["prs"].values(): v["pushed_at"] -= 400
 json.dump(st, open(p, "w"))
 EOF
-check "stale push blocks with retrigger" "$(stop s2)" "/claude-bot review"
+check "stale push blocks with retrigger" "$(stop s2)" "clanky-review.py"
 
 # Review for the head with two findings and no dispositions.
 fixture "t" "$HEAD" "abc1234"
@@ -184,7 +184,7 @@ for v in st["prs"].values(): v["pushed_at"] -= 400
 json.dump(st, open(p, "w"))
 json.dump({"pid": os.getppid(), "head": "abc1234def", "started": time.time() - 390, "deadline": time.time() + 600}, open(sys.argv[2], "w"))
 EOF
-check "a wait from before the retrigger point still gets the retrigger" "$(stop s15)" "/claude-bot review"
+check "a wait from before the retrigger point still gets the retrigger" "$(stop s15)" "clanky-review.py"
 python3 - "$PR_REVIEW_GATE_STATE/waits/versable-git-demo-7@abc1234.json" <<'EOF'
 import json, os, sys, time
 json.dump({"pid": os.getppid(), "head": "abc1234def", "started": time.time(), "deadline": time.time() + 600}, open(sys.argv[1], "w"))

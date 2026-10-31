@@ -582,3 +582,49 @@ Insights:
 ---
 
 
+
+## tasks: rebuilt on a goal-keyed record [tasks-fix-7c] · 2026-09-23 19:40
+**Purpose:** Replace the session-keyed /tasks store and its resolver with one goal record (gs + five views) whose "met" is gated on the owner's acceptance rows.
+
+**Insights:**
+1. The need was never tracking. 149 frustration prompts and every fix correlated with a spike; the missing object was acceptance (visual, functional, deployed, reviewed). The store now refuses a goal without an acceptance row and refuses met while any is unproven.
+2. The armed goal already carried a goal_id and a session lineage under the wrong key. Promoting it to by-id/<goal_id>.json deleted the whole resolver class (resolve-store, pins, stamps, identity tests) rather than fixing it.
+3. Reading the real render by eye caught two defects the 40-check suite passed: the header counted milestones by stored status while the box derived them from rows, and "armed" was claimed from the record's pointer when the harness Stop hook was not armed. Both fixed; the header now says linked versus armed in goal.sh's two-source terms.
+4. The kanban's communication channel was engineered hardest and used least: 5 notes over 7 boards, 9 of 28 owed decisions already ruled and never read back. Frozen, not folded in.
+5. Ephemeral handoffs are notes, never rows: a note has no state, counts toward nothing, and is consumed on first read, so the next session cannot nag about it.
+
+---
+
+## session: pause UX, integer shares, verb derivation [pause-ux-7a] 2026-09-23
+
+Purpose: answer the owner's pause, cancel, rerun and credits questions from code, write the behavior validation contract, then ship one verb derivation, review on stopped jobs, integer-share counters and the UI state surfaces on PR #81, confirmed on the preview.
+
+Insights:
+- The receipt key includes the run id, so a non-forced rerun with a changed value charges the same part twice (decision D3, open). Normalize re-decides every model attribute on every run, force or not.
+- Module weights: relative ints scaled per job to 1000 shares with largest-remainder rounding; counters store shares via a metric `scale`, read back through `inUnits` in usage.server.ts. Old float `deliveryWeights` on a job are scaled once in deliveryContext.
+- The output fence (`commitJobOutputs`) is where review on a paused job was blocked; a person's write has no lease and no delivery candidate, which is the whole test for machine versus person.
+- A save-time formatter reflows every file on Write or Edit; each Edit that follows must re-read. It also turns a small diff into a whole-file diff.
+- `npm run typecheck` triggers `kit:ensure`, which links the local kit 0.5 and rewrites package.json; run `npx tsc -p tsconfig.typecheck.json` directly and `bash scripts/release.sh dev-unlink` if it already fired.
+- The module page's rerun control was already staff-only (`extraAction={staff ? ...}`); I claimed otherwise once from a partial read. Grep the slot, not the button.
+- Cancelling a job that was paused leaves `pausedByJob` on its runs; the badge now defers to the job's control state, or a cancelled job reads Paused on its module pill.
+
+---
+
+---
+
+
+## catchup: resume pause-credits mini dump into pause-credit-a3 (2026-09-23 19:20)
+
+**Purpose:** Resume PR #81 pause/cancel/metering work from _20260923-speedway-pause-credits.claude.md after /clear.
+
+**Insights:**
+
+1. The workspace _active.md in this project points at an August session (workspace switcher); it is not this work stream. Resolve by session id and ignore _active.md when the header date is stale.
+2. The checkpoint's "rg finds no weight/share/basis/scale" check matches ordinary English across app/; narrow it to workflow_delivered_parts and to `weight` inside app/lib/usage before treating a hit as drift.
+3. usage.server.ts:515 still spreads e.weight though nothing sets it; a leftover of the abandoned weights design, cheap to remove.
+4. No goal record existed for this stream (gs list empty); propose one rather than arming.
+
+---
+
+---
+

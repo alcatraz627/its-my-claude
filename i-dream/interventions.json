@@ -58,7 +58,7 @@
     "body": "Check whether anything was deferred earlier. A terse continuation does not lift a deferral: do only the unambiguous part, or ask one line.",
     "created": "2026-07-24T14:54:37.875879Z",
     "promoted_by": "owner-demoted",
-    "strength": 0.7000000000000001
+    "strength": 1.0
   },
   {
     "id": "3c40a861cd0842a7",
@@ -341,7 +341,7 @@
     "created": "2026-08-28T01:22:24.995413Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 1.0
+    "strength": 0.9
   },
   {
     "id": "e606efbe6e71a5a2",
@@ -403,7 +403,7 @@
     "created": "2026-09-02T05:39:33.700961Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.6000000000000001
+    "strength": 0.5
   },
   {
     "id": "d178058596c639ab",
@@ -482,7 +482,7 @@
     "created": "2026-09-06T02:09:07.057532Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.6000000000000001
+    "strength": 0.7000000000000001
   },
   {
     "id": "595b0fe0fc23f577",
@@ -513,7 +513,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.7000000000000001
+    "strength": 1.0
   },
   {
     "id": "e8c3ac862b73ef60",
@@ -544,7 +544,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.8
+    "strength": 0.7000000000000001
   },
   {
     "id": "53f74d55587f358b",
@@ -587,7 +587,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-10T01:17:48.446544Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.5
+    "strength": 0.0
   },
   {
     "id": "dc466ca4f5535f1b",
@@ -716,7 +716,7 @@
     },
     "body": "Before saying a skill is missing, ls ~/.claude/skills/<name> and <project>/.claude/skills/<name>. If either exists, read its SKILL.md and run it. Your skill listing is not the full set.",
     "created": "2026-10-09T23:00:59.234443Z",
-    "strength": 0.5
+    "strength": 0.0
   },
   {
     "id": "326f849316465520",
@@ -730,7 +730,7 @@
     },
     "body": "This prints process args or unit contents on extractor-vm, which leaks secrets into the transcript. Use ss -tlnp or ps -o pid,stat,etime,comm instead.",
     "created": "2026-10-10T23:00:58.096034Z",
-    "strength": 0.07142857142857144
+    "strength": 0.014285714285714301
   },
   {
     "id": "950aabdafcab9812",
@@ -744,7 +744,7 @@
     },
     "body": "Did the owner ask for a checkpoint? If their last message named a deliverable and it is already written, stop here. Don't add a checkpoint, summary or report as an extra artifact.",
     "created": "2026-10-12T23:01:22.849139Z",
-    "strength": 0.1
+    "strength": 0.04285714285714287
   },
   {
     "id": "1b06a73dd595df26",
@@ -758,7 +758,7 @@
     },
     "body": "Before creating a new note here, rg -l the topic in frontend/.claude/notes/; if a living tracker exists (e.g. extractor-and-e2e-directions.md), edit it and link any side doc from it.",
     "created": "2026-10-13T11:12:36.699180Z",
-    "strength": 0.7000000000000001
+    "strength": 0.6000000000000001
   },
   {
     "id": "8b674622cadcf676",
@@ -771,14 +771,14 @@
     },
     "body": "New doc must stand alone: before saving, rg draft for 'changes from', 'unchanged', 'see the', links to the source doc; carry that content in. Change list goes in the reply, not the doc.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 0.14285714285714285
+    "strength": 0.7000000000000001
   },
   {
     "id": "bb91078a96285f82",
     "slug": "violated-a-constraint-i-authored-this-session",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "project": "slack-automation",
       "tool": "Bash",
@@ -786,7 +786,7 @@
     },
     "body": "Stop: live_eval.py/grade.py spend the owner's local claude login. Use launch.py on Clanky's account (prod probe) or run no model.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 0.8
+    "strength": 1.0
   },
   {
     "id": "b3affb0ca94ccf83",
@@ -800,7 +800,7 @@
     },
     "body": "Re-derive every status cell from live state (gh pr view, reply sweep) and replace in place. No 'Updated at'/'as of' lines or past-action logs.",
     "created": "2026-10-20T23:02:07.473144Z",
-    "strength": 0.9
+    "strength": 1.0
   },
   {
     "id": "7139ee0236dd4643",
@@ -813,7 +813,7 @@
     },
     "body": "Before presenting a reply/todo list, run the sweep (gh api pulls/N/comments per PR, human comments without in_reply_to_id) and diff it against the list. Never list from memory.",
     "created": "2026-10-20T23:02:07.473144Z",
-    "strength": 0.21428571428571427
+    "strength": 0.1714285714285714
   },
   {
     "id": "02002ed82205d631",
@@ -834,14 +834,14 @@
     "slug": "push-approval-treated-as-blanket-authorization",
     "source": "atone-precheck",
     "form": "nudge",
-    "state": "shadow",
+    "state": "candidate",
     "trigger": {
       "tool": "Bash",
       "input_pattern": "\\bgh\\s+pr\\s+merge\\b"
     },
     "body": "Before merging: confirm a quoted owner grant names this repo and a review on the current head sha landed with no blocking finding. Otherwise ask for the merge in one line.",
     "created": "2026-10-22T23:01:46.057439Z",
-    "strength": 0.24285714285714285
+    "strength": 0.9
   },
   {
     "id": "36db13bcb51036f1",
@@ -855,6 +855,19 @@
     },
     "body": "This message cites a bare #N. Name each referenced issue/PR in words and link it before posting; don't ask the owner to rule on formalities you can decide.",
     "created": "2026-10-23T23:02:06.052165Z",
+    "strength": 0.7000000000000001
+  },
+  {
+    "id": "d7e02db576536249",
+    "slug": "decision-request-without-decision-grade-context",
+    "source": "atone-precheck",
+    "form": "hint",
+    "state": "shadow",
+    "trigger": {
+      "prompt_pattern": "\\b(owner[- ]gates?|decision[- ](request|memo|ask)s?|needs? (an? )?owner (decision|sign-?off|approval)|escalat\\w* to (the )?owner)\\b"
+    },
+    "body": "For every owner ask, state what happened, why it matters now, and the default if they say nothing; write for whoever will receive the forward. Missing any? Add it or drop the gate.",
+    "created": "2026-10-28T23:02:21.057008Z",
     "strength": 0.5
   }
 ]
