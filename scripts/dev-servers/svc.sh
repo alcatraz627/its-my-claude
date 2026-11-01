@@ -290,7 +290,11 @@ cmd_down() {
 cmd_hold() {
   local name="${1:-}" length="${2:-}" why="${3:-}"
   [ -z "$name" ] && { echo "usage: svc hold <name> <30m|4h|2d> <why>" >&2; return 2; }
-  python3 "$HOLDER" hold "$HOLDS" "$name" "$length" "$why" "$SESSION" || return $?
+  lock
+  python3 "$HOLDER" hold "$HOLDS" "$name" "$length" "$why" "$SESSION"
+  local rc=$?
+  unlock
+  [ "$rc" -ne 0 ] && return "$rc"
   emit "$(python3 -c 'import json,sys; print(json.dumps({"ts":sys.argv[1],"event":"hold","name":sys.argv[2],"for":sys.argv[3],"why":sys.argv[4],"session":sys.argv[5]}))' "$(now_iso)" "$name" "$length" "$why" "$SESSION")"
   echo "held $name for $length: $why (end it early: svc release $name)"
 }
@@ -298,7 +302,11 @@ cmd_hold() {
 cmd_release() {
   local name="${1:-}"
   [ -z "$name" ] && { echo "usage: svc release <name>" >&2; return 2; }
-  python3 "$HOLDER" release "$HOLDS" "$name" || return $?
+  lock
+  python3 "$HOLDER" release "$HOLDS" "$name"
+  local rc=$?
+  unlock
+  [ "$rc" -ne 0 ] && return "$rc"
   emit "{\"ts\":\"$(now_iso)\",\"event\":\"release\",\"name\":\"$name\",\"session\":\"$SESSION\"}"
   echo "released $name"
 }
@@ -317,7 +325,12 @@ cmd_policy() {
   local name="${1:-}"
   [ -z "$name" ] && { echo "usage: svc policy <name> keep <why> | idle <minutes> [why] | default" >&2; return 2; }
   shift
-  python3 "$HOLDER" policy "$POLICY" "$name" "$@" || return $?
+  # Two writers at once (the hub and a script) would otherwise lose an update.
+  lock
+  python3 "$HOLDER" policy "$POLICY" "$name" "$@"
+  local rc=$?
+  unlock
+  [ "$rc" -ne 0 ] && return "$rc"
   cmd_status
 }
 

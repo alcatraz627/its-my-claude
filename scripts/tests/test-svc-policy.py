@@ -84,6 +84,11 @@ class TheVerdict(unittest.TestCase):
         self.assertEqual(self.verdict(age=6, idle=6, limit=5), "REAP")
         self.assertEqual(self.verdict(age=3, idle=3, limit=5), "grace", "a fresh start still gets its limit")
         self.assertEqual(self.verdict(age=6, idle=6, limit=120), "grace", "a long limit keeps the full grace")
+        self.assertEqual(self.verdict(age=31, idle=31, limit=120), "active", "the grace still ends at 30 minutes")
+
+    def test_the_edges_of_each_window(self):
+        self.assertEqual(self.verdict(age=30, idle=30, limit=120), "active", "30 minutes old is out of grace")
+        self.assertEqual(self.verdict(age=200, idle=120, limit=120), "REAP", "exactly at the limit stops")
 
     def test_policy_overrides_defaults(self):
         policy = {"default": {"idle_min": 120}, "services": {"a": {"idle_min": 5}}}

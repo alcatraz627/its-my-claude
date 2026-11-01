@@ -140,16 +140,26 @@ Tests: `python3 ~/.claude/scripts/tests/test-svc-policy.py`, and in bfb
 
 One page listing every pm2 service, with one click to start and open, Stop, and
 a per-service idle limit. It lives in `~/Code/Claude/sys-pier/hub` and is itself a
-pm2 app (`service-hub`, port pinned, policy `keep`). It keeps no state: limits go
-through `svc policy`, starts through `svc up`, and the older list is read from the
-port ledger.
+pm2 app (`service-hub`, port pinned, policy `keep`). It keeps no state of its own:
+limits go through `svc policy`, starts through `svc up`, and the older list is read
+from the port ledger.
 
 Any app in pm2 appears by itself, so a new service needs no registration. Older
-services are ledger entries pm2 does not run. Starting one adopts it into pm2 under
-its ledger name, using its recorded command, or else `npm run dev` on its claimed
-port when the project has that script. From then on it auto-stops like the rest.
+services are ledger entries pm2 does not run. Few have a recorded command. The rest
+get a guess, `npm run dev` on the claimed port, shown as "Try to start", and only
+when the project's dev script does not choose its own port or workspace app.
+
+Starting an older service adopts it into pm2 under its ledger name and runs
+`pm2 save`, so it stays listed under Ready to start, and comes back at login if it
+was running when saved. There is no remove button yet; use `pm2 delete <name>`. It
+auto-stops once it opens a port inside its process tree.
+
 `http://localhost:3999/go/<name>` starts a service and opens it, and works as a
 bookmark.
+
+Commands in the older list come from the ledger, which any local process can
+append to, and one click runs that text in a login shell. The page shows the
+command first, and a web page cannot trigger it.
 
 Tests: `node --test ~/Code/Claude/sys-pier/hub/hub.test.cjs`. Page source is in
 `hub/page/`; run `hub/build.py` after changing it.
