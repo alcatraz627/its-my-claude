@@ -80,6 +80,11 @@ class TheVerdict(unittest.TestCase):
         self.assertEqual(self.verdict(idle=10, limit=5), "REAP")
         self.assertEqual(self.verdict(idle=10, limit=60), "active")
 
+    def test_a_limit_shorter_than_the_grace_period_still_applies(self):
+        self.assertEqual(self.verdict(age=6, idle=6, limit=5), "REAP")
+        self.assertEqual(self.verdict(age=3, idle=3, limit=5), "grace", "a fresh start still gets its limit")
+        self.assertEqual(self.verdict(age=6, idle=6, limit=120), "grace", "a long limit keeps the full grace")
+
     def test_policy_overrides_defaults(self):
         policy = {"default": {"idle_min": 120}, "services": {"a": {"idle_min": 5}}}
         self.assertEqual(sample.service_policy(policy, "a")["idle_min"], 5)

@@ -251,7 +251,9 @@ def reap_verdict(online, protected, ports, age_min, idle_min, grace_min, idle_li
         # Nothing listening anywhere in the tree. Either a background worker or
         # a server still starting. Neither is safe to stop on this evidence.
         return "no-port(skip)"
-    if age_min < grace_min:
+    # The grace period protects a fresh start, but never for longer than the
+    # service's own limit, or a limit under 30 minutes would mean nothing.
+    if age_min < min(grace_min, idle_limit):
         return "grace"
     if idle_min >= idle_limit:
         return "REAP"
@@ -370,6 +372,7 @@ def main():
                 "name": name,
                 "status": status,
                 "ports": sorted(ports),
+                "known_ports": sorted(remembered),
                 "conns": len(endpoints),
                 "idle_h": round(idle_min / 60.0, 2),
                 "idle_limit_min": None if keep else limit,

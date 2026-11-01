@@ -127,7 +127,9 @@ cmd_watch() {
   return "$rc"
 }
 
-cmd_status() { sample report table; }
+cmd_status() {
+  if [ "${1:-}" = "--json" ]; then sample report json; else sample report table; fi
+}
 
 cmd_ports() { state_field "${1:-}" ports | tr -d '[],' | tr -s ' '; }
 
@@ -323,7 +325,7 @@ usage() {
   cat <<'EOF'
 svc: stop pm2 services nobody is using
 
-  svc status                 what is running, how long unused, its limit, the verdict
+  svc status [--json]        what is running, how long unused, its limit, the verdict
   svc up <name>              start if stopped, wait for its port (idempotent)
   svc down <name>            stop now
   svc hold <name> <len> <why>   keep it up for dedicated work: 30m, 4h, up to 7d

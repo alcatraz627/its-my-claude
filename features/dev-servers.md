@@ -108,7 +108,7 @@ svc reap --dry-run      # what would be stopped
 | Its tab is in front, its window focused, you at the machine | yes | bfb reports the port once a minute |
 | A new connection from another device (phone, tailnet, LAN) | yes | the peer's address, or `tailscaled` as the client |
 | You, or the app itself, say so | yes | `svc touch <name or port>` |
-| Starting it, by any route | yes, plus 30 minutes of grace | pm2's own start time |
+| Starting it, by any route | yes, plus 30 minutes of grace, or its own limit if that is shorter | pm2's own start time |
 | A hold, for dedicated work | yes, until it ends | `svc hold`, which needs a length and a reason |
 | Health checks, API refreshes, scripts, agents' curl | no | the connecting program is not a browser |
 | A parked tab polling or holding a websocket | no | bfb says what is in front, so its connections mean nothing |
@@ -135,6 +135,24 @@ limit. Reap is not deletion here either. Every reap records `svc up <name>`.
 
 Tests: `python3 ~/.claude/scripts/tests/test-svc-policy.py`, and in bfb
 `node e2e/svc-seen-walk.mjs`.
+
+## The service hub: http://localhost:3999
+
+One page listing every pm2 service, with one click to start and open, Stop, and
+a per-service idle limit. It lives in `~/Code/Claude/sys-pier/hub` and is itself a
+pm2 app (`service-hub`, port pinned, policy `keep`). It keeps no state: limits go
+through `svc policy`, starts through `svc up`, and the older list is read from the
+port ledger.
+
+Any app in pm2 appears by itself, so a new service needs no registration. Older
+services are ledger entries pm2 does not run. Starting one adopts it into pm2 under
+its ledger name, using its recorded command, or else `npm run dev` on its claimed
+port when the project has that script. From then on it auto-stops like the rest.
+`http://localhost:3999/go/<name>` starts a service and opens it, and works as a
+bookmark.
+
+Tests: `node --test ~/Code/Claude/sys-pier/hub/hub.test.cjs`. Page source is in
+`hub/page/`; run `hub/build.py` after changing it.
 
 ## /doctor
 
