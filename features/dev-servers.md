@@ -147,7 +147,8 @@ from the port ledger.
 Any app in pm2 appears by itself, so a new service needs no registration. Older
 services are ledger entries pm2 does not run. Few have a recorded command. The rest
 get a guess, `npm run dev` on the claimed port, shown as "Try to start", and only
-when the project's dev script does not choose its own port or workspace app.
+when the project's dev script starts with a known server (vite, next, node and so
+on) and does not choose its own port. Enter in the search box never runs a guess.
 
 Starting an older service adopts it into pm2 under its ledger name and runs
 `pm2 save`, so it stays listed under Ready to start, and comes back at login if it

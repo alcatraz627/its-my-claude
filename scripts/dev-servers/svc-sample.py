@@ -375,6 +375,7 @@ def main():
                 "known_ports": sorted(remembered),
                 "conns": len(endpoints),
                 "idle_h": round(idle_min / 60.0, 2),
+                "age_min": round(age_min, 1),
                 "idle_limit_min": None if keep else limit,
                 "source": source,
                 "why": hold.get("why") if held else rule.get("why"),
