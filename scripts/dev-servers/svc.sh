@@ -9,18 +9,23 @@
 # It applies at every tier. A tier-1 pinned port running under pm2 is still in
 # scope, because the tier says who owns the PORT, not who owns the process.
 #
-# Idle means "nobody opened a new connection in IDLE_HOURS", not "nothing is
-# connected": see svc-sample.py for why that distinction is the whole design.
+# Unused means no person has used it, not "nothing is connected": health checks,
+# API refreshes and parked tabs do not count. features/dev-servers.md holds the
+# policy, and svc-sample.py decides each case.
 #
 # Stopping is never losing: reap records a revive line, and `up` brings the
 # service straight back. Same principle as ports.sh reap/revive.
 #
 # Commands:
-#   watch                sample activity, refresh lastseen   (cron, every 5m)
-#   reap [--dry-run]     stop apps idle beyond the window    (cron, hourly)
+#   watch                sample activity, refresh lastseen
+#   reap [--dry-run]     sample, then stop apps unused past their limit (launchd)
 #   up <name>            start if stopped, wait for its port, mark used
 #   down <name>          stop now and record it
-#   status               table: state, ports, idle age, verdict
+#   hold <name> <len> <why>   keep it up for dedicated work, until the time runs out
+#   release <name>       end a hold
+#   touch <name|port>    say a person just used it
+#   policy <name> ...    keep <why> | idle <minutes> [why] | default
+#   status               table: state, ports, time unused, limit, verdict
 #   ports <name>         the ports svc believes an app holds
 #
 # State sits beside the port ledger in ~/.claude/dev-servers/.
@@ -30,15 +35,19 @@ DIR="$HOME/.claude/dev-servers"
 EVENTS="$DIR/svc-events.jsonl"
 STATE="$DIR/svc-state.json"
 LOCK="$DIR/.svc.mutex"
-mkdir -p "$DIR"
+POLICY="$DIR/svc-policy.json"
+HOLDS="$DIR/svc-holds.json"
+TOUCH_DIR="$DIR/svc-touch"
+mkdir -p "$DIR" "$TOUCH_DIR"
 
 PM2="${PM2_BIN:-$(command -v pm2 || echo /opt/homebrew/bin/pm2)}"
 SAMPLER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/svc-sample.py"
+HOLDER="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/svc-holds.py"
 
-# How long a service may sit unused before it is stopped. 12h is long enough to
-# survive a working day's gaps and short enough that something forgotten dies
-# overnight rather than running for a week.
-IDLE_HOURS="${SVC_IDLE_HOURS:-12}"
+# How long a service may sit unused by a person before it is stopped, unless
+# svc-policy.json says otherwise for it. Short on purpose: the owner would rather
+# restart a service than have forgotten ones running (2026-11-01).
+IDLE_MIN="${SVC_IDLE_MIN:-120}"
 
 # A service that just started has no traffic yet, so without this it could be
 # reaped in the window between `up` and the first request.
@@ -73,7 +82,8 @@ sample() {
   # shellcheck disable=SC2086: NEVER_REAP is a deliberate word-split list
   "$PM2" jlist 2>/dev/null | python3 "$SAMPLER" \
     --state "$STATE" --mode "${1:-report}" --format "${2:-json}" \
-    --idle-hours "$IDLE_HOURS" --grace-min "$GRACE_MIN" \
+    --idle-min "$IDLE_MIN" --grace-min "$GRACE_MIN" \
+    --policy "$POLICY" --holds "$HOLDS" --touch-dir "$TOUCH_DIR" \
     --never $NEVER_REAP
 }
 
@@ -164,7 +174,7 @@ for r in rows:
 ')
 
   if [ -z "$targets" ]; then
-    [ -n "${SVC_VERBOSE:-}" ] && echo "nothing idle past ${IDLE_HOURS}h"
+    [ -n "${SVC_VERBOSE:-}" ] && echo "nothing unused past its limit"
     return 0
   fi
 
@@ -274,22 +284,66 @@ cmd_down() {
   lock; sample watch json > /dev/null; unlock
 }
 
+# Record dedicated work on a service so reap leaves it alone until the time runs out.
+cmd_hold() {
+  local name="${1:-}" length="${2:-}" why="${3:-}"
+  [ -z "$name" ] && { echo "usage: svc hold <name> <30m|4h|2d> <why>" >&2; return 2; }
+  python3 "$HOLDER" hold "$HOLDS" "$name" "$length" "$why" "$SESSION" || return $?
+  emit "$(python3 -c 'import json,sys; print(json.dumps({"ts":sys.argv[1],"event":"hold","name":sys.argv[2],"for":sys.argv[3],"why":sys.argv[4],"session":sys.argv[5]}))' "$(now_iso)" "$name" "$length" "$why" "$SESSION")"
+  echo "held $name for $length: $why (end it early: svc release $name)"
+}
+
+cmd_release() {
+  local name="${1:-}"
+  [ -z "$name" ] && { echo "usage: svc release <name>" >&2; return 2; }
+  python3 "$HOLDER" release "$HOLDS" "$name" || return $?
+  emit "{\"ts\":\"$(now_iso)\",\"event\":\"release\",\"name\":\"$name\",\"session\":\"$SESSION\"}"
+  echo "released $name"
+}
+
+# A person just used this service. Takes a pm2 name or a port, since a browser tab
+# only knows the port.
+cmd_touch() {
+  local what="${1:-}"
+  case "$what" in
+    ""|*/*|.*) echo "usage: svc touch <name|port>" >&2; return 2 ;;
+  esac
+  touch "$TOUCH_DIR/$what"
+}
+
+cmd_policy() {
+  local name="${1:-}"
+  [ -z "$name" ] && { echo "usage: svc policy <name> keep <why> | idle <minutes> [why] | default" >&2; return 2; }
+  shift
+  python3 "$HOLDER" policy "$POLICY" "$name" "$@" || return $?
+  cmd_status
+}
+
 usage() {
   cat <<'EOF'
-svc: idle lifecycle for pm2-managed services
+svc: stop pm2 services nobody is using
 
-  svc status              what is running, its ports, how long unused
-  svc up <name>           start if stopped, wait for its port (idempotent)
-  svc down <name>         stop now
-  svc watch               refresh activity state (cron, every 5m)
-  svc reap [--dry-run]    stop anything unused past the idle window (cron, hourly)
-  svc ports <name>        ports svc believes the app holds
+  svc status                 what is running, how long unused, its limit, the verdict
+  svc up <name>              start if stopped, wait for its port (idempotent)
+  svc down <name>            stop now
+  svc hold <name> <len> <why>   keep it up for dedicated work: 30m, 4h, up to 7d
+  svc release <name>         end a hold
+  svc touch <name|port>      say a person just used it
+  svc policy <name> keep <why>            never stop it
+  svc policy <name> idle <minutes> [why]  its own limit
+  svc policy <name> default               back to the default limit
+  svc reap [--dry-run]       stop anything unused past its limit (launchd)
+  svc watch                  refresh activity state
+  svc ports <name>           ports svc believes the app holds
+
+Use means a person: the active Chrome tab (bfb reports it), another device on the
+tailnet, or svc touch. Health checks, API refreshes and parked tabs do not count.
 
 Scope: pm2-managed processes only. A server started by hand in a terminal is
 untouched: svc cannot see it and will never stop it.
 
 Tuning (env):
-  SVC_IDLE_HOURS   idle window before reap        (default 12)
+  SVC_IDLE_MIN     default limit, in minutes      (default 120)
   SVC_GRACE_MIN    protection after start         (default 30)
   SVC_NEVER_REAP   space-separated names to skip
                    (also ~/.claude/dev-servers/svc-never-reap, one per line)
@@ -301,6 +355,10 @@ case "${1:-}" in
   reap)   shift; cmd_reap "$@" ;;
   up)     shift; cmd_up "$@" ;;
   down)   shift; cmd_down "$@" ;;
+  hold)   shift; cmd_hold "$@" ;;
+  release) shift; cmd_release "$@" ;;
+  touch)  shift; cmd_touch "$@" ;;
+  policy) shift; cmd_policy "$@" ;;
   status) shift; cmd_status "$@" ;;
   ports)  shift; cmd_ports "$@" ;;
   ""|-h|--help|help) usage ;;

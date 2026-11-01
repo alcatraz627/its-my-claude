@@ -134,6 +134,11 @@ nobody ran is visible rather than absent.
    FULL catalog, not only the classes the plan cites. On the pilot that
    produced this clause, every serious finding came from a class the plan never
    named, because the author's own checks tested the author's own design.
+2c. **UI work also gets a reading check.** `/ui-categorical-check` finds defects, not
+   confusion. Run `/ui-gripe` on the final render against the plan's reading row, or
+   add that row if the plan has none, and compare the render with any approved mock
+   in both themes yourself before a done-claim. If the mock showed hand-written
+   content, say whether the build can produce it.
 3. The dispatch prompt must: name the load-bearing claims to attack, including CONCRETE
    malformed-input classes (the missing field, the NaN, the duplicate, the empty list);
    name the classes past runs found outside the diff: what the change newly made

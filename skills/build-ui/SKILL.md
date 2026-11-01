@@ -376,6 +376,18 @@ Two tests:
 - **Adequacy:** two implementers working from it independently produce the same
   DOM order and the same behavior in all four states.
 
+Two requirements, because a build can pass every directive and still be hard to
+read (the Ghostty settings window, 2026-10-31):
+
+- **A mock shows content the build can produce.** Draw it from the real schema,
+  fields and strings. If the mock's copy is hand-written, the plan must name who
+  writes that copy for the build, or the build falls back to whatever the data
+  holds and the owner has approved a page that will never exist.
+- **One acceptance row is about reading the page.** Name a first-time reader's
+  task with a time limit ("finds and understands font size, theme and padding in
+  under 10 s"), judged by `/ui-gripe` on the final render. A row a grep can pass
+  does not count.
+
 ## Phase 8. Turn traits into directives
 
 A trait becomes a directive when it has **named classes, a rule, and a check**.

@@ -81,10 +81,11 @@ pm2 start.
 
 ## Idle lifecycle: `scripts/dev-servers/svc.sh` (migration 0043)
 
-Anything pm2 runs is stopped after **12 hours with no new connections**, at any
-tier. pm2 is the ownership boundary, not the tier: the tier says who owns the
-PORT, and this says who owns the PROCESS. A server started by hand in a terminal is
-never touched, because svc cannot see it.
+Anything pm2 runs is stopped once **no person has used it for its limit** (2 hours
+unless set otherwise), at any tier. The owner would rather restart a service than
+have forgotten ones running (2026-11-01). pm2 is the ownership boundary, not the
+tier: the tier says who owns the PORT, and this says who owns the PROCESS. A server
+started by hand in a terminal is never touched, because svc cannot see it.
 
 **Before using any pm2 service, call `svc up <name>`.** It is idempotent, so run
 it unconditionally instead of checking first. It starts the app if stopped,
@@ -95,15 +96,45 @@ Never assume a service is live, because it may have been reaped overnight.
 svc status              # what is running, its ports, how long unused
 svc up <name>           # start if stopped, wait for its port (call this first)
 svc down <name>         # stop now
+svc hold <name> 4h "why"   # dedicated work: keep it up until the time runs out
+svc release <name>      # end a hold
 svc reap --dry-run      # what would be stopped
 ```
 
-Idle means "no NEW connection", not "nothing connected". A Vite HMR websocket
-held by a forgotten browser tab would otherwise read as use forever, which is
-the failure this replaced. Tuning lives in env vars (`SVC_IDLE_HOURS`,
-`SVC_GRACE_MIN`) and `~/.claude/dev-servers/svc-never-reap`.
+**What keeps a service up**
 
-Reap is not deletion here either. Every reap records `svc up <name>`.
+| Evidence | Counts? | How svc knows |
+|---|---|---|
+| Its tab is in front, its window focused, you at the machine | yes | bfb reports the port once a minute |
+| A new connection from another device (phone, tailnet, LAN) | yes | the peer's address, or `tailscaled` as the client |
+| You, or the app itself, say so | yes | `svc touch <name or port>` |
+| Starting it, by any route | yes, plus 30 minutes of grace | pm2's own start time |
+| A hold, for dedicated work | yes, until it ends | `svc hold`, which needs a length and a reason |
+| Health checks, API refreshes, scripts, agents' curl | no | the connecting program is not a browser |
+| A parked tab polling or holding a websocket | no | bfb says what is in front, so its connections mean nothing |
+| An agent's test browser (Chrome for Testing) | no | named by process; hold it if the work must stay up |
+
+A new browser connection counts only when bfb has not reported for 10 minutes (it
+is not loaded, or you are in another browser) and the keyboard or mouse moved in
+the last 5 minutes.
+
+**Agents:** `svc up` is enough for a quick look. Work that must outlast the grace
+period (a long run, a demo, something the owner is waiting on) takes a hold with a
+reason, and releases it when done. Never add a service to the keep list to avoid
+writing a hold.
+
+**Per service:** `svc policy <name> keep "why"` means never stop it, and
+`svc policy <name> idle <minutes> "why"` gives it its own limit. Both live in
+`~/.claude/dev-servers/svc-policy.json`, and `svc status` shows each service's
+limit, last use and reason. A service with no listening port is never reaped, since
+nothing says whether it is working. `SVC_IDLE_MIN`, `SVC_GRACE_MIN` and
+`~/.claude/dev-servers/svc-never-reap` still apply.
+
+launchd runs `gcc-svc` every 5 minutes, so a service stops within 5 minutes of its
+limit. Reap is not deletion here either. Every reap records `svc up <name>`.
+
+Tests: `python3 ~/.claude/scripts/tests/test-svc-policy.py`, and in bfb
+`node e2e/svc-seen-walk.mjs`.
 
 ## /doctor
 
