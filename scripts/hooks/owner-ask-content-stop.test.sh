@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # owner-ask-content-stop.py: an ask that names only ids or a file is blocked; an ask
 # that carries its question, options or default inline passes.
 set -uo pipefail
@@ -30,6 +31,15 @@ passes "an id with its words" "Decide D2, whether the hub lives in bfb or Switch
 passes "a decision page link carries the content" "Answer the page when you can: http://localhost:5106/dp/backlog-drain-1024/"
 passes "ids in a status line, no ask" "Closed R1 to R3 and pushed 519f39a."
 passes "ids inside a code block" $'Here is the ledger:\n```\nRule on R1 to R3\n```\nNothing needs you.'
+
+# Required reason: a list of bare commands handed to the owner (mist-20261028-184946-19).
+blocks "bare commands with no why" $'Needs you before I can go on:\n- Delete the staging VM\n- Approve the weekly live test\n- Rule on the network policy\n- Rotate the keys'
+blocks "numbered bare commands" $'Waiting on you:\n1. Restart the broker\n2. Revoke the old token'
+passes "commands that say why" $'Needs you before I can go on:\n- Delete the staging VM, because it bills $40 a day and nothing uses it\n- Rotate the keys (they were pasted into a public issue)\n- Approve the weekly live test so the drift check can run'
+passes "one bare command is left alone" $'Needs you:\n- Approve the push'
+passes "a list with no ask lead-in" $'Steps I took:\n- Delete the temp dir\n- Restart the broker\n- Rotate the log'
+passes "bare commands with a decision page" $'Needs you:\n- Delete the VM\n- Rotate the keys\nAll on http://localhost:5106/dp/vm-cleanup/'
+passes "bare commands inside a code block" $'Needs you:\n```\n- Delete the VM\n- Rotate the keys\n```'
 
 # Loop-safe: the same reply blocks once, then becomes a note.
 msg="Rule on Q1 and Q2 please."
