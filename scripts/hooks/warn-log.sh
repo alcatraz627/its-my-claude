@@ -119,8 +119,15 @@ sid="${CLAUDE_SESSION_ID:-}"
     # it resolves. Burn detectors match on action (regardless of kind), so a line
     # with no action never counts toward any burn budget.
     id=$(ledger_id heed)
-    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" --arg cwd "$cwd" \
-      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref, cwd:\$cwd} | $LEDGER_STRIP_EMPTY")
+    # warn_id joins this row to its warning: the ref itself when it is a fire id,
+    # else the newest warn row of the same hook in the same session.
+    case "$ref" in
+      warn-*) warn_id="$ref" ;;
+      *) warn_id=$(tail -n 3000 "$LOG" 2>/dev/null | jq -r --arg h "$hook_id" --arg s "$sid" \
+           'select(.kind=="warn" and .hook_id==$h and .sid==$s) | .id' 2>/dev/null | tail -n 1) ;;
+    esac
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" --arg warn_id "${warn_id:-}" --arg cwd "$cwd" \
+      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref, warn_id:\$warn_id, cwd:\$cwd} | $LEDGER_STRIP_EMPTY")
   else
     id=$(ledger_id warn)
     line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" --arg cwd "$cwd" --arg project "$project" --arg target "$target" --arg detail "$detail" \

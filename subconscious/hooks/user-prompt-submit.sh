@@ -2,7 +2,7 @@
 # i-dream's own background claude calls carry I_DREAM_CHILD=1; their hooks must
 # not feed the daemon (it was downvoting its own intentions, 2026-10-06).
 [ -n "${I_DREAM_CHILD:-}" ] && exit 0
-# i-dream: UserPromptSubmit hook: sentiment signals only.
+# i-dream: UserPromptSubmit hook — sentiment signals only.
 # NOTE: this script emits NOTHING to stdout; it runs async, so any output
 #       would never reach the session. Hints are delivered by the separate
 #       synchronous user-prompt-hint.sh.
@@ -28,7 +28,11 @@ except Exception:
 if not prompt:
     sys.exit(0)
 
-# ALL-CAPS words (≥2 letters): proxy for emphasis or frustration
+# A sub-agent's notification is machine input, not the owner speaking.
+if prompt.lstrip().startswith("<task-notification>"):
+    sys.exit(0)
+
+# ALL-CAPS words (≥2 letters) — proxy for emphasis or frustration
 uppercase_words = len(re.findall(r"\b[A-Z]{2,}\b", prompt))
 
 # Frustration and swear word detection
@@ -97,5 +101,5 @@ try:
 except Exception:
     pass
 PYEOF
-# Touch activity signal (best-effort: dir may not exist on first install)
+# Touch activity signal (best-effort — dir may not exist on first install)
 touch "/Users/alcatraz627/.claude/subconscious/.last-activity" 2>/dev/null || true
