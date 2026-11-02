@@ -21,6 +21,8 @@ Usage:
 
 Config (JSON): account, folder, title, cover (a markdown file, becomes the Cover
 tab), docs (markdown paths, one tab each). Written back: doc_id, tabs {file: tabId}.
+Optional per doc: fonts, spacing ([above, below] by heading level and "body"), and
+tight_tables (true shrinks the empty lines Google leaves around each table).
 """
 import argparse
 import json
@@ -774,6 +776,25 @@ def tab_body(doc, tab_id):
     return walk(doc.get("tabs", []))
 
 
+def tighten_table_gaps(tok, doc_id, tid):
+    """Shrink the empty lines Google leaves around a table, so a table sits close to the text beside it."""
+    content = tab_body(get_doc(tok, doc_id), tid).get("content", [])
+    reqs = []
+    for i, el in enumerate(content):
+        p = el.get("paragraph")
+        if not p or "".join(x.get("textRun", {}).get("content", "") for x in p["elements"]) != "\n":
+            continue
+        beside = [content[j] for j in (i - 1, i + 1) if 0 <= j < len(content)]
+        if not any("table" in n for n in beside):
+            continue
+        rng = {"startIndex": el["startIndex"], "endIndex": el["endIndex"], "tabId": tid}
+        reqs.append({"updateParagraphStyle": {"range": rng, "paragraphStyle": {"spaceAbove": pt(0), "spaceBelow": pt(0), "lineSpacing": 100},
+                                              "fields": "spaceAbove,spaceBelow,lineSpacing"}})
+        reqs.append({"updateTextStyle": {"range": rng, "textStyle": {"fontSize": pt(4)}, "fields": "fontSize"}})
+    if reqs:
+        batch(tok, doc_id, reqs)
+
+
 def write_tab(tok, doc_id, tid, blocks, clear=True):
     body = tab_body(get_doc(tok, doc_id), tid)
     end = body["content"][-1]["endIndex"]
@@ -949,6 +970,12 @@ def main():
                 if key in G:
                     G[key].update({"header_font": cfg["fonts"]["body"], "body_font": cfg["fonts"]["body"]})
         print(f"fonts    {G['fonts']}")
+    # A doc may also ask for its own rhythm: [space above, space below] per heading level and "body".
+    if cfg.get("spacing"):
+        G["spacing"].update(cfg["spacing"])
+    # A publish rewrites the whole Doc, so a Doc the owner now edits by hand refuses it until the lock is removed.
+    if a.confirm and not a.archive and cfg.get("locked"):
+        print(f"STOP: this Doc is locked: {cfg['locked']}"); return 2
     acct = sh("gcloud", "auth", "list", "--filter=status:ACTIVE", "--format=value(account)")
     print(f"account  {acct}  (expected {cfg['account']})")
     print(f"folder   https://drive.google.com/drive/folders/{cfg['folder']}")
@@ -1029,6 +1056,8 @@ def main():
         for name, tid, blocks in plan:
             blocks = mermaid_to_images(tok, cfg["folder"], blocks, uploaded)
             n, t = write_tab(tok, doc_id, tid, relink(blocks, link_map))
+            if cfg.get("tight_tables"):
+                tighten_table_gaps(tok, doc_id, tid)
             print(f"  wrote   {name:28} {n:5} requests, {t} tables")
     finally:
         drive_cleanup(tok, uploaded)
