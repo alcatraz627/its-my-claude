@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 
 HOME = os.path.expanduser("~")
@@ -35,13 +36,79 @@ KINDS = [
 ]
 
 
+# Tools whose response echoes the file they changed. For these the scan reads only what the
+# call added, so a token already sitting in a file does not re-alert on every later edit.
+EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
+ADDED_KEYS = ("new_string", "content", "new_source")
+
+# Fingerprints of known fake tokens (test fixtures), one per line, beside this script.
+ALLOWLIST = os.path.join(os.path.dirname(os.path.abspath(__file__)), "secret-leak-scan.allow")
+
+
 def find(text):
-    """Every (kind, fingerprint) found in the text; the fingerprint is 8 hex chars of a sha256."""
-    hits = []
+    """Every (kind, fingerprint) found in the text, one per fingerprint.
+
+    The fingerprint is 8 hex chars of a sha256. A value that fits two key shapes (an
+    sk-ant key also fits the OpenAI shape) is reported once, under the first kind listed.
+    """
+    seen = {}
     for kind, rx in KINDS:
         for m in rx.finditer(text):
-            hits.append((kind, hashlib.sha256(m.group(0).encode()).hexdigest()[:8]))
-    return sorted(set(hits))
+            seen.setdefault(hashlib.sha256(m.group(0).encode()).hexdigest()[:8], kind)
+    return sorted((kind, fp) for fp, kind in seen.items())
+
+
+def added_text(tool_input):
+    """The text an edit or write puts into a file: new strings and content, never the old text."""
+    parts = []
+    if isinstance(tool_input, dict):
+        for key in ADDED_KEYS:
+            if isinstance(tool_input.get(key), str):
+                parts.append(tool_input[key])
+        for edit in tool_input.get("edits") or []:
+            if isinstance(edit, dict) and isinstance(edit.get("new_string"), str):
+                parts.append(edit["new_string"])
+    return "\n".join(parts)
+
+
+def scan_text(tool, data):
+    """The text worth scanning for this tool call."""
+    tool_input = data.get("tool_input", "")
+    if tool in EDIT_TOOLS:
+        return added_text(tool_input)
+    return json.dumps(tool_input, ensure_ascii=False) + "\n" + json.dumps(data.get("tool_response", ""), ensure_ascii=False)
+
+
+def allowed():
+    """Fingerprints of known fake tokens; a missing or unreadable file means none."""
+    try:
+        with open(ALLOWLIST, encoding="utf-8") as f:
+            return {line.split("#")[0].strip() for line in f if line.split("#")[0].strip()}
+    except OSError:
+        return set()
+
+
+def new_for_session(hits):
+    """Drop fingerprints already reported in this session and remember the rest.
+
+    A token that stays in view (a fixture file read again and again) alerts once, so the
+    one alert that is real is not buried under repeats.
+    """
+    path = os.path.join(HOME, ".claude", "logs", ".secret-scan-seen", SESSION)
+    try:
+        with open(path, encoding="utf-8") as f:
+            seen = set(f.read().split())
+    except OSError:
+        seen = set()
+    fresh = [h for h in hits if h[1] not in seen]
+    if fresh:
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "a", encoding="utf-8") as f:
+                f.write("".join(fp + "\n" for _, fp in fresh))
+        except OSError:
+            pass
+    return fresh
 
 
 def main():
@@ -55,8 +122,10 @@ def main():
     if isinstance(data, dict) and data.get("session_id"):
         SESSION = re.sub(r"[^\w-]", "", str(data["session_id"]))[:64] or SESSION
     tool = data.get("tool_name", "?")
-    text = json.dumps(data.get("tool_input", ""), ensure_ascii=False) + "\n" + json.dumps(data.get("tool_response", ""), ensure_ascii=False)
-    hits = find(text)
+    fakes = allowed()
+    hits = [h for h in find(scan_text(tool, data)) if h[1] not in fakes]
+    if hits:
+        hits = new_for_session(hits)
     if not hits:
         return 0
     report(tool, hits)
@@ -72,6 +141,15 @@ def main():
     return 0
 
 
+def warn_log(action):
+    """Record this fire in the hook ledger. Telemetry never gets to break the hook."""
+    try:
+        subprocess.run(["bash", os.path.expanduser("~/.claude/scripts/hooks/warn-log.sh"), "--hook", "secret-scan", "--action", action],
+                       capture_output=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
 def report(tool, hits):
     """Tell the owner and the agent, before anything else can fail."""
     kinds = ", ".join(sorted({k for k, _ in hits}))
@@ -81,6 +159,7 @@ def report(tool, hits):
              "next reply, in one line, which kind leaked and that it needs rotating. Never quote, repeat or "
              "partially print it. Find what printed it and stop that path (a stub recording env, a debug dump, a "
              "verbose flag) before running it again.")
+    warn_log("nudge")
     print(json.dumps({"systemMessage": owner,
                       "hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": agent}}))
     return 0

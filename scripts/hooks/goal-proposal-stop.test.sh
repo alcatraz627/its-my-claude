@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # The proposal-then-halt gate: blocks once on a bare /goal line, never on a
 # hand-off, never twice, never while the harness is already continuing.
 set -uo pipefail

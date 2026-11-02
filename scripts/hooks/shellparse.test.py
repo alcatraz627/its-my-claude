@@ -5,6 +5,7 @@ Run: python3 shellparse.test.py   (SP=<path> points it at a mutated copy)
 """
 import importlib.util
 import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import subprocess
 import sys
 

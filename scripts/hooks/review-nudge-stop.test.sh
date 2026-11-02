@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for review-nudge-stop.sh and the review-marker.sh fix it depends on: a
 # substantial unreviewed change warns once, a review marker written with ANY form of
 # the session id silences it (and records the heed), small or non-code or test-only
@@ -85,6 +86,12 @@ fresh $S8; rm -f /tmp/claude-review-done-otherses; lines src/d.py 80; track $S8 
 echo "$T/proj/src/d.py" > "/tmp/claude-review-done-otherses"
 out=$(stop "$SID"); warns "$out" && ok "another session's marker does not silence this session" || bad "another session's marker does not silence this session"
 rm -f /tmp/claude-review-done-otherses
+
+# 10. the PR-open entry fires on gh pr create and nothing else
+fresh $S8; lines src/e.py 80; track $S8 "$T/proj/src/e.py"
+pr() { jq -nc --arg s "$SID" --arg c "$1" '{session_id:$s, tool_input:{command:$c}}' | REVIEW_MARKER_SH="$MARKER" bash "$D/review-nudge-stop.sh" pr-open 2>/dev/null; }
+out=$(pr "git status"); [ -z "$out" ] && ok "pr-open: another Bash call is silent" || bad "pr-open: another Bash call is silent: $out"
+out=$(pr "gh pr create --title x"); warns "$out" && ok "pr-open: gh pr create raises it" || bad "pr-open: gh pr create raises it: $out"
 
 fresh $S8
 echo "---- pass=$pass fail=$fail"

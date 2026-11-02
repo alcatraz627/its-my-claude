@@ -10,6 +10,9 @@
 # Owner, 2026-10-14: "it is only to show me never for its own arming".
 #
 # Once per distinct goal text per session. Mute: touch ~/.claude/.no-goal-gate-note
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-goal-gate-note" ] && exit 0
 command -v jq >/dev/null 2>&1 || exit 0

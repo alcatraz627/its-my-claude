@@ -17,6 +17,15 @@
 # otherwise. Dedup sentinel: /tmp/claude-personasuggest-<sid8> (one line per
 # already-suggested persona). Mute: touch ~/.claude/personas/usage/.suggest-off.
 # Always exits 0: an advisory hook must never block a prompt.
+# Keyword advice is for what a person typed: see hook_should_run. Reads stdin once and
+# hands the same bytes on to the code below.
+HOOK_STDIN=$(cat)
+if . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; then
+  hook_should_run owner-turn || exit 0
+  hook_is_automated_prompt "$(printf '%s' "$HOOK_STDIN" | jq -r '.prompt // empty' 2>/dev/null)" && exit 0
+fi
+exec 0< <(printf '%s' "$HOOK_STDIN")
+
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed persona-suggest && exit 0
 
 set -uo pipefail
@@ -44,6 +53,13 @@ mark() { echo "$1" >> "$SENT"; }
 # prompt. Order = priority. grep -Eq, case-insensitive (prompt already lowercased).
 m() { printf '%s' "$prompt" | grep -Eq "$1"; }
 
+# A planning ask uses "plan" (or decompose / sequence) as a verb, or asks for a
+# plan to be made. The bare noun does not count: "where are we in the plan",
+# "docs/plan/x.md" and "your plan file" refer to a plan that already exists.
+PLAN_LEAD="(let.?s|lets|let us|help me|i want to|i need to|we need to|need to|want to|we should|should we|you should|can you|could you|please|we.ll|i.ll|you.ll|gonna|going to)( (also|first|now|properly|thoroughly|carefully|fully|really|just))* (plan|decompose|sequence)\b"
+PLAN_MAKE="\b(make|draft|write|create|lay (out|down)|come up with|put together|give me|build) (a|an|the|me a|your|our|this) ([a-z-]+ ){0,2}plan\b"
+PLAN_ASK="\b${PLAN_LEAD}|^[-*0-9. ]*(please )?(plan|decompose|sequence)\b|${PLAN_MAKE}|break (this|it|that) down|how should (i|we) approach"
+
 persona="" ; msg=""
 if   m 'should (i|we) build|what should (i|we) (do next|build)|prioriti|worth building|trim the (scope|backlog)'; then
   persona="strategic-triad"
@@ -51,7 +67,7 @@ if   m 'should (i|we) build|what should (i|we) (do next|build)|prioriti|worth bu
 elif m '\b(review|audit) (my|the|this) (code|change|changes|diff|pr|branch)|is this (right|correct|safe)|check my work|skeptical'; then
   persona="skeptical-reviewer"
   msg="This looks like a code review: run /skeptical-review (it dispatches the skeptical-reviewer persona: coverage-first, grounded findings)."
-elif m '\b(plan|decompose|sequence|break (this|it) down)\b|how should (i|we) approach|roadmap'; then
+elif m "$PLAN_ASK"; then
   persona="task-goal-planner"
   msg="This is a planning/decomposition task: run /pick-skill, which routes to /plan and can seat the task-goal-planner persona (persona.sh seat, logged)."
 elif m 'write (the )?docs?|document (this|the)|technical doc|\badr\b|architecture doc|data-pattern doc'; then

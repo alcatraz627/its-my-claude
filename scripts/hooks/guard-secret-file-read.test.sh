@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-secret-file-read.sh.
 #
 # The acceptance condition is the peer's, from prop-20260817-112815-df: replay

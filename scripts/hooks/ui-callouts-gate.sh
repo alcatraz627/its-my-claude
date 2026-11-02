@@ -15,6 +15,9 @@
 # Then callouts.sh gate <surface> decides; unmet rows block ONCE (loop-safe;
 # the second Stop passes with a note). Everything else is silent.
 # Mute: touch ~/.claude/.no-ui-callouts-gate (machine-wide until removed).
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-ui-callouts-gate" ] && exit 0
 input=$(cat 2>/dev/null) || exit 0

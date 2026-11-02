@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks guard-user-commit: a commit that would run in a protected repo is
 # blocked however it is spelled, and a mention of one is not.
 # GUARD_UNDER_TEST=<path> points the suite at a mutated copy.

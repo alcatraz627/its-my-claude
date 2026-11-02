@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # guard-dev-server-port.test.sh: runnable checks for the dev-server port gate.
 #
 # Six false-fire proposals accumulated against this guard in three weeks while it

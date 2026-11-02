@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for named-next-work-stop.sh: a reply that ends on a "Doing now" section
 # blocks once; a parked list, a sentence, and a continuing harness pass.
 set -uo pipefail
@@ -46,6 +47,17 @@ rm -f /tmp/claude-nextwork-sess-*
 out=$(run "$T/a.jsonl" f1)
 [ -z "$out" ] && ok "the mute file silences it" || bad "fired under mute"
 rm -f "$T/.claude/.no-named-next-work-gate"
+
+# Stale tail: the transcript's newest assistant row is an older message, the Stop
+# input's last_assistant_message is the real reply, and the verdict follows the real one.
+runm() { jq -cn --arg tp "$1" --arg s "sess-$2" --arg m "$3" '{transcript_path:$tp, session_id:$s, last_assistant_message:$m}' | bash "$HOOK" 2>/dev/null; }
+rm -f /tmp/claude-nextwork-sess-*
+tx "$T/s1.jsonl" 'All done, nothing is open.'
+out=$(runm "$T/s1.jsonl" s1 $'Here is the list.\n\n**Doing now**\n- ask push-guard-7c\n')
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "stale tail: the real reply's Doing-now label blocks" || bad "stale tail hid the real reply: $out"
+tx "$T/s2.jsonl" $'**Doing now**\n- ask push-guard-7c\n'
+out=$(runm "$T/s2.jsonl" s2 'All done, nothing is open.')
+[ -z "$out" ] && ok "stale tail: an old Doing-now row does not block a clean real reply" || bad "judged the old transcript row: $out"
 
 # MUTATION: without the heading regex the hook is a no-op that reads as passing.
 M="$T/mut.sh"; sed 's/doing now|doing next|next i will/zzz-never/' "$HOOK" > "$M"

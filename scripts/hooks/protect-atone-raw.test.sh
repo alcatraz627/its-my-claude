@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Mutation test for protect-atone-raw's stage-two mention filter.
 #
 # The guard must keep blocking a real write to the raw ledger, and must stop

@@ -36,7 +36,7 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
 
 # Session-scoped marker, same derivation as prose-smell-stop.sh.
 sid="${CLAUDE_SESSION_ID:-}"
-[[ -z "$sid" && -f "$HOME/.claude/.current-session-id" ]] && sid=$(cat "$HOME/.claude/.current-session-id" 2>/dev/null)
+[[ -z "$sid" ]] && sid="${CLAUDE_CODE_SESSION_ID:-}"
 sid8="${sid:0:8}"; [[ -z "$sid8" ]] && sid8="nosid"
 MARK="/tmp/claude-tmp-py-nudge-${sid8}"
 

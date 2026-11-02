@@ -21,11 +21,10 @@ stale_after_days: 365
 # Surface hook nudges to the user
 
 A PreToolUse hook's `additionalContext` reaches **you (the agent) only**, and the
-user never sees it. No non-blocking channel puts it in their
-transcript mechanically (stderr, systemMessage and `/dev/tty` are all
-invisible or clobbered, see `features/hooks-tui-limits.md`). So if a hook nudge is
-worth acting on, it is worth telling the human about, because **you are the only path to
-their transcript.**
+user never sees it. A hook that wants the owner to see something should send
+`systemMessage`, which shows on their screen with no model turn (see the channel rule in
+`conventions/hook-authoring-and-review.md`). So this rule covers the nudges that still come
+as `additionalContext`: if one is worth acting on, it is worth telling the human about.
 
 ## The rule
 
@@ -52,8 +51,6 @@ reliably):
 
 ## Why agent-mediated (not mechanical)
 
-The platform has no non-blocking hook-to-user-transcript channel (verified 2026-06-01
-across stderr, systemMessage and /dev/tty). Agent-surfacing is the only way to get
-a per-incident nudge into the transcript. It is reliable but not 100% mechanical,
-which is the cost the platform forces. Hooks fire rarely (only on their specific
-patterns), so surfacing each one is low-volume and adds little noise.
+A nudge sent as `additionalContext` reaches only the model, so the model has to pass it
+on. A new hook meant for the owner should use `systemMessage` instead. Hooks fire rarely
+(only on their specific patterns), so surfacing each one is low-volume and adds little noise.

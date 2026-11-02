@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-duplicate-symbol.sh: a real duplicate of a long exported name
 # still blocks, while short names, test names, private names and a match in a
 # different top-level package do not. The name set mirrors the 43 blocks seen in

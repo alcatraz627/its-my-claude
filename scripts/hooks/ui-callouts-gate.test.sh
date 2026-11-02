@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Lag-regression tests for ui-callouts-gate.sh: the done-claim is read from the
 # Stop input's last_assistant_message, never the one-message-stale transcript tail.
 set -uo pipefail

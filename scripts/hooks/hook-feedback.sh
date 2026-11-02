@@ -40,7 +40,7 @@ case " $VALID_KINDS " in
 esac
 
 sid="${CLAUDE_SESSION_ID:-}"
-[ -z "$sid" ] && [ -f "$HOME/.claude/.current-session-id" ] && sid=$(cat "$HOME/.claude/.current-session-id" 2>/dev/null)
+[ -z "$sid" ] && sid="${CLAUDE_CODE_SESSION_ID:-}"
 ts=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 id="fb-$(date -u +%Y%m%d-%H%M%S)-$$-$(printf '%04x%04x' "$RANDOM" "$RANDOM")"
 

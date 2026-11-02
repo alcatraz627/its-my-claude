@@ -1,0 +1,20 @@
+# Gates that can hold a turn open, highest priority first. stop-arbiter.py runs them
+# together and sends one message. The order is the order of the message.
+~/.claude/scripts/hooks/credential-ask-stop.sh
+~/.claude/scripts/hooks/atone-stop-gate.sh
+/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-stop
+python3 ~/.claude/scripts/hooks/pr-review-gate.py stop
+~/.claude/scripts/hooks/guard-structural-claim.sh
+~/.claude/scripts/hooks/guard-absence-claim.sh
+~/.claude/scripts/hooks/declared-ready-stop.sh
+~/.claude/scripts/hooks/ui-callouts-gate.sh
+python3 ~/.claude/scripts/hooks/ui-verified-stop.py
+python3 ~/.claude/scripts/hooks/doc-voice-gate.py stop
+~/.claude/scripts/hooks/queue-stop.sh
+~/.claude/scripts/hooks/goal-proposal-stop.sh
+python3 ~/.claude/scripts/hooks/owner-ask-content-stop.py
+python3 ~/.claude/scripts/hooks/creation-box-stop.py
+~/.claude/scripts/hooks/named-next-work-stop.sh
+~/.claude/scripts/hooks/bare-id-cluster-stop.sh
+~/.claude/scripts/hooks/speculative-atone-stop.sh
+~/.claude/scripts/hooks/format-gate-stop.sh

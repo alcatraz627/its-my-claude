@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ledger-id: format-reminder
 # lifecycle: tune-able hook (owner ruling D6, 2026-10-19)
 # instrument: reads the format gate's own block rows (warn-log.sh --hook format-gate)
 # review-by: 2026-11-19
@@ -16,6 +17,15 @@
 #
 # Mute: touch ~/.claude/.no-format-gate (same file as the gate) or FORMAT_GATE_OFF=1.
 # Never exits non-zero.
+
+# Keyword advice is for what a person typed: see hook_should_run. Reads stdin once and
+# hands the same bytes on to the code below.
+HOOK_STDIN=$(cat)
+if . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; then
+  hook_should_run owner-turn || exit 0
+  hook_is_automated_prompt "$(printf '%s' "$HOOK_STDIN" | jq -r '.prompt // empty' 2>/dev/null)" && exit 0
+fi
+exec 0< <(printf '%s' "$HOOK_STDIN")
 
 set -uo pipefail
 [ "${FORMAT_GATE_OFF:-0}" = "1" ] && exit 0

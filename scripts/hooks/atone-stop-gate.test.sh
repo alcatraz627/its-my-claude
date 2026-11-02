@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # atone-stop-gate.test.sh: an explicit /atone with no recorded event blocks the stop.
 #
 # Runs against a sandbox HOME. CLAUDE_CODE_CHILD_SESSION=1 is set on purpose:

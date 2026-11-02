@@ -14,8 +14,28 @@
 #                                                    to this turn (the hinter)
 
 set -uo pipefail
-NOTES="$HOME/.claude/guidance/notes.md"
+NOTES="${GUIDANCE_NOTES:-$HOME/.claude/guidance/notes.md}"
 cmd="${1:-show}"
+
+# Does a note's scope list apply to this prompt? Scopes are comma separated and
+# each one is matched whole: "port" is not found inside "report", and a phrase
+# such as "next dev" must appear as that phrase, not as "next" or "dev" alone.
+# Punctuation and hyphens count as word edges; letters, digits and "_" do not.
+# `all` always applies. Case is ignored. Args: prompt, comma-separated scope list.
+scope_matches() {
+  local text kw esc
+  text=" $(printf '%s' "$1" | tr 'A-Z' 'a-z' | tr -s '[:space:]' ' ') "
+  local IFS=','
+  for kw in $(printf '%s' "$2" | tr 'A-Z' 'a-z'); do
+    kw="${kw#"${kw%%[![:space:]]*}"}"; kw="${kw%"${kw##*[![:space:]]}"}"
+    [ -n "$kw" ] || continue
+    [ "$kw" = "all" ] && return 0
+    esc=$(printf '%s' "$kw" | sed 's/[][\.*^$+?(){}|/]/\\&/g')
+    [[ "$text" =~ (^|[^a-z0-9_])${esc}($|[^a-z0-9_]) ]] && return 0
+  done
+  return 1
+}
+[ "${GUIDANCE_SOURCE_ONLY:-}" = 1 ] && return 0
 
 init_notes() {
   mkdir -p "$(dirname "$NOTES")"
@@ -60,17 +80,15 @@ case "$cmd" in
   relevant)
     prompt=$(printf '%s' "${2:-}" | tr 'A-Z' 'a-z')
     [ -f "$NOTES" ] || exit 0
+    shown=0
     while IFS= read -r line; do
       # Only top-level note lines: start with "- " and carry a [scope] tag.
       printf '%s' "$line" | rg -q '^- .*\[[^]]+\]' || continue
-      tags=$(printf '%s' "$line" | sed -n 's/^- [^[]*\[\([^]]*\)\].*/\1/p' | tr 'A-Z' 'a-z' | tr ',' ' ')
-      show=0
-      for kw in $tags; do
-        [ "$kw" = "all" ] && { show=1; break; }
-        case "$prompt" in *"$kw"*) show=1; break ;; esac
-      done
-      [ "$show" = 1 ] && printf '%s\n' "$line"
+      tags=$(printf '%s' "$line" | sed -n 's/^- [^[]*\[\([^]]*\)\].*/\1/p' | tr 'A-Z' 'a-z')
+      scope_matches "$prompt" "$tags" && { printf '%s\n' "$line"; shown=1; }
     done < "$NOTES"
+    [ "$shown" = 1 ] && bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guidance --action nudge >/dev/null 2>&1
+    exit 0
     ;;
 
   *) echo "usage: guidance.sh {add|show|relevant} ..." >&2; exit 2 ;;

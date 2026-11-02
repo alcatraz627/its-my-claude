@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for hook_cmd_skeleton, the shared quote-blanking helper.
 #
 # Cases live in this FILE rather than inline in a shell command on purpose. The

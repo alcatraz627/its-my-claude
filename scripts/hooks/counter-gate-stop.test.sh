@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Lag-regression tests for counter-gate-stop.sh: the counted reply is the Stop
 # input's last_assistant_message, never the one-message-stale transcript tail.
 # Runs under a throwaway HOME so the real counter-gate.jsonl is never written.

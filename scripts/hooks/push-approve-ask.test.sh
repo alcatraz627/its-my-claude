@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for push-approve-ask.sh, the ask-tool approval channel of the push gate.
 #
 # The 2026-07-13 incident: a stubbed osascript made every dialog test pass while

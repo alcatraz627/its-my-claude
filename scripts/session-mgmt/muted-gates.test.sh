@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks the muted-gates SessionStart injector against a throwaway config root:
 # silent with no sentinels, one line naming each present .no-* / *-off file with
 # the script that honours it, and the lane's own mute skipped.

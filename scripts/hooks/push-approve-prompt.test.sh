@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for push-approve-prompt.sh, the typed-line approval channel of the push gate.
 # The end-to-end case runs the REAL gate against a real repo on main and feeds its
 # printed nonce to the real prompt hook; only the human typing is not exercised.

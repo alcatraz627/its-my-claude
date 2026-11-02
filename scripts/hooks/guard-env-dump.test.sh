@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks guard-env-dump: whole-environment dumps are refused, named reads pass.
 set -u
 G="${GUARD:-$(dirname "$0")/guard-env-dump.sh}"

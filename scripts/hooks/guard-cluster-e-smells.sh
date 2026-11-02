@@ -9,8 +9,8 @@
 #     → prints an advisory and allows the edit; it cannot be mechanically
 #     confirmed, so it must not block.
 #
-# At Stop, review-nudge-stop.sh warns when substantial code edits have no
-# /skeptical-review covering them.
+# review-nudge-stop.sh warns, from /validate and when a PR opens, when substantial code
+# edits have no /skeptical-review covering them.
 #
 # Mute: touch ~/.claude/.no-cluster-e-nudge
 

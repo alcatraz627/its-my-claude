@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # speculative-atone.test.sh: the three fixes of #43 (ledger 10, 20, 21), each
 # with the defect planted to prove the guard: the hinter says the same thing at
 # most twice, the Stop gate waits for the owner to go quiet, and agreeing costs

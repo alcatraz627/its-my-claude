@@ -34,16 +34,25 @@ reply at the end of the turn points the owner at it by its full path, because
 that is the moment it becomes something a person reads. A seat's own output is
 never judged this way. `reader: agent` at the top of the file clears it.
 
+A doc is judged against how it stood before this session first touched it
+(the pre-edit snapshot, else the committed file), so a merge that only
+removed conflict markers from an old doc does not fail it, and only what got
+worse holds the turn. A new file is judged whole. A note during editing is
+sent once per change in the set of faults, not once per edit.
+
 Mute: touch ~/.claude/.no-doc-voice-gate · One-shot: DOC_VOICE_OFF=1
 Test: bash ~/.claude/scripts/hooks/doc-voice-gate.test.sh
 """
 import fnmatch
+import hashlib
 import importlib.util
 import json
 import os
 import re
 import subprocess
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SURFACE = "doc"          # the style/profiles.json row for documents
@@ -82,6 +91,7 @@ LONG_SENTENCE_WORDS, MAX_LONG_SENTENCES = 40, 3
 # A page this long needs a heading at least this often, or it is one flat wall.
 FLAT_PAGE_WORDS, WORDS_PER_HEADING = 2000, 600
 
+SNAP_DIR = os.environ.get("DOC_VOICE_SNAP", "/tmp")
 STATE_DIR = os.environ.get("DOC_VOICE_STATE", "/tmp")
 EXEMPT = os.environ.get("DOC_VOICE_EXEMPT", os.path.expanduser("~/.claude/doc-voice-exempt.txt"))
 MUTE = os.path.expanduser("~/.claude/.no-doc-voice-gate")
@@ -355,6 +365,35 @@ def committed_text(path):
     return r.stdout if r.returncode == 0 else None
 
 
+def snapshot_text(path, sid):
+    """The doc as it stood before this session first touched it, from the pre-edit
+    snapshot (snapshot-pre-edit.sh keeps /tmp/claude-presnap-<sid8>/<sha1 of the real
+    path>). Returns (found, text): found is False when no snapshot exists; an empty
+    snapshot means the file did not exist yet, so text is None."""
+    if not sid:
+        return False, None
+    real = os.path.join(os.path.realpath(os.path.dirname(path) or "."), os.path.basename(path))
+    key = hashlib.sha1(real.encode()).hexdigest()
+    snap = os.path.join(SNAP_DIR, "claude-presnap-%s" % sid[:8], key)
+    try:
+        with open(snap, encoding="utf-8", errors="replace") as f:
+            text = f.read()
+    except OSError:
+        return False, None
+    return True, (text if text else None)
+
+
+def baseline(path, sid):
+    """How bad the doc already was before this session's edits, as measure() numbers,
+    or None for a new file. With no snapshot (a resumed session, or the snapshotter
+    not wired) the last committed version stands in: it is the best honest "before"
+    available, and a file with neither is treated as new."""
+    found, text = snapshot_text(path, sid)
+    if not found:
+        text = committed_text(path)
+    return measure(text) if text is not None else None
+
+
 def worse(base, now):
     """True when the agent's own edits are the problem: the doc is new or used to
     pass and now fails, or it already failed and got worse on some measure."""
@@ -437,6 +476,18 @@ def findings(path, force=False):
     return out
 
 
+# What each kind of fault looks like in the note text, so "did the set of faults
+# change" can be answered from the findings, or from a note already sent.
+KIND_MARKERS = (("ledger", "internal ledger"), ("wall", "wall of text"), ("dense", "dense paragraphs"),
+                ("glued", "glued with"), ("mechanism", "only name code"), ("codes", "agent codes"),
+                ("long-sentences", "run past"), ("flat", "section headings"), ("tail", "outweighs the page"))
+
+
+def fault_kinds(text):
+    """Which kinds of fault a note (or the joined findings) names."""
+    return sorted(k for k, marker in KIND_MARKERS if marker in text)
+
+
 def warn_log(action):
     subprocess.run(["bash", os.path.expanduser("~/.claude/scripts/hooks/warn-log.sh"), "--hook", "doc-voice-gate",
                     "--action", action, "--heeded", "unknown"], capture_output=True)
@@ -477,9 +528,26 @@ def note_candidate(data, path):
     if path not in st.setdefault("cands", []):
         st["cands"].append(path)
     if path not in st.setdefault("base", {}):
-        old = committed_text(path)
-        st["base"][path] = measure(old) if old is not None else None
+        st["base"][path] = baseline(path, sid)
     save(sid, st)
+
+
+def new_kinds(sid, path, kinds):
+    """True when the faults found in this doc differ from the last note sent for it;
+    records them. Repeating the same note on every edit teaches the agent to ignore it."""
+    st = load(sid)
+    changed = st.setdefault("noted", {}).get(path) != kinds
+    st["noted"][path] = kinds
+    save(sid, st)
+    return changed
+
+
+def forget_noted(sid, path):
+    """A doc that reads fine again starts over: if it fails later, that is news."""
+    st = load(sid)
+    if path in st.get("noted", {}):
+        del st["noted"][path]
+        save(sid, st)
 
 
 def post(data):
@@ -489,10 +557,14 @@ def post(data):
     found = findings(path)
     if not found:
         note_candidate(data, path)
+        forget_noted(data.get("session_id"), path)
         return 0
+    kinds = fault_kinds(" ".join(found))
     if data.get("agent_id"):
         # A sub-agent's write: the seat gets the note in its own context, but the
         # parent's turn is never held for a doc the parent did not write.
+        if not new_kinds(data.get("session_id"), path, kinds):
+            return 0
         warn_log("nudge")
         msg = "%s does not read as a doc for a person: %s." % (os.path.basename(path), "; ".join(found))
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": msg}}))
@@ -500,10 +572,13 @@ def post(data):
     st = load(data.get("session_id"))
     if path not in st["docs"]:
         st["docs"].append(path)
-        # The baseline is taken once, at the first edit of the turn: the doc as committed before it.
-        old = committed_text(path)
-        st.setdefault("base", {})[path] = measure(old) if old is not None else None
+        # Taken once, at the first edit that fails: the doc as it stood before the session touched it.
+        st.setdefault("base", {})[path] = baseline(path, data.get("session_id"))
+    changed = st.setdefault("noted", {}).get(path) != kinds
+    st["noted"][path] = kinds
     save(data.get("session_id"), st)
+    if not changed:
+        return 0
     warn_log("nudge")
     base = st.get("base", {}).get(path)
     if base and base["fails"]:
@@ -579,7 +654,10 @@ def main(argv):
     except Exception:
         return 0
     try:
-        return stop(data) if argv[:1] == ["stop"] else post(data)
+        if argv[:1] == ["stop"]:
+            # A reply waiting on a running job may still be drafting, so it is not judged yet.
+            return stop(data) if hookpop.should_run() and not hookpop.background_live(data) else 0
+        return post(data)
     except Exception:
         return 0     # a bug here must never block a write or a turn by accident
 

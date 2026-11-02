@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for hand-rendered-tasks-stop.sh: a hand-painted task table warns; a
 # fenced /tasks render, a turn that ran the tool, and plain prose stay quiet.
 set -uo pipefail
@@ -89,6 +90,19 @@ mk "$T5" "what next?" \
   "text:Next I'd start #11, the /tasks failure-mode audit, since it is briefed and ready."
 o5=$(run "$T5" "sess-eeee5555-0000-0000-0000-000000000005")
 [ -z "$o5" ] && ok "prose with one glossed id is quiet" || bad "single glossed id should be quiet"
+
+# 6. stale tail: the transcript's newest row is an older clean message, the Stop
+# input holds the real reply with a hand-built table -> WARN. The reverse -> QUIET.
+runm(){ # <transcript> <sid> <last_assistant_message>
+  jq -nc --arg s "$2" --arg tp "$1" --arg m "$3" '{session_id:$s, transcript_path:$tp, last_assistant_message:$m}' | bash "$HOOK" 2>/dev/null
+}
+TBL=$'| #11 | the audit | pending |\n| #12 | acceptance block | pending |'
+T6="$TMP/t6.jsonl"; mk "$T6" "what's pending?" "text:All done, nothing open."
+o6=$(runm "$T6" "sess-ffff6666-0000-0000-0000-000000000006" "$TBL")
+printf '%s' "$o6" | rg -q "hand-rendered task table" && ok "stale tail: the real reply's table warns" || bad "stale tail hid the real reply's table"
+T7="$TMP/t7.jsonl"; mk "$T7" "what's pending?" "text:$TBL"
+o7=$(runm "$T7" "sess-aaaa7777-0000-0000-0000-000000000007" "All done, nothing open.")
+[ -z "$o7" ] && ok "stale tail: an old table row does not warn a clean real reply" || bad "judged the old transcript row"
 
 echo "---- pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

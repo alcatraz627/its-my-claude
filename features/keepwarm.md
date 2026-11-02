@@ -55,10 +55,11 @@ turn, such as on a cold cache, keeps its job firing and blocked until then.
 
 A hook cannot create a job; it can only ask the model to, and the model sometimes does
 not. The ~/Movies session of 2026-11-02 spent its first turn on 300 tool calls and never
-did, so it pinged nothing and left no dump. Now every Stop looks for a real `CronCreate`
-tool call in the transcript since the session was told. If there is none, it blocks the
-turn and asks again, up to 3 times per instruction, then logs `arm-failed`. Until a job
-is confirmed the statusline shows no next ping.
+did, so it pinged nothing and left no dump. Now every Stop reads `session_crons`, the job
+list Claude Code hands to Stop hooks, and falls back to a real `CronCreate` call in the
+transcript. If the job is missing, it blocks the turn and asks again, up to 3 times per
+instruction, then logs `arm-failed`. Until a job is confirmed the statusline shows no next
+ping.
 
 This Stop hook must stay synchronous, because Claude Code discards a block from an async
 hook. `keepwarm-recurring.test.py` reads the real settings file to check that.

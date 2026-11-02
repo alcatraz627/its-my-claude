@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for the owner-policy layer as the hooks see it: guard-policy.sh (every
 # key, every value, every route), guard-policy-store.sh, the MCP path of the
 # marker guard, and each guard rewired to read the policy, including the rule

@@ -1,4 +1,5 @@
 #!/bin/bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks that the decision-surface nudge speaks for decision sets and visual
 # comparisons, and stays silent for a single plain question or another tool.
 H="$HOME/.claude/scripts/hooks/decision-surface-nudge.sh"

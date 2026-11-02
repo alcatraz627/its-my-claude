@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for guard-zsh-path-var.sh + zsh-path-scan.py.
 #
 # WARN_LOG_STORE is set below because the previous version of this suite did not

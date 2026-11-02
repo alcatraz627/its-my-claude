@@ -22,11 +22,9 @@ from datetime import datetime, timezone
 
 # Opening text of user entries the owner did not type: harness notices, wakes,
 # hook injections and compaction summaries.
-_NOT_OWNER_PREFIXES = (
-    "<task-notification", "<local-command-stdout", "<local-command-caveat",
-    "Caveat:", "[keepwarm]", "This session is being continued",
-    "<system-reminder", "<user-prompt-submit-hook", "[Request interrupted",
-)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hooks"))
+import hookpop  # noqa: E402
+_NOT_OWNER_PREFIXES = hookpop.PREFIXES
 _WRITE_TOOLS = ("Write", "Edit", "MultiEdit", "NotebookEdit")
 # Tool use that changes the world, for "did the agent keep working after the dump".
 _WORK_TOOLS = _WRITE_TOOLS + ("Bash",)

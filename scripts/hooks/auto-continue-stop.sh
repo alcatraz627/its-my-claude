@@ -66,4 +66,5 @@ sleep "${cooldown:-30}" 2>/dev/null || true
 
 jq -cn --arg r "Your previous turn was cut short by a transient API error (rate-limit / 5xx / timeout) and the cooldown has passed. Resume exactly where you left off and finish the task. [auto-continue retry ${next} of ${maxr} for this error run; the counter resets as soon as a turn completes cleanly.]" \
   '{decision:"block", reason:$r}' 2>/dev/null || true
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook auto-continue --action block >/dev/null 2>&1 || true
 exit 0

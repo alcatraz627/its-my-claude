@@ -56,6 +56,15 @@ set -uo pipefail
 LOG="${WARN_LOG_STORE:-$HOME/.claude/hooks/warn-events.jsonl}"
 LOCK="$(dirname "$LOG")/.warn-events.lock"
 
+# A test that fires a real hook must not count as a real fire, or tuning reads test
+# runs as noise. Only the owner's true ledger is refused: a test that pointed HOME or
+# WARN_LOG_STORE at a temporary folder still gets its rows.
+if [ "${HOOK_TEST:-}" = 1 ]; then
+  live_dir=$(cd "$(eval echo "~$(id -un)")/.claude/hooks" 2>/dev/null && pwd -P)
+  log_dir=$(cd "$(dirname "$LOG")" 2>/dev/null && pwd -P)
+  [ -n "$live_dir" ] && [ "$log_dir" = "$live_dir" ] && [ "$(basename "$LOG")" = warn-events.jsonl ] && exit 0
+fi
+
 hook_id="" heeded="unknown" action="" ref="" cwd="" target="" detail=""
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -108,8 +117,9 @@ if ! declare -f ledger_id >/dev/null 2>&1; then
 fi
 : "${LEDGER_STRIP_EMPTY:=with_entries(select(.value != \"\" and .value != null))}"
 
-sid="${CLAUDE_SESSION_ID:-}"
-[ -z "$sid" ] && [ -f "$HOME/.claude/.current-session-id" ] && sid=$(cat "$HOME/.claude/.current-session-id" 2>/dev/null)
+# Claude Code gives every hook its own session id. The machine-wide id file belongs to
+# whichever session started last, so reading it blamed one session for another's fires.
+sid="${CLAUDE_SESSION_ID:-${CLAUDE_CODE_SESSION_ID:-nosid}}"
 
 {
   ts=$(ledger_ts)
@@ -126,12 +136,12 @@ sid="${CLAUDE_SESSION_ID:-}"
       *) warn_id=$(tail -n 3000 "$LOG" 2>/dev/null | jq -r --arg h "$hook_id" --arg s "$sid" \
            'select(.kind=="warn" and .hook_id==$h and .sid==$s) | .id' 2>/dev/null | tail -n 1) ;;
     esac
-    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" --arg warn_id "${warn_id:-}" --arg cwd "$cwd" \
-      "{id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref, warn_id:\$warn_id, cwd:\$cwd} | $LEDGER_STRIP_EMPTY")
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg sid "$sid" --arg heeded "$heeded" --arg ref "$ref" --arg warn_id "${warn_id:-}" --arg cwd "$cwd" --arg entry "${CLAUDE_CODE_ENTRYPOINT:-}" --arg test_run "${HOOK_TEST_RUN:-}" \
+      "{test_run:\$test_run, id:\$id, ts:\$ts, kind:\"heed\", hook_id:\$h, sid:\$sid, heeded:\$heeded, ref:\$ref, warn_id:\$warn_id, cwd:\$cwd, entry:\$entry} | $LEDGER_STRIP_EMPTY")
   else
     id=$(ledger_id warn)
-    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" --arg cwd "$cwd" --arg project "$project" --arg target "$target" --arg detail "$detail" \
-      "{id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, action:\$action, sid:\$sid, fired:1, heeded:\$heeded, cwd:\$cwd, project:\$project, target:\$target, detail:\$detail} | $LEDGER_STRIP_EMPTY")
+    line=$(jq -cn --arg id "$id" --arg ts "$ts" --arg h "$hook_id" --arg action "$action" --arg sid "$sid" --arg heeded "$heeded" --arg cwd "$cwd" --arg project "$project" --arg target "$target" --arg detail "$detail" --arg entry "${CLAUDE_CODE_ENTRYPOINT:-}" --arg test_run "${HOOK_TEST_RUN:-}" \
+      "{test_run:\$test_run, id:\$id, ts:\$ts, kind:\"warn\", hook_id:\$h, action:\$action, sid:\$sid, fired:1, heeded:\$heeded, cwd:\$cwd, project:\$project, target:\$target, detail:\$detail, entry:\$entry} | $LEDGER_STRIP_EMPTY")
   fi
   ledger_append "$LOG" "$LOCK" "$line"
 } 2>/dev/null || true

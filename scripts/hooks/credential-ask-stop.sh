@@ -14,6 +14,9 @@
 # check first (gh auth, printenv/env, a TOKEN grep, a .npmrc or keychain read).
 # Loop-safe: stop_hook_active steps aside, and a message is blocked once.
 # Mute: touch ~/.claude/.no-credential-ask-gate  (machine-wide until removed)
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-credential-ask-gate" ] && exit 0
 input=$(cat 2>/dev/null) || exit 0
@@ -22,34 +25,31 @@ command -v jq >/dev/null 2>&1 || exit 0
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty'); sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
 [ -n "$tp" ] && [ -f "$tp" ] || exit 0
 
-# The last assistant text, and every Bash command since the last real prompt.
-turn=$(tail -n 400 "$tp" | python3 -c '
+# The shared reader sits beside this hook when HOME has no copy (a test home).
+type hook_last_assistant_text >/dev/null 2>&1 || . "$(dirname "$0")/hook-common.sh" 2>/dev/null || exit 0
+# The reply comes from the Stop input (the transcript lags one message at Stop
+# time, see hook_last_assistant_text). Every command this turn has run since the
+# last real prompt still comes from the transcript.
+text=$(hook_last_assistant_text "$input" "$tp")
+[ -n "$text" ] || exit 0
+cmds=$(tail -n 400 "$tp" | python3 -c '
 import json, sys
 recs = [json.loads(l) for l in sys.stdin if l.strip()]
-last = None
-for i in range(len(recs) - 1, -1, -1):
-    r = recs[i]
-    if r.get("type") == "assistant":
-        last = i; break
-if last is None: sys.exit(0)
 start = 0
-for i in range(last, -1, -1):
+for i in range(len(recs) - 1, -1, -1):
     r = recs[i]
     c = (r.get("message") or {}).get("content")
     if r.get("type") == "user" and (isinstance(c, str) or (isinstance(c, list) and any(b.get("type") == "text" for b in c if isinstance(b, dict)))):
         start = i; break
-text = " ".join(b.get("text", "") for b in (recs[last].get("message") or {}).get("content", []) if b.get("type") == "text")
 cmds = []
-for r in recs[start:last + 1]:
+for r in recs[start:]:
     if r.get("type") != "assistant": continue
     for b in (r.get("message") or {}).get("content", []):
         if b.get("type") == "tool_use":
             inp = b.get("input") or {}
             cmds.append(str(inp.get("command", "")) + " " + str(inp.get("file_path", "")))
-print(json.dumps({"text": text, "cmds": "\n".join(cmds)}))
+print("\n".join(cmds))
 ' 2>/dev/null)
-[ -n "$turn" ] || exit 0
-text=$(printf '%s' "$turn" | jq -r '.text'); cmds=$(printf '%s' "$turn" | jq -r '.cmds')
 lower=$(printf '%s' "$text" | tr 'A-Z' 'a-z')
 printf '%s' "$lower" | rg -q '(mint|generate|create|rotate|issue)( a| an| the| another| new| fresh)*( new| fresh| personal| access| api| github| classic| fine-grained)* ?(token|pat\b|api key|secret|credential)|personal access token|tokens \(classic\)' || exit 0
 # An auth check this turn clears it.

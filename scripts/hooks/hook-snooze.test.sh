@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for hook-snooze.sh: owner approval is required, scopes match, expiry drops rows.
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"; S="$HERE/hook-snooze.sh"

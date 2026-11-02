@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # guard-rg-replace-bundle.test.sh: runnable checks for the rg -r guard.
 #
 # The guard must tell rg's OWN -r flag from a -r that merely appears in the
@@ -68,6 +69,38 @@ echo "── a | inside the pattern must not split the segment ──"
 # like rg's own args. Both must allow.
 ok "pipe in pattern"        "$(verdict 'rg "a|b" src/')"             allow
 ok "pipe AND -r in pattern" "$(verdict 'rg "jq -r x|y" src/')"       allow
+
+echo "── a real replacement is the flag's job: -r with a capture group or empty text must ALLOW ──"
+# 22 of the 28 real denials were this. -r takes the next word as the replacement,
+# so a word with a $ reference, or an empty one, is the flag used correctly.
+ok "-r '\$1'"                "$(verdict "rg 'a(b)' -r '\$1' f.txt")"            allow
+ok "-r after the path"       "$(verdict "rg -n -o 'v\\(--[a-z]+' app.css --no-filename -r '\$0' -m 4")" allow
+ok "-r \"\$1\" double quoted"  "$(verdict 'rg -o "\](([^)]+))" -r "$1" docs/')"    allow
+ok "-r '' empty"             "$(verdict "rg -n 'X = ' -r '' --hex f.py")"       allow
+ok "-r \"\" empty"            "$(verdict 'rg "a|b" -r "" -c f.txt')"             allow
+ok "-r '\$1\$2' two groups"   "$(verdict "rg -o 'x(a)|y(b)' -r '\$1\$2' README.md")" allow
+ok "-r with text and a ref"  "$(verdict "rg 'k=(\\w+)' -r 'key:\$1' f")"        allow
+ok "-or bundle ending in r"  "$(verdict "rg -nor '\$0' 'a+' f")"                allow
+ok "-r bare \$1"             "$(verdict 'rg -o "(a)" -r $1 f')"                 allow
+ok "-r=VALUE"                "$(verdict "rg foo -r='x' f")"                     allow
+ok "replacement, then sort -r" "$(verdict "rg -o 'a(b)' -r '\$1' f | sort -r")" allow
+
+echo "── a bundle where r swallows the letters after it, or an r with a pattern after it: must BLOCK ──"
+ok "-ri bundle"              "$(verdict 'rg -ri foo src/')"                     BLOCK
+ok "-rl bundle"              "$(verdict 'rg -rl foo src/')"                     BLOCK
+ok "-rn with quoted pattern" "$(verdict 'rg -rn "def ipc_peers" -A20 native/')"  BLOCK
+ok "-rn with glob after"     "$(verdict "rg -rn 'a|b' dir --glob '!x.json' -m 3")" BLOCK
+ok "-nrn middle r"           "$(verdict 'rg -nrn foo src/')"                    BLOCK
+ok "-r then a quoted pattern" "$(verdict "rg -r 'pattern' src/")"               BLOCK
+ok "-r then a plain word"    "$(verdict 'rg -r pattern src/')"                  BLOCK
+ok "-r last, nothing after"  "$(verdict 'rg foo src/ -r')"                      BLOCK
+ok "-n -r then a path"       "$(verdict 'rg -n -r foo /abs/path')"              BLOCK
+ok "the \$ is in the pattern, not after -r" "$(verdict 'rg "a$" -r src/')"      BLOCK
+ok "second -r is the typo"   "$(verdict "rg -r '\$1' 'a(b)' f | rg -r foo g")"  BLOCK
+
+echo "── the block message keeps the phrase measure.test.py reads ──"
+msg=$(printf '{"tool_name":"Bash","tool_input":{"command":"rg -rn foo ."}}' | bash "$HOOK" 2>/dev/null)
+ok "message names the footgun" "$(printf '%s' "$msg" | grep -c 'rg -r IS --replace')" 1
 
 echo "── the mute still works ──"
 ok "muted -> allow" "$(RGGUARD_TEST=1; touch "$HOME/.claude/.no-rg-replace-guard"; v=$(verdict 'rg -r foo src/'); rm -f "$HOME/.claude/.no-rg-replace-guard"; echo "$v")" allow

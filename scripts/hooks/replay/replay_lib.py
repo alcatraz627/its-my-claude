@@ -260,7 +260,7 @@ def run_hook(hook_path, payload, timeout=45):
     LIVE warns ledger (98 junk events on 2026-07-02 taught us this). Redirect
     to a per-process temp store unless the caller already set one.
     """
-    env = dict(os.environ)
+    env = dict(os.environ, HOOK_TEST="1")
     env.setdefault(
         "WARN_LOG_STORE",
         os.path.join(tempfile.gettempdir(), f"replay-warn-events-{os.getpid()}.jsonl"),

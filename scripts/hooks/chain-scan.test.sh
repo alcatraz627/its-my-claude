@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # chain-scan.test.sh: the false-fire cases matter more than the true ones.
 #
 # This guard blocks. The failure mode that makes a blocking guard worse than no

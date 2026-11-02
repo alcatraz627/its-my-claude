@@ -4,9 +4,12 @@
 # For each candidate file: resolve its enforcement tier (approximating
 # style/scope-map.json: that file stays authoritative for the critic persona),
 # run the free tier-0 screen (regex tells / comment detector), and only on a
-# positive screen spend the tier-2 sonnet judgment, which may cite ONLY active
+# positive screen report what the free prose and comment checks found. A model
+# judgment runs only with ~/.claude/.style-watch-model-on, and may cite ONLY active
 # thesaurus entry ids: the watcher enforces the user's ledger, never its own
-# taste. Verdicts land in style/pending-watch-notes.txt for next-turn
+# taste. The free checks find about a quarter of what the model found (measured by
+# scripts/hooks/audit/critic_recall.py), and the model's notes were never recorded as
+# acted on, at about $0.26 a run. Verdicts land in style/pending-watch-notes.txt for next-turn
 # injection; every fire/skip is telemetry in logs/style-watch.jsonl (tokens +
 # instances: the user's explicit ask).
 #
@@ -58,13 +61,20 @@ judge() {  # tier-2 sonnet; prints findings lines "entry-id|quote|rewrite" (may 
     echo "thes-fake-0000|canned test finding|canned rewrite"
     return 0
   fi
+  if [ ! -f "$HOME/.claude/.style-watch-model-on" ]; then
+    local surface=doc
+    [ "$tier" = comment-minimal ] && surface=comment
+    python3 "$HOME/.claude/scripts/style/prose-lint.py" --profile "$surface" "$f" 2>/dev/null \
+      | jq -r '[.findings[]? | select(.action != "score" and (.tell | test("score") | not))] | .[:3][] | "free-\(.tell)|\(.text | gsub("[\n|]"; " "))|line \(.line)"' 2>/dev/null
+    return 0
+  fi
   [ "$tier2_used" -ge "$TIER2_CAP" ] && return 1
   tier2_used=$((tier2_used + 1))
   command -v claude >/dev/null 2>&1 || return 1
   digest=$(cat "$digestfile" 2>/dev/null); [ -n "$digest" ] || return 1
   # JSON output so token spend lands in telemetry (the user's explicit ask).
   local raw
-  raw=$(head -c 12000 "$f" | claude -p --model sonnet --output-format json \
+  raw=$(head -c 12000 "$f" | claude -p --safe-mode --tools "" --model sonnet --output-format json \
     "You enforce a style ledger on the file content on stdin (tier: $tier). Ledger (the ONLY rules you may enforce):
 $digest
 Output at most 3 lines, each exactly: <entry-id>|<short offending quote>|<one-line rewrite>
@@ -93,13 +103,13 @@ while IFS= read -r f; do
     mark "$f"; continue
   fi
   findings=$(judge "$f" "$tier" || true)
-  n=$(printf '%s' "$findings" | rg -c '^thes-' 2>/dev/null || echo 0)
+  n=$(printf '%s' "$findings" | rg -c '^(thes|free)-' 2>/dev/null || echo 0)
   if [ "$n" -gt 0 ]; then
     top=$(printf '%s\n' "$findings" | head -1)
     id="${top%%|*}"
     note "[style-watch] ${f##*/}: $n ledger finding(s) at tier $tier; top: $top: act or dismiss, then log heed: bash ~/.claude/scripts/style/style-log.sh --kind watcher-fire --entry $id --heeded yes|no"
-    bash "$LOGGER" --kind watcher-fire --surface "$tier" --artifact "$f" --model sonnet --findings "$n" --entry "$id" --tokens "$(cat "$TOKENS_FILE" 2>/dev/null || echo 0)" >/dev/null 2>&1
-    [ "${id}" != "thes-fake-0000" ] && bash "$HOME/.claude/scripts/style/thesaurus.sh" hit "$id" >/dev/null 2>&1
+    bash "$LOGGER" --kind watcher-fire --surface "$tier" --artifact "$f" --model "$([ -f "$HOME/.claude/.style-watch-model-on" ] && echo sonnet || echo free)" --findings "$n" --entry "$id" --tokens "$(cat "$TOKENS_FILE" 2>/dev/null || echo 0)" >/dev/null 2>&1
+    [ "${id}" != "thes-fake-0000" ] && [ "${id#free-}" = "$id" ] && bash "$HOME/.claude/scripts/style/thesaurus.sh" hit "$id" >/dev/null 2>&1
   else
     bash "$LOGGER" --kind watcher-skip --surface "$tier/judge-clean" --artifact "$f" >/dev/null 2>&1
   fi

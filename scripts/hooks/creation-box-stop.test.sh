@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for creation-box-stop.py on synthetic transcripts.
 #   bash ~/.claude/scripts/hooks/creation-box-stop.test.sh
 set -uo pipefail
@@ -48,6 +49,16 @@ case "$out" in *pin-20261026101010-7e*) ok "a pin is a creation too" ;; *) ko "p
 
 touch "$T/mute"; out=$(CREATION_BOX_GATE_OFF=1 run s6 "$T/a.jsonl"); [ -z "$out" ] && ok "the off switch silences it" || ko "off switch ignored"
 [ -s "$T/creation-box-gate.jsonl" ] && ok "blocks are logged" || ko "no telemetry"
+
+# Stale tail: the transcript's final reply is an older boxed message, the Stop input's
+# last_assistant_message is the real reply, and the verdict follows the real one.
+runm() { jq -nc --arg s "$1" --arg tp "$2" --arg m "$3" '{session_id:$s, transcript_path:$tp, last_assistant_message:$m}' | python3 "$H"; }
+transcript "$T/s1.jsonl" "bash ~/.claude/scripts/atone.sh add --slug x" "recorded $ID" "$(printf '┌─ 🙏 atone · x ──\n│ %s · S2\n└──' "$ID")"
+out=$(runm s7 "$T/s1.jsonl" "Logged it as $ID.")
+case "$out" in *'"decision": "block"'*) ok "stale tail: the real reply without a box blocks" ;; *) ko "stale tail hid the real reply: $out" ;; esac
+transcript "$T/s2.jsonl" "bash ~/.claude/scripts/atone.sh add --slug x" "recorded $ID" "Logged it as $ID."
+out=$(runm s8 "$T/s2.jsonl" "$(printf '┌─ 🙏 atone · x ──\n│ %s · S2\n└──' "$ID")")
+[ -z "$out" ] && ok "stale tail: an unboxed old row does not block a boxed real reply" || ko "judged the old transcript row: $out"
 
 trash "$T" >/dev/null 2>&1
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]

@@ -1,0 +1,35 @@
+# Hooks that steer a session but keep no row in hooks/warn-events.jsonl, and why.
+# settings-registration.test.sh fails on a steering hook that neither logs nor appears here.
+scripts/directions/directions.py          keeps its own record in the repo's DIRECTIONS.md
+scripts/dream/dream-insights-prompt.sh    a fixed start-of-session brief, not a judgment
+scripts/hint-injector.sh                  a dispatcher; each hinter logs for itself
+scripts/hook-orchestrator/run.sh          a dispatcher; each task logs for itself
+scripts/hooks/api-recovery-nudge.sh       fires only after an API outage
+scripts/hooks/browser-ttl-nudge.sh        a state notice with its own reaper log
+scripts/hooks/stop-arbiter.py             a dispatcher; each gate logs for itself
+scripts/hooks/ctx-pressure-nudge.sh       a measured context notice, not a judgment
+scripts/hooks/ctx-signal-nudge.sh         a measured context notice, not a judgment
+scripts/hooks/gemini-mode-inject.sh       states the session's mode
+scripts/hooks/guard-artifact-unasked.sh   logs to its own policy record
+scripts/hooks/guard-commit-signature.sh   a safety guard; the deny is the record
+scripts/hooks/guard-cron-prompt.sh        a safety guard; the deny is the record
+scripts/hooks/guard-github-agent-marker.sh a safety guard; the deny is the record
+scripts/hooks/guard-policy-store.sh       a safety guard; the deny is the record
+scripts/hooks/parked-skills-nudge.sh      a fixed start-of-session notice
+scripts/hooks/policy-approve-ask.sh       carries the owner's approval, not a judgment
+scripts/hooks/speculative-atone-hint.sh   has its own atone event stream
+scripts/hooks/task-table-inject.sh        injects state the owner asked for
+scripts/hooks/ui-verified-hint.sh         paired with ui-verified-stop.py, which logs
+scripts/keepwarm/keepwarm.py              logs to keepwarm/events.jsonl
+scripts/migrate-hint.sh                   a fixed reminder on one path
+scripts/render-mcp-gate.py                a safety guard; the deny is the record
+scripts/seats/seat-hook.py                logs to the seat record
+scripts/session-mgmt/compact-gate.sh      logs to its own gate record
+scripts/session-mgmt/post-compact-recovery.sh restores context after a compaction
+scripts/session-mgmt/sessionstart-inject.sh a fixed start-of-session brief
+scripts/shell-mem.sh                      logs to shell-logs
+scripts/sync-todos/stop-sync.sh           syncs state, never judges
+scripts/tool-counter.sh                   a measured counter
+scripts/usage/usage5h.py                  logs to the usage record
+subconscious/hooks/pre-tool-use.sh        i-dream logs to firings.jsonl
+subconscious/hooks/user-prompt-hint.sh    i-dream logs to firings.jsonl

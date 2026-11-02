@@ -300,6 +300,10 @@
           {
             "type": "command",
             "command": "python3 ~/.claude/scripts/hooks/pr-review-gate.py track"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/review-nudge-stop.sh pr-open"
           }
         ]
       },
@@ -1175,16 +1179,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/speculative-atone-stop.sh"
-          },
+            "command": "/usr/bin/python3 ~/.claude/scripts/hooks/stop-arbiter.py",
+            "timeout": 70
+          }
+        ]
+      },
+      {
+        "hooks": [
           {
             "type": "command",
             "command": "~/.claude/scripts/hook-orchestrator/run.sh Stop",
             "async": true
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/bare-id-cluster-stop.sh"
           },
           {
             "type": "command",
@@ -1196,44 +1201,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/declared-ready-stop.sh"
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/scripts/hooks/doc-voice-gate.py stop"
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/scripts/hooks/pr-review-gate.py stop",
-            "timeout": 60
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/scripts/hooks/owner-ask-content-stop.py"
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/scripts/hooks/creation-box-stop.py"
-          },
-          {
-            "type": "command",
             "command": "python3 ~/.claude/scripts/directions/directions.py hook-stop"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/format-gate-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/goal-proposal-stop.sh"
           }
         ]
       },
@@ -1249,39 +1217,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/queue-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "~/.claude/scripts/hooks/ctx-claim-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/guard-structural-claim.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/guard-absence-claim.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/atone-stop-gate.sh"
           }
         ]
       },
@@ -1342,46 +1278,6 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/hooks/heed-writeback.sh resolve"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/ui-callouts-gate.sh"
-          },
-          {
-            "type": "command",
-            "command": "python3 ~/.claude/scripts/hooks/ui-verified-stop.py"
-          },
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/review-nudge-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/credential-ask-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/scripts/hooks/named-next-work-stop.sh"
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-stop"
           }
         ]
       }
@@ -1668,7 +1564,7 @@
     "code-simplifier@claude-plugins-official": true,
     "codex@openai-codex": true,
     "commit-commands@claude-plugins-official": true,
-    "explanatory-output-style@claude-code-plugins": true,
+    "explanatory-output-style@claude-code-plugins": false,
     "feature-dev@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
     "frontend-developer@awesome-claude-code-plugins": false,
@@ -1708,6 +1604,7 @@
     }
   },
   "outputStyle": "Concise",
+  "attribution": { "commit": "", "pr": "" },
   "feedbackDrafts": "notify",
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",

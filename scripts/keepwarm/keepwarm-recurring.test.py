@@ -94,9 +94,15 @@ def events(sid):
 # Claude Code discards a block from an async hook, so a passing test above proves nothing
 # unless the real registration can deliver it. Reads the live settings file.
 with open(os.path.expanduser("~/.claude/settings.json")) as f:
-    registered = [h for g in json.load(f)["hooks"]["Stop"] for h in g["hooks"] if "keepwarm.py hook-stop" in h.get("command", "")]
-expect("the Stop hook is registered once", len(registered) == 1)
-expect("the Stop hook is not async, so its block reaches the session", not registered[0].get("async"))
+    live_hooks = json.load(f)["hooks"]
+with open(os.path.join(HERE, "..", "hooks", "stop-gates.txt")) as f:
+    expect("the arbiter runs the Stop hook", sum("keepwarm.py hook-stop" in line for line in f) == 1)
+registered = [h for g in live_hooks["Stop"] for h in g["hooks"] if "stop-arbiter.py" in h.get("command", "")]
+expect("the arbiter is registered once", len(registered) == 1)
+expect("the arbiter is not async, so a block reaches the session", not registered[0].get("async"))
+for event, mode in (("SessionStart", "hook-start"), ("UserPromptSubmit", "hook-prompt")):
+    expect("keep-warm's %s is registered on %s" % (mode, event),
+           any("keepwarm.py " + mode in h.get("command", "") for g in live_hooks[event] for h in g["hooks"]))
 
 
 def job_transcript(name, rows):
@@ -180,6 +186,27 @@ hook("hook-prompt", session_id="jm7", prompt="[keepwarm] idle check")
 expect("a wake arriving confirms the job", state("jm7").get("job_seen") is True)
 out = hook("hook-stop", session_id="jm7", transcript_path=quiet)
 expect("and a confirmed job is not asked for again", out.get("decision") != "block")
+
+# Claude Code's own job list outranks anything in the transcript.
+job = {"id": "abc", "schedule": "1-59/20 * * * *", "recurring": True, "prompt": "[keepwarm] idle check"}
+hook("hook-start", session_id="jc1")
+hook("hook-prompt", session_id="jc1", prompt="work")
+expect("a job in the list confirms it, with no transcript to read", hook("hook-stop", session_id="jc1", session_crons=[job]) == {})
+expect("and shows the next ping", "armed_at" in state("jc1"))
+out = hook("hook-stop", session_id="jc1", session_crons=[])
+expect("a job deleted later is asked for again", out.get("decision") == "block")
+hook("hook-start", session_id="jc2")
+hook("hook-prompt", session_id="jc2", prompt="work")
+other_job = dict(job, prompt="[other] thing")
+expect("another job in the list does not count", hook("hook-stop", session_id="jc2", session_crons=[other_job]).get("decision") == "block")
+hook("hook-start", session_id="jc3")
+hook("hook-prompt", session_id="jc3", prompt="work")
+time.sleep(0.01)
+out = hook("hook-stop", session_id="jc3", session_crons=[], transcript_path=job_transcript("c3", [cron_row()]))
+expect("an empty list beats a create in the transcript", out.get("decision") == "block")
+hook("hook-start", session_id="jc4")
+hook("hook-prompt", session_id="jc4", prompt="work")
+expect("a malformed list entry is not a job", hook("hook-stop", session_id="jc4", session_crons=["[keepwarm]", None]).get("decision") == "block")
 
 # What the first validation found unpinned.
 hook("hook-start", session_id="jm9")

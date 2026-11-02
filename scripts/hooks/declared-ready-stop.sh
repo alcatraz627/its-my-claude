@@ -50,6 +50,9 @@
 # Tuning posture: UNDER-fire, never over-fire. Loop-safe: blocks once per
 # claim-signature, then demotes to a soft note. Mute: touch ~/.claude/.no-declared-ready-gate
 
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-declared-ready-gate" ] && exit 0
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; hook_snoozed declared-ready && exit 0

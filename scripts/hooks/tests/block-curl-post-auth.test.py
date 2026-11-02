@@ -6,6 +6,8 @@ by flag rather than by URL would have let a deployed host through in the same
 command line.
 """
 
+import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import json
 import subprocess
 import sys

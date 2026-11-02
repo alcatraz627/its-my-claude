@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks guard-env-capture-test: test code that stores and shows the whole
 # environment is refused; passing an environment on or reading keys is not.
 set -u

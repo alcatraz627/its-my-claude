@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # prefer-tmp-py-over-inline.test.sh: nudge behaviour + heed measurement.
 #
 # The hook nudges on a multi-line inline `python3 -c`, then measures whether the

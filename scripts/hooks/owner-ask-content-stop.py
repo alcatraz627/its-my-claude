@@ -183,7 +183,9 @@ def main():
     try:
         inp = json.load(sys.stdin)
         tp = inp.get("transcript_path")
-        reply = last_reply(tp) if tp and os.path.exists(tp) else ""
+        # The Stop input carries the reply just sent; the transcript lags one
+        # message at Stop time, so it is only the fallback.
+        reply = inp.get("last_assistant_message") or (last_reply(tp) if tp and os.path.exists(tp) else "")
     except (ValueError, OSError):
         return
     hits = bare_asks(reply)

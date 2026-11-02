@@ -62,7 +62,7 @@ Instructions say what good writing is. Hooks catch the tells that kept slipping 
 | No period after a path | CLAUDE.md core | Ghostty swallows the period into the link | `CLAUDE.md` |
 | Evidence before agreement | always-loaded rule | No "you're absolutely right" without a check | `rules/pushback-and-self-criticism.md` |
 | Questions go to a wizard | always-loaded rule | More than one owner question becomes a decision page | `rules/owner-decisions-go-through-a-wizard.md` |
-| format-gate | Stop hook, blocks once | Six checks in one pass: path-dot, em-dash, length cap (2600 chars), relative path, prose-smell (blocks on 2+ tells under policy `enforce`), dense-briefing (advisory) | `scripts/hooks/format-gate-stop.sh` |
+| format-gate | Stop hook, through `stop-arbiter.py` | Em-dash and prose-smell (2+ tells under policy `enforce`) block once. The length cap warns from 2600 chars and blocks from 3250, not counting lines other hooks require. Path-dot and relative path print the clickable path for the owner and do not block | `scripts/hooks/format-gate-stop.sh` |
 | format reminder | prompt hinter | Reminds the next two turns which format class tripped | `scripts/hooks/format-reminder-ups.sh` |
 | Bare-id clusters | Stop hook, blocks | `#123`, `VER-12`, hashes with no words saying what they are | `scripts/hooks/bare-id-cluster-stop.sh` |
 | Named next work | Stop hook, blocks | "Next I will..." with the work undone | `scripts/hooks/named-next-work-stop.sh` |

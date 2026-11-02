@@ -1,0 +1,16 @@
+<task-notification
+<system-reminder
+<local-command
+<user-prompt-submit-hook
+Another Claude session sent
+Stop hook feedback:
+Caveat:
+This session is being continued
+[keepwarm]
+[usage-carry]
+[usage-resume]
+[fleet-watch]
+[Usage limit reached
+[Earlier usage-limit notes
+[Request interrupted
+[SYSTEM

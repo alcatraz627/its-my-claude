@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-gh-prose.py: prose posted through gh that reads as a wall is
 # refused, a plain rewrite of the same text passes, and short automation
 # triggers such as "/clanky review" pass. The real case is the 20 Oct landing-app

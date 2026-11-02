@@ -3,6 +3,7 @@
 host that the command does not name is refused; local hosts, named hosts, offline
 SQL, read-only commands and mere mentions of the verbs pass."""
 import json, os, subprocess, sys, tempfile
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 HOOK = os.environ.get("DBT_HOOK", os.path.join(os.path.dirname(os.path.abspath(__file__)), "guard-db-target.py"))
 tmp = tempfile.mkdtemp(prefix="dbt-")

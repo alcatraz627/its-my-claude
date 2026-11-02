@@ -12,6 +12,7 @@ scripts/hooks/ so it finds shellparse.py.
 
 import json
 import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import subprocess
 import sys
 import tempfile

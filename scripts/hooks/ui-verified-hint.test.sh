@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for ui-verified-hint.sh: the note queued by ui-verified-stop.py reaches the
 # agent once, as UserPromptSubmit context, and only the session it belongs to.
 set -uo pipefail

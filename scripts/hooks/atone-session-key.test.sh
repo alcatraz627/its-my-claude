@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # atone-session-key.test.sh: the atone fleet keys its state on the SESSION, not the day.
 #
 # What this protects, in human terms: every part of the atone system keeps a little

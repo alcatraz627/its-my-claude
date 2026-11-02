@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-pr-title-tags.sh: a `gh pr create` or `gh pr edit --title`
 # whose title lacks the repo's required tags is refused with the corrected
 # title; the same command with the tags passes; a repo's own PR-TITLE-TAGS line

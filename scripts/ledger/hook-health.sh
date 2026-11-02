@@ -36,13 +36,14 @@ WARN="${HOOK_HEALTH_WARN:-$HOME/.claude/hooks/warn-events.jsonl}"
 MUTE_ROOT="${HOOK_HEALTH_MUTE_ROOT:-$HOME/.claude}"
 NOW="${HOOK_HEALTH_NOW:-$(date -u '+%Y-%m-%dT%H:%M:%SZ')}"
 
-JSON=0; HOOK=""; SINCE=""; WITHIN=""; RECENT=20
+JSON=0; HOOK=""; SINCE=""; WITHIN=""; RECENT=20; HEADLESS=0
 while [ $# -gt 0 ]; do case "$1" in
   --json)    JSON=1; shift;;
   --hook)    HOOK="${2:-}"; shift 2;;
   --since)   SINCE="${2:-}"; shift 2;;
   --within)  WITHIN="${2:-}"; shift 2;;
   --recent)  RECENT="${2:-}"; shift 2;;
+  --headless) HEADLESS=1; shift;;
   -h|--help)
     cat <<'H'
 hook-health: per-hook health from warn-events telemetry (read-only)
@@ -52,11 +53,13 @@ hook-health: per-hook health from warn-events telemetry (read-only)
   hook-health.sh --since <ISO>   only fires at/after this UTC timestamp
   hook-health.sh --within <days> only fires in the last N days
   hook-health.sh --recent <N>    with --hook: how many recent fires to show (default 20)
+  hook-health.sh --headless      also count fires from claude -p sessions, left out by default
   hook-health.sh --json          machine output
 
 Columns: hook | fires | by-action | heed | top-project | last-fired | MUTED?
   heed  = heeded/(heeded+ignored) from kind:heed lines, or UNMEASURED if no heed data yet
   MUTED = the hook's mute file exists AND it is still firing (worth a look)
+  RETIRE-DUE = its own retire-if line has been met; the call is the owner's
 H
     exit 0;;
   *) shift;;
@@ -69,11 +72,11 @@ if [ ! -s "$WARN" ]; then
   exit 0
 fi
 
-python3 - "$NOW" "$WARN" "$MUTE_ROOT" "$JSON" "$HOOK" "$SINCE" "$WITHIN" "$RECENT" <<'PY'
+python3 - "$NOW" "$WARN" "$MUTE_ROOT" "$JSON" "$HOOK" "$SINCE" "$WITHIN" "$RECENT" "$HEADLESS" <<'PY'
 import json, sys, os, datetime
 from collections import Counter, defaultdict
 
-now_s, warn_path, mute_root, json_s, hook, since_s, within_s, recent_s = sys.argv[1:9]
+now_s, warn_path, mute_root, json_s, hook, since_s, within_s, recent_s, headless_s = sys.argv[1:10]
 as_json  = json_s == "1"
 recent_n = int(recent_s) if str(recent_s).isdigit() else 20
 
@@ -133,6 +136,7 @@ def resolve_mute(hid):
 fires = []   # each: dict with ts, hook_id, action, project, target, detail, id, heeded
 heeds = []   # each: dict with ts, hook_id, ref
 malformed = 0
+headless_skipped = 0
 try:
     fh = open(warn_path)
 except Exception:
@@ -148,6 +152,9 @@ for line in fh:
     kind = d.get("kind")
     hid  = d.get("hook_id") or ""
     if not hid: malformed += 1; continue
+    # A headless turn's outcome says nothing about whether a person was helped. Rows
+    # without the entry field stay counted.
+    if headless_s != "1" and str(d.get("entry", "")).startswith("sdk"): headless_skipped += 1; continue
     if kind == "heed":
         heeds.append({"ts": t, "hook_id": hid, "ref": d.get("ref", ""),
                       "heeded": str(d.get("heeded", "")).lower()})
@@ -206,9 +213,12 @@ def _scan_lifecycle():
         try: txt = open(path, errors="replace").read(4000)
         except OSError: continue
         if "# lifecycle:" not in txt: continue
-        m = re.search(r"--hook\s+([A-Za-z0-9_-]+)", open(path, errors="replace").read())
+        # A file that logs under several ids names the one its rule is about, on a line of
+        # its own; otherwise the first id it logs under is the one.
+        m = re.search(r"^# ledger-id: *([A-Za-z0-9_-]+)", txt, re.M) or re.search(r"--hook\s+([A-Za-z0-9_-]+)", open(path, errors="replace").read())
         hid = m.group(1) if m else os.path.basename(path).rsplit(".", 1)[0]
         fields = dict(re.findall(r"^# (instrument|review-by|retire-if): *(.+)$", txt, re.M))
+        fields["path"] = path
         _LC[hid] = fields
 _scan_lifecycle()
 def lifecycle_of(hid):
@@ -222,6 +232,25 @@ def lifecycle_of(hid):
         if rb and datetime.date.fromisoformat(rb) < now.date(): flags.append("OVERDUE")
     except ValueError: pass
     return (rb, " ".join(flags))
+
+def retire_state(hid, heed_list):
+    """Has this hook met the retirement rule written in its own header?
+
+    Only the measurable form "heed-rate < N% over M fires" can be decided here. Any other
+    wording names a judgment, so it is reported as needing a person to read it. A rule
+    that says "counted from <date>" only counts heed rows from that date.
+    """
+    rule = (_LC.get(hid) or {}).get("retire-if", "")
+    if not rule: return ""
+    m = re.match(r"heed-rate\s*<\s*(\d+)%\s*over\s*(\d+)\s*fires", rule)
+    if not m: return "READ-RULE"
+    start = re.search(r"counted from (\d{4}-\d{2}-\d{2})", rule)
+    if start:
+        day = start.group(1)
+        heed_list = [h for h in heed_list if h["ts"].strftime("%Y-%m-%d") >= day]
+    _, yes, no = heed_rate_for(hid, heed_list)
+    if yes + no < int(m.group(2)): return ""
+    return "RETIRE-DUE" if yes / (yes + no) * 100 < int(m.group(1)) else ""
 
 # ─── per-hook aggregation ────────────────────────────────────────
 def build_rows(fire_list, heed_list):
@@ -249,7 +278,8 @@ def build_rows(fire_list, heed_list):
             "last_ts": h["last"].strftime("%Y-%m-%dT%H:%M:%SZ") if h["last"] else None,
             "last_age": humanize_age(h["last"]) if h["last"] else "-",
             "mute_path": mute_path, "muted": muted, "hard_gate": hard,
-            "review_by": lifecycle_of(hid)[0], "lifecycle": lifecycle_of(hid)[1],
+            "review_by": lifecycle_of(hid)[0],
+            "lifecycle": " ".join(x for x in (lifecycle_of(hid)[1], retire_state(hid, heed_list)) if x),
         })
     rows.sort(key=lambda r: (-r["fires"], r["hook"]))
     return rows
@@ -312,7 +342,8 @@ if as_json:
     print(json.dumps({
         "now": now_s, "since": since.strftime("%Y-%m-%dT%H:%M:%SZ") if since else None,
         "total_fires": len(fires_w), "total_hooks": len(rows),
-        "malformed_skipped": malformed,
+        "malformed_skipped": malformed, "headless_skipped": headless_skipped,
+        "retire_due": [r["hook"] for r in rows if "RETIRE-DUE" in r["lifecycle"]],
         "muted_but_firing": [r["hook"] for r in rows if r["muted"]],
         "hooks": rows,
     }, indent=2))
@@ -349,4 +380,7 @@ hottest = rows[0]["hook"] if rows else "-"
 extra = f"  ·  {malformed} malformed skipped" if malformed else ""
 mnote = f"  ·  {n_muted} MUTED-but-firing" if n_muted else ""
 print(f"{len(rows)} hooks  ·  {len(fires_w)} fires  ·  hottest: {hottest} ({rows[0]['fires']}){mnote}{extra}")
+if headless_skipped: print(f"{headless_skipped} fires from headless sessions left out (--headless to count them)")
+due = [r["hook"] for r in rows if "RETIRE-DUE" in r["lifecycle"]]
+if due: print("past their own retire-if limit, for the owner to call: " + ", ".join(due))
 PY

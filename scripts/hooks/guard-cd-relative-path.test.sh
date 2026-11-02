@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # guard-cd-relative-path.test.sh: the guard catches the reported shape and stays
 # quiet on everything else.
 #

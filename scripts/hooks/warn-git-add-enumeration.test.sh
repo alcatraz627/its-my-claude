@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # warn-git-add-enumeration.test.sh: runnable checks for the git-add enumeration nudge.
 #
 # The nudge must fire on a real `git add` with four or more path arguments and stay

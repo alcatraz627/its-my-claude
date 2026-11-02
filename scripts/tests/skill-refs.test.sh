@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks that the skill-text defects from the process-skills review stay fixed.
 # Each check greps for the defect (or for the required line) and fails if it
 # reappears. Run: bash ~/.claude/scripts/tests/skill-refs.test.sh

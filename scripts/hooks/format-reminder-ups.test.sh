@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for format-reminder-ups.sh: silent for a clean session, one line naming
 # only the tripped classes for the next two prompts after a trip, silent after.
 set -uo pipefail
@@ -24,7 +25,7 @@ trip() { # trip <sid8> <reply>: run the real gate so the tripped file is the rea
 }
 one_line_ctx() { printf '%s' "$1" | jq -e '.hookSpecificOutput.hookEventName == "UserPromptSubmit" and (.hookSpecificOutput.additionalContext | type == "string" and (contains("\n") | not))' >/dev/null 2>&1; }
 ctx() { printf '%s' "$1" | jq -r '.hookSpecificOutput.additionalContext // empty'; }
-long=$(printf 'This sentence is plain prose that keeps going to make the reply long. %.0s' $(seq 1 45))
+long=$(printf 'This sentence is plain prose that keeps going to make the reply long. %.0s' $(seq 1 60))
 D=$'\xe2\x80\x94'
 
 echo "== clean session =="
@@ -47,9 +48,9 @@ printf '%s' "$gate_out" | jq -r '.reason // empty' | rg -q 'prose cap 2600 chars
   && ok "the gate's own reason uses the identical phrase" || bad "gate reason phrase: $gate_out"
 
 echo "== several classes =="
-trip fgu00004 "Small $D change, see ~/foo/bar.md." >/dev/null
+trip fgu00004 "Small $D change. $long" >/dev/null
 out=$(ups fgu00004)
-ctx "$out" | rg -q 'no em-dashes' && ctx "$out" | rg -q 'period right after a file path' && ok "lists both tripped classes" || bad "both classes: $(ctx "$out")"
+ctx "$out" | rg -q 'no em-dashes' && ctx "$out" | rg -q 'prose cap 2600 chars' && ok "lists both tripped classes" || bad "both classes: $(ctx "$out")"
 
 echo "== a newer trip restarts the count =="
 trip fgu00005 "Small $D change." >/dev/null

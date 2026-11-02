@@ -6,6 +6,8 @@ new shape: nothing is refused, a real use still gets told about rg, and prose
 gets nothing at all.
 """
 
+import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import json
 import subprocess
 import sys

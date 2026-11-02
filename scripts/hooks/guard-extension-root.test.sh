@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for guard-extension-root.sh: each case feeds a tool call and checks
 # whether the hook blocks it (exit 2) or lets it through (exit 0).
 

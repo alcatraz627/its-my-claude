@@ -1,4 +1,5 @@
 #!/bin/bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks the doc gate against real offending docs (must speak), their plain
 # rewrites (must stay quiet), the scope rules, and the end-of-turn gate.
 H="${GATE_UNDER_TEST:-$HOME/.claude/scripts/hooks/doc-voice-gate.py}"
@@ -8,7 +9,7 @@ WALL="$HOME/.claude/assets/reports/20261022-doc-gate-fixture"
 # written, the 20 Oct PR status doc before and after its rewrite, and PR 60's two bodies.
 REC="$HOME/.claude/assets/reports/20261027-readability-gate-fixture"
 T=$(mktemp -d)
-export DOC_VOICE_STATE="$T/state" DOC_VOICE_EXEMPT="$T/exempt.txt" DOC_VOICE_OFF=0
+export DOC_VOICE_SNAP="$T/snap" DOC_VOICE_STATE="$T/state" DOC_VOICE_EXEMPT="$T/exempt.txt" DOC_VOICE_OFF=0
 mkdir -p "$DOC_VOICE_STATE"
 fail=0
 run() { printf '{"session_id":"%s","tool_name":"Write","tool_input":{"file_path":"%s"}}' "${2:-s1}" "$1" | python3 "$H"; }
@@ -25,7 +26,7 @@ mkdir -p "$T/docs/plan" "$T/notes" "$T/proj/.claude/docs"
 cp "$FIX/cprd-parity-before.md" "$T/docs/plan/before.md"
 cp "$FIX/cprd-parity-after.md" "$T/docs/plan/after.md"
 expect "the ledger-style doc is flagged" "internal ledger" "$(run "$T/docs/plan/before.md")"
-expect "and asks for a reader line" "reader:" "$(run "$T/docs/plan/before.md")"
+expect "and asks for a reader line" "reader:" "$(run "$T/docs/plan/before.md" s1r)"
 expect "the plain rewrite is quiet" silent "$(run "$T/docs/plan/after.md")"
 cp "$FIX/cprd-parity-before.md" "$T/notes/before.md"
 expect "outside docs/ with no reader is out of scope" silent "$(run "$T/notes/before.md")"
@@ -200,5 +201,60 @@ printf 'Intro.\n\n%s\n\n%s\n\n%s\n\n%s\n' "$L" "$L" "$L" "$L" > "$T/docs/plan/lo
 expect "a run of very long sentences is called out" "run past 40 words" "$(run "$T/docs/plan/longs.md" q12)"
 { printf 'Intro.\n\n'; for i in $(seq 1 90); do printf 'The sync job copies each row once a night. It skips rows that did not change. A failed row is retried the next night.\n\n'; done; } > "$T/docs/plan/flat.md"
 expect "a long page with no sections is called out" "section headings" "$(run "$T/docs/plan/flat.md" q13)"
+
+# Judged against the session's own pre-edit snapshot: only what got worse holds the turn.
+# snap SID FILE [SOURCE]: the snapshot snapshot-pre-edit.sh would have written (empty = new file).
+snap() {
+  local d f key
+  d=$(cd "$(dirname "$2")" && pwd -P); f="$d/$(basename "$2")"
+  key=$(printf '%s' "$f" | shasum | awk '{print $1}')
+  mkdir -p "$DOC_VOICE_SNAP/claude-presnap-${1:0:8}"
+  if [ -n "${3:-}" ]; then cp "$3" "$DOC_VOICE_SNAP/claude-presnap-${1:0:8}/$key"; else : > "$DOC_VOICE_SNAP/claude-presnap-${1:0:8}/$key"; fi
+}
+mkdir -p "$T/docs/snap"
+# An old failing doc, not in git, that the session only touched (a merge that removed markers).
+cp "$WALL/directions-wall.md" "$T/docs/snap/old.md"
+snap h1aaaaaa "$T/docs/snap/old.md" "$WALL/directions-wall.md"
+printf '\nOne more short line.\n' >> "$T/docs/snap/old.md"
+run "$T/docs/snap/old.md" h1aaaaaa >/dev/null
+expect "a touched-only old doc passes at Stop" silent "$(stop h1aaaaaa 'Resolved the merge in old.md.')"
+# The same edit with no snapshot and no git history has nothing to compare with, so it is judged whole.
+cp "$WALL/directions-wall.md" "$T/docs/snap/nosnap.md"
+run "$T/docs/snap/nosnap.md" h1bbbbbb >/dev/null
+expect "with no snapshot and no commit the doc is judged whole" '"decision": "block"' "$(stop h1bbbbbb 'Touched nosnap.md.')"
+# One new bad paragraph on top of the old doc is the agent's doing.
+cp "$WALL/directions-wall.md" "$T/docs/snap/grown.md"
+snap h1cccccc "$T/docs/snap/grown.md" "$WALL/directions-wall.md"
+{ printf '\n'; for i in $(seq 1 60); do printf 'This sentence adds length to one paragraph without a break. '; done; printf '\n'; } >> "$T/docs/snap/grown.md"
+run "$T/docs/snap/grown.md" h1cccccc >/dev/null
+got=$(stop h1cccccc 'Added a section to grown.md.')
+expect "a doc made worse still blocks" '"decision": "block"' "$got"
+expect "and names the doc" "grown.md" "$got"
+# A brand-new file has an empty snapshot and is judged whole.
+{ printf -- '---\nreader: agent\n---\n'; cat "$FIX/cprd-parity-before.md"; } > "$T/docs/snap/ledger.md"
+snap h1dddddd "$T/docs/snap/ledger.md"
+run "$T/docs/snap/ledger.md" h1dddddd >/dev/null
+expect "a new agent-written ledger doc blocks" '"decision": "block"' "$(stop h1dddddd 'Wrote ledger.md.')"
+# Calling a failing doc better is blocked even when it did not get worse.
+cp "$WALL/directions-wall.md" "$T/docs/snap/claimed.md"
+snap h1eeeeee "$T/docs/snap/claimed.md" "$WALL/directions-wall.md"
+printf '\nOne more short line.\n' >> "$T/docs/snap/claimed.md"
+run "$T/docs/snap/claimed.md" h1eeeeee >/dev/null
+expect "a reply calling a failing doc better still blocks" "tells the owner the doc is better" "$(stop h1eeeeee 'Made claimed.md much clearer.')"
+
+# One note per change in the set of faults, not one per edit.
+cp "$WALL/directions-wall.md" "$T/docs/snap/repeat.md"
+expect "the first note is sent" "does not read as a doc" "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+expect "the same faults again are not repeated" silent "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+printf '\nOne more short line.\n' >> "$T/docs/snap/repeat.md"
+expect "a small edit that leaves the same faults stays quiet" silent "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+printf '\n%s\n\n%s\n\n%s\n\n%s\n' "$L" "$L" "$L" "$L" >> "$T/docs/snap/repeat.md"
+expect "a new kind of fault is noted" "run past 40 words" "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+printf '\nAnother short line.\n' >> "$T/docs/snap/repeat.md"
+expect "and an edit that leaves the set alone is quiet again" silent "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+cp "$WALL/directions-plain.md" "$T/docs/snap/repeat.md"
+run "$T/docs/snap/repeat.md" h2aaaaaa >/dev/null
+cp "$WALL/directions-wall.md" "$T/docs/snap/repeat.md"
+expect "a doc that was fixed and fails again is noted again" "does not read as a doc" "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
 trash "$T" 2>/dev/null
 exit $fail

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ledger-id: format-gate
 # lifecycle: tune-able hook (owner rulings D6 and D7, 2026-10-19)
 # instrument: warn-log.sh rows per class (same hook_id as the old gates) plus a format-gate row
 # review-by: 2026-11-19
@@ -14,17 +15,20 @@
 # them, not rewritten, except where a ruling changed the rule (marked D7).
 #
 # Blocking classes (one block, one reason line, every span and its fix):
-#   filename-dot  a file path that CONTAINS A SLASH directly followed by a period.
-#                 A bare filename such as settings.json no longer blocks (D7).
 #   emdash        one or more em-dashes in prose.
-#   terse-reply   prose over the cap (TERSE_LIMIT, default 2600) unless the owner
-#                 asked for length.
-#   relpath       (D7) the reply names a file this turn wrote or edited, or a
-#                 deliverable under docs/ assets/ .claude/output, and the full
-#                 absolute path of it appears nowhere in the reply.
+#   terse-reply   prose a quarter over the cap (TERSE_LIMIT, default 2600) unless the
+#                 owner asked for length. Lines other hooks require are not counted.
 #   prose-smell   two or more block-tier tells, only while policy gates.prose_smell
 #                 is enforce; fewer tells, or policy warn, only advise.
-# Advisory classes (systemMessage only): the remaining prose-smell tells, and the terse-reply warn tier between TERSE_WARN (1500) and the cap.
+# Shown to the owner with no model turn (systemMessage):
+#   filename-dot  a file path that CONTAINS A SLASH directly followed by a period, with
+#                 the clickable path. A bare filename such as settings.json passes (D7).
+#   relpath       the reply names a file this turn wrote or edited by a partial path (one
+#                 with a slash), or a deliverable under docs/ assets/ .claude/output, and
+#                 its absolute path appears nowhere in the reply. A bare filename passes
+#                 (D7). It names a full path only for a file in the session's own project
+#                 or scratchpad.
+#   the remaining prose-smell tells, and the terse-reply warn tier from TERSE_WARN (1500).
 #
 # Loop safety: marker /tmp/claude-format-gate-<sid8> holds "<signature> <blocks> <classes>".
 # An identical reply, three blocks in a row, or stop_hook_active (a block already
@@ -37,6 +41,9 @@
 # keys gates.terse_reply and gates.prose_smell and the hook snoozes. New:
 # FORMAT_GATE_OFF=1 (process) or touch ~/.claude/.no-format-gate (machine-wide,
 # ALL sessions until removed). Never exits non-zero.
+
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
 
 set -uo pipefail
 [ "${FORMAT_GATE_OFF:-0}" = "1" ] && exit 0
@@ -145,12 +152,13 @@ chk_filename_dot() {
   snoozed filename-dot && return
   n=$(printf '%s\n' "$spans" | wc -l | tr -d ' ')
   # Show each span without the closer the pattern swallowed after the period.
-  a=$(printf '%s\n' "$spans" | sed -n '1p' | sed -e 's/[[:space:])"]*$//' -e 's/\]$//')
-  b=$(printf '%s\n' "$spans" | sed -n '2p' | sed -e 's/[[:space:])"]*$//' -e 's/\]$//')
+  a=$(printf '%s\n' "$spans" | sed -n '1p' | sed -e 's/[[:space:])"]*$//' -e 's/\]$//' -e 's/\.$//')
+  b=$(printf '%s\n' "$spans" | sed -n '2p' | sed -e 's/[[:space:])"]*$//' -e 's/\]$//' -e 's/\.$//')
   s="$(trunc "$a" 60)"
   [ -n "$b" ] && s="$s ; $(trunc "$b" 60)"
-  frag="filename-dot: [${s}] put a word or comma after the path, not a period"
-  add_block filename-dot "$frag" "$n"
+  # Printing the path costs nothing, whereas sending the reply back costs a whole turn for a period.
+  add_adv "paths, clickable: ${s}"
+  bash "$LOG" --hook filename-dot --action soft --heeded unknown >/dev/null 2>&1 || true
 }
 
 # ---------------------------------------------------------------------- emdash
@@ -189,11 +197,16 @@ chk_terse() {
   last_user=$(tail -n 400 "$tp" 2>/dev/null | jq -rc 'select(.type=="user")' 2>/dev/null | tail -n 1 \
     | jq -r '.message.content | if type=="string" then . else (.[]? | select(.type=="text") | .text) end' 2>/dev/null)
   printf '%s' "$last_user" | rg -qi '\b(detail(ed|s)?|thorough(ly)?|full(y)?|write[- ]?up|document|report|explain|walk me through|essay|long(er)?|comprehensive|in depth)\b' && asked_long=1
-  plen=$(printf '%s' "$P3" | wc -c | tr -d ' ')
+  # Lines other hooks require are not the author's padding: goal lines, boxes, the secret-scan
+  # note. Up to a limit, so the exemption cannot carry a whole essay.
+  local full; full=$(printf '%s\n' "$P3" | wc -c | tr -d ' ')
+  plen=$(printf '%s\n' "$P3" | rg -v '^\s*(/goal |[┌│└])|secret-scan|/core-dump' 2>/dev/null | wc -c | tr -d ' ')
+  [ "$((full - plen))" -gt 800 ] && plen=$((full - 800))
   warn_at="${TERSE_WARN:-1500}"
   [ "$plen" -ge "$warn_at" ] || return
   snoozed terse-reply && return
-  if [ "$enforce" = "1" ] && [ "$plen" -ge "$TLIMIT" ] && [ "$asked_long" = "0" ]; then
+  # A small overage earns a note. Only a reply a quarter past the cap is worth a rewrite.
+  if [ "$enforce" = "1" ] && [ "$plen" -ge "$((TLIMIT * 125 / 100))" ] && [ "$asked_long" = "0" ]; then
     over=$((plen - TLIMIT + 100))
     add_block terse-reply "terse-reply: ${plen} chars, prose cap ${TLIMIT} chars; cut ${over}+, lead with the one thing to do or know, detail goes in a file" 1
   else
@@ -239,7 +252,10 @@ chk_relpath() {
   done <<EOF
 $hits
 EOF
-  # 2. D7: a file this turn wrote or edited, mentioned but never given in full.
+  # 2. A file this turn wrote or edited, named with a partial path (it has a
+  # slash) but never given in full. A bare filename is left alone, the same line
+  # the filename-dot check draws.
+  local tok qt ends sug
   while IFS= read -r f; do
     [ -n "$f" ] || continue
     b="${f##*/}"
@@ -247,7 +263,10 @@ EOF
     case " $seen " in *" $b "*) continue ;; esac
     seen="$seen $b"
     qb=$(printf '%s' "$b" | sed 's/[.[\*^$()+?{|]/\\&/g')
-    printf '%s\n' "$P1" | rg -qP "(?<![A-Za-z0-9_-])${qb}(?![A-Za-z0-9_])" 2>/dev/null || continue
+    # Partial-path mentions only: an absolute or ~/ form starts after a slash or
+    # tilde, which the lookbehind refuses.
+    tok=$(printf '%s\n' "$P1" | rg -oP "(?<![A-Za-z0-9_/~.@-])(?:[A-Za-z0-9_.@-]+/)+${qb}(?![A-Za-z0-9_])" 2>/dev/null | sort -u)
+    [ -n "$tok" ] || continue
     # Any absolute form of ANY edited file with this basename satisfies it.
     local ok=0 g
     while IFS= read -r g; do
@@ -259,13 +278,37 @@ EOF
 $TURN_FILES
 EOF
     [ "$ok" = "1" ] && continue
-    PENDING="${PENDING}${b}	${f}
+    # Each mention must be the tail of an edited file's path; the full path is
+    # offered only when that file sits in this session's project or scratchpad,
+    # never in another session's worktree.
+    while IFS= read -r qt; do
+      [ -n "$qt" ] || continue
+      sug=""; ends=0
+      while IFS= read -r g; do
+        [ -n "$g" ] || continue
+        case "$g" in */"${qt#./}") ends=1 ;; *) continue ;; esac
+        case "$g" in
+          "$cwd"/*) [ -n "$cwd" ] && sug="$g" ;;
+          */"$sid"/scratchpad/*) sug="$g" ;;
+        esac
+        [ -n "$sug" ] && break
+      done <<EOF
+$TURN_FILES
+EOF
+      [ "$ends" = "1" ] || continue
+      PENDING="${PENDING}${qt}	${sug}
 "
+    done <<EOF
+$tok
+EOF
   done <<EOF
 $TURN_FILES
 EOF
   [ -n "${PENDING//[[:space:]]/}" ] || return
   snoozed relpath && { PENDING=""; return; }
+  # Items that carry a path to paste come first, so the clip never drops them.
+  PENDING="$(printf '%s' "$PENDING" | awk -F'\t' 'NF>=2 && $2!=""' ; printf '%s' "$PENDING" | awk -F'\t' 'NF<2 || $2==""')
+"
   while IFS="	" read -r h abs; do
     [ -n "$h" ] || continue
     n=$((n + 1))
@@ -275,8 +318,9 @@ EOF
 $PENDING
 EOF
   list="$shown"; [ "$n" -gt 2 ] && list="$list ; +$((n - 2)) more"
-  frag="relpath: write the full path once: ${list}"
-  add_block relpath "$frag" "$n"
+  # The hook already knows the absolute path, so it hands it to the owner itself.
+  add_adv "full paths: ${list}"
+  bash "$LOG" --hook relpath --action soft --heeded unknown >/dev/null 2>&1 || true
 }
 
 # ----------------------------------------------------------------- prose-smell
@@ -449,5 +493,9 @@ bash "$LOG" --hook format-gate --action block --heeded unknown --detail "classes
 reason="format-gate: re-emit once with all of these fixed. ${ITEMS}"
 # The block channel clips the reason to one line, so keep it compact.
 if [ "${#reason}" -gt 500 ]; then reason="$(printf '%s' "$reason" | cut -c1-497)..."; fi
-emit --arg r "$reason" '{decision:"block", reason:$r}'
+if [ -n "$ADV" ]; then
+  emit --arg r "$reason" --arg m "$ADV" '{decision:"block", reason:$r, systemMessage:$m}'
+else
+  emit --arg r "$reason" '{decision:"block", reason:$r}'
+fi
 exit 0

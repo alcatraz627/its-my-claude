@@ -9,6 +9,7 @@ scripts/hooks/git-prose-gate.py, scripts/style/prose-lint.py, git-hooks/pre-comm
 that has one guard weakened, and the matching test must go red.
 """
 import os, subprocess, sys, tempfile, unittest
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 ROOT = os.environ.get("PROSE_GATE_TEST_ROOT") or os.path.expanduser("~/.claude")
 GATE = os.path.join(ROOT, "scripts", "hooks", "git-prose-gate.py")

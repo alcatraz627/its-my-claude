@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Covers the nuisance-tier hooks migrated to hook_cmd_skeleton (task #36 / D12).
 #
 # Every mention row carries its OWN mutation control, because the first draft of

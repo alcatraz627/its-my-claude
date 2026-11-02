@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for hook_heed_note (hook-common.sh) and for the five hooks that use it:
 # guard-cluster-e-smells, guard-prose-quality, guard-ai-signature,
 # warn-git-add-enumeration and prefer-ripgrep. For each, a fire followed by a clean

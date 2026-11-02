@@ -2,6 +2,7 @@
 """Checks ui-verified-stop: a UI claim with no image after the last UI edit is
 refused; a looked-at change, a non-UI change and an honest "not looked at" pass."""
 import json, os, subprocess, sys, tempfile
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 HOOK = os.environ.get("UI_VERIFIED_HOOK", os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui-verified-stop.py"))
 tmp = tempfile.mkdtemp(prefix="uiv-")

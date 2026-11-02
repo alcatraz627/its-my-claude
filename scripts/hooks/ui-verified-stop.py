@@ -40,6 +40,10 @@ records heeded:true; the same shortfall again records heeded:false.
 Mute: touch ~/.claude/.no-ui-verified-gate
 """
 import datetime, hashlib, json, os, re, subprocess, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
+if not hookpop.should_run():
+    sys.exit(0)
 
 HOME = os.path.expanduser("~")
 if os.path.exists(os.path.join(HOME, ".claude", ".no-ui-verified-gate")):

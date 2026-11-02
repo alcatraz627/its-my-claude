@@ -43,20 +43,28 @@ event and on whether you are blocking:
       arrive (for example a `PreToolUse:… hook additional context:` reminder). Stdin
       unit-tests do NOT prove this, because you read the stderr yourself and the agent can't.
 
-## A2. Does it reach the USER? (only via the agent, because no mechanical channel exists)
+## A2. Does it reach the USER? Pick the cheapest channel that works
 
-**No non-blocking hook output reaches the user's transcript mechanically.**
-`stderr`, `systemMessage` and `/dev/tty` are all invisible or clobbered by the
-TUI alternate-screen buffer (verified live 2026-06-01; see `hooks-tui-limits.md`).
-The conversation area belongs to the TUI, and mechanical user-visible channels exist
-only OUTSIDE it (macOS notification, statusline, tab title, log file).
+`systemMessage` shows on the owner's screen with no model turn, and it does not enter what
+the model reads. It was checked on screen in tmux on Claude Code 2.1.316 (2026-11-02), from
+PreToolUse, UserPromptSubmit and Stop, multi-line text included. SubagentStart and SubagentStop
+showed nothing on the same screen. `stderr` with exit 0 and `/dev/tty` remain invisible.
 
-So a per-incident nudge reaches the user's transcript ONLY agent-mediated:
+The channel rule, cheapest first. Use the first one that does the job:
 
-- [ ] The advisory hook appends a **`→→ SURFACE …`** directive to its
-      `additionalContext`, and `rules/surface-hook-nudges-to-user.md` mandates the
-      agent render it as a bordered callout in its reply. This is the hybrid: the hook
-      detects (mechanical) and the agent surfaces with context (in-transcript).
+1. The hook does the work itself.
+2. It shows the owner directly, with `systemMessage`. Free.
+3. It notes the model on the next prompt, with `additionalContext`. Costs context.
+4. It blocks with `decision: block`, only when a model turn is the only remedy. Costs a turn,
+   and Claude Code discards a block from a hook registered `async`.
+
+A Stop hook also receives `last_assistant_message`, `session_crons` (the session's jobs) and
+`background_tasks` (running shells and agents). Read those instead of inferring from the
+transcript, which lags behind.
+
+- [ ] A hook that still sends a nudge as `additionalContext` for the owner may append a
+      **`→→ SURFACE …`** directive, and `rules/surface-hook-nudges-to-user.md` covers it. Prefer
+      `systemMessage` in new hooks.
 - [ ] For *aggregate* visibility ("fired N / heeded M"), log firings to a file
       and surface them in reflect or the widget, and never as a per-fire popup.
 

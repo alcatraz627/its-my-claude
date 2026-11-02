@@ -18,6 +18,15 @@
 # One-shot skip: PLAN_GATE_OFF=1
 # Telemetry:     warn-log.sh --hook plan-gate-ups --action nudge
 
+# Keyword advice is for what a person typed: see hook_should_run. Reads stdin once and
+# hands the same bytes on to the code below.
+HOOK_STDIN=$(cat)
+if . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; then
+  hook_should_run owner-turn || exit 0
+  hook_is_automated_prompt "$(printf '%s' "$HOOK_STDIN" | jq -r '.prompt // empty' 2>/dev/null)" && exit 0
+fi
+exec 0< <(printf '%s' "$HOOK_STDIN")
+
 set -uo pipefail
 [ "${PLAN_GATE_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-plan-gate" ] && exit 0

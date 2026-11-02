@@ -57,6 +57,40 @@ if [ -r "$STRIP" ]; then
   _h=$(printf '%s' "$command" | python3 "$STRIP" --heredocs-only 2>/dev/null) && [ -n "$_h" ] && body_free="$_h"
 fi
 scan=$(blank_quotes "$body_free")
+
+# Blanking hides what a quoted replacement holds, and a '$1' replacement is the one
+# valid use of -r. Put a marker back where the original had a $ inside a blanked
+# span, so "is the next word a replacement" can be answered below. Skipped when the
+# blanker changed the length (positions would no longer line up); then a quoted
+# $1 reads as a plain word and the guard errs toward blocking.
+MARK=$'\001'
+if [[ "$body_free" == *'$'* ]] && [ "${#scan}" -eq "${#body_free}" ]; then
+  marked=""
+  for ((i = 0; i < ${#scan}; i++)); do
+    if [ "${scan:i:1}" = " " ] && [ "${body_free:i:1}" = '$' ]; then marked+="$MARK"; else marked+="${scan:i:1}"; fi
+  done
+  scan="$marked"
+fi
+
+# Is the word at the start of $1 a replacement string for rg -r? True for an empty
+# quote pair, a quoted word holding a $ (capture reference), or a bare word holding
+# a $. A plain word such as a pattern or a path is not.
+starts_with_replacement() {
+  local rest="${1#"${1%%[![:space:]]*}"}" q body word
+  [ -n "$rest" ] || return 1
+  q="${rest:0:1}"
+  if [ "$q" = "'" ] || [ "$q" = '"' ]; then
+    body="${rest:1}"
+    body="${body%%"$q"*}"
+    [ -z "$body" ] && return 0
+    [[ "$body" == *"$MARK"* ]] && return 0
+    return 1
+  fi
+  word="${rest%%[[:space:]]*}"
+  [[ "$word" == *'$'* ]] && return 0
+  return 1
+}
+
 scan=${scan//\$\(/$'\n'}                                      # a substitution starts a new command
 scan=${scan//\`/$'\n'}
 footgun=0
@@ -79,11 +113,23 @@ while IFS= read -r seg; do
   [[ "$s" =~ ^rg[[:space:]] ]] || continue                    # this segment isn't an rg command
   rgargs="${s#rg}"                                            # only the args that belong to rg
   [[ "$rgargs" =~ (--replace)([[:space:]=]|$) ]] && continue  # explicit intent → allow
-  # SHORT flag token containing 'r' (single dash: -r, -rn, -ri, -nr, -rl). The
-  # leading separator class forbids a double dash, so `--replace` never matches.
-  if [[ "$rgargs" =~ (^|[[:space:]\(])-[A-Za-z]*r[A-Za-z]*([[:space:]=]|$) ]]; then
+  # Two shapes are the mistake. A bundle where r is followed by more letters
+  # (-rn, -ri, -rl): r takes the rest of the bundle as its replacement, so the
+  # letters never act as flags. And an r that ends a token (-r, -nr) whose next
+  # word is not a replacement: that is "recursive" muscle memory, and rg then eats
+  # the pattern. `-r '$1'`, `-r ''` and `-nor '$0'` are real replacements and pass.
+  # The leading separator class forbids a double dash, so `--replace` never matches.
+  if [[ "$rgargs" =~ (^|[[:space:]\(])-[A-Za-z]*r[A-Za-z]+([[:space:]=]|$) ]]; then
     footgun=1; break
   fi
+  rest="$rgargs"
+  while [[ "$rest" =~ (^|[[:space:]\(])-[A-Za-z]*r([[:space:]=]|$) ]]; do
+    hit="${BASH_REMATCH[0]}"
+    rest="${rest#*"$hit"}"
+    [[ "$hit" == *= ]] && continue                            # -r=VALUE is explicit
+    if ! starts_with_replacement "$rest"; then footgun=1; break; fi
+  done
+  [ "$footgun" = 1 ] && break
 done < <(printf '%s\n' "$scan" | tr ';|&' '\n')
 
 if [ "$footgun" = 1 ]; then

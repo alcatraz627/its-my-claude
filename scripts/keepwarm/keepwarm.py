@@ -951,13 +951,21 @@ def hook_stop(inp):
     st.update(last_activity=now_s(), work_at=now_s(), answered=True, account=account())
     job_missing = False
     if st.get("recurring_at"):
-        if oneshot_mode() or st.get("job_seen") or job_created_since(inp.get("transcript_path") or "", st["recurring_at"]):
+        # Claude Code tells a Stop hook which jobs the session holds, which also catches
+        # one deleted later. The transcript search is for a harness that does not say.
+        crons = inp.get("session_crons")
+        if isinstance(crons, list):
+            held = any(isinstance(c, dict) and str(c.get("prompt", "")).startswith(PREFIX) for c in crons)
+        else:
+            held = st.get("job_seen") or job_created_since(inp.get("transcript_path") or "", st["recurring_at"])
+        if oneshot_mode() or held:
             st["job_seen"] = True
             st.pop("arm_asks", None)
             st["armed_at"] = now_s() + WARM_DUE_MIN * 60   # the statusline shows this as the next ping
         else:
             # The statusline must not promise a ping nothing will send.
             st.pop("armed_at", None)
+            st.pop("job_seen", None)
             job_missing = True
     u = last_usage(inp.get("transcript_path") or "")
     if u:

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Job 2b, inverted 2026-09-18 (owner): a fable lane MAY delegate by default; the
 # authoring block binds only while a fable-restrict snooze row is live.
 set -uo pipefail

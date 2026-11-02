@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-prose-quality.sh: banned prose tells in a written artifact
 # block, and the same text in a test, fixture, probe or replay file is a
 # deliberate example and does not. GUARD_UNDER_TEST points the suite at a

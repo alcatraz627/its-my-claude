@@ -4,6 +4,8 @@ The must-BLOCK list is the point: a false-positive fix that lets a real leak
 through is worse than the false positive. Every entry here emits file CONTENTS.
 """
 
+import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import json
 import subprocess
 import sys

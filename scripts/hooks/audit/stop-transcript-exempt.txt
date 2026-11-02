@@ -1,0 +1,7 @@
+# Stop hooks that read transcript_path for something other than the reply just sent, and why.
+# settings-registration.test.sh fails on a registered Stop hook that reads the transcript
+# and neither uses the Stop input's reply nor appears here.
+scripts/hooks/auto-continue-stop.sh       scans the last 6 KB for an API error string, not the reply
+scripts/hooks/speculative-atone-stop.sh   reads when the owner last typed, from the transcript's timestamps
+scripts/sync-todos/stop-sync.sh           rebuilds the task list from the transcript's tool calls
+scripts/keepwarm/keepwarm.py              reads token usage, turn times and job-creation tool calls

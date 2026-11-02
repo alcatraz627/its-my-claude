@@ -46,6 +46,19 @@ msg="Rule on Q1 and Q2 please."
 first=$(run "$msg"); second=$(run "$msg")
 if [[ "$first" == *block* && "$second" == *systemMessage* ]]; then pass=$((pass+1)); echo "ok   blocks once, then notes"; else fail=$((fail+1)); echo "FAIL loop safety: $second"; fi
 
+# Stale tail: the transcript's newest assistant row is an older message, the Stop
+# input's last_assistant_message is the real reply, and the verdict follows the real one.
+stale() {  # $1 newest transcript row, $2 last_assistant_message, $3 session id
+  local tp="$T/stale-$RANDOM.jsonl"
+  jq -cn '{type:"user", message:{role:"user", content:"do the thing"}}' > "$tp"
+  jq -cn --arg t "$1" '{type:"assistant", message:{role:"assistant", content:[{type:"text", text:$t}]}}' >> "$tp"
+  jq -cn --arg tp "$tp" --arg m "$2" --arg s "$3" '{session_id:$s, transcript_path:$tp, last_assistant_message:$m}' | python3 "$HOOK"
+}
+out=$(stale "Closed R1 to R3 and pushed 519f39a." "I need you to decide D2, D4 and D7." stale01)
+if [[ "$out" == *'"decision": "block"'* ]]; then pass=$((pass+1)); echo "ok   stale tail: the real reply's bare ask blocks"; else fail=$((fail+1)); echo "FAIL stale tail hid the real reply: $out"; fi
+out=$(stale "I need you to decide D2, D4 and D7." "Closed R1 to R3 and pushed 519f39a." stale02)
+if [ -z "$out" ]; then pass=$((pass+1)); echo "ok   stale tail: an old bare ask does not block a clean real reply"; else fail=$((fail+1)); echo "FAIL judged the old transcript row: ${out:0:200}"; fi
+
 trash "$T" >/dev/null 2>&1
 echo "pass=$pass fail=$fail"
 [ "$fail" -eq 0 ]

@@ -11,6 +11,15 @@
 #
 # Output: JSON {"hookSpecificOutput": {"additionalContext": "..."}} to stdout.
 
+# Keyword advice is for what a person typed: see hook_should_run. Reads stdin once and
+# hands the same bytes on to the code below.
+HOOK_STDIN=$(cat)
+if . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null; then
+  hook_should_run owner-turn || exit 0
+  hook_is_automated_prompt "$(printf '%s' "$HOOK_STDIN" | jq -r '.prompt // empty' 2>/dev/null)" && exit 0
+fi
+exec 0< <(printf '%s' "$HOOK_STDIN")
+
 set -uo pipefail
 
 HINTER_DIR="${HOME}/.claude/hinters"

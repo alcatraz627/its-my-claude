@@ -24,6 +24,7 @@ Run: python3 guard-corpus.test.py            (exit 0 = pass)
 """
 import json
 import os
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 import subprocess
 import sys
 import tempfile
@@ -72,6 +73,7 @@ F = [  # id, command, cwd key, guard named in the plan, expectation for that gua
     ("F7", "bash scripts/deploy.sh --env dev", "plain", "dev-server-port", "quiet"),
     ("F8", "npx vite-node scripts/seed.ts", "plain", "dev-server-port", "quiet"),
     ("F9", 'rg -n "jq -r .cwd" scripts/', "plain", "rg-replace-bundle", "quiet"),
+    ("F9b", "rg -r '' foo src/", "plain", "rg-replace-bundle", "quiet"),
     ("F10", "cat <<EOF > /tmp/gh.md\ngh release create v1\nEOF", "plain", "gate-cli-actions", "quiet"),
     ("F11", 'python3 -c "print(1); x=\\"gh pr list\\""', "plain", "gate-cli-actions", "quiet"),
     ("F12", 'jq -n --arg i "log is atone/events.jsonl" .', "plain", "protect-atone-raw", "quiet"),
@@ -138,7 +140,7 @@ T = [  # id, command, cwd key, owning guard
     ("T38", 'curl -X POST -H "Authorization: Bearer abc123" https://api.example.com/v1/things', "plain", "curl-post-auth"),
     ("T39", "gh repo create versable-git/x --public", "plain", "repo-visibility"),
     ("T40", "git commit -m x", "protected", "user-commit"),
-    ("T41", "rg -r '' foo src/", "plain", "rg-replace-bundle"),
+    ("T41", "rg -r foo src/", "plain", "rg-replace-bundle"),
 ]
 
 N = [  # id, command, cwd key, owning guard, expectation today

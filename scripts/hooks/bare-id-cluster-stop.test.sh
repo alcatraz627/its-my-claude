@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for bare-id-cluster-stop.sh. BAREID_HOOK points the run at another copy
 # of the hook, to watch the new rows fail against an older one.
 #
@@ -143,6 +144,23 @@ touch "$HOME/.claude/.no-bare-id-gate"
 out=$(run "pending: #59 #91 #39 #153" cccccccc-1111-2222-3333-444444444444)
 [ -z "$out" ] && ok "mute file silences it" || ko "mute ignored"
 rm -f "$HOME/.claude/.no-bare-id-gate"
+
+echo "== stale tail: the Stop input's reply is judged, not the transcript's newest row =="
+stale() {  # stale <newest transcript text> <last_assistant_message> <sid>
+  local tr="$T/stale$RANDOM.jsonl"
+  python3 - "$tr" "$1" <<'PY'
+import json, sys
+open(sys.argv[1], "w").write(json.dumps({"type": "assistant", "message": {"role": "assistant", "content": [{"type": "text", "text": sys.argv[2]}]}}) + "\n")
+PY
+  jq -nc --arg s "$3" --arg tp "$tr" --arg m "$2" '{session_id:$s, transcript_path:$tp, last_assistant_message:$m}' \
+    | bash "$H" 2>/dev/null | jq -r '.decision // empty' 2>/dev/null
+}
+rm -f /tmp/claude-bareid-dddddddd /tmp/claude-bareid-eeeeeeee
+out=$(stale "All three are deployed." "Still pending on you: #59 #91 #39 #153." dddddddd-1111-2222-3333-444444444444)
+[ "$out" = "block" ] && ok "a clean old transcript row, a cluster in the real reply: blocks" || ko "stale tail hid the real reply: '$out'"
+out=$(stale "Still pending on you: #59 #91 #39 #153." "All three are deployed." eeeeeeee-1111-2222-3333-444444444444)
+[ -z "$out" ] && ok "a cluster in the old row, a clean real reply: quiet" || ko "judged the old transcript row: '$out'"
+rm -f /tmp/claude-bareid-dddddddd /tmp/claude-bareid-eeeeeeee
 
 rm -f /tmp/claude-bareid-f000* /tmp/claude-bareid-bbbbbbbb /tmp/claude-bareid-cccccccc
 rm -rf "$T"

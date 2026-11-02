@@ -28,6 +28,9 @@
 #
 # Mute: touch ~/.claude/.no-hand-tasks-gate (machine-wide until removed).
 
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-hand-tasks-gate" ] && exit 0
 
@@ -77,16 +80,12 @@ PY
 
 # The final assistant message, fenced and inline code removed (a fenced /tasks
 # render is the ruled shape, never the defect).
-prose=$(python3 - "$tp" <<'PY' 2>/dev/null
-import json, re, sys
-last = ""
-for line in open(sys.argv[1], errors="replace"):
-    try: d = json.loads(line)
-    except Exception: continue
-    if d.get("type") != "assistant": continue
-    c = (d.get("message") or {}).get("content") or []
-    t = "".join(b.get("text", "") for b in c if isinstance(b, dict) and b.get("type") == "text")
-    if t.strip(): last = t
+# The reply comes from the Stop input (the transcript lags one message at Stop
+# time, see hook_last_assistant_text); only the tool-use scan above needs the file.
+text=$(hook_last_assistant_text "$input" "$tp")
+prose=$(HANDTASKS_TEXT="$text" python3 - <<'PY' 2>/dev/null
+import os, re
+last = os.environ.get("HANDTASKS_TEXT", "")
 bt = chr(96)
 last = re.sub(bt * 3 + ".*?" + bt * 3, " ", last, flags=re.S)
 last = re.sub(bt + "[^" + bt + "]*" + bt, " ", last)

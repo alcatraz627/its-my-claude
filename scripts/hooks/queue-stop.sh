@@ -13,6 +13,9 @@
 #
 # Mute: touch ~/.claude/.no-queue-stop-gate (machine-wide until removed);
 # pause one session's drive with `queue-run.sh off`.
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run no-wake || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-queue-stop-gate" ] && exit 0
 input=$(cat 2>/dev/null) || exit 0
@@ -51,6 +54,7 @@ fi
 printf '%s %s\n' "$sig" "$seen" > "$MARK"
 # One block per record state: a repeat stop on the same state is let through.
 [ "$seen" -eq 1 ] || exit 0
+hook_background_live "$input" && exit 0
 [ -n "$rows" ] || exit 0
 
 next=$(printf '%s\n' "$rows" | head -n 1)
@@ -63,4 +67,5 @@ case "$last" in
   *\?*) reason="Your reply ends on a question. Nothing is asked mid-run: if only the owner can answer it, file it with gs gate $gid <id> \"USER: …\" --do \"<your drafted answer>\" and carry on; otherwise answer it yourself. $reason" ;;
 esac
 reason="$reason To pause the run: queue-run.sh off. Mute: touch ~/.claude/.no-queue-stop-gate"
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook queue --action block >/dev/null 2>&1 || true
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}'

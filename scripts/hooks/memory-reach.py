@@ -19,7 +19,10 @@ import glob
 import json
 import os
 import re
+import subprocess
 import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
 
 HOME = os.path.expanduser("~")
 GLOBAL = os.environ.get("MEMORY_REACH_GLOBAL", os.path.join(HOME, ".claude/memory/global/MEMORY.md"))
@@ -30,6 +33,13 @@ MUTE = os.path.join(HOME, ".claude/.no-memory-reach")
 GENERIC = {"claude", "code", "versable", "users", "home", "work", "src", "app", "test", "tests", "docs",
            "automation", "scripts", "codex", "private-tmp", "resumes", "portfolio"}
 MAX_PROJECTS = 3
+# Short names the owner really uses for a project, beyond its full directory name.
+# Only add one after checking it in real prompts: a guessed word (the first word of
+# a name, say) loads the wrong project whenever the word is common.
+ALIASES = {
+    "better-file-browser": ("bfb",),
+    "switchboard-mac": ("switchboard",),
+}
 
 
 def index_text(path):
@@ -62,12 +72,9 @@ def project_names():
 
 
 def mentioned(prompt, name):
-    """A project is named when its name, or its first word for a hyphenated name, appears whole."""
+    """A project is named when its full name, the name with spaces, or a listed alias appears whole."""
     p = prompt.lower()
-    forms = {name, name.replace("-", " ")}
-    head = name.split("-")[0]
-    if "-" in name and len(head) >= 5 and head not in GENERIC:
-        forms.add(head)
+    forms = {name, name.replace("-", " "), *ALIASES.get(name, ())}
     return any(re.search(r"(?<![\w-])" + re.escape(f) + r"(?![\w-])", p) for f in forms)
 
 
@@ -79,6 +86,7 @@ def session_start(inp):
 
 
 def emit(event, text):
+    warn_log("nudge")
     print(json.dumps({"hookSpecificOutput": {"hookEventName": event, "additionalContext": text}}))
 
 
@@ -110,6 +118,15 @@ def prompt(inp):
         emit("UserPromptSubmit", "\n\n".join(blocks))
 
 
+def warn_log(action):
+    """Record this fire in the hook ledger. Telemetry never gets to break the hook."""
+    try:
+        subprocess.run(["bash", os.path.expanduser("~/.claude/scripts/hooks/warn-log.sh"), "--hook", "memory-reach", "--action", action],
+                       capture_output=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
 def main():
     if os.path.exists(MUTE):
         return
@@ -117,6 +134,8 @@ def main():
         inp = json.load(sys.stdin)
     except ValueError:
         inp = {}
+    if not hookpop.should_run() or hookpop.is_automated_prompt(inp.get("prompt")):
+        return
     mode = sys.argv[1] if len(sys.argv) > 1 else ""
     try:
         {"session-start": session_start, "prompt": prompt}.get(mode, lambda _: None)(inp)

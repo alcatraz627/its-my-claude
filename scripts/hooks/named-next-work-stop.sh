@@ -17,23 +17,21 @@
 # blocked-on label passes. Loop-safe: stop_hook_active steps aside, one block
 # per message hash.
 # Mute: touch ~/.claude/.no-named-next-work-gate  (machine-wide until removed)
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-named-next-work-gate" ] && exit 0
 input=$(cat 2>/dev/null) || exit 0
 command -v jq >/dev/null 2>&1 || exit 0
 [ "$(printf '%s' "$input" | jq -r '.stop_hook_active // false')" = "true" ] && exit 0
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty'); sid=$(printf '%s' "$input" | jq -r '.session_id // empty')
-[ -n "$tp" ] && [ -f "$tp" ] || exit 0
+[ -n "$sid" ] || exit 0
 
-text=$(tail -n 200 "$tp" | python3 -c '
-import json, sys
-recs = [json.loads(l) for l in sys.stdin if l.strip()]
-for r in reversed(recs):
-    if r.get("type") == "assistant":
-        c = (r.get("message") or {}).get("content") or []
-        print(" \n".join(b.get("text", "") for b in c if isinstance(b, dict) and b.get("type") == "text"))
-        break
-' 2>/dev/null)
+# The shared reader sits beside this hook when HOME has no copy (a test home).
+type hook_last_assistant_text >/dev/null 2>&1 || . "$(dirname "$0")/hook-common.sh" 2>/dev/null || exit 0
+# The reply comes from the Stop input (the transcript lags one message at Stop time).
+text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$text" ] || exit 0
 
 # A heading or a bold label at line start. Inline prose ("next I will read the

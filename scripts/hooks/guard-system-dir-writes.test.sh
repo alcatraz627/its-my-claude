@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks guard-system-dir-writes: a write into a system directory is blocked
 # however it is wrapped, and a path that is only named is not.
 # GUARD_UNDER_TEST=<path> points the suite at a mutated copy.

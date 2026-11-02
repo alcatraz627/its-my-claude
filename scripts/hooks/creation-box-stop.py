@@ -18,8 +18,11 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
 
 MUTE = os.path.expanduser("~/.claude/.no-creation-box-gate")
 STATE = os.environ.get("CREATION_BOX_STATE", "/tmp")
@@ -120,11 +123,20 @@ def log(row):
         pass
 
 
+def warn_log(action):
+    """Record this fire in the hook ledger. Telemetry never gets to break the hook."""
+    try:
+        subprocess.run(["bash", os.path.expanduser("~/.claude/scripts/hooks/warn-log.sh"), "--hook", "creation-box", "--action", action],
+                       capture_output=True, timeout=5)
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
 def main():
     if len(sys.argv) > 2 and sys.argv[1] == "--replay":
         days = int(sys.argv[sys.argv.index("--days") + 1]) if "--days" in sys.argv else 30
         return replay(sys.argv[2], days)
-    if os.path.exists(MUTE) or os.environ.get("CREATION_BOX_GATE_OFF") == "1":
+    if os.path.exists(MUTE) or os.environ.get("CREATION_BOX_GATE_OFF") == "1" or not hookpop.should_run():
         return
     try:
         inp = json.load(sys.stdin)
@@ -137,6 +149,9 @@ def main():
     if not last:
         return
     pairs, reply = last
+    # The Stop input carries the reply just sent; the transcript lags one message
+    # at Stop time, so its copy is only the fallback. The tool pairs still come from it.
+    reply = inp.get("last_assistant_message") or reply
     miss = missing(created(pairs), reply)
     if not miss:
         return
@@ -146,6 +161,7 @@ def main():
     names = ", ".join(f"{k} {i}" for k, i in miss)
     if os.path.exists(mark):
         log({"ts": time.time(), "session": sid, "action": "note", "missing": miss})
+        warn_log("soft")
         print(json.dumps({"systemMessage": f"Creation-box gate: the reply still does not show {names} in a box."}))
         return
     try:
@@ -157,6 +173,7 @@ def main():
     # the fix is one command per id; the reason stays one line because the
     # harness clips a block reason.
     cmds = " ; ".join(f"python3 ~/.claude/scripts/box/record-box.py {i}" for _, i in miss)
+    warn_log("block")
     print(json.dumps({"decision": "block", "reason": (
         f"This turn recorded {names}, but the reply does not show it (the owner never sees tool output). "
         f"Run {cmds}, then paste each box and the line under it into the reply.")},

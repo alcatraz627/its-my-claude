@@ -15,6 +15,9 @@
 # is about to review themselves.
 #
 # Mute: touch ~/.claude/.no-style-watch (machine-wide) · STYLE_WATCH_OFF=1 (process)
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 
 [ -f "$HOME/.claude/.no-style-watch" ] && exit 0

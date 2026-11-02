@@ -28,6 +28,9 @@
 #
 # Mute: touch ~/.claude/.no-bare-id-gate (machine-wide until removed).
 
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-bare-id-gate" ] && exit 0
 
@@ -41,24 +44,22 @@ HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"
 
 sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null)
 tp=$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)
-[ -n "$sid" ] && [ -n "$tp" ] && [ -f "$tp" ] || exit 0
+[ -n "$sid" ] || exit 0
 sid8=$(hook_sid8 "$sid")
+
+# The reply that just ended the turn, from the Stop input (the transcript lags one
+# message at Stop time, see hook_last_assistant_text).
+text=$(hook_last_assistant_text "$input" "$tp")
+[ -n "$text" ] || exit 0
 
 # JSON {"prose": <final message, fences removed>, "hits": [<cluster>, ...]}.
 # Backticks cannot appear literally in the python: it lives inside a $(...)
 # command substitution, where bash still treats a backtick as an open-quote even
 # through a quoted heredoc. Spell them chr(96); `bash -n` is the check that
 # catches a slip.
-result=$(python3 - "$tp" <<'PY' 2>/dev/null
-import json, re, sys
-last = ""
-for line in open(sys.argv[1], errors="replace"):
-    try: d = json.loads(line)
-    except Exception: continue
-    if d.get("type") != "assistant": continue
-    c = (d.get("message") or {}).get("content") or []
-    t = "".join(b.get("text", "") for b in c if isinstance(b, dict) and b.get("type") == "text")
-    if t.strip(): last = t
+result=$(BAREID_TEXT="$text" python3 - <<'PY' 2>/dev/null
+import json, os, re
+last = os.environ.get("BAREID_TEXT", "")
 
 bt = chr(96)
 prose = re.sub(bt * 3 + ".*?" + bt * 3, " ", last, flags=re.S)

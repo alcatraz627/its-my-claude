@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # queue-stop: blocks a stop while the drive's goal has an agent-ready row, once
 # per record state; silent with no drive, nothing ready, or the mute; re-blocks
 # under stop_hook_active only after progress; three unchanged stops park the row

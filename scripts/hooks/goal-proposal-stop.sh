@@ -12,6 +12,9 @@
 # Loop-safe: stop_hook_active in the input means the harness is already
 # continuing after a block, and the same message is never blocked twice.
 # Mute: touch ~/.claude/.no-goal-proposal-gate  (machine-wide until removed)
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-goal-proposal-gate" ] && exit 0
 input=$(cat 2>/dev/null) || exit 0
@@ -33,6 +36,9 @@ if [ -z "$(printf '%s' "$input" | jq -r '.last_assistant_message // empty')" ]; 
 fi
 printf '%s' "$text" | rg -q '^\s*/goal ' || exit 0
 printf '%s' "$text" | rg -qi 'Which pending item|/catchup|checkpoint|core-dump|Resume with' && exit 0
+hook_background_live "$input" && exit 0
+# A reply waiting on the owner's answer is meant to stop here, so pushing it on would be wrong.
+printf '%s' "$text" | tail -c 900 | rg -qi '\?\s|answer like|waiting on you|blocked on|your call|your go|say go|you to' && exit 0
 h=$(printf '%s' "$text" | shasum | cut -c1-12)
 STATE="/tmp/claude-goalprop-${sid:0:8}"
 [ "$(cat "$STATE" 2>/dev/null)" = "$h" ] && exit 0
@@ -47,4 +53,5 @@ reason='You printed a /goal paste line and ended the turn with no tool call afte
 [ -n "$lint" ] && reason="$reason
 The proposed goal also has lint findings; fix the wording before it is armed:
 $lint"
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook goal-paste --action block >/dev/null 2>&1 || true
 jq -cn --arg r "$reason" '{decision:"block", reason:$r}'

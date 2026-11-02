@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # policy-approve-ask.sh against a scratch policy store: an approved pick applies the
 # change, anything else changes nothing.
 set -uo pipefail

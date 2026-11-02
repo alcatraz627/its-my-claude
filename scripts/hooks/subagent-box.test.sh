@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # subagent-box.test.sh: a lone dispatch or landing carries at most two rows, a
 # landing reaches the model once, stop-only strays are ledgered but never
 # injected, and three or more seats sent together share one fleet box at
@@ -14,17 +15,23 @@ T=$(mktemp -d); export HOME="$T"; mkdir -p "$T/.claude"
 ln -s "$REAL/.claude/scripts" "$T/.claude/scripts"
 # Lone-seat cases first: no two dispatches may join a batch.
 export SUBAGENT_BURST_GAP=-1
-ev(){ bash "$BX" | jq -r '(.hookSpecificOutput.additionalContext // empty)'; }
+ev(){ bash "$BX" | jq -r '[.systemMessage // empty, .hookSpecificOutput.additionalContext // empty] | join("\n")'; }
 rows(){ printf '%s\n' "$1" | rg -c '^│  \S'; }
+# A SubagentStop hook's output reaches nobody, so a landing box waits for the next prompt.
+land(){ printf "$1" "$SID" | bash "$BX" >/dev/null; cat "/tmp/claude-agentbox-$S8/pending-boxes"; }
 
 d=$(printf '{"hook_event_name":"PreToolUse","session_id":"%s","tool_name":"Agent","tool_input":{"subagent_type":"general-purpose","model":"sonnet","description":"audit hooks","prompt":"Audit every hook."}}' "$SID" | ev)
 n=$(rows "$d")
 [ "$n" -le 2 ] && ok "dispatch box is $n rows" || ko "dispatch box is $n rows"
 printf '%s' "$d" | rg -q "🔵 goal +audit hooks" && ok "dispatch box names the goal" || ko "goal lost: $d"
 printf '%s' "$d" | rg -q "subagent · general-purpose .* sonnet" && ok "the header carries the model" || ko "model missing: $d"
+raw=$(printf '{"hook_event_name":"PreToolUse","session_id":"%s","tool_name":"Agent","tool_input":{"subagent_type":"general-purpose","model":"sonnet","description":"channel check","prompt":"x"}}' "$SID" | bash "$BX")
+printf '%s' "$raw" | jq -e '.systemMessage | test("subagent")' >/dev/null && ok "the box goes straight to the owner's screen" || ko "box not in systemMessage: $raw"
+printf '%s' "$raw" | jq -e 'has("hookSpecificOutput") | not' >/dev/null && ok "and the model does not read it" || ko "box reached the model: $raw"
+sed -i '' '$d' "/tmp/claude-agentbox-$S8/dispatch-queue"
 
 printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag1","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
-l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag1","agent_type":"general-purpose"}' "$SID" | ev)
+l=$(land '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag1","agent_type":"general-purpose"}')
 n=$(rows "$l")
 [ "$n" -le 2 ] && ok "landing box is $n row(s)" || ko "landing box is $n rows"
 printf '%s' "$l" | rg -q "report is data" && ko "landing box still has the long reminder" || ok "landing reminder line dropped"
@@ -52,12 +59,12 @@ printf '%s' "$d" | rg -q "for each one you find" && ko "a long goal was not cut"
 printf '%s' "$d" | rg -q " …" && ok "the cut is marked" || ko "no cut mark: $d"
 printf '%s' "$d" | rg -q "[a-z]{2,} …" && ok "the cut lands after a whole word" || ko "cut mid-word: $d"
 printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
-l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}' "$SID" | ev)
+l=$(land '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag2","agent_type":"general-purpose"}')
 printf '%s' "$l" | rg -q "🔴 goal +golden review · output NOT written" && ok "landing names the goal and the missing file" || ko "missing file not flagged: $l"
 printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' "$SID" | bash "$BX" >/dev/null
 d=$(ev < "$T/pre.json"); echo "done" > "$OUTF"
 printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | bash "$BX" >/dev/null
-l=$(printf '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}' "$SID" | ev)
+l=$(land '{"hook_event_name":"SubagentStop","session_id":"%s","agent_id":"ag3","agent_type":"general-purpose"}')
 printf '%s' "$l" | rg -q "🟢 goal +golden review · output written" && ok "landing says the file was written" || ko "written file not shown: $l"
 printf '%s\n' "$l" | rg -qxF "$OUTF" && ok "the path sits bare on its own line" || ko "path not bare: $l"
 n=$(rows "$l"); [ "$n" -le 2 ] && ok "the landing is at most 2 rows" || ko "landing grew to $n rows"
@@ -86,7 +93,7 @@ Do part $k." --arg d "part $k" \
 done
 printf '%s' "$f" | rg -q "🛫 fleet · 3 seats" && ok "the third dispatch shows one fleet box" || ko "no fleet box: $f"
 [ "$(printf '%s\n' "$f" | rg -c '^│  🔵 [123] +sonnet ')" = "3" ] && ok "the fleet box lists all three seats" || ko "fleet rows: $f"
-printf '%s' "$f" | rg -q "replaces the separate dispatch boxes" && ok "it tells the agent to show only the fleet box" || ko "no replace note: $f"
+printf "%s" "$f" | rg -q "Surface this box|surface only" && ko "the box still asks the model to retype it: $f" || ok "nothing asks the model to retype a box"
 printf '%s' "$f" | rg -q 'est ~' && ko "a fleet with no estimates claims one: $f" || ok "a fleet with no estimates shows no total"
 echo x > "$T/out/seat1.md"; echo x > "$T/out/seat2.md"
 for k in 1 2 3; do printf '{"hook_event_name":"SubagentStart","session_id":"%s","agent_id":"fa%s","agent_type":"general-purpose"}' "$SID" "$k" | bash "$BX" >/dev/null; done

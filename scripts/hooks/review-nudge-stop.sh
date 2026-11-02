@@ -3,8 +3,13 @@
 # instrument: self (a review marker covering the files after the nudge records heeded:true)
 # review-by: 2026-11-15
 # retire-if: heed-rate < 30% over 40 fires
-# review-nudge-stop.sh: Stop hook: when this session wrote a substantial amount of
-# code and no /skeptical-review or /adversarial-review has covered it, tell the owner.
+# review-nudge-stop.sh: when this session wrote a substantial amount of code and no
+# /skeptical-review or /adversarial-review has covered it, tell the owner.
+#
+# Not registered on Stop: at the end of every turn almost nobody acted on it. It runs when
+# work is about to be called done:
+#   review-nudge-stop.sh check     from /validate, using this session's id
+#   review-nudge-stop.sh pr-open   a PostToolUse hook, when a Bash call opens a PR
 #
 # The old review-gate-stop.sh blocked the turn, was retired on 2026-10-14 (zero
 # fires, unregistered, and a marker nobody could write correctly), and the intent
@@ -31,9 +36,19 @@
 # Mute: touch ~/.claude/.no-review-nudge-gate (machine-wide until removed).
 # Telemetry: warn-log.sh --hook review-nudge.
 
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-review-nudge-gate" ] && exit 0
 command -v jq >/dev/null 2>&1 || exit 0
+# Opening a PR is the other moment a review is worth raising. Any other Bash call is silent.
+if [ "${1:-}" = pr-open ]; then
+  HOOK_STDIN=$(cat)
+  case "$(printf '%s' "$HOOK_STDIN" | jq -r '.tool_input.command // empty' 2>/dev/null)" in *"gh pr create"*) ;; *) exit 0 ;; esac
+  exec 0< <(printf '%s' "$HOOK_STDIN" | jq -c '{session_id, stop_hook_active:false}')
+fi
+if [ "${1:-}" = check ]; then exec 0< <(jq -cn --arg s "${CLAUDE_CODE_SESSION_ID:-}" '{session_id:$s, stop_hook_active:false}'); fi
 
 input=$(cat 2>/dev/null) || exit 0
 HOOK_COMMON="$HOME/.claude/scripts/hooks/hook-common.sh"

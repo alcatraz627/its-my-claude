@@ -12,6 +12,45 @@
 # Source it (defines functions only: sourcing has no side effects):
 #   . "$HOME/.claude/scripts/hooks/hook-common.sh"
 
+# hook_is_automated_prompt <prompt>: did a machine write this prompt, not a person?
+#
+# The one list lives in automated-prompts.txt, shared with hookpop.py and every reader.
+hook_is_automated_prompt() {
+  local prompt="${1:-}" prefix
+  prompt="${prompt#"${prompt%%[![:space:]]*}"}"
+  while IFS= read -r prefix; do
+    [ -n "$prefix" ] || continue
+    case "$prompt" in "$prefix"*) return 0 ;; esac
+  done < "$HOME/.claude/scripts/hooks/automated-prompts.txt"
+  return 1
+}
+
+# hook_should_run <population>: should a hook written for this population act now?
+#
+# Advice is for someone reading the reply. In a headless claude -p run or a keep-warm
+# ping nobody is, so advice there only buys another paid turn. Safety guards must never
+# call this: they hold whoever is running. The Python twin is hookpop.should_run.
+#   owner-turn  only when a person may read the reply: not headless, not a keep-warm ping
+#   no-wake     everywhere but a keep-warm ping, for a gate a headless run also has to meet
+hook_should_run() {
+  local population="${1:-owner-turn}" sid="${CLAUDE_CODE_SESSION_ID:-}"
+  if [ "${HOOK_TEST:-}" = 1 ] && [ "${HOOK_POPULATION_TEST:-}" != 1 ]; then return 0; fi
+  if [ -n "$sid" ] && [ -e "${KEEPWARM_WAKE_DIR:-/tmp}/claude-keepwarm-wake-${sid:0:8}" ]; then return 1; fi
+  [ "$population" = no-wake ] && return 0
+  case "${CLAUDE_CODE_ENTRYPOINT:-}" in sdk*) return 1 ;; esac
+  return 0
+}
+
+# hook_background_live <stop-input-json>: is background work still running for this session?
+#
+# A reply that is waiting on a running job has not stopped working, so a gate should not
+# push it on. Claude Code lists these in background_tasks. The inbox watcher runs for the
+# whole session, so it does not count. The Python twin is hookpop.background_live.
+hook_background_live() {
+  printf '%s' "${1:-}" | jq -e '[.background_tasks[]? | select(.status == "running")
+    | select(((.command // "") | contains("watch-inbox")) | not)] | length > 0' >/dev/null 2>&1
+}
+
 # hook_sid8 <session_id>: echo an 8-char, marker-safe session tag.
 #
 # Returns the first 8 characters of the session id, or the literal "nosid" when

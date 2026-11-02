@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Every hook this machine registers must actually be able to run.
 #
 # WHY THIS EXISTS. heed-writeback.sh was committed at mode 100644 and registered
@@ -91,6 +92,13 @@ echo "== every ~/.claude/hinters/*.sh is executable (the injector skips 644 sile
 badh=$(for h in "$HOME"/.claude/hinters/*.sh; do [[ "$h" == *.test.sh ]] && continue; [ -x "$h" ] || echo "notexec $h"; done)
 [ -z "$badh" ] && ok "all hinters carry the x bit" || { bad "non-executable hinters:"; printf '       %s\n' $badh; }
 
+# ── a hook that steers a session must leave a ledger row ─────────────────────
+# A hook with no row is invisible to tuning, however often it blocks. A hook on
+# audit/no-ledger.txt has said why it is exempt; a new one must log or say so.
+echo "== every hook that blocks or injects writes to the ledger =="
+unlogged=$(python3 "$HOME/.claude/scripts/hooks/audit/ledger_coverage.py" "$SETTINGS")
+[ -z "$unlogged" ] && ok "every steering hook logs or is listed as exempt" || { bad "steering hooks with no ledger call:"; printf '       %s\n' $unlogged; }
+
 # ── the prose gates must stay bound to their events ──────────────────────────
 # features/prose-and-voice.md maps these. A settings edit that drops one leaves no
 # error anywhere: the reply or file simply stops being checked.
@@ -102,7 +110,7 @@ PreToolUse:guard-ai-signature.sh UserPromptSubmit:format-reminder-ups.sh"
 # Prints "unbound <event>:<script>" for each required gate absent from that event.
 unbound() {
   python3 - "$1" $PROSE_GATES <<'PY'
-import json, sys
+import json, os, sys
 try:
     hooks = json.load(open(sys.argv[1])).get("hooks", {})
 except Exception:
@@ -110,6 +118,9 @@ except Exception:
 for pair in sys.argv[2:]:
     event, script = pair.split(":", 1)
     cmds = [h.get("command", "") for g in hooks.get(event, []) for h in g.get("hooks", [])]
+    # A gate the arbiter runs is bound through it, so read its list only when it is registered.
+    if any("stop-arbiter.py" in c for c in cmds):
+        cmds += open(os.environ.get("STOP_ARBITER_GATES", os.path.expanduser("~/.claude/scripts/hooks/stop-gates.txt"))).read().split("\n")
     if not any(script in c for c in cmds):
         print(f"unbound {pair}")
 PY
@@ -186,10 +197,40 @@ case "$(audit "$T/broken.json")" in
 esac
 
 echo "== a prose gate dropped from settings is caught =="
-jq 'del(.hooks.Stop[] | select(any(.hooks[]?; .command | test("format-gate-stop"))))' "$SETTINGS" > "$T/noformat.json"
-[ "$(unbound "$T/noformat.json")" = "unbound Stop:format-gate-stop.sh" ] \
-  && ok "removing format-gate from Stop is reported, and nothing else is" \
-  || bad "dropped format-gate not reported exactly, got: $(unbound "$T/noformat.json")"
+jq 'del(.hooks.Stop[] | select(any(.hooks[]?; .command | test("stop-arbiter"))))' "$SETTINGS" > "$T/noarbiter.json"
+unbound "$T/noarbiter.json" | rg -q "unbound Stop:format-gate-stop.sh" \
+  && ok "removing the arbiter from Stop is reported" \
+  || bad "dropped arbiter not reported, got: $(unbound "$T/noarbiter.json")"
+rg -v "format-gate-stop" "$HOME/.claude/scripts/hooks/stop-gates.txt" > "$T/gates.txt"
+[ "$(STOP_ARBITER_GATES="$T/gates.txt" unbound "$SETTINGS")" = "unbound Stop:format-gate-stop.sh" ] \
+  && ok "removing format-gate from the arbiter's list is reported, and nothing else is" \
+  || bad "dropped format-gate not reported exactly, got: $(STOP_ARBITER_GATES="$T/gates.txt" unbound "$SETTINGS")"
+
+# ── a Stop hook must judge the reply it is handed, not the transcript's tail ─
+# The transcript lags one message at Stop time (hook_last_assistant_text in
+# hook-common.sh). A Stop hook that reads transcript_path must use that helper,
+# read last_assistant_message, or be listed with a reason in
+# audit/stop-transcript-exempt.txt.
+echo "== every Stop hook that reads the transcript uses the Stop input's reply or says why not =="
+STR="$HOME/.claude/scripts/hooks/audit/stop_transcript_readers.py"
+stale=$(python3 "$STR" "$SETTINGS")
+[ -z "$stale" ] && ok "no registered Stop hook tails the transcript for the reply" || { bad "Stop hooks reading the transcript without the Stop input's reply:"; printf '       %s\n' $stale; }
+
+printf '#!/usr/bin/env bash\ntp=$(jq -r .transcript_path)\ntail -n 5 "$tp"\n' > "$T/bin/tail-reader.sh"
+printf '#!/usr/bin/env bash\ntp=$(jq -r .transcript_path)\ntext=$(hook_last_assistant_text "$in" "$tp")\n' > "$T/bin/helper-reader.sh"
+printf '#!/usr/bin/env bash\necho nothing\n' > "$T/bin/no-reader.sh"
+fixture "$T/f" "$T/bin/tail-reader.sh"
+[ "$(python3 "$STR" "$T/f/settings.json")" = "$T/bin/tail-reader.sh" ] \
+  && ok "flags a Stop hook that tails the transcript with no helper" \
+  || bad "did not flag a transcript tail reader, got: $(python3 "$STR" "$T/f/settings.json")"
+fixture "$T/g" "$T/bin/helper-reader.sh"
+[ -z "$(python3 "$STR" "$T/g/settings.json")" ] \
+  && ok "a hook using hook_last_assistant_text passes" \
+  || bad "flagged a hook that uses the helper"
+fixture "$T/h" "$T/bin/no-reader.sh"
+[ -z "$(python3 "$STR" "$T/h/settings.json")" ] \
+  && ok "a hook that never reads the transcript passes" \
+  || bad "flagged a hook with no transcript read"
 
 rm -rf "$T"
 echo "---"; echo "pass=$pass fail=$fail"

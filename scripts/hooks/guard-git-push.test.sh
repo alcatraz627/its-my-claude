@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for guard-git-push.sh's GATING DECISION: which pushes reach the approval
 # machinery and which pass silently. The approval machinery itself (sentinel,
 # dialog) is NOT stubbed-and-trusted here: the 2026-07-13 incident showed a

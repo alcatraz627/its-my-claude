@@ -1,0 +1,210 @@
+{
+ "H10_reconcile": {
+  "bare-id-cluster": {
+   "flag": true,
+   "ledger": 77,
+   "transcript": 12
+  },
+  "doc-voice-gate": {
+   "flag": true,
+   "ledger": 3643,
+   "transcript": 83
+  },
+  "format-gate": {
+   "flag": false,
+   "ledger": 299,
+   "transcript": 299
+  },
+  "goal-paste": {
+   "flag": true,
+   "ledger": 0,
+   "transcript": 34
+  },
+  "guard-env-dump": {
+   "flag": true,
+   "ledger": 274,
+   "transcript": 14
+  },
+  "guard-rg-replace-bundle": {
+   "flag": false,
+   "ledger": 29,
+   "transcript": 29
+  },
+  "pr-review": {
+   "flag": true,
+   "ledger": 0,
+   "transcript": 101
+  }
+ },
+ "H11_guidance": {
+  "fires": 379,
+  "on_real_keyword": 65
+ },
+ "H12_by_project": {
+  "better-file-browser": 29,
+  "claude-ipc": 7,
+  "landing-app": 6,
+  "local-models": 14,
+  "speedway": 6,
+  "switchboard-mac": 6
+ },
+ "H12_memory_false_loads": 80,
+ "H13_secret_rows": 1588,
+ "H14_relpath": {
+  "bare": 63,
+  "items": 71,
+  "wrong_worktree": 11
+ },
+ "H15_rg_r_denials": 29,
+ "H17_doc_notes": {
+  "files": 117,
+  "notes": 524,
+  "per_file": 4.5
+ },
+ "H18_persona_fires": 32,
+ "H19_note": "fixture-based, see the plan",
+ "H1_critic_sessions": 503,
+ "H20_path_blocks": 117,
+ "H21_pr_review": {
+  "findings": 23,
+  "retrigger": 46,
+  "total": 101,
+  "wait": 32
+ },
+ "H22_terse": {
+  "blocks": 46,
+  "median_over": 0.09,
+  "under_15pct": 32
+ },
+ "H23_dp_server_ipc_owed": 7,
+ "H24_review_nudge_stop_messages": 342,
+ "H25_box_injects": {
+  "chars": 581719,
+  "count": 535
+ },
+ "H27_stops_with_2plus_messages": 59,
+ "H29_explanatory_injects": 266,
+ "H2_stop_blocks_in_headless": 157,
+ "H30_signature_denials": 40,
+ "H31_goal_paste": {
+  "reply_asks_owner": 6,
+  "total": 34
+ },
+ "H3_blocks_on_warm_replies": 17,
+ "H4_keyword_injects_on_automated_prompts": 198,
+ "H5_guard_env_dump": {
+  "ledger": 274,
+  "transcript": 14
+ },
+ "H6_known_session_share": 0.996,
+ "H6_review_nudge_rows": {
+  "on_critics": 238,
+  "total": 342
+ },
+ "H7_hooks_missing_from_ledger": [
+  "pr-review",
+  "goal-paste",
+  "secret-scan",
+  "memory-reach",
+  "guidance",
+  "subagent-box"
+ ],
+ "H8_block_outcomes": {
+  "bare-id": {
+   "dismissed": 1,
+   "fixed": 4,
+   "no_action": 7
+  },
+  "doc-voice": {
+   "dismissed": 33,
+   "fixed": 37,
+   "no_action": 13
+  },
+  "format:emdash": {
+   "no_action": 1
+  },
+  "format:filename-dot": {
+   "dismissed": 5,
+   "fixed": 7,
+   "no_action": 51
+  },
+  "format:prose-smell": {
+   "no_action": 1
+  },
+  "format:relpath": {
+   "dismissed": 10,
+   "fixed": 12,
+   "no_action": 32
+  },
+  "format:terse-reply": {
+   "fixed": 6,
+   "no_action": 21
+  },
+  "goal-paste": {
+   "fixed": 15,
+   "no_action": 19
+  },
+  "ipc-owed": {
+   "fixed": 10,
+   "no_action": 2
+  },
+  "other": {
+   "dismissed": 1,
+   "fixed": 8,
+   "no_action": 12
+  },
+  "pr-review": {
+   "dismissed": 3,
+   "fixed": 43,
+   "no_action": 55
+  },
+  "queue": {
+   "fixed": 8,
+   "no_action": 4
+  },
+  "structural": {
+   "no_action": 1
+  },
+  "task-stale": {
+   "fixed": 17
+  },
+  "ui-verified": {
+   "dismissed": 2,
+   "fixed": 1,
+   "no_action": 6
+  }
+ },
+ "H8_emdash_heed_rows_from_critics": 118,
+ "blocks_by_gate": {
+  "bare-id": 12,
+  "doc-voice": 83,
+  "format:emdash": 1,
+  "format:filename-dot": 63,
+  "format:prose-smell": 1,
+  "format:relpath": 54,
+  "format:terse-reply": 27,
+  "goal-paste": 34,
+  "ipc-owed": 12,
+  "other": 21,
+  "pr-review": 101,
+  "queue": 12,
+  "structural": 1,
+  "task-stale": 17,
+  "ui-verified": 9
+ },
+ "interactive_block_messages": 448,
+ "interactive_blocked_stops": 380,
+ "interactive_sessions": 68,
+ "interactive_stops": 1434,
+ "populations": {
+  "human": 68,
+  "other-headless": 7,
+  "show-me-examples": 52,
+  "style-critic": 503
+ },
+ "window": {
+  "files": 975,
+  "since": "2026-10-25T00:00:00",
+  "until": "2026-11-01T14:40:00"
+ }
+}

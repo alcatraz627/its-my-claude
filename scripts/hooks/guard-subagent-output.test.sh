@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for guard-subagent-output.sh, focused on the sanctioned-inverse
 # exemption added 2026-08-16 (task #39 / prop-20260722-220830-c9).
 #

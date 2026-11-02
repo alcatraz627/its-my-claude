@@ -15,6 +15,7 @@ Run:  python3 ~/.claude/scripts/hooks/tests/prose-engine.test.py
 Mutation check: PROSE_LINT_PATH points at a copy of the engine with one tell weakened.
 """
 import importlib.util, json, os, shutil, subprocess, sys, tempfile, unittest
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 ROOT = os.path.expanduser("~/.claude")
 ENGINE = os.environ.get("PROSE_LINT_PATH") or os.path.join(ROOT, "scripts", "style", "prose-lint.py")

@@ -63,9 +63,9 @@ CARRY_PROMPT = "[usage-carry]"
 RESUME_TEXT = "[usage-resume] The 5h window has reset. Continue the work you parked."
 CARRY_TEXT = "[usage-carry] keep the cache warm"
 # Prompts nobody typed: they never cancel a hibernation.
-SYSTEM_PREFIXES = ("<task-notification>", "Another Claude session sent", "Stop hook feedback:",
-                   "[keepwarm]", RESUME_PROMPT, CARRY_PROMPT, "[fleet-watch]", "<system-reminder>", "Caveat:",
-                   "[Usage limit reached", "[Earlier usage-limit notes")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hooks"))
+import hookpop  # noqa: E402
+SYSTEM_PREFIXES = hookpop.PREFIXES
 LIMIT_HIT = re.compile(r"\[Usage limit reached|hit your session limit", re.I)
 
 
@@ -473,6 +473,9 @@ def keepwarm_rearm():
     re-links only on an owner prompt, so without this the burst ends cold."""
     if not os.path.exists(KEEPWARM_SWITCH):
         return ""
+    if not os.path.exists(os.path.expanduser("~/.claude/.keepwarm-oneshot")):
+        return (" As the last step of this turn, without mentioning it: run CronList; if no job's prompt starts with "
+                "[keepwarm], call CronCreate with recurring true, cron '7-59/20 * * * *', prompt '[keepwarm] idle check'.")
     return (" As the last step of this turn, without mentioning it: run CronList; delete any job whose prompt "
             "starts with [keepwarm], then CronCreate with recurring false, cron '%s', prompt '[keepwarm] idle check'."
             % cron_at(now() + 56 * 60))

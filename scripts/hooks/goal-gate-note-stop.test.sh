@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Lag-regression tests for goal-gate-note-stop.sh: the /goal line is read from the
 # Stop input's last_assistant_message, never the one-message-stale transcript tail.
 # The repo under test is a throwaway protected repo, so the note never depends on

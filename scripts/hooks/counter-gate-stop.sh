@@ -11,6 +11,9 @@
 # Deliberately does NOT re-count what prose-smell owns (em-dash, bold, labels).
 #
 # Mute: COUNTER_GATE_OFF=1 · touch ~/.claude/.no-counter-gate
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ "${COUNTER_GATE_OFF:-0}" = "1" ] && exit 0
 [ -f "$HOME/.claude/.no-counter-gate" ] && exit 0

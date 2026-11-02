@@ -34,9 +34,12 @@ sid8="${sid:0:8}"
 STASH_DIR="/tmp/claude-agentbox-${sid8:-nosid}"
 mkdir -p "$STASH_DIR" 2>/dev/null || true
 
-emit_ctx() {  # <event-name> <box-text>
-  jq -cn --arg e "$1" --arg c "$2" \
-    '{hookSpecificOutput:{hookEventName:$e, additionalContext:$c}}' 2>/dev/null || true
+# Show a box on the owner's screen, which costs no model context. The second argument,
+# when given, is the one thing the model does need to read.
+emit_owner() {  # <box-text> <model-note>
+  bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook subagent-box --action soft >/dev/null 2>&1 || true
+  jq -cn --arg e "$event" --arg m "$1" --arg c "$2" \
+    '{systemMessage:$m} + (if $c == "" then {} else {hookSpecificOutput:{hookEventName:$e, additionalContext:$c}} end)' 2>/dev/null || true
 }
 
 
@@ -130,20 +133,14 @@ print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
 
     if [ "$idx" -ge "$FLEET_MIN" ]; then
       box=$(fleet_out "$bid")
-      msg="$box
-This fleet box replaces the separate dispatch boxes for this batch: surface only the latest fleet box to the user (rules/surface-hook-nudges-to-user.md), then continue."
     else
       seatrow="${typ:-general-purpose}${name:+ as $name}"
       [ "$bg" = "true" ] && seatrow="$seatrow · background"
       [ -n "$seat" ] && seatrow="$seatrow · $seat"
       box=$(bash "$BOXSH" dispatch "${typ:-general-purpose}" --attr "${model:-inherit}${est:+ · ~\$$est}" \
         --row info:goal "${desc:+$desc: }$goal" --row info:seat "$seatrow" 2>/dev/null)
-      msg="$box
-Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), then continue."
     fi
-    # The whole box is owner text: a gcc-mods session draws it as a transcript
-    # line and the model never reads it; any other session pastes it as before.
-    emit_ctx "PreToolUse" "$(printf '%s' "$msg" | hook_owner_wrap log subagent-box)"
+    emit_owner "$box" ""
     ;;
   SubagentStart)
     aid=$(printf '%s' "$input" | jq -r '.agent_id // empty' 2>/dev/null)
@@ -210,10 +207,8 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
       [ -n "$box" ] || box=$(printf 'goal: %s\n' "$ldesc" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
       printf '%s\n' "$box" >> "$STASH_DIR/pending-boxes" 2>/dev/null || true
     fi
-    # SubagentStop context delivery is unrouted in this harness (verified
-    # 2026-08-14: the box was emitted and never arrived). The parked box goes
-    # out with the UserPromptSubmit drain below; the direct emit is insurance.
-    emit_ctx "SubagentStop" "$(printf '%s\n' "$box" | hook_owner_wrap log subagent-box)"
+    # Nothing a SubagentStop hook prints reaches the screen or the model, so the parked
+    # box goes out with the UserPromptSubmit drain below.
     ;;
   UserPromptSubmit)
     boxes=''
@@ -229,12 +224,8 @@ Surface this box verbatim to the user (rules/surface-hook-nudges-to-user.md), th
     # Stop-only strays are harness internals with no action owed: they stay in
     # unmatched.log (written above) and never reach the model.
     if [ -n "$boxes" ]; then
-      # The boxes and the paste instruction are owner text; the duty to verify
-      # each agent's output stays outside the block so the model keeps it.
-      owner=$(printf '%s\nSubagent landing(s) since your last turn. Surface each box verbatim to the user (rules/surface-hook-nudges-to-user.md).' "$boxes" | hook_owner_wrap log subagent-box)
-      ctx="$owner
-Subagent landing(s) since your last turn: verify each agent's output before acting on it."
-      emit_ctx "UserPromptSubmit" "$ctx"
+      # The boxes are for the owner; the duty to verify each agent's output is the model's.
+      emit_owner "$boxes" "Subagent landing(s) since your last turn: verify each agent's output before acting on it."
     fi
     ;;
 esac

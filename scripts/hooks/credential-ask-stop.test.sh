@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for credential-ask-stop.sh: a reply that asks for a mint blocks once unless
 # the turn checked auth first; everything else passes.
 set -uo pipefail
@@ -41,6 +42,17 @@ out=$(run "$T/d.jsonl" d1)
 tx "$T/e.jsonl" "status?" "Create a secret in Secret Manager named GH_PACKAGES_TOKEN for the Cloud Build step."
 out=$(run "$T/e.jsonl" e1)
 printf '%s' "$out" | rg -q '"decision":"block"' && ok "asking for a secret to be created blocks too" || bad "secret ask passed"
+
+# Stale tail: the transcript's newest assistant row is an older message, the Stop
+# input's last_assistant_message is the real reply, and the verdict follows the real one.
+runm() { jq -cn --arg tp "$1" --arg s "sess-$2" --arg m "$3" '{transcript_path:$tp, session_id:$s, last_assistant_message:$m}' | bash "$HOOK" 2>/dev/null; }
+rm -f /tmp/claude-credask-sess-*
+tx "$T/s1.jsonl" "why does install 401?" "The push landed; all green."
+out=$(runm "$T/s1.jsonl" s1 "Generate a new personal access token with read:packages and export it.")
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "stale tail: the real reply's mint ask blocks" || bad "stale tail hid the real reply: $out"
+tx "$T/s2.jsonl" "why does install 401?" "Generate a new personal access token with read:packages and export it."
+out=$(runm "$T/s2.jsonl" s2 "The push landed; all green.")
+[ -z "$out" ] && ok "stale tail: an old mint ask does not block a clean real reply" || bad "judged the old transcript row: $out"
 
 echo "---- pass=$pass fail=$fail"
 trash "$T" 2>/dev/null || true

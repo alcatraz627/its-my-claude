@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Suite for guard-github-agent-marker.sh: a real gh posting command without the
 # owner's marker is refused, and a file, echo, commit message or heredoc that
 # merely NAMES such a command is not. GUARD_UNDER_TEST points it at a mutated

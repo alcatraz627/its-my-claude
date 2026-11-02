@@ -3,6 +3,7 @@
 than 15 minutes off the clock warns; on-clock lines, non-logs, mentions and old
 lines do not; the next clean edit records a heed."""
 import json, os, subprocess, sys, tempfile
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 HOOK = os.environ.get("HHMM_HOOK", os.path.join(os.path.dirname(os.path.abspath(__file__)), "hhmm-drift-post.py"))
 tmp = tempfile.mkdtemp(prefix="hhmm-")

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for ctx-claim-stop.sh (task #33 / D7).
 #
 # The gate is conditional on a measurement, so every row states the instrument

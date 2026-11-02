@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Checks guard-repo-visibility: public creates and edits in versable-git are denied,
 # private ones and other owners pass.
 set -uo pipefail

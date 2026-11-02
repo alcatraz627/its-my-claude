@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # hook-common.test.sh: runnable checks for hook-common.sh.
 #
 # Covers what the replay fixture corpus structurally cannot: the replay gate uses

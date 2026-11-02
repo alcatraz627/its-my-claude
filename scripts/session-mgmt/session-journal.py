@@ -19,6 +19,8 @@ import os
 import re
 import subprocess
 import sys
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "hooks"))
+import hookpop  # noqa: E402
 import time
 from collections import OrderedDict
 
@@ -62,8 +64,7 @@ def owner_text(e):
     t = _REMINDER.sub("", c).strip()
     if not t:
         return None
-    if t.startswith(("<task-notification", "<local-command-stdout", "Caveat:", "[keepwarm]",
-                     "This session is being continued")):
+    if hookpop.is_automated_prompt(t):
         return None
     m = re.search(r"<command-name>(/[^<]+)</command-name>", t)
     if m:

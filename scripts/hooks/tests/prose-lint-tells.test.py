@@ -7,6 +7,7 @@ their thresholds.
 Run:  python3 ~/.claude/scripts/hooks/tests/prose-lint-tells.test.py
 """
 import importlib.util, os, subprocess, sys, unittest
+os.environ["HOOK_TEST"] = "1"  # keeps real hooks fired here out of the live ledger
 
 PATH = os.environ.get("PROSE_LINT_PATH") or os.path.expanduser("~/.claude/scripts/style/prose-lint.py")
 spec = importlib.util.spec_from_file_location("prose_lint", PATH)

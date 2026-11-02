@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for plan-gate-pre.sh (third-code-file dry-run check), plan-gate-ups.sh
 # (build-prompt hint) and plan-signals.py (what counts as a plan or an exemption).
 # Every exemption has a control: the same setup without it fires.

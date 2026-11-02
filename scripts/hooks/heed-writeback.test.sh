@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export HOOK_TEST=1  # keeps real hooks fired here out of the live ledger
 # Tests for heed-writeback.sh (task #41 / D15).
 #
 # Asserts the LEDGER LINE, not the marker's absence. A marker disappears on both

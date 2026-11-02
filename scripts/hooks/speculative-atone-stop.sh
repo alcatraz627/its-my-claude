@@ -6,6 +6,9 @@
 # way declared-ready-stop is: one block per nag-count value, so a session that
 # genuinely cannot resolve (broker down, store gone) is slowed, never wedged.
 # Mute (owner only, machine-wide): touch ~/.claude/.no-spec-atone-gate
+# Advice for a person reading the reply: see hook_should_run.
+. "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
+
 set -uo pipefail
 [ -f "$HOME/.claude/.no-spec-atone-gate" ] && exit 0
 command -v jq >/dev/null 2>&1 || exit 0
