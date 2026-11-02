@@ -7,10 +7,10 @@ triggers:
   - phrase:"-h"
   - phrase:"--help"
   - phrase:"build a cli"
-related: [tui-design.md]
+related: [tui-design.md, tui-handbook.md]
 tier: 2
 category: conventions
-updated: 2026-06-25
+updated: 2026-11-01
 stale_after_days: 90
 ---
 
@@ -26,16 +26,53 @@ interactive TUI patterns (fzf-as-launcher, color-vs-search fields) see
 1. **Header**: Tool name and one-line purpose. Use gum border or ANSI bold/color if available.
 2. **Structure**: USAGE → EXAMPLES → OPTIONS → SUBCOMMANDS → CONFIGURATION. Users scan top-down, so put the most-used info first.
 3. **Examples over descriptions**: Show 4-6 real commands with `# comments` explaining each. Users copy-paste examples more than they read option docs.
-4. **Color coding** (ANSI or gum): section titles in **bold yellow**, commands and subcommands in **cyan**, option flags in **green**, descriptions and comments in **dim**. Never rely on color alone, because text must be readable without it.
-5. **Consistent column alignment**: Options left-aligned at 20 chars, descriptions start at a fixed column. Use the `printf '  %-20s %s\n'` pattern.
+4. **Color coding** (ANSI or gum): section titles in **bold white** with no rule or box around them (owner, 2026-11-01), commands and subcommands in **cyan**, option flags in **green**, descriptions and comments in **dim**. Never rely on color alone, because text must be readable without it.
+5. **Consistent column alignment**: One line per command, with the description on the command's own line and in one straight column (owner, 2026-11-01). Shorten the words until they fit. At a narrow terminal, cut with `…` rather than wrap.
 6. **Show defaults**: Display current default values inline (for example `--max-tokens N  Max output tokens (default: 200)`).
 7. **Group related options**: Separate option groups with labeled sections, and avoid a flat list.
-8. **No pager**: Help text should be short enough to fit about 60 lines. If it is longer, the tool is doing too much or the help needs trimming.
+8. **No pager**: Bare help and `help` fit 40 lines, and an `examples` command fits 50 (owner, 2026-11-01). The rest goes behind `more`, `help <verb>` and `examples --all`.
 9. **Fallback**: Help always works without gum or color. Test with `TERM=dumb` or pipe to `cat`.
 
 ## Reference implementation
 
 `~/.claude/scripts/llm-mini/llm-mini-core.sh` `show_help()`.
+
+## Structured output: one printer
+
+Everything a tool prints that has a shape goes through one printer object: headings, labelled lines, tables, command lists and the coloring of another tool's output. The look is then decided in one place, and a `[theme]` table in the tool's config can change it. Reference: `vg`.
+
+Copy the class from `~/.claude/scripts/tui/printer.py`, which is standard library only. Run that file for a demo.
+
+```python
+ui = Printer(color_wanted(), config.get("theme", {}))
+ui.section("SERVICES", "forge")                          # a white heading, with a dim note
+ui.rows([("tool logs <svc>", "read logs", ""),           # one line per command, one column
+         ("tool deploy <name>", "start it", "(changes)")])
+ui.field("region", "us-west1")                           # a labelled line
+ui.table(["NAME", "STATUS"], [["web", "READY"]])         # columns that stay lined up with color in them
+print(ui.paint(line), end="")                            # color headings and status words in another tool's output
+```
+
+| Role | Default | Colors |
+|---|---|---|
+| `title` | `1;37` | headings |
+| `command` | `36` | commands in a list |
+| `note`, `label` | `2` | quiet text |
+| `header` | `1` | table column names |
+| `good`, `wait`, `bad` | `32`, `33`, `31` | status words |
+| `mark` | `33` | end-of-row marks such as `(changes)` |
+| `title_prefix` | empty | text in front of every heading |
+
+Stream another tool's output line by line through `paint`, so a follow or a build log still arrives as it is written. Leave it unpainted under `--json` and in a pipe.
+
+## What a command-line tool should offer
+
+- **An `examples` command.** Worked commands live on each verb, so `help <verb>` and `examples <verb>` show the same ones. A test fails a verb without any.
+- **Aliases for the words people reach for.** A test stops an alias clashing with a positional name such as a project.
+- **Two levels of agreement.** An ordinary change asks at a terminal and needs `-y` without one. A dangerous one refuses without `-y`, even from a person, so a stray key cannot pass it.
+- **`-n` shows every step.** A step that depends on an earlier answer prints a placeholder such as `<region>`.
+- **An AI lookup is explicit and checked.** It says that words leave the machine, drops any suggestion that does not name a real verb, removes control characters, and never runs what it suggests.
+- **A mistyped flag stops the command.** Refuse it, or pass it to a tool that will. Never drop it and carry on.
 
 ## Pipe-friendly mode (stdio)
 
