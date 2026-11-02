@@ -136,6 +136,44 @@ limit. Reap is not deletion here either. Every reap records `svc up <name>`.
 Tests: `python3 ~/.claude/scripts/tests/test-svc-policy.py`, and in bfb
 `node e2e/svc-seen-walk.mjs`.
 
+## Leaks that are not services
+
+The same 5-minute `gcc-svc` pass also runs `~/.claude/scripts/dev-servers/reap-leaks.py`,
+which stops what agents leave behind. Check it with `reap-leaks.py status`; every
+stop is logged to `~/.claude/logs/reap-leaks.jsonl`.
+
+| Leak | Stopped when | Never touches |
+|---|---|---|
+| Testing browser (automation flag on a throwaway profile) | No agent use for 2 hours | The owner's Chrome and Claude's tabs in it, which have no automation flag or use the real profile |
+| Automated copy of the installed Chrome, with no real Chrome running | No agent use for 15 minutes by default, because it stops the owner opening Chrome | Same |
+| Pipe-driven browser whose driver is gone | After 5 minutes, since nothing can reach it | Same |
+| Test run (pytest, vitest, `test_*.py` and so on) | Under 1 second of CPU across its whole process tree for 2 hours | Anything not shaped like a test, and test watchers, which are silent between saves on purpose |
+| pm2 daemon started from a temporary home | Older than 2 hours | The real `~/.pm2` |
+
+**What counts as a browser being used.** Page traffic never counts, so a parked tab
+polling an API still goes idle. These do:
+
+- An MCP tool call from the session that owns the browser, recorded by
+  `hooks/browser-use-touch.sh`.
+- A new connection to the browser's debugging port.
+- For a browser driven by a script in a live session, that script using 3 seconds of
+  CPU in a pass. An MCP server's CPU does not count, because page events reach it too.
+
+Time the machine was asleep does not count as idle.
+
+**An agent can choose its browser's limit.** `reap-leaks.py ttl MINUTES "why"` sets
+the idle limit for its session's testing browsers, or for one with `--pid`, in place
+of either default. It may be shorter or longer, up to 240 minutes; past 120 it warns
+but still applies. `hooks/browser-ttl-nudge.sh` raises the choice once per session as
+a browser starts, and never blocks. The default of 15 minutes suits most work.
+
+**Quiet test runs:** a test legitimately silent for hours takes a hold:
+`reap-leaks.py hold <pid> <hours> "why"`. A stop is polite first, then forced on the
+next pass if the process is still there. Mute everything with
+`touch ~/.claude/.no-reap-leaks`.
+
+Tests: `python3 ~/.claude/scripts/dev-servers/reap-leaks.test.py`.
+
 ## The service hub: http://localhost:3999
 
 One page listing every pm2 service, with one click to start and open, Stop, and

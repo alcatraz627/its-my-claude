@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""A log of odd system behaviour seen once and not yet explained.
+
+An agent mistake belongs in /atone and an idea in the proposals backlog. This is for
+what is left: something the machine or the gcc did that nobody can account for yet,
+written down with enough context that the next sighting can build on it.
+
+Usage:
+  observed new "title" --what TEXT [--tried TEXT] [--ruled-out TEXT] [--open TEXT]
+  observed note SLUG TEXT      add a dated note, signed by this session
+  observed again SLUG TEXT     record another sighting
+  observed close SLUG TEXT     record the explanation
+  observed list [--all]
+Files: ~/.claude/assets/observed/ (OBSERVED_DIR overrides)
+"""
+import argparse
+import datetime as dt
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+
+DIR = os.environ.get("OBSERVED_DIR", os.path.expanduser("~/.claude/assets/observed"))
+
+
+def signature():
+    """Who is writing: the session's friendly name and id, so a reader can open its transcript."""
+    sid = os.environ.get("CLAUDE_CODE_SESSION_ID") or "not a Claude session"
+    name = ""
+    pid = os.getppid()
+    for _ in range(8):
+        try:
+            with open(os.path.expanduser("~/.claude/sessions/%d.json" % pid)) as f:
+                info = json.load(f)
+            name, sid = info.get("name") or "", info.get("sessionId") or sid
+            break
+        except (OSError, ValueError):
+            pass
+        try:
+            pid = int(subprocess.run(["ps", "-o", "ppid=", "-p", str(pid)], capture_output=True, text=True).stdout.strip() or 0)
+        except ValueError:
+            break
+        if pid <= 1:
+            break
+    return "%s (%s)" % (name, sid) if name else sid
+
+
+def path_for(slug):
+    hits = sorted(glob.glob(os.path.join(DIR, "*%s*.md" % slug)))
+    if len(hits) != 1:
+        sys.exit("observed: %d entries match %r" % (len(hits), slug))
+    return hits[0]
+
+
+def now():
+    return dt.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+
+def section(title, body):
+    return "## %s\n\n%s\n\n" % (title, body or "Nothing recorded.")
+
+
+def cmd_new(a):
+    os.makedirs(DIR, exist_ok=True)
+    slug = re.sub(r"[^a-z0-9]+", "-", a.title.lower()).strip("-")[:50]
+    path = os.path.join(DIR, "%s-%s.md" % (dt.date.today().strftime("%Y%m%d"), slug))
+    if os.path.exists(path):
+        sys.exit("observed: %s already exists; use note or again" % path)
+    who = signature()
+    with open(path, "w") as f:
+        f.write("---\ntitle: %s\nstatus: open\nsightings: 1\nfirst_seen: %s\nfiled_by: %s\n---\n\n# %s\n\n"
+                % (a.title, now(), who, a.title))
+        f.write(section("What was seen", a.what))
+        f.write(section("What was tried", a.tried))
+        f.write(section("Ruled out", a.ruled_out))
+        f.write(section("Still open", a.open))
+        f.write("## Notes\n\n- %s, %s: filed.\n" % (now(), who))
+    print(path)
+
+
+def add_note(slug, text, label):
+    path = path_for(slug)
+    with open(path, "a") as f:
+        f.write("- %s, %s: %s%s\n" % (now(), signature(), label, text))
+    return path
+
+
+def set_field(path, field, value):
+    with open(path) as f:
+        text = f.read()
+    with open(path, "w") as f:
+        f.write(re.sub(r"(?m)^%s: .*$" % field, "%s: %s" % (field, value), text, count=1))
+
+
+def field(path, name):
+    with open(path) as f:
+        m = re.search(r"(?m)^%s: (.*)$" % name, f.read())
+    return m.group(1) if m else ""
+
+
+def cmd_list(a):
+    rows = sorted(glob.glob(os.path.join(DIR, "*.md")), reverse=True)
+    shown = [p for p in rows if a.all or field(p, "status") == "open"]
+    if not shown:
+        print("nothing open in %s" % DIR)
+    for p in shown:
+        print("%-6s seen %sx  %s  %s" % (field(p, "status"), field(p, "sightings"), field(p, "first_seen"), p))
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    new = sub.add_parser("new")
+    new.add_argument("title")
+    new.add_argument("--what", required=True)
+    new.add_argument("--tried", default="")
+    new.add_argument("--ruled-out", default="")
+    new.add_argument("--open", default="")
+    for name in ("note", "again", "close"):
+        p = sub.add_parser(name)
+        p.add_argument("slug")
+        p.add_argument("text")
+    ls = sub.add_parser("list")
+    ls.add_argument("--all", action="store_true")
+    a = ap.parse_args()
+    if a.cmd == "new":
+        cmd_new(a)
+    elif a.cmd == "list":
+        cmd_list(a)
+    elif a.cmd == "note":
+        print(add_note(a.slug, a.text, ""))
+    elif a.cmd == "again":
+        path = add_note(a.slug, a.text, "seen again: ")
+        set_field(path, "sightings", int(field(path, "sightings") or 1) + 1)
+        print(path)
+    else:
+        path = add_note(a.slug, a.text, "explained: ")
+        set_field(path, "status", "closed")
+        print(path)
+
+
+if __name__ == "__main__":
+    main()

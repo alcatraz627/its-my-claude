@@ -48,7 +48,7 @@ inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && ex
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
 
 if [[ -n "${DRYRUN:-}" ]]; then
-  printf 'open -na Ghostty.app --args -e zsh -lc %q\n' "$inner"; exit 0
+  printf 'ghostty-open --cwd %q -- %q\n' "$WORKDIR" "$inner"; exit 0
 fi
 
 # A window opening is not a session starting: from July to October, 7 of 13
@@ -59,7 +59,7 @@ proj="$HOME/.claude/projects/$(printf '%s' "$WORKDIR" | tr '/.' '--')"
 stamp="${TMPDIR:-/tmp}/gcc-launch-stamp.$$"
 : > "$stamp"
 write_meta "outcome=unknown" "reason=post_handoff" "stage=handoff"
-if ! open -na 'Ghostty.app' --args -e zsh -lc "$inner"; then
+if ! "$HOME/.claude/scripts/ghostty/ghostty-open" --cwd "$WORKDIR" -- "$inner"; then
   write_meta "outcome=failed" "reason=open_failed" "stage=open"; exit 1
 fi
 deadline=$(( $(date +%s) + ${LAUNCH_VERIFY_SECS:-90} ))

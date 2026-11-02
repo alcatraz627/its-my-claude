@@ -779,16 +779,21 @@ def cmd_restore(a):
         chosen = [rows[i - 1] for i in idx if 0 < i <= len(rows)]
     if "--open" in a or "--dry-run" in a:
         print()
+        failed = []
         for s in chosen:
-            argv = ["open", "-na", "Ghostty.app", "--args",
-                    f"--working-directory={s.get('cwd') or os.path.expanduser('~')}", "-e", "zsh", "-ic", resume_cmd(s)]
+            # --bulk: the owner asked to bring back every chosen session at once.
+            argv = [os.path.expanduser("~/.claude/scripts/ghostty/ghostty-open"), "--bulk",
+                    "--cwd", s.get("cwd") or os.path.expanduser("~"), "--", resume_cmd(s)]
             if "--dry-run" in a:
                 print("  " + " ".join(shlex.quote(x) for x in argv))
             else:
-                subprocess.Popen(argv)
+                if subprocess.run(argv, stdout=subprocess.DEVNULL).returncode != 0:
+                    failed.append(s)
                 time.sleep(0.8)
         if "--dry-run" not in a:
-            print(f"opened {len(chosen)} Ghostty window(s) {C.d('(a second Ghostty instance; it quits when they close)')}")
+            print(f"opened {len(chosen) - len(failed)} Ghostty tab(s)")
+            for s in failed:
+                print(f"  could not open {s.get('cwd') or '?'}: {resume_cmd(s)}")
     else:
         print(C.d("\n  --open launches them in Ghostty · --only 1,3 picks · --dry-run shows the commands"))
 

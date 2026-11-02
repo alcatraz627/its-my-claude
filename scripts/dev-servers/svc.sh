@@ -158,6 +158,10 @@ cmd_reap() {
   local dry=0
   [ "${1:-}" = "--dry-run" ] && dry=1
 
+  # Leaks that are not pm2 services (testing browsers, hung tests, stray pm2
+  # daemons) share this pass. A failure there must not stop services being reaped.
+  python3 "$(dirname "${BASH_SOURCE[0]}")/reap-leaks.py" run ${1:+"$1"} || echo "svc: leak reaper failed" >&2
+
   lock
   local rows; rows=$(sample watch json)
   unlock

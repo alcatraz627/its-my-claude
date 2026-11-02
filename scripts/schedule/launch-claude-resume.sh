@@ -49,14 +49,14 @@ inner=". \"\$HOME/.local/bin/env\" 2>/dev/null; cd $(printf %q "$WORKDIR") && ex
 [[ -n "$PROMPT" ]] && inner+=" $(printf %q "$PROMPT")"
 
 if [[ -n "${DRYRUN:-}" ]]; then
-  printf 'open -na Ghostty.app --args -e zsh -lc %q\n' "$inner"
+  printf 'ghostty-open --cwd %q -- %q\n' "$WORKDIR" "$inner"
   exit 0
 fi
 
 # Preflight passed: the launch attempt is good, but past this `open` the
 # scheduler is blind (claude may boot, crash, or be closed): so `unknown`.
 write_meta "outcome=unknown" "reason=post_handoff" "stage=handoff"
-if open -na 'Ghostty.app' --args -e zsh -lc "$inner"; then
+if "$HOME/.claude/scripts/ghostty/ghostty-open" --cwd "$WORKDIR" -- "$inner"; then
   exit 0
 else
   write_meta "outcome=failed" "reason=open_failed" "stage=open"

@@ -97,7 +97,7 @@ gcc-schedule add --name resume-session-x --at 2026-06-02T15:00 \
 ```
 
 > **Always route a scheduled `claude --resume` through `launch-claude-resume.sh`**:
-> do NOT inline `open -na Ghostty.app --args -e zsh -lc "... claude ..."`. Under
+> do NOT inline a Ghostty launch for `claude`. Under
 > launchd the PATH is bare and a login shell skips `~/.zshrc` (the only place
 > `~/.local/bin`, where the `claude` binary lives, is added to PATH), so the
 > window dies with `command not found: claude`. The helper sources the path env

@@ -1,7 +1,9 @@
-"""Drives keepwarm.py's hooks with the JSON Claude Code sends, in a temp folder.
+"""Drives keepwarm.py's hooks in one-shot mode, the revert path, in a temp folder.
+The recurring job, which is the default, is in keepwarm-recurring.test.py.
 
 Run: python3 ~/.claude/scripts/keepwarm/keepwarm.test.py
 """
+import importlib.util
 import json
 import os
 import subprocess
@@ -17,7 +19,9 @@ KW = os.path.join(HERE, "keepwarm.py")
 T = tempfile.mkdtemp()
 SWITCH = os.path.join(T, "on")
 LIMITS = os.path.join(T, "limits.json")
-ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITCH,
+ONESHOT = os.path.join(T, "oneshot")
+open(ONESHOT, "w").close()
+ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITCH, KEEPWARM_ONESHOT_FILE=ONESHOT,
            CLAUDE_CODE_ENTRYPOINT="cli", KEEPWARM_NO_STATUSLINE="1",
            USAGE5H_LIMITS=LIMITS, USAGE5H_DIR=os.path.join(T, "u5"),
            USAGE5H_CLAUDE_JSON=os.path.join(T, "claude.json"), KEEPWARM_TASK_STORE=os.path.join(T, "tasks"))
@@ -244,6 +248,89 @@ for p in ("Your claude.ai usage limit has reset. Continue the task you were work
     expect("not the owner, no re-arm: " + p[:24], ctx(hook("hook-prompt", session_id="s12", prompt=p)) == "")
 expect("and the wake count survives them", json.load(open(os.path.join(T, "kw", "s12.json")))["wakes"] == 1)
 expect("the owner's own prompt still re-links", "no wake is pending" in ctx(hook("hook-prompt", session_id="s12", prompt="back")))
+
+# The vg session on 2026-11-01: told to re-arm at its resume, it never did, and no
+# wake ever came again. The turn's end now checks.
+RESUME = "[usage-resume] The 5h window has reset. Continue the work you parked."
+hook("hook-prompt", session_id="s30", prompt="x")
+hook("hook-prompt", session_id="s30", prompt=RESUME)
+no_cron = transcript(300000)
+with open(no_cron, "a") as f:
+    f.write(json.dumps({"type": "user", "message": {"content": RESUME}}) + "\n")
+stop = hook("hook-stop", session_id="s30", transcript_path=no_cron)
+expect("a resume that never re-armed is sent back to do it", stop.get("decision") == "block" and "CronCreate" in stop.get("reason", ""))
+expect("and only once", hook("hook-stop", session_id="s30", transcript_path=no_cron).get("decision") is None)
+hook("hook-prompt", session_id="s31", prompt="x")
+hook("hook-prompt", session_id="s31", prompt=RESUME)
+with_cron = os.path.join(T, "t-cron.jsonl")
+with open(with_cron, "w") as f:
+    f.write(json.dumps({"type": "user", "message": {"content": RESUME}}) + "\n")
+    f.write(json.dumps({"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "CronCreate", "input": {
+        "cron": "1 2 3 4 *", "prompt": "[keepwarm] idle check"}}]}}, separators=(",", ":")) + "\n")
+expect("a resume that re-armed is left alone", hook("hook-stop", session_id="s31", transcript_path=with_cron).get("decision") is None)
+hook("hook-prompt", session_id="s32", prompt="x")
+expect("an ordinary turn is never sent back", hook("hook-stop", session_id="s32", transcript_path=no_cron).get("decision") is None)
+
+# The usage window closing in: leave a dump while a turn still works.
+hook("hook-prompt", session_id="s33", prompt="x")
+limits(96)
+text = ctx(wake("s33", 300000, 56))
+expect("above 95%% a wake writes the mini dump", "/core-dump mini" in text and "96%" in text)
+expect("the mini dump says how to build the full one", "Build the full dump" in text and "dump again" in text)
+expect("and keep-warm is finished", json.load(open(os.path.join(T, "kw", "s33.json")))["stopped"] is True)
+expect("so the next wake never runs", wake("s33", 300000, 56).get("decision") == "block")
+
+hook("hook-prompt", session_id="s34", prompt="x")
+limits(90)
+text = ctx(wake("s34", 300000, 56))
+expect("a window that will not last through the warm-ups gets a full dump", "full /core-dump" in text and "/core-dump mini" not in text)
+
+spec = importlib.util.spec_from_file_location("keepwarm_mod", KW)
+K = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(K)
+
+
+def verdict(pct, reset_min, chains=1):
+    return K.window_dump({"pct": pct, "reset_min": reset_min, "spent_pct": 98}, chains)
+
+
+expect("a window about to reset is just waited out", verdict(90, 10) is None)
+expect("a comfortable window is left alone", verdict(40, 120) is None)
+expect("an early window's fast pace is not an alarm", verdict(60, 200) is None)
+expect("a mostly-gone window burning fast gets a dump", verdict(90, 120) == "dump")
+expect("pings alone can sink it when many sessions share the window", verdict(84, 280, 5) == "dump")
+expect("one session's pings do not", verdict(84, 280, 1) is None)
+expect("the mini line beats everything", verdict(95, 5) == "mini")
+expect("no reading is never treated as danger", K.window_dump(None, 1) is None)
+expect("an unknown reset time is never treated as danger", K.window_dump({"pct": 90, "reset_min": None, "spent_pct": 98}, 1) is None)
+
+hook("hook-prompt", session_id="s36", prompt="x")
+limits(96)
+text = ctx(wake("s36", 300000, 5))
+expect("nothing is dumped out from under someone just here", "core-dump" not in text)
+expect("a tight window brings the next wake closer", "CronCreate" in text)
+at = json.load(open(os.path.join(T, "kw", "s36.json")))["armed_at"]
+expect("at most 25 minutes away", at - time.time() <= 25 * 60 + 5)
+
+hook("hook-prompt", session_id="s37", prompt="x")
+limits(99)
+text = ctx(wake("s37", 300000, 56))
+expect("99% still tries the mini dump rather than giving up", "/core-dump mini" in text)
+hook("hook-prompt", session_id="s38", prompt="x")
+limits(99)
+expect("99% with the owner just here is skipped", wake("s38", 300000, 5).get("decision") == "block")
+
+hook("hook-prompt", session_id="s39", prompt="x")
+limits(10)
+gate_env = dict(ENV)
+ENV["USAGE_GATE_FILE"] = os.path.join(T, "gate.json")
+ENV["USAGE_GATE_PCT"] = "90"
+with open(ENV["USAGE_GATE_FILE"], "w") as f:
+    json.dump({"5h": {"pct": 10}, "week": {"pct": 95}}, f)
+text = ctx(wake("s39", 300000, 56))
+expect("a usage gate leaves a dump instead of going quiet without one", "full /core-dump" in text)
+ENV.pop("USAGE_GATE_FILE")
+ENV.pop("USAGE_GATE_PCT")
 
 # A spent 5h window: the wake would be refused, so it is skipped before the model runs.
 hook("hook-prompt", session_id="s13", prompt="x")

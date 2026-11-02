@@ -87,6 +87,11 @@ Keep-warm skips its wakes while a session hibernates (the pings do that job),
 skips wakes into a spent window, and does not mistake any of these prompts for
 the owner. `wake-breaker.sh` lets the identical pings through.
 
+A session that cannot get across the window leaves a dump while a turn still works
+(owner, 2026-11-02). The rule and the rest of keep-warm's decisions are in
+`features/keepwarm.md`. Its recurring job survives a spent window by itself, so a
+usage resume only re-creates a job that is missing.
+
 The prompt cache belongs to the claude.ai organization. After an account
 switch, keep-warm wakes and hibernation pings are skipped before they reach the
 model, because a ping would only pay the new account to rebuild a cache nobody

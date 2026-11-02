@@ -117,7 +117,7 @@ ${BLD}NOTES${RST}
 ${BLD}EXAMPLES${RST}
   $PROG ${CYN}-i${RST}                                    ${DIM}# browse + act on schedules, or build one, interactively${RST}
   $PROG add --name backup-pull --at 2026-06-02T15:00 \\
-    --command 'open -na Ghostty.app --args -e zsh -lc "rsync …"' \\
+    --command '~/.claude/scripts/ghostty/ghostty-open -- "rsync …"' \\
     --description 'Pull mac-migration backup before flight'
 
   $PROG add --name morning-digest --daily-at 09:00 \\

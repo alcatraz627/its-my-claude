@@ -205,6 +205,16 @@
         ]
       },
       {
+        "matcher": "mcp__plugin_playwright_playwright__.*|mcp__plugin_chrome-devtools-mcp_chrome-devtools__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/browser-use-touch.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
           {
@@ -499,6 +509,25 @@
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/guard-ghostty.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|mcp__plugin_playwright_playwright__.*|mcp__plugin_chrome-devtools-mcp_chrome-devtools__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/browser-ttl-nudge.sh",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "matcher": "Bash",
         "hooks": [
@@ -1352,8 +1381,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-stop",
-            "async": true
+            "command": "/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-stop"
           }
         ]
       }
@@ -1415,6 +1443,15 @@
       }
     ],
     "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
+            "timeout": 45
+          }
+        ]
+      },
       {
         "hooks": [
           {

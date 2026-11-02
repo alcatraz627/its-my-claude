@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+# The one way agents and scheduled jobs open a terminal: a new tab in the window
+# the owner is already using, left in the background so their tab stays selected.
+#
+# `open -na Ghostty.app` starts a second copy of the whole app, and with
+# window-save-state=always that copy also restores the owner's tabs. If scripting
+# the running Ghostty fails, this falls back to at most one such copy, with restore
+# off, and refuses after that. Guarded by hooks/guard-ghostty.sh.
+#
+# Usage: ghostty-open [--cwd DIR] [--dry-run] [--bulk] -- SHELL_COMMAND
+#   --bulk  skip the rate limit, for an owner-run restore of many sessions
+set -uo pipefail
+
+CWD="$PWD"; DRY=0; BULK=0
+LOG="${GHOSTTY_OPEN_LOG:-$HOME/.claude/logs/ghostty-open.jsonl}"
+MAX_OPENS=6
+WINDOW_S=600
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --cwd) CWD="${2:?--cwd needs a folder}"; shift 2 ;;
+    --dry-run) DRY=1; shift ;;
+    --bulk) BULK=1; shift ;;
+    --) shift; break ;;
+    -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "ghostty-open: unknown option $1 (the command goes after --)" >&2; exit 2 ;;
+  esac
+done
+COMMAND="${*:-}"
+[[ -d "$CWD" ]] || { echo "ghostty-open: no such folder: $CWD" >&2; exit 2; }
+
+# Login and interactive, so PATH and aliases match a tab the owner opens by hand:
+# a login shell alone skips ~/.zshrc, which is what puts claude and zrecover on PATH.
+# With no command the tab is just the owner's normal shell in that folder.
+SURFACE=""
+if [[ -n "$COMMAND" ]]; then
+  SURFACE="/bin/zsh -lic $(printf %q "$COMMAND")"
+fi
+
+record() {
+  mkdir -p "$(dirname "$LOG")"
+  python3 -c 'import json,sys,time; print(json.dumps({"ts":int(time.time()),"how":sys.argv[1],"cwd":sys.argv[2],"cmd":sys.argv[3][:160]}))' \
+    "$1" "$CWD" "$COMMAND" >> "$LOG"
+}
+
+recent_opens() {
+  [[ -f "$LOG" ]] || { echo 0; return; }
+  python3 - "$LOG" "$WINDOW_S" <<'PY'
+import json, sys, time
+cutoff = time.time() - float(sys.argv[2])
+n = 0
+for line in open(sys.argv[1], errors="replace"):
+    try:
+        row = json.loads(line)
+    except ValueError:
+        continue
+    if row.get("ts", 0) >= cutoff and row.get("how") != "refused":
+        n += 1
+print(n)
+PY
+}
+
+if (( DRY )); then
+  printf 'ghostty-open: new tab in the front window, cwd=%q command=%s\n' "$CWD" "${SURFACE:-<login shell>}"
+  exit 0
+fi
+
+if (( ! BULK )) && (( $(recent_opens) >= MAX_OPENS )); then
+  record refused
+  echo "ghostty-open: refused, $MAX_OPENS terminals opened in the last $(( WINDOW_S / 60 )) minutes. A loop is the likely cause." >&2
+  exit 3
+fi
+
+# Named by bundle id so this always reaches the running app, never a stray copy.
+open_tab() {
+  /usr/bin/osascript - "$CWD" "$SURFACE" 2>&1 <<'APPLESCRIPT'
+on run argv
+	tell application id "com.mitchellh.ghostty"
+		set cfg to new surface configuration
+		set initial working directory of cfg to item 1 of argv
+		if item 2 of argv is not "" then set command of cfg to item 2 of argv
+		if (count windows) is 0 then
+			new window with configuration cfg
+			return "window"
+		end if
+		set w to front window
+		set ownerTab to selected tab of w
+		new tab in w with configuration cfg
+		-- The tab exists from here on. Failing to hand focus back must not read as a
+		-- failed open, or the fallback would run the same command a second time.
+		try
+			select tab ownerTab
+		end try
+		return "tab"
+	end tell
+end run
+APPLESCRIPT
+}
+
+# -a matters: from inside a Ghostty tab the running app is an ancestor of this
+# script, and pgrep hides ancestors by default, so it would read as not running.
+instances() { pgrep -a -x ghostty | wc -l | tr -d ' '; }
+
+if (( $(instances) == 0 )); then
+  open -a Ghostty
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    (( $(instances) > 0 )) && break
+    sleep 1
+  done
+fi
+
+if [[ -z "${GHOSTTY_OPEN_NO_SCRIPTING:-}" ]]; then
+  if result=$(open_tab) && [[ "$result" == "tab" || "$result" == "window" ]]; then
+    record "$result"
+    echo "ghostty-open: opened a $result in the front window"
+    exit 0
+  fi
+  echo "ghostty-open: scripting Ghostty failed: $result" >&2
+  # A timeout says nothing about whether the tab was made, and starting the command
+  # twice is worse than reporting a failure.
+  if [[ "$result" == *"-1712"* || "$result" == *"timed out"* ]]; then
+    record failed
+    exit 1
+  fi
+fi
+
+# Scripting can be refused, for example a background job without Automation access.
+if (( $(instances) >= 2 )); then
+  record refused
+  echo "ghostty-open: refused, a second Ghostty is already running and only one is allowed." >&2
+  exit 3
+fi
+ARGS=(--window-save-state=never --quit-after-last-window-closed=true "--working-directory=$CWD")
+if [[ -n "$COMMAND" ]]; then
+  ARGS+=(-e /bin/zsh -lic "$COMMAND")
+fi
+if open -na Ghostty.app --args "${ARGS[@]}"; then
+  record second-copy
+  echo "ghostty-open: opened one separate Ghostty copy (scripting was unavailable)"
+  exit 0
+fi
+record failed
+exit 1
