@@ -23,21 +23,54 @@ try:
 except Exception:
     sys.exit(0)
 prompt = data.get("prompt", "") or ""
-ipath = _p.expanduser("~/.claude/i-dream/interventions.json")
-if not isinstance(prompt, str) or not prompt or not _p.exists(ipath):
+if not isinstance(prompt, str) or not prompt:
     sys.exit(0)
 # Machine-written prompts (task notifications, seat briefs) are not the owner
 # talking, whatever the entrypoint says.
 if prompt.lstrip().startswith(("<task-notification>", "You are", "You enforce")):
     sys.exit(0)
-try:
-    items = json.load(open(ipath))
-except Exception:
-    sys.exit(0)
 
 cwd = data.get("cwd", "") or ""
 proj = _p.basename(cwd.rstrip("/")) if cwd else ""
 sid = data.get("session_id", "") or ""
+
+def _rules():
+    # The daemon answers with the rules this prompt is about, and spends their
+    # fires only after writing them. Give up quickly: a prompt must never wait.
+    import socket
+    words = sorted({w.lower() for w in re.findall(r"[A-Za-z][A-Za-z-]{3,}", prompt[:4000])})[:400]
+    try:
+        s = socket.socket(socket.AF_UNIX)
+        s.settimeout(1.0)
+        s.connect("/Users/alcatraz627/.claude/subconscious/daemon.sock")
+        s.sendall((json.dumps({"event": "prompt_rules", "session_id": sid, "cwd": cwd,
+            "entrypoint": os.environ.get("CLAUDE_CODE_ENTRYPOINT") or None,
+            "prompt_words": words}) + "\n").encode())
+        reply = b""
+        while True:
+            chunk = s.recv(65536)
+            if not chunk:
+                break
+            reply += chunk
+        s.close()
+        return [l for l in reply.decode("utf-8", "replace").splitlines() if l.strip()]
+    except Exception:
+        return []
+
+def _finish(hints):
+    # Hints and rules travel in one block: the harness reads one JSON object.
+    lines = hints + _rules()
+    if lines:
+        print(json.dumps({"hookSpecificOutput": {
+            "hookEventName": "UserPromptSubmit",
+            "additionalContext": "\n".join(lines)}}))
+    sys.exit(0)
+
+ipath = _p.expanduser("~/.claude/i-dream/interventions.json")
+try:
+    items = json.load(open(ipath))
+except Exception:
+    _finish([])
 
 # ReDoS guard: compiler-authored patterns get a hard 2s budget for the whole
 # match loop and a capped subject. A catastrophic pattern aborts to a silent
@@ -70,11 +103,11 @@ try:
             continue
         (live if it.get("state") == "live" else shadow).append(it)
 except TimeoutError:
-    sys.exit(0)
+    _finish([])
 _sig.alarm(0)
 
 if not live and not shadow:
-    sys.exit(0)
+    _finish([])
 # Every match is ledgered (display caps never gate telemetry).
 try:
     with open(_p.expanduser("~/.claude/i-dream/would-fire.jsonl"), "a") as f:
@@ -122,11 +155,7 @@ for it in live:
     shown.append(it)
     if len(shown) == 2:
         break
-if shown:
-    lines = ["[i-dream:%s] %s" % (str(it.get("id", ""))[:8], it.get("body", ""))
-             for it in shown]
-    print(json.dumps({"hookSpecificOutput": {
-        "hookEventName": "UserPromptSubmit",
-        "additionalContext": "\n".join(lines)}}))
+_finish(["[i-dream:%s] %s" % (str(it.get("id", ""))[:8], it.get("body", ""))
+         for it in shown])
 PYEOF
 exit 0
