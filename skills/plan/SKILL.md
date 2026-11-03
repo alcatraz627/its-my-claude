@@ -18,6 +18,8 @@ It routes and it records. It produces no plan of its own.
 
 ## Step 0: Load shared guidelines
 
+**Fit check.** Say the task's shape in one line before starting. A known non-UI change can go straight to `/build-change`, and a known page to `/build-ui`. A one-line fix needs no plan. If the ask spans shapes, chain them. Mention a better or extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md` list the rest.
+
 Read `~/.claude/skills/GUIDELINES.md` and apply it for the run. Read
 `~/.claude/skills/plan/runtime-notes.md` if it exists.
 

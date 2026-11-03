@@ -4,6 +4,7 @@
 ~/.claude/scripts/hooks/atone-stop-gate.sh
 /usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-stop
 python3 ~/.claude/scripts/hooks/pr-review-gate.py stop
+~/.claude/scripts/hooks/ready-claim-note.sh
 ~/.claude/scripts/hooks/guard-structural-claim.sh
 ~/.claude/scripts/hooks/guard-absence-claim.sh
 ~/.claude/scripts/hooks/declared-ready-stop.sh

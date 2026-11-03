@@ -140,6 +140,12 @@ step you take; keep working, and the completion notice wakes you. Run it in the
 foreground only when you would otherwise sit idle waiting on it. Background seats
 land through `seat sweep`, which runs on every dispatch.
 
+`isolation: "worktree"` cuts the worktree from the session's cwd repo. When the
+target repo is not the cwd repo, do not pass it: `git clone -b <branch> <repo path>
+<scratchpad>/<name>`, name that clone in the brief, and have the seat confirm
+`git rev-parse --show-toplevel` before trusting a read. Otherwise the seat stops on
+its precondition and the dispatch costs a round.
+
 Codex seats do not read `SendMessage` mid-run. Steer them through the spec file
 they re-read, named in the brief, never through a message.
 

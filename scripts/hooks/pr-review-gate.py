@@ -15,7 +15,7 @@ Runtime contract:
                                  going and tell the owner what is happening
   pr-review-gate.py wait <pr> [seconds] [--wake SESSION --marker FILE]
                                  poll until the review for the head lands
-                                 (default 6 min), then print its findings; with
+                                 (default 10 min), then print its findings; with
                                  --wake, message that session when it ends
   pr-review-gate.py dispose <pr> [--sha S] "1=fixed:reason" "2=optional:reason" ...
   pr-review-gate.py summary <pr> [--sha S]  one line per finding for the owner
@@ -49,7 +49,9 @@ import hookpop  # noqa: E402
 
 ORG = "versable-git"
 SETTLE_S = 300
-WAIT_MAX_S = 360
+# Ten minutes. Of the recorded reviews answered within half an hour of the push, 9 of 10 were
+# answered by 9.6 minutes, and a wait running in the background costs the session nothing.
+WAIT_MAX_S = 600
 POLL_S = float(os.environ.get("PR_REVIEW_GATE_POLL_S", 20))
 AUTO_WAIT_S = int(os.environ.get("PR_REVIEW_GATE_AUTO_WAIT_S", WAIT_MAX_S))
 # A wait that runs this far past its limit is dead, even if its pid now belongs to something else.
@@ -645,7 +647,9 @@ def cmd_dispose(args):
     with open(ledger_path(), "a") as f:
         for row in rows:
             f.write(json.dumps(row) + "\n")
-    return cmd_summary(args[:1] + ([f"--sha={sha}"] if sha != pr.get("review_sha") else []))
+    # Always name the review: when it is the only one and the head has moved on, it is
+    # still the latest review but no longer the current head's, so a bare summary refuses.
+    return cmd_summary(args[:1] + [f"--sha={sha}"])
 
 
 def cmd_summary(args):

@@ -16,6 +16,8 @@ Phase 11 is mechanical, not a promise.
 
 ## Step 0: Load shared guidelines and runtime context
 
+**Fit check.** Say the task's shape in one line before starting. A single-component fix is done inline, a non-UI change is `/build-change`, and an unsettled look is `/ui-direction` first. If the ask spans shapes, chain them. Mention a better or extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md` list the rest.
+
 Read `~/.claude/skills/GUIDELINES.md` and apply its rules for the whole run:
 forbidden paths, retry logic, tool preferences, verbosity, timeouts, and
 post-run insights. Also read `~/.claude/skills/build-ui/runtime-notes.md` for

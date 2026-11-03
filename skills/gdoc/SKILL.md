@@ -45,6 +45,22 @@ relative shade. What the owner ruled on 2026-09-29, each a key in that section:
   mermaid-cli (cached in `~/.cache/gdoc-mermaid`), uploads the PNG to the Doc's folder
   with link sharing, inserts it at page width, then trashes the upload; the Doc keeps
   its own copy.
+- **drawio**: a code fence tagged `drawio` holding the diagram XML, or a standalone image
+  line `![alt](flow.drawio)` pointing at a file beside the markdown, becomes an image the
+  same way (cached in `~/.cache/gdoc-drawio`, a multi-page file shows its first page).
+  Rendering uses the draw.io desktop app's command line, installed once with
+  `brew install --cask drawio` and removed with `brew uninstall --cask drawio`. Without it
+  the run stops and names that command; it is never installed for you.
+- **pageless**: every tab is set to pageless mode through `updateDocumentStyle`
+  (`documentFormat.documentMode`) and read back; the run prints `layout   pageless, N of N
+  tabs read back` and a WARNING for any tab Docs left in pages. `"pageless": false` in
+  the config keeps pages. A new Doc already starts pageless in this account, so the read-back is
+  what proves it, and a Doc someone switched to pages is set back on the next publish.
+- **readability**: body text gets 1.15 line spacing, 6 pt below each paragraph and widow and
+  orphan control, set on the tab's normal-text style. A `"body": [above, below]` entry in
+  `spacing` wins over the gap. `"readability": {"line_spacing": 130, "space_below": 8}` in the
+  config overrides a value and `"readability": false` leaves Docs' own defaults. Lists, code,
+  callouts and tables set their own spacing and are unchanged.
 - **rich content**: `![alt](https://…png)` inserts an image (public PNG, JPEG or GIF;
   local files and SVG get their alt text), `text[^1]` with a `[^1]: note` line makes a
   footnote, `[Name](mailto:…)` a person chip, `[Oct 1, 2026](date:2026-10-01)` a date
@@ -72,6 +88,7 @@ a tab the owner keeps as a style guide, replacing the previous samples (from the
 
 Read `~/.claude/skills/GUIDELINES.md` and the `## gdoc:` entries in
 `~/.claude/skills/runtime-notes.md`. Run `python3 ~/.claude/scripts/gdoc/gdoc.py -h`.
+After a change to the script, run `uv run --with markdown --with pygments python3 ~/.claude/scripts/gdoc/gdoc.test.py`.
 
 ## The run
 

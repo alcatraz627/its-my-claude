@@ -18,6 +18,8 @@ It emits one plan and stops. It does not implement, and it does not commit.
 
 ## Step 0: Load shared guidelines and runtime context
 
+**Fit check.** Say the task's shape in one line before starting. A page or screen is `/build-ui`, a one-line fix is done inline, and an unsettled approach is `/plan` first. If the ask spans shapes, chain them. Mention a better or extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md` list the rest.
+
 Read `~/.claude/skills/GUIDELINES.md` and apply it for the run. Read
 `~/.claude/skills/build-change/runtime-notes.md` if it exists.
 

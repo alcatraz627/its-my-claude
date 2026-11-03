@@ -40,7 +40,9 @@ FP=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 # doc, and anything that reads as the central config/flags accessor or a test.
 case "$FP" in
   *.env|*.env.*|*/env-access.md) exit 0 ;;
-  */config.*|*/config/*|*/flags.*|*/settings.py|*/env.ts|*/env.py) exit 0 ;;
+  */config.*|*/config/*|*/flags.*|*/settings.py) exit 0 ;;
+  # A file named env in any JS or TS flavour is the project's own env accessor, where reads belong.
+  */env.ts|*/env.mts|*/env.cts|*/env.js|*/env.mjs|*/env.cjs|*/env.py) exit 0 ;;
   *.test.*|*.spec.*|*_test.*|*_spec.*|*/test/*|*/tests/*|*/__tests__/*|*/spec/*) exit 0 ;;
 esac
 # Only known code files (keep the detector honest, avoid prose false-positives).

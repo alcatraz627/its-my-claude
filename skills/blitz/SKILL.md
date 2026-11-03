@@ -51,6 +51,12 @@ the owner arms; arm it beside a blitz that will run unattended.
 Read `~/.claude/skills/GUIDELINES.md` and apply it for this run. Read
 `~/.claude/skills/blitz/runtime-notes.md` if it exists.
 
+**Fit check.** Say the task's shape in one line before starting. One change is `/bloop`,
+an unplanned or unclear goal needs `/plan` first, and a goal with no rows is not a queue.
+If the ask spans shapes, chain them (plan, then this queue, then `/validate`). Mention a
+better or extra skill only when it matters to the ask; `/pick-skill` and
+`skills/00-index.md` list the rest.
+
 ## Phase 1: Turn on
 
 1. Name the goal. It is the session's linked goal, or the one the owner named.

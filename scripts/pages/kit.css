@@ -14,10 +14,29 @@ html { scroll-padding-top: 96px; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 var(--kit-sans); }
 
 /* The bar stays on top. Table headers stop just under it. */
-.kit-bar { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid var(--border); }
+.kit-bar { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--border); }
 .kit-bar-inner { max-width: var(--kit-width); margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.kit-title { font: 600 17px/1.2 var(--kit-sans); margin: 0; margin-right: auto; }
-.kit-theme { font: 500 12.5px var(--kit-sans); color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.kit-title { display: flex; align-items: center; gap: 8px; font: 600 17px/1.2 var(--kit-sans); margin: 0; margin-right: auto; }
+.kit-title .kit-i { color: var(--brand); }
+/* Every page shows the same switch: one icon, no border, a shade when pointed at */
+.kit-theme { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; color: var(--dim); background: none; border: 0; border-radius: var(--radius-sm); cursor: pointer; }
+.kit-theme:hover { color: var(--text); background: var(--surface-2); }
+:root[data-theme="light"] .kit-theme .kit-i-sun, :root:not([data-theme="light"]) .kit-theme .kit-i-moon { display: none; }
+
+/* Icons come from the sprite pagekit puts in every page */
+.kit-i { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* A plain button: words or an icon, no border or fill, a shade when pointed at */
+.kit-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 30px; padding: 0 8px; font: 500 13px var(--kit-sans); color: var(--text); background: none; border: 0; border-radius: var(--radius-sm); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.kit-page a.kit-btn { color: var(--text); text-decoration: none; }
+.kit-btn:hover { background: var(--surface-2); }
+.kit-btn.kit-icon-only { width: 30px; padding: 0; color: var(--dim); }
+.kit-btn.kit-icon-only:hover { color: var(--text); }
+.kit-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+/* A tooltip for anything with data-tip. Icon-only controls need one, and an aria-label too */
+[data-tip] { position: relative; }
+[data-tip]:is(:hover, :focus-visible)::after { content: attr(data-tip); position: absolute; z-index: 30; top: calc(100% + 6px); right: 0; width: max-content; max-width: 320px; padding: 4px 8px; font: 400 12px/1.4 var(--kit-sans); color: var(--text); background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); white-space: normal; text-align: left; pointer-events: none; }
 .kit-theme:focus-visible, .kit-tab:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
 .kit-tabs { display: flex; flex-wrap: wrap; gap: 5px; max-width: var(--kit-width); margin: 0 auto; padding: 0 16px 10px; }

@@ -256,5 +256,28 @@ cp "$WALL/directions-plain.md" "$T/docs/snap/repeat.md"
 run "$T/docs/snap/repeat.md" h2aaaaaa >/dev/null
 cp "$WALL/directions-wall.md" "$T/docs/snap/repeat.md"
 expect "a doc that was fixed and fails again is noted again" "does not read as a doc" "$(run "$T/docs/snap/repeat.md" h2aaaaaa)"
+# --check FILE: judge one file on demand, wherever it lives and whatever mutes are set.
+mkdir -p "$T/loose"
+cp "$WALL/directions-wall.md" "$T/loose/wall.md"
+cp "$WALL/directions-plain.md" "$T/loose/plain.md"
+got=$(python3 "$H" --check "$T/loose/wall.md" 2>&1); code=$?
+expect "--check names what is wrong with a file outside any doc folder" "wall of text" "$got"
+expect "and leads with the file name" "wall.md does not read as a doc" "$got"
+[ "$code" = 1 ] && echo "ok   and exits 1" || { echo "FAIL --check exit on a failing file: $code"; fail=1; }
+expect "and does not nag for a reader line, since the check was asked for" silent "$(printf '%s' "$got" | grep 'reader:')"
+got=$(python3 "$H" --check "$T/loose/plain.md" 2>&1); code=$?
+expect "--check says a plain doc passes" "plain.md passes the doc check" "$got"
+[ "$code" = 0 ] && echo "ok   and exits 0" || { echo "FAIL --check exit on a passing file: $code"; fail=1; }
+got=$(DOC_VOICE_OFF=1 python3 "$H" --check "$T/loose/wall.md" 2>&1)
+expect "--check still runs under the one-shot mute" "wall of text" "$got"
+got=$(python3 "$H" --check "$T/loose/missing.md" 2>&1); code=$?
+expect "--check on a missing file says so" "no such file" "$got"
+[ "$code" = 2 ] && echo "ok   and exits 2" || { echo "FAIL --check exit on a missing file: $code"; fail=1; }
+got=$(python3 "$H" --check 2>&1); code=$?
+[ "$code" = 2 ] && echo "ok   --check with no path exits 2" || { echo "FAIL --check with no path: $code"; fail=1; }
+before=$(ls "$DOC_VOICE_STATE" | wc -l | tr -d ' ')
+python3 "$H" --check "$T/loose/wall.md" >/dev/null 2>&1
+[ "$(ls "$DOC_VOICE_STATE" | wc -l | tr -d ' ')" = "$before" ] && echo "ok   --check leaves no session state behind" || { echo "FAIL --check wrote state"; fail=1; }
+
 trash "$T" 2>/dev/null
 exit $fail

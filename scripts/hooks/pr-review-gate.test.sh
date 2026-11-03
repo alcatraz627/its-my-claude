@@ -422,6 +422,7 @@ fixture "t" "d1234567ff" ""
 out=$(HOOK_POPULATION_TEST=1 CLAUDE_CODE_ENTRYPOINT=sdk-cli stop s40)
 check "a headless run is told to wait" "$out" "pr-review-gate.py wait versable-git/demo#7"
 check "by a block" "$out" '"decision": "block"'
+check "and told the wait can take up to 10 minutes" "$out" "polls up to 10 min"
 same "and no background wait starts for it" "$(waiters s40)" "0"
 age_push s40
 out=$(HOOK_POPULATION_TEST=1 CLAUDE_CODE_ENTRYPOINT=sdk-cli stop s40)
@@ -442,6 +443,12 @@ check "and the summary for that review shows it" "$(python3 "$GATE" summary demo
 check "an unknown --sha is refused with the known ones" "$(python3 "$GATE" dispose demo#7 --sha 2222222 "1=fixed:x y" 2>&1)" "reviews on: 1111111, abc1234"
 fixture "t" "9999999aaa" "abc1234" two
 check "without --sha a moved head still points at --sha" "$(python3 "$GATE" dispose demo#7 "1=fixed:x y" 2>&1)" "--sha <reviewed head>"
+# The one-review case: the only review is the one being answered and the head has moved on since.
+fixture "t" "9999999aaa" "abc1234"
+out=$(python3 "$GATE" dispose demo#7 --sha abc1234 "1=fixed:moved in the same push" 2>&1); code=$?
+same "dispose --sha on the only review exits 0 after saving" "$code" "0"
+check "and prints that review's summary" "$out" "Clanky on abc1234"
+check "and the answer was recorded" "$(python3 "$GATE" summary demo#7 --sha abc1234)" "fixed: moved in the same push"
 
 pkill -f "$T/state" 2>/dev/null
 trash "$T" >/dev/null 2>&1

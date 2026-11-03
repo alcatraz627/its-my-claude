@@ -164,6 +164,35 @@ found, _ = lint(GOOD.replace("| `#4` | Look at the new reply | Read the reply on
 ids = [f["ids"] for f in found if f["code"] == "ask-no-default"]
 check("a range inside one pair of backticks reads as each id", ids == [["#2", "#3"]], str(ids))
 
+# the optional links column
+def links_json(text):
+    write(text)
+    r = subprocess.run([sys.executable, SCRIPT, "links", F, "--json"], capture_output=True, text=True, env=ENV)
+    return json.loads(r.stdout), r.returncode
+
+
+got, rc = links_json(GOOD)
+check("a file with no links column has no row links and still reads", got == [] and rc == 0, str(got))
+LINKED = GOOD.replace(
+    "| id | state | task |\n| --- | --- | --- |\n| `#1` | ✅ | Merged the first change |\n| `#2` | 🟢 | Ship the second change |",
+    "| id | state | task | links |\n| --- | --- | --- | --- |\n"
+    "| `#1` | ✅ | Merged the first change | [PR 12](https://github.com/o/r/pull/12) VER-123 |\n"
+    "| `#2` | 🟢 | Ship the second change | pr-claude-testbed#35, https://example.com/doc |")
+check("the links fixture really carries the column", "| links |" in LINKED)
+found, rc = lint(LINKED)
+check("a links column adds no error", codes(found, "error") == [] and rc == 0, str(codes(found)))
+check("a links column does not trip the long-row or proof checks",
+      not {"row-long", "proof-in-row"} & set(codes(found)), str(codes(found)))
+got, rc = links_json(LINKED)
+by_id = {r["id"]: r["links"] for r in got}
+check("a markdown link keeps its address", {"label": "PR 12", "target": "https://github.com/o/r/pull/12"} in by_id.get("#1", []), str(got))
+check("a reference with no known address keeps its label", {"label": "VER-123", "target": None} in by_id.get("#1", []), str(got))
+check("a cross-repo reference gets a GitHub address",
+      {"label": "pr-claude-testbed#35", "target": "https://github.com/versable-git/pr-claude-testbed/issues/35"} in by_id.get("#2", []), str(got))
+check("a bare URL is a link to itself", {"label": "https://example.com/doc", "target": "https://example.com/doc"} in by_id.get("#2", []), str(got))
+check("a row with an empty links cell is left out",
+      "#1" not in {r["id"] for r in links_json(LINKED.replace("| [PR 12](https://github.com/o/r/pull/12) VER-123 |", "|  |"))[0]})
+
 # sync: forward only
 write(GOOD.replace("| `#1` | ✅ |", "| `#1` | 🟢 |").replace("| `#2` | 🟢 |", "| `#2` | ✅ |"))
 out = subprocess.run([sys.executable, SCRIPT, "sync", F], capture_output=True, text=True, env=ENV).stdout

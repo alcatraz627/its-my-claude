@@ -47,6 +47,8 @@ invents a different project just to score.
 
 ## Step 0: Load Shared Guidelines and Runtime Context
 
+**Fit check.** Say the task's shape in one line before starting. This prosecutes work already declared done. Unfinished work is `/skeptical-review`, and a question of which checker applies is `/validate`. If the ask spans shapes, chain them. Mention a better or extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md` list the rest.
+
 Read the shared guidelines, `<project>/.claude/skills/GUIDELINES.md` if the project
 has one, otherwise the global default `~/.claude/skills/GUIDELINES.md` (most projects
 have no local copy; use the global one and say so in one line, never skip the rules).

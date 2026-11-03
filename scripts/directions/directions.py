@@ -14,6 +14,7 @@ Usage:
   directions.py lint <file> [--json]   findings; exit 1 when any is an error
   directions.py sync <file> [--dry-run] mark rows done that their source shows done
   directions.py link <file> [--dry-run] turn GH#n, repo#n, repo paths and commits into links
+  directions.py links <file> [--json]  the links in each row's optional `links` column
   directions.py hook-post              PostToolUse: Edit/Write baseline, gs auto-sync
   directions.py hook-stop              Stop: hold the turn on errors this turn added
 
@@ -170,12 +171,54 @@ def row_entries(doc):
         if kind(t) != "rows":
             continue
         ci, cs, ct = col(t["head"], "id"), col(t["head"], "state"), col(t["head"], "task")
+        cl = col(t["head"], "links", "link")
         for ln, cs_ in t["rows"]:
             if max(ci, cs) >= len(cs_):
                 continue
             out.append({"line": ln, "ids": expand_ids(cs_[ci]), "state": cs_[cs],
                         "task": cs_[ct] if ct is not None and ct < len(cs_) else "",
+                        "links": cs_[cl] if cl is not None and cl < len(cs_) else "",
                         "raw": doc["lines"][ln], "table": t})
+    return out
+
+
+BARE_URL = re.compile(r"https?://[^\s)>\]|,]+")
+
+
+def cell_links(cell):
+    """The links in an optional `links` cell, as [{label, target}].
+
+    A cell holds zero or many, written as Markdown links, bare URLs, or plain
+    references such as `repo#n` or `VER-123`. A reference with no known address
+    keeps its label and a null target, so a reader can still show it as text.
+    """
+    out = []
+    rest = MD_LINK.sub(lambda m: (out.append({"label": TICK.sub(r"\1", m.group(1)) or m.group(2),
+                                              "target": m.group(2)}) or " "), cell)
+    for url in BARE_URL.findall(rest):
+        out.append({"label": url, "target": url})
+    rest = BARE_URL.sub(" ", rest)
+    for tok in re.split(r"[,;\s]+", TICK.sub(r"\1", rest)):
+        if tok and tok not in ("-", "—", "none", "n/a"):
+            out.append({"label": tok, "target": None})
+    return out
+
+
+def row_links(path):
+    """Every work row that carries links: [{id, task, links}]. Rows in a table with
+    no `links` column, and rows with an empty cell, are simply left out."""
+    with open(path, encoding="utf-8", errors="replace") as f:
+        text = f.read()
+    # Run the linker over the text first so repo#n and paths in the cell get an address.
+    try:
+        text = link_text(text, path)[0]
+    except Exception:  # noqa: BLE001  an unlinkable file still has its explicit links
+        pass
+    out = []
+    for r in row_entries(parse(text)):
+        links = cell_links(r["links"])
+        if links:
+            out.append({"id": ", ".join(r["ids"]), "task": plain(r["task"]), "links": links})
     return out
 
 
@@ -668,6 +711,15 @@ def main(argv):
     if cmd == "link" and len(argv) > 1:
         changed = link_file(argv[1], dry="--dry-run" in argv)
         print(("would link: " if "--dry-run" in argv else "linked: ") + (", ".join(changed) or "nothing"))
+        return 0
+    if cmd == "links" and len(argv) > 1:
+        found = row_links(argv[1])
+        if "--json" in argv:
+            print(json.dumps(found, ensure_ascii=False, indent=1))
+        else:
+            for r in found:
+                print("%s\t%s" % (r["id"], "  ".join("%s -> %s" % (l["label"], l["target"] or "(no address)")
+                                                   for l in r["links"])))
         return 0
     if cmd == "sync" and len(argv) > 1:
         changed = sync(argv[1], dry="--dry-run" in argv)

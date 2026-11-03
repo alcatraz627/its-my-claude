@@ -22,6 +22,9 @@ allowed here because a doc is longer than a comment.
 Runtime contract:
   doc-voice-gate.py          PostToolUse on Write/Edit/MultiEdit: note + record
   doc-voice-gate.py stop     Stop: re-check this turn's docs, block or tell
+  doc-voice-gate.py --check FILE
+                             judge one file now, from a shell: prints what is
+                             wrong and exits 1, or says it passes and exits 0
 Scope: .md files under a `docs/` folder, or any .md whose frontmatter names a
 non-agent `reader:` (that includes a file under `.claude/`). Skips `archive/`,
 other `.claude/` files, and changelogs, RCAs and ADRs. `reader: agent` exempts
@@ -405,10 +408,11 @@ def worse(base, now):
                                                  "codes", "sentences", "flat", "tail"))
 
 
-def findings(path, force=False):
+def findings(path, force=False, hint=True):
     """What is wrong with the doc as it stands now, as sentences; empty when it
     reads fine. `force` judges a doc that is out of scope by location, because
-    the reply handed it to the owner."""
+    the reply handed it to the owner. `hint=False` leaves out the advice about
+    naming a reader, for a caller that asked for the check itself."""
     try:
         with open(path, encoding="utf-8", errors="replace") as f:
             text = f.read()
@@ -467,7 +471,7 @@ def findings(path, force=False):
                    "they get from it")
     if out:
         out.append("the moves and size signals are in ~/.claude/conventions/doc-writing.md section 6b. Keep every fact")
-    if out and reader_of(text) is None:
+    if out and hint and reader_of(text) is None:
         if force:
             out.append("you pointed the owner at this file. If it is for agents, put `reader: agent` at the top; "
                        "if it is for the owner, name them (`reader: <who>`) and fix the points above")
@@ -646,7 +650,29 @@ def stop(data):
     return 0
 
 
+def check(path):
+    """Judge one file now and say so, whether or not a hook would ever look at it.
+
+    Exit 0 when it reads fine, 1 when it does not, 2 when there is nothing to read.
+    Scope, the owner's exempt list and the mutes are ignored: someone asked.
+    """
+    if not path or not os.path.isfile(path):
+        print("doc check: no such file: %s" % (path or "(no path given)"), file=sys.stderr)
+        return 2
+    found = findings(path, force=True, hint=False)
+    name = os.path.basename(path)
+    if not found:
+        print("%s passes the doc check." % name)
+        return 0
+    print("%s does not read as a doc for a person:" % name)
+    for f in found:
+        print("  - %s" % f)
+    return 1
+
+
 def main(argv):
+    if argv[:1] == ["--check"]:
+        return check(argv[1] if len(argv) > 1 else "")
     if os.environ.get("DOC_VOICE_OFF") == "1" or os.path.exists(MUTE):
         return 0
     try:

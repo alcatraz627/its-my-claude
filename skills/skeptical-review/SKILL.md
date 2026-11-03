@@ -9,6 +9,8 @@ A post-work review biased toward suspicion, not approval. Its job is to surface
 things the author (me) plausibly got wrong so the human can deep-dive, not to
 bless the diff. It flags, it never auto-fixes.
 
+**Fit check.** Say the task's shape in one line before starting. A hostile proof that finished work is broken is `/adversarial-review`, a UI defect class is `/ui-categorical-check`, and an unfinished change gets finished first. If the ask spans shapes, chain them. Mention a better or extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md` list the rest.
+
 ## Why this forks a fresh context (the load-bearing design choice)
 
 A model reviewing its own diff in its own context is structurally sycophantic:

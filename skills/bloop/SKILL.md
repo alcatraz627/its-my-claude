@@ -40,6 +40,13 @@ protocol: for the entire duration of this skill run.
 Also read `~/.claude/skills/bloop/runtime-notes.md` for past run history relevant to this
 skill. If it does not exist yet, continue without it.
 
+**Fit check.** Say the task's shape in one line before starting. A one-off fix is done
+inline, a queue of goal rows is `/blitz`, a plan still to be written is `/plan` or
+`/build-change` first, and a review of finished work is `/skeptical-review`. If the ask
+spans shapes, chain them (plan, then this loop, then `/validate`). Mention a better or
+extra skill only when it matters to the ask; `/pick-skill` and `skills/00-index.md`
+list the rest.
+
 > Lock reminder: acquire a lock via `lock-file.sh acquire` before every Edit/Write to a
 > shared file, and release it immediately after. Never write to `runtime-notes.md` or any
 > SKILL.md without holding its lock.
@@ -139,6 +146,12 @@ nobody ran is visible rather than absent.
    add that row if the plan has none, and compare the render with any approved mock
    in both themes yourself before a done-claim. If the mock showed hand-written
    content, say whether the build can produce it.
+2d. **Isolation follows the target repo.** `isolation: "worktree"` cuts the worktree from
+   the session's cwd repo. When the build lives in another repo (cwd is `~/.claude`, the
+   work is under `~/Code/`), do not pass it. Instead `git clone -b <branch> <repo path>
+   <scratchpad>/<name>` and name that clone in the brief, with the seat to confirm
+   `git rev-parse --show-toplevel` before trusting a read. A worktree cut from the wrong
+   repo makes the seat stop on its precondition and costs a round (prop-20261031-170950-85).
 3. The dispatch prompt must: name the load-bearing claims to attack, including CONCRETE
    malformed-input classes (the missing field, the NaN, the duplicate, the empty list);
    name the classes past runs found outside the diff: what the change newly made

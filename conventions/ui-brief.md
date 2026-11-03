@@ -33,6 +33,19 @@ Owner, 2026-11-01: "needs a much better UI, the html and ui best practices for v
 3. Look up what the owner already rejected on this surface: its charter (`conventions/ui-charter.md`), its git log, and `rg -il "<surface name>" ~/.claude/memory ~/.claude/projects/*/memory`. A fix that restores a rejected look is the worst outcome here. It nearly happened on the hub: the cure for "this looks like plain text" was a boxed dropdown and a blue button on every row, the exact look already rejected.
 4. Open one sibling page and follow it, or say in a sentence why this one differs.
 
+## What the owner sees first
+
+Owner, 2026-11-03, on a page that passed every check and an independent review: "My gripe is what I see." The kit now carries most of this, so use it and do not rebuild it.
+
+| Rule | Check |
+|---|---|
+| A favicon, a meta description and an svg icon in the bar. `pagekit.page(icon_name=..., description=...)` gives all three | `check_page.py` prints a note when one is missing |
+| The theme switch looks the same on every page: the kit's one icon, never a word or a homemade control | Compare against any kit page |
+| Buttons are plain: an icon and a word, or an icon with a tooltip, and a shade on hover. Use `.kit-btn` and `.kit-icon-only`. A border or a fill needs a reason | Read computed border and background at rest |
+| Every button that acts has an icon, from the kit's sprite, and every icon-only control has a tooltip and a label | Search the rendered page for controls without an svg or `data-tip` |
+| The bar, search and alerts belong to one design: same background, same control height, same radius as what is below them. Search can live in the bar | Screenshot the top 200px and ask whether they look like one page |
+| No footer of words nobody reads. Key lists and explanations go in a help icon's tooltip | Read the last line of the page and ask who it is for |
+
 ## What the page must do
 
 Each rule was missed on a page that passed every check, and each check is one you can run.

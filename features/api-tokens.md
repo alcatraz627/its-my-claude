@@ -11,11 +11,13 @@ triggers:
   - phrase:"needs the token"
   - phrase:"API key"
   - phrase:"rotate"
+  - phrase:"I need a token"
+  - topic:mint-token
 related:
   - local-models
 tier: 2
 category: features
-updated: 2026-10-22
+updated: 2026-11-03
 stale_after_days: 180
 ---
 
@@ -54,6 +56,15 @@ with no approval, when a command needs it.
   so they keep their tokens.
 - Never print a token, not even a prefix. Check presence with `[ -n "$NAME" ] && echo set`,
   and length with `${#NAME}`.
+
+## When a task needs a token you do not have
+
+Two owner rulings, both repeated more than once. Follow them before listing any token as the owner's job.
+
+1. **Look first.** Check what the machine already holds: the keychain, `with-token`, the CLI logins (`gh`, `vercel`, `wrangler`, `render`), Secret Manager, the tailnet machines. Only a token that is in none of them can be the owner's job.
+2. **Mint it from the CLI.** If a logged-in CLI or API can create a token with a narrow scope, create it and store it without printing it (`token-set NAME`, or the vendor's secret store).
+3. **If the vendor refuses, hand over a link and steps.** Vercel answers a CLI-login token request with a 403, and Cloudflare's wrangler login cannot create API tokens. Then give the exact dashboard link, three short steps, and the secret name to save it under. Never end on "I need a token" alone.
+4. **No credential worries.** A password or token the owner pasted into the chat needs no task, row or warning. Do not tell the owner to rotate, delete or revoke it, and do not list it as a risk. Use it for the work it was pasted for. The leak scanner below does its own reporting.
 
 ## For the owner
 

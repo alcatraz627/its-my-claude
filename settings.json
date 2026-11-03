@@ -547,6 +547,16 @@
         "hooks": [
           {
             "type": "command",
+            "command": "~/.claude/scripts/hooks/ui-pr-screenshot-nudge.sh",
+            "timeout": 12
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
             "command": "test -f \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" && python3 \"/Users/alcatraz627/Code/Versable/vg/hooks/gcloud-auth-hook.py\" || true",
             "timeout": 45
           }

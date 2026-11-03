@@ -20,6 +20,10 @@ MEASURE = """() => {
   const res = {tables: 0, scroll_sideways: [], page_overflow: false, dead_links: [], theme_button: false};
   res.page_overflow = document.documentElement.scrollWidth > innerWidth + 2;
   res.theme_button = !!document.querySelector('[data-kit-theme], [data-theme-toggle]');
+  res.head_missing = [];
+  if (!document.querySelector('link[rel~="icon"]')) res.head_missing.push('favicon');
+  if (!document.querySelector('meta[name="description"]')) res.head_missing.push('meta description');
+  if (!document.querySelector('header svg, nav svg, .kit-bar svg')) res.head_missing.push('icon in its bar');
   const hidden = [];
   document.querySelectorAll('[hidden]').forEach(e => { hidden.push(e); e.hidden = false; });
   document.querySelectorAll('table').forEach((t, i) => {
@@ -123,6 +127,8 @@ def main():
         browser.close()
 
     notes = []
+    for missing in res.get("head_missing", []):
+        notes.append(f"the page has no {missing}: every page carries a favicon, a meta description and an icon in its bar (conventions/ui-brief.md)")
     if by_os["light"] == by_os["dark"]:
         notes.append("the page ignores the OS theme: it should follow the OS until the reader chooses (conventions/visual-design.md)")
 

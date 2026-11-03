@@ -12,7 +12,11 @@
   function applyTheme(t) {
     root.dataset.theme = t;
     document.body.classList.toggle('light', t === 'light');
-    document.querySelectorAll('[data-kit-theme]').forEach(b => { b.textContent = t === 'light' ? 'Dark' : 'Light'; b.setAttribute('aria-label', 'Switch to ' + (t === 'light' ? 'dark' : 'light') + ' theme'); });
+    document.querySelectorAll('[data-kit-theme]').forEach(b => {
+      const label = 'Switch to ' + (t === 'light' ? 'dark' : 'light') + ' theme';
+      b.setAttribute('aria-label', label);
+      b.dataset.tip = label;
+    });
   }
   applyTheme(readTheme() || osTheme());
   osLight.addEventListener('change', () => { if (!readTheme()) applyTheme(osTheme()); });

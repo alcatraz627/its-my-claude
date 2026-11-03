@@ -82,7 +82,7 @@ already carries its own legend keeps that legend; this is the default for a new 
    what waits on other people.
 6. One section per direction. Each opens with when and one sentence of what it is
    for, then one sub-section per goal with its accepted-when line and a
-   `id | state | task` table. The accepted-when line names the bars that apply,
+   `id | state | task` table (a fourth `links` column is optional, see below). The accepted-when line names the bars that apply,
    in these words so bfb can show them as a checklist: code complete, exercised
    (by the agent), reviewed, tested, deployed. A gap nobody owns gets a gap line under its goal;
    parked rows go on one closing line.
@@ -100,6 +100,16 @@ hashes, ids and paths stay in Sources even when a prose-style hook flags them.
 file or doc in the repo links by its path relative to this file, a commit links to
 its GitHub page. Write them plain and run `directions.py link <file>`, which
 rewrites them and leaves existing links alone; `lint` warns on any it missed.
+
+**The optional `links` column.** A row table may end with a `links` column holding
+the PRs, tickets or resources behind that row: zero or many per cell, each a Markdown
+link, a bare URL, or a plain reference (`repo#n`, `VER-123`). It is advisory, so a
+table without it stays valid, an empty cell is fine, and lint adds no error for it.
+A reader such as bfb gets the cell with `directions.py links <file> --json`, which
+gives `{id, task, links: [{label, target}]}` per row; a reference with no known
+address comes back with a null target and is shown as text. Keep the row's `task`
+cell as the words the owner reads, and put the link in this column rather than
+leaving the reader to dig it out of the task text.
 
 ## Show (bare)
 

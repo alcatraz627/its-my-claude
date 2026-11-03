@@ -7,6 +7,7 @@ scripts/hook-orchestrator/run.sh          a dispatcher; each task logs for itsel
 scripts/hooks/api-recovery-nudge.sh       fires only after an API outage
 scripts/hooks/browser-ttl-nudge.sh        a state notice with its own reaper log
 scripts/hooks/ui-brief-nudge.sh           a one-time pointer to a doc, not a judgment
+scripts/hooks/ui-pr-screenshot-nudge.sh   a one-time optional suggestion, not a judgment
 scripts/hooks/stop-arbiter.py             a dispatcher; each gate logs for itself
 scripts/hooks/ctx-pressure-nudge.sh       a measured context notice, not a judgment
 scripts/hooks/ctx-signal-nudge.sh         a measured context notice, not a judgment

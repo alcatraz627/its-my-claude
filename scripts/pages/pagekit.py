@@ -133,9 +133,51 @@ THEME_BEFORE_PAINT = (
 )
 
 
-def page(title, body, tabs=None, extra_css="", extra_js=""):
-    """One self-contained HTML file. `tabs` is a list of (key, label); each body panel then carries data-kit-panel."""
+# The icon set every page carries, as a sprite: <svg class="kit-i"><use href="#kit-i-NAME"/></svg>.
+ICONS = {
+    "sun": '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+    "moon": '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+    "search": '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    "play": '<path d="M6 3l14 9-14 9z"/>',
+    "stop": '<rect x="6" y="6" width="12" height="12" rx="1"/>',
+    "open": '<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+    "restart": '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+    "copy": '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    "clock": '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    "logs": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+    "server": '<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/>',
+    "alert": '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/>',
+    "help": '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',
+    "chip": '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
+    "close": '<path d="M18 6 6 18M6 6l12 12"/>',
+    "file": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+}
+SPRITE = '<svg hidden aria-hidden="true">' + "".join(
+    f'<symbol id="kit-i-{name}" viewBox="0 0 24 24">{shape}</symbol>' for name, shape in ICONS.items()) + "</svg>"
+# A favicon cannot read the page's colour variables, so it carries the one literal colour.
+FAVICON_STROKE = "%235b9cf5"
+
+
+def icon(name, extra=""):
+    """One icon from the sprite, as markup."""
+    return f'<svg class="kit-i {extra}" aria-hidden="true"><use href="#kit-i-{name}"/></svg>'
+
+
+def favicon(name):
+    """A data-URI favicon drawn from the same icon as the page's bar."""
+    shape = ICONS[name].replace('"', "'").replace("<", "%3C").replace(">", "%3E").replace("#", "%23")
+    return ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' "
+            f"stroke='{FAVICON_STROKE}' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E{shape}%3C/svg%3E")
+
+
+def page(title, body, tabs=None, extra_css="", extra_js="", icon_name="file", description=None):
+    """One self-contained HTML file. `tabs` is a list of (key, label); each body panel then carries data-kit-panel.
+
+    `icon_name` picks the sprite icon shown in the bar and as the favicon, and `description`
+    fills the meta tag, which falls back to the title.
+    """
     esc = _html.escape(title)
+    desc = _html.escape(description or title, quote=True)
     tab_bar = ""
     if tabs:
         tab_bar = '<nav class="kit-tabs" role="tablist">' + "".join(
@@ -145,6 +187,9 @@ def page(title, body, tabs=None, extra_css="", extra_js=""):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="{desc}">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" type="image/svg+xml" href="{favicon(icon_name)}">
 <title>{esc}</title>
 <script>{THEME_BEFORE_PAINT}</script>
 <style>
@@ -154,7 +199,8 @@ def page(title, body, tabs=None, extra_css="", extra_js=""):
 </style>
 </head>
 <body>
-<header class="kit-bar"><div class="kit-bar-inner"><h1 class="kit-title">{esc}</h1><button type="button" class="kit-theme" data-kit-theme>Light</button></div>{tab_bar}</header>
+{SPRITE}
+<header class="kit-bar"><div class="kit-bar-inner"><h1 class="kit-title">{icon(icon_name)}{esc}</h1><button type="button" class="kit-theme" data-kit-theme aria-label="Switch theme">{icon("sun", "kit-i-sun")}{icon("moon", "kit-i-moon")}</button></div>{tab_bar}</header>
 <main class="kit-page">
 {body}
 </main>

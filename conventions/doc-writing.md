@@ -377,7 +377,44 @@ Size signals (restructure when one trips): a sentence over 35 words, a paragraph
 | Sentences that only name code | One sentence on what it means, then a table: what it is, where it lives |
 | History of rulings and dates | Today's rule, one "why" sentence, the history in Sources |
 
-Never pass a check by deleting a fact, or by swapping one splice mark for another. Worked examples: `~/Code/Versable/slack-automation/.claude/output/20261029-doc-gate-diagnosis/diagnosis.md`, section "How to write instead".
+To check one file while you rewrite it, run `python3 ~/.claude/scripts/hooks/doc-voice-gate.py --check <path>`. It judges the file wherever it lives, prints what the doc gate would flag, and exits 1, or says the file passes and exits 0.
+
+Never pass a check by deleting a fact, or by swapping one splice mark for another. A score is never the only done-condition for a doc: a brief that asks for a doc also carries habits 1, 2 and 6 in one line each.
+
+Pruning word by word keeps the wrong shape and hides the symptom. Two more moves belong in the table above: two readers on one page means splitting the page, or giving each reader a section that opens by naming them; a long table cell keeps a short value, with the explanation in a subsection named after the row.
+
+### Worked examples
+
+**A dense paragraph, split by layer.** Before:
+
+> There is also a backend admin concept that lives on the Python side and is decoupled from the frontend concept; the backend treats any session whose `team_id == Config.ADMIN_TEAM_ID` as admin (`backend/api/auth.py:19`, config at `__init__.py:143`), which is not the same check as `@versable.ai`, so the two can drift if someone joins the admin team without a company email or vice versa.
+
+After:
+
+> The backend decides who is an admin differently from the frontend, so the two can disagree.
+>
+> - The frontend treats any `@versable.ai` email as an admin.
+> - The backend treats any session in the admin team as an admin. That team is set by `ADMIN_TEAM_ID`.
+>
+> Someone in the admin team without a company email is an admin to the backend only.
+
+The file:line references move to Sources. Nothing was deleted: the paragraph became a claim, a two-item comparison and a consequence.
+
+**A long table cell, promoted to a section.** Before, one row of a five-column table:
+
+> `| MOD-03 | Module run gate | Run action passes assertAccess/checkLimits; with a feature blocked the run refuses cleanly with a user-readable message, and credits are not deducted, and the Slack card says skipped | P1 |`
+
+After: the cell reads "Refuses cleanly when blocked", and a `### MOD-03: module run gate` section below the table lists the three things to check, one per bullet.
+
+**A ledger paragraph, rewritten as today's rule.** Before:
+
+> Per owner ruling D7 (2026-10-19), superseding the 2026-09-12 decision in PR #311, file paths are no longer followed by a period (S2 found this in 4 of 9 replies).
+
+After:
+
+> Never put a period right after a file path. The terminal links the path and swallows the period, so the link breaks.
+
+The ruling id, both dates, the PR and the count go to Sources, where a reader who wants the history can find them.
 
 ## 7. Diagram rules
 

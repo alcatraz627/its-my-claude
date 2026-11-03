@@ -6,9 +6,15 @@ The markdown is the source of truth. The first run creates the Doc in the named
 Drive folder; every run rewrites the Cover tab (the README, with its links to the
 other files turned into links to their tabs) and one tab per file. Headings,
 paragraphs, bullets, numbered lists, tables, code blocks, callouts, quotes, bold,
-italic, inline code and links are recreated through the Docs API, and Mermaid
-diagrams become images (rendered locally, briefly hosted in the Doc's folder), in the fonts,
+italic, inline code and links are recreated through the Docs API, and Mermaid and
+draw.io diagrams become images (rendered locally, briefly hosted in the Doc's folder), in the fonts,
 sizes, colours and table look of ~/.claude/scripts/shared/doc-style.json ("gdoc").
+The Doc is set to pageless mode (one continuous page, no page breaks) unless the config says otherwise.
+
+A draw.io diagram is either a code fence tagged `drawio` holding the diagram's XML, or a
+standalone image line pointing at a .drawio file next to the markdown: `![alt](flow.drawio)`.
+Rendering needs the draw.io desktop app's command line: `brew install --cask drawio`
+(remove with `brew uninstall --cask drawio`). A multi-page file shows its first page.
 
 Auth is the signed-in gcloud account with a Drive scope (`gcloud auth login
 --enable-gdrive-access`, once, by the owner). Nothing here talks to Slack or a bot.
@@ -23,11 +29,15 @@ Config (JSON): account, folder, title, cover (a markdown file, becomes the Cover
 tab), docs (markdown paths, one tab each). Written back: doc_id, tabs {file: tabId}.
 Optional per doc: fonts, spacing ([above, below] by heading level and "body"), and
 tight_tables (true shrinks the empty lines Google leaves around each table).
+Also optional: pageless (default true; false keeps the Doc in pages) and readability
+(a dict of line_spacing, space_below and widow_orphan for body text, or false to leave
+Docs' own body defaults).
 """
 import argparse
 import json
 import pathlib
 import re
+import shutil
 import subprocess
 import sys
 import urllib.error
@@ -46,6 +56,9 @@ SPEC = {"callouts": G["callouts"]}
 CALLOUT_RE = re.compile(r"^\[!(NOTE|TIP|WARNING|IMPORTANT|CAUTION)\]\s*")
 SOFT_BREAK = "\u000b"  # a line break inside one paragraph, so a block keeps one box
 SAMPLES_HEADING = "Blocks the document skills produce"
+# Body text defaults that make long reading easier. The spec (G["readability"]) and then the config override them.
+READABILITY_DEFAULTS = {"line_spacing": 115, "space_below": 6, "widow_orphan": True}
+READ = dict(READABILITY_DEFAULTS, **G.get("readability", {}))
 
 
 def is_stroke(ch):
@@ -228,6 +241,34 @@ def render_mermaid(src):
     return png
 
 
+DRAWIO_CACHE = pathlib.Path.home() / ".cache" / "gdoc-drawio"
+DRAWIO_APP_BIN = "/Applications/draw.io.app/Contents/MacOS/draw.io"
+
+
+def drawio_bin():
+    """The draw.io command line: the brew wrapper on PATH, else the binary inside the desktop app."""
+    found = shutil.which("drawio") or (DRAWIO_APP_BIN if pathlib.Path(DRAWIO_APP_BIN).exists() else None)
+    if not found:
+        raise SystemExit("a draw.io diagram needs the draw.io command line, and none is installed. "
+                         "Install it with: brew install --cask drawio  (remove it with: brew uninstall --cask drawio)")
+    return found
+
+
+def render_drawio(src):
+    """Render one draw.io diagram (its XML) to a PNG at twice its size, cached by its source."""
+    import hashlib
+    DRAWIO_CACHE.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha256(src.encode()).hexdigest()[:16]
+    png, xml = DRAWIO_CACHE / f"{key}.png", DRAWIO_CACHE / f"{key}.drawio"
+    if png.exists(): return png
+    xml.write_text(src)
+    cmd = [drawio_bin(), "-x", "-f", "png", "-s", "2", "-b", "10", "-o", str(png), str(xml)]
+    r = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
+    if r.returncode or not png.exists():
+        raise SystemExit(f"draw.io render failed for diagram {key}: {(r.stderr or r.stdout).strip()[-600:]}")
+    return png
+
+
 def png_width_pt(png):
     """The width a 2x render should show at, in points, never wider than the page."""
     w = int.from_bytes(png.read_bytes()[16:20], "big")
@@ -251,13 +292,16 @@ def drive_upload_shared(tok, folder, png, name):
     return fid, f"https://drive.google.com/uc?export=view&id={fid}"
 
 
-def mermaid_to_images(tok, folder, blocks, uploaded):
-    """Swap each Mermaid block for a paragraph holding its image; record each upload to clean up later."""
+DIAGRAM_RENDERERS = {"mermaid": render_mermaid, "drawio": render_drawio}
+
+
+def diagrams_to_images(tok, folder, blocks, uploaded):
+    """Swap each Mermaid or draw.io block for a paragraph holding its image; record each upload to clean up later."""
     out = []
     for b in blocks:
-        if b[0] != "mermaid":
+        if b[0] not in DIAGRAM_RENDERERS:
             out.append(b); continue
-        png = render_mermaid(b[1])
+        png = DIAGRAM_RENDERERS[b[0]](b[1])
         fid, uri = drive_upload_shared(tok, folder, png, f"gdoc-diagram-{png.stem}.png")
         uploaded.append(fid)
         out.append(("p", [(obj_marker("image", {"uri": uri, "alt": "diagram", "hosted": True,
@@ -353,6 +397,8 @@ class Blocks(HTMLParser):
             self.in_pre = False
             if self.pre_lang == "mermaid":
                 self.blocks.append(("mermaid", self.pre_text.rstrip("\n")))
+            elif self.pre_lang == "drawio":
+                self.blocks.append(("drawio", self.pre_text.strip()))
             elif self.pre_lang in ("", "diagram", "ascii", "text"):
                 self.blocks.append(("diagram", self.pre_text.rstrip("\n")))
             else:
@@ -394,8 +440,23 @@ def obj_marker(kind, payload):
     return f"⁣O{len(OBJECTS) - 1}⁣"
 
 
-def md_blocks(text):
+DRAWIO_REF_RE = re.compile(r"^!\[[^\]]*\]\(([^)\s]+\.drawio)\)[ \t]*$", re.M)
+
+
+def inline_drawio_files(text, base):
+    """Turn a standalone `![alt](flow.drawio)` line into a drawio fence holding that file's XML."""
+    def swap(m):
+        path = (pathlib.Path(base) if base else pathlib.Path.cwd()) / m.group(1)
+        if not path.is_file():
+            raise SystemExit(f"draw.io file not found: {path} (referenced as {m.group(1)!r})")
+        return "```drawio\n" + path.read_text().strip() + "\n```"
+    return DRAWIO_REF_RE.sub(swap, text)
+
+
+def md_blocks(text, base=None):
+    """The markdown as blocks. `base` is the folder a `![](x.drawio)` path is read from."""
     import markdown  # provided by `uv run --with markdown`
+    text = inline_drawio_files(text, base)
     # Footnotes: the definitions leave the text and each reference becomes an object marker.
     notes = dict(re.findall(r"^\[\^([^\]]+)\]:\s*(.+)$", text, flags=re.M))
     text = re.sub(r"^\[\^[^\]]+\]:.*\n?", "", text, flags=re.M)
@@ -511,22 +572,57 @@ def style_requests(runs, start, tab, base_size=None):
     return out
 
 
+def readability_style():
+    """Body paragraph settings for easier reading: looser lines, a gap between paragraphs, no stranded lines."""
+    out = {}
+    if READ.get("line_spacing"): out["lineSpacing"] = READ["line_spacing"]
+    if READ.get("space_below") is not None: out["spaceBelow"] = pt(READ["space_below"])
+    if READ.get("widow_orphan"): out["avoidWidowAndOrphan"] = True
+    return out
+
+
+def document_mode_requests(tab_ids, pageless=True):
+    """One updateDocumentStyle per tab that sets pageless (or paged) mode. Each tab keeps its own document style."""
+    mode = "PAGELESS" if pageless else "PAGES"
+    return [{"updateDocumentStyle": {"documentStyle": {"documentFormat": {"documentMode": mode}},
+                                     "fields": "documentFormat.documentMode", "tabId": tid}} for tid in tab_ids]
+
+
+def document_modes(doc):
+    """{tabId: documentMode} read back from a Doc (a tab with no mode reads as PAGES)."""
+    def walk(tabs):
+        for t in tabs:
+            yield t["tabProperties"]["tabId"], t["documentTab"].get("documentStyle", {}).get("documentFormat", {}).get("documentMode", "PAGES")
+            yield from walk(t.get("childTabs", []))
+    return dict(walk(doc.get("tabs", [])))
+
+
+def set_document_mode(tok, doc_id, tab_ids, pageless=True):
+    """Set every tab to pageless (or paged) and read the Doc back; returns the tabs that did not take the mode."""
+    batch(tok, doc_id, document_mode_requests(tab_ids, pageless))
+    want = "PAGELESS" if pageless else "PAGES"
+    got = document_modes(get_doc(tok, doc_id))
+    return [t for t in tab_ids if got.get(t) != want]
+
+
 def named_style_requests(tab):
     """The heading ramp, title, subtitle and body from the spec, set on the tab's named styles."""
     f, sz, col, wt, sp = G["fonts"], G["sizes"], G["heading_colors"], G["heading_weights"], G["spacing"]
     reqs = []
-    def one(name, key, font):
+    def one(name, key, font, extra=None):
         ts = {"weightedFontFamily": {"fontFamily": font, "weight": wt.get(key, 400)}, "fontSize": pt(sz[key]), "bold": False, "italic": key == "h6"}
         fields = ["weightedFontFamily", "fontSize", "bold", "italic"]
         if key in col: ts["foregroundColor"] = rgb(col[key]); fields.append("foregroundColor")
         ps, pfields = {}, []
         if key in sp:
             ps = {"spaceAbove": pt(sp[key][0]), "spaceBelow": pt(sp[key][1])}; pfields = ["spaceAbove", "spaceBelow"]
+        for k, v in (extra or {}).items():  # a spacing entry for this style wins over the readability defaults
+            if k not in ps: ps[k] = v; pfields.append(k)
         if key.startswith("h"):
             ps["keepWithNext"] = True; pfields.append("keepWithNext")
         reqs.append({"updateNamedStyle": {"tabId": tab, "namedStyle": {"namedStyleType": name, "textStyle": ts, "paragraphStyle": ps},
                                           "fields": ",".join(["namedStyleType"] + ["textStyle." + x for x in fields] + ["paragraphStyle." + x for x in pfields])}})
-    one("NORMAL_TEXT", "body", f["body"]); one("TITLE", "title", f["title"]); one("SUBTITLE", "subtitle", f["title"])
+    one("NORMAL_TEXT", "body", f["body"], readability_style()); one("TITLE", "title", f["title"]); one("SUBTITLE", "subtitle", f["title"])
     for i in range(1, 7): one(f"HEADING_{i}", f"h{i}", f["heading"] if i < 6 else f["body"])
     return reqs
 
@@ -973,6 +1069,11 @@ def main():
     # A doc may also ask for its own rhythm: [space above, space below] per heading level and "body".
     if cfg.get("spacing"):
         G["spacing"].update(cfg["spacing"])
+    # Readability: a dict overrides the body defaults, false leaves Docs' own.
+    if cfg.get("readability") is False:
+        READ.clear()
+    elif isinstance(cfg.get("readability"), dict):
+        READ.update(cfg["readability"])
     # A publish rewrites the whole Doc, so a Doc the owner now edits by hand refuses it until the lock is removed.
     if a.confirm and not a.archive and cfg.get("locked"):
         print(f"STOP: this Doc is locked: {cfg['locked']}"); return 2
@@ -989,9 +1090,9 @@ def main():
     for rel in files:
         p = base / rel; text = strip_md(p.read_text())
         m = re.search(r"^# (.+)$", text, flags=re.M)
-        parsed.append((p.name, m.group(1).strip() if m else p.stem, md_blocks(text)))
+        parsed.append((p.name, m.group(1).strip() if m else p.stem, md_blocks(text, p.parent)))
         kinds = [b[0] for b in parsed[-1][2]]
-        print(f"  {p.name:28} {len(kinds):4} blocks  h {kinds.count('h')}  p {kinds.count('p')}  li {kinds.count('li')}  table {kinds.count('table')}  code {kinds.count('code')}  diagram {kinds.count('diagram')}  mermaid {kinds.count('mermaid')}  callout {kinds.count('callout')}")
+        print(f"  {p.name:28} {len(kinds):4} blocks  h {kinds.count('h')}  p {kinds.count('p')}  li {kinds.count('li')}  table {kinds.count('table')}  code {kinds.count('code')}  diagram {kinds.count('diagram')}  mermaid {kinds.count('mermaid')}  drawio {kinds.count('drawio')}  callout {kinds.count('callout')}")
     if a.dry_run: return 0
 
     tok = sh("gcloud", "auth", "print-access-token")
@@ -1049,12 +1150,16 @@ def main():
     stale = [{"deleteTab": {"tabId": tid}} for tid in old_ids if tid not in tabs.values() and tid in by_title.values()]
     batch(tok, doc_id, stale + [{"updateDocumentTabProperties": {"tabProperties": {"tabId": first_tab, "title": parsed[0][1][:50]}, "fields": "title"}}])
     cfg_path.write_text(json.dumps(cfg, indent=2) + "\n")
+    pageless = cfg.get("pageless", True)
+    missed = set_document_mode(tok, doc_id, list(tabs.values()), pageless)
+    print(f"layout   {'pageless' if pageless else 'pages'}, {len(tabs) - len(missed)} of {len(tabs)} tabs read back in that mode")
+    if missed: print(f"  WARNING: Docs did not apply the mode to tabs {missed}")
 
     link_map = {name: f"https://docs.google.com/document/d/{doc_id}/edit?tab={tid}" for name, tid, _ in plan}
     uploaded = []
     try:
         for name, tid, blocks in plan:
-            blocks = mermaid_to_images(tok, cfg["folder"], blocks, uploaded)
+            blocks = diagrams_to_images(tok, cfg["folder"], blocks, uploaded)
             n, t = write_tab(tok, doc_id, tid, relink(blocks, link_map))
             if cfg.get("tight_tables"):
                 tighten_table_gaps(tok, doc_id, tid)
