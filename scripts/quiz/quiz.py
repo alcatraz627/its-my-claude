@@ -29,7 +29,8 @@ import sys
 
 HOME = os.environ.get("QUIZ_HOME", os.path.expanduser("~/.claude/assets/quizzes"))
 KINDS = ("spec", "plan", "code-change", "app", "feature", "analysis", "presentation", "docs")
-SLICE_MAX = 20
+SLICE_MAX = 6
+FEEDBACK_MAX = 240  # characters in one why, wrong or catch line: feedback stays terse
 MARKDOWN = (".md", ".markdown", ".mdx")
 NOT_SURE = "?"
 HEADING = re.compile(r"^(#{1,6})\s+(.*)$")
@@ -186,6 +187,15 @@ def _problems(q):
             out.append(f"{qid}: key '{item.get('key')}' is not an option")
         if not item.get("why"):
             out.append(f"{qid}: no why")
+        lines_of_feedback = [item.get("why") or "", item.get("catch") or "", *(item.get("wrong") or {}).values()]
+        if any(len(str(text)) > FEEDBACK_MAX for text in lines_of_feedback):
+            out.append(f"{qid}: a why, catch or wrong line is over {FEEDBACK_MAX} characters; feedback must stay terse")
+        look = item.get("look")
+        if look is not None:
+            if not isinstance(look, dict) or not str(look.get("hint") or "").strip() or not look.get("path"):
+                out.append(f"{qid}: look needs a path and a hint")
+            elif not os.path.exists(look["path"]):
+                out.append(f"{qid}: look path does not exist: {look['path']}")
         missing = [c for c in codes if c != item.get("key") and c not in (item.get("wrong") or {})]
         if missing:
             out.append(f"{qid}: no wrong line for {', '.join(missing)}")
@@ -244,6 +254,15 @@ def round_questions(q, n):
     return qs
 
 
+def stem_with_look(item):
+    """The question as asked, with its optional pointer for working the answer out."""
+    look = item.get("look")
+    if not look:
+        return item["stem"]
+    where = look["path"] + (f":{look['lines'][0]}-{look['lines'][1]}" if look.get("lines") else "")
+    return f"{item['stem']}\n\nWork it out: {where} ({look['hint']})"
+
+
 def cmd_render(a):
     q = load(a.dir)
     p = problems(q)
@@ -253,7 +272,7 @@ def cmd_render(a):
     title = f"Quiz · {os.path.basename(q['artifact']['ref'].rstrip('/'))} · round {a.round}"
     if a.surface == "wizard":
         # "Not sure" is always offered: a lucky guess would otherwise read as held.
-        steps = [{"name": i["id"], "message": i["stem"],
+        steps = [{"name": i["id"], "message": stem_with_look(i),
                   "fields": [{"name": "pick", "label": "Your answer", "type": "string",
                               "enum": [o["code"] for o in i["options"]] + [NOT_SURE],
                               "enum_labels": [f"{o['code']}) {o['label']}" for o in i["options"]] + ["not sure"]}]}
@@ -262,7 +281,7 @@ def cmd_render(a):
         return 0
     # The decision page contract needs one recommended option per decision, so a
     # neutral first option carries it and nothing on the page leaks the key.
-    decisions = [{"id": i["id"].upper(), "question": i["stem"], "context": f"chunk: {chunk_title(q, i['chunk'])}",
+    decisions = [{"id": i["id"].upper(), "question": stem_with_look(i), "context": f"chunk: {chunk_title(q, i['chunk'])}",
                   "options": [{"code": "x", "label": "answer below", "rec": True}] +
                              [{"code": o["code"], "label": o["label"]} for o in i["options"]]}
                  for i in qs]
@@ -276,6 +295,12 @@ def cmd_render(a):
 
 def chunk_title(q, cid):
     return next((c["title"] for c in q["chunks"] if c["id"] == cid), cid)
+
+
+def slice_where(s):
+    """Where a claim lives, as a reader can open it."""
+    return s.get("image") or f"{s['path']}" + (f":{s['lines'][0]}-{s['lines'][1]}" if "lines" in s else
+                                               f" § {s['anchor']}" if "anchor" in s else "")
 
 
 def cmd_grade(a):
@@ -307,19 +332,23 @@ def cmd_grade(a):
                              "ts": datetime.datetime.now().isoformat(timespec="seconds")})
         if ok:
             print(f"✓ {qid}  {item['why']}")
+            if item.get("catch"):
+                print(f"   catch: {item['catch']}")
+            print(f"   see: {slice_where(claims[item['claim']][1]['slice'])}")
             continue
         label = next((o["label"] for o in item["options"] if o["code"] == item["key"]), item["key"])
         wrong = "Not sure is an honest answer; here is the part that settles it." if pick == NOT_SURE \
             else (item.get("wrong") or {}).get(pick, "")
         print(f"✗ {qid}  you picked {pick}: {wrong}")
         print(f"   answer {item['key']}) {label}. {item['why']}")
+        if item.get("catch"):
+            print(f"   catch: {item['catch']}")
         s = claims[item["claim"]][1]["slice"]
         lines, total = read_slice(s)
         if lines is None:
             print(f"   slice unreadable: {total}")
             continue
-        where = s.get("image") or f"{s['path']}" + (f":{s['lines'][0]}-{s['lines'][1]}" if "lines" in s else
-                                                     f" § {s['anchor']}" if "anchor" in s else "")
+        where = slice_where(s)
         print(f"   ── {where}")
         for line in lines[:SLICE_MAX]:
             print(f"   │ {line}")

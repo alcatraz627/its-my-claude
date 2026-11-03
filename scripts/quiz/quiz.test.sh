@@ -105,7 +105,20 @@ check "wizard carries only the inputs-MCP fields, so nothing can leak the key" \
 pg=$($Q render "$D" --round 1 --surface page)
 check "page puts the recommendation on a neutral option" "$(printf '%s' "$pg" | jq -c '[.decisions[].options[] | select(.rec) | .code] | unique')" '["x"]'
 
+mutate 'q["questions"][0]["why"] = "x" * 300'
+check "feedback over the limit is refused" "$($Q check "$D")" "feedback must stay terse"
+write_quiz b 1
+mutate 'q["questions"][0]["look"] = {"path": "/no/such/file", "hint": "see the retry loop"}'
+check "a look at a missing file is refused" "$($Q check "$D")" "look path does not exist"
+write_quiz b 1
+mutate 'q["questions"][0]["look"] = {"path": q["chunks"][0]["claims"][0]["slice"]["path"], "lines": [4, 5], "hint": "see the retry line"}; q["questions"][0]["catch"] = "Retries are per job, not per batch."; q["questions"][1]["catch"] = "The queue is never drained on its own."'
+check "a look is offered in the question" "$($Q render "$D" --round 1)" "Work it out:"
+check "a look does not add wizard fields" "$($Q render "$D" --round 1 | jq -c '[.steps[0] | keys]')" '[["fields","message","name"]]'
+
 g=$($Q grade "$D" q1=b q2=a)
+check "a right pick still gets its catch" "$g" "catch: Retries are per job, not per batch."
+check "a right pick also cites its source" "$g" "see: $DOC:4-5"
+check "a wrong pick gets its catch" "$g" "catch: The queue is never drained on its own."
 check "a right pick prints its why" "$g" "✓ q1  The spec says three retries."
 check "a wrong pick prints the wrong line" "$g" "you picked a: Dropping would lose jobs."
 check "a wrong pick reveals the anchor slice read live" "$g" "│ After the last retry the job moves to the dead-letter queue."
