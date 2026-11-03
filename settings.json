@@ -1097,6 +1097,11 @@
           {
             "type": "command",
             "command": "~/.claude/scripts/session-mgmt/session-end-checkpoint.sh"
+          },
+          {
+            "type": "command",
+            "command": "/Users/alcatraz627/Code/Claude/claude-ipc/hooks/session-end.sh",
+            "timeout": 5
           }
         ]
       },
@@ -1359,6 +1364,15 @@
       }
     ],
     "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/hooks/authority-claim-note.sh",
+            "timeout": 5
+          }
+        ]
+      },
       {
         "hooks": [
           {

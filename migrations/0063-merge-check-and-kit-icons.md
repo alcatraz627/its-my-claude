@@ -22,6 +22,7 @@ The owner approved these on decision pages gcc-next-20261103 and hub-direction-2
 | `pagekit.page()` had no favicon, meta tags or bar icon | `icon_name` and `description`, plus an icon sprite | The owner's list |
 | A word for the theme switch, and a bar in a different colour | One icon, and the bar on the page background | "EVery new page made by claude has a different visual display" |
 | No plain button or tooltip in the kit | `.kit-btn`, `.kit-icon-only`, `data-tip` | The owner's list |
+| No check on claims to speak for the owner | `scripts/hooks/authority-claim-note.sh` on UserPromptSubmit, and claude-ipc's `hooks/session-end.sh` on SessionEnd | D5b and D6: proof of typed words, and one confirm line |
 | `directions.py` had no links reader | Optional `links` column and `links --json` | D4b: optional and advisory |
 
 ## What does NOT change

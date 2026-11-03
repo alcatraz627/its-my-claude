@@ -45,6 +45,11 @@ Owner, 2026-11-03, on a page that passed every check and an independent review: 
 | Every button that acts has an icon, from the kit's sprite, and every icon-only control has a tooltip and a label | Search the rendered page for controls without an svg or `data-tip` |
 | The bar, search and alerts belong to one design: same background, same control height, same radius as what is below them. Search can live in the bar | Screenshot the top 200px and ask whether they look like one page |
 | No footer of words nobody reads. Key lists and explanations go in a help icon's tooltip | Read the last line of the page and ask who it is for |
+| No `...` or `…` anywhere on screen, including progress text. Say "Starting bfb-phone" and show progress with a real indicator | Search the page's strings for both forms |
+| Plain, formal words on controls: "Confirm stop", never "Sure?" | Read every label aloud as a stranger would |
+| Read every screen, not the main one: start page, failure page, logs with hundreds of real lines, menus, armed states, empty and error | List each screen with the screenshot you read |
+| A control that opens something shows it at rest, with a chevron beside its value | Screenshot with no hover and ask what can be clicked |
+| A log or text viewer is a reading surface: line numbers, a hover per line, one-action copy for a line and the whole, errors separable | Open it with 200 real lines |
 
 ## What the page must do
 

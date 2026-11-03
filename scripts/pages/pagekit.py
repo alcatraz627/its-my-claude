@@ -151,6 +151,13 @@ ICONS = {
     "chip": '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>',
     "close": '<path d="M18 6 6 18M6 6l12 12"/>',
     "file": '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+    "chevron": '<path d="m6 9 6 6 6-6"/>',
+    "back": '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "pencil": '<path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5z"/><path d="m15 5 4 4"/>',
+    "archive": '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/>',
+    "undo": '<path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/>',
+    "refresh": '<path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/>',
 }
 SPRITE = '<svg hidden aria-hidden="true">' + "".join(
     f'<symbol id="kit-i-{name}" viewBox="0 0 24 24">{shape}</symbol>' for name, shape in ICONS.items()) + "</svg>"
