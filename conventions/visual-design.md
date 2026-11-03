@@ -29,8 +29,9 @@ stale_after_days: 365
 # Visual design: color, hierarchy, and where to read more
 
 How to make a UI surface (native app, web page, widget, CLI/TUI) read as designed
-rather than assembled. The worked example to copy is Switchboard's kit,
-`~/Code/Claude/switchboard-mac/docs/design-kit.md`. The claude-instances dropdown
+rather than assembled. Start with `conventions/ui-brief.md`, the short checklist for
+any UI build; this file is the reference behind it. The worked example to copy is
+Switchboard's kit, `~/Code/Claude/switchboard-mac/docs/dev/design-kit.md`. The claude-instances dropdown
 redesign these principles were first drawn from is not an exemplar; the owner
 judged it a failure (see Provenance).
 
@@ -165,7 +166,7 @@ are both attention claims, and both are spent by firing when nothing was wrong.
 ## Where to read more (per surface)
 
 ### Apple (macOS/iOS apps, menu-bar, SwiftUI)
-- House kit to copy for any new Swift menu-bar app: `~/Code/Claude/switchboard-mac/docs/design-kit.md`, with the build and packaging steps in `features/macos-menubar-widget.md` §0.
+- House kit to copy for any new Swift menu-bar app: `~/Code/Claude/switchboard-mac/docs/dev/design-kit.md`, with the build and packaging steps in `features/macos-menubar-widget.md` §0.
 - Human Interface Guidelines: https://developer.apple.com/design/human-interface-guidelines
 - HIG · The menu bar / menus: https://developer.apple.com/design/human-interface-guidelines/the-menu-bar
 - HIG · Color: https://developer.apple.com/design/human-interface-guidelines/color

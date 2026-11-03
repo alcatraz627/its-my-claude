@@ -47,7 +47,7 @@ that produced it:
 - gcc tooling UIs (the kanban board and hub, the instances hub, decision pages,
   anything served out of `~/.claude`):
   `~/.claude/assets/reports/*-ui-categorical/patterns.md`, currently the
-  2026-07-28 catalog of 13 classes. It is NOT under `.claude/output/` because
+  2026-07-28 catalog, now 20 classes. It is NOT under `.claude/output/` because
   the generic rule below would resolve to `~/.claude/.claude/output/`, a
   double-nested path that matches nothing and that this account's hook blocks.
 - Otherwise: `<project>/.claude/output/*-ui-categorical/patterns.md`

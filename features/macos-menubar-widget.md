@@ -35,7 +35,7 @@ cross-project scaffolding and the non-obvious gotchas that cost real debugging t
    `PaletteToken` to what you use; keep the severity three. Copying is the
    ruled approach (owner, 2026-09-28): no shared package, drift between apps is
    acceptable. The rules the kit encodes, and why, are in
-   `switchboard-mac/docs/design-kit.md`; read it before adding any colour or size.
+   `switchboard-mac/docs/dev/design-kit.md`; read it before adding any colour or size.
 2. **The packaging.** Copy `scripts/build.sh`: it globs `Sources/*.swift` (no
    hand-kept source list to drift), builds a real `.app` bundle with
    `LSUIElement`, ad-hoc signs it, installs to `~/Applications` and registers a
@@ -180,7 +180,7 @@ draws its own hover) and `ClosureMenuItem` for plain closure items.
 
 - `~/Code/Claude/switchboard-mac/` (§0, §6-8): `Sources/DesignKit.swift`,
   `Sources/Palette.swift`, `Sources/AppSupport.swift`, `scripts/build.sh`,
-  `docs/design-kit.md`, `docs/architecture.md`.
+  `docs/dev/design-kit.md`, `docs/architecture.md`.
 - `~/.claude/widgets/claude-instances/native/SettingsWindowController.swift` (§1),
   `Bar.swift` (`updateButton` §3, `checkHover`/`showUsagePopover` §4, the
   `.menuBehaviorDidChange` observer §2), `Dashboard.swift` (the SwiftUI sections).

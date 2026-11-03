@@ -123,7 +123,7 @@ Every file under `features/` and `conventions/` carries frontmatter with `brief`
 ## MANDATORY quick-rules (never-miss bar)
 
 - **Never let a relative `.claude/…` path resolve into `~/.claude/.claude/`.** When CWD is `~/.claude`, redirect `.claude/output/X` to `~/.claude/assets/reports/X` and `.claude/skills/X` to `~/.claude/skills/X`. A hook blocks the write. Redirect table: `conventions/asset-management.md`.
-- **Every HTML page is built on the shared kit and passes the page check.** The kit carries the dark and light switch and every colour, so neither is written by hand. Pick the surface first (markdown, local page, decision page, Artifact). See `conventions/pages.md`, or run `/page`.
+- **Every HTML page is built on the shared kit and passes the page check.** The kit carries the dark and light switch and every colour, so neither is written by hand. Pick the surface first (markdown, local page, decision page, Artifact). See `conventions/pages.md`, or run `/page`. That proves the page works, not that it reads well: any UI, small tools included, starts from `conventions/ui-brief.md`.
 - **Desktop automation: confirm before focus-steal, and HARD STOP on any failure.** Run `mcp__inputs__confirm` before `click`/`type`/`key`/`space`/`focus` unless the user pre-approved the sequence. On any failure (empty screenshot, non-zero command, empty window bounds), stop and report, and never hallucinate state. See `features/desktop-automation.md`.
 - **Never commit files with secrets** (.env, credentials, tokens).
 

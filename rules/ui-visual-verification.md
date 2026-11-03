@@ -22,7 +22,8 @@ stale_after_days: 180
 For a UI change: start the dev server, use the feature in a browser, golden path and edge cases. Type checks and suites verify code, not the feature. A verified claim means you drove headless Chrome, read the screenshot back, and judged it; cite the screenshot path.
 
 - **[design-mocks]** Before implementing any user-facing UI, grep for mocks or Figma specs for the surface and consult them.
-- **Every state:** dark AND light, open and closed, each breakpoint, or scope the claim ("verified in dark only"). `lm see` is a cheap second reader.
+- **Before building:** `conventions/ui-brief.md`, small tools included.
+- **Every state:** dark AND light, open and closed, each breakpoint, or scope the claim. A state today's data lacks (crash, failed read) gets induced with a stand-in API. `lm see` is a cheap second reader.
 - **Describe the frame before the question.** Write what is on screen first, then answer your prepared question; a prepared question turns looking into a slow DOM assertion.
 - **Compare siblings**; say which rows differ and how.
 - **The tree is not the render.** An accessibility snapshot proves structure; say "structure checked".

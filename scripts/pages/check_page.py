@@ -111,7 +111,20 @@ def main():
             themes["second"] = bg()
             unreadable["second theme"] = page.evaluate(CONTRAST)
             page.screenshot(path=str(out / "check-second-theme.png"))
+        # A fresh visit under each OS setting, with nothing stored, should land on different themes.
+        by_os = {}
+        for scheme in ("light", "dark"):
+            ctx = browser.new_context(viewport={"width": 1440, "height": 900}, color_scheme=scheme)
+            fresh = ctx.new_page()
+            fresh.goto(url)
+            fresh.wait_for_timeout(300)
+            by_os[scheme] = fresh.evaluate("() => getComputedStyle(document.body).backgroundColor")
+            ctx.close()
         browser.close()
+
+    notes = []
+    if by_os["light"] == by_os["dark"]:
+        notes.append("the page ignores the OS theme: it should follow the OS until the reader chooses (conventions/visual-design.md)")
 
     if errors:
         failures.append(f"page errors: {errors}")
@@ -131,7 +144,7 @@ def main():
     if sticky.get("tested") and abs(sticky["gap"]) > 3:
         failures.append(f"a tall table's header sits {sticky['gap']}px from the bar, not under it")
 
-    report = {"url": url, "tables": res["tables"], "sticky": sticky, "themes": themes, "failures": failures}
+    report = {"url": url, "tables": res["tables"], "sticky": sticky, "themes": themes, "failures": failures, "notes": notes}
     (out / "check-page.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report, indent=1))
     print("PASS" if not failures else f"FAIL: {len(failures)} check(s)")

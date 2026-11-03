@@ -125,6 +125,14 @@ def main():
     print(out)
 
 
+# Sets the theme before the first paint, so a light-mode reader never sees a dark flash.
+# kit.js repeats the choice once the page exists and owns the switch.
+THEME_BEFORE_PAINT = (
+    "(function(){var t=null;try{t=localStorage.getItem('kit-theme')}catch(e){}"
+    "document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})()"
+)
+
+
 def page(title, body, tabs=None, extra_css="", extra_js=""):
     """One self-contained HTML file. `tabs` is a list of (key, label); each body panel then carries data-kit-panel."""
     esc = _html.escape(title)
@@ -138,6 +146,7 @@ def page(title, body, tabs=None, extra_css="", extra_js=""):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc}</title>
+<script>{THEME_BEFORE_PAINT}</script>
 <style>
 {COLORS.read_text()}
 {(HERE / "kit.css").read_text()}

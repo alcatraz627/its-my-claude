@@ -60,7 +60,7 @@ uv run --with markdown python3 ~/.claude/scripts/pages/pagekit.py in.md out.html
 
 | Thing | Rule |
 |---|---|
-| Theme | Dark and light, with a switch in the bar. Dark is the default |
+| Theme | Dark and light, with a switch in the bar. It follows the OS until the reader chooses, and only that choice is stored |
 | Colour | Only through the variables in `colors.css`. No colour written on an element |
 | Tables | Column widths from `size_columns()`. Headers follow the reader. A table scrolls sideways only from eight columns |
 | Text | No paragraph over about 60 words. A table cell is a lead line, then bullets |
@@ -93,7 +93,9 @@ It opens the page in headless Chrome and fails on any of these:
 | Readable text | In either theme, any text has less than 3 to 1 contrast with what is behind it |
 | Table headers | A tall table's header does not sit under the bar after scrolling |
 
-It saves a screenshot of each theme. Read both before calling the page done (`rules/ui-visual-verification.md`). A pass means the page works. It does not mean the page reads well.
+It saves a screenshot of each theme. Read both before calling the page done (`rules/ui-visual-verification.md`). A pass means the page works. It does not mean the page reads well, and a page the owner will use, small tools included, also follows `conventions/ui-brief.md`.
+
+It also prints `notes`, which never fail the run: today, a page that ignores the OS theme. Older pages not on the kit may show it until they move.
 
 ## Diagrams
 

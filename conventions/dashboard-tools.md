@@ -14,7 +14,7 @@ related:
   - conventions/ui-charter.md
 tier: 2
 category: conventions
-updated: 2026-04-28
+updated: 2026-11-03
 stale_after_days: 180
 ---
 
@@ -238,6 +238,8 @@ If you skip step 2 ("I'll add the mutex later"), you'll spend 10× the time debu
 - Always include `createdAt` / `updatedAt` ISO timestamps. They cost nothing and save you in debugging.
 
 ### Dashboard rules: vanilla JS, single page, no framework
+
+This file covers keeping the tool's data safe. How the page looks and reads is in `conventions/ui-brief.md`; read that before the first line of markup.
 
 - One `dashboard.html` served from `/`. No build step. View-source readable. (See `conventions/html-output.md` for theme/toggle requirements.)
 - Auto-refresh via SSE OR a 5s poll, never both. SSE only if you have a real reason; polling is simpler and cannot loop-trigger races as easily.

@@ -201,7 +201,9 @@ append to, and one click runs that text in a login shell. The page shows the
 command first, and a web page cannot trigger it.
 
 Tests: `node --test ~/Code/Claude/sys-pier/hub/hub.test.cjs`. Page source is in
-`hub/page/`; run `hub/build.py` after changing it.
+`hub/page/`; run `hub/build.py` after changing it. The page's own checks answer every
+API call from a stand-in, so they never touch a real service:
+`uv run --with playwright python3 ~/Code/Claude/sys-pier/hub/ui-check.py`.
 
 ## /doctor
 

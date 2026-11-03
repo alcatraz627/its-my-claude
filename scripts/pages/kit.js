@@ -4,14 +4,18 @@
 (function () {
   const root = document.documentElement;
 
-  // Theme. Dark is the default; the choice is remembered when the browser allows it.
+  // Theme. Follows the OS until the reader chooses. Only an explicit choice is stored,
+  // because saving the OS value would pin the page to whatever the OS was on the first visit.
   function readTheme() { try { return localStorage.getItem('kit-theme'); } catch (e) { return null; } }
+  const osLight = window.matchMedia('(prefers-color-scheme: light)');
+  function osTheme() { return osLight.matches ? 'light' : 'dark'; }
   function applyTheme(t) {
     root.dataset.theme = t;
     document.body.classList.toggle('light', t === 'light');
     document.querySelectorAll('[data-kit-theme]').forEach(b => { b.textContent = t === 'light' ? 'Dark' : 'Light'; b.setAttribute('aria-label', 'Switch to ' + (t === 'light' ? 'dark' : 'light') + ' theme'); });
   }
-  applyTheme(readTheme() || root.dataset.theme || 'dark');
+  applyTheme(readTheme() || osTheme());
+  osLight.addEventListener('change', () => { if (!readTheme()) applyTheme(osTheme()); });
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-kit-theme]'); if (!b) return;
     const next = root.dataset.theme === 'light' ? 'dark' : 'light';

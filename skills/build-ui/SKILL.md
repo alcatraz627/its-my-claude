@@ -19,8 +19,9 @@ Phase 11 is mechanical, not a promise.
 Read `~/.claude/skills/GUIDELINES.md` and apply its rules for the whole run:
 forbidden paths, retry logic, tool preferences, verbosity, timeouts, and
 post-run insights. Also read `~/.claude/skills/build-ui/runtime-notes.md` for
-past runs; continue without it if absent. This skill holds no file locks
-because it writes only its own plan.
+past runs; continue without it if absent. Read `~/.claude/conventions/ui-brief.md`
+too: its rules become directives and its states become the plan's checks. This
+skill holds no file locks because it writes only its own plan.
 
 # build-ui
 

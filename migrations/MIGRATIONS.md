@@ -100,6 +100,7 @@ Zero-padded 4-digit (`0001`, `0002`, `0042`). **Gaps are allowed.** **Never renu
 | 0058 | warden standing beat retired per owner ruling D1a (2026-09-02); on-demand judgment survives; revive runner unbuilt | ✅ | 2026-09-08 | 2026-09-08 | [0058-warden-beat-retired.md](0058-warden-beat-retired.md) |
 | 0059 | task stores gain a `.goals` sidecar (direction, when) written by `task.sh goal`, drawn by /tasks; the row loader skips dotfiles | ✅ | 2026-09-08 | 2026-09-08 | [0059-task-store-goals-sidecar.md](0059-task-store-goals-sidecar.md) |
 | 0060 | Codex adapter v2: `~/.codex/hooks.json` and `rules/gcc.rules` symlinked into the gcc, 10 skills linked at `~/.agents/skills`, gcc guards wrapped for Codex, `gcc` write path with an outbox hooks drain, claude-ipc identity `cx-<dir>-<id8>` | ✅ | 2026-09-10 | 2026-09-10 | [0060-codex-adapter-v2.md](0060-codex-adapter-v2.md) |
+| 0062 | UI brief delivered by a PreToolUse hook on the first UI edit (`conventions/ui-brief.md`, `ui-brief-nudge.sh`), the internal-tools ruling moved to global memory, kit pages follow the OS theme | ✅ | 2026-11-03 | 2026-11-03 | [0062-ui-brief-delivery.md](0062-ui-brief-delivery.md) |
 
 ---
 

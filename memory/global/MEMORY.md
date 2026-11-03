@@ -8,6 +8,9 @@
 ## Feedback: PR Reviews
 - [Clanky local trigger](feedback_clanky-local-trigger.md): start Clanky reviews with local clanky-review.py; a /claude-bot review PR comment is discouraged, not banned
 
+## Feedback: UI
+- [Internal tools get real UI](feedback_internal-tools-get-real-ui.md): small tools get a full design pass; the page check is not enough; start from conventions/ui-brief.md
+
 ## Team Decisions
 - [Forge and foundry paused](project_forge_foundry_paused.md): owner 2026-10-30, no new work on versable-forge-v6 or versable-foundry; only basic docs cleanup and pruning
 
