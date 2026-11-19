@@ -587,7 +587,7 @@ case "$cmd" in
   git-large)   cmd_git_large "$@" ;;
   -h|--help|help) show_help ;;
   examples)    Z_EX_ONLY="${1:-}"; examples ;;
-  --version)   printf '%s %s\n' "$SELF" "$VERSION" ;;
+  -V|--version) printf '%s %s\n' "$SELF" "$VERSION" ;;
   --__candidates)      internal_candidates "$@" ;;
   --__tracked)         internal_tracked_candidates "$@" ;;
   --__delete)          internal_delete "$@" ;;

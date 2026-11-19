@@ -118,7 +118,7 @@ VERBS = [
     ("tools",    "Tools", None, "every tool in zcmd's registry (built in)"),
 ]
 # Words the hub answers itself when called as gcc; anything else goes to the compiler.
-VERB_NAMES = {v[0] for v in VERBS} | {"which", "help", "version", "examples", "agents", "tools", "--json"}
+VERB_NAMES = {v[0] for v in VERBS} | {"which", "help", "version", "examples", "agents", "tools", "--json", "-V"}
 
 
 def resolve(argv0):
@@ -514,7 +514,7 @@ def main(argv):
     if verb in ("-h", "--help", "help"):
         print(HELP)
         return 0
-    if verb in ("--version", "version"):
+    if verb in ("--version", "-V", "version"):
         print("gcc-hub " + VERSION)
         return 0
     if verb == "examples":

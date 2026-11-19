@@ -233,6 +233,7 @@ def main():
     ap = argparse.ArgumentParser(prog="zusage", add_help=False, **plain,
                                  description="Builds the page in your browser; the path goes to stdout.")
     ap.add_argument("-h", "--help", action="store_true", help="show this help")
+    ap.add_argument("-V", "--version", action="version", version="zusage 1.0.0")
     ap.add_argument("--days", type=int, default=14, help="window to include (default 14)")
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where to write the page")
     ap.add_argument("--no-open", action="store_true", help="write the file, do not open it")
