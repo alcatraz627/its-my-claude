@@ -117,7 +117,8 @@ VERBS = [
     ("zcmd",     "Tools", ["zcmd"], "registry of your CLI tools"),
     ("tools",    "Tools", None, "every tool in zcmd's registry (built in)"),
 ]
-VERB_NAMES = {v[0] for v in VERBS} | {"which", "help", "version"}
+# Words the hub answers itself when called as gcc; anything else goes to the compiler.
+VERB_NAMES = {v[0] for v in VERBS} | {"which", "help", "version", "examples", "agents", "tools", "--json"}
 
 
 def resolve(argv0):
@@ -475,7 +476,7 @@ USAGE
   gcc agents [...]          startup entries: list, show, on, off, title, note
   gcc tools                 everything in zcmd's registry
 
-EXAMPLES
+EXAMPLES  more: gcc examples
   gcc agents                # every startup entry with cadence and state
   gcc agents show gcc-cron  # program, plist, logs, last and next run
   gcc agents off residue-review
@@ -484,6 +485,21 @@ EXAMPLES
 
   Anything that is not a hub verb goes to the C compiler when called as gcc.
 """ % VERSION
+
+
+def cmd_examples():
+    """Worked commands for the hub itself; each tool it starts has its own `examples`."""
+    print("gcc-hub examples: every line can be pasted as it is (gcc is the usual name)\n")
+    for cmd, note in (("gcc", "every verb, grouped"),
+                      ("gcc which zrecover", "what a verb runs"),
+                      ("gcc agents", "every startup entry with cadence and state"),
+                      ("gcc agents show gcc-cron", "program, plist, logs, last and next run"),
+                      ("gcc agents off residue-review", "switch one startup entry off"),
+                      ("gcc tools", "everything in zcmd's registry"),
+                      ("gcc ipc peers", "the same as claude-ipc peers"),
+                      ("gcc --json", "the verbs as data")):
+        print("  %-34s %s" % (cmd, C.d(note)))
+    return 0
 
 
 def main(argv):
@@ -501,6 +517,10 @@ def main(argv):
     if verb in ("--version", "version"):
         print("gcc-hub " + VERSION)
         return 0
+    if verb == "examples":
+        if rest and rest[0] not in ("--all", "all"):
+            die("gcc-hub examples has one page; no section %r" % rest[0], 2, "gcc examples")
+        return cmd_examples()
     if verb == "which":
         return cmd_which(rest[0]) if rest else die("usage: gcc which <verb>")
     if verb == "agents":

@@ -237,9 +237,19 @@ def main():
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where to write the page")
     ap.add_argument("--no-open", action="store_true", help="write the file, do not open it")
     ap.add_argument("--rebuild", action="store_true", help="ignore the cache and re-read everything")
+    if sys.argv[1:] == ["examples"]:
+        print("zusage examples: every line can be pasted as it is\n")
+        for cmd, note in (("zusage", "the last 14 days, opened in your browser"),
+                          ("zusage --days 30", "a longer window"),
+                          ("zusage --no-open", "write the page and print its path"),
+                          ("zusage --rebuild", "re-read every transcript, ignoring the cache"),
+                          ("zusage --out ~/Desktop/usage.html --no-open", "save it somewhere else")):
+            print(f"  {cmd:<44} {note}")
+        return
     args = ap.parse_args(["--help"] if sys.argv[1:] == ["help"] else None)
     if args.help:
-        print("zusage: Claude usage as a flame chart and stacked bars, by model, platform and sub-agent\n")
+        print("zusage: Claude usage as a flame chart and stacked bars, by model, platform and sub-agent")
+        print("        more: zusage examples\n")
         ap.print_help()
         return
 

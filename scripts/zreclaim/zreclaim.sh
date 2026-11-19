@@ -497,6 +497,41 @@ internal_git_tracked() { is_tracked "$1" && echo "tracked" || echo "untracked"; 
 internal_pareto() { pareto "$1" "$2"; }   # __pareto SORTED_DESC_FILE PCT (deterministic test seam)
 
 # ── help ─────────────────────────────────────────────────────────────────────
+# These four mirror the zcmd helpers (lib/z.sh). zreclaim lives in ~/.claude and
+# does not need the zcmd repo, so it carries its own small copies.
+Z_PROG="$SELF"
+z_ex_title() { printf '%s%s examples%s: %s\n' "$B" "$SELF" "$R" "$1"; }
+z_sec() { printf '\n%s%s%s' "$T" "$1" "$R"; [ -n "${2:-}" ] && printf '  %s%s%s' "$D" "$2" "$R"; printf '\n'; }
+z_ex() { local p=$(( Z_COL - ${#1} )); [ "$p" -lt 1 ] && p=1; printf '  %s%s%s%*s%s%s%s\n' "$C" "$1" "$R" "$p" '' "$D" "$2" "$R"; }
+z_ex_want() { Z_EX_NAMES="${Z_EX_NAMES:-} $1"; case "${Z_EX_ONLY:-}" in ''|--all|all|"$1") Z_EX_HIT=1; return 0 ;; esac; return 1; }
+z_ex_end() {
+  case "${Z_EX_ONLY:-}" in ''|--all|all) return 0 ;; esac
+  [ "${Z_EX_HIT:-0}" = 1 ] || die "no examples section '$Z_EX_ONLY'; the sections are:${Z_EX_NAMES:-}" 2
+}
+
+# Worked commands, by job. `<tool> examples <section>` shows one section.
+examples() {
+  Z_COL=44
+  z_ex_title "every line can be pasted as it is"
+  if z_ex_want scan; then z_sec "LOOK FIRST" "$Z_PROG examples scan"
+    z_ex "zreclaim scan ~/Code" "what can go, biggest first (changes nothing)"
+    z_ex "zreclaim scan --min 50 ." "only folders of 50 MB or more"
+    z_ex "zreclaim scan --big 100 ." "also flag loose files of 100 MB or more"
+    z_ex "zreclaim scan --json . | jq ." "the same, as data"
+  fi
+  if z_ex_want clean; then z_sec "CLEAR" "$Z_PROG examples clean"
+    z_ex "zreclaim clean --dry-run ~/Code" "what would go, nothing deleted"
+    z_ex "zreclaim clean ~/Code" "the few biggest that free 90%, after a confirm"
+    z_ex "zreclaim clean --pick ." "choose the folders yourself"
+    z_ex "zreclaim clean --pareto 95 --trash ." "free 95%, into the Trash instead"
+    z_ex "zreclaim clean --all --min 100 -y ." "everything of 100 MB+, no prompt"
+  fi
+  if z_ex_want git; then z_sec "GIT" "$Z_PROG examples git"
+    z_ex "zreclaim gc ~/Code" "git gc and worktree prune on every repo"
+    z_ex "zreclaim git-large --history ." "big files committed to git (report only)"
+  fi
+  z_ex_end
+}
 show_help() {
   cat <<EOF
 ${B}zreclaim${R}: find and safely clear rebuildable cache and build folders (v$VERSION)
@@ -504,7 +539,7 @@ ${B}zreclaim${R}: find and safely clear rebuildable cache and build folders (v$V
 ${T}USAGE${R}
   ${C}zreclaim${R} <command> [PATHS...] [options]     ${D}(PATHS default to .)${R}
 
-${T}EXAMPLES${R}
+${T}EXAMPLES${R}  ${D}more: zreclaim examples${R}
   ${C}zreclaim scan${R} ~/Code/Versable            ${D}# rank reclaimable data, biggest first${R}
   ${C}zreclaim scan${R} --min 50 .                 ${D}# only itemize dirs >= 50MB (small ones summarized)${R}
   ${C}zreclaim scan${R} --big 100 .                ${D}# flag loose non-deletable files >= 100MB${R}
@@ -551,6 +586,7 @@ case "$cmd" in
   gc)          cmd_gc "$@" ;;
   git-large)   cmd_git_large "$@" ;;
   -h|--help|help) show_help ;;
+  examples)    Z_EX_ONLY="${1:-}"; examples ;;
   --version)   printf '%s %s\n' "$SELF" "$VERSION" ;;
   --__candidates)      internal_candidates "$@" ;;
   --__tracked)         internal_tracked_candidates "$@" ;;

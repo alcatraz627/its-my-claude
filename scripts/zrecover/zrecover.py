@@ -176,27 +176,38 @@ def help_topic(t):
         die(f"no help topic {t!r}", "topics: crash · slow · big · alias", 2)
 
 
-def examples():
-    print(f"{C.b('zrecover examples')} {C.d('every line is pasteable')}")
-    sec("WATCH")
-    ex("zrecover status --json | jq .readings", "machine readings as data")
-    ex("zrecover top -n 15 --by cpu", "fifteen hottest processes")
-    ex("zrecover plan --json", "would-act list for a script")
-    ex("zrecover explain 'Steam Helper'", "verdict for a name (regex)")
-    ex("zrecover log --follow", "tail the action log")
-    sec("STEER")
-    ex("zrecover allow --match Frostpunk --gb 30 --for 4h --note game", "")
-    ex("zrecover pause --for 30m", "a benchmark you do not want interrupted")
-    ex("zrecover protect add 'Final Cut'", "then: zrecover daemon restart")
-    ex("zrecover config set kill_proc_gb 20", "then: zrecover daemon restart")
-    sec("RECOVER")
-    ex("zrecover sessions --json | jq '.sessions[].alias'", "")
-    ex("zrecover restore --only 1,2 --dry-run", "show the open commands, run nothing")
-    ex("zrecover screen enh-scrape-bug", "a session's screen by alias")
-    sec("MAINTAIN")
-    ex("zrecover doctor", "exit 1 if anything is wrong")
-    ex("zrecover daemon restart", "after editing config")
-    ex("zrecover test --no-claude", "fast tests only")
+def examples(only=""):
+    """Worked commands by job; `zrecover examples steer` shows one section."""
+    print(f"{C.b('zrecover examples')}: every line can be pasted as it is")
+    keys = ("watch", "steer", "recover", "maintain")
+    if only in ("--all", "all"):
+        only = ""
+    if only and only not in keys:
+        die(f"no examples section {only!r}; the sections are: {' '.join(keys)}", "zrecover examples", 2)
+    want = lambda k: not only or only == k
+    if want("watch"):
+        sec("WATCH  " + C.d("zrecover examples watch"))
+        ex("zrecover status --json | jq .readings", "machine readings as data")
+        ex("zrecover top -n 15 --by cpu", "fifteen hottest processes")
+        ex("zrecover plan --json", "would-act list for a script")
+        ex("zrecover explain 'Steam Helper'", "verdict for a name (regex)")
+        ex("zrecover log --follow", "tail the action log")
+    if want("steer"):
+        sec("STEER  " + C.d("zrecover examples steer"))
+        ex("zrecover allow --match Frostpunk --gb 30 --for 4h --note game", "a game may use 30 GB for 4 hours")
+        ex("zrecover pause --for 30m", "a benchmark you do not want interrupted")
+        ex("zrecover protect add 'Final Cut'", "then: zrecover daemon restart")
+        ex("zrecover config set kill_proc_gb 20", "then: zrecover daemon restart")
+    if want("recover"):
+        sec("RECOVER  " + C.d("zrecover examples recover"))
+        ex("zrecover sessions --json | jq '.sessions[].alias'", "every live session's alias")
+        ex("zrecover restore --only 1,2 --dry-run", "show the open commands, run nothing")
+        ex("zrecover screen enh-scrape-bug", "a session's screen by alias")
+    if want("maintain"):
+        sec("MAINTAIN  " + C.d("zrecover examples maintain"))
+        ex("zrecover doctor", "exit 1 if anything is wrong")
+        ex("zrecover daemon restart", "after editing config")
+        ex("zrecover test --no-claude", "fast tests only")
 
 
 # WATCH
@@ -1164,7 +1175,7 @@ def main():
         help_main() if len(a) == 1 else help_topic(a[1])
         return
     if a[0] == "examples":
-        examples()
+        examples(a[1] if len(a) > 1 else "")
         return
     if a[0] == "reap":
         sys.argv = [sys.argv[0]] + a[1:]

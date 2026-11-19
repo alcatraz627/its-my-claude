@@ -92,6 +92,7 @@ case "${1:-}" in
     ;;
   list)       hp rows | cut -f2; hp header ;;
   set)        [ "$#" -eq 3 ] || { printf 'usage: __NAME__ set <row> <value>\n' >&2; exit 2; }; hp try "$2" "$3" ;;
-  -h|--help|help) printf '__NAME__          browse and change on one screen\n__NAME__ list     every row and what is showing\n__NAME__ set R V  try one value\n' ;;
+  -h|--help|help) printf '__NAME__: say in one sentence what this tool is for, in the words of the person using it.\n\n  __NAME__            browse and change on one screen\n  __NAME__ list       every row and what is showing\n  __NAME__ set R V    try one value\n  __NAME__ examples   worked commands\n' ;;
+  examples)   printf '__NAME__ examples: every line can be pasted as it is\n\n  __NAME__            browse and change on one screen\n  __NAME__ list       every row and what is showing now\n  __NAME__ set R V    try one value without the screen (R and V from list)\n' ;;
   *) printf 'no command %s  try: __NAME__ --help\n' "$1" >&2; exit 2 ;;
 esac
