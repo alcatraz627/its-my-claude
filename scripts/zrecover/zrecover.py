@@ -29,8 +29,11 @@ except (AttributeError, ValueError):
 
 
 # colour, gated once
+# z-handroll: a Python tool cannot source the shell palette; same gate and roles.
 class C:
-    on = sys.stdout.isatty() and not os.environ.get("NO_COLOR") and os.environ.get("TERM") != "dumb"
+    # Both streams must be terminals, so a redirected stderr never gets escape codes.
+    on = (sys.stdout.isatty() and sys.stderr.isatty() and not os.environ.get("NO_COLOR")
+          and os.environ.get("TERM", "dumb") != "dumb")
 
     @classmethod
     def off(cls):
@@ -45,6 +48,8 @@ class C:
     @classmethod
     def y(cls, s): return cls._c("1;33", s)
     @classmethod
+    def t(cls, s): return cls._c("1;37", s)   # section titles (bold white, the house rule)
+    @classmethod
     def c(cls, s): return cls._c("36", s)
     @classmethod
     def g(cls, s): return cls._c("32", s)
@@ -55,7 +60,7 @@ class C:
 
 
 def sec(title):
-    print(f"\n{C.y(title)}")
+    print(f"\n{C.t(title)}")
 
 
 def row(left, right, colour=C.c, width=46):
@@ -107,17 +112,14 @@ def wants_help(a):
 # help
 def help_main():
     cfg = reaper.load_config()
-    print(f"{C.b(SELF)} {C.d('desktop-session safeguard: reaper, screen mirror, crash resume')}")
+    print(f"{C.b(SELF)}: desktop-session safeguard (reaper, screen mirror, crash resume)")
     sec("USAGE")
     print(f"  {C.c(SELF)} <command> [options]        {C.d('--json on any data command · --plain · -h per command')}")
     sec("EXAMPLES")
     ex("zrecover status", "pressure, daemon heartbeat, top offenders, grants")
-    ex("zrecover plan", "what the reaper would do right now, and why")
-    ex("zrecover explain Frostpunk", "which rule or grant applies, effective limits")
     ex("zrecover allow --match llama-server --gb 40 --for 3h", "one big run, desktop still protected")
     ex("zrecover run claude", "Claude with its screen mirrored (the `claude` alias)")
     ex("zrecover restore --open", "after a reboot: every session back in Ghostty")
-    ex("zrecover log 20 --kind kill", "what it killed lately")
     sec("WATCH")
     row("status [--json]", "readings, daemon, top memory and CPU, grants")
     row("plan [--json]", "dry-run scan: the actions it would take now")
@@ -125,11 +127,12 @@ def help_main():
     row("explain <pid|name> [--json]", "verdict and effective limits for one process")
     row("log [N] [--kind k,k] [--follow] [--json]", "action log (kill, demote, warn-size, pressure…)")
     sec("STEER")
-    row("allow --match RE|--pid N --gb G [--for 2h]", f"temporary cap for one run (max {cfg['grant_max_gb']} GB)")
+    row("allow --match RE|--pid N --gb G|--class C [--for 2h]", f"temporary cap (max {cfg['grant_max_gb']} GB) or class")
     row("grants [--json] · revoke <id|all>", "list or end grants")
     row("pause [--for 1h] · resume", "idle the reaper; a pause with no --for holds until resume")
     row("rules [--json]", "globals and per-app rules in force")
     row("protect list|add|rm <name>", "names the reaper never touches")
+    row("profile list|show [name]|use <name>|clear", "named caps, rules and protected apps for this Mac")
     row("config show|get|set|unset|path|edit", "overrides in config.json (daemon restart to apply)")
     sec("RECOVER")
     row("run [--name L] [--every S] -- <cmd>", "run a TUI with its screen mirrored to disk")
@@ -142,7 +145,7 @@ def help_main():
     row("daemon status|start|stop|restart|install|uninstall", f"the LaunchAgent {LABEL}")
     row("doctor [--json]", "check everything the suite depends on; exit 1 on any issue")
     row("test [--no-claude] · examples · help <topic> · version", "")
-    print(f"\n  {C.d('topics: zrecover help crash|slow|big|alias   ·   doc: ~/.claude/features/zrecover.md')}")
+    print(f"  {C.d('more examples: zrecover examples · topics: help crash|slow|big|alias · doc: ~/.claude/features/zrecover.md')}")
 
 
 def help_topic(t):
@@ -212,6 +215,8 @@ def tag(p):
     k = p["class"]
     if k == "protected":
         return C.d("protected    ")
+    if k == "slow-only":
+        return C.y("slow-only    ")
     if k == "grant":
         return C.g(f"grant {p['gb']:.0f}G".ljust(13))
     if k == "rule":
@@ -312,7 +317,8 @@ def cmd_explain(a):
     for p in hits[:10]:
         v = reaper.verdict(r, p)
         out.append({"pid": p["pid"], "ident": reaper.short(p["cmd"], 120), "mem_gb": round(p["mem"] / GB, 2),
-                    **v, "limits": reaper.effective_limits(r, p) if v["class"] != "protected" else None})
+                    **v, "limits": reaper.effective_limits(r, p) if v["class"] not in ("protected", "slow-only") else None,
+                    "main_app": reaper.is_main_app(p["cmd"])})
     if "--json" in a:
         out_json(out)
         return
@@ -325,6 +331,10 @@ def cmd_explain(a):
             print(C.d(f"  warn {L['warn_proc_gb']}G · kill {L['kill_proc_gb']}G · cpu >{L['cpu_demote_cores']}c for "
                       f"{L['cpu_demote_after_s']}s demote, +{L['cpu_kill_after_s']}s kill · "
                       f"{'shed first' if L['pressure_first'] else 'shed by size'} under pressure"))
+            if o["main_app"]:
+                print(C.d("  main app: never killed for CPU, only slowed in a freeze; memory caps still apply"))
+        elif o["class"] == "slow-only":
+            print(C.d("  never killed; its priority is lowered in a freeze and restored after"))
         else:
             print(C.d("  never touched (protected name or system path)"))
     if len(hits) > 10:
@@ -333,7 +343,8 @@ def cmd_explain(a):
 
 def fmt_log(x):
     act = x.get("action", "?")
-    col = C.r if act == "kill" else C.y if act in ("demote", "warn-size", "pressure-warn", "freeze-warn") else C.d
+    col = C.r if act == "kill" else C.y if act in ("demote", "warn-size", "pressure-warn", "freeze-warn",
+                                                   "kill-countdown", "freeze-kill-limit") else C.d
     extra = ""
     if act == "start":
         extra = f" pid {x.get('pid')}" + (" dry-run" if x.get("dry_run") else "")
@@ -396,17 +407,25 @@ def print_grants(grants):
         print(C.d("  none"))
     for g in grants:
         who = f"pid {g['pid']}" if "pid" in g else g["match"]
-        print(f"  {C.c(g['id'])}  {who:<36} {g['gb']:.0f} GB  {left(g['until'])} left  {C.d(g.get('note', ''))}")
+        what = g["class"] if g.get("class") else f"{g['gb']:.0f} GB"
+        print(f"  {C.c(g['id'])}  {who:<36} {what}  {left(g['until'])} left  {C.d(g.get('note', ''))}")
 
 
 def cmd_allow(a):
     if not a or wants_help(a):
-        print(f"{C.b('zrecover allow')} --match RE | --pid N  --gb G  [--for 2h] [--note text] [--json]")
-        print(C.d("  lifts the memory cap for the match, up to grant_max_gb; pressure and freeze rules still apply"))
+        print(f"{C.b('zrecover allow')} --match RE | --pid N  --gb G | --class slow-only|protected"
+              "  [--for 2h] [--note text] [--json]")
+        print(C.d("  --gb lifts the memory cap for the match, up to grant_max_gb; pressure and freeze rules still apply"))
+        print(C.d("  --class keeps a job alive for a while: slow-only is never killed but can be slowed, "
+                  "protected is never touched"))
         sys.exit(0 if a else 2)
-    match, pid, gb = opt(a, "--match"), opt(a, "--pid"), opt(a, "--gb")
-    if not gb or not (match or pid):
-        die("need --gb and one of --match RE / --pid N", "zrecover allow -h", 2)
+    match, pid, gb, klass = opt(a, "--match"), opt(a, "--pid"), opt(a, "--gb"), opt(a, "--class")
+    if not (match or pid):
+        die("need one of --match RE / --pid N", "zrecover allow -h", 2)
+    if bool(gb) == bool(klass):
+        die("need exactly one of --gb G / --class slow-only|protected", "zrecover allow -h", 2)
+    if klass and klass not in ("slow-only", "protected"):
+        die(f"unknown class {klass!r}: use slow-only or protected", "zrecover allow -h", 2)
     if match:
         try:
             re.compile(match)
@@ -415,13 +434,17 @@ def cmd_allow(a):
     if pid and not reaper.alive(int(pid)):
         die(f"pid {pid} is not running", "zrecover top", 1)
     cfg = reaper.load_config()
-    gb = float(gb)
-    if gb > cfg["grant_max_gb"]:
-        print(f"{SELF}: {gb:.0f} GB capped at grant_max_gb={cfg['grant_max_gb']}", file=sys.stderr)
-        gb = cfg["grant_max_gb"]
     now = time.time()
-    g = {"id": time.strftime("%H%M%S"), "gb": gb, "until": now + parse_duration(opt(a, "--for", "2h")),
+    g = {"id": time.strftime("%H%M%S"), "until": now + parse_duration(opt(a, "--for", "2h")),
          "note": opt(a, "--note", ""), "created": now}
+    if klass:
+        g["class"] = klass
+    else:
+        gb = float(gb)
+        if gb > cfg["grant_max_gb"]:
+            print(f"{SELF}: {gb:.0f} GB capped at grant_max_gb={cfg['grant_max_gb']}", file=sys.stderr)
+            gb = cfg["grant_max_gb"]
+        g["gb"] = gb
     if match:
         g["match"] = match
     if pid:
@@ -430,7 +453,8 @@ def cmd_allow(a):
     if "--json" in a:
         out_json(g)
         return
-    print(f"granted {C.c(g['id'])}: {'pid ' + pid if pid else match} may use up to {gb:.0f} GB until "
+    what = f"is {klass}" if klass else f"may use up to {g['gb']:.0f} GB"
+    print(f"granted {C.c(g['id'])}: {'pid ' + pid if pid else match} {what} until "
           f"{time.strftime('%H:%M', time.localtime(g['until']))}. {C.d('zrecover revoke ' + g['id'] + ' to end early.')}")
     if not daemon_state()["alive"]:
         print(C.y("  note: the daemon is not running, so nothing is enforced right now"))
@@ -478,7 +502,9 @@ def cmd_resume(_a):
 
 GLOBAL_KEYS = ("warn_proc_gb", "kill_proc_gb", "pressure_warn_hold_s", "pressure_min_target_gb",
                "critical_min_target_gb", "swap_warn_gb", "cpu_demote_cores", "cpu_demote_after_s",
-               "cpu_kill_after_s", "cpu_kill_load_ratio", "freeze_load_ratio", "freeze_hold_s", "grant_max_gb")
+               "cpu_kill_after_s", "cpu_kill_load_ratio", "freeze_load_ratio", "freeze_hold_s", "freeze_min_cores",
+               "freeze_min_share", "freeze_warn_s", "freeze_kill_gap_s", "freeze_max_kills", "freeze_kill_window_s",
+               "restore_below_ratio", "restore_after_s", "grant_max_gb")
 
 
 def cmd_rules(a):
@@ -486,7 +512,7 @@ def cmd_rules(a):
     glob = {k: cfg[k] for k in GLOBAL_KEYS}
     if "--json" in a:
         out_json({"globals": glob, "rules": cfg["rules"], "protected": cfg["protected"],
-                  "protected_paths": cfg["protected_paths"]})
+                  "protected_paths": cfg["protected_paths"], "slow_only": cfg["slow_only"]})
         return
     sec("globals")
     for k, v in glob.items():
@@ -499,6 +525,53 @@ def cmd_rules(a):
     sec("protected names")
     print("  " + ", ".join(cfg["protected"]))
     print(C.d("  paths: " + ", ".join(cfg["protected_paths"])))
+    sec("slow-only names (never killed, slowed in a freeze)")
+    print("  " + (", ".join(cfg["slow_only"]) or C.d("none")))
+
+
+def cmd_profile(a):
+    """Choose which named set of caps, rules and protected apps this Mac runs under."""
+    sub = a[0] if a else "show"
+    user = reaper.load_user_config()
+    current = user.get("profile")
+    if sub == "list":
+        for name in reaper.profile_names():
+            mark = "*" if name == current else " "
+            print(f"{mark} {C.c(name.ljust(14))} {C.d(reaper.load_profile(name).get('description', ''))}")
+    elif sub == "show":
+        name = a[1] if len(a) > 1 else current
+        if not name:
+            print("no profile set: the built-in settings apply. See: zrecover profile list")
+            return
+        if name not in reaper.profile_names():
+            die(f"no profile named {name!r}", "zrecover profile list", 1)
+        print(json.dumps(reaper.load_profile(name), indent=1))
+    elif sub == "use" and len(a) > 1:
+        if a[1] not in reaper.profile_names():
+            die(f"no profile named {a[1]!r}", "zrecover profile list", 1)
+        user["profile"] = a[1]
+        reaper.save_user_config(user)
+        print(f"profile {a[1]}. {C.d('zrecover daemon restart to apply')}")
+    elif sub == "clear":
+        user.pop("profile", None)
+        reaper.save_user_config(user)
+        print(f"no profile. {C.d('zrecover daemon restart to apply')}")
+    else:
+        die("usage: zrecover profile list | show [name] | use <name> | clear", code=2)
+
+
+def login_item_allowed():
+    """Whether macOS will start the daemon at login. The Login Items switch overrides launchd,
+    so a job can look installed and still never come back after a reboot. None means unknown."""
+    try:
+        out = subprocess.run(["sfltool", "dumpbtm"], capture_output=True, text=True, timeout=20).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    at = out.find(f"8.{LABEL}")
+    if at < 0:
+        return None
+    line = out.rfind("Disposition:", 0, at)
+    return "disallowed" not in out[line:at] if line >= 0 else None
 
 
 def cmd_protect(a):
@@ -930,6 +1003,7 @@ def write_plist():
 </dict></plist>
 """
     os.makedirs(os.path.dirname(PLIST), exist_ok=True)
+    os.makedirs(os.path.expanduser("~/.claude/logs"), exist_ok=True)   # the plist sends output here, even on a clean Mac
     with open(PLIST, "w") as f:
         f.write(body)
 
@@ -944,6 +1018,12 @@ def cmd_doctor(a):
     dm = daemon_state()
     check("LaunchAgent plist", os.path.exists(PLIST), PLIST, "zrecover daemon install")
     check("LaunchAgent loaded", launchctl("print", target()).returncode == 0, LABEL, "zrecover daemon start")
+    allowed = login_item_allowed()
+    backup = os.path.exists(os.path.expanduser("~/.claude/scripts/startup/tasks/05-ensure-zrecover.sh"))
+    check("will start at login", allowed is not False or backup,
+          "unknown" if allowed is None else "System Settings allows it" if allowed
+          else "Login Items has it off, but the gcc login task starts it" if backup else "switched off in Login Items",
+          "System Settings > General > Login Items & Extensions: turn on gcc-zrecover")
     check("daemon alive", dm["alive"], f"pid {dm['state']['pid']}" if dm["state"] else "no heartbeat", "zrecover daemon start")
     check("daemon heartbeat fresh", dm["fresh"], f"last tick {ago(dm['state']['last_tick'])} ago" if dm["state"] else "",
           "zrecover daemon restart")
@@ -966,20 +1046,23 @@ def cmd_doctor(a):
         check("rule regexes compile", False, str(e), "zrecover config edit")
     g = reaper.load_grants()
     check("grants file parses", isinstance(g, list), f"{len(active_grants())} active", f"trash {reaper.GRANTS}")
-    py = python_for_wrap()
-    has_pyte = bool(py) and subprocess.run([py, "-c", "import pyte"], capture_output=True).returncode == 0
-    check("python with pyte for `run`", has_pyte, py or "none",
-          f"uv venv {HERE}/.venv --python 3.12; uv pip install --python {VENV_PY} pyte")
-    check("zrecover on PATH", shutil.which("zrecover") is not None, shutil.which("zrecover") or "", "zcmd install")
-    alias = False
-    try:
-        with open(ZSHRC) as f:
-            alias = ALIAS_LINE in f.read()
-    except OSError:
-        pass
-    check("claude alias in ~/.zshrc", alias, "interactive claude runs through the wrapper", f"add: {ALIAS_LINE}")
-    check("IPC registry readable", os.path.exists(reaper.IPC_DB) and reaper.ipc_sessions() is not None, reaper.IPC_DB,
-          "claude-ipc broker (restore takes session ids from it)")
+    # A guard-only Mac runs no Claude Code, so the session-recovery extras do not apply.
+    if not cfg.get("guard_only"):
+        py = python_for_wrap()
+        has_pyte = bool(py) and subprocess.run([py, "-c", "import pyte"], capture_output=True).returncode == 0
+        check("python with pyte for `run`", has_pyte, py or "none",
+              f"uv venv {HERE}/.venv --python 3.12; uv pip install --python {VENV_PY} pyte")
+        check("zrecover on PATH", shutil.which("zrecover") is not None, shutil.which("zrecover") or "", "zcmd install")
+        alias = False
+        for rc in (ZSHRC, os.path.expanduser("~/.zprofile")):
+            try:
+                with open(rc) as f:
+                    alias = alias or "zrecover run claude" in f.read()
+            except OSError:
+                pass
+        check("claude alias in a zsh startup file", alias, "interactive claude runs through the wrapper", f"add: {ALIAS_LINE}")
+        check("IPC registry readable", os.path.exists(reaper.IPC_DB) and reaper.ipc_sessions() is not None, reaper.IPC_DB,
+              "claude-ipc broker (restore takes session ids from it)")
     check("log dir writable", os.access(os.path.dirname(reaper.LOG), os.W_OK), reaper.LOG, "")
     snap = load_snapshot(reaper.SESSIONS)
     check("session snapshot recent", bool(snap and time.time() - snap["ts"] < 3 * cfg["sessions_every_s"]),
@@ -1014,12 +1097,56 @@ def cmd_test(a):
 COMMANDS = {
     "status": cmd_status, "plan": cmd_plan, "top": cmd_top, "explain": cmd_explain, "log": cmd_log,
     "allow": cmd_allow, "revoke": cmd_revoke, "grants": cmd_grants, "pause": cmd_pause, "resume": cmd_resume,
-    "rules": cmd_rules, "protect": cmd_protect, "config": cmd_config,
+    "rules": cmd_rules, "protect": cmd_protect, "config": cmd_config, "profile": cmd_profile,
     "run": cmd_run, "sessions": cmd_sessions, "restore": cmd_restore, "screens": cmd_screens, "screen": cmd_screen,
     "bundle": cmd_bundle, "attach": cmd_attach, "end": cmd_end,
     "daemon": cmd_daemon, "doctor": cmd_doctor, "test": cmd_test,
 }
 OWN_HELP = ("run", "allow", "explain", "revoke", "screen", "restore", "attach", "end")
+
+# The options each command understands, so a typo like --dry-runn stops the
+# command instead of being silently ignored (and, for restore, opening every
+# session for real). Commands that hand their arguments on to another program
+# (run, attach, end, test) are left out and check their own.
+GLOBAL_FLAGS = {"-h", "--help", "--json", "--plain"}
+SNAPSHOT_FLAGS = {"--from", "--reconstruct", "--before", "--hours"}
+FLAGS = {
+    "status": set(), "plan": set(), "top": {"-n", "--by"}, "explain": set(),
+    "log": {"-n", "--kind", "--follow"}, "allow": {"--match", "--pid", "--gb", "--class", "--for", "--note"},
+    "revoke": set(), "grants": set(), "pause": {"--for"}, "resume": set(), "rules": set(),
+    "protect": set(), "config": set(), "profile": set(), "sessions": {"--detail"},
+    "restore": {"--detail", "--only", "--open", "--dry-run"} | SNAPSHOT_FLAGS,
+    "screens": set(), "screen": set(), "bundle": set(), "daemon": set(), "doctor": set(),
+}
+
+
+# Options that take the next word as their value; that word is never checked as
+# an option itself, so `--note '-- done'` and `--match -foo` keep working.
+VALUE_FLAGS = {"-n", "--by", "--kind", "--match", "--pid", "--gb", "--class", "--for", "--note",
+               "--only", "--from", "--before", "--hours"}
+
+
+def check_flags(cmd, args):
+    """Stop with exit 2 on an option this command does not know.
+
+    Only words shaped like options count: `--word`, or a dash and one letter.
+    A name such as `-zsh` (how login shells appear in ps) stays a plain argument.
+    """
+    known = FLAGS.get(cmd)
+    if known is None:
+        return
+    skip = False
+    for x in args:
+        if skip:
+            skip = False
+            continue
+        if x == "--":
+            return
+        if x in VALUE_FLAGS:
+            skip = True
+        looks_like_option = x.startswith("--") or (len(x) == 2 and x[0] == "-" and x[1].isalpha())
+        if looks_like_option and x not in known | GLOBAL_FLAGS:
+            die(f"unknown option {x!r} for {cmd}", f"zrecover help {cmd}" if cmd in OWN_HELP else "zrecover -h", 2)
 
 
 def main():
@@ -1047,6 +1174,8 @@ def main():
     if not fn:
         near = [c for c in COMMANDS if c.startswith(a[0][:3])]
         die(f"unknown command {a[0]!r}", f"did you mean: {', '.join(near)}" if near else "zrecover -h", 2)
+    a = ["--dry-run" if x == "--dry" else x for x in a]   # --dry is the family's short spelling
+    check_flags(a[0], a[1:])
     if wants_help(a[1:]) and a[0] not in OWN_HELP:
         help_main()
         return

@@ -228,12 +228,20 @@ def render(data, out):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    # Help starts with "zusage: purpose" like the rest of the z- tools, then argparse's usage.
+    plain = {"color": False} if sys.version_info >= (3, 14) else {}  # newer argparse colors help itself
+    ap = argparse.ArgumentParser(prog="zusage", add_help=False, **plain,
+                                 description="Builds the page in your browser; the path goes to stdout.")
+    ap.add_argument("-h", "--help", action="store_true", help="show this help")
     ap.add_argument("--days", type=int, default=14, help="window to include (default 14)")
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT, help="where to write the page")
     ap.add_argument("--no-open", action="store_true", help="write the file, do not open it")
     ap.add_argument("--rebuild", action="store_true", help="ignore the cache and re-read everything")
-    args = ap.parse_args()
+    args = ap.parse_args(["--help"] if sys.argv[1:] == ["help"] else None)
+    if args.help:
+        print("zusage: Claude usage as a flame chart and stacked bars, by model, platform and sub-agent\n")
+        ap.print_help()
+        return
 
     started = time.time()
     data = aggregate(collect(args.days, args.rebuild), load_usage_stats())

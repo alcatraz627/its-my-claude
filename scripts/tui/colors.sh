@@ -8,8 +8,9 @@
 #
 # Exports BOTH naming dialects the existing tools already use, so adoption is one
 # `source` line, not a callsite rename:
-#   short  : B Y C D R G Rd RED MAG BLU   (zap/zconvert/memhog use B Y C D R [+G Rd])
-#   long   : BLD YEL CYN DIM RST GRN       (download/zcmd use BLD/YEL/CYN/DIM/RST/GRN)
+#   short  : B Y C D R G Rd RED MAG BLU T (zap/zconvert/memhog use B Y C D R [+G Rd])
+#   long   : BLD YEL CYN DIM RST GRN TTL  (download/zcmd use BLD/YEL/CYN/DIM/RST/GRN)
+# T / TTL is the bold-white section title in help (conventions/cli-help-design.md).
 # RED/MAG/BLU are shared across dialects. `Rd` is zap's red alias; `R` is reset.
 #
 # Gate is BOTH fds: a tool whose `--help` pipes to a pager, or whose stderr is
@@ -24,10 +25,11 @@ tui_colors_init() {
   if [ -t 1 ] && [ -t 2 ] && [ -z "${NO_COLOR:-}" ] && [ "${TERM:-dumb}" != "dumb" ]; then
     B=$'\033[1m';  Y=$'\033[1;33m'; C=$'\033[36m'; D=$'\033[2m'; R=$'\033[0m'
     G=$'\033[32m'; RED=$'\033[31m'; MAG=$'\033[35m'; BLU=$'\033[34m'
+    T=$'\033[1;37m'                           # section titles in help (bold white, the house rule)
   else
-    B=''; Y=''; C=''; D=''; R=''; G=''; RED=''; MAG=''; BLU=''
+    B=''; Y=''; C=''; D=''; R=''; G=''; RED=''; MAG=''; BLU=''; T=''
   fi
   Rd="$RED"                                   # zap's red alias (R is reset, not red)
-  BLD="$B"; YEL="$Y"; CYN="$C"; DIM="$D"; RST="$R"; GRN="$G"   # long-form dialect
-  export B Y C D R G Rd RED MAG BLU BLD YEL CYN DIM RST GRN
+  BLD="$B"; YEL="$Y"; CYN="$C"; DIM="$D"; RST="$R"; GRN="$G"; TTL="$T"   # long-form dialect
+  export B Y C D R G Rd RED MAG BLU T BLD YEL CYN DIM RST GRN TTL
 }

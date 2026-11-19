@@ -5,7 +5,7 @@ writes go to a scratch copy of the suite's files.
 
 Run: /usr/bin/python3 ~/.claude/scripts/zrecover/test_cli.py
 """
-import json, os, subprocess, sys, tempfile
+import json, os, subprocess, sys, tempfile, time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from testlib import expect, finish  # noqa: E402
@@ -48,6 +48,17 @@ r = run("revoke", "nope")
 expect("revoke unknown id: exit 1, points at grants", r.returncode == 1 and "zrecover grants" in r.stderr)
 r = run("top", "--by", "disk")
 expect("bad --by value: exit 2", r.returncode == 2)
+# No --open here: if the check ever broke, restore would only list, never open tabs.
+r = run("restore", "--dry-runn")
+expect("a mistyped restore flag is refused: exit 2", r.returncode == 2 and "--dry-runn" in r.stderr)
+r = run("explain", "-zsh")
+expect("a dash-led name is an argument, not an option", "unknown option" not in r.stderr)
+r = run("restore", "--dry")
+expect("--dry is accepted as --dry-run", "unknown option" not in r.stderr)
+r = run("status", "--nope")
+expect("unknown flag on a subcommand: exit 2", r.returncode == 2)
+r = run("top", "-n", "3", "--json")
+expect("known flags still pass", r.returncode == 0)
 
 # --json shapes
 r = run("status", "--json")
@@ -115,6 +126,28 @@ try:
     expect("protect add lands in the override file", "TestApp" in json.load(open(cfgpath))["protected"])
     zrecover.cmd_protect(["rm", "TestApp"])
     expect("protect rm removes it", "TestApp" not in json.load(open(cfgpath))["protected"])
+
+    # Grants, on a scratch file so this never touches the running daemon's.
+    reaper.GRANTS = os.path.join(scratch, "grants.json")
+    zrecover.cmd_allow(["--match", "someapp", "--class", "slow-only", "--for", "1h"])
+    g = json.load(open(reaper.GRANTS))[0]
+    expect("allow --class writes a class grant with no gb", g["class"] == "slow-only" and "gb" not in g and g["until"] > time.time())
+    zrecover.print_grants(zrecover.active_grants())
+    zrecover.cmd_revoke(["all"])
+    zrecover.cmd_allow(["--match", "someapp", "--gb", "20", "--for", "1h"])
+    g = json.load(open(reaper.GRANTS))[0]
+    expect("allow --gb still writes a memory grant", g["gb"] == 20 and "class" not in g)
+    zrecover.cmd_revoke(["all"])
+    for bad, why in ((["--match", "x", "--class", "nope"], "an unknown class"),
+                     (["--match", "x", "--class", "protected", "--gb", "5"], "both --gb and --class"),
+                     (["--match", "x"], "neither --gb nor --class"),
+                     (["--class", "protected"], "no target")):
+        try:
+            zrecover.cmd_allow(bad)
+            expect(f"allow refuses {why}", False)
+        except SystemExit as e:
+            expect(f"allow refuses {why} (exit 2)", e.code == 2)
+    expect("refused grants wrote nothing", json.load(open(reaper.GRANTS)) == [])
 finally:
     for n in os.listdir(scratch):
         os.remove(os.path.join(scratch, n))

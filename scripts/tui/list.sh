@@ -16,7 +16,7 @@ printf '%sstd::claude::tui%s: reusable terminal-UI primitives  %s(source the mod
   "${B:-}" "${R:-}" "${D:-}" "${R:-}"
 printf '%sall input fns degrade fzf → gum → read and never hang headless%s\n\n' "${D:-}" "${R:-}"
 
-for f in "$DIR"/*.sh; do
+for f in "$DIR"/*.sh "$DIR"/*.py; do
   base="$(basename "$f")"
   [ "$base" = "list.sh" ] && continue
   # public-function doc headers: lines beginning "# tui_<name>"

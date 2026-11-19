@@ -1,0 +1,15 @@
+{
+ "description": "A design Mac in active use: Claude Desktop, Affinity, TouchDesigner, Music, WhatsApp and Chrome. Open work is never killed; a heavy Chrome tab is the first thing to go.",
+ "guard_only": true,
+ "warn_protected": true,
+ "warn_proc_pct": 30,
+ "kill_proc_pct": 60,
+ "swap_warn_pct": 25,
+ "grant_max_pct": 75,
+ "pressure_min_target_gb": 1.5,
+ "protected_add": ["Claude", "Affinity", "TouchDesigner", "Music", "WhatsApp"],
+ "rules": [
+  {"name": "chrome-tab", "match": "Google Chrome Helper",
+   "warn_proc_pct": 15, "kill_proc_pct": 25, "pressure_first": true}
+ ]
+}

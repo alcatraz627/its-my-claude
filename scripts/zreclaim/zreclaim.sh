@@ -18,10 +18,11 @@ SELF="zreclaim"
 _tuidir="$HOME/.claude/scripts/tui"
 # shellcheck disable=SC1090
 { . "$_tuidir/colors.sh"; . "$_tuidir/require.sh"; . "$_tuidir/tty.sh"; . "$_tuidir/pick.sh"; } 2>/dev/null || true
-command -v tui_colors_init >/dev/null 2>&1 && tui_colors_init || { B=''; Y=''; C=''; D=''; R=''; G=''; RED=''; MAG=''; BLU=''; }
+command -v tui_colors_init >/dev/null 2>&1 && tui_colors_init || { B=''; Y=''; C=''; D=''; R=''; G=''; RED=''; MAG=''; BLU=''; T=''; }
 
 # ── small helpers ────────────────────────────────────────────────────────────
-die()  { printf '%s%s: %s%s\n' "${RED}" "$SELF" "$*" "${R}" >&2; exit 1; }
+# die MESSAGE [CODE]: print to stderr and exit (1 for a failure, 2 for a usage error).
+die()  { printf '%s%s: %s%s\n' "${RED}" "$SELF" "$1" "${R}" >&2; exit "${2:-1}"; }
 warn() { printf '%s%s%s\n' "${Y}" "$*" "${R}" >&2; }
 
 human_kb() {  # KB → human size
@@ -195,7 +196,7 @@ cmd_scan() {
     --plain) shift ;;                 # colors already gated by TTY
     --min) min=$2; shift 2 ;;         # itemize floor (MB); smaller dirs summarized
     --big) big=$2; shift 2 ;;         # large-loose-file threshold (MB)
-    -*) die "scan: unknown option $1" ;;
+    -*) die "scan: unknown option $1" 2 ;;
     *) roots+=("$1"); shift ;;
   esac; done
   [ ${#roots[@]} -gt 0 ] || roots=(".")
@@ -319,13 +320,13 @@ cmd_clean() {
   while [ $# -gt 0 ]; do case "$1" in
     --pareto) pct=$2; shift 2 ;;
     --min) min=$2; shift 2 ;;
-    --dry-run) dry=1; shift ;;
+    --dry-run|--dry) dry=1; shift ;;
     --yes|-y) yes=1; shift ;;
     --pick) pick=1; shift ;;
     --all) all=1; shift ;;
     --trash) DELETE_MODE="trash"; shift ;;
     --rm) DELETE_MODE="rm"; shift ;;
-    -*) die "clean: unknown option $1" ;;
+    -*) die "clean: unknown option $1" 2 ;;
     *) roots+=("$1"); shift ;;
   esac; done
   [ ${#roots[@]} -gt 0 ] || roots=(".")
@@ -401,7 +402,7 @@ cmd_gc() {
   local aggressive=0; local roots=()
   while [ $# -gt 0 ]; do case "$1" in
     --aggressive) aggressive=1; shift ;;
-    -*) die "gc: unknown option $1" ;;
+    -*) die "gc: unknown option $1" 2 ;;
     *) roots+=("$1"); shift ;;
   esac; done
   [ ${#roots[@]} -gt 0 ] || roots=(".")
@@ -431,7 +432,7 @@ cmd_git_large() {
   while [ $# -gt 0 ]; do case "$1" in
     --history) history=1; shift ;;
     --min) min_mb=$2; shift 2 ;;
-    -*) die "git-large: unknown option $1" ;;
+    -*) die "git-large: unknown option $1" 2 ;;
     *) roots+=("$1"); shift ;;
   esac; done
   [ ${#roots[@]} -gt 0 ] || roots=(".")
@@ -498,42 +499,42 @@ internal_pareto() { pareto "$1" "$2"; }   # __pareto SORTED_DESC_FILE PCT (deter
 # ── help ─────────────────────────────────────────────────────────────────────
 show_help() {
   cat <<EOF
-${B}zreclaim${R}: recon + safe cleanup of reproducible cache/build data (v$VERSION)
+${B}zreclaim${R}: find and safely clear rebuildable cache and build folders (v$VERSION)
 
-${Y}USAGE${R}
+${T}USAGE${R}
   ${C}zreclaim${R} <command> [PATHS...] [options]     ${D}(PATHS default to .)${R}
 
-${Y}EXAMPLES${R}
+${T}EXAMPLES${R}
   ${C}zreclaim scan${R} ~/Code/Versable            ${D}# rank reclaimable data, biggest first${R}
   ${C}zreclaim scan${R} --min 50 .                 ${D}# only itemize dirs >= 50MB (small ones summarized)${R}
   ${C}zreclaim scan${R} --big 100 .                ${D}# flag loose non-deletable files >= 100MB${R}
   ${C}zreclaim scan${R} --json .                   ${D}# machine-readable recon${R}
-  ${C}zreclaim clean${R} ~/Code/Versable           ${D}# delete the pareto set (90%%), with confirm${R}
+  ${C}zreclaim clean${R} ~/Code/Versable           ${D}# delete the pareto set (90%), with confirm${R}
   ${C}zreclaim clean${R} --pick .                  ${D}# multi-select what to delete (★ = pareto)${R}
-  ${C}zreclaim clean${R} --dry-run --pareto 95 .   ${D}# preview a 95%%-coverage selection${R}
+  ${C}zreclaim clean${R} --dry-run --pareto 95 .   ${D}# preview a 95%-coverage selection${R}
   ${C}zreclaim clean${R} --trash .                 ${D}# send to Trash instead of rm${R}
   ${C}zreclaim gc${R} ~/Code/Versable              ${D}# safe git gc + reflog expire + worktree prune${R}
   ${C}zreclaim git-large${R} --history .           ${D}# large files tracked in git (report only)${R}
 
-${Y}COMMANDS${R}
+${T}COMMANDS${R}
   ${C}scan${R}        Read-only. Find + size disposable dirs, ranked; flag tracked ones;
               list .git sizes, large git-tracked files, and large loose files.
   ${C}clean${R}       Delete a selection (default: pareto set). Shows blast radius + confirms.
   ${C}gc${R}          Run git gc/reflog-expire/worktree-prune on every repo under PATHS.
   ${C}git-large${R}   Report large files tracked in git. Never deletes.
 
-${Y}OPTIONS${R}
+${T}OPTIONS${R}
   ${G}--min MB${R}       Size floor: itemize/consider only dirs >= MB (default: 1). Smaller
                 ones are summarized (scan) or ignored (clean). Tune to taste.
   ${G}--big MB${R}       (scan) Flag loose non-deletable files >= MB (default: 50).
   ${G}--pareto PCT${R}   (clean) Coverage target for the auto-selection (default: 90)
   ${G}--pick${R}        (clean) Interactive multi-select instead of the pareto set
   ${G}--all${R}         (clean) Select every candidate above --min
-  ${G}--dry-run${R}     (clean) Show what would be deleted, delete nothing
+  ${G}--dry-run${R}     (clean) Show what would be deleted, delete nothing (or --dry)
   ${G}--yes, -y${R}     (clean) Skip the confirm prompt
   ${G}--trash${R}       (clean) Send to macOS Trash (recoverable) instead of ${G}--rm${R} (default)
 
-${Y}SAFETY${R}
+${T}SAFETY${R}
   Only a closed allowlist of reproducible dirs is ever a candidate (node_modules,
   .venv, __pycache__, dist, build, .next, target, caches, ...). Size only ranks;
   it never selects. Anything ${B}tracked in git${R} is EXCLUDED and flagged. .git is
@@ -556,5 +557,5 @@ case "$cmd" in
   --__delete)          internal_delete "$@" ;;
   --__git-tracked)     internal_git_tracked "$@" ;;
   --__pareto)          internal_pareto "$@" ;;
-  *) die "unknown command: $cmd (try: $SELF --help)" ;;
+  *) die "unknown command: $cmd (try: $SELF --help)" 2 ;;
 esac

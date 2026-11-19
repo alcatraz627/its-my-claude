@@ -7,10 +7,10 @@ triggers:
   - phrase:"-h"
   - phrase:"--help"
   - phrase:"build a cli"
-related: [tui-design.md, tui-handbook.md]
+related: [conventions/tui-design.md, conventions/tui-handbook.md]
 tier: 2
 category: conventions
-updated: 2026-11-01
+updated: 2026-11-20
 stale_after_days: 90
 ---
 
@@ -20,6 +20,12 @@ common need). Below that are pipe mode, man pages, source-vs-render, and the
 robustness and safety patterns that recurring tool work (zap, zcmd) surfaced. For
 interactive TUI patterns (fzf-as-launcher, color-vs-search fields) see
 `tui-design.md`.
+
+**Building a personal tool in the zcmd family?** Start with `zcmd add <name>
+--shape flag|verbs|tui|wrap`, which writes a tool on the shared helpers
+(`~/.zcmd/lib/z.sh`) that already passes the family test. The rules for that
+family (help shape, reserved flags, streams, names, the `# z-handroll:` marker
+for a deliberate hand-rolled piece) are in `~/.zcmd/docs/STANDARD.md`.
 
 ## Principles
 
@@ -70,7 +76,8 @@ Stream another tool's output line by line through `paint`, so a follow or a buil
 - **An `examples` command.** Worked commands live on each verb, so `help <verb>` and `examples <verb>` show the same ones. A test fails a verb without any.
 - **Aliases for the words people reach for.** A test stops an alias clashing with a positional name such as a project.
 - **Two levels of agreement.** An ordinary change asks at a terminal and needs `-y` without one. A dangerous one refuses without `-y`, even from a person, so a stray key cannot pass it.
-- **`-n` shows every step.** A step that depends on an earlier answer prints a placeholder such as `<region>`.
+- **`--dry-run` (or `--dry`) shows every step.** It has no short form. A step that depends on an earlier answer prints a placeholder such as `<region>`. `-n N` is a count, as in `head -n` (owner, 2026-11-20).
+- **Reserved flags keep one meaning.** `-h -V -y -n -q -v -i -o -O -0 --json --plain --dry-run --force` mean the same thing in every tool, and a tool never reuses one for something else, even when it does not offer the real meaning (owner, 2026-11-20). The table is in `~/.zcmd/docs/STANDARD.md`, and `z_reserved` in `~/.zcmd/lib/z.sh` holds it as code.
 - **An AI lookup is explicit and checked.** It says that words leave the machine, drops any suggestion that does not name a real verb, removes control characters, and never runs what it suggests.
 - **A mistyped flag stops the command.** Refuse it, or pass it to a tool that will. Never drop it and carry on.
 

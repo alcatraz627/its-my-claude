@@ -1,0 +1,19 @@
+{
+ "description": "An engineering Mac: Chrome, testing browsers, dev servers under pm2, local models. Throwaway work goes first; agent sessions and editors stay.",
+ "protected_add": ["Claude"],
+ "slow_only": ["qemu-system-aarch64-headless", "qemu-system-aarch64", "qemu-system-x86_64-headless", "qemu-system-x86_64"],
+ "rules": [
+  {"name": "testing-browser", "match": "Chrome for Testing|chrome-headless-shell|headless_shell|Chromium",
+   "warn_proc_gb": 4, "kill_proc_gb": 8, "pressure_first": true},
+  {"name": "chrome-tab", "match": "Google Chrome Helper",
+   "warn_proc_gb": 6, "kill_proc_gb": 12, "pressure_first": true},
+  {"name": "ollama", "match": "ollama|llama[-_]server|mlx_vlm|mlx_lm",
+   "kill_proc_gb": 20, "pressure_first": true},
+  {"name": "steam", "match": "steam_osx|Steam Helper|/Steam/steamapps/",
+   "warn_proc_gb": 10, "kill_proc_gb": 16, "cpu_demote_cores": 6,
+   "cpu_demote_after_s": 30, "cpu_kill_after_s": 120, "pressure_first": true},
+  {"name": "servers", "match": "(?i)^(node|bun|python3?|next-server|uvicorn|vite|tsx|ts-node)\\b",
+   "kill_proc_gb": 8, "cpu_demote_cores": 4, "cpu_demote_after_s": 60,
+   "cpu_kill_after_s": 180, "pressure_first": true}
+ ]
+}
