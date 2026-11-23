@@ -85,7 +85,7 @@ Divergences outrank the battery: they are where the config lies to itself.
 Run these repeatable checks. They are necessary, not sufficient.
 
 1. **Link graph + integrity:** every doc's outbound refs; flag orphans and broken links.
-2. **Staleness:** frontmatter where `updated + stale_after_days < today`.
+2. **Staleness:** the `STALE` lines from `python3 ~/.claude/scripts/validate-triggers.py`. It counts age from a doc's last commit or uncommitted edit, because nobody bumps `updated:` by hand.
 3. **Always-loaded budget:** measured token footprint of everything that loads every
    session; trend it against the last run if a prior map exists.
 4. **Tier / paths drift:** rules with a `tier:` implying on-demand but no `paths:` lever,

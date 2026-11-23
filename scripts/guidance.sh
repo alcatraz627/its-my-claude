@@ -78,15 +78,27 @@ case "$cmd" in
     ;;
 
   relevant)
-    prompt=$(printf '%s' "${2:-}" | tr 'A-Z' 'a-z')
     [ -f "$NOTES" ] || exit 0
+    # This runs on every prompt, so the loop starts no process per note. The
+    # notes are lowercased once, and a note reaches scope_matches (which does
+    # start processes) only when one of its keywords appears somewhere in the
+    # prompt, which every whole-word match must also satisfy.
+    text=" $(printf '%s' "${2:-}" | tr 'A-Z' 'a-z' | tr -s '[:space:]' ' ') "
     shown=0
-    while IFS= read -r line; do
+    while IFS= read -r line && IFS= read -r lower <&3; do
       # Only top-level note lines: start with "- " and carry a [scope] tag.
-      printf '%s' "$line" | rg -q '^- .*\[[^]]+\]' || continue
-      tags=$(printf '%s' "$line" | sed -n 's/^- [^[]*\[\([^]]*\)\].*/\1/p' | tr 'A-Z' 'a-z')
-      scope_matches "$prompt" "$tags" && { printf '%s\n' "$line"; shown=1; }
-    done < "$NOTES"
+      [[ "$lower" =~ ^-\ [^[]*\[([^]]+)\] ]] || continue
+      tags="${BASH_REMATCH[1]}"
+      maybe=0
+      IFS=',' read -ra kws <<< "$tags"
+      for kw in "${kws[@]}"; do
+        kw="${kw#"${kw%%[![:space:]]*}"}"; kw="${kw%"${kw##*[![:space:]]}"}"
+        [ -n "$kw" ] || continue
+        if [ "$kw" = "all" ] || [[ "$text" == *"$kw"* ]]; then maybe=1; break; fi
+      done
+      [ "$maybe" = 1 ] || continue
+      scope_matches "$text" "$tags" && { printf '%s\n' "$line"; shown=1; }
+    done < "$NOTES" 3< <(tr 'A-Z' 'a-z' < "$NOTES")
     [ "$shown" = 1 ] && bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook guidance --action nudge >/dev/null 2>&1
     exit 0
     ;;

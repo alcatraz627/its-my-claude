@@ -117,7 +117,7 @@ Override the target file with `WAL_FILE=<path> wal.sh ...` if auto-detection is 
 | Every ~15-20 actions, or before risky ops | `checkpoint` |
 | Session end | Final `checkpoint`, then `session_end` |
 
-Keep only the last 2 sessions in the file. Prune older entries when starting a new session (or let a Stop hook rotate them).
+The file is not pruned by session. A Stop hook (`scripts/rotation/rotate-wal.sh`) archives it to `assets/backups/wal-archive/` once it passes 5 MB and starts a fresh one.
 
 ---
 

@@ -18,7 +18,7 @@ The write-ahead log lives at `.claude/wal.jsonl` (project-local) or `~/.claude/w
 
 ## Core rules
 
-- Append-only during the session. Keep only the last 2 sessions.
+- Append-only during the session. `scripts/rotation/rotate-wal.sh` (a Stop hook) archives the file to `assets/backups/wal-archive/` once it passes 5 MB; nothing prunes by session count.
 - JSONL: one JSON object per line. Required fields: `ts`, `kind`, `session_id`, plus a kind-specific body.
 - Skip trivial reads. Compress aggressively, with one event per line.
 - It is `jq`-queryable. Last checkpoint: `jq -c 'select(.kind == "checkpoint")' .claude/wal.jsonl | tail -1`

@@ -1,7 +1,5 @@
 # Global Config Lookup Index
 
-<!-- sessions: impr-conf-98@2026-04-06 -->
-
 > **Address book for all Claude global configuration.**
 > Read this file when you need to find where a rule, convention, or reference lives.
 > CLAUDE.md carries only essential always-on rules. Everything else lives in dedicated files below.
@@ -27,7 +25,7 @@
 | `~/.claude/GLOSSARY.md` | Terminology reference for the GCC: abbreviations, namespace labels, concepts, file conventions | Encountering unfamiliar shorthand; adding new terms the user introduces |
 | `~/.claude/FOLDERS.md` | **Per-folder index**: every top-level dir under `~/.claude/`, owner (Anthropic vs user), purpose, what-goes-here / what-doesn't. Auto-regen via `scripts/folders-index.sh`. | Adding a new top-level folder, cleaning up unknown dirs, deciding where data goes |
 | `~/.claude/rules/00-index.md` | **Rules menu**: one line per behavioral rule (name + load-mode + gist), DERIVED from each rule's `brief:` via `scripts/rules-index.sh`; `scoped` rules are not autoloaded, Read them when they apply | Deciding which behavioral rule applies; finding a rule by name; after adding/removing a rule |
-| `*-domain/` + `i-dream/` `ledger/` `pinned/` `scheduled/` | **i-dream event-domain subsystem**: per-domain event capture (`events.jsonl`) to derived session-start hinters (`_tldr.txt` / `triggers.json`) to a weekly dream pass. Engine source `~/Code/Claude/i-dream`; per-dir owners in `FOLDERS.md`; `scheduled/registry.json` runs the passes | Understanding session-start insight injection, the dream cycle, or where feedback events go |
+| `*-domain/` + `i-dream/` `ledger/` `pinned/` `scheduled/` | **i-dream event-domain subsystem**: per-domain event capture (`events.jsonl`) to derived session-start hinters (`_tldr.txt` / `triggers.json`) to the i-dream reader (a daily recon and a weekly run; the nightly dream pass was retired 2026-09-18). Engine source `~/Code/Claude/i-dream`; per-dir owners in `FOLDERS.md`; `scheduled/registry.json` runs the reader jobs | Understanding session-start insight injection, the dream cycle, or where feedback events go |
 | `~/.claude/memory/global/MEMORY.md` | Cross-project global memory tier index (24 feedback/user memories). **Not auto-loaded**: no hook or harness path reads it (`features/memory.md` §Tiers; verified gcc-map v3 and v4). Read it on demand alongside the auto-loaded per-project MEMORY.md | Any session that wants the cross-project defaults; per-project memory overrides it on conflict |
 | `~/.claude/assets/reports/20260905-gcc-structure-map/MAP.md` | **Living GCC structure map** (v4, `/gcc-map --deep`, 2026-09-05): how content reaches an agent, the doc graph, ranked empirical-vs-claimed divergences, a critic's audit of the audit in `lenses/critic.md`, and a ten-sheet visual companion `map.html`. Its TL;DR carries the open high-severity findings: they are live items, not archive. v3 (2026-07-04) is the baseline it diffs against | Any structural question about `~/.claude`; before restructuring config; checking what the map already flagged |
 | `~/.claude/assets/reports/20260930-repo-census/README.md` | **Repo census, dated 2026-09-30**: every repo in the versable-git org (47) and the alcatraz627 account (90) classified from commit, author and deploy evidence into product, client build, platform / internal service, internal tool, personal tool, MVP / POC, dormant and archived, with usage level, a one-line description and flagged judgment calls. `gather.py <owner>` refreshes it into a new dated folder | Any task that surveys, picks from, or describes the owner's repos; before re-gathering repo facts; check the date and refresh if it is stale |
@@ -61,10 +59,11 @@
 | `features/versable-envs.md` | versable-git only: each repo's staging and release branch, GCP project, deploy triggers and preview grants. Script: `scripts/versable/envs.py` | `topic:versable-envs`, `phrase:"staging env"`, `phrase:"preview env"` |
 | `features/memory.md` | Per-project + global memory, cascade rules | `topic:memory`, `phrase:"remember that"` |
 | `features/context-retention.md` | Session ID, core-dump/catchup, scratchpad, archive cadence | `skill:core-dump`, `skill:catchup`, `topic:session-id` |
+| `features/debris-prune.md` | Monthly sweep of old checkpoints, handbacks, WALs and backups, and how to undo a run | `topic:debris`, `topic:checkpoint-archive` |
 | `features/proposals.md` | Improvement backlog + self-feedback → canon lifecycle | `tool:propose.sh`, `topic:improvements` |
 | `features/whatsapp-render.md` | WhatsApp export to a WhatsApp-style HTML reader (date rail, media, search, saved position), served to the phone over the tailnet. Script: `scripts/whatsapp-render/build_chat.py` | `topic:whatsapp`, `phrase:"_chat.txt"` |
 | `features/mcp-catalog.md` | MCP server catalog + add-mcp + version pinning | `tool:add-mcp`, `topic:mcp-setup` |
-| `features/kanban.md` | The kanban board: a project's communication surface between the human and its agents across sessions and days. Independent of the Task tool, never a mirror of it; earned by project shape, not todo count | `topic:kanban`, `topic:board`, `skill:kanban` |
+| `features/kanban.md` | MOTHBALLED 2026-10-14 (read-only, data kept; decision pages stay live). The kanban board: a project's communication surface between the human and its agents across sessions and days. Independent of the Task tool, never a mirror of it; earned by project shape, not todo count | `topic:kanban`, `topic:board`, `skill:kanban` |
 | `features/warden.md` | The warden: session-liveness plus event-driven revive for working agents. The 45m standing-judgment beat is retired (2026-09-02); on-demand judgment survives; event-driven revive not yet wired pending an owner decision. Institution dir `~/.claude/warden/` | `topic:warden`, `topic:revive`, `tool:warden-beat.sh` |
 | `features/codex-adapter.md` | How Codex CLI runs under this gcc: rules routed via a generated `AGENTS.md`, skills/hooks/execpolicy rules symlinked, gcc guards wrapped, claude-ipc identity `cx-<dir>-<id8>`, and `adapters/codex/bin/gcc` as the one write path (outbox drained by Codex's hooks). Constraint ledger + `install.sh` keep-current procedure | `topic:codex`, `tool:codex`, `tool:codex-gcc`, `topic:adapters` |
 | `features/atone.md` | atone+affirm system: mistake/compliment event logs, derived views, hinters | `tool:atone`, `tool:affirm`, `topic:mistake-tracking` |
@@ -76,12 +75,13 @@
 | `features/agent-policy.md` | The owner's agent policy: allow/block switches, choices and thresholds for what agents may do as the owner, global with per-repo overrides and timed flips; menu bar panel plus `pol.sh`, read live by hooks | `topic:agent-policy`, `tool:pol.sh`, `phrase:"agent policy"` |
 | `features/macos-menubar-widget.md` | AppKit menu-bar widget patterns: settings window, live-propagation, composited badge, hover popover | `topic:macos-menubar`, `topic:appkit`, `tool:claude-instances` |
 | `features/hooks-tui-limits.md` | Hook TUI display limitation (alt-screen buffer) | `topic:hooks`, `topic:terminal-display` |
-| `features/dev-servers.md` | pm2 + port 30xx/50xx + persistence + the leak reaper (testing browsers, hung tests, stray pm2) | `tool:pm2`, `topic:dev-servers` |
+| `features/dev-servers.md` | Three-tier port policy (pinned, pm2 + 51xx, one-off 62xx with TTL), the `ports.sh` ledger, the svc idle reaper and the leak reaper (testing browsers, hung tests, stray pm2) | `tool:pm2`, `topic:dev-servers` |
 | `features/ghostty-open.md` | How agents open a terminal: a tab in the owner's window, never a stray copy | `topic:ghostty` |
 | `features/observed.md` | Where to file odd behaviour seen once and not explained | `tool:observed`, `topic:one-off-bug` |
 | `features/keepwarm.md` | How keep-warm holds a session's cache and when it dumps | `topic:keep-warm` |
 | `features/bfb-comments.md` | The owner's comments on markdown in bfb: answer them from any terminal with `bfb-docs comments` (inbox, reply, done, suggest); threads live in `<file>.md.bfb.json` | `tool:bfb-docs`, `topic:markdown-comments`, `phrase:"comment on md"`, `phrase:"review in bfb"` |
 | `features/usage-speedbumps.md` | 5h usage window speed bumps for every agent and subagent (amber 80, red 90, brake 96), hibernation in place (warm pings, own wake after the reset), the gate on Claude Code's own reset resume, and `/catchup --from <alias\|sid>` manual takeover | `tool:usage5h.py`, `tool:resume-from.py`, `topic:usage-window`, `topic:hibernate` |
+| `features/clanky-host.md` | `clanky-host FILE...` puts a screenshot on Clanky's file host and prints markdown that renders in a PR body, private repos included | `tool:clanky-host`, `topic:pr-screenshots` |
 | `features/api-tokens.md` | API tokens live in the Keychain; agent shells strip them, `with-token NAME -- cmd` grants one per command, `token-set` stores a rotated one, and the leak scanner reports any token that reaches a transcript | `tool:with-token`, `topic:api-token`, `topic:secrets` |
 | `features/zrecover.md` | Desktop-session safeguard: memory/CPU reaper with rules and grants, `zrecover run claude` screen capture, `zrecover restore` after a crash | `tool:zrecover`, `topic:memory-pressure`, `topic:crash-recovery` |
 | `features/claudew.md` | Plugin-based claude CLI wrapper | `tool:claudew`, `topic:rate-limit-recovery` |
@@ -96,6 +96,15 @@
 | `features/git-commands.md` | git + gh command cheatsheet: common ops, PR workflows, recovery | `topic:git-commands`, `topic:gh-cli` |
 | `features/declared-ready-stop-hook.md` | Stop-hook that blocks a premature done/works/shipped claim when nothing ran | `topic:declared-ready`, `topic:stop-hook` |
 | `features/env-access-convention-hook.md` | Env-access convention hook (DESIGN, not built): cache a project's env convention, nudge accesses | `tool:guard-env-access`, `topic:env-access` |
+| `features/ci-oauth-token-minting.md` | Mint a Claude Code OAuth token for a different Anthropic account from a throwaway codespace, so the local login is never at risk; covers the CI auth model, the script and the traps | `tool:mint-ci-token.sh`, `topic:ci-auth`, `topic:claude-code-oauth-token` |
+| `features/decision-pages.md` | Pre-answered HTML decision pages for a batch of owner verdicts, answered with one pasted string and served at `:5106/dp/<slug>/` | `tool:decision-page.sh`, `skill:decision-wizard`, `topic:decision-page` |
+| `features/gcc-mods.md` | The gcc-mods plugin: clickable paths, one band row per offer, a display-only side pane, the status line and wakes inside the Claude Code TUI | `tool:gcc-mods`, `topic:mods`, `phrase:"/hub"` |
+| `features/hook-design.md` | Weight a hook's false positives by the cost of a false fire, then match block, warn or nudge to that cost | `topic:hook-design`, `topic:false-positives`, `phrase:"build a hook"` |
+| `features/model-tier-harness.md` | Mechanics of the model-tier harness: guard-model-tier.sh, its logs, the scheduled reviews and the lm gemini lane | `tool:guard-model-tier`, `tool:lm-gemini`, `topic:model-tier` |
+| `features/usage-policy.md` | One reader for every usage window (`policy.sh`), the owner-approved expiring hook snooze, and the lifecycle header on tunable hooks | `tool:policy.sh`, `tool:hook-snooze.sh`, `topic:usage-window` |
+| `features/weekly-tags.md` | Notes queued for the owner's Tuesday gcc session in `handoffs/tags/`, written and closed with `handoff.sh` | `tool:handoff.sh`, `topic:weekly-session`, `topic:weekly-review` |
+| `features/work-focus-identity.md` | How to address "the agent working on X" when the asking session is gone: project path, then live ipc alias, then message id | `topic:reply-to`, `topic:ipc-addressing`, `topic:work-focus` |
+| `features/prose-and-voice.md` | Map of every prose, voice and anti-slop capability (rules, personas, skills, hooks, lints, style data) by surface, with overlaps, contradictions and consolidation options; read before adding a writing rule or prose gate | `topic:prose-quality`, `topic:voice`, `topic:ai-smell`, `phrase:"prose gate"` |
 
 ### `conventions/`: output/authoring standards
 
@@ -107,7 +116,6 @@
 | `conventions/pages.md` | Which surface to show something on, plus the shared page kit and page check | `topic:html-output`, `topic:reports`, `topic:artifacts`, `skill:page` |
 | `conventions/html-output.md` | Older HTML guidance: the colour system the kit uses, complexity tiers, snippets | `topic:html-output` |
 | `conventions/ascii-diagrams.md` | Proactive box-drawing diagrams; /diagram for complex | `skill:diagram`, `topic:diagrams` |
-| `features/prose-and-voice.md` | Map of every prose, voice and anti-slop capability (rules, personas, skills, hooks, lints, style data) by surface, with overlaps, contradictions and consolidation options; read before adding a writing rule or prose gate | `topic:prose-quality`, `topic:voice`, `topic:ai-smell`, `phrase:"prose gate"` |
 | `conventions/doc-writing.md` | The standard for every human-facing doc: common rules plus tiers for reference docs, READMEs, changelogs, reports and RCAs (§16 genre contract), PR and commit text. Technical doc guidelines + anti-patterns | `skill:write-docs`, `topic:docs-work`, `topic:reports`, `topic:rca`, `topic:changelog` |
 | `conventions/language-quality.md` | Ratified prose defect taxonomy (structure, verdict-first, contrast scaffolds, bare ids, option menus, overclaims) and which gate covers which surface | `topic:prose-quality`, `topic:ai-smell` |
 | `conventions/rca-template.md` | Incident report section order in plain, neutral statements | `topic:rca` |
@@ -119,6 +127,8 @@
 | `conventions/agent-first-tools.md` | Design doctrine for tools Claude drives: digest deltas, ref contracts, fix-proposing errors | `topic:agent-first-tools`, `topic:cli-for-agents` |
 | `conventions/shipped-checks-serve-the-author.md` | A check shipped to someone else's repo: precise may block, imprecise must stay advisory; the stale-claim class only a reader catches | `topic:shipped-tooling`, `topic:qa-checks`, `phrase:"should this block"` |
 | `conventions/tui-design.md` | Functional TUI patterns + fzf-as-runtime launcher blueprint + approach selection | `topic:tui`, `topic:fzf` |
+| `conventions/mods-handbook.md` | What gcc draws inside Claude Code (statusline and gcc-mods): which surface for what, band-row presets S1/S2/S3, chip, color and link rules, where borrowed community-mod ideas go | `topic:mods`, `topic:statusline`, `tool:gcc-mods`, `phrase:"band row"` |
+| `conventions/tui-handbook.md` | How to build a TUI here: the `--__` fzf-app blueprint, features catalog, the trap→fix failure-mode table, testing-without-a-tty, destructive-tool rules, library reference | `topic:gum`, `phrase:"build a tui"`, `phrase:"terminal ui"`, `phrase:"fzf picker"` |
 | `conventions/ui-brief.md` | Read before writing any UI, small tools included: the rules owner-rejected pages missed, each with a check. A hook injects it on the first UI edit | `topic:ui-design`, `topic:dashboard-tool`, `skill:build-ui` |
 | `conventions/visual-design.md` | Visual-design reference: OKLCH color harmony, layout/hierarchy, de-chaos rule | `topic:color`, `topic:visual-design` |
 | `conventions/dashboard-tools.md` | Build template for single-user dashboard tools: watcher + JSON-state, mutex, atomic writes | `topic:dashboard-tool` |
@@ -126,6 +136,11 @@
 | `conventions/run-and-observe-affordance.md` | Every project exposes a one-command run-and-observe affordance so verifying is cheap | `topic:run-and-observe`, `topic:verify-affordance` |
 | `conventions/large-external-list-scan.md` | Procedure for scanning a vast external list (GH / Linear / Slack): pagination + budget | `topic:large-list-scan`, `topic:pagination` |
 | `conventions/hook-authoring-and-review.md` | Checklist for authoring + reviewing gcc hooks | `topic:hook-authoring`, `topic:hooks` |
+| `conventions/callout-boxes.md` | One anatomy for every inline callout: the emoji names the emitter and the rail weight carries severity; render with `box <kind>` | `topic:callout-boxes`, `topic:hook-output`, `tool:box` |
+| `conventions/env-access.md` | How gcc scripts read environment variables, and why they have no central config module | `topic:env-access`, `phrase:"env var"` |
+| `conventions/github-markdown.md` | GitHub rendering and Actions behaviours that cost real rounds: callouts in details, branch links, stacked squash merges | `topic:github-markdown`, `topic:github-actions`, `topic:pr-description` |
+| `conventions/mobile-ux-pattern-palette.md` | A pick-from palette of mobile todo and notes UX patterns mined from seven apps; consult when designing a notes, tasks or mobile-first UI | `topic:mobile-ux`, `topic:ui-patterns`, `phrase:"ux pattern palette"` |
+| `conventions/report-writing.md` | Redirect stub: the report genre contract is now section 16 of `conventions/doc-writing.md` | none (stub) |
 
 ---
 
@@ -141,33 +156,33 @@
 
 | Skill | Invocation | Brief | Use when... |
 |-------|-----------|-------|-------------|
-| `designer-reviewer/SKILL.md` | `/designer-reviewer [screenshot-path]` | Reviews UI screenshots against terminal-dashboard aesthetic fingerprints (FP-1–FP-6). Scores 5 dimensions, generates findings + CSS fixes. Calibrated for pm2-manage, visualize-claude, and developer tool UIs | Reviewing any dark-mode dashboard or tool UI for visual consistency against the established design system |
-| `doctor/SKILL.md` | `/doctor` | On-demand environment health check: worktrees, pm2 status, disk, WAL staleness, git dirty count, event log health, hook integrity, MCP config validity. Wraps `scripts/health-check.sh` | Running a quick env audit mid-session, or after seeing unexpected hook behavior |
-| `autocorrect/SKILL.md` | `/autocorrect [subcommand]` | Manage typo correction dictionaries: list, add, teach, ignore, log, undo, test, stats. Data in `assets/autocorrect/`, log at `.autocorrect-log.jsonl` | Managing autocorrect dictionaries, reviewing correction history, teaching new mappings |
-| `mini/SKILL.md` | `/mini <prompt>` | Fast mini-model query (<1s) using local Ollama or cloud Haiku. Templates: session-title, doc-lookup, cmd-compose, summarize. All surfaces share `llm-mini-core.sh`. CLI: `llm-mini`. Engine: `llm-mini engine [start\|stop\|status]` | Quick lookups, session titles, command composition, short summaries |
+| `skills/designer-reviewer/SKILL.md` | `/designer-reviewer [screenshot-path]` | Reviews UI screenshots against terminal-dashboard aesthetic fingerprints (FP-1–FP-6). Scores 5 dimensions, generates findings + CSS fixes. Calibrated for pm2-manage, visualize-claude, and developer tool UIs | Reviewing any dark-mode dashboard or tool UI for visual consistency against the established design system |
+| `skills/doctor/SKILL.md` | `/doctor` | On-demand environment health check: worktrees, pm2 status, disk, WAL staleness, git dirty count, event log health, hook integrity, MCP config validity. Wraps `scripts/health-check.sh` | Running a quick env audit mid-session, or after seeing unexpected hook behavior |
+| `skills-parked/autocorrect/SKILL.md` | (parked, mig 0048; not invocable) | Manage typo correction dictionaries: list, add, teach, ignore, log, undo, test, stats. Data in `assets/autocorrect/`, log at `.autocorrect-log.jsonl`; the `hinters/00-autocorrect.sh` hinter still runs | Editing autocorrect dictionaries by hand in `assets/autocorrect/`; the `/autocorrect` command is parked |
+| `skills-parked/mini/SKILL.md` | (parked, mig 0048; not invocable) | Fast mini-model query (<1s) using local Ollama or cloud Haiku. Templates: session-title, doc-lookup, cmd-compose, summarize. All surfaces share `llm-mini-core.sh`. CLI: `llm-mini`. Engine: `llm-mini engine [start\|stop\|status]` | Quick lookups, session titles, command composition; use the `llm-mini` CLI or `q` today |
 | `skills-parked/past-sessions/SKILL.md` | (parked, mig 0048; not invocable) | Browse, search, summarize past Claude Code transcripts in `~/.claude/projects/`. Parked 2026-08-21; the live equivalents are `/revive` (full rehydration) and `/catchup` (checkpoint briefing) | Recalling past conversation content; use `/revive` or `/catchup` today |
-| `tag/SKILL.md` | `/tag [target \| "concept"]` | Files something worth keeping into `~/.claude/` at its correct home per PLACEMENT (category x tier), updates every index/pointer, sets the `paths:` lever on scoped rules, promotes to a CLAUDE.md brief only when justified | Enshrining a rule/convention/term/snippet mid-session so it does not die inline |
-| `preference-graduation/SKILL.md` | `/preference-graduation [--days N]` | Harvests recurring preference/vocabulary signals from atone/affirm/i-dream/runtime-notes, dedupes vs GLOSSARY+memory, routes each to its durable home (glossary term, global memory, or rule) after per-signal confirm. Wraps `scripts/preference-harvest.sh` | Sweeping the insight streams to bake how-the-user-works into durable config; on "remember how I work" / "bake this in" |
-| `gcc-map/SKILL.md` | `/gcc-map [--deep]` | Maps how instruction content loads + the CLAUDE.md doc graph; measures ground truth first, diffs vs what the indices claim, runs a health battery (orphans / broken-links / staleness / always-loaded budget / tier-paths drift) + an unconstrained blindspot pass; writes a durable map to `assets/reports/`. Read-only on config | Auditing gcc structure health, finding drift/orphans/bloat, before a config cleanup |
-| `gcc-explore/SKILL.md` | `/gcc-explore [shape\|vital\|cycle <arg>]` | The map's exploratory sibling: renders the config as three panels (SHAPE what it is, MOVEMENT which way it drifts, CYCLE the loops keeping it alive) by CONSUMING MAP.md + `gcc-vitals.sh --json` + the schedulers and ledgers, declares its own staleness, then offers up to 3 observations and dig-deeper verbs. Notices, never adjudicates; findings stay `/gcc-map`'s job. Numbers come from `scripts/gcc-explore.sh`, read-only | Feeling the shape/movement/cycle of the config rather than hunting a defect; onboarding to what `~/.claude` even is; "show me the gcc", "how is it moving" |
+| `skills/tag/SKILL.md` | `/tag [target \| "concept"]` | Files something worth keeping into `~/.claude/` at its correct home per PLACEMENT (category x tier), updates every index/pointer, sets the `paths:` lever on scoped rules, promotes to a CLAUDE.md brief only when justified | Enshrining a rule/convention/term/snippet mid-session so it does not die inline |
+| `skills/preference-graduation/SKILL.md` | `/preference-graduation [--days N]` | Harvests recurring preference/vocabulary signals from atone/affirm/i-dream/runtime-notes, dedupes vs GLOSSARY+memory, routes each to its durable home (glossary term, global memory, or rule) after per-signal confirm. Wraps `scripts/preference-harvest.sh` | Sweeping the insight streams to bake how-the-user-works into durable config; on "remember how I work" / "bake this in" |
+| `skills/gcc-map/SKILL.md` | `/gcc-map [--deep]` | Maps how instruction content loads + the CLAUDE.md doc graph; measures ground truth first, diffs vs what the indices claim, runs a health battery (orphans / broken-links / staleness / always-loaded budget / tier-paths drift) + an unconstrained blindspot pass; writes a durable map to `assets/reports/`. Read-only on config | Auditing gcc structure health, finding drift/orphans/bloat, before a config cleanup |
+| `skills/gcc-explore/SKILL.md` | `/gcc-explore [shape\|vital\|cycle <arg>]` | The map's exploratory sibling: renders the config as three panels (SHAPE what it is, MOVEMENT which way it drifts, CYCLE the loops keeping it alive) by CONSUMING MAP.md + `gcc-vitals.sh --json` + the schedulers and ledgers, declares its own staleness, then offers up to 3 observations and dig-deeper verbs. Notices, never adjudicates; findings stay `/gcc-map`'s job. Numbers come from `scripts/gcc-explore.sh`, read-only | Feeling the shape/movement/cycle of the config rather than hunting a defect; onboarding to what `~/.claude` even is; "show me the gcc", "how is it moving" |
 
 ## Shared References (`~/.claude/skills/shared/`)
 
 | File | Brief | Read when... |
 |------|-------|-------------|
-| `shared/doc-naming.md` | Datestamp + session ID naming/tagging rules for all files | Creating any new file or document |
-| `shared/safe-delete.md` | `trash` not `rm`; recovery procedures; hook details | Deleting files, or when `rm` is blocked by hook |
-| `shared/asset-management.md` | Asset registry: register, find, expire, cleanup via `asset.sh` | Creating screenshots, reports, PDFs, or any non-source file |
-| `shared/wal-format.md` | WAL session header, action log, and checkpoint format | Writing WAL entries or parsing WAL for `/catchup` |
-| `shared/gum-guide.md` | Interactive TUI patterns with `gum` (choose, filter, spin) | Building skill UIs with terminal prompts |
+| `skills/shared/doc-naming.md` | Datestamp + session ID naming/tagging rules for all files | Creating any new file or document |
+| `skills/shared/safe-delete.md` | `trash` not `rm`; recovery procedures; hook details | Deleting files, or when `rm` is blocked by hook |
+| `skills/shared/asset-management.md` | Asset registry: register, find, expire, cleanup via `asset.sh` | Creating screenshots, reports, PDFs, or any non-source file |
+| `skills/shared/wal-format.md` | WAL session header, action log, and checkpoint format | Writing WAL entries or parsing WAL for `/catchup` |
+| `skills/shared/gum-guide.md` | Interactive TUI patterns with `gum` (choose, filter, spin) | Building skill UIs with terminal prompts |
 | `assets/docs/gum-rendering-examples.md` | Visual output gallery: tables, boxes, architecture diagrams, flowcharts, dashboards, color reference: all TTY-safe | Writing `gum_table`/`gum style`/`gum join` output; styling terminal results; composing diagram layouts |
 | `assets/docs/port-system-architecture.md` | Port-discipline internals: event-log fold semantics, allocation mutex, owner-boundary rules, fail-open rationale, known edges, sandbox test recipe | UPGRADING ports.sh or guard-dev-server-port.sh (everyday use needs only features/dev-servers.md) |
-| `shared/desktop-automation.md` | macOS GUI automation v1: screencapture, osascript, cliclick patterns, usage examples, Phase 2 upgrade spec | Any desktop automation task: screenshots, clicks, window management, Space switching |
-| `shared/bash-gotchas.md` | Bash pitfalls: `cat\|jq` pipe hangs, `\|\|`/`&&`/`\|` precedence, when to use Read vs Bash | Before writing any multi-step shell pipeline or file inspection command |
-| `shared/lock-file.sh` | File lock acquire/release/check for parallel agent safety | Before any write to shared files (runtime-notes, SKILL.md) |
-| `shared/check-path.sh` | Validates path is not in forbidden list | Before any write operation |
-| `shared/log-run.sh` | Timestamped entry to `shared/run.log` | At skill start and end |
-| `shared/prepend-runtime-note.sh` | Atomic prepend to runtime-notes with lock handling | At end of every skill run |
+| `skills/shared/desktop-automation.md` | macOS GUI automation v1: screencapture, osascript, cliclick patterns, usage examples, Phase 2 upgrade spec | Any desktop automation task: screenshots, clicks, window management, Space switching |
+| `skills/shared/bash-gotchas.md` | Bash pitfalls: `cat\|jq` pipe hangs, `\|\|`/`&&`/`\|` precedence, when to use Read vs Bash | Before writing any multi-step shell pipeline or file inspection command |
+| `skills/shared/lock-file.sh` | File lock acquire/release/check for parallel agent safety | Before any write to shared files (runtime-notes, SKILL.md) |
+| `skills/shared/check-path.sh` | Validates path is not in forbidden list | Before any write operation |
+| `skills/shared/log-run.sh` | Timestamped entry to `shared/run.log` | At skill start and end |
+| `skills/shared/prepend-runtime-note.sh` | Atomic prepend to runtime-notes with lock handling | At end of every skill run |
 
 ## Dev Server & Port Scripts (`~/.claude/scripts/`)
 
@@ -177,11 +192,10 @@
 | `scripts/tui/file-preview.sh` | Reusable rich `fzf --preview` module: jq/bat/xlsx-sheets, degrades to head, always exits 0 | Building any fzf-based picker that needs a file preview pane (plug-and-play; std::claude::tui) |
 | `scripts/tui/{colors,tty,require,pick}.sh` | std::claude::tui input library: TTY-gated palette · honest tty probe + bounded read · dep preflight · fzf→gum→read pick ladder (`tui_pick_one`/`pick_many`/`choose`/`confirm`) | Building a shell TUI: source these instead of re-rolling color/tty/pick/confirm |
 | `scripts/tui/list.sh` | Live catalog of the tui/ primitives, scanned from the module doc-headers (auto-current) | Run `bash ~/.claude/scripts/tui/list.sh` to see what tui primitives exist before building a TUI |
-| `conventions/mods-handbook.md` | What gcc draws inside Claude Code (statusline and gcc-mods): which surface for what, band-row presets S1/S2/S3, chip, color and link rules, where borrowed community-mod ideas go | Before adding or restyling anything in the statusline, the band, or a mod pane |
-| `conventions/tui-handbook.md` | How to build a TUI here: the `--__` fzf-app blueprint, features catalog, the trap→fix failure-mode table, testing-without-a-tty, destructive-tool rules, library reference | Before building or auditing any terminal UI (fzf/gum/read) |
-| `scripts/dev-servers/pm2-register.sh` | Register/deregister pm2 apps, auto-assign 30xx/50xx ports, output ecosystem.config.cjs snippets. Commands: `register`, `deregister`, `change`, `list` | Setting up a new server or pair app, or reassigning ports |
-| `scripts/dev-servers/gen-nginx-conf.sh` | Generate nginx `.test` server blocks from port registry. Handles Host header rewrite for Vite/Next.js. `--dry-run` to preview | Activating `<name>.test` domains for registered apps |
-| `~/.claude/dev-servers-guide.md` | Full pm2 + nginx + port workflow guide including persistence (startup+save), registration script usage, and troubleshooting | Any dev server setup, port allocation, or pm2 persistence questions |
+| `scripts/dev-servers/ports.sh` | The port ledger for the three-tier policy: `scan`, `claim`, `pin`, `reap`, `revive`, `next`. Policy and tiers: `features/dev-servers.md` | Allocating or checking a dev-server port; start here, not with the 30xx/50xx scripts below |
+| `scripts/dev-servers/pm2-register.sh` | Older pair-app registrar: registers/deregisters pm2 apps and assigns 30xx/50xx suffixes from the retired scratchpad `port-registry.md`, so its port choice ignores the three-tier policy. Commands: `register`, `deregister`, `change`, `list` | Only to read how old pair apps were registered; allocate new ports with `ports.sh` |
+| `scripts/dev-servers/gen-nginx-conf.sh` | Generates nginx `.test` server blocks from the retired scratchpad `port-registry.md` (30xx/50xx rows only). Handles Host header rewrite for Vite/Next.js. `--dry-run` to preview | Regenerating `.test` domains for the older registered apps; it does not see tier-2 or tier-3 claims |
+| `~/.claude/dev-servers-guide.md` | Older pm2 + nginx + port workflow guide (persistence, registration scripts, troubleshooting). Its port rules and its scratchpad registry step predate the three-tier policy | pm2 persistence and nginx troubleshooting only; for ports read `features/dev-servers.md` |
 
 ## Personal CLIs (`zcmd` registry)
 
@@ -261,7 +275,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 |------|-------|-------------|
 | `~/.claude/scratchpad/README.md` | Scratchpad system docs (local + global tiers, scripts) | Using scratchpad for plans or learnings |
 | `~/.claude/scratchpad/global/` | Cross-project patterns and reusable references | Looking for patterns from other projects |
-| `~/.claude/scratchpad/global/port-registry.md` | pm2 port assignments (frontend=30xx, backend=50xx) | Starting a dev server or registering ports |
+| `~/.claude/dev-servers/port-registry.md` | Derived view of port claims and pins, regenerated by `ports.sh scan` (never hand-edit) | Starting a dev server or checking which port is taken |
 
 ## Persistent Memory
 
@@ -272,7 +286,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | `~/.claude/scripts/weekly-todo.sh` | CLI for weekly todos: `add`, `done`, `rm`, `list`, `ensure`, `archive` | Managing weekly todos from shell or agent scripts |
 | `~/.claude/.mcp.json` | **Active global MCP servers**: dot-prefixed, this is what Claude Code reads | Adding/removing global MCP servers. ⚠ Never create `mcp.json` (no dot): it is silently ignored |
 | `~/.claude/mcp-catalog.json` | Pre-configured MCP server definitions for `/add-mcp` | Adding MCP servers to a project: NOT the active server list |
-| `shared/mcp-config.md` | Full MCP file reference, gotcha notes, server inventory | Any MCP config work: read this before touching MCP files |
+| `skills/shared/mcp-config.md` | Full MCP file reference, gotcha notes, server inventory | Any MCP config work: read this before touching MCP files |
 | `~/.claude/disabled-plugins.json` | Registry of disabled plugins with reasons | Re-enabling plugins for specific projects |
 
 ## Agents & Personas
@@ -315,8 +329,7 @@ Personal command-line tools live in the `zcmd` registry (`~/Code/Claude/its-my-c
 | File | Brief | Read when... |
 |------|-------|-------------|
 | `~/Code/Claude/visualize-claude/templates/_agent-infra/` | pm2 + dev server templates (PORT-POLICY, PM2-FRAMEWORK, LOCAL-DOMAINS, ecosystem templates) | Setting up new agent app infrastructure |
-| `~/Code/Claude/pm2-manage/` | Browser dashboard for all pm2 processes (port 5042). REST API + SSE. Config: `pm2-manage-config.json` | Managing pm2 processes, extending the dashboard, understanding process state |
-| `~/Code/Claude/pm2-manage/DESIGN-DAEMON-EXTENSION.md` | Feature design: extending pm2-manage to show daemons, cron jobs, and launchd agents | Building the daemon/cron dashboard feature |
+| `~/Code/Claude/sys-pier/` | The local tool for what is running on this Mac (the old pm2-manage dashboard, renamed): the service hub in `hub/` at :3999 (pm2 service `service-hub`) lists, starts, opens and stops pm2 services, and its System page shows ports, sessions, launch agents, nginx routes and cron jobs. The earlier dashboard at :5042 is out of use. Guide: `features/dev-servers.md` | Managing pm2 processes, seeing what is running, extending the hub |
 
 ---
 

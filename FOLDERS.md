@@ -4,7 +4,7 @@
 >
 > **Regenerate:** `bash ~/.claude/scripts/folders-index.sh` (rewrites in place; preserves the policy section above the marker; add `--stdout` to preview). Never redirect with `> FOLDERS.md`: the shell truncates the file before the script reads it, destroying the policy section.
 >
-> **Last regenerated:** 2026-07-04 (session tag-skill; census + rules count refreshed)
+> **Policy last reviewed:** 2026-07-04. The census at the bottom carries its own regeneration stamp.
 
 ---
 
@@ -74,11 +74,13 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `code/` | unclear | 2 files; check before touching |
 | `llm-mini-state/` | `mini` skill / Ollama | Cache + Ollama log for the local fast model |
 | `logs/` | misc | Hook/script logs (tab-title-emit.log, mistake-patterns-graduation.log) |
+| `review-lane/` | `scripts/review-lane/review-lane.py` | Telemetry only: `telemetry.jsonl`, one row per recorded review (lane, found, confirmed, false positives). Gitignored because it names private repos |
+| `state/` | hooks and session-start scripts (`scripts/hooks/ui-brief-nudge.sh`, `pr-review-gate.py`, `scripts/session-mgmt/resume-inject.sh`) | Once-per-session nudge markers and verdict files: `ui-brief-nudged/`, `ui-pr-screenshot-nudged/`, `resume-inject/`, `pr-review-gate/`, `mcp-discover-verdicts.json`. Safe to delete; the nudge fires again |
 | `memory/` | auto-memory | Per-project + global memory entries (the auto-loaded MEMORY.md system) |
 | `mistakes/` | (legacy?) | Pre-atone mistake notes; verify before touching |
 | `output/` | (legacy) | Early sub-agent output dir, newest entry 2026-05-24. CLAUDE.md now redirects `.claude/output/X` to `assets/reports/X`; nothing writes here |
 | `paste-cache/` | clipboard paste hook | Cached pastes from user prompts |
-| `personas/` | `/persona` skill | Working-mode persona prompts (40 files) plus `usage/` adoption log. Activation: `features/persona-activation.md` |
+| `personas/` | `/persona` skill | Working-mode persona prompts plus `usage/` adoption log. Activation: `features/persona-activation.md` |
 | `plans/` | misc | Multi-session plan files (`/core-dump` scratchpads, etc.) |
 | `scratchpad/` | scratchpad MCP + global | **Prototype** scratch space: see `reference_scratchpad_system.md` memory entry |
 | `shell-logs/` | shell-mem MCP | Bash command history (DIY mem system) |
@@ -87,11 +89,11 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `tools/` | misc | 14 MB single subdir; check before touching |
 | `topics/` | `/cogitate` skill | Topic-themed long-form notes |
 | `widgets/` | statusline widget system | Widget definitions for the statusline (`features/tab-title.md` adjacent) |
-| `*-domain/` (memory-, sessions-, proposals-, hooks-feedback-) | i-dream engine | Per-domain event streams feeding the dream cycle. Each holds `events.jsonl` + `derived/` (session-start hinter `_tldr.txt` + `triggers.json`) + `dream/` (weekly LLM pass) + a `.i-dream-domain.toml` manifest; extracted idempotently by `extract-events.sh` (`_seen.json` cursor). `proposals-domain/events.jsonl` symlinks to `proposals.jsonl` (fed by `scripts/hooks/gcc-signal-capture.sh`, a SessionEnd hook). NOTE: `memory-domain/` (dream capture) is unrelated to `memory/` (auto-memory) despite the name |
-| `i-dream/` | i-dream engine (source: `~/Code/Claude/i-dream`) | Runtime data for the dream engine: `daily/` digests, `derived/` cross-domain union (`*.union.*`), `domains/` manifests, `injections.jsonl` (session-start context). Sibling of `subconscious/` |
+| `*-domain/` (memory-, sessions-, proposals-, hooks-feedback-) | i-dream engine | Per-domain event streams feeding the i-dream reader. Each holds `events.jsonl` + `derived/` (session-start hinter `_tldr.txt` + `triggers.json`) + `dream/` (output of the dream pass, retired 2026-09-18; nothing new is written there) + a `.i-dream-domain.toml` manifest; extracted idempotently by `extract-events.sh` (`_seen.json` cursor). `proposals-domain/events.jsonl` symlinks to `proposals.jsonl` (fed by `scripts/hooks/gcc-signal-capture.sh`, a SessionEnd hook). NOTE: `memory-domain/` (dream capture) is unrelated to `memory/` (auto-memory) despite the name |
+| `i-dream/` | i-dream engine (source: `~/Code/Claude/i-dream`) | Runtime data for the dream engine: `daily/` digests (last written 2026-09-18), `derived/` cross-domain union (`*.union.*`), `domains/` manifests, `injections.jsonl` (session-start context). Sibling of `subconscious/` |
 | `ledger/` | `scripts/ledger/` | Value-system + alerting layer: `goals.toml`, `detectors.toml`, `efficacy.toml`, `plug-events.jsonl`, `alerts.jsonl` |
-| `pinned/` | `/pin-for-dream` | Insights pinned for the next dream cycle; `consolidate.sh` decays them after ~2 cycles |
-| `scheduled/` | `gcc-schedule` / routines | Cron/launchd routine registry (`registry.json` + `history.jsonl`) that runs the domain consolidations + dream passes |
+| `pinned/` | `/pin-for-dream` | Insights pinned from a session (each also files a proposal, because no dream pass reads pins since 2026-09-18); `consolidate.sh` decays them after ~2 cycles |
+| `scheduled/` | `gcc-schedule` / routines | Cron/launchd routine registry (`registry.json` + `history.jsonl`) that runs the domain consolidations, the i-dream reader jobs and the monthly audit card |
 | `session-notes/` | `/workspace` + `/core-dump` + `/catchup` | Per-session workspace docs (`<session-id>.md`: Todos / Notes / Doc Links / Decisions); `_active.md` points to the current session |
 | `adapters/` | `features/codex-adapter.md` | Adapter code for driving a non-Claude model seat (`codex/`) from this config, and `claude-app/`, the skills-only plugin for claude.ai chat that `.claude-plugin/marketplace.json` at the root lists |
 | `archive/` | `scripts/archive-transcripts.sh` | Archived session transcripts plus `archive.log`; the cold tier for `projects/` JSONL that `/revive` no longer needs hot |
@@ -105,7 +107,7 @@ Owned by user-built systems. Names reference owning subsystem; safe to inspect.
 | `review/` | `review/freshness.sh` | The lane-freshness detector: `registry.jsonl` maps each scheduled producer to its artifact and cadence; `freshness.sh` reads only mtimes and goes RED when a lane stops producing |
 | `secrets/` | (owner) | Env files for audits and CI (`*.env`). Never read or print; gitignored |
 | `session-state/` | `scripts/session-state/session-state.sh` | Per-session key/value state (`<sid>.json`, both full-uuid and 8-char forms); reaped at startup by `startup/tasks/60-reap-session-state.sh` |
-| `skills-parked/` | mig 0048 | Skills taken off the roster but kept whole (34 as of 2026-09-05), with `INDEX.md` and `tags.tsv`. A parked skill is not invocable; citers must be swept when parking |
+| `skills-parked/` | mig 0048 | Skills taken off the roster but kept whole (32 as of 2026-11-23), with `INDEX.md` and `tags.tsv`. A parked skill is not invocable; citers must be swept when parking |
 | `tasks-pins/` | `scripts/task-table/task-table.sh --pin` (mig 0057) | Per-session pin naming which task store `/tasks` renders, moved out of `tasks/` so the harness's store directory holds only stores |
 | `auto-continue/` | `scripts/auto-continue.sh` + `hooks/auto-continue-stop.sh` | State for the auto-continue Stop hook; empty between runs |
 | `dev-servers/` | `scripts/dev-servers/ports.sh` + `svc.sh` (mig 0029, 0043) | The port ledger (`port-registry.md`, `port-events.jsonl`) and the pm2 idle-lifecycle state (`svc-state.json`, `svc-events.jsonl`), plus `logs/`. Policy: `features/dev-servers.md` |
@@ -151,101 +153,101 @@ A common decision when writing files inside `~/.claude/`:
 
 <!-- AUTO-GENERATED BELOW: regenerated by scripts/folders-index.sh; do not hand-edit -->
 
-## Census (auto-generated 2026-10-28 03:28)
+## Census (auto-generated 2026-11-23 22:30)
 
 | Folder | Size | Files | Subdirs | Last touched |
 |---|---|---|---|---|
-| `adapters/` | 712K | 0 | 1 | 2026-10-27 |
-| `affirm/` | 780K | 4 | 3 | 2026-10-06 |
+| `adapters/` | 1.7M | 0 | 2 | 2026-11-23 |
+| `affirm/` | 840K | 4 | 3 | 2026-11-12 |
 | `agents/` | 16K | 3 | 0 | 2026-08-11 |
-| `archive/` | 14G | 1 | 1 | 2026-10-27 |
-| `assets/` | 1.9G | 4 | 20 | 2026-10-28 |
-| `atone-snapshots/` | 191M | 1 | 18 | 2026-10-28 |
-| `atone/` | 358M | 15 | 7 | 2026-10-27 |
+| `archive/` | 18G | 1 | 1 | 2026-11-23 |
+| `assets/` | 2.2G | 5 | 21 | 2026-11-23 |
+| `atone-snapshots/` | 601M | 1 | 34 | 2026-11-23 |
+| `atone/` | 379M | 15 | 7 | 2026-11-23 |
 | `auto-continue/` | 0B | 0 | 0 | empty |
-| `backups/` | 33M | 9 | 5 | 2026-10-28 |
-| `cache/` | 1.2M | 3 | 3 | 2026-10-28 |
-| `checkpoints-domain/` | 652K | 4 | 2 | 2026-10-27 |
-| `checkpoints/` | 42M | 3807 | 5 | 2026-10-28 |
+| `backups/` | 34M | 9 | 5 | 2026-11-23 |
+| `cache/` | 1.5M | 3 | 3 | 2026-11-23 |
+| `checkpoints-domain/` | 1.2M | 4 | 2 | 2026-11-23 |
+| `checkpoints/` | 35M | 2091 | 5 | 2026-11-23 |
 | `chrome/` | 4.0K | 1 | 0 | 2026-10-27 |
-| `claudew/` | 164K | 12 | 3 | 2026-10-06 |
+| `claudew/` | 152K | 10 | 3 | 2026-11-20 |
 | `code/` | 44K | 2 | 2 | 2026-05-01 |
-| `compact-gate/` | 240K | 1 | 0 | 2026-10-27 |
-| `conventions/` | 340K | 31 | 1 | 2026-10-27 |
+| `compact-gate/` | 576K | 1 | 0 | 2026-11-23 |
+| `conventions/` | 368K | 33 | 1 | 2026-11-20 |
 | `cron-duties/` | 64K | 16 | 0 | 2026-09-25 |
 | `daemon/` | 8.0K | 2 | 2 | 2026-09-09 |
 | `deployq/` | 24K | 0 | 4 | 2026-08-27 |
 | `dev-mods/` | 1.9M | 0 | 4 | 2026-10-06 |
-| `dev-servers/` | 136K | 6 | 1 | 2026-10-28 |
-| `features/` | 348K | 45 | 0 | 2026-10-27 |
-| `feedback/` | 8.0K | 0 | 1 | 2026-10-01 |
+| `dev-servers/` | 176K | 9 | 3 | 2026-11-23 |
+| `features/` | 392K | 50 | 0 | 2026-11-12 |
+| `feedback/` | 0B | 0 | 0 | empty |
 | `fiber-actions/` | 24K | 0 | 2 | 2026-07-04 |
-| `file-history/` | 1.0G | 0 | 644 | 2026-10-28 |
+| `file-history/` | 1.4G | 0 | 751 | 2026-11-23 |
 | `git-hooks/` | 44K | 11 | 0 | 2026-10-27 |
-| `goals/` | 1.4M | 185 | 3 | 2026-10-27 |
+| `goals/` | 1.6M | 191 | 3 | 2026-11-23 |
 | `groups/` | 0B | 0 | 0 | empty |
 | `guidance/` | 4.0K | 1 | 0 | 2026-07-10 |
-| `handoffs/` | 16K | 3 | 1 | 2026-10-27 |
+| `handoffs/` | 20K | 3 | 1 | 2026-11-17 |
 | `hinters/` | 132K | 28 | 0 | 2026-10-27 |
-| `hooks-feedback-domain/` | 252K | 3 | 2 | 2026-10-27 |
-| `hooks/` | 8.4M | 4 | 0 | 2026-10-28 |
-| `i-dream/` | 38M | 10 | 9 | 2026-10-28 |
+| `hooks-feedback-domain/` | 272K | 3 | 2 | 2026-11-23 |
+| `hooks/` | 11M | 4 | 0 | 2026-11-23 |
+| `i-dream/` | 53M | 10 | 11 | 2026-11-23 |
 | `ide/` | 4.0K | 1 | 0 | 2026-08-31 |
 | `jobs/` | 88K | 1 | 2 | 2026-09-09 |
-| `kanban/` | 6.2M | 71 | 2 | 2026-10-27 |
-| `keepwarm/` | 7.5M | 1844 | 0 | 2026-10-28 |
+| `kanban/` | 6.2M | 71 | 2 | 2026-11-19 |
+| `keepwarm/` | 10M | 2419 | 0 | 2026-11-23 |
 | `ledger-archive/` | 528K | 1 | 6 | 2026-10-15 |
-| `ledger/` | 2.1M | 10 | 0 | 2026-10-28 |
+| `ledger/` | 2.3M | 10 | 0 | 2026-11-23 |
 | `llm-mini-state/` | 108K | 2 | 0 | 2026-05-04 |
-| `logs/` | 39M | 43 | 1 | 2026-10-28 |
-| `memory-domain/` | 212K | 5 | 2 | 2026-10-28 |
-| `memory/` | 120K | 0 | 1 | 2026-10-27 |
-| `migrations/` | 360K | 61 | 0 | 2026-10-27 |
+| `logs/` | 44M | 39 | 2 | 2026-11-23 |
+| `memory-domain/` | 212K | 5 | 2 | 2026-11-23 |
+| `memory/` | 144K | 0 | 1 | 2026-11-20 |
+| `migrations/` | 372K | 64 | 0 | 2026-11-03 |
 | `mistakes/` | 32K | 3 | 0 | 2026-05-13 |
-| `mods/` | 1.2M | 1 | 1 | 2026-10-28 |
+| `mods/` | 1.4M | 1 | 1 | 2026-11-23 |
 | `node_modules/` | 24K | 0 | 1 | 2026-10-11 |
 | `output/` | 2.3M | 0 | 13 | 2026-05-24 |
-| `paste-cache/` | 1.3M | 232 | 0 | 2026-10-27 |
-| `personas/` | 456K | 26 | 2 | 2026-10-27 |
-| `pinned/` | 616K | 4 | 3 | 2026-10-27 |
+| `paste-cache/` | 1.4M | 253 | 0 | 2026-11-20 |
+| `personas/` | 468K | 26 | 2 | 2026-11-23 |
+| `pinned/` | 640K | 4 | 3 | 2026-11-23 |
 | `plans/` | 72K | 2 | 1 | 2026-08-31 |
-| `plugins/` | 472M | 6 | 5 | 2026-10-28 |
+| `plugins/` | 137M | 6 | 6 | 2026-11-23 |
 | `policy/` | 32K | 7 | 0 | 2026-10-24 |
-| `projects/` | 15G | 1 | 189 | 2026-10-28 |
-| `proposals-domain/` | 80K | 1 | 2 | 2026-10-26 |
-| `review-lane/` | 4.0K | 1 | 0 | 2026-10-26 |
+| `projects/` | 19G | 1 | 211 | 2026-11-23 |
+| `proposals-domain/` | 80K | 1 | 2 | 2026-11-23 |
+| `review-lane/` | 4.0K | 1 | 0 | 2026-11-04 |
 | `review/` | 8.0K | 2 | 0 | 2026-08-21 |
-| `rules-provenance/` | 188K | 30 | 0 | 2026-10-27 |
-| `rules/` | 356K | 67 | 0 | 2026-10-27 |
+| `rules-provenance/` | 188K | 30 | 0 | 2026-11-04 |
+| `rules/` | 356K | 67 | 0 | 2026-11-04 |
 | `run/` | 0B | 0 | 1 | empty |
-| `scheduled/` | 652K | 19 | 26 | 2026-10-28 |
-| `scratchpad/` | 24M | 15 | 4 | 2026-10-26 |
-| `scripts/` | 97M | 102 | 72 | 2026-10-28 |
-| `seats-domain/` | 36K | 3 | 0 | 2026-10-27 |
-| `seats/` | 400K | 53 | 0 | 2026-10-28 |
+| `scheduled/` | 724K | 18 | 30 | 2026-11-23 |
+| `scratchpad/` | 24M | 15 | 4 | 2026-11-23 |
+| `scripts/` | 90M | 102 | 77 | 2026-11-23 |
+| `seats-domain/` | 132K | 3 | 0 | 2026-11-23 |
+| `seats/` | 1.6M | 215 | 0 | 2026-11-23 |
 | `secrets/` | 4.0K | 1 | 0 | 2026-08-28 |
-| `session-env/` | 11M | 0 | 2721 | 2026-10-28 |
-| `session-notes/` | 220K | 53 | 0 | 2026-10-28 |
-| `session-state/` | 84K | 21 | 0 | 2026-10-27 |
-| `sessions-domain/` | 4.4M | 5 | 3 | 2026-10-28 |
-| `sessions/` | 40K | 10 | 0 | 2026-10-28 |
-| `shell-logs/` | 70M | 209 | 0 | 2026-10-28 |
-| `shell-snapshots/` | 4.0M | 29 | 0 | 2026-10-28 |
-| `skill-usage-domain/` | 144K | 4 | 2 | 2026-10-27 |
+| `session-env/` | 288K | 0 | 72 | 2026-11-23 |
+| `session-notes/` | 276K | 67 | 0 | 2026-11-23 |
+| `session-state/` | 96K | 24 | 0 | 2026-10-31 |
+| `sessions-domain/` | 4.4M | 5 | 3 | 2026-11-23 |
+| `sessions/` | 24K | 6 | 0 | 2026-11-23 |
+| `shell-logs/` | 85M | 227 | 0 | 2026-11-23 |
+| `shell-snapshots/` | 3.7M | 27 | 0 | 2026-11-23 |
+| `skill-usage-domain/` | 192K | 4 | 2 | 2026-11-23 |
 | `skills-parked/` | 5.7M | 3 | 32 | 2026-10-27 |
-| `skills/` | 84M | 10 | 85 | 2026-10-28 |
+| `skills/` | 84M | 10 | 86 | 2026-11-23 |
 | `snippets/` | 4.0K | 3 | 0 | 2026-10-06 |
-| `state/` | 5.6M | 1 | 2 | 2026-10-28 |
-| `style/` | 88M | 550 | 2 | 2026-10-28 |
-| `subconscious/` | 382M | 8 | 10 | 2026-10-28 |
-| `tasks-pins/` | 1.1M | 269 | 0 | 2026-10-27 |
-| `tasks/` | 72M | 10043 | 559 | 2026-10-28 |
-| `teams/` | 372K | 0 | 53 | 2026-10-28 |
-| `telemetry/` | 7.2M | 20 | 0 | 2026-10-27 |
+| `state/` | 8.2M | 1 | 4 | 2026-11-23 |
+| `style/` | 91M | 657 | 2 | 2026-11-23 |
+| `subconscious/` | 342M | 8 | 10 | 2026-11-23 |
+| `tasks-pins/` | 1.4M | 369 | 0 | 2026-11-23 |
+| `tasks/` | 77M | 10554 | 713 | 2026-11-23 |
+| `teams/` | 368K | 0 | 51 | 2026-11-23 |
+| `telemetry/` | 12M | 31 | 0 | 2026-11-23 |
 | `tools/` | 14M | 0 | 1 | 2026-08-24 |
-| `topics/` | 1.3M | 128 | 0 | 2026-10-27 |
+| `topics/` | 1.4M | 144 | 0 | 2026-11-22 |
 | `transcripts/` | 20K | 1 | 0 | 2026-09-25 |
-| `usage5h/` | 48K | 556 | 0 | 2026-10-28 |
-| `warden/` | 1.2M | 15 | 3 | 2026-09-02 |
-| `widgets/` | 36M | 5 | 2 | 2026-10-28 |
-| `zrecover/` | 3.1M | 5 | 4 | 2026-10-28 |
+| `usage5h/` | 108K | 1082 | 0 | 2026-11-23 |
+| `warden/` | 1.2M | 14 | 3 | 2026-09-02 |
+| `widgets/` | 35M | 4 | 2 | 2026-11-23 |
+| `zrecover/` | 60M | 6 | 4 | 2026-11-23 |

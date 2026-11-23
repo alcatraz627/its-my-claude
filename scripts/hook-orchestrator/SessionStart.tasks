@@ -24,8 +24,8 @@ input=$(cat); cwd=$(echo "$input" | jq -r '.cwd'); shortdir=$(basename "$cwd"); 
 # [moved → session-mgmt/sessionstart-inject.sh] Dream metrics context
 # (these inject additionalContext; an async orchestrator would /dev/null them)
 
-# Subconscious daemon notification of new session
-bash /Users/alcatraz627/.claude/subconscious/hooks/session-start.sh
+# The subconscious session-start hook runs from settings.json, not here: it
+# prints the briefing, and this runner discards stdout.
 
 # Event log emission
 ~/.claude/scripts/emit-event.sh SessionStart

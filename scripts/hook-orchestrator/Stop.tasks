@@ -10,8 +10,7 @@
 # Cost alert if session has crossed threshold
 ~/.claude/scripts/cost-alert.sh
 
-# Subconscious daemon notification of session stop
-bash /Users/alcatraz627/.claude/subconscious/hooks/stop.sh
+# The subconscious stop hook runs from settings.json, not here.
 
 # diy-mem session-end shell snapshot
 ~/.claude/scripts/shell-mem.sh session-end-shell
