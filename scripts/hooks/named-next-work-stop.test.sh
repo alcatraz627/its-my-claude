@@ -42,6 +42,31 @@ tx "$T/e.jsonl" $'All three landed; suites green.'
 out=$(run "$T/e.jsonl" e1)
 [ -z "$out" ] && ok "a plain done reply passes" || bad "plain reply blocked"
 
+# The owner's waiting list sits above the agent's own section: the agent's items are not parked.
+tx "$T/g.jsonl" $'## Waiting on you\n- the budget call\n\n## Next on my side\n1. the batch\n2. the release\n'
+out=$(run "$T/g.jsonl" g1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a waiting list above the section does not park the agent's own items" || bad "waiting-on above the section let it pass"
+
+# A closing line that says what comes next and hands the go back.
+tx "$T/h.jsonl" $'Two things are open.\n\nI\'ll start item 1 next unless you\'d rather redirect.'
+out=$(run "$T/h.jsonl" h1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a closing offer that hands the go back blocks" || bad "closing offer passed"
+printf '%s' "$out" | rg -q 'hands the go back.*name the input it still lacks' && ok "the offer's reason names its shape and keeps the precheck" || bad "offer reason wrong: $out"
+
+tx "$T/i.jsonl" $'I\'ll keep the old name unless you object, and that part is done.\n\nThe suite is green.\n\nNothing is open.\n\nAll pushed.'
+out=$(run "$T/i.jsonl" i1)
+[ -z "$out" ] && ok "the same words above the last three lines pass" || bad "an early mention blocked: $out"
+
+runb() { jq -cn --arg tp "$1" --arg s "sess-$2" '{transcript_path:$tp, session_id:$s, background_tasks:[{status:"running", command:"cargo test"}]}' | bash "$HOOK" 2>/dev/null; }
+out=$(runb "$T/h.jsonl" h2)
+[ -z "$out" ] && ok "a closing offer while a job is still running passes" || bad "blocked a reply that is waiting on a running job"
+
+# MUTATION: with the order rule removed, any waiting-on label parks everything again.
+M2="$T/mut2.sh"; sed 's/\[ "\$wait_line" -gt "\$head_line" \]/true/' "$HOOK" > "$M2"; cp "$HERE/hook-common.sh" "$T/hook-common.sh" 2>/dev/null
+rm -f /tmp/claude-nextwork-sess-*
+out=$(jq -cn --arg tp "$T/g.jsonl" --arg s "sess-m2" '{transcript_path:$tp, session_id:$s}' | HOME="$T" bash "$M2" 2>/dev/null)
+[ -z "$out" ] && ok "MUTATION: dropping the order rule lets the waiting list hide the section (the assertion above is load-bearing)" || bad "order-rule mutant still blocked"
+
 touch "$T/.claude/.no-named-next-work-gate"
 rm -f /tmp/claude-nextwork-sess-*
 out=$(run "$T/a.jsonl" f1)
