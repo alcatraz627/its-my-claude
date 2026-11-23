@@ -50,14 +50,16 @@ if [ -n "$head_line" ]; then
   # "Waiting on you" section higher up lists the owner's items and says nothing
   # about the agent's own.
   wait_line=$(printf '%s\n' "$text" | rg -n -i '^\s*(#{1,6}\s*|\*\*|__)?\s*(waiting on|blocked on|blocked_on|waits on)' | tail -n 1 | cut -d: -f1)
-  [ -n "$wait_line" ] && [ "$wait_line" -gt "$head_line" ] && exit 0
-  shape="section"
+  # A parked section is fine, and the closing-line check below still runs.
+  { [ -n "$wait_line" ] && [ "$wait_line" -gt "$head_line" ]; } || shape="section"
 fi
-# The reply's last lines say what comes next and then hand the go back
+# The reply's last lines say what work comes next and then hand the go back
 # ("I'll start item 1 next unless you'd rather redirect"). The owner reads that
-# as waiting for a yes that was never needed.
-tail3=$(printf '%s\n' "$text" | rg -v '^\s*$' | tail -n 3)
-if [ -z "$shape" ] && printf '%s' "$tail3" | rg -qi "\bI(.ll| will| am going to|.m going to)\b[^.\n]{0,120}\bunless you\b"; then
+# as waiting for a yes that was never needed. It has to name work to begin:
+# "I'll keep the default unless you say otherwise" reports a choice already
+# made. A quoted line is someone else's words.
+tail3=$(printf '%s\n' "$text" | rg -v '^\s*(>.*)?$' | tail -n 3)
+if [ -z "$shape" ] && printf '%s' "$tail3" | rg -qi "\bI(.ll| will| am going to|.m going to)\s+(now\s+|then\s+|next\s+)?(start|begin|continue|proceed|pick up|move on|plan|tackle|take|do|run|merge|go ahead|work on|build|implement|write)\b[^\n]{0,160}\bunless you\b"; then
   # A reply that is waiting on a running job has not stopped working.
   hook_background_live "$input" && exit 0
   shape="offer"

@@ -57,6 +57,23 @@ tx "$T/i.jsonl" $'I\'ll keep the old name unless you object, and that part is do
 out=$(run "$T/i.jsonl" i1)
 [ -z "$out" ] && ok "the same words above the last three lines pass" || bad "an early mention blocked: $out"
 
+# A choice already made is not work waiting on a go.
+tx "$T/j.jsonl" $'Done: the timeout is now 30s.\n\nI\'ll keep the default retries unless you say otherwise.'
+out=$(run "$T/j.jsonl" j1)
+[ -z "$out" ] && ok "reporting a choice already made passes" || bad "a settled choice blocked: $out"
+
+tx "$T/k.jsonl" $'The reviewer wrote:\n\n> I\'ll merge this unless you object.\n\nI replied with the numbers.'
+out=$(run "$T/k.jsonl" k1)
+[ -z "$out" ] && ok "someone else's quoted offer passes" || bad "a quoted line blocked: $out"
+
+tx "$T/l.jsonl" $'Two files are left.\n\nI\'ll start with `foo.rs` unless you\'d rather redirect.'
+out=$(run "$T/l.jsonl" l1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a filename before 'unless' does not hide the offer" || bad "a period hid the offer"
+
+tx "$T/m.jsonl" $'## Next steps\n1. the batch\n\n**Waiting on**\n- the batch: your budget call\n\nI\'ll do the release unless you object.'
+out=$(run "$T/m.jsonl" m1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a closing offer after a parked section still blocks" || bad "a parked section hid the closing offer"
+
 runb() { jq -cn --arg tp "$1" --arg s "sess-$2" '{transcript_path:$tp, session_id:$s, background_tasks:[{status:"running", command:"cargo test"}]}' | bash "$HOOK" 2>/dev/null; }
 out=$(runb "$T/h.jsonl" h2)
 [ -z "$out" ] && ok "a closing offer while a job is still running passes" || bad "blocked a reply that is waiting on a running job"
