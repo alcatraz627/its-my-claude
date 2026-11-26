@@ -150,7 +150,9 @@ class Readability(unittest.TestCase):
     def test_headings_are_not_given_the_body_settings(self):
         heading = next(r["updateNamedStyle"] for r in gdoc.named_style_requests("t.0")
                        if r["updateNamedStyle"]["namedStyle"]["namedStyleType"] == "HEADING_2")
-        self.assertNotIn("lineSpacing", heading["namedStyle"]["paragraphStyle"])
+        ps = heading["namedStyle"]["paragraphStyle"]
+        self.assertEqual(ps.get("lineSpacing"), gdoc.G["heading_line_spacing"])
+        self.assertNotIn("avoidWidowAndOrphan", ps)
 
     def test_turning_it_off_leaves_docs_own_defaults(self):
         gdoc.READ.clear()
@@ -168,6 +170,190 @@ class Readability(unittest.TestCase):
         ps = normal_text(gdoc.named_style_requests("t.0"))["namedStyle"]["paragraphStyle"]
         self.assertEqual((ps["spaceAbove"]["magnitude"], ps["spaceBelow"]["magnitude"]), (2, 3))
         self.assertEqual(ps["lineSpacing"], 115)
+
+
+class ListNesting(unittest.TestCase):
+    def test_two_space_indent_nests(self):
+        blocks = gdoc.md_blocks("- one\n  - inner\n- two\n")
+        self.assertEqual([b[1] for b in blocks if b[0] == "li"], [1, 2, 1])
+
+    def test_four_space_indent_still_nests(self):
+        blocks = gdoc.md_blocks("- one\n    - inner\n")
+        self.assertEqual([b[1] for b in blocks if b[0] == "li"], [1, 2])
+
+    def test_code_fences_keep_their_indent(self):
+        # The opposite proof: a list-looking line inside fenced code is not touched.
+        self.assertEqual(gdoc.widen_list_indent("```\n  - x\n```"), "```\n  - x\n```")
+
+
+def cell(text):
+    return [(text, {})]
+
+
+class TableWidths(unittest.TestCase):
+    def setUp(self):
+        self._width = gdoc.G["table"]["page_width_pt"]
+        gdoc.G["table"]["page_width_pt"] = 516
+
+    def tearDown(self):
+        gdoc.G["table"]["page_width_pt"] = self._width
+
+    def test_widths_fill_the_text_column(self):
+        rows = [[cell("Goal"), cell("Status")], [cell("Ship it"), cell("Done")]]
+        self.assertAlmostEqual(sum(gdoc.column_widths(rows)), 516, delta=0.1)
+
+    def test_prose_column_gets_the_room_and_a_status_column_stays_narrow(self):
+        prose = "Writing it needs a Versable admin since 25 Nov. One more place has no caller and can be deleted"
+        rows = [[cell("Measure"), cell("State"), cell("Proof")]] + [[cell("Removed the routes that ran code"), cell("ok"), cell(prose)]] * 3
+        w = gdoc.column_widths(rows)
+        self.assertLess(w[1], 70)
+        self.assertGreater(w[2], w[0])
+
+    def test_two_long_columns_split_by_how_much_text_each_holds(self):
+        # Both columns pass the old 48-character cap, which split them evenly; the longer one must now win.
+        long, short = "x " * 49, "y " * 27
+        rows = [[cell("A"), cell("B")]] + [[cell(long), cell(short)]] * 4
+        w = gdoc.column_widths(rows)
+        self.assertGreater(w[0], w[1] * 1.3)
+
+    def test_a_short_label_column_stays_on_one_line(self):
+        rows = [[cell(""), cell("")], [cell("Time to code execution"), cell("word " * 60)]]
+        w = gdoc.column_widths(rows)
+        self.assertGreaterEqual(w[0], len("Time to code execution") * 5)
+
+    def test_every_column_keeps_its_longest_word_whole(self):
+        rows = [[cell("Header"), cell("Notes")], [cell("internationalisation"), cell("word " * 80)]]
+        w = gdoc.column_widths(rows)
+        self.assertGreaterEqual(w[0], len("internationalisation") * 5)
+
+
+class Pageless(unittest.TestCase):
+    def setUp(self):
+        self._t, self._sp, self._img = dict(gdoc.G["table"]), dict(gdoc.G["spacing"]), gdoc.PAGE_WIDTH_PT
+
+    def tearDown(self):
+        gdoc.G["table"].clear(); gdoc.G["table"].update(self._t)
+        gdoc.G["spacing"].clear(); gdoc.G["spacing"].update(self._sp)
+        gdoc.PAGE_WIDTH_PT = self._img
+
+    def test_tables_and_images_take_the_pageless_column(self):
+        gdoc.apply_pageless()
+        self.assertEqual(gdoc.G["table"]["page_width_pt"], 516)
+        self.assertEqual(gdoc.PAGE_WIDTH_PT, 516)
+
+    def test_without_pageless_tables_keep_the_page_width(self):
+        # The opposite proof: the spec's base table width is the paged one.
+        self.assertEqual(gdoc.G["table"]["page_width_pt"], 468)
+
+
+def para_style_on(reqs, start):
+    return [r["updateParagraphStyle"]["paragraphStyle"] for r in reqs
+            if "updateParagraphStyle" in r and r["updateParagraphStyle"]["range"]["startIndex"] == start]
+
+
+class Rhythm(unittest.TestCase):
+    def test_a_paragraph_after_a_list_gets_a_gap(self):
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("- one\n- two\n\nAfter.\n"), "t.0")
+        last_item = len("one\n") + 1
+        gap = {"spaceBelow": {"magnitude": gdoc.READ["space_below"], "unit": "PT"}}
+        self.assertIn(gap, para_style_on(reqs, last_item))
+
+    def test_a_heading_after_a_list_gets_no_extra_gap(self):
+        # The opposite proof: a heading brings its own space above.
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("- one\n- two\n\n## Next\n"), "t.0")
+        gap = {"spaceBelow": {"magnitude": gdoc.READ["space_below"], "unit": "PT"}}
+        self.assertNotIn(gap, para_style_on(reqs, len("one\n") + 1))
+
+    def test_the_opening_heading_has_no_space_above(self):
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("## Opening\n\nText.\n\n## Later\n"), "t.0")
+        heads = [r["updateParagraphStyle"]["paragraphStyle"] for r in reqs
+                 if "updateParagraphStyle" in r and r["updateParagraphStyle"]["paragraphStyle"].get("namedStyleType") == "HEADING_2"]
+        self.assertEqual(heads[0].get("spaceAbove"), {"magnitude": 0, "unit": "PT"})
+        self.assertNotIn("spaceAbove", heads[1])
+
+    def test_appended_blocks_keep_their_first_heading_space(self):
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("# Samples\n"), "t.0", opening=False)
+        self.assertEqual(reqs[1]["updateParagraphStyle"]["paragraphStyle"]["namedStyleType"], "HEADING_1")
+        self.assertNotIn("spaceAbove", reqs[1]["updateParagraphStyle"]["paragraphStyle"])
+
+
+def styles_in_order(reqs):
+    return [r["updateParagraphStyle"]["paragraphStyle"].get("namedStyleType") for r in reqs
+            if "updateParagraphStyle" in r and "namedStyleType" in r["updateParagraphStyle"]["paragraphStyle"]]
+
+
+class TitleBlock(unittest.TestCase):
+    def test_opening_h1_is_the_title_and_the_next_line_the_subtitle(self):
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("# Ops review\n\nWeekly review | Nov 27, 2026 | A. C.\n\nBody.\n\n# Part two\n"), "t.0")
+        self.assertEqual(styles_in_order(reqs), ["TITLE", "SUBTITLE", "NORMAL_TEXT", "HEADING_1"])
+
+    def test_a_heading_after_the_title_gets_no_subtitle(self):
+        # The opposite proof: only a paragraph directly after the title becomes the subtitle.
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("# Ops review\n\n## Notes\n\nBody.\n"), "t.0")
+        self.assertEqual(styles_in_order(reqs), ["TITLE", "HEADING_2", "NORMAL_TEXT"])
+
+    def test_ordinary_intro_prose_after_the_title_stays_body_text(self):
+        # An existing README cover opens with prose; it must not shrink into the Subtitle face.
+        reqs, _ = gdoc.tab_requests(gdoc.md_blocks("# Project guide\n\nThis guide explains the setup.\n\n## Install\n"), "t.0")
+        self.assertEqual(styles_in_order(reqs), ["TITLE", "NORMAL_TEXT", "HEADING_2"])
+
+    def test_title_and_headings_get_tight_leading_and_title_aligns_left(self):
+        named = {r["updateNamedStyle"]["namedStyle"]["namedStyleType"]: r["updateNamedStyle"]["namedStyle"]["paragraphStyle"]
+                 for r in gdoc.named_style_requests("t.0")}
+        self.assertEqual(named["TITLE"]["alignment"], "START")
+        self.assertEqual(named["SUBTITLE"]["alignment"], "START")
+        self.assertEqual(named["HEADING_2"]["lineSpacing"], gdoc.G["heading_line_spacing"])
+        self.assertNotEqual(named["NORMAL_TEXT"].get("lineSpacing"), gdoc.G["heading_line_spacing"])
+
+
+class CodeColours(unittest.TestCase):
+    def colours(self, src, lang="python"):
+        reqs = gdoc.highlight_requests(src, lang, 1, "t.0")
+        return {src[r["updateTextStyle"]["range"]["startIndex"] - 1:r["updateTextStyle"]["range"]["endIndex"] - 1]:
+                r["updateTextStyle"]["textStyle"] for r in reqs}
+
+    def test_keywords_strings_and_comments_take_the_spec_palette(self):
+        c = self.colours('def f():\n    return "x"  # note\n')
+        self.assertEqual(c["def"]["foregroundColor"], gdoc.rgb(gdoc.G["code"]["colors"]["Keyword"]))
+        self.assertEqual(c['"x"']["foregroundColor"], gdoc.rgb(gdoc.G["code"]["colors"]["Literal.String"]))
+        self.assertTrue(c["# note"]["italic"])
+
+    def test_the_most_specific_token_type_wins(self):
+        c = self.colours("def f():\n    return None\n")
+        self.assertEqual(c["None"]["foregroundColor"], gdoc.rgb(gdoc.G["code"]["colors"]["Keyword.Constant"]))
+
+
+class ContentChecks(unittest.TestCase):
+    GOOD = "# Ops review\n\nWeekly review | Nov 27, 2026 | A. C.\n\n## Notes\n\n- one\n- two\n\n## Part\n\nText.\n"
+
+    def test_a_house_style_doc_passes(self):
+        self.assertEqual(gdoc.content_checks(gdoc.md_blocks(self.GOOD)), [])
+
+    def test_each_rule_is_named_when_broken(self):
+        bad = ("# A title that runs far past five words\n\nno subtitle here\n\n## Summary\n\n- a\n\n"
+               "## Notes\n\n- a\n- b\n- c\n- d\n\n## Open questions\n\n- x\n")
+        notes = " ".join(gdoc.content_checks(gdoc.md_blocks(bad)))
+        for phrase in ("5 or fewer", "<topic>", '"## Notes"', "skip"):
+            self.assertIn(phrase, notes)
+
+    def test_notes_with_more_than_three_points_or_prose_is_flagged(self):
+        notes = gdoc.content_checks(gdoc.md_blocks(self.GOOD.replace("- two\n", "- two\n- three\n- four\n\nProse.\n")))
+        self.assertTrue(any("3" in n for n in notes) and any("only a bullet list" in n for n in notes))
+
+    def test_doc_name_fixes_the_date_once(self):
+        cfg = {"title": "Ops review"}
+        name = gdoc.doc_name(cfg)
+        self.assertRegex(name, r"^Ops review \| [A-Z][a-z]{2} \d{1,2}, \d{4} \| .+$")
+        cfg["date"] = "Jul 14, 2026"
+        self.assertTrue(gdoc.doc_name(cfg).startswith("Ops review | Jul 14, 2026 | "))
+
+
+class MermaidTheme(unittest.TestCase):
+    def test_spec_colours_reach_mermaid_with_a_hash(self):
+        conf = gdoc.mermaid_config()
+        self.assertEqual(conf["theme"], "base")
+        self.assertTrue(conf["themeVariables"]["primaryColor"].startswith("#"))
+        self.assertFalse(conf["themeVariables"]["fontFamily"].startswith("#"))
 
 
 if __name__ == "__main__":

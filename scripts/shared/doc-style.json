@@ -172,128 +172,183 @@
  },
  "gdoc": {
   "family": "blue",
+  "_look": "Owner pick 2026-11-27 from the canary Doc: variant 1 (Inter, JetBrains Mono, neutral zinc greys) with Comfortaa for the title, subtitle and callout label, and Open Sans for tables and callout text.",
+  "author": "Aakarsh Chopra",
   "fonts": {
-   "title": "Newsreader",
-   "heading": "IBM Plex Sans",
-   "body": "IBM Plex Sans",
-   "mono": "IBM Plex Mono"
+   "title": "Comfortaa",
+   "heading": "Inter",
+   "body": "Inter",
+   "mono": "JetBrains Mono"
   },
   "sizes": {
-   "title": 26,
-   "subtitle": 15,
-   "h1": 22,
-   "h2": 17,
+   "title": 28,
+   "subtitle": 12,
+   "h1": 20,
+   "h2": 16,
    "h3": 12,
-   "h4": 12,
-   "h5": 11,
-   "h6": 11,
-   "body": 11,
-   "table": 10,
+   "h4": 11,
+   "h5": 10.5,
+   "h6": 10.5,
+   "body": 10.5,
+   "table": 9.5,
    "code": 9
   },
   "heading_colors": {
-   "h3": "@gray.black",
-   "h4": "@gray.dark4",
-   "h5": "@gray.dark3",
-   "h6": "@gray.dark3"
+   "title": "18181B",
+   "subtitle": "71717A",
+   "h1": "18181B",
+   "h2": "18181B",
+   "h3": "3F3F46",
+   "h4": "3F3F46",
+   "h5": "71717A",
+   "h6": "71717A",
+   "body": "27272A"
   },
   "heading_weights": {
-   "title": 500,
-   "h1": 600,
+   "title": 700,
+   "h1": 700,
    "h2": 600,
    "h3": 600,
    "h4": 600,
-   "h5": 400,
-   "h6": 400
+   "h5": 500,
+   "h6": 500
   },
+  "heading_line_spacing": 108,
   "spacing": {
    "h1": [
-    20,
-    6
+    28,
+    8
    ],
    "h2": [
-    32,
-    8
+    24,
+    6
    ],
    "h3": [
     14,
     4
    ],
    "h4": [
-    14,
+    12,
     4
    ],
    "h5": [
-    12,
-    4
+    10,
+    2
    ],
    "h6": [
-    12,
-    4
+    10,
+    2
    ],
    "title": [
     0,
-    3
+    4
    ],
    "subtitle": [
     0,
-    16
+    18
    ]
+  },
+  "readability": {
+   "line_spacing": 145,
+   "space_below": 8
   },
   "palette": {
    "accent": "@light1",
-   "ink": "@gray.black",
-   "muted": "@gray.dark3",
-   "code_bg": "F3F4F6",
+   "ink": "18181B",
+   "muted": "71717A",
+   "code_bg": "F6F8FA",
    "link": "1155CC"
   },
   "table": {
-   "_": "Filled header whose dashed border is the header colour; dashed body grid two tones lighter; body text the darkest tone; first column optionally in the lightest tone. Columns sized to content.",
-   "header_fill": "F3F4F6",
-   "header_border": "E5E7EB",
-   "header_text": "@gray.dark4",
-   "header_font": "IBM Plex Sans",
-   "border": "E5E7EB",
+   "_": "Light grey header, thin zinc grid, Open Sans. Columns sized to content.",
+   "header_fill": "F4F4F5",
+   "header_border": "F4F4F5",
+   "header_text": "3F3F46",
+   "header_font": "Open Sans",
+   "border": "E4E4E7",
    "dash": "SOLID",
    "border_pt": 1,
-   "text": "@gray.black",
-   "body_font": "IBM Plex Sans",
-   "font_pt": 10,
-   "first_col_fill": "@light3",
+   "text": "27272A",
+   "body_font": "Open Sans",
+   "font_pt": 9.5,
+   "char_em": 0.53,
+   "first_col_fill": "FAFAFA",
    "first_col": false,
-   "padding_pt": 4,
+   "padding_pt": 5,
    "line_spacing": 100,
    "page_width_pt": 468,
-   "min_col_weight": 6,
-   "max_col_weight": 48,
    "pin_header": true,
-   "bold_first_col": true,
-   "header_bold": true
+   "bold_first_col": false,
+   "header_bold": true,
+   "tight_gaps": true
   },
   "table_light": {
-   "_": "The light variant for lighter concerns: no fill and no vertical lines, a dashed rule in the header colour under the header, dashed separators two tones lighter between rows. Fonts and colours from the main table.",
-   "header_text": "@dark1",
-   "rule": "@light1",
-   "rule_pt": 1.5,
-   "separator": "@light3",
+   "_": "The light variant for lighter concerns: no fill and no vertical lines, a rule under the header and thin separators between rows. Fonts from the main table.",
+   "header_text": "71717A",
+   "rule": "D4D4D8",
+   "rule_pt": 1,
+   "separator": "E4E4E7",
    "separator_pt": 1,
-   "dash": "DASH"
+   "dash": "SOLID"
   },
   "code": {
-   "_": "One box per block with room on all four sides and a bar on the left. Diagrams share the box without the bar; their strokes and arrowheads are drawn lighter so the labels carry the weight.",
-   "weight": 200,
+   "_": "One box per block with room on all four sides and a thin bar on the left, coloured with GitHub's light palette (colors, by pygments token type; the most specific type listed wins). Diagrams share the box without the bar; their strokes are drawn lighter so the labels carry the weight.",
+   "weight": 400,
    "pad_pt": 8,
    "space_pt": 8,
    "line_spacing": 100,
-   "bar": "@light1",
-   "bar_pt": 3,
+   "bar": "D0D7DE",
+   "bar_pt": 2,
    "highlight": "tango",
+   "colors": {
+    "Comment": "6E7781",
+    "Keyword": "CF222E",
+    "Keyword.Constant": "0550AE",
+    "Name.Builtin": "0550AE",
+    "Name.Function": "8250DF",
+    "Name.Class": "953800",
+    "Name.Decorator": "8250DF",
+    "Name.Tag": "116329",
+    "Name.Attribute": "0550AE",
+    "Name.Variable": "953800",
+    "Literal.String": "0A3069",
+    "Literal.String.Doc": "6E7781",
+    "Literal.Number": "0550AE",
+    "Literal": "0550AE",
+    "Operator.Word": "CF222E",
+    "Generic.Inserted": "116329",
+    "Generic.Deleted": "82071E"
+   },
+   "italic_comments": true,
    "diagram_weight": 400,
-   "stroke": "@gray.dark3",
-   "stroke_weight": 400
+   "stroke": "A1A1AA",
+   "stroke_weight": 300
+  },
+  "mermaid": {
+   "_": "Mermaid fences render as images in the same neutral look: the base theme with these variables, Inter labels.",
+   "theme": "base",
+   "themeVariables": {
+    "fontFamily": "Inter, Helvetica, Arial, sans-serif",
+    "fontSize": "15px",
+    "primaryColor": "F4F4F5",
+    "primaryBorderColor": "A1A1AA",
+    "primaryTextColor": "18181B",
+    "secondaryColor": "FAFAFA",
+    "tertiaryColor": "FFFFFF",
+    "lineColor": "71717A",
+    "textColor": "27272A",
+    "clusterBkg": "FAFAFA",
+    "clusterBorder": "E4E4E7",
+    "edgeLabelBackground": "FFFFFF",
+    "noteBkgColor": "FAFAFA",
+    "noteBorderColor": "D4D4D8",
+    "actorBkg": "F4F4F5",
+    "actorBorder": "A1A1AA",
+    "signalColor": "52525B"
+   }
   },
   "rule": {
-   "color": "@light3",
+   "color": "E4E4E7",
    "pt": 1,
    "space_pt": 8
   },
@@ -301,28 +356,28 @@
    "max_width_pt": 468
   },
   "callout": {
-   "_": "Two lines in one box: the key (glyph + LABEL, mono extra bold 8) then the text (mono 9) under it, both starting at the same indent, with air above the key and below the text.",
-   "label_font": "JetBrains Mono",
-   "label_weight": 800,
-   "label_pt": 8,
+   "_": "Two lines in one box: the key (glyph + LABEL in Comfortaa bold) then the text in Open Sans under it, both starting at the same indent, with air above the key and below the text.",
+   "label_font": "Comfortaa",
+   "label_weight": 700,
+   "label_pt": 8.5,
    "label_upper": true,
-   "body_font": "JetBrains Mono",
+   "body_font": "Open Sans",
    "body_weight": 400,
-   "body_pt": 9,
-   "body_color": "@gray.dark4",
+   "body_pt": 9.5,
+   "body_color": "27272A",
    "bar_pt": 3,
    "indent_pt": 12,
    "pad_pt": 8,
    "space_pt": 8
   },
   "quote": {
-   "_": "A keyline quote on the lightest tint, with a serif opening mark in the bar's colour at the start.",
-   "font": "Comfortaa",
-   "pt": 9,
-   "italic": true,
-   "color": "@gray.dark4",
-   "fill": "@light3",
-   "bar": "@light1",
+   "_": "A keyline quote on the faintest grey, with a light opening mark at the start.",
+   "font": "Inter",
+   "pt": 10,
+   "italic": false,
+   "color": "3F3F46",
+   "fill": "FAFAFA",
+   "bar": "D4D4D8",
    "bar_pt": 3,
    "indent_pt": 12,
    "pad_pt": 8,
@@ -330,7 +385,7 @@
    "mark": "“",
    "mark_font": "Georgia",
    "mark_pt": 22,
-   "mark_color": "@light1",
+   "mark_color": "A1A1AA",
    "mark_offset": "NONE"
   },
   "lists": {
@@ -344,6 +399,10 @@
   },
   "page": {
    "margins_pt": 72
+  },
+  "pageless": {
+   "_": "What a pageless Google Doc needs that a page does not. Docs draws pageless text in a column whose width is each reader's own View > Text width (Narrow by default), not the page minus margins, and centres every table and image at its point width. Measured 2026-11-26: the Narrow column is 516 pt whatever the page size or margins, so tables and images sized to it sit flush with the text; at Medium, Wide or Full they are centred. Only /gdoc reads this block.",
+   "text_width_pt": 516
   }
  },
  "docx": {

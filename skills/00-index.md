@@ -10,7 +10,7 @@ related:
   - rules/00-index.md
 tier: 2
 category: skills
-updated: 2026-10-26
+updated: 2026-11-26
 stale_after_days: 365
 ---
 
@@ -25,7 +25,7 @@ The **Invoke** column: `yes` = user `/name` and model auto-invoke both allowed �
 `user-only` = `disable-model-invocation: true`, the user must type it ·
 `bg` = `user-invocable: false`, background knowledge, not in the `/` menu.
 
-Regenerated 2026-10-26 14:24.
+Regenerated 2026-11-26 22:42.
 
 | Skill | Invoke | Gist |
 |-------|--------|------|
@@ -33,6 +33,7 @@ Regenerated 2026-10-26 14:24.
 | `affirm` | yes | Records an affirmed-good behavior, non-obvious approach the user explicitly approved. Sibling of /atone. Higher write bar than atone (only fires for genuinely … |
 | `arch-qa` | yes | A question about how a feature, data flow or auth path works in a codebase. Traces the code and returns a structured analysis. Not for making changes. |
 | `atone` | yes | Records a mistake, gathers context, classifies severity (S1/S2/S3), and writes a structured entry to ~/.claude/atone/events.jsonl. For S3 events, also drafts an RCA file … |
+| `away` | yes | The owner says when they expect to be back, roughly or exactly, so keep-warm holds this session for about that long or dumps it. Never stops work in progress. Use for … |
 | `backlog-triage` | yes | Review the triaged gcc improvement backlog (PROMOTE, WATCH, DROP-REVIEW from backlog-consolidate.py) and decide it on one decision page, then apply the promote and … |
 | `banner` | yes | A custom terminal banner is wanted. Prompts for title, sections and theme and renders aligned output. Not for the daily banner (use banner-fun). |
 | `banner-fun` | yes | Render a daily fun terminal banner with weather, quote, moon phase, and code riddle. Use for the daily fun banner, not dev metrics, which live in the statusline. |
@@ -62,7 +63,7 @@ Regenerated 2026-10-26 14:24.
 | `gcc-explore` | yes | Owner wants to feel the shape of the gcc ("show me the gcc", "how is it moving"). Renders shape, movement and cycle panels, then talks. Not for defects (use gcc-map). |
 | `gcc-map` | user-only | Check how instruction content loads and whether the indices match reality. Measures, runs a health battery, writes a map under assets/reports. Not for browsing (use … |
 | `gcc-proposal` | yes | Files a ~/.claude improvement proposal into the backlog via propose.sh and derives the title, category, effort, and cross-links from a rough description or from the … |
-| `gdoc` | yes | Publishes a set of markdown files as one Google Doc with one tab per file, in a named Drive folder; re-runs rewrite each tab in place so the link and tabs never change. … |
+| `gdoc` | yes | Publishes markdown files as one Google Doc, a tab per file, in a named Drive folder; re-runs rewrite the tabs in place so the link never changes. Confirms the gcloud … |
 | `generate-image` | yes | A raster image is wanted (photo, texture, concept art, cover). Runs the local imagine model, slow and offline, then looks at the result. Not for icons or vectors (use … |
 | `generate-pdf` | yes | A markdown file must become a PDF. Renders one of four styles with optional cover, TOC and landscape, beside the input. Not for Word files (use word-doc). |
 | `improve-skill` | yes | A skill misfires, feels stale, or needs checking before use. Audits it against house rules, run history, sibling skills and owner rulings, then applies approved fixes. … |
@@ -83,7 +84,7 @@ Regenerated 2026-10-26 14:24.
 | `preference-graduation` | user-only | Harvesting recurring preferences from atone, affirm, notes and checkpoints. Dedupes and files each signal to a glossary term, memory or rule after confirmation. Not for … |
 | `probe` | yes | A fix did not work or a cause is still a guess. Isolates the mechanism with a runnable probe before any fix. Not for defects whose cause is already confirmed. |
 | `pyramid-sweep` | yes | Runs a pyramid-of-intelligence corpus sweep that mines a large transcript corpus for candidate items with cheap mechanical passes, then refines through progressively … |
-| `quiz` | yes | Quizzes the owner on an agent-built artifact (spec, plan, diff, app, feature, analysis, deck, docs) in rounds of three graded questions; a wrong answer opens the part … |
+| `quiz` | yes | Makes the owner think through the hard parts of agent-built work (spec, plan, diff, app, feature, analysis, deck, docs). Optionally writes a plain explainer first, then … |
 | `readme` | yes | Scans a git repo's structure, docs, package metadata, and prior skill reports, then generates a polished README.md with GitHub-style badges, a pixel-art cover image, a … |
 | `recommend` | yes | Answers what to do next on a session, project, or plan file as a call already made, splitting what it needs from you into gates you can clear today and defaults it took … |
 | `retro-dump` | yes | A past session ended without a core-dump (crash, context ran out). Spawns a headless resume that writes a mini checkpoint, one LLM call. Not for live sessions (use … |

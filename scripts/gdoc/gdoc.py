@@ -28,8 +28,10 @@ Usage:
 Config (JSON): account, folder, title, cover (a markdown file, becomes the Cover
 tab), docs (markdown paths, one tab each). Written back: doc_id, tabs {file: tabId}.
 Optional per doc: fonts, spacing ([above, below] by heading level and "body"), and
-tight_tables (true shrinks the empty lines Google leaves around each table).
-Also optional: pageless (default true; false keeps the Doc in pages) and readability
+tight_tables (default from the spec, true: shrinks the empty lines Google leaves around
+each table; false keeps them). Also optional: locked (a reason; a publish then refuses),
+pageless (default true, which also sizes tables and images to the pageless text column;
+false keeps the Doc in pages at the page width) and readability
 (a dict of line_spacing, space_below and widow_orphan for body text, or false to leave
 Docs' own body defaults).
 """
@@ -59,6 +61,21 @@ SAMPLES_HEADING = "Blocks the document skills produce"
 # Body text defaults that make long reading easier. The spec (G["readability"]) and then the config override them.
 READABILITY_DEFAULTS = {"line_spacing": 115, "space_below": 6, "widow_orphan": True}
 READ = dict(READABILITY_DEFAULTS, **G.get("readability", {}))
+
+
+def apply_pageless():
+    """Size tables and images for the pageless text column and use the pageless heading rhythm.
+
+    Pageless Docs draw text in the reader's own Text width column (516 pt at the default,
+    Narrow), not the page less its margins, and centre tables and images at their point
+    width, so anything sized to the 468 pt page sits inset from the text. Call it before a
+    config's own spacing is merged, so the config still wins.
+    """
+    global PAGE_WIDTH_PT
+    P = G.get("pageless", {})
+    if P.get("text_width_pt"):
+        G["table"]["page_width_pt"] = PAGE_WIDTH_PT = P["text_width_pt"]
+    G["spacing"].update(P.get("spacing", {}))
 
 
 def is_stroke(ch):
@@ -138,12 +155,25 @@ def highlight_requests(text, lang, start, tab):
         lexer = get_lexer_by_name(lang, stripnl=False, ensurenl=False)
     except ClassNotFound:
         return []
-    style = get_style_by_name(G["code"]["highlight"])
+    colors = G["code"].get("colors")
+    style = None if colors else get_style_by_name(G["code"]["highlight"])
+
+    def token_style(ttype):
+        """A spec palette maps token types to colours, the most specific listed type winning."""
+        if style:
+            st = style.style_for_token(ttype); return st["color"], st["bold"], st["italic"]
+        t = ttype
+        while t is not None and str(t)[len("Token."):] not in colors and t.parent is not None:
+            t = t.parent
+        name = str(t)[len("Token."):]
+        italic = G["code"].get("italic_comments") and str(ttype).startswith("Token.Comment")
+        return colors.get(name), False, bool(italic)
+
     spans, i = [], 0
     for ttype, value in lexer.get_tokens(text):
         n = u16(value)
-        st = style.style_for_token(ttype)
-        key = (st["color"], st["bold"], st["italic"])
+        key = token_style(ttype)
+        st = {"color": key[0], "bold": key[1], "italic": key[2]}
         if value.strip() and (st["color"] or st["bold"] or st["italic"]):
             if spans and spans[-1][2] == key and spans[-1][1] == i:
                 spans[-1][1] = i + n
@@ -222,15 +252,27 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PAGE_WIDTH_PT = 468  # a Letter page less one-inch margins
 
 
+def mermaid_config():
+    """The Mermaid theme from the spec, as mermaid-cli's config file wants it (hex colours with a #)."""
+    M = G.get("mermaid") or {}
+    tv = {k: (f"#{v}" if re.fullmatch(r"[0-9A-Fa-f]{6}", str(v)) else v) for k, v in M.get("themeVariables", {}).items()}
+    return {"theme": M.get("theme", "default"), "themeVariables": tv} if M else {}
+
+
 def render_mermaid(src):
-    """Render one Mermaid diagram to a PNG at twice its size, cached by its source."""
+    """Render one Mermaid diagram to a PNG at twice its size in the spec's theme, cached by source and theme."""
     import hashlib
     MERMAID_CACHE.mkdir(parents=True, exist_ok=True)
-    key = hashlib.sha256(src.encode()).hexdigest()[:16]
+    theme = json.dumps(mermaid_config(), sort_keys=True)
+    key = hashlib.sha256((src + theme).encode()).hexdigest()[:16]
     png, mmd = MERMAID_CACHE / f"{key}.png", MERMAID_CACHE / f"{key}.mmd"
     if png.exists(): return png
     mmd.write_text(src)
     cmd = ["npx", "-y", "-p", "@mermaid-js/mermaid-cli@11.4.2", "mmdc", "-i", str(mmd), "-o", str(png), "-s", "2", "-b", "white"]
+    if theme != "{}":
+        conf = MERMAID_CACHE / f"{key}.config.json"
+        conf.write_text(theme)
+        cmd += ["-c", str(conf)]
     if pathlib.Path(CHROME).exists():
         cfg = MERMAID_CACHE / "puppeteer.json"
         cfg.write_text(json.dumps({"executablePath": CHROME, "headless": "new"}))
@@ -461,9 +503,30 @@ def md_blocks(text, base=None):
     notes = dict(re.findall(r"^\[\^([^\]]+)\]:\s*(.+)$", text, flags=re.M))
     text = re.sub(r"^\[\^[^\]]+\]:.*\n?", "", text, flags=re.M)
     text = re.sub(r"\[\^([^\]]+)\]", lambda m: obj_marker("footnote", {"text": notes.get(m.group(1), "")}) if m.group(1) in notes else m.group(0), text)
-    h = markdown.Markdown(extensions=["tables", "fenced_code", "sane_lists"]).convert(text)
+    h = markdown.Markdown(extensions=["tables", "fenced_code", "sane_lists"]).convert(widen_list_indent(text))
     p = Blocks(); p.feed(h); p._flush()
     return pad_inline_code(chips(p.blocks))
+
+
+LIST_ITEM_RE = re.compile(r"^( +)([-*+]|\d+[.)]) ")
+
+
+def widen_list_indent(text):
+    """Nest 2-space-indented list items the way GitHub does.
+
+    python-markdown only nests an item indented by 4 spaces, so the common 2-space style came
+    out as one flat list. List-item lines whose indent is not a multiple of 4 get it doubled;
+    fenced code is left alone.
+    """
+    out, fenced = [], False
+    for line in text.split("\n"):
+        if line.lstrip().startswith(("```", "~~~")):
+            fenced = not fenced
+        m = None if fenced else LIST_ITEM_RE.match(line)
+        if m and len(m.group(1)) % 4:
+            line = " " * (len(m.group(1)) * 2) + line[len(m.group(1)):]
+        out.append(line)
+    return "\n".join(out)
 
 
 def chips(blocks):
@@ -620,6 +683,11 @@ def named_style_requests(tab):
             if k not in ps: ps[k] = v; pfields.append(k)
         if key.startswith("h"):
             ps["keepWithNext"] = True; pfields.append("keepWithNext")
+        if (key.startswith("h") or key in ("title", "subtitle")) and G.get("heading_line_spacing"):
+            # Headings inherit Normal text's leading, which would spread a two-line title apart.
+            ps["lineSpacing"] = G["heading_line_spacing"]; pfields.append("lineSpacing")
+        if key in ("title", "subtitle"):
+            ps["alignment"] = "START"; pfields.append("alignment")  # Docs centres both by default
         reqs.append({"updateNamedStyle": {"tabId": tab, "namedStyle": {"namedStyleType": name, "textStyle": ts, "paragraphStyle": ps},
                                           "fields": ",".join(["namedStyleType"] + ["textStyle." + x for x in fields] + ["paragraphStyle." + x for x in pfields])}})
     one("NORMAL_TEXT", "body", f["body"], readability_style()); one("TITLE", "title", f["title"]); one("SUBTITLE", "subtitle", f["title"])
@@ -627,8 +695,11 @@ def named_style_requests(tab):
     return reqs
 
 
-def tab_requests(blocks, tab):
-    """Text pass: everything but tables, appended in order; a table leaves a marker paragraph."""
+def tab_requests(blocks, tab, opening=True):
+    """Text pass: everything but tables, appended in order; a table leaves a marker paragraph.
+
+    `opening` False means the blocks are appended after existing text, so the first heading keeps its space above.
+    """
     reqs, cursor, markers = [], 1, []
     def para(text, pstyle):
         nonlocal cursor
@@ -639,26 +710,43 @@ def tab_requests(blocks, tab):
                                               "paragraphStyle": pstyle, "fields": ",".join(pstyle)}})
         return start
     # Google reads leading tabs as nesting only when one bullets request covers the whole list.
-    run = None  # [start, tabs, preset] of the list being written
-    def end_list():
+    run = None  # [start, tabs, preset, last item's start] of the list being written
+    def end_list(next_kind=None):
         nonlocal cursor, run
         if run:
+            if next_kind == "p":
+                # List items carry no gap of their own, so a paragraph after a list would sit on its last line.
+                reqs.append({"updateParagraphStyle": {"range": {"startIndex": run[3], "endIndex": cursor, "tabId": tab},
+                                                      "paragraphStyle": {"spaceBelow": pt(body_gap)}, "fields": "spaceBelow"}})
             reqs.append({"createParagraphBullets": {"range": {"startIndex": run[0], "endIndex": cursor, "tabId": tab}, "bulletPreset": run[2]}})
             cursor -= run[1]  # the request consumes the leading tabs it used for nesting
             run = None
+    body_gap = G["spacing"]["body"][1] if "body" in G["spacing"] else READ.get("space_below", 6)
     boxed, prev = ("code", "diagram", "callout", "quote"), None
     for b in blocks:
         kind = b[0]
         if kind != "li":
-            end_list()
+            end_list(kind)
         if kind in boxed and prev in boxed:
             # Google fuses adjacent paragraphs whose borders match; a small empty line keeps two boxes apart.
             s = para("", {"namedStyleType": "NORMAL_TEXT", "spaceAbove": pt(0), "spaceBelow": pt(0), "lineSpacing": 100})
             reqs.append(text_style(s, s + 1, tab, size=4))
-        prev = kind
-        if kind == "h":
-            s = para(runs_text(b[2]), {"namedStyleType": f"HEADING_{min(b[1], 6)}"})
+        first, after_title, prev = prev is None, prev == "title", kind
+        if kind == "h" and first and opening and b[1] == 1:
+            # The tab's opening H1 is the document title, and a paragraph straight after it the subtitle.
+            s = para(runs_text(b[2]), {"namedStyleType": "TITLE"})
             reqs += style_requests(b[2], s, tab)
+            prev = "title"
+        elif kind == "h":
+            hs = {"namedStyleType": f"HEADING_{min(b[1], 6)}"}
+            if first and opening:  # the tab's opening heading needs no room above it, whatever its level's spacing
+                hs["spaceAbove"] = pt(0)
+            s = para(runs_text(b[2]), hs)
+            reqs += style_requests(b[2], s, tab)
+        elif kind == "p" and after_title and " | " in runs_text(b[1]):
+            # Only a "<topic> | <date> | <author>" line is a subtitle; ordinary intro prose stays body text.
+            s = para(runs_text(b[1]), {"namedStyleType": "SUBTITLE"})
+            reqs += style_requests(b[1], s, tab)
         elif kind == "p":
             s = para(runs_text(b[1]), {"namedStyleType": "NORMAL_TEXT"})
             reqs += style_requests(b[1], s, tab)
@@ -673,8 +761,9 @@ def tab_requests(blocks, tab):
                                                      "spaceAbove": pt(L["space_above"]), "spaceBelow": pt(L["space_below"])})
             reqs += style_requests(runs, s + lead, tab)
             if run is None:
-                run = [s, 0, "BULLET_CHECKBOX" if check else "NUMBERED_DECIMAL_ALPHA_ROMAN" if ordered else "BULLET_DISC_CIRCLE_SQUARE"]
+                run = [s, 0, "BULLET_CHECKBOX" if check else "NUMBERED_DECIMAL_ALPHA_ROMAN" if ordered else "BULLET_DISC_CIRCLE_SQUARE", s]
             run[1] += lead
+            run[3] = s
         elif kind in ("code", "diagram"):
             C, bg = G["code"], G["palette"]["code_bg"]
             text = b[1].replace("\n", SOFT_BREAK)
@@ -746,34 +835,45 @@ def table_insert_requests(markers_found, tables, tab):
 
 
 def column_widths(rows):
-    """Proportional to the longest cell in each column, clamped so a short column stays narrow."""
+    """Column widths that fill the text column, giving room to the columns that hold the most text.
+
+    Works the way a browser lays out an auto-width table: each column has a least width (its
+    longest word unbroken) and a natural width (its longest line on one line). When every
+    column fits at its natural width, the spare room is shared in proportion to it; otherwise
+    each column gets its least width plus a share of the rest in proportion to how much it
+    would still wrap. A short column (a status, a date) stays narrow and a prose column gets
+    the width, instead of every long column splitting the page evenly.
+    """
     T = G["table"]
+    page, pad, floor = T["page_width_pt"], 2 * T["padding_pt"] + 6, 24
     cols = max(len(r) for r in rows)
-    weights, words = [], []
+    least, natural = [], []
     for c in range(cols):
-        texts = [runs_text(r[c]) for r in rows if c < len(r)]
-        longest = max((len(t) for t in texts), default=0)
-        weights.append(min(max(longest, T["min_col_weight"]), T["max_col_weight"]))
-        body_word = max((len(w) for t in texts[1:] for w in t.split()), default=0)
-        head_word = max((len(w) for w in texts[0].split()), default=0) if texts else 0
-        words.append(max(body_word * 5.8, head_word * 6.6))  # Comfortaa headers set wider than the body
-    total = sum(weights) or 1
-    widths = [T["page_width_pt"] * w / total for w in weights]
-    # Every column gets its longest word unbroken, taken from the widest columns so the table still fits.
-    need = [min(n + 2 * T["padding_pt"] + 6, T["page_width_pt"] / 2) for n in words]
-    page, floor = T["page_width_pt"], 24
-    if sum(need) > page * 0.8:
-        # Not every word fits with room for text: cap the longest-word columns so the short ones stay whole.
-        lo, hi = 0.0, max(need)
-        for _ in range(40):
-            cap = (lo + hi) / 2
-            lo, hi = (cap, hi) if sum(min(n, cap) for n in need) < page * 0.8 else (lo, cap)
-        need = [min(n, lo) for n in need]
-    short = sum(max(0, n - w) for n, w in zip(need, widths))
-    if short:
-        spare = sum(max(0, w - n) for n, w in zip(need, widths)) or 1
-        widths = [n if n > w else w - (w - n) * short / spare for n, w in zip(need, widths)]
-    widths = [max(w, floor) for w in widths]
+        lo = hi = 0.0
+        for i, r in enumerate(rows):
+            if c >= len(r): continue
+            # Plex Sans averages 0.46 em a character (measured on a Doc); 0.5 keeps a margin, the header a little more.
+            # A monospaced table font sets char_em to about 0.62.
+            em = T.get("char_em", 0.5)
+            per_char = T["font_pt"] * (em * 1.12 if i == 0 else em)
+            for line in runs_text(r[c]).split("\n"):
+                hi = max(hi, len(line.strip()) * per_char)
+                lo = max(lo, max((len(w) for w in line.split()), default=0) * per_char)
+        # A long unbroken token (a URL, a path) may wrap rather than take more than half the table.
+        least.append(max(min(lo + pad, page / 2), floor)); natural.append(max(hi + pad, floor))
+    if sum(least) >= page:
+        widths = least
+    elif sum(natural) <= page:
+        widths = [n * page / sum(natural) for n in natural]
+    else:
+        # A label or status column that fits on one line in under 30% of the table is not wrapped.
+        whole = [n <= page * 0.3 for n in natural]
+        if sum(n for n, w in zip(natural, whole) if w) + sum(m for m, w in zip(least, whole) if not w) > page or all(whole):
+            whole = [False] * cols
+        low = [n if w else m for n, m, w in zip(natural, least, whole)]
+        wrap = [0 if w else n - m for n, m, w in zip(natural, least, whole)]
+        spare = page - sum(low)
+        widths = [m + spare * w / (sum(wrap) or 1) for m, w in zip(low, wrap)]
     return [round(w * page / sum(widths), 2) for w in widths]
 
 
@@ -896,7 +996,7 @@ def write_tab(tok, doc_id, tid, blocks, clear=True):
     end = body["content"][-1]["endIndex"]
     if clear and end > 2:
         batch(tok, doc_id, [{"deleteContentRange": {"range": {"startIndex": 1, "endIndex": end - 1, "tabId": tid}}}])
-    reqs, tables = tab_requests(blocks, tid)
+    reqs, tables = tab_requests(blocks, tid, opening=clear)
     if not clear:
         shift = end - 2  # append before the tab's final newline, which the API keeps
         for r in reqs:
@@ -1050,6 +1150,51 @@ def archive(tok, doc_id, cfg, confirm):
     return 0
 
 
+SKIP_HEADINGS = re.compile(r"^(\d+\.\s*)?(open questions?|references|sources|further reading|appendix: links)$", re.I)
+SUBTITLE_RE = re.compile(r"^[^|]{1,40} \| [A-Z][a-z]{2} \d{1,2}, \d{4} \| .+$")
+
+
+def content_checks(blocks):
+    """House-style notes on one tab's markdown: the title block, the Notes section and sections nobody reads.
+
+    Advisory only: each note names what to change, and the publish still runs.
+    """
+    notes = []
+    if not blocks or blocks[0][0] != "h" or blocks[0][1] != 1:
+        return ["the tab does not open with a # Title line"]
+    title = runs_text(blocks[0][2])
+    if len(title.split()) > 5:
+        notes.append(f"title has {len(title.split())} words; keep it to one phrase of 5 or fewer")
+    sub = runs_text(blocks[1][1]) if len(blocks) > 1 and blocks[1][0] == "p" else ""
+    if not SUBTITLE_RE.match(sub):
+        notes.append('the line after the title should read "<topic> | <Mon D, YYYY> | <author>"')
+    h2 = [i for i, b in enumerate(blocks) if b[0] == "h" and b[1] == 2]
+    if not h2 or runs_text(blocks[h2[0]][2]).strip().lower() != "notes":
+        notes.append('the first section should be "## Notes"')
+    else:
+        i, items, other = h2[0] + 1, 0, False
+        while i < len(blocks) and blocks[i][0] != "h":
+            if blocks[i][0] == "li":
+                items += blocks[i][1] == 1
+            else:
+                other = True
+            i += 1
+        if other: notes.append("Notes holds only a bullet list")
+        if items > 3: notes.append(f"Notes has {items} points; keep it to 3")
+    for b in blocks:
+        if b[0] == "h" and SKIP_HEADINGS.match(runs_text(b[2]).strip()):
+            notes.append(f'"{runs_text(b[2]).strip()}" is a section readers skip; fold what matters into the part it belongs to')
+    return notes
+
+
+def doc_name(cfg):
+    """The Drive file name: "<Title> | <Mon D, YYYY> | <author>", the date fixed at creation."""
+    import datetime
+    cfg.setdefault("date", datetime.date.today().strftime("%b %-d, %Y"))
+    author = cfg.get("author") or G.get("author")
+    return " | ".join(x for x in (cfg["title"], cfg["date"], author) if x)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("config"); ap.add_argument("--confirm", action="store_true")
@@ -1066,6 +1211,8 @@ def main():
                 if key in G:
                     G[key].update({"header_font": cfg["fonts"]["body"], "body_font": cfg["fonts"]["body"]})
         print(f"fonts    {G['fonts']}")
+    if cfg.get("pageless", True):
+        apply_pageless()
     # A doc may also ask for its own rhythm: [space above, space below] per heading level and "body".
     if cfg.get("spacing"):
         G["spacing"].update(cfg["spacing"])
@@ -1093,6 +1240,8 @@ def main():
         parsed.append((p.name, m.group(1).strip() if m else p.stem, md_blocks(text, p.parent)))
         kinds = [b[0] for b in parsed[-1][2]]
         print(f"  {p.name:28} {len(kinds):4} blocks  h {kinds.count('h')}  p {kinds.count('p')}  li {kinds.count('li')}  table {kinds.count('table')}  code {kinds.count('code')}  diagram {kinds.count('diagram')}  mermaid {kinds.count('mermaid')}  drawio {kinds.count('drawio')}  callout {kinds.count('callout')}")
+        for w in content_checks(parsed[-1][2]):
+            print(f"    check  {w}")
     if a.dry_run: return 0
 
     tok = sh("gcloud", "auth", "print-access-token")
@@ -1108,7 +1257,7 @@ def main():
 
     doc_id = cfg.get("doc_id")
     if not doc_id:
-        meta = {"name": cfg["title"], "mimeType": "application/vnd.google-apps.document", "parents": [cfg["folder"]]}
+        meta = {"name": doc_name(cfg), "mimeType": "application/vnd.google-apps.document", "parents": [cfg["folder"]]}
         doc_id = gapi(tok, "https://www.googleapis.com/drive/v3/files?supportsAllDrives=true", "POST", meta)["id"]
         cfg["doc_id"] = doc_id; cfg_path.write_text(json.dumps(cfg, indent=2) + "\n")
         print(f"created  {doc_id}")
@@ -1161,7 +1310,7 @@ def main():
         for name, tid, blocks in plan:
             blocks = diagrams_to_images(tok, cfg["folder"], blocks, uploaded)
             n, t = write_tab(tok, doc_id, tid, relink(blocks, link_map))
-            if cfg.get("tight_tables"):
+            if cfg.get("tight_tables", G["table"].get("tight_gaps", True)):
                 tighten_table_gaps(tok, doc_id, tid)
             print(f"  wrote   {name:28} {n:5} requests, {t} tables")
     finally:
