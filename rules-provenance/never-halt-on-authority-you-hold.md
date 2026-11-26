@@ -61,3 +61,7 @@ Since 2026-09-01 every always-loaded rule that directs an owner-gated halt carri
 
 You are about to end a turn with the next work named and undone, or to ask for a go
 that a goal, a plan, or an earlier message already gave.
+
+## 2026-11-26: reversible in-lane steps named (agent-behavior audit, ruling D2)
+
+The owner took option a on the audit rulings page: four step classes are always the agent call, reported after (a commit on a feature branch, deleting its own scratch resources, releasing its own bot once suites pass, its own recommended reversible option while the owner is away). Evidence: 41 of 957 owner messages answered a question the agent could have settled; `a0daccbc L1734` asked whether to stop runaway processes while recommending yes, and the owner replied that the agent had the authority. Report: `~/.claude/assets/reports/20261126-agent-behavior-audit/REPORT.md` (F2).

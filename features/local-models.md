@@ -59,7 +59,7 @@ menu with examples.
 | `lib/findings-gate.py` | the $0 review pre-gate's trust layer | `review --findings --json -m small \| … \| findings-gate.py --root <repo>` drops any finding whose file:line does not exist. **Fail-CLOSED** (absolute paths and `..` escapes are rejected). Survivors are OPINIONS to triage, never verdicts |
 | `lib/e8-dom.py` | exact CSS on a live web surface | run `lib/e8-extract.js` in any browser driver (Playwright/CDP MCP) and feed both captures in. The judge reads exact hexes and padding instead of estimating from pixels |
 | `warm on\|off [tier] [ttl]` | residency: forever-pin (small) or bounded lease (big tiers) | leases self-heal; `warm off all` sweeps; agents don't toggle unasked, but fleet and opencode lease automatically |
-| `lm` / `status` / `doctor` / `timeline` | front door, health, merged history | `scripts/verify.sh` = the ~30-check smoke battery; run after any change |
+| `lm` / `status` / `doctor` / `timeline` | front door, health, merged history | `~/Code/local-models/scripts/verify.sh` = the ~30-check smoke battery; run after any change |
 
 ## The imitation-fidelity stack (2026-07-13): reach for this when B is a REBUILD of A
 
@@ -80,7 +80,7 @@ composition moves. A live round fixed 3 of 5 divergences while grid-delta *rose*
 `lib/vis-ledger.py` states progress in-band so you cannot misread it.
 
 **Imagegen convergence:** `imagine` (schnell, ~46s) → `see diff --no-read` → judge at nudged
-moments → `imagine refine N "<the verdict's fix_hints>"` (**seed-locked**; a fresh roll
+moments → `lm imagine refine N "<the verdict's fix_hints>"` (**seed-locked**; a fresh roll
 makes every divergence read as new and destroys the ledger's meaning) → repeat. Proven live:
 one refine fixed 3 of 5 divergences. Design: `~/Code/local-models/docs/10-visual-compare-design.md` §11.
 
@@ -88,7 +88,7 @@ one refine fixed 3 of 5 divergences. Design: `~/Code/local-models/docs/10-visual
 
 - **Histories are the API:** `logs/{q,see,fleet,gem}-history.jsonl` + `outputs/imagine-history.jsonl`
   record every run (successes AND failures), and `lm timeline` merges them. A weekly self-audit mines
-  the failures (`scripts/self-audit.sh`, Sun 11:00).
+  the failures (`~/Code/local-models/scripts/self-audit.sh`, Sun 11:00).
 - **The UI-reading trio** (pick per case): the **AX tree** (`ax` / `ui-verify --app`) for running native
   apps is exact and semantic. **`see --ui`** works on any pixels and is structured but good-but-verify.
   **`see --ocr`** is the exactness lane for verbatim text. gcc consumers already wired:

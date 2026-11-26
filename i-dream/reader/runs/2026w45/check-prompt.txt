@@ -1,0 +1,169 @@
+These problems were named from evidence alone, without reading the checks they credit. Below them is the source header of each credited check.
+
+## The problems as named
+```json
+[
+  {
+    "cluster": "c-b86b2809",
+    "kind": "structural-need",
+    "title": "Sent you a list of action requests with no reason attached to any of them",
+    "why": "atone:mist-20261028-184946-19 records that owner gates were handed over without the why, history, or plain steps; no registered check covers this.",
+    "evidence_ids": [
+      "atone:mist-20261028-184946-19",
+      "checkpoints:ckpt-32ea1e0ebcf2f9c1",
+      "checkpoints:ckpt-1dbdeb02b3d5ec8c",
+      "signals:74b1491f-8f20-4f36-b438-ba91cae91d2c-1793191137"
+    ],
+    "proposal": {
+      "target": "owner-ask-content-stop.py",
+      "change": "Exit 1 when a proposed batch of owner asks contains any item with no rationale clause, blocking until a reason is attached."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261028-184946-19",
+        "what": "Asked you to delete a VM, approve a weekly live test, rule on a network policy, and rotate keys — a batch of gate requests — without explaining why each was needed, what had led to it, or what the plain steps were."
+      }
+    ],
+    "why_repeats": "Nothing checks whether a batch of asks directed at you includes a rationale before it is sent; bare imperatives reach you with no context attached.",
+    "fix": "Add a pre-send check that requires each ask directed at you to include a one-sentence reason; a batch containing a bare imperative with no rationale should be held until context is added.",
+    "guard": {
+      "hook_id": null,
+      "plain": "Nothing currently checks that asks sent to you include context before they go out",
+      "verdict": "no",
+      "gap": "No registered check covers whether owner-directed action requests include a reason or history"
+    }
+  },
+  {
+    "cluster": "c-1f725c61",
+    "kind": "repeat",
+    "title": "Asked you for something already written down in your own notes",
+    "why": "Three atone entries (mist-20261102-142233-82, mist-20261023-193439-69, mist-20261008-145106-69) each record the same mistake across independent projects while the registered check shows zero fires in the same period.",
+    "evidence_ids": [
+      "atone:mist-20261102-142233-82",
+      "atone:mist-20261023-193439-69",
+      "atone:mist-20261008-145106-69"
+    ],
+    "proposal": {
+      "target": "guard-lazy-question.sh",
+      "change": "Audit why the script produces zero fires and change its exit code to 1 so it blocks the turn instead of exiting silently when the answer to an owner ask is already present in notes or memory."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261102-142233-82",
+        "what": "Listed Clanky's own accounts as a blocker on you when the project notes already answered which accounts existed."
+      },
+      {
+        "evidence_id": "atone:mist-20261023-193439-69",
+        "what": "Asked you for a Speedway login and created a new test account when the project notes already had the login details."
+      },
+      {
+        "evidence_id": "atone:mist-20261008-145106-69",
+        "what": "Asked you which backend pairs with each frontend and shipped a literal question-mark placeholder when the app's own code already answered it."
+      }
+    ],
+    "why_repeats": "The check registered to stop Claude from asking questions whose answers are already derivable has not fired once in the last fourteen days, so nothing has stopped any of these occurrences.",
+    "fix": "The check's matching logic needs to be fixed and its exit mode changed to blocking so it stops the turn rather than running silently when notes or memory already contain the answer Claude is about to ask for.",
+    "guard": {
+      "hook_id": "guard-lazy-question",
+      "plain": "A check that is supposed to stop Claude from asking you for information it could look up itself",
+      "verdict": "no",
+      "gap": "It has not fired once in the last fourteen days while the same mistake appeared three times across three different projects; either its matching logic never triggers or it exits without stopping the turn"
+    }
+  }
+]
+```
+
+## The credited checks
+### guard-lazy-question (/Users/alcatraz627/.claude/scripts/hooks/guard-lazy-question.sh)
+```
+#!/usr/bin/env bash
+# guard-lazy-question.sh: PreToolUse hook on AskUserQuestion.
+#
+# Nudges when the agent asks the user a question without having consulted the
+# codebase in the current turn. Grounded in real user pushback ("why would you
+# ask me such lazy questions"): a question that the code could have answered,
+# asked before the agent looked.
+#
+# Mechanism: on every AskUserQuestion, walk the CURRENT turn's tool history
+# (from the last genuine human prompt to now, treating task-notifications /
+# system-reminders / stop-hook-feedback as transparent interruptions, not
+# boundaries). If that window contains a Read / Grep / Glob / LS: or a
+# code-reading Bash (cat, rg, fd, head, tail, ls, sed, awk, git diff/show/log,
+# …): the question is INFORMED, so this stays silent. If NOT, it emits one
+# soft nudge: check the code first; ask only what the code cannot tell you.
+#
+# ADVISORY, never blocks. A genuinely user-only question (a preference, a design
+# call the code can't answer) must still go through: this only reminds. The
+# false-positive floor is the class of genuine preference/decision questions
+# asked without a read; the nudge is written to be self-defeating there ("ask
+# only what the code cannot tell you") so a misfire costs the agent one glance.
+#
+# PreToolUse DOES fire for AskUserQuestion in this harness (verified against
+# recorded transcripts: hookName "PreToolUse:AskUserQuestion"). If a future
+# harness stops delivering it, this hook simply never runs: it fails silent.
+#
+# Output contract: {hookSpecificOutput:{hookEventName:"PreToolUse",
+# additionalContext:<msg>}} on stdout, exit 0 always. Silent exit 0 on any
+# doubt (no jq/python3, no transcript, muted, not AskUserQuestion, turn too long
+# to delimit).
+#
+# Mute:          touch ~/.claude/.no-lazy-question-gate
+# One-shot skip: LAZY_QUESTION_OFF=1
+# Telemetry:     warn-log.sh --hook guard-lazy-question --action nudge
+
+set -uo pipefail
+
+INPUT=$(cat 2>/dev/null || echo "{}")
+command -v jq >/dev/null 2>&1 || exit 0
+printf '%s' "$INPUT" | jq empty 2>/dev/null || exit 0
+
+# Mute honored early: before any real work.
+[ "${LAZY_QUESTION_OFF:-0}" = "1" ] && exit 0
+[ -f "$HOME/.claude/.no-lazy-question-gate" ] && exit 0
+
+TOOL=$(printf '%s' "$INPUT" | jq -r '.tool_name // empty')
+[ "$TOOL" = "AskUserQuestion" ] || exit 0
+
+TX=$(printf '%s' "$INPUT" | jq -r '.transcript_path // empty')
+[ -n "$TX" ] && [ -f "$TX" ] || exit 0
+
+command -v python3 >/dev/null 2>&1 || exit 0
+
+# Scan the current turn for a code-read. Prints exactly one of:
+#   READ: a read/grep/glob/code-reading-bash was seen this turn → informed
+#   NOREAD: turn delimited, no read seen → lazy-question candidate
+#   UNKNOWN: could not delimit the turn within the window → stay silent (safe)
+verdict=$(CLAUDE_LQ_TX="$TX" python3 <<'PY' 2>/dev/null || echo UNKNOWN
+import json, os, re
+from collections import deque
+
+tx = os.environ.get("CLAUDE_LQ_TX", "")
+if not tx:
+    print("UNKNOWN"); raise SystemExit
+
+# Bounded tail: a turn essentially never exceeds this many transcript entries,
+# and reads that make a question "informed" land well within it. Reading via a
+# maxlen deque keeps memory flat regardless of transcript size.
+WINDOW = 900
+try:
+    with open(tx, encoding="utf-8", errors="replace") as f:
+        lines = deque(f, maxlen=WINDOW)
+except Exception:
+    print("UNKNOWN"); raise SystemExit
+
+# Injected/synthetic "user" entries are NOT real human turn boundaries: the
+# agent's read may precede such an interruption, so we scan through them.
+SYNTHETIC_PREFIXES = (
+    "<task-notification>", "<system-reminder>", "Stop hook feedback:",
+    "Caveat:", "This session is being continued", "[api-recovery]",
+```
+
+## What to do
+For each problem:
+- Correct `why_repeats`, `fix` and `guard` wherever the check's source contradicts them: what it looks at, where it runs, whether it blocks or only warns. If the credited check cannot see this problem at all, say that plainly, and aim `fix` at what is actually missing.
+- If a case in `happened` is a different problem from the others, list it in `drop` with one sentence on why.
+- Leave a field out when it is already right.
+- Put in `quote` one line copied exactly from a credited check's source that backs your correction. A correction with no such line is thrown away, so never claim a check lacks something without having read the line that shows it.
+Keep the same voice rules as before: owner-facing fields are plain sentences about what Claude did, with no hook ids, script names, slugs or numbers.
+
+Answer with one ```json block: {"items": [{"cluster": "...", "why_repeats": "...", "fix": "...", "guard": {"hook_id": "..." or null, "plain": "...", "verdict": "yes|partly|no", "gap": "..."}, "drop": [{"evidence_id": "...", "why": "..."}]}]}

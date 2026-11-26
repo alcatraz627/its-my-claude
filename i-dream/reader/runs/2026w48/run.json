@@ -1,0 +1,462 @@
+{
+  "week": "2026w48",
+  "at": "2026-11-23T16:07:13.284848Z",
+  "forwarded": [
+    {
+      "id": "c-2d8458a5",
+      "kind": "repeat",
+      "key": "ai-smell-prose-against-stored-voice",
+      "summary": "'ai-smell-prose-against-stored-voice' came up 2 times from 2 independent source(s) across atone, proposals",
+      "evidence": [
+        "atone:mist-20261120-151346-07",
+        "proposals:prop-20261120-151415-34"
+      ],
+      "domains": [
+        "atone",
+        "proposals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-11-20T15:13:46Z",
+      "last_ts": "2026-11-20T15:14:15Z",
+      "score": 11.76
+    },
+    {
+      "id": "c-605137d0",
+      "kind": "session-cluster",
+      "key": "da9f47ce-1824-4923-bf9d-0e2135da8011",
+      "summary": "Session da9f47ce in csync: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-3da7d3eca788cb9c",
+        "signals:da9f47ce-1824-4923-bf9d-0e2135da8011-1795256577"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-11-21T10:22:57.300865Z",
+      "last_ts": "2026-11-21T13:02:19Z",
+      "score": 4.3
+    },
+    {
+      "id": "c-e21da166",
+      "kind": "session-cluster",
+      "key": "b8d6eb03-1b21-4523-98ee-26ded410b379",
+      "summary": "Session b8d6eb03 in aep-scrape: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-3f8b15b5b9cafc16",
+        "signals:b8d6eb03-1b21-4523-98ee-26ded410b379-1795116315"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-11-19T19:25:15.191649Z",
+      "last_ts": "2026-11-19T22:07:31Z",
+      "score": 3.66
+    }
+  ],
+  "named": {
+    "items": [
+      {
+        "cluster": "c-2d8458a5",
+        "kind": "repeat",
+        "title": "Wrote developer docs in a hand-holding, over-explained style",
+        "why": "An atone entry and a same-day proposal both name the same prose register problem in the same session, showing the check fires but did not stop the output (atone:mist-20261120-151346-07, proposals:prop-20261120-151415-34).",
+        "evidence_ids": [
+          "atone:mist-20261120-151346-07",
+          "proposals:prop-20261120-151415-34"
+        ],
+        "proposal": {
+          "target": "doc-voice-gate.py",
+          "change": "Raise the exit code to blocking for any doc file matched by README, AGENTS, or docs/ whose tone scores as informal-explainer, rather than emitting an advisory nudge."
+        },
+        "happened": [
+          {
+            "evidence_id": "atone:mist-20261120-151346-07",
+            "what": "Claude wrote README, AGENTS, and planning docs for a developer project in a wordy, informal, hand-holding register instead of direct developer prose."
+          },
+          {
+            "evidence_id": "proposals:prop-20261120-151415-34",
+            "what": "A proposal was raised the same day to ban the coddling-explainer register from developer and agent documentation entirely."
+          }
+        ],
+        "why_repeats": "The voice check is active and blocks some cases, but the atone and proposal arriving on the same day show it passed the offending output through — most likely because informal-but-not-flagrant prose exits advisory rather than blocked, letting the register survive into the final file.",
+        "fix": "Tighten the voice check so an over-explained register in any developer-facing doc (README, AGENTS, planning files) triggers a block rather than a nudge.",
+        "guard": {
+          "hook_id": "doc-voice-gate",
+          "plain": "A check on the register and tone of documentation Claude writes",
+          "verdict": "partly",
+          "gap": "README and planning files written in an informal explainer tone pass through as nudges rather than hard stops, so the pattern recurs without being caught before the output lands"
+        }
+      },
+      {
+        "cluster": "c-605137d0",
+        "merged": [
+          "c-e21da166"
+        ],
+        "kind": "noise",
+        "title": "Session corrections with no named mistake",
+        "why": "Both clusters consist solely of correction signals and pending checkpoints with no named atone row; under the standing amendment they resolve to noise (signals:da9f47ce-1824-4923-bf9d-0e2135da8011-1795256577, signals:b8d6eb03-1b21-4523-98ee-26ded410b379-1795116315).",
+        "evidence_ids": [
+          "checkpoints:ckpt-3da7d3eca788cb9c",
+          "signals:da9f47ce-1824-4923-bf9d-0e2135da8011-1795256577",
+          "checkpoints:ckpt-3f8b15b5b9cafc16",
+          "signals:b8d6eb03-1b21-4523-98ee-26ded410b379-1795116315"
+        ],
+        "happened": [
+          {
+            "evidence_id": "signals:da9f47ce-1824-4923-bf9d-0e2135da8011-1795256577",
+            "what": "Claude was corrected during a session and left items unfinished, but no specific mistake was recorded."
+          },
+          {
+            "evidence_id": "signals:b8d6eb03-1b21-4523-98ee-26ded410b379-1795116315",
+            "what": "Claude was corrected during a session and left items unfinished, but no specific mistake was recorded."
+          }
+        ],
+        "why_repeats": "Both clusters contain only a correction signal and a pending-items checkpoint with no named mistake type; there is no way to tell whether the correction reflects a real error or a preference change, so no lesson can be drawn.",
+        "fix": "No action — neither cluster meets the threshold for a named mistake without an atone row saying what went wrong.",
+        "guard": {
+          "hook_id": null,
+          "plain": "Nothing tries to stop this because no specific pattern has been identified",
+          "verdict": "no",
+          "gap": "No mistake type is named so no check can be targeted"
+        }
+      }
+    ],
+    "rejected": [],
+    "dropped_ids": 0,
+    "summary": "One real repeat this week: Claude wrote developer docs in a hand-holding, over-explained register despite an active voice check that fires but does not always block. The two session-correction clusters carry no named mistake type and resolve to noise under the standing amendment.",
+    "process_note": "The zero-fire diagnostic requested across the 2026w44–2026w46 amendments is still absent. This week the doc-voice-gate shows 19 blocks and 124 nudges alongside a repeat atone for the same pattern. Without a column showing exit-1 vs exit-0 vs muted counts broken down by file type, the reader cannot determine whether the gate's advisory fires on README-style files are a deliberate policy or a logic gap. That single column would have resolved the guard verdict for c-2d8458a5 from 'partly' to a precise diagnosis before the run."
+  },
+  "items": [
+    {
+      "cluster": "c-2d8458a5",
+      "kind": "repeat",
+      "title": "Wrote developer docs in a hand-holding, over-explained style",
+      "why": "An atone entry and a same-day proposal both name the same prose register problem in the same session, showing the check fires but did not stop the output (atone:mist-20261120-151346-07, proposals:prop-20261120-151415-34).",
+      "evidence_ids": [
+        "atone:mist-20261120-151346-07",
+        "proposals:prop-20261120-151415-34"
+      ],
+      "proposal": {
+        "target": "doc-voice-gate.py",
+        "change": "Raise the exit code to blocking for any doc file matched by README, AGENTS, or docs/ whose tone scores as informal-explainer, rather than emitting an advisory nudge."
+      },
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261120-151346-07",
+          "what": "Claude wrote README, AGENTS, and planning docs for a developer project in a wordy, informal, hand-holding register instead of direct developer prose."
+        },
+        {
+          "evidence_id": "proposals:prop-20261120-151415-34",
+          "what": "A proposal was raised the same day to ban the coddling-explainer register from developer and agent documentation entirely."
+        }
+      ],
+      "why_repeats": "The check's scope covers only .md files under docs/ and files that carry a non-agent reader: frontmatter tag; a root-level README, AGENTS file, or planning doc without that tag is outside the check entirely. Even for files it does reach, the fault detectors target ledger-voice markers and wall-of-text, not an informal or hand-holding prose register — so the specific failure that recurred is invisible to it on two independent grounds.",
+      "fix": "Extend the check's scope to cover README and AGENTS files at the project root (without requiring reader: frontmatter), and add a detection path for informal-explainer register — verbose hedging, coddling phrases, over-explained steps — as a blocking fault alongside the existing ledger-voice and wall-of-text paths.",
+      "guard": {
+        "hook_id": "doc-voice-gate",
+        "plain": "A check on the register and tone of documentation Claude writes",
+        "verdict": "no",
+        "gap": "Root-level README and AGENTS files are outside the check's scope (it requires docs/ placement or a reader: frontmatter tag), and the check's three fault detectors — dense-block, spliced-line, mechanism-run — do not include informal or hand-holding register, so the pattern that recurred produces no signal from this check at all."
+      }
+    }
+  ],
+  "page_slug": "idream-reader-2026w48",
+  "page_url": "http://localhost:5106/dp/idream-reader-2026w48/",
+  "tokens": 76413,
+  "held_by_gate": null,
+  "skipped": null,
+  "landed": [],
+  "since": "2026-10-26T16:07:13.284848Z",
+  "atone_total": 20,
+  "hook_actions": [
+    [
+      "terse-reply",
+      {
+        "block": 8,
+        "soft": 232
+      }
+    ],
+    [
+      "prose-smell",
+      {
+        "block": 2,
+        "nudge": 209
+      }
+    ],
+    [
+      "doc-voice-gate",
+      {
+        "block": 19,
+        "nudge": 124,
+        "unlabelled": 51
+      }
+    ],
+    [
+      "subagent-box",
+      {
+        "soft": 125
+      }
+    ],
+    [
+      "push-gate",
+      {
+        "unlabelled": 93
+      }
+    ],
+    [
+      "filename-dot",
+      {
+        "soft": 80
+      }
+    ],
+    [
+      "prefer-tmp-py-over-inline",
+      {
+        "nudge": 60
+      }
+    ],
+    [
+      "memory-reach",
+      {
+        "nudge": 59
+      }
+    ],
+    [
+      "relpath",
+      {
+        "soft": 49
+      }
+    ],
+    [
+      "declared-ready",
+      {
+        "block": 2,
+        "soft": 29
+      }
+    ],
+    [
+      "guard-env-access",
+      {
+        "nudge": 21
+      }
+    ],
+    [
+      "guard-pr-title-tags",
+      {
+        "block": 18
+      }
+    ],
+    [
+      "guard-cluster-e-smells",
+      {
+        "nudge": 17
+      }
+    ],
+    [
+      "review-nudge",
+      {
+        "nudge": 17
+      }
+    ],
+    [
+      "warn-git-add-enumeration",
+      {
+        "nudge": 16
+      }
+    ],
+    [
+      "guidance",
+      {
+        "nudge": 15
+      }
+    ],
+    [
+      "guard-gh-prose",
+      {
+        "block": 14
+      }
+    ],
+    [
+      "pr-review",
+      {
+        "block": 14
+      }
+    ],
+    [
+      "goal-paste",
+      {
+        "block": 13
+      }
+    ],
+    [
+      "guard-prose-quality",
+      {
+        "block": 13
+      }
+    ],
+    [
+      "ui-verified",
+      {
+        "block": 9,
+        "nudge": 1
+      }
+    ],
+    [
+      "format-gate",
+      {
+        "block": 9
+      }
+    ],
+    [
+      "guard-command-chaining",
+      {
+        "block": 9
+      }
+    ],
+    [
+      "guard-comment-verbosity",
+      {
+        "nudge": 8
+      }
+    ],
+    [
+      "prefer-ripgrep",
+      {
+        "nudge": 6
+      }
+    ],
+    [
+      "ui-callouts-gate",
+      {
+        "soft": 6
+      }
+    ],
+    [
+      "secret-scan",
+      {
+        "nudge": 5
+      }
+    ],
+    [
+      "absence-claim",
+      {
+        "block": 4
+      }
+    ],
+    [
+      "creation-box",
+      {
+        "block": 4
+      }
+    ],
+    [
+      "protect-atone-raw",
+      {
+        "block": 4
+      }
+    ],
+    [
+      "structural-claim",
+      {
+        "block": 3,
+        "soft": 1
+      }
+    ],
+    [
+      "bare-id-cluster",
+      {
+        "block": 3
+      }
+    ],
+    [
+      "guard-comment-hygiene",
+      {
+        "block": 3
+      }
+    ],
+    [
+      "guard-rg-replace-bundle",
+      {
+        "block": 3
+      }
+    ],
+    [
+      "persona-suggest",
+      {
+        "nudge": 3
+      }
+    ],
+    [
+      "block-nested-claude",
+      {
+        "block": 2
+      }
+    ],
+    [
+      "goal-arm-lint",
+      {
+        "unlabelled": 2
+      }
+    ],
+    [
+      "guard-ai-signature",
+      {
+        "block": 2
+      }
+    ],
+    [
+      "ready-claim",
+      {
+        "nudge": 2
+      }
+    ],
+    [
+      "dev-server-port",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "guard-cd-relative-path",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "guard-env-dump",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "hand-rendered-tasks",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "plan-gate-ups",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "prevent-unsolicited-index-manipulation",
+      {
+        "block": 1
+      }
+    ]
+  ],
+  "backlog_open": 102
+}

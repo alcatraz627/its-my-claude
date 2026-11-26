@@ -6,7 +6,6 @@ triggers:
   - phrase:"declared ready"
 related:
   - rules/testing.md
-  - scripts/hooks/retired/review-gate-stop.sh
 tier: 2
 category: features
 updated: 2026-06-01

@@ -6,7 +6,7 @@ triggers:
   - topic:session-monitoring
   - phrase:"pause the warden"
   - phrase:"warden beat"
-related: [scheduling-discipline, model-tier-routing]
+related: [rules/scheduling-discipline.md, rules/model-tier-routing.md]
 tier: 2
 category: features
 updated: 2026-09-02

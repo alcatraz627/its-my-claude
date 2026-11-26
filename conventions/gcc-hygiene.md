@@ -3,9 +3,9 @@ brief: Heuristics for a clean ~/.claude/: what to keep, what to derive, what to 
 triggers:
   - topic:gcc-cleanup
   - topic:gcc-hygiene
-  - phrase:clean up claude
-  - phrase:consolidate gcc
-  - phrase:structural change
+  - phrase:"clean up claude"
+  - phrase:"consolidate gcc"
+  - phrase:"structural change"
   - tool:migrate
 related:
   - PLACEMENT.md

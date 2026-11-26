@@ -1,8 +1,6 @@
 # Document Naming & Session Tagging Reference
 
-<!-- sessions: doc-stamp-8a@2026-03-31, sess-tag-4e@2026-03-31 -->
-
-> Canonical reference for how Claude names files and tags them with session identity.
+> Canonical reference for how Claude names files and tags them with session identity. The quick rule is `~/.claude/conventions/doc-naming.md`; this file is the full spec, and the two agree.
 > Referenced by: CLAUDE.md, core-dump, catchup, cogitate, WAL format, GUIDELINES.md
 
 ---
@@ -43,7 +41,6 @@ Files created once, rarely edited after. Prefix with `YYYYMMDD-`.
 | Scratchpad plans/learnings | `.claude/scratchpad/` | `20260331-auth-refac-plan.md` |
 | Checkpoints / core-dumps | Project root | `_20260331-fix-auth-3b.claude.md` |
 | Cogitate topic files | `~/Documents/Claude/Topics/` | `20260331-redis-caching.md` |
-| Memory files | `.claude/projects/.../memory/` | `20260331-user-role.md` |
 | Research / audit outputs | Varies | `20260331-perf-audit-results.md` |
 | Architecture decisions | `.claude/scratchpad/` | `20260331-db-schema-decision.md` |
 | Postmortems | `.claude/scratchpad/` | `20260331-outage-postmortem.md` |
@@ -61,6 +58,7 @@ Files updated continuously across sessions. No date prefix.
 | Indexes | `MEMORY.md`, `_index.claude.md`, `_insights.claude.md` |
 | Configuration | `CLAUDE.md`, `GUIDELINES.md`, `SKILL.md` |
 | Registries | `port-registry.md`, `mcp-catalog.json` |
+| Memory files | `.claude/projects/.../memory/user_role.md`, `feedback_no-trailers.md`: a type prefix (`user_`, `feedback_`, `project_`, `reference_`) and no date |
 | Source code | `*.ts`, `*.js`, `*.py`, etc. |
 
 ### Decision rule
@@ -73,7 +71,7 @@ Files updated continuously across sessions. No date prefix.
 
 ## Session ID Tagging
 
-Embed session provenance in documents via HTML comments with timestamps.
+Embed session provenance in **point-in-time documents** via HTML comments with timestamps. Living documents (the non-datestamped list above, including `LOOKUP.md`, `PLACEMENT.md`, `GLOSSARY.md` and `NAMESPACE.md`) carry no session tag, because their history is in git. Memory files carry none either.
 
 ### Format
 
@@ -87,9 +85,10 @@ Each entry is `session-id@YYYY-MM-DD`: the date is when that session last touche
 
 | Scenario | Action |
 |----------|--------|
-| **New document** | Add `<!-- sessions: [id]@[today] -->` on the second line (after title or frontmatter) |
-| **Existing doc, same session** | Update the timestamp if >1 day old: `fix-auth-3b@2026-03-30` → `fix-auth-3b@2026-03-31` |
-| **Existing doc, new session** | Append: `<!-- sessions: fix-auth-3b@2026-03-31, add-chart-f1@2026-03-29 -->` |
+| **New point-in-time document** | Add `<!-- sessions: [id]@[today] -->` on the second line (after title or frontmatter) |
+| **Living document** | No tag. If an old tag is there, delete it when touching the file |
+| **Existing point-in-time doc, same session** | Update the timestamp if >1 day old: `fix-auth-3b@2026-03-30` → `fix-auth-3b@2026-03-31` |
+| **Existing point-in-time doc, new session** | Append: `<!-- sessions: fix-auth-3b@2026-03-31, add-chart-f1@2026-03-29 -->` |
 | **Cleanup stale entries** | Remove entries where the timestamp is >3 days old. Do this when touching the file for any other reason: don't make a special pass. |
 | **WAL** | Session encoded in `## Session: YYYY-MM-DD HH:MM [session-id]` header: no separate tag |
 | **Runtime notes** | Session ID in `## session: [desc] [session-id]: YYYY-MM-DD` heading: no separate tag |
@@ -133,5 +132,5 @@ Skills and tools that create documents MUST consult this file:
 | `/cogitate` | Topic files in `~/Documents/Claude/Topics/` get `YYYYMMDD-` prefix |
 | WAL system | Session header includes `[session-id]` per `wal-format.md` |
 | Runtime notes | Session heading includes `[session-id]` |
-| Memory system | Memory files get `YYYYMMDD-` prefix + session tag |
+| Memory system | Memory files keep their type prefix (`user_`, `feedback_`, `project_`, `reference_`), no date and no session tag |
 | Scratchpad | Plans and learnings get `YYYYMMDD-` prefix |

@@ -4,6 +4,7 @@ triggers:
   - topic:ghostty
   - phrase:"open -na"
   - phrase:"ghostty-open"
+related: [features/tab-title.md]
 tier: 2
 category: features
 updated: 2026-11-02

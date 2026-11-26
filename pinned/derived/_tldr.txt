@@ -1,2 +1,3 @@
-📌 Make an adaptive local pre-push check standard agent behavior, so agents stop us
-📌 Intent alignment failure (owner, 2026-10-19): owner said "you may update code in
+📌 A sub-agent's UI addition to an existing page (tech nexus 'New here' row) was me
+📌 gcc structure map v5, 2026-11-23 (partial: 2 of 5 deep lenses, no completeness c
+📌 When the owner says work is dragging because defects keep arriving, the useful r

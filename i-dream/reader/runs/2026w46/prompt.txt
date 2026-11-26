@@ -1,0 +1,120 @@
+Week 2026w46. `kind` is one of repeat, structural-need, drift or noise; a cluster's 'found by' label says how the join found it and is not its kind. The clusters:
+
+## c-8033ea3b (found by session cluster, score 21.9)
+Session 6ef4ea99 in winhere-pim: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Routed the setup through a named person after the owner banned it)
+- checkpoints:ckpt-c37273c3f155350e | checkpoints | human | 2026-11-05 | winhere-pim | pending: - Agent: follow-up PR (task 56): China access to the Export Builder, `migrate.mjs` backup retry, alert step on beta. Optional small PRD items: dashboard 5 rows, `Issues` column. - Agent: mark…
+- signals:6ef4ea99-b703-4ce8-8a84-c2f48218d714-1793907870 | signals | human | 2026-11-05 | - | the owner corrected the agent
+- checkpoints:ckpt-7962e6ab230a4154 | checkpoints | human | 2026-11-05 | winhere-pim | pending: - Agent: follow-up PR (task 56): China access to the Export Builder, `migrate.mjs` backup retry, alert step on beta. Optional small PRD items: dashboard 5 rows, `Issues` column. - Agent: mark…
+- proposals:prop-20261105-193149-57 | proposals | agent | 2026-11-05 | - | Owner ask: have Codex review and fix this session's production login refusals
+- proposals:prop-20261105-193133-47 | proposals | agent | 2026-11-05 | - | Let an agent sign in to production without ever seeing the password: Secret Manager to Playwright login helper
+- atone:mist-20261105-172425-75 | atone | human | 2026-11-05 | winhere-pim | Handed the owner an IAM command without --condition=None: The add-iam-policy-binding command I gave omitted --condition=None. The project's policy has conditional bindings, so gcloud prompted for a co…
+- atone:mist-20261105-172413-b0 | atone | human | 2026-11-05 | winhere-pim | Routed the setup through a named person after the owner banned it: Asked why the PR 48 setup could not run, I recommended asking Von to run the script, scripted Von's steps, and offered a command for …
+
+## c-c314d6cd (found by session cluster, score 16.5)
+Session 21964d1e in winhere-pim: the owner corrected the agent, a mistake was recorded, the core-dump left items pending (Asked the owner to merge a PR that deploys production, against a standing hold)
+- checkpoints:ckpt-75d7ff40fd92f228 | checkpoints | human | 2026-11-04 | winhere-pim | pending: - Agent: confirm staging `6c86889` and smoke, and PR 38's checks. - Agent: answer review comments on PR 35 and PR 38 when they land. - Owner: decide when production gets `main`, and migration…
+- signals:21964d1e-a3ff-46e5-8774-9b6b60990e64-1793790369 | signals | human | 2026-11-04 | - | the owner corrected the agent
+- signals:21964d1e-a3ff-46e5-8774-9b6b60990e64-1793786798 | signals | human | 2026-11-04 | - | the owner corrected the agent
+- atone:mist-20261104-094948-b7 | atone | human | 2026-11-04 | winhere-pim | Asked the owner to merge a PR that deploys production, against a standing hold: Resumed a checkpoint carrying 'prod is sacred and has customers' and 'No don't merge them yet, just deploy an integratio…
+- proposals:prop-20261104-093827-8f | proposals | agent | 2026-11-04 | - | Replace foreground PR review waits with an armable monitor
+
+## c-d3b3bae6 (found by repeat, score 15.1)
+'test-harness-bypasses-production-entry-path' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261110-063422-3c | proposals | agent | 2026-11-10 | - | Audit every TUI tool on this machine against the latest TUI kit
+- atone:mist-20261110-054557-fe | atone | human | 2026-11-10 | its-my-config | TUI verified by source path, blank when started through its installed link: zterminal look was reported built after 14 tests and a tmux walkthrough that all started it by its source path. The owner st…
+
+## c-3e97af59 (found by repeat, score 9.6)
+'recommended-against-a-carried-owner-ruling' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261105-193133-47 | proposals | agent | 2026-11-05 | - | Let an agent sign in to production without ever seeing the password: Secret Manager to Playwright login helper
+- atone:mist-20261105-172413-b0 | atone | human | 2026-11-05 | winhere-pim | Routed the setup through a named person after the owner banned it: Asked why the PR 48 setup could not run, I recommended asking Von to run the script, scripted Von's steps, and offered a command for …
+
+## c-833e079b (found by repeat, score 8.8)
+'peer-ask-unanswered-while-heads-down' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261104-151949-8e | proposals | agent | 2026-11-04 | - | Keep unanswered ipc asks in front of a busy session until they are answered
+- atone:mist-20261104-145725-fe | atone | human | 2026-11-04 | slack-automation | Left a peer's two asks unanswered, then drafted a Cloudflare write past the policy hook: gates-clear-c7 sent two delivered messages about Winhere domains (msg-ed0f64b9dbef4a65, msg-e458ad83773f4d4c) a…
+
+## c-da3a5c26 (found by repeat, score 2.8)
+'decision-request-without-decision-grade-context' came up 4 times from 1 independent source(s) across atone
+- atone:mist-20261104-105731-da | atone | human | 2026-11-04 | slack-automation | Listed owner gates as bare numbers, same slip twice in one session: Gave clanky-hands' status keyed on bare task and issue numbers, and closed with decisions named only by number ('issue 492, closing …
+- atone:mist-20261104-102145-89 | atone | human | 2026-11-04 | slack-automation | Relayed a docs update to the owner as a Winhere catalog update: A peer asked for slack-automation docs to be updated for Winhere's branch previews. The owner gate read 'yes or no on winhere's catalog …
+- atone:mist-20261028-184946-19 | atone | human | 2026-10-28 | slack-automation | Owner gates and an admin note handed over without the why, history or plain steps: Asked the owner to delete the old clanky-box VM, approve a weekly live test, rule on staged-data internet and rotate …
+- atone:mist-20261023-193413-ac | atone | human | 2026-10-23 | versable-ingest | Asked the owner to rule on R1 to R3 by id, without the questions: versable-ingest DIRECTIONS.md and the reply listed 'Rule on R1 to R3 (report section 4)' with only my picks; the three questions, opti…
+
+
+
+## Hook scripts already registered in settings.json
+allow-claude-ipc.py, api-recovery-nudge.sh, authority-claim-note.sh, auto-base.sh, auto-continue-stop.sh, auto-format.sh, bash-wal.sh, block-curl-post-auth.sh, block-nested-claude.sh, browser-ttl-nudge.sh, browser-use-touch.sh, check-human-comments.sh, cleanup-comments-nudge.sh, compact-gate.sh, counter-gate-stop.sh, ctx-claim-stop.sh, ctx-pressure-nudge.sh, ctx-signal-nudge.sh, decision-surface-nudge.sh, diff-preview.sh, directions.py, doc-voice-gate.py, dream-insights-prompt.sh, edit-tracker.sh, emit-event.sh, enqueue-auto-coredump.sh, exit-code-hook.sh, file-changed.sh, format-reminder-ups.sh, gate-cli-actions.sh, gcc-signal-capture.sh, gcloud-auth-hook.py, gemini-mode-inject.sh, goal-gate-note-stop.sh, guard-ai-signature.sh, guard-anthropic-credentials.sh, guard-artifact-unasked.sh, guard-banned-vocab.sh, guard-cd-relative-path.sh, guard-cluster-e-smells.sh, guard-command-chaining.sh, guard-comment-hygiene.sh, guard-comment-verbosity.sh, guard-commit-signature.sh, guard-cron-prompt.sh, guard-db-target.py, guard-dev-server-port.sh, guard-env-access.sh, guard-env-capture-test.sh, guard-env-dump.sh, guard-extension-root.sh, guard-gh-prose.py, guard-ghostty.sh, guard-git-push.sh, guard-github-agent-marker.sh, guard-lazy-question.sh, guard-model-tier.sh, guard-near-dup-env-var.sh, guard-policy-store.sh, guard-policy.sh, guard-pr-title-tags.sh, guard-prose-quality.sh, guard-repo-visibility.sh, guard-rg-replace-bundle.sh, guard-secret-file-read.sh, guard-settings-write.py, guard-subagent-output.sh, guard-system-dir-writes.sh, guard-user-commit.sh, guard-zsh-path-var.sh, hand-rendered-tasks-stop.sh, heartbeat.sh, heed-writeback.sh, hhmm-drift-post.py, hint-injector.sh, keepwarm.py, log-image-reads.sh, memory-reach.py, migrate-hint.sh, notification-context.sh, parked-skills-nudge.sh, permission-ask.py, permission-notify.sh, persona-log-nudge.sh, persona-suggest.sh, plan-gate-pre.sh, plan-gate-ups.sh, policy-approve-ask.sh, policy-ask-prompt.sh, post-compact-recovery.sh, post-tool-use.sh, post-tool.sh, pr-review-gate.py, pre-compact-checkpoint.sh, pre-tool-use.sh, pre-tool.sh, prefer-ripgrep.sh, prefer-tmp-py-over-inline.sh, prevent-unsolicited-index-manipulation.sh, protect-atone-raw.sh, push-approve-ask.sh, push-approve-prompt.sh, quoted-text-is-not-a-command.py, raw-guard.sh, render-mcp-gate.py, review-nudge-stop.sh, run.sh, safe-delete.sh, seat-hook.py, secret-leak-scan.py, session-end-checkpoint.sh, session-end.sh, session-start.sh, sessionstart-inject.sh, shell-mem.sh, skill-invocation-log.sh, snapshot-pre-edit.sh, speculative-atone-hint.sh, stop-arbiter.py, stop-sync.sh, stop.sh, style-watch-stop.sh, subagent-box.sh, subagent-tracker.sh, task-table-inject.sh, test-status-hook.sh, tmp-jail-cleanup.sh, tmp-jail-guard.sh, tool-counter.sh, track-edits-session.sh, turn-counter.sh, turn-start.sh, ui-brief-nudge.sh, ui-pr-screenshot-nudge.sh, ui-verified-hint.sh, ups.sh, usage5h.py, user-prompt-hint.sh, user-prompt-submit.sh, wake-breaker.sh, warn-git-add-enumeration.sh
+
+Never propose registering one of these. If one exists and its mistake still repeats, name what it fails to catch, or that it only warns instead of blocking.
+
+## What each hook did in the last 14 days
+block = stopped the turn or tool call; block-dry = would have blocked but runs in dry-run; soft and nudge = advisory only; muted = suppressed by a mute file. Base any claim about whether a hook blocks on these counts, not on its name.
+- doc-voice-gate: 833 block, 1805 nudge, 486 unlabelled
+- prose-smell: 9 block, 526 nudge
+- terse-reply: 54 block, 441 soft
+- push-gate: 474 unlabelled
+- review-nudge: 261 nudge
+- subagent-box: 16 nudge, 245 soft
+- prefer-tmp-py-over-inline: 206 nudge
+- format-gate: 164 block
+- guard-command-chaining: 146 block
+- guard-env-access: 142 nudge
+- guard-cluster-e-smells: 1 block, 112 nudge
+- filename-dot: 56 block, 48 soft
+- memory-reach: 96 nudge
+- persona-suggest: 87 nudge
+- relpath: 63 block, 24 soft
+- declared-ready: 5 block, 74 soft
+- warn-git-add-enumeration: 70 nudge
+- guard-comment-verbosity: 42 nudge
+- guard-gh-prose: 33 block
+- guard-prose-quality: 30 block
+- ui-verified: 23 block, 7 nudge
+- guidance: 29 nudge
+- guard-rg-replace-bundle: 27 block
+- prefer-ripgrep: 27 nudge
+- guard-env-dump: 26 block
+- wake-breaker: 23 unlabelled
+- emdash: 22 block
+- ui-callouts-gate: 18 block, 4 soft
+- guard-extension-root: 20 block
+- bare-id-cluster: 17 block
+- guard-pr-title-tags: 15 block
+- ui-pr-screenshot-nudge: 14 nudge
+- guard-cd-relative-path: 12 block
+- guard-comment-hygiene: 11 block
+- creation-box: 10 block
+- pr-review: 10 block
+- ready-claim: 9 nudge
+- secret-scan: 9 nudge
+- decision-surface-nudge: 8 nudge
+- goal-paste: 8 block
+
+
+## Who reads this
+The owner reads this page as the person Claude worked for, not as an engineer of the
+gcc. Write every owner-facing field (title, happened[].what, why_repeats, fix,
+guard.plain, guard.gap, summary) as plain sentences about what Claude did to them.
+Never put an evidence id, cluster id, hook id, script or file name, slug, or the
+words "gcc", "backlog", "atone", "gate" or "cluster" in those fields. Counts are added
+by the page; do not write numbers in guard.gap.
+
+`happened` lists the times it happened, one per cited evidence row, each a sentence
+about what Claude did. The page adds the date and project from the evidence row.
+`guard.hook_id` is a hook id from the 14-day list above, or null when nothing tries
+to stop it; `guard.verdict` is yes, partly or no.
+
+## Merge
+If two clusters are the same problem seen two ways, name it once and list the other
+cluster ids in "merged". A cluster is named or merged, never both.
+
+## Answer with JSON only
+{"summary": "…",
+ "items": [{"cluster": "c-…", "merged": ["c-…"], "kind": "repeat",
+   "title": "Said it works without checking where you would see it",
+   "happened": [{"evidence_id": "atone:…", "what": "told you the deploy script was simplest and certain; it had never been run, and it failed when you ran it."}],
+   "why_repeats": "…", "fix": "…",
+   "guard": {"hook_id": "declared-ready", "plain": "A check on \"done\" and \"works\" claims", "verdict": "partly", "gap": "\"proven on the Pi\" and \"green on the laptop\" get through"},
+   "why": "…", "evidence_ids": ["atone:…"],
+   "proposal": {"target": "…", "change": "…"}}],
+ "process_note": null}

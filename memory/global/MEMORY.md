@@ -17,13 +17,18 @@
 ## Reference
 - [Repo census 2026-09-30](reference_repo_census.md): every versable-git and alcatraz627 repo classified with evidence. Reuse it before surveying repos.
 - [Test logins](reference_test-logins.md): Speedway FLIP and F3 accounts, Walmart test account. Read before any browser test or login ask.
+- [PIES and ACES data classes](reference_pies_aces_data_classes.md): what data classes an auto part needs for a PIM, and what stayed unconfirmed. Read before defining "PIM ready".
 
 ## Feedback: Communication & Autonomy
 - [Challenge user requests](feedback_challenge_user_asks.md): Push back on suboptimal asks; be opinionated, not a yes-machine
 - [Autonomous mode](feedback_autonomous.md): Prefers fully autonomous operation; batch work, use background agents
+- [Decide reversible steps yourself](feedback_decide-reversible-steps-yourself.md): reversible in-lane calls are the agent's, reported after; a turn that waits names the next action if no reply comes (owner rulings 2026-11-05 to 11-26)
+- [Owner credentials mean sign in](feedback_owner-credentials-mean-sign-in.md): the owner hands over a login for a system they run and says use it, so sign in, production included; never refuse or hand back a script
 - [No speculative output descriptions](feedback_agent_output_descriptions.md): Agents producing files: return path only, don't describe visual design
 - [Skip Learn by Doing](feedback_no_learn_by_doing.md): Don't use scaffolded learning prompts for simple mechanical tasks
 - [Proactive question ownership](feedback_proactive_question_ownership.md): Own meta-questions (project ceiling, user-stories, safety nets); ASK + RE-ASK + save answers; user explicitly endorses re-asking
+- [Outside sources with a grain of salt](feedback_outside-sources-grain-of-salt.md): literature, vendor pages and existing tools are leads with a stated trust level, never authority
+- [/tag files without asking](feedback_tag-file-without-asking.md): on /tag, pick the home and file it; report after; never re-raise an unanswered tag ask
 
 ## Feedback: Task Framing & Scope
 - [Asks keep their context](feedback_asks_keep_context.md): Never surface an owner ask stripped of its context or merged across work; "I am not a dumb meat proxy"

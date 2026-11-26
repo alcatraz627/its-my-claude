@@ -1,0 +1,299 @@
+These problems were named from evidence alone, without reading the checks they credit. Below them is the source header of each credited check.
+
+## The problems as named
+```json
+[
+  {
+    "cluster": "c-8033ea3b",
+    "merged": [
+      "c-3e97af59",
+      "c-c314d6cd"
+    ],
+    "kind": "repeat",
+    "title": "Proposed an action that contradicted a rule you had already set",
+    "why": "Evidence from two independent sessions shows Claude contradicted a named-person ban and a production-deploy hold, both times after loading a session that carried the ruling (atone:mist-20261105-172413-b0, atone:mist-20261104-094948-b7).",
+    "evidence_ids": [
+      "atone:mist-20261104-094948-b7",
+      "atone:mist-20261105-172413-b0",
+      "proposals:prop-20261105-193133-47",
+      "atone:mist-20261105-172425-75"
+    ],
+    "proposal": {
+      "target": "guard-policy.sh",
+      "change": "Add patterns that match person-name routing bans and production-deploy holds carried in a checkpoint, and change the exit code to 1 so the check blocks rather than advises."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261104-094948-b7",
+        "what": "Claude loaded a saved session that carried your explicit hold on production deploys, then asked you to merge the PR to production anyway."
+      },
+      {
+        "evidence_id": "atone:mist-20261105-172413-b0",
+        "what": "You had banned routing the setup through a named person; Claude recommended asking that person to run the script, then scripted their exact steps."
+      },
+      {
+        "evidence_id": "proposals:prop-20261105-193133-47",
+        "what": "Claude proposed a production sign-in flow that sidesteps the access rule you had set."
+      },
+      {
+        "evidence_id": "atone:mist-20261105-172425-75",
+        "what": "In the same session, Claude gave you an IAM command missing a required flag for a project with conditional bindings, which caused an unexpected interactive prompt when you ran it."
+      }
+    ],
+    "why_repeats": "When Claude reaches a blocked path it searches for the nearest unblocked alternative; a standing ruling held as session text does not interrupt that search the way a hard block would.",
+    "fix": "A check that reads active rulings from the saved session and blocks any proposed action that contradicts one, before the proposal reaches you.",
+    "guard": {
+      "hook_id": null,
+      "plain": "Nothing currently stops Claude from proposing actions that contradict rulings you have already given.",
+      "verdict": "no",
+      "gap": "A check for this is registered but has fired zero times in the last two weeks, so it never matches the actual pattern"
+    }
+  },
+  {
+    "cluster": "c-d3b3bae6",
+    "kind": "repeat",
+    "title": "Declared something working without testing the way you launch it",
+    "why": "Two signals in the same week show the test harness matched Claude's launch path rather than yours, leaving the installed-link failure undetected until you ran it (atone:mist-20261110-054557-fe, proposals:prop-20261110-063422-3c).",
+    "evidence_ids": [
+      "atone:mist-20261110-054557-fe",
+      "proposals:prop-20261110-063422-3c"
+    ],
+    "proposal": {
+      "target": "ui-verified-hint.sh",
+      "change": "Require that any verification log entry records the launch path used, and block a 'verified' claim that logs a source path rather than the installed path."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261110-054557-fe",
+        "what": "Claude reported the terminal tool built and fully verified after running all tests from its source directory; it showed blank when you launched it through its installed shortcut."
+      },
+      {
+        "evidence_id": "proposals:prop-20261110-063422-3c",
+        "what": "Claude proposed auditing every similar tool on the machine, implying the same launch-path gap likely exists elsewhere."
+      }
+    ],
+    "why_repeats": "Tests are written to match how Claude starts the tool, not how you do; the difference between the source path and the installed shortcut is invisible to Claude unless it explicitly tests the installed entry point.",
+    "fix": "Any 'verified' claim for a tool that has an installed shortcut must include a test run from that shortcut, not from the source location.",
+    "guard": {
+      "hook_id": "ui-verified",
+      "plain": "A check that asks whether a UI tool was actually tested before Claude calls it done",
+      "verdict": "partly",
+      "gap": "Confirms that some test ran but does not verify the test used the installed shortcut rather than the source path"
+    }
+  },
+  {
+    "cluster": "c-833e079b",
+    "kind": "structural-need",
+    "title": "Missed messages from a peer while focused on another task",
+    "why": "A peer's two domain-related messages went unanswered and an infrastructure change proceeded past a policy rule in the same session, both caused by the absence of an interrupt path for in-flight messages (atone:mist-20261104-145725-fe).",
+    "evidence_ids": [
+      "atone:mist-20261104-145725-fe",
+      "proposals:prop-20261104-151949-8e"
+    ],
+    "proposal": {
+      "target": "allow-claude-ipc.py",
+      "change": "Exit 1 when unacknowledged peer messages exist and the current tool call targets external infrastructure, blocking the call until the messages are acknowledged."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261104-145725-fe",
+        "what": "A peer sent two messages about Winhere domains; Claude left both unanswered while heads-down on a different task, then went on to draft a Cloudflare change that a policy rule should have blocked."
+      }
+    ],
+    "why_repeats": "A focused session has no interrupt path; peer messages arrive and wait with no mechanism to surface them before an action that affects the same domain.",
+    "fix": "A check that runs before any tool call touching external infrastructure and blocks it when unacknowledged peer messages are waiting, until those messages are cleared.",
+    "guard": {
+      "hook_id": null,
+      "plain": "Nothing currently surfaces waiting peer messages into an active session before an infrastructure action.",
+      "verdict": "no",
+      "gap": "The inter-process communication check is registered but shows no blocking activity; incoming messages do not interrupt a running session"
+    }
+  },
+  {
+    "cluster": "c-da3a5c26",
+    "kind": "repeat",
+    "title": "Asked you to decide something without telling you what you were deciding",
+    "why": "Four atone entries across three weeks record the same pattern: Claude asked the owner to rule on something identified only by a number, without the question itself (atone:mist-20261023-193413-ac, atone:mist-20261028-184946-19, atone:mist-20261104-102145-89, atone:mist-20261104-105731-da).",
+    "evidence_ids": [
+      "atone:mist-20261023-193413-ac",
+      "atone:mist-20261028-184946-19",
+      "atone:mist-20261104-102145-89",
+      "atone:mist-20261104-105731-da"
+    ],
+    "proposal": {
+      "target": "decision-surface-nudge.sh",
+      "change": "Change the exit code to 1 for any owner-facing message that contains a bare ID reference without an adjacent plain-language question, making this a block rather than an advisory."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261023-193413-ac",
+        "what": "Claude listed three items for you to rule on by ID number only, without stating the actual questions."
+      },
+      {
+        "evidence_id": "atone:mist-20261028-184946-19",
+        "what": "Claude handed you a list of approval requests and an admin task without the context, history, or plain steps needed to act on any of them."
+      },
+      {
+        "evidence_id": "atone:mist-20261104-102145-89",
+        "what": "Claude relayed a peer's documentation request as a catalog question, dropping the actual ask so you could not answer it without going back to the peer."
+      },
+      {
+        "evidence_id": "atone:mist-20261104-105731-da",
+        "what": "Claude gave you task and issue status keyed on bare numbers twice in the same session, then closed with decisions named only by number."
+      }
+    ],
+    "why_repeats": "Claude surfaces decisions at the moment they block a task, using whatever identifier is in the task list rather than reconstructing the full question you need to answer it.",
+    "fix": "Any message that asks you to decide or approve must include the question in plain words and why it matters before any ID or reference number.",
+    "guard": {
+      "hook_id": "decision-surface-nudge",
+      "plain": "A check that notices when Claude is about to ask you to make a decision",
+      "verdict": "partly",
+      "gap": "Fires as advisory only, so a message with bare IDs and no plain question still reaches you unchanged"
+    }
+  }
+]
+```
+
+## The credited checks
+### ui-verified (/Users/alcatraz627/.claude/scripts/hooks/ui-verified-stop.py)
+```
+#!/usr/bin/env python3
+"""Refuses a reply that calls a UI change verified, done or working when nobody
+looked at it.
+
+The failure it stops: an agent edits a page, checks properties it chose itself,
+and reports "verified" while the defects the owner sees are on screen in the first
+screenshot. Six S3 atones in one session (2026-08-26) had that shape, and the
+advisory rule did not bind (prop-20260826-093335-6e).
+
+Stop hook. Blocks once per distinct reply when all three hold in the current turn:
+a UI file (html, css, scss, js, jsx, tsx, vue, svelte) was edited; no image reached
+the model after the last such edit (a Read of an image, or a screenshot tool that
+returns one); and the final reply claims verified, works, fixed or looks right.
+Writing "not looked at" or "UNCONFIRMED" beside the claim is the honest way
+through. Sibling: declared-ready-stop.sh only nudges on style edits and counts a
+screenshot taken but never read as seen.
+
+Second check (owner D5, 2026-10-15): when the image WAS read but the reply gives the
+verdict without first describing what is on screen, that is a warning, not a block:
+the frame description is what proves the image was read, and the owner wants the
+agent to weigh it. The warning reaches the owner as a systemMessage now and the agent
+as context on the next prompt (ui-verified-hint.sh), because a Stop hook has no
+non-blocking channel to the agent. It escalates to a block once the atone ledger
+holds 3 or more events in the UI-verification slugs (UI_SLUGS) within 14 days: the
+slug of record is shipping-css-ui-changes-without-visual-verification, plus its
+render-not-read siblings. A frame description is, before the claim, at least 80
+characters of prose that carries a seeing word (screenshot, frame, on screen, I see,
+shows, displays, visible, rendered).
+
+Third check (review turns): a turn with no UI edit can still give a visual verdict, such
+as a review that says a page "holds up at 360px" after reading CSS and computed styles.
+When the reply gives such a verdict about a UI and the turn never looked (no Read of an
+image file, no image returned by a tool, no screenshot tool call, no `lm see` or
+`claude-see` Bash call), it blocks once per distinct reply. A turn that looked passes,
+and so does a reply that names what it did not look at. The edit turns above keep their
+own rules.
+
+Heed: a later UI claim that carries the image, or a frame description, after a fire
+records heeded:true; the same shortfall again records heeded:false.
+Mute: touch ~/.claude/.no-ui-verified-gate
+"""
+import datetime, hashlib, json, os, re, subprocess, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
+if not hookpop.should_run():
+    sys.exit(0)
+
+HOME = os.path.expanduser("~")
+if os.path.exists(os.path.join(HOME, ".claude", ".no-ui-verified-gate")):
+    sys.exit(0)
+try:
+    inp = json.load(sys.stdin)
+except ValueError:
+    sys.exit(0)
+if not isinstance(inp, dict):
+    sys.exit(0)
+if inp.get("stop_hook_active"):
+    sys.exit(0)
+tp = inp.get("transcript_path") or ""
+if not os.path.isfile(tp):
+    sys.exit(0)
+
+recs = []
+with open(tp, errors="replace") as fh:
+    for line in fh.readlines()[-4000:]:
+        try:
+            recs.append(json.loads(line))
+        except ValueError:
+            pass
+
+
+def content_of(r):
+    c = (r.get("message") or {}).get("content")
+    return c if isinstance(c, list) else ([{"type": "text", "text": c}] if isinstance(c, str) else [])
+
+
+HARNESS = re.compile(r"^\s*(<system-reminder>|\[Image:|<command-name>|<local-command|Caveat:|<task-notification>"
+                     r"|\[keepwarm\]|Base directory for this skill:|Stop hook feedback:)")
+start = None
+for i in range(len(recs) - 1, -1, -1):
+```
+
+### decision-surface-nudge (/Users/alcatraz627/.claude/scripts/hooks/decision-surface-nudge.sh)
+```
+#!/usr/bin/env bash
+# decision-surface-nudge.sh: PreToolUse hook on AskUserQuestion.
+#
+# Points the agent at the right surface when a question to the owner is
+# really a decision set or a visual comparison. More than one question goes
+# through /decision-wizard (inline menu for a few simple picks, a decision
+# page at :5106/dp/ above that). Options carrying a `preview` mean the owner
+# is comparing visuals, which /mock-app renders as real mocks in a gallery on
+# one decision page; a monospace preview box is a sketch, not a mock.
+#
+# ADVISORY, never blocks: a single genuine pick still goes through as asked.
+#
+# Output contract: {hookSpecificOutput:{hookEventName:"PreToolUse",
+# additionalContext:<msg>}} on stdout, exit 0 always. Silent on any doubt.
+#
+# Mute:          touch ~/.claude/.no-decision-surface-nudge
+# One-shot skip: DECISION_SURFACE_OFF=1
+# Telemetry:     warn-log.sh --hook decision-surface-nudge --action nudge
+
+set -uo pipefail
+
+INPUT=$(cat 2>/dev/null || echo "{}")
+command -v jq >/dev/null 2>&1 || exit 0
+printf '%s' "$INPUT" | jq empty 2>/dev/null || exit 0
+
+[ "${DECISION_SURFACE_OFF:-0}" = "1" ] && exit 0
+[ -f "$HOME/.claude/.no-decision-surface-nudge" ] && exit 0
+
+TOOL=$(printf '%s' "$INPUT" | jq -r '.tool_name // empty')
+[ "$TOOL" = "AskUserQuestion" ] || exit 0
+
+COUNT=$(printf '%s' "$INPUT" | jq -r '(.tool_input.questions // []) | length')
+PREVIEWS=$(printf '%s' "$INPUT" | jq -r '[(.tool_input.questions // [])[] | (.options // [])[] | select((.preview // "") != "")] | length')
+
+MSG=""
+if [ "${PREVIEWS:-0}" -gt 0 ]; then
+  MSG="This question compares visuals. Render real options with /mock-app and show them as a gallery on one decision page; a text preview box is a sketch the owner has to imagine."
+elif [ "${COUNT:-0}" -gt 1 ]; then
+  MSG="This asks the owner $COUNT questions. Route them through /decision-wizard: default what you have a confident pick for, ask only the open calls, inline menu for three or fewer simple picks, a decision page above that."
+fi
+[ -n "$MSG" ] || exit 0
+
+bash "$HOME/.claude/scripts/hooks/warn-log.sh" --hook decision-surface-nudge --action nudge --heeded unknown >/dev/null 2>&1 || true
+jq -n --arg m "$MSG" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$m}}'
+exit 0
+```
+
+## What to do
+For each problem:
+- Correct `why_repeats`, `fix` and `guard` wherever the check's source contradicts them: what it looks at, where it runs, whether it blocks or only warns. If the credited check cannot see this problem at all, say that plainly, and aim `fix` at what is actually missing.
+- If a case in `happened` is a different problem from the others, list it in `drop` with one sentence on why.
+- Leave a field out when it is already right.
+- Put in `quote` one line copied exactly from a credited check's source that backs your correction. A correction with no such line is thrown away, so never claim a check lacks something without having read the line that shows it.
+Keep the same voice rules as before: owner-facing fields are plain sentences about what Claude did, with no hook ids, script names, slugs or numbers.
+
+Answer with one ```json block: {"items": [{"cluster": "...", "why_repeats": "...", "fix": "...", "guard": {"hook_id": "..." or null, "plain": "...", "verdict": "yes|partly|no", "gap": "..."}, "drop": [{"evidence_id": "...", "why": "..."}]}]}

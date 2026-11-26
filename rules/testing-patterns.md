@@ -4,8 +4,8 @@ triggers:
   - topic:testing
   - topic:test-patterns
   - topic:verification
-  - phrase:mutation test
-  - phrase:flaky test
+  - phrase:"mutation test"
+  - phrase:"flaky test"
 related:
   - rules/testing.md
   - rules/exercise-based-verification.md

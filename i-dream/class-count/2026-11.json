@@ -1,0 +1,46 @@
+{
+ "ts": "2026-11-23T13:24:20Z",
+ "window": [
+  "2026-11-09",
+  "2026-11-24"
+ ],
+ "sessions_read": 30,
+ "cases_first_reader": 44,
+ "cases_both_readers": 27,
+ "agreement": 0.61,
+ "owner_turns": 582,
+ "kinds": {
+  "length-or-register": {
+   "count": 9,
+   "per_100_turns": 1.55
+  },
+  "defect-in-build": {
+   "count": 5,
+   "per_100_turns": 0.86
+  },
+  "wrong-premise": {
+   "count": 5,
+   "per_100_turns": 0.86
+  },
+  "halted-or-waited": {
+   "count": 3,
+   "per_100_turns": 0.52
+  },
+  "skipped-something": {
+   "count": 2,
+   "per_100_turns": 0.34
+  },
+  "wasted-cost": {
+   "count": 1,
+   "per_100_turns": 0.17
+  },
+  "unverified-done": {
+   "count": 1,
+   "per_100_turns": 0.17
+  },
+  "other: global PATH litter": {
+   "count": 1,
+   "per_100_turns": 0.17
+  }
+ }
+}

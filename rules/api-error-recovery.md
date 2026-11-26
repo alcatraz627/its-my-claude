@@ -2,10 +2,10 @@
 brief: After an API-outage abort, a terse "keep going" means re-orient first. Reconstruct the goal, what is done and the interrupted step, then continue, rolling back if the abort left things half-done.
 triggers:
   - topic:api-error-recovery
-  - phrase:keep going
-  - phrase:proceed
-  - phrase:recover
-  - phrase:api error
+  - phrase:"keep going"
+  - phrase:"proceed"
+  - phrase:"recover"
+  - phrase:"api error"
 related:
   - rules/subagent-fleet-discipline.md
   - features/context-retention.md

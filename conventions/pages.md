@@ -9,7 +9,7 @@ triggers:
   - tool:pagekit
   - phrase:"local preview"
   - phrase:"html report"
-related: [conventions/html-output.md, rules/no-unasked-artifact-publish.md, rules/owner-decisions-go-through-a-wizard.md, rules/ui-visual-verification.md]
+related: [conventions/html-output.md, conventions/ui-brief.md, conventions/visual-design.md, rules/no-unasked-artifact-publish.md, rules/owner-decisions-go-through-a-wizard.md, rules/ui-visual-verification.md]
 tier: 2
 category: conventions
 updated: 2026-09-29

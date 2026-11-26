@@ -1,26 +1,25 @@
 {
-  "last_updated": "2026-10-26T20:29:16.882236Z",
-  "average_depth": 65.6,
-  "average_breadth": 1.8,
-  "fixation_rate": 0.36,
-  "assumption_rate": 0.58,
-  "overconfidence_rate": 0.39,
+  "last_updated": "2026-11-19T08:49:09.374672Z",
+  "average_depth": 199.0,
+  "average_breadth": 2.5,
+  "fixation_rate": 0.35,
+  "assumption_rate": 0.42,
+  "overconfidence_rate": 0.22,
   "common_assumptions": [
-    "file paths exist as expected from prior session context",
-    "tools and runtimes (go, adb, brew, gcloud) are installed and on PATH",
-    "git repository state matches what was last observed",
-    "external services and network endpoints are reachable",
-    "prior session work was committed or persisted correctly"
+    "Git branch and working tree are in expected state before operations",
+    "External services and test infrastructure are available without verification",
+    "File paths and directory structures match prior knowledge from earlier in the chain",
+    "Previously read file contents remain current across long multi-step chains"
   ],
   "strength_patterns": [
-    "Systematic file exploration precedes implementation in multi-step tasks",
-    "Verification steps (test runs, log inspection, diff checks) consistently follow modifications",
-    "Targeted grep and read patterns show efficient scoped information gathering"
+    "Multi-source cross-referencing (PR view, diff, comments, commits) before committing to decisions",
+    "Iterative test-and-verify loops catch regressions before pushing to remotes",
+    "Explicit state inspection (git status, pr view, lsof) before destructive or hard-to-reverse steps"
   ],
   "weakness_patterns": [
-    "Repeated reads of identical files within a single chain without intervening writes, indicating fixation loops",
-    "Extremely long chains (76–403 steps) proceed without intermediate direction pivots or progress checks",
-    "Environment assumptions (tool availability, file existence, prior state) are rarely verified before acting on them"
+    "Repeated reads of the same file without intervening changes indicate stalled or looping reasoning",
+    "Long chains accumulate context drift causing late-chain tool calls to re-verify early findings redundantly",
+    "Alternatives are rarely explored; first viable path is pursued linearly with low branching breadth"
   ],
   "trend": {
     "calibration_improving": false,

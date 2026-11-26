@@ -1,0 +1,3 @@
+idream reader 2026w46:
+1: agree: Give the agent a way to INSIST, but do block it once and tell the agent WHY
+3: agree: Yeah. Also can subagents or the /btw mode help with this, just something to explore

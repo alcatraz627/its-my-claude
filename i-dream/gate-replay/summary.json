@@ -1,0 +1,27 @@
+{
+ "ts": "2026-11-23T14:49:43Z",
+ "cases": 43,
+ "agreed_real": 27,
+ "classes": [
+  {
+   "class": "halted-or-waited",
+   "gate": "named-next-work-stop.sh",
+   "cases": 3,
+   "caught": 1
+  },
+  {
+   "class": "unverified-done",
+   "gate": "declared-ready-stop.sh",
+   "cases": 1,
+   "caught": 0
+  }
+ ],
+ "no_gate": {
+  "wasted-cost": 1,
+  "defect-in-build": 5,
+  "length-or-register": 9,
+  "skipped-something": 2,
+  "other: global PATH litter": 1,
+  "wrong-premise": 5
+ }
+}

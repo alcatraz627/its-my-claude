@@ -8,6 +8,12 @@ triggers:
   - tool:tui/colors.sh
   - tool:tui/pick.sh
   - tool:tui/tty.sh
+  - tool:tui/smoke.sh
+  - tool:tui/tuikit.py
+  - phrase:"settings screen"
+  - phrase:"confirm dialog"
+  - phrase:"blank pane"
+  - phrase:"blank screen"
 related:
   - conventions/tui-design.md
   - conventions/cli-help-design.md
@@ -16,7 +22,7 @@ related:
   - skills/shared/bash-gotchas.md
 tier: 2
 category: conventions
-updated: 2026-07-01
+updated: 2026-11-10
 stale_after_days: 180
 ---
 
@@ -35,9 +41,11 @@ the build.
    INPUT side  (scripts/tui/)          DISPLAY side (skills/shared/)
    colors.sh  tty.sh  require.sh        gum-tui.sh  (gum_* output wrappers)
    pick.sh    file-preview.sh
+   SCREEN side (scripts/tui/)           CHECK side (scripts/tui/)
+   tuikit.py  (box, legend, pane rules) smoke.sh  (blank-screen check)
    ───────────────────────────────      ────────────────────────────────
-   PATTERN side (this handbook): the --__ fzf-app blueprint · destructive
-   guards · the testing seams.
+   PATTERN side (this handbook): the --__ fzf-app blueprint · the
+   list-and-preview screen (§11) · destructive guards · the testing seams.
 ```
 
 The single most important fact: **fzf already is a TUI runtime.** Build on
@@ -91,6 +99,7 @@ esac
 
 main() {
   tui_have fzf && [ -t 1 ] && [ -t 0 ] || { "$SELF" --__feed; exit 0; }  # degrade BEFORE fzf
+  "$SELF" --__feed >/dev/null || { echo "mytool could not start" >&2; exit 1; }  # no blank frame (A11)
   local q; q="$(printf '%q' "$SELF")"              # the load-bearing quote
   "$SELF" --__feed | fzf --ansi --height=80% --reverse \
     --preview "$q --__preview {1}" \
@@ -116,6 +125,13 @@ invoking fzf, never inside it.
 | F5 | One palette via env | always | `FZF_DEFAULT_OPTS` + `GUM_*` env, set once. Don't double-color (gum styling + embedded ANSI). Gate all color via `colors.sh` so it never leaks into a pipe (A8). |
 | F6 | Command-palette / verb router | a tool with many verbs | `fzf --prompt ':' --bind 'enter:become(dispatch {})'`. Use `become` (not `execute`) so the verb owns a clean terminal (A3). Never auto-run on hover; require Enter. |
 | F7 | Two-axis filter (scope × match) | big lists | Cycle *scope* via `reload` with a source flag, and advertise fzf's `'exact` `^prefix` `suffix$` `!negate` in the header. `--nth` must point at a **clean uncolored field**, because `--nth` onto ANSI matches zero (A7). |
+| F9 | Question in a floating box | confirm a save, a drop, a quit with unsaved work | `key:transform(self --__flow step)`. The callback draws `tuikit.dialog` over the live screen, acts on the key, and prints the next fzf actions (`clear-screen+reload(...)`, or `abort`). No screen switch. Single keys need `tuikit.read_key` (A13). |
+| F10 | Headings in the list | more than about eight rows | Emit heading rows with a key that is no item (`group:name`) and make every action ignore that prefix. Start the cursor on row 2. |
+| F11 | Fixed-shape preview pane | any pane a person compares across rows | `tuikit.title`, then the SAME three labelled lines for every row, then `tuikit.section` dividers. A line that appears only sometimes makes rows impossible to compare, so show it always and dim it when it says nothing. |
+| F12 | Key legend footer | every screen | `--footer "$(tuikit.py legend ...)"`: aligned cells, green keeps, amber drops or undoes, cyan the rest. Three cells per row fits the list column. |
+| F13 | Try on move, undo on escape | choosing a value with a visible effect | In the value picker: `focus:execute-silent(self --__try KEY {1})+refresh-preview`, `start:pos(current)` so opening changes nothing, and on abort re-apply the value that was showing. Trying is never saving. |
+| F14 | Keep the place across `become` | a row opens another full screen and returns | Return with `exec self --at KEY` and `start:pos(index of KEY)`. A list that reopens at the top after every edit reads as broken. |
+| F15 | Drawn preview of what text cannot show | a setting whose effect is outside the terminal's text (an icon, a title bar, a screen edge) | A small "what it changes" section: half-block pixels for an image (`sips` to BMP, two pixels per cell), box-drawing for a window. Best effort: draw nothing when it cannot be drawn. |
 | F8 | In-list option toggles (live header) | adjustable options mid-browse | `execute-silent(mutate statefile)+reload(feed)+transform-header(header)` gives no modal and no flicker. Keep state in a `mktemp` arg (not a global) so callbacks are pure and headless-testable. Clean the temp in an EXIT trap. (zconvert `-i` ^O/^T.) |
 
 ## §4 · Failure-mode catalog: the traps that break TUIs here
@@ -134,6 +150,15 @@ account and macOS specific (the ones that actually bit), and Tier B is general.
 | A7 | `--nth` pointed at an ANSI-colored field | fuzzy match returns zero results | Color only the `--with-nth` display field; keep the `--nth` match field uncolored. |
 | A8 | color gated on `-t 1` only | raw escapes leak into a redirected stderr (`2>log`) or a pager | Gate on **both** fds (`-t 1 && -t 2`); `colors.sh` does this. |
 | A9 | `[ -r /dev/tty ]` as the interactivity test | `read </dev/tty` hangs/errors with no controlling terminal | Probe by *opening* it with `tui_have_tty` (subshell `exec 3</dev/tty`). |
+| A10 | a helper file located with `dirname "$0"` | works from the source folder; once installed as a link on PATH, every callback fails and the screen opens blank | Follow the link before taking the folder (a `readlink` loop, or `cd -P`). Test by starting the tool through a link in another folder. |
+| A11 | a feed, header or preview callback that fails | fzf draws an empty frame and says nothing: the list is empty because the command behind it died | Run the feed once BEFORE opening fzf, and print its error and exit 1 when it fails or prints nothing. Callbacks exit with their real status, never a blanket `exit 0`, and the script sets `pipefail`. |
+| A12 | header or row text wider than the list column | fzf cuts it with `··`, and the cut part is usually the instruction | With a side preview the list is the narrow column. Keep header lines and rows under about 55 characters, or split the header over two lines. |
+| A13 | reading one key inside `transform` or `execute-silent` | the box draws, the key is echoed and nothing happens until enter | fzf puts the terminal back in line mode a moment after starting the command. Poll and re-set one-key mode while waiting: `tuikit.read_key` does this. |
+| A14 | a screen offers an action its current state cannot deliver | "changes as you go" while nothing is connected; the owner tries values and sees no effect | Check the precondition before opening the screen that depends on it, ask in a box, and refuse plainly when declined. Never rely on a status line to carry it. |
+| A15 | `load:` used for a once-only action | the action repeats after every `reload`, and can loop | Use `start:` for anything that must run once. |
+| A16 | `$(tput cols)` for the window size | answers 80 whatever the window is, because its output is captured | `stty size </dev/tty`, with `tput` only as the fallback when there is no terminal. |
+| A17 | a message printed just before the screen redraws | the owner never sees it; an error looks like nothing happened | Put outcomes in a box (`tuikit.notice`) or the header. For plain prompts, wait for a key before returning. |
+| A18 | the same helper written into each tool | two tools, two legends, two dividers, drifting apart | If it draws part of a screen, it belongs in `tuikit.py`. Import it; do not copy it. |
 | B1 | TTY left raw after a crash mid-prompt | terminal unusable after the tool dies | fzf/gum restore on their own; for a hand-rolled `read` after gum, `stty sane` on the way out. |
 | B2 | no `SIGWINCH` redraw in a hand-rolled screen | layout corrupts on resize | Don't hand-roll, since fzf/gum handle resize. If you must, trap `WINCH` and redraw. |
 | B3 | color leaking into a pipe | escapes in captured output | Always gate via `colors.sh`; honor `NO_COLOR`. |
@@ -163,6 +188,45 @@ then test the parts:
 
 This is the [`exercise-based-verification`](../rules/exercise-based-verification.md)
 rule applied to TUIs: "looks right" is not "ran it."
+
+### The blank-screen check: run it before calling any TUI done
+
+A TUI that opens as an empty frame is the most repeated defect in tools built here. It has
+one shape: a callback fails, fzf has nothing to draw, and no error reaches the screen. It
+passes every headless test above, because those call the callbacks from the source folder
+with the builder's own paths. The owner starts the tool by the name on PATH.
+
+```bash
+bash ~/.claude/scripts/tui/smoke.sh --expect "a word on the main screen" -- mytool
+bash ~/.claude/scripts/tui/smoke.sh --keys "j Enter" --expect "a word on the next screen" -- mytool
+bash ~/.claude/scripts/tui/smoke.sh --keys "s" --keys "y" --expect "saved" -- mytool   # one --keys per step
+```
+
+`smoke.sh` starts the command in a real terminal, reads the screen back, prints it, and
+exits 1 when the screen is blank, shows a startup error, or closed by itself. It refuses a
+path, since the name on PATH is the thing under test.
+
+A TUI is not done until all five hold:
+
+1. `smoke.sh` passes for the main screen, started by its installed name.
+2. `smoke.sh --keys` passes for every screen a key opens (a picker, a history, a prompt).
+3. Breaking the tool on purpose (point its helper at a missing file) gives a plain error
+   and a failed check, never an empty frame. This proves trap A11 is closed.
+4. The printed screen was read: nothing cut with `··`, and every key in the legend is there.
+
+5. `python3 ~/.claude/scripts/tui/lint.py <the tool's files>` prints no findings, or each
+   one left is explained.
+
+The check reads text, so colour stays unverified. Say so, or look at a screenshot.
+
+Enforced: `scripts/hooks/tui-smoke-stop.py` (a Stop gate in `stop-gates.txt`) holds a reply
+that calls a changed screen done when no `tui/smoke.sh` run followed the last edit. It blocks
+once, then only notes. Saying the smoke check was not run passes. Mute:
+`touch ~/.claude/.no-tui-smoke-gate` . Open work on the kit: `~/.claude/scripts/tui/TODO.md` .
+
+Lived case, 2026-11-10: `zterminal look` passed 14 tests and a full tmux walkthrough, all run
+by its source path. Installed, it was a link in `~/.local/bin`, the helper was looked for
+beside the link, and the owner got an empty frame on first use.
 
 ## §6 · Degradation ladder: pointer and module map
 
@@ -215,6 +279,11 @@ UPPER/ctrl = destructive**, `?` = help.
 | `pick.sh` | `source` | `tui_pick_one` (one from stdin, fzf→gum→read); `tui_pick_many` (multi); `tui_choose OPT...` (static arg list); `tui_confirm PROMPT` (yes=0, no/headless=1). **Enriched (§10):** `tui_pick_key` (colored `key⇥display` in, clean key out); `tui_pick_or_add` (seeded suggestions + accept a typed-new value); `tui_strip_ansi` (filter). |
 | `file-preview.sh` | `exec` (`bash .../file-preview.sh F`) | rich bounded preview (jq/bat/xlsx-sheets→head), always exits 0. **Deliberate exception to the §4-A8 color gate: color is forced ON**, because a preview pane always wants ANSI. |
 
+| `tuikit.py` | `import tuikit` in Python, or `python3 .../tuikit.py dialog\|legend\|title\|section` from a shell | the drawn parts of a list-and-preview screen: `dialog`/`notice` (box over the live screen), `read_key`, `legend`, `choice`, `title`, `section` (§11). Always writes ANSI. |
+| `new-screen.sh` | `exec` (`bash .../new-screen.sh NAME [FOLDER]`) | writes a working list-and-preview tool (§11): the tool, its helper and its tests. Start here; do not hand-build a screen. |
+| `lint.py` | `exec` (`python3 .../lint.py FILE...` or `--scan DIR`) | reads a tool's source for the traps in §4 and exits 1 on any finding. A finding is a place to look, not proof of a fault. |
+| `smoke.sh` | `exec` (`bash .../smoke.sh [--keys K] [--expect T] -- tool`) | opens the tool by its installed name in a real terminal and exits 1 on a blank or errored screen (§5). Needs tmux. |
+
 **Discover live:** `bash ~/.claude/scripts/tui/list.sh` prints this catalog scanned straight from the modules' doc-headers, so it can't drift from the code the way a hand-kept list does. Run it before building a TUI to see what's already available.
 
 > **`set -e` note:** all five are sourced libraries. Under `set -euo pipefail`,
@@ -264,6 +333,87 @@ both-fd color gate keeps the same tool's piped and agent calls plain automatical
 **Reference implementation:** `gcc-schedule -i` (`scripts/schedule/schedule.sh`,
 the `_i_*` functions) and its criteria harness `scripts/schedule/test-interactive.sh`
 (A: agent-plain · C: feature coverage · E: enriched-picker contracts).
+
+## §11 · The list-and-preview screen: one shape for every tool
+
+A screen that lists things on the left and shows the highlighted one on the right is the
+default shape for a tool with more than a few settings or items. Build every one the same
+way, so the owner learns it once. Reference implementations: `zterminal look` and
+`zterminal banner` (`~/Code/Claude/its-my-config/shell/zcmd/tools/zterminal`,
+`zterminal-look.py`; `~/Code/Claude/banner-fun/home_variants.py` `feed` and `pane`).
+
+```
+ one line of state, under 55 characters      │ name of the highlighted row
+ GROUP HEADING                               │ ──────────────────────────────
+   row           value          not saved    │ label     value      (always
+   row           value                       │ label     value       these
+ GROUP HEADING                               │ label     value       three)
+   row           value                       │
+ ─────────────────────────────────────────── │ ── SECTION ───────────────────
+  enter change   u  put back   h  history    │ what the row changes, drawn
+  s     save     x  drop all   q  quit       │ ── SECTION ───────────────────
+```
+
+The rules, each of which was a defect before it was a rule:
+
+1. **Logic in a helper, the shell only draws and asks.** The helper answers one word per
+   step (`rows`, `header`, `detail KEY`, `try KEY VALUE`, `flow save`). Every step is then
+   testable with no terminal, and the screen is a thin `fzf` call over them.
+2. **The top line is the state**, in one short sentence (A12). It changes after every action
+   (`transform-header`).
+3. **The list is grouped** (F10) and each row is `label  value  marker`. The marker is a
+   short word, never a sentence: the detail belongs in the pane.
+4. **The pane has a fixed top**: `tuikit.title`, then the same three labelled lines for
+   every row (F11). Below it, `tuikit.section` dividers in the same order everywhere.
+5. **The footer is a legend** from `tuikit.legend` (F12), and every key in it is bound.
+   A test asserts both directions.
+6. **Questions are boxes over the screen** (F9), never a new screen. Anything lasting needs
+   a yes from a key press; with no terminal to ask on, the answer is no.
+7. **Trying is not saving.** Keep `saved` and `draft` as separate files, show the draft live,
+   and write `saved` only on a yes. Keep every save in a history, starting with the state
+   before the tool first ran, so there is always a way back.
+8. **Never rewrite a config the owner maintains.** Add one include line once, on a yes,
+   after a backup, and keep the tool's values in the tool's own file.
+9. **A precondition is checked before the screen that needs it** (A14).
+10. **The place is kept** when a row opens another screen and returns (F14).
+
+Skeleton of the flow callback and its binds:
+
+```bash
+# in the tool: one word from the helper becomes what the screen does next
+--__flow) word=$(helper flow "$2" "$3")
+  case "$word" in
+    refresh) printf 'clear-screen+reload(%s --__rows)+transform-header(%s --__header)+refresh-preview' "$q" "$q" ;;
+    redraw)  printf 'clear-screen' ;;
+    abort)   printf 'abort' ;;
+    edit\ *) printf 'become(%s --__screen edit %s)' "$q" "${word#edit }" ;;
+  esac ;;
+
+fzf --ansi --no-input --reverse --height=100% --delimiter=$'\t' --with-nth=2 --sync \
+  --header "$(helper header)" --footer "$(helper keys)" \
+  --preview "$q --__detail {1}" --preview-window "right,58%,border-left" \
+  --bind "start:pos(${start:-2})" \
+  --bind "enter:transform($q --__flow enter {1})" \
+  --bind "s:transform($q --__flow save)" \
+  --bind "q:transform($q --__flow quit),esc:transform($q --__flow quit)"
+```
+
+```python
+# in the helper: the box, the key, and the one word back
+import sys; sys.path.insert(0, str(Path.home() / ".claude/scripts/tui"))
+from tuikit import GREEN, CYAN, choice, dialog, legend, section, title
+
+def flow(step):
+    if step == "save":
+        key = dialog("Save this?", changes(), choice(("y", "save", GREEN), ("n", "keep trying", CYAN)))
+        if key in ("y", "Y"):
+            save()
+        return "refresh"
+```
+
+Testing a screen built this way: the helper's steps run under plain `subprocess` with state
+redirected to a temp folder by env vars; the tool is started through a link in another
+folder (A10); and `smoke.sh` opens each screen by its installed name, one `--keys` per step.
 
 ## Cross-link index
 

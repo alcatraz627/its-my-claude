@@ -99,6 +99,10 @@ How each part binds:
   (an artifact or a repo gather could not read; the briefing names it so the owner
   can veto). Ask once, in one line, only when the target moved, the entry is
   `UNVERIFIED:` or NOT ACTIONABLE, or a one-shot grant was already spent.
+  A carried grant covers reversible steps as written, so do not hold finished
+  work waiting for the owner to say it again. For a step that is hard to undo
+  (a delete, a send, a production deploy, a forced push), name it and ask once
+  before its first use in this session (owner ruling, 2026-11-26).
   Push-to-main and policy asks still go through their hooks, as Switchboard sets
   them. A legacy checkpoint with "Expired authorizations" instead carries no
   verbatim grants: confirm those in one line before acting.

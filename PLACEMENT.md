@@ -3,8 +3,6 @@
 > **Read this before adding any rule, feature doc, or convention to `~/.claude/`.**
 > This rule is the anchor. CLAUDE.md length will rot without it.
 
-<!-- sessions: impr-cfg-7a@2026-04-24 -->
-
 ## The problem this solves
 
 Frontier LLMs reliably follow ~150–200 instructions. Claude Code burns ~50 on its own system prompt. A CLAUDE.md past ~200 lines degrades adherence: rules in the tail get quietly ignored, not merely loaded at token cost. This rule keeps always-loaded content in the zone the model can actually follow.
@@ -89,11 +87,11 @@ special case is `rules/`. Measured cost and the full picture live in
 
 ## Sub-file frontmatter (mandatory)
 
-Every file under `rules/`, `features/`, `conventions/` opens with this YAML block:
+Every file under `rules/`, `features/`, `conventions/` opens with this YAML block, except each folder's `README.md`:
 
 ```yaml
 ---
-brief: One-line semantic summary (< 120 chars). PRIMARY selection signal.
+brief: One or two sentences, about 250 chars, front-loading what the doc is and when to load or skip it. PRIMARY selection signal.
 triggers:
   - tool:<name>                 # literal tool/CLI/binary name
   - topic:<slug>                # task domain: github-repos, docs-work, macos-windows, html-output
@@ -124,6 +122,8 @@ stale_after_days: 90
 Triggers are **advisory**: they guide agent self-selection when scanning LOOKUP.md + CLAUDE.md pointers at session start. No hook auto-loads files *based on triggers* today (the `rules/` directory auto-load is a separate native mechanism; see "Loading reality" above); triggers document intent so an upgrade path exists.
 
 **Rule:** `brief` must be sufficient on its own for the agent to decide "load or skip." `triggers` are secondary hints for literal/domain matching.
+
+**`related:`** means "read next", not "mirror". It need not be symmetric, and a one-way link is fine. Add an entry when the doc's body cites a sibling doc, written as `folder/name.md`. Docs nobody cites get a row in `LOOKUP.md` instead of a `related:` back-link.
 
 ### Staleness
 
@@ -191,7 +191,7 @@ Triggers are **advisory**: they guide agent self-selection when scanning LOOKUP.
 ## For future agents working on this config
 
 - **Every addition** follows the flowchart above
-- **Every sub-file** carries full frontmatter (no exceptions)
+- **Every sub-file** carries full frontmatter (no exceptions; each folder's `README.md` is not a sub-file)
 - **CLAUDE.md never exceeds 200 lines**: if an edit would push past, something else must move out first
 - **Validator:** run `bash ~/.claude/scripts/validate-triggers.sh` after any sub-file add/rename
 - **Rules index:** after adding/renaming/removing a `rules/*.md` file, regenerate the always-on menu with `bash ~/.claude/scripts/rules-index.sh` (it derives from each rule's `brief:`; if a similar rule exists, refine it instead of duplicating)

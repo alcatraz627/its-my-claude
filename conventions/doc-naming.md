@@ -16,8 +16,9 @@ Naming and session-tagging rules for files Claude creates.
 
 ## Quick rules
 
-- **Point-in-time files** (scratchpad plans, checkpoints, research, memory files): prefix with `YYYYMMDD-`, add session tag
-- **Living docs** (WAL, runtime-notes, CLAUDE.md, SKILL.md, registries, source code): no datestamp, no session tag (WAL/runtime-notes encode session identity in their headers)
+- **Point-in-time files** (scratchpad plans, checkpoints, research): prefix with `YYYYMMDD-`, add session tag
+- **Living docs** (WAL, runtime-notes, CLAUDE.md, SKILL.md, registries, the root indices, source code): no datestamp, no session tag (WAL/runtime-notes encode session identity in their headers)
+- **Memory files** keep their type prefix (`user_`, `feedback_`, `project_`, `reference_`): no date, no session tag
 
 ## Session tag format
 

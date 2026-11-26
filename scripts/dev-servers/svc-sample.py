@@ -143,22 +143,26 @@ def descendants(children, root):
     return seen
 
 
-def socket_map():
+def socket_map(timeout=240):
     """One lsof sweep: (ports each pid listens on, peers per local port, who owns
-    each local endpoint).
+    each local endpoint), or None when the sweep could not finish.
 
     Peers are keyed by the remote "host:port" string because that is what
     distinguishes a reload from a websocket that has simply been left open. A
     loopback peer's own socket is in the same sweep, which is how a connection
     gets traced back to the program that made it.
+
+    lsof took 15 to 194 seconds on this machine with about 1,400 processes. None is
+    not the same as an empty result: empty would read as "no service has a port",
+    which skips every reap and forgets every port.
     """
     listening, peers, owners = {}, {}, {}
     try:
         out = subprocess.run(
-            ["lsof", "+c", "0", "-nP", "-iTCP"], capture_output=True, text=True, timeout=30
+            ["lsof", "+c", "0", "-nP", "-iTCP"], capture_output=True, text=True, timeout=timeout
         ).stdout
     except Exception:
-        return listening, peers, owners
+        return None
 
     for line in out.splitlines()[1:]:
         fields = line.split()
@@ -271,6 +275,7 @@ def main():
     ap.add_argument("--policy", default="")
     ap.add_argument("--holds", default="")
     ap.add_argument("--touch-dir", default="")
+    ap.add_argument("--sweep-timeout", type=float, default=60.0)
     args = ap.parse_args()
 
     now = time.time()
@@ -296,7 +301,12 @@ def main():
         return 3
 
     children = process_tree()
-    listening, peers, owners = socket_map()
+    swept = socket_map(args.sweep_timeout)
+    sweep_failed = swept is None
+    listening, peers, owners = swept or ({}, {}, {})
+    if sweep_failed:
+        print("svc-sample: socket sweep did not finish in %gs; keeping the last known ports, reaping nothing"
+              % args.sweep_timeout, file=sys.stderr)
     previous = load_state(args.state)
 
     state, rows = {}, []
@@ -322,6 +332,8 @@ def main():
 
         prior = previous.get(name, {})
         prior_endpoints = set(prior.get("endpoints", []))
+        if sweep_failed and online:
+            ports, endpoints = set(prior.get("ports", [])), prior_endpoints
         lastseen = prior.get("lastseen") or 0
         started = prior.get("started") or 0
         source = prior.get("source") or ""
@@ -366,6 +378,10 @@ def main():
         limit = float(rule.get("idle_min") or args.idle_min)
         hold = holds.get(name) or {}
         held = (hold.get("until") or 0) > now
+        verdict = reap_verdict(online, keep, ports, age_min, idle_min, args.grace_min, limit, held)
+        # Without a sweep nothing proves the service is idle, whatever the old sample said.
+        if sweep_failed and verdict == "REAP":
+            verdict = "unknown(no sweep)"
 
         rows.append(
             {
@@ -381,10 +397,7 @@ def main():
                 "why": hold.get("why") if held else rule.get("why"),
                 "hold_until": hold.get("until") if held else None,
                 "restarts": env.get("restart_time", 0),
-                "verdict": reap_verdict(
-                    online, keep, ports, age_min, idle_min,
-                    args.grace_min, limit, held,
-                ),
+                "verdict": verdict,
             }
         )
 
@@ -417,7 +430,7 @@ def main():
     else:
         print(json.dumps(rows))
 
-    return 0
+    return 4 if sweep_failed else 0
 
 
 if __name__ == "__main__":

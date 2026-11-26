@@ -133,3 +133,16 @@ Model Plan naming it, or switching models on your own judgment. Stop: route it o
 ## Auxiliary lm and Gemini use (full text moved from the rule)
 
 The owner has authorized local models and Gemini generally. Use Gemini eagerly for a broad, low-judgment, context-heavy sweep when it reduces work. Before the call, specify the corpus, requested output, and validation criteria. Afterward, check a targeted sample of source-linked claims and probe likely omissions or boundary cases. If checking would repeat most of the sweep, use the main agent or a direct sub-agent instead. Keep judgment, edits, and final claims with the main agent. Never send credentials or unreviewed secret-bearing inputs.
+
+## Wording moved out of the rule to meet the 2,200-byte cap (2026-11-04)
+
+The rule keeps every directive in shorter words. These are the longer forms it replaced.
+
+- Lanes: "local `lm` and `lm gemini` are complements for what Claude cannot do well, never a cheaper stand-in (owner, 2026-08-30)"; "`lm gemini` for a sweep of a corpus too big for context (untrusted output)"; "fable (vague, complex work; still declared)".
+- Effort: "Sub-agent effort stays at or below a high main. Sonnet gets liberal effort, opus medium unless real judgment is needed, and xhigh needs the owner."
+- Fable main: "A fable-tier main does involved work ITSELF (owner 2026-09-01). It may delegate review, verification and cheap passes, never authoring (guard-model-tier.sh blocks it)."
+- Escalation: "(failed gate, over 2 retries, correction, irreversible stakes)" and "A missing model falls one lane DOWN, never up to fable."
+- Gemini sweeps: the rule now points here (section "Auxiliary lm and Gemini use" above) for "state the corpus, output and validation criteria before; sample-check its claims afterward".
+- Policy layer: "Fable usage-window advisories (80/90 percent) belong to the policy layer." (Also stated in "Escape hatches" above.)
+- Off-lane record: "Before picking a model for a seat, read its track record in `~/Code/local-models/docs/model-notes.md`. After a run off the usual lane (any non-Claude seat, or a Claude model in a role it rarely holds, such as Sonnet as main), add a row there; a run that teaches more gets a report in `docs/model-runs/` (guide: its README)."
+- Frontmatter brief, before shortening: "Route work to the smallest adequate lane (local lm, gemini, haiku, sonnet, opus), carry a 4-line Model Plan, and never switch models without explicit user confirmation. Enforced by guard-model-tier.sh."

@@ -34,7 +34,7 @@ AGENT_HOME="$SCHED_HOME/agents"
 GATEWAY_MARK="$SCHED_HOME/.gateway"
 GATEWAY=0; [[ -f "$GATEWAY_MARK" ]] && GATEWAY=1
 CRON_LABEL="com.alcatraz.gcc-cron"
-is_timed() { case "$1" in daily|weekly|monthly|one-shot) return 0 ;; *) return 1 ;; esac; }
+is_timed() { case "$1" in hourly|daily|weekly|monthly|one-shot) return 0 ;; *) return 1 ;; esac; }
 
 mkdir -p "$SCHED_HOME" "$LOG_HOME"
 [[ -f "$REGISTRY" ]] || echo '{}' > "$REGISTRY"
@@ -72,7 +72,7 @@ ${DIM}Claude-facing usage contract: ~/.claude/scripts/schedule/INSTRUCTIONS.md${
 ${BLD}USAGE${RST}
   $PROG ${CYN}-i${RST}${DIM}|--interactive${RST}          ${DIM}colored fuzzy browser: every command, for humans (needs a terminal)${RST}
   $PROG ${CYN}add${RST}     --name <slug> <schedule-mode> --command <shell> [opts]
-                schedule-mode: --at <ISO> | --daily-at <HH:MM> | --weekly <dow> <HH:MM> | --monthly <day> <HH:MM>
+                schedule-mode: --at <ISO> | --hourly <MM> | --daily-at <HH:MM> | --weekly <dow> <HH:MM> | --monthly <day> <HH:MM>
   $PROG ${CYN}list${RST}    [--all]
   $PROG ${CYN}inventory${RST}                  survey ALL launchd plists + user crontab (read-only audit)
   $PROG ${CYN}doctor${RST} [--check-calendar]  drift audit (+ sweeps missed one-shots into history)
@@ -95,6 +95,7 @@ ${BLD}add FLAGS${RST}
   --at <ISO datetime>      one-shot: fire once at YYYY-MM-DDTHH:MM local
   --daily-at <HH:MM>       daily recurring: fire every day at HH:MM
   --weekly <dow> <HH:MM>   weekly recurring: fire every <dow> at HH:MM
+  --hourly <MM>            hourly recurring: fire at minute MM of every hour
   --monthly <day> <HH:MM>  monthly recurring: fire on <day> (1-31) of each month at HH:MM
                            dow ∈ {mon, tue, wed, thu, fri, sat, sun}
   ── optional ──────────────────────────────────────────────────────────
@@ -571,7 +572,7 @@ PLIST
 
 # ── add ────────────────────────────────────────────────────────────────────
 cmd_add() {
-  local name="" at="" daily_at="" weekly_dow="" weekly_at="" monthly_day="" monthly_at=""
+  local name="" at="" hourly_min="" daily_at="" weekly_dow="" weekly_at="" monthly_day="" monthly_at=""
   local cmd_str="" desc="" alert="10" working_dir=""
   local do_calendar=1 do_bootstrap=1 force=0 dry_run=0
   local env_pairs=()
@@ -582,6 +583,7 @@ cmd_add() {
       --at)           at="$2"; shift 2 ;;
       --daily-at)     daily_at="$2"; shift 2 ;;
       --weekly)       weekly_dow="$2"; weekly_at="$3"; shift 3 ;;
+      --hourly)       hourly_min="$2"; shift 2 ;;
       --monthly)      monthly_day="$2"; monthly_at="$3"; shift 3 ;;
       --command)      cmd_str="$2"; shift 2 ;;
       --description)  desc="$2"; shift 2 ;;
@@ -608,11 +610,13 @@ cmd_add() {
   [[ -n "$at" ]]         && mode_count=$((mode_count + 1))
   [[ -n "$daily_at" ]]   && mode_count=$((mode_count + 1))
   [[ -n "$weekly_dow" ]] && mode_count=$((mode_count + 1))
+  [[ -n "$hourly_min" ]] && mode_count=$((mode_count + 1))
   [[ -n "$monthly_day" ]] && mode_count=$((mode_count + 1))
-  (( mode_count == 1 )) || fail "exactly one of --at <ISO>, --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM> required (got $mode_count)"
+  (( mode_count == 1 )) || fail "exactly one of --at <ISO>, --hourly <MM>, --daily-at <HH:MM>, --weekly <dow> <HH:MM>, --monthly <day> <HH:MM> required (got $mode_count)"
 
   local kind
   if   [[ -n "$at" ]];         then kind="one-shot"
+  elif [[ -n "$hourly_min" ]]; then kind="hourly"
   elif [[ -n "$daily_at" ]];   then kind="daily"
   elif [[ -n "$weekly_dow" ]]; then kind="weekly"
   else                              kind="monthly"
@@ -686,6 +690,20 @@ cmd_add() {
       when_human="ONCE on $fire_date $(printf '%02d:%02d' $h $mi) local time then self-unloads"
       cal_y="$y"; cal_mo="$mo"; cal_d="$d"; cal_h="$h"; cal_mi="$mi"
       cal_summary="[cron-once] $name: fires $fire_date $(printf '%02d:%02d' $h $mi)"
+      ;;
+
+    hourly)
+      [[ "$hourly_min" =~ ^[0-9]{1,2}$ ]] && (( 10#$hourly_min <= 59 )) \
+        || fail "--hourly takes a minute 0-59, got '$hourly_min'"
+      mi=$((10#$hourly_min))
+      sci_xml="        <key>Minute</key><integer>$mi</integer>"
+      fire_at_meta="hourly@$(printf '%02d' $mi)"
+      when_human="HOURLY at minute $(printf '%02d' $mi) (recurring; does not self-unload)"
+      # A calendar event per hour would bury the calendar, so the companion is one daily
+      # marker that states the true cadence (rules/scheduling-discipline.md).
+      read -r cal_y cal_mo cal_d cal_h cal_mi < <(next_daily_start 9 0)
+      cal_summary="[cron-hourly] $name: fires every hour at :$(printf '%02d' $mi)"
+      cal_rrule="FREQ=DAILY"
       ;;
 
     daily)

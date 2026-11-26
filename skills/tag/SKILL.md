@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 
 ## Brief
 
-Point at something worth enshrining and `/tag` files it into `~/.claude/` correctly. It resolves the target, works out the right home via the PLACEMENT two-axis logic, confirms the plan with you, writes the item with proper frontmatter, and updates every index and pointer that must reference it. Content lives in exactly one canonical home; every other location gets a pointer, not a copy. It promotes an item into CLAUDE.md's always-loaded core only when the tier heuristics justify it, and it chains `/migrate` when the action is structural.
+Point at something worth enshrining and `/tag` files it into `~/.claude/` correctly. It resolves the target, works out the right home via the PLACEMENT two-axis logic, writes the item with proper frontmatter, updates every index and pointer that must reference it, and reports what it filed and where. Content lives in exactly one canonical home; every other location gets a pointer, not a copy. It promotes an item into CLAUDE.md's always-loaded core only when the tier heuristics justify it, and it chains `/migrate` when the action is structural.
 
 This is the manual, in-the-moment front-end to the placement discipline that `PLACEMENT.md`, `gcc-hygiene.md`, and `conventions/preference-graduation.md` document but otherwise rely on an agent remembering to apply. The whole value is that it performs the full filing-and-cross-referencing ritual so a good idea does not die inline in a session.
 
@@ -121,11 +121,14 @@ recommendation first. Only escalate to a `std::claude::tui` picker (source
 `~/.claude/scripts/tui/pick.sh`, use `tui_choose`; never hand-roll) when the choice
 genuinely needs the user and a one-line question will not do.
 
-## Phase 3: Propose and confirm
+## Phase 3: Settle the plan
 
-Present ONE consolidated plan and wait for approval. Do not write anything yet.
+Settle ONE consolidated plan and carry it out. Do not wait for approval: the owner
+ruled that `/tag` picks the home, files the item and reports after (global memory
+`feedback_tag-file-without-asking`). Stop first only when a write would overwrite a
+file this run did not create, or would push CLAUDE.md past its line budget.
 
-The plan states:
+The plan, which becomes the report, states:
 
 - the canonical home (new file or append-to-existing), with the exact path
 - the frontmatter you will write (brief, triggers, tier, `paths:` if scoped, related)
@@ -134,13 +137,14 @@ The plan states:
 - any structural-change trigger that will chain `/migrate` (see Notes)
 - for a project-specific item, the project `.claude/` destination and the reason
 
-You may halt at any point to ask a focused question or offer a suggestion (a better
-home, a related item worth tagging too, a cross-link the user may not have considered).
-This is encouraged; the user wants the skill's judgment, not silent compliance.
+A suggestion (a better home, a related item worth tagging too, a cross-link the user
+may not have considered) goes in the report after the write. The user wants the
+skill's judgment, stated, not a question. Never re-raise a tag ask the owner left
+unanswered.
 
 ## Phase 4: Write and propagate
 
-Only after approval. For every write, hold the file lock (acquire, write, release).
+For every write, hold the file lock (acquire, write, release).
 
 1. Create or append the canonical file with correct, validated frontmatter.
 2. Apply each index/pointer edit from the ripple set: the `LOOKUP.md` row, the

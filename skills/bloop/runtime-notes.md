@@ -1,3 +1,16 @@
+## bloop: zrecover victim selection, three gates [gcc-clean 9080e064] 2026-11-05
+
+**Purpose:** build an approved behaviour change to a live watchdog through one validator, then fix rounds.
+
+**Insights:**
+
+1. Each gate found new majors after a run where every author mutation went red, because the author's mutations only cover the author's own mental model. A simulator over the real decision code (fake clock, fake process table, real scan) was the cheapest way to pin them, and the validators' best finds came from combining two correct rules (a small countdown plus the gap delaying a large runaway past the watchdog).
+2. A rule that replaces a measurement needs its boundary attacked too: "per freeze" keyed on one load sample was steppable by a one-scan dip. A time window has no such boundary.
+3. Read the live log after the restart, not only the suite: a broad `except Exception` added in the fix round logged an error on every clean start, and 152 green tests did not see it because none asserted the no-file case.
+4. Rung 2 of the loop floor says escalate, but a reversible, non-taste call with a pick in hand should be taken and reported (owner, 2026-11-05). The question cost 80 minutes and two 430k pings.
+
+---
+
 ## bloop: Ghostty settings window, engine plus front end [556b1dee] 2026-10-31
 
 **Purpose:** build the settings window from an approved build-ui plan on a repo outside the gcc, with a builder seat for the front end and one validator.

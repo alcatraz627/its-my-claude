@@ -3,8 +3,8 @@ brief: When a parallel sub-agent fleet hits a transient API throttle, salvage fi
 triggers:
   - topic:subagent-fleet
   - topic:api-error-recovery
-  - phrase:re-dispatch
-  - phrase:fleet died
+  - phrase:"re-dispatch"
+  - phrase:"fleet died"
   - tool:Agent
   - tool:Workflow
 related:

@@ -1,5 +1,5 @@
 ---
-brief: After user corrections: state mistake, identify pattern, update mistake-patterns.md, check for hook, fix
+brief: After user corrections: state mistake, identify pattern, invoke /atone, check for hook, fix
 triggers:
   - topic:user-corrections
   - phrase:"revert this"

@@ -18,7 +18,7 @@ A two-tier memory system: per-project (auto-loaded) and global (cross-project).
 ## Tiers
 
 - **Per-project:** `~/.claude/projects/<slug>/memory/MEMORY.md` plus referenced `<type>_*.md` files. Auto-loaded every session.
-- **Global:** `~/.claude/memory/global/MEMORY.md` plus files. Not auto-loaded, so reference it in CLAUDE.md for agents to read alongside per-project memory.
+- **Global:** `~/.claude/memory/global/MEMORY.md` plus files. A SessionStart hook injects the index into every session as the `[global memory]` block; read a listed file when its line applies.
 
 ## Cascade rule
 
@@ -47,6 +47,8 @@ When both tiers have a memory on the same topic, **per-project takes precedence*
 Code patterns derivable by reading current state, git history and who-changed-what, debugging fix recipes, anything already in CLAUDE.md, and ephemeral task details. Even if the user asks, ask back "what was *surprising* about this?" and save only that.
 
 ## Promotion workflow
+
+**Placement test, applied when the memory is written:** a lesson about how the agent behaves (when to ask, when to stop, how to report, what to verify) goes to global memory straight away, because it holds in every repo. A fact about one repo, one product or one customer stays with that project. Do not wait for the lesson to recur: nothing watches for recurrence, and in November 2026 one steer was saved four times in four project folders that never read each other.
 
 Per-project memory that proves universal (observed in 2 or more projects) graduates to global. See `~/.claude/memory/global/README.md` for promotion criteria and format.
 

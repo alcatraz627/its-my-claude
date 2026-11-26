@@ -24,6 +24,8 @@ All scratch files at the `~/.claude/` root start with `_` and end with `.claude.
 
 ## Monthly archival (MANDATORY going forward)
 
+This covers scratch files at the `~/.claude` root. Checkpoints in every other folder go to the same archive through `features/debris-prune.md`.
+
 Scratch files older than **14 days** must be archived monthly to:
 
 ```

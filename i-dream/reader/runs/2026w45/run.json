@@ -1,0 +1,782 @@
+{
+  "week": "2026w45",
+  "at": "2026-11-02T16:46:27.562622Z",
+  "forwarded": [
+    {
+      "id": "c-5a39aac6",
+      "kind": "session-cluster",
+      "key": "51808dfa-5193-4a38-a95c-f956bf405ea8",
+      "summary": "Session 51808dfa in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-84cd98e70fd16d1b",
+        "checkpoints:ckpt-c68883b26f0b085a",
+        "proposals:prop-20261030-180957-b7",
+        "proposals:prop-20261030-181001-04",
+        "signals:51808dfa-5193-4a38-a95c-f956bf405ea8-1793383781"
+      ],
+      "domains": [
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-30T18:09:41.605260Z",
+      "last_ts": "2026-10-30T21:21:12Z",
+      "score": 17.16
+    },
+    {
+      "id": "c-34bc06f7",
+      "kind": "session-cluster",
+      "key": "220a70a0-9a70-474e-b03f-360d7dab2179",
+      "summary": "Session 220a70a0 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-3f08619b8d208da4",
+        "proposals:prop-20261030-162437-45",
+        "signals:220a70a0-9a70-474e-b03f-360d7dab2179-1793365518"
+      ],
+      "domains": [
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-30T13:05:18.472264Z",
+      "last_ts": "2026-10-30T16:28:52Z",
+      "score": 13.44
+    },
+    {
+      "id": "c-b86b2809",
+      "kind": "session-cluster",
+      "key": "74b1491f-8f20-4f36-b438-ba91cae91d2c",
+      "summary": "Session 74b1491f in slack-automation: the owner corrected the agent, a mistake was recorded (Owner gates and an admin note handed over without the why, history or plain steps)",
+      "evidence": [
+        "atone:mist-20261028-184946-19",
+        "checkpoints:ckpt-1dbdeb02b3d5ec8c",
+        "checkpoints:ckpt-32ea1e0ebcf2f9c1",
+        "signals:74b1491f-8f20-4f36-b438-ba91cae91d2c-1793191137"
+      ],
+      "domains": [
+        "atone",
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-28T12:38:57.290199Z",
+      "last_ts": "2026-10-29T06:05:39Z",
+      "score": 13.24
+    },
+    {
+      "id": "c-dfe17f8b",
+      "kind": "session-cluster",
+      "key": "9c2e0ff1-7dbf-46a0-9a2e-496eaf2308ba",
+      "summary": "Session 9c2e0ff1 in versable-foundry: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-fbfab40dbbf2b217",
+        "proposals:prop-20261027-132204-8d",
+        "signals:9c2e0ff1-7dbf-46a0-9a2e-496eaf2308ba-1793114279"
+      ],
+      "domains": [
+        "checkpoints",
+        "proposals",
+        "signals"
+      ],
+      "provenances": [
+        "agent",
+        "human"
+      ],
+      "first_ts": "2026-10-27T13:22:04Z",
+      "last_ts": "2026-10-27T18:39:03Z",
+      "score": 10.41
+    },
+    {
+      "id": "c-7e3023c1",
+      "kind": "session-cluster",
+      "key": "076c2049-583f-424b-a508-a8744daa635d",
+      "summary": "Session 076c2049 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-15848e8885d06bdf",
+        "checkpoints:ckpt-77a38650838f903b",
+        "checkpoints:ckpt-ee773eb6b2986b82",
+        "signals:076c2049-583f-424b-a508-a8744daa635d-1793282677",
+        "signals:076c2049-583f-424b-a508-a8744daa635d-1793286353"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-29T11:10:32Z",
+      "last_ts": "2026-10-29T20:31:27Z",
+      "score": 5.17
+    },
+    {
+      "id": "c-1f725c61",
+      "kind": "repeat",
+      "key": "asked-owner-for-a-value-already-derivable",
+      "summary": "'asked-owner-for-a-value-already-derivable' came up 3 times from 1 independent source(s) across atone",
+      "evidence": [
+        "atone:mist-20261008-145106-69",
+        "atone:mist-20261023-193439-69",
+        "atone:mist-20261102-142233-82"
+      ],
+      "domains": [
+        "atone"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-08T14:51:06Z",
+      "last_ts": "2026-11-02T14:22:33Z",
+      "score": 4.74
+    },
+    {
+      "id": "c-8bfd3b1d",
+      "kind": "session-cluster",
+      "key": "12b74374-20d4-467f-9bf7-87e28909825d",
+      "summary": "Session 12b74374 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-1c44ac1ed68bf930",
+        "checkpoints:ckpt-2927dd2a41ca998e",
+        "signals:12b74374-20d4-467f-9bf7-87e28909825d-1793364485"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-30T12:48:05.323473Z",
+      "last_ts": "2026-10-30T16:20:11Z",
+      "score": 4.48
+    },
+    {
+      "id": "c-0c8638ad",
+      "kind": "session-cluster",
+      "key": "f7b62fe2-3d88-4071-b4a4-8f8b2e1f948a",
+      "summary": "Session f7b62fe2 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-08fbfea30646cf53",
+        "signals:f7b62fe2-3d88-4071-b4a4-8f8b2e1f948a-1793182288",
+        "signals:f7b62fe2-3d88-4071-b4a4-8f8b2e1f948a-1793182519"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-28T10:11:28.165083Z",
+      "last_ts": "2026-10-28T10:28:56Z",
+      "score": 3.66
+    },
+    {
+      "id": "c-abdabcf5",
+      "kind": "session-cluster",
+      "key": "b60883a8-1728-4cd7-8100-c5f6a83052f2",
+      "summary": "Session b60883a8 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-68a1f114496cb247",
+        "checkpoints:ckpt-e202f76f5c97a664",
+        "signals:b60883a8-1728-4cd7-8100-c5f6a83052f2-1793101876"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-27T11:51:16.390248Z",
+      "last_ts": "2026-10-27T17:49:11Z",
+      "score": 3.47
+    },
+    {
+      "id": "c-586c5af9",
+      "kind": "session-cluster",
+      "key": "0e7c704b-4da7-4167-a1af-22f636de4720",
+      "summary": "Session 0e7c704b in better-file-browser: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-d4561b1e307af6af",
+        "signals:0e7c704b-4da7-4167-a1af-22f636de4720-1793098897"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-27T11:01:37.717720Z",
+      "last_ts": "2026-10-27T14:56:09Z",
+      "score": 3.01
+    },
+    {
+      "id": "c-53a4b171",
+      "kind": "session-cluster",
+      "key": "0cbfd6a8-6242-44c6-af95-4b137f9baef9",
+      "summary": "Session 0cbfd6a8 in slack-automation: the owner corrected the agent, the core-dump left items pending",
+      "evidence": [
+        "checkpoints:ckpt-6f12e8ee4a2ee4e2",
+        "signals:0cbfd6a8-6242-44c6-af95-4b137f9baef9-1793089734"
+      ],
+      "domains": [
+        "checkpoints",
+        "signals"
+      ],
+      "provenances": [
+        "human"
+      ],
+      "first_ts": "2026-10-27T08:28:54.408980Z",
+      "last_ts": "2026-10-27T14:36:13Z",
+      "score": 3.0
+    }
+  ],
+  "named": {
+    "items": [
+      {
+        "cluster": "c-1f725c61",
+        "kind": "repeat",
+        "title": "Asked you for something already written down in your own notes",
+        "why": "Three atone entries (mist-20261102-142233-82, mist-20261023-193439-69, mist-20261008-145106-69) each record the same mistake across independent projects while the registered check shows zero fires in the same period.",
+        "evidence_ids": [
+          "atone:mist-20261102-142233-82",
+          "atone:mist-20261023-193439-69",
+          "atone:mist-20261008-145106-69"
+        ],
+        "proposal": {
+          "target": "guard-lazy-question.sh",
+          "change": "Audit why the script produces zero fires and change its exit code to 1 so it blocks the turn instead of exiting silently when the answer to an owner ask is already present in notes or memory."
+        },
+        "happened": [
+          {
+            "evidence_id": "atone:mist-20261102-142233-82",
+            "what": "Listed Clanky's own accounts as a blocker on you when the project notes already answered which accounts existed."
+          },
+          {
+            "evidence_id": "atone:mist-20261023-193439-69",
+            "what": "Asked you for a Speedway login and created a new test account when the project notes already had the login details."
+          },
+          {
+            "evidence_id": "atone:mist-20261008-145106-69",
+            "what": "Asked you which backend pairs with each frontend and shipped a literal question-mark placeholder when the app's own code already answered it."
+          }
+        ],
+        "why_repeats": "The check registered to stop Claude from asking questions whose answers are already derivable has not fired once in the last fourteen days, so nothing has stopped any of these occurrences.",
+        "fix": "The check's matching logic needs to be fixed and its exit mode changed to blocking so it stops the turn rather than running silently when notes or memory already contain the answer Claude is about to ask for.",
+        "guard": {
+          "hook_id": "guard-lazy-question",
+          "plain": "A check that is supposed to stop Claude from asking you for information it could look up itself",
+          "verdict": "no",
+          "gap": "It has not fired once in the last fourteen days while the same mistake appeared three times across three different projects; either its matching logic never triggers or it exits without stopping the turn"
+        }
+      },
+      {
+        "cluster": "c-b86b2809",
+        "kind": "structural-need",
+        "title": "Sent you a list of action requests with no reason attached to any of them",
+        "why": "atone:mist-20261028-184946-19 records that owner gates were handed over without the why, history, or plain steps; no registered check covers this.",
+        "evidence_ids": [
+          "atone:mist-20261028-184946-19",
+          "checkpoints:ckpt-32ea1e0ebcf2f9c1",
+          "checkpoints:ckpt-1dbdeb02b3d5ec8c",
+          "signals:74b1491f-8f20-4f36-b438-ba91cae91d2c-1793191137"
+        ],
+        "proposal": {
+          "target": "owner-ask-content-stop.py",
+          "change": "Exit 1 when a proposed batch of owner asks contains any item with no rationale clause, blocking until a reason is attached."
+        },
+        "happened": [
+          {
+            "evidence_id": "atone:mist-20261028-184946-19",
+            "what": "Asked you to delete a VM, approve a weekly live test, rule on a network policy, and rotate keys — a batch of gate requests — without explaining why each was needed, what had led to it, or what the plain steps were."
+          }
+        ],
+        "why_repeats": "Nothing checks whether a batch of asks directed at you includes a rationale before it is sent; bare imperatives reach you with no context attached.",
+        "fix": "Add a pre-send check that requires each ask directed at you to include a one-sentence reason; a batch containing a bare imperative with no rationale should be held until context is added.",
+        "guard": {
+          "hook_id": null,
+          "plain": "Nothing currently checks that asks sent to you include context before they go out",
+          "verdict": "no",
+          "gap": "No registered check covers whether owner-directed action requests include a reason or history"
+        }
+      },
+      {
+        "cluster": "c-5a39aac6",
+        "merged": [
+          "c-34bc06f7",
+          "c-dfe17f8b",
+          "c-7e3023c1",
+          "c-8bfd3b1d",
+          "c-0c8638ad",
+          "c-abdabcf5",
+          "c-586c5af9",
+          "c-53a4b171"
+        ],
+        "kind": "noise",
+        "title": "Session corrections with no recorded mistake type",
+        "why": "Nine of eleven clusters this week carry no named mistake type; under the standing amendment they resolve to noise.",
+        "evidence_ids": [
+          "signals:51808dfa-5193-4a38-a95c-f956bf405ea8-1793383781"
+        ],
+        "happened": [
+          {
+            "evidence_id": "signals:51808dfa-5193-4a38-a95c-f956bf405ea8-1793383781",
+            "what": "You corrected Claude during the session, but no specific mistake was recorded, leaving only pending work and a correction signal."
+          }
+        ],
+        "why_repeats": "These sessions produced correction signals and open work items but no named mistake type, so there is no pattern to act on.",
+        "fix": "No action; these fall below the threshold for a real finding under the standing rule that a session correction without a named mistake is noise.",
+        "guard": {
+          "hook_id": null,
+          "plain": "Not applicable",
+          "verdict": "no",
+          "gap": "Not applicable"
+        }
+      }
+    ],
+    "rejected": [
+      "c-1f725c61: took out atone:mist-20261102-142233-82 as a different problem (The answer was in project notes, not code files; the credited check only fires when no code-reading tool ran before the question, so this instance is outside its scope and belongs to a separate missing gate.)",
+      "c-1f725c61: took out atone:mist-20261023-193439-69 as a different problem (The answer was in project notes, not code files; same reason as above — the credited check cannot detect whether notes already hold the answer.)"
+    ],
+    "dropped_ids": 0,
+    "summary": "Two real patterns this week: Claude kept asking for information already in project notes or memory (three separate occasions across different projects), and once handed you a list of admin action requests with no context for why each was needed. The remaining nine session clusters carry no named mistakes and resolve to noise under the standing amendment.",
+    "process_note": "2026w45: The zero-fire diagnostic requested in the 2026w44 amendment would have surfaced c-1f725c61 immediately this week — the registered lazy-question check has fired zero times while three atone entries name the exact pattern. Without the diagnostic the reader cannot distinguish 'hook logic never matches' from 'hook exits advisory' from 'hook is muted'; all three look identical. Recommend adding a weekly row for each registered check with zero fires in the last 14 days paired with any cluster whose named mistake type it should have stopped, before the 2026w46 run."
+  },
+  "items": [
+    {
+      "cluster": "c-b86b2809",
+      "kind": "structural-need",
+      "title": "Sent you a list of action requests with no reason attached to any of them",
+      "why": "atone:mist-20261028-184946-19 records that owner gates were handed over without the why, history, or plain steps; no registered check covers this.",
+      "evidence_ids": [
+        "atone:mist-20261028-184946-19",
+        "checkpoints:ckpt-32ea1e0ebcf2f9c1",
+        "checkpoints:ckpt-1dbdeb02b3d5ec8c",
+        "signals:74b1491f-8f20-4f36-b438-ba91cae91d2c-1793191137"
+      ],
+      "proposal": {
+        "target": "owner-ask-content-stop.py",
+        "change": "Exit 1 when a proposed batch of owner asks contains any item with no rationale clause, blocking until a reason is attached."
+      },
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261028-184946-19",
+          "what": "Asked you to delete a VM, approve a weekly live test, rule on a network policy, and rotate keys — a batch of gate requests — without explaining why each was needed, what had led to it, or what the plain steps were."
+        }
+      ],
+      "why_repeats": "Nothing checks whether a batch of asks directed at you includes a rationale before it is sent; bare imperatives reach you with no context attached.",
+      "fix": "Add a pre-send check that requires each ask directed at you to include a one-sentence reason; a batch containing a bare imperative with no rationale should be held until context is added.",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently checks that asks sent to you include context before they go out",
+        "verdict": "no",
+        "gap": "No credited check source exists to review; the proposed gate does not yet exist"
+      }
+    },
+    {
+      "cluster": "c-1f725c61",
+      "kind": "repeat",
+      "title": "Asked you for something already written down in your own notes",
+      "why": "Three atone entries (mist-20261102-142233-82, mist-20261023-193439-69, mist-20261008-145106-69) each record the same mistake across independent projects while the registered check shows zero fires in the same period.",
+      "evidence_ids": [
+        "atone:mist-20261008-145106-69"
+      ],
+      "proposal": {
+        "target": "guard-lazy-question.sh",
+        "change": "Audit why the script produces zero fires and change its exit code to 1 so it blocks the turn instead of exiting silently when the answer to an owner ask is already present in notes or memory."
+      },
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261008-145106-69",
+          "what": "Asked you which backend pairs with each frontend and shipped a literal question-mark placeholder when the app's own code already answered it."
+        }
+      ],
+      "why_repeats": "The check's output contract specifies exit 0 on every path, so it has never been able to block a turn regardless of whether it fires; additionally the check only inspects whether a code-reading tool ran in the current turn and cannot see whether the answer is in project notes, which is the source for two of the three instances.",
+      "fix": "Change the exit code from 0 to 1 when the check fires so it blocks the turn before the question reaches you; the two notes-based instances (accounts listed as a blocker, login details already in project notes) are outside this check's scope entirely and need a separate gate that consults notes or memory before allowing the question through.",
+      "guard": {
+        "hook_id": "guard-lazy-question",
+        "plain": "A check that is supposed to stop Claude from asking you for something it could have looked up itself, but it is wired to exit silently on every path and only checks whether Claude read code before asking — it cannot see whether the answer already exists in project notes",
+        "verdict": "partly",
+        "gap": "The check exits with code 0 on every path including when it fires, so it can never block a turn; its matching logic covers code-reading tools only, leaving the two notes-based instances entirely outside its scope"
+      }
+    }
+  ],
+  "page_slug": "idream-reader-2026w45",
+  "page_url": "http://localhost:5106/dp/idream-reader-2026w45/",
+  "tokens": 0,
+  "held_by_gate": null,
+  "skipped": null,
+  "landed": [
+    {
+      "cluster": "c-b86b2809",
+      "title": "Sent you a list of action requests with no reason attached to any of them",
+      "outcome": "filed",
+      "detail": "prop-20261102-165943-90",
+      "ts": "2026-11-02T16:59:43.585618Z"
+    },
+    {
+      "cluster": "c-1f725c61",
+      "title": "Asked you for something already written down in your own notes",
+      "outcome": "already-filed",
+      "detail": "prop-20261006-103353-96",
+      "ts": "2026-11-02T16:59:43.585618Z"
+    }
+  ],
+  "since": "2026-10-05T16:46:27.562622Z",
+  "atone_total": 58,
+  "hook_actions": [
+    [
+      "doc-voice-gate",
+      {
+        "block": 1197,
+        "nudge": 2467,
+        "unlabelled": 689
+      }
+    ],
+    [
+      "push-gate",
+      {
+        "allow-approved": 50,
+        "block": 58,
+        "unlabelled": 636
+      }
+    ],
+    [
+      "review-nudge",
+      {
+        "nudge": 732
+      }
+    ],
+    [
+      "prose-smell",
+      {
+        "block": 11,
+        "nudge": 643
+      }
+    ],
+    [
+      "terse-reply",
+      {
+        "block": 95,
+        "soft": 544
+      }
+    ],
+    [
+      "format-gate",
+      {
+        "block": 555
+      }
+    ],
+    [
+      "guard-env-dump",
+      {
+        "block": 280
+      }
+    ],
+    [
+      "persona-suggest",
+      {
+        "nudge": 227
+      }
+    ],
+    [
+      "emdash",
+      {
+        "block": 212
+      }
+    ],
+    [
+      "safe-delete",
+      {
+        "block": 202
+      }
+    ],
+    [
+      "guard-env-access",
+      {
+        "nudge": 201
+      }
+    ],
+    [
+      "filename-dot",
+      {
+        "block": 187
+      }
+    ],
+    [
+      "guard-command-chaining",
+      {
+        "block": 157
+      }
+    ],
+    [
+      "guard-cluster-e-smells",
+      {
+        "block": 3,
+        "nudge": 146
+      }
+    ],
+    [
+      "relpath",
+      {
+        "block": 148
+      }
+    ],
+    [
+      "declared-ready",
+      {
+        "block": 11,
+        "soft": 124
+      }
+    ],
+    [
+      "warn-git-add-enumeration",
+      {
+        "nudge": 110
+      }
+    ],
+    [
+      "prefer-tmp-py-over-inline",
+      {
+        "nudge": 108
+      }
+    ],
+    [
+      "guard-pr-title-tags",
+      {
+        "block": 106
+      }
+    ],
+    [
+      "bare-id-cluster",
+      {
+        "block": 68,
+        "nudge": 23
+      }
+    ],
+    [
+      "guard-extension-root",
+      {
+        "block": 69
+      }
+    ],
+    [
+      "guard-rg-replace-bundle",
+      {
+        "block": 62
+      }
+    ],
+    [
+      "guard-env-capture-test",
+      {
+        "block": 57
+      }
+    ],
+    [
+      "guard-cd-relative-path",
+      {
+        "block": 56
+      }
+    ],
+    [
+      "block-curl-post-auth",
+      {
+        "block": 34,
+        "unlabelled": 21
+      }
+    ],
+    [
+      "prefer-ripgrep",
+      {
+        "nudge": 53
+      }
+    ],
+    [
+      "guard-prose-quality",
+      {
+        "block": 50
+      }
+    ],
+    [
+      "block-nested-claude",
+      {
+        "block": 45
+      }
+    ],
+    [
+      "guard-comment-verbosity",
+      {
+        "nudge": 44
+      }
+    ],
+    [
+      "ui-callouts-gate",
+      {
+        "block": 10,
+        "soft": 33
+      }
+    ],
+    [
+      "prevent-unsolicited-index-manipulation",
+      {
+        "block": 33
+      }
+    ],
+    [
+      "dense-briefing-shapes",
+      {
+        "soft": 26
+      }
+    ],
+    [
+      "wake-breaker",
+      {
+        "unlabelled": 25
+      }
+    ],
+    [
+      "decision-surface-nudge",
+      {
+        "nudge": 24
+      }
+    ],
+    [
+      "ui-verified",
+      {
+        "block": 15,
+        "nudge": 9
+      }
+    ],
+    [
+      "model-tier",
+      {
+        "block": 5,
+        "unlabelled": 15
+      }
+    ],
+    [
+      "guard-ai-signature",
+      {
+        "block": 15
+      }
+    ],
+    [
+      "protect-atone-raw",
+      {
+        "block": 15
+      }
+    ],
+    [
+      "guard-gh-prose",
+      {
+        "block": 13
+      }
+    ],
+    [
+      "hand-rendered-tasks",
+      {
+        "nudge": 9
+      }
+    ],
+    [
+      "guard-comment-hygiene",
+      {
+        "block": 7
+      }
+    ],
+    [
+      "guard-duplicate-symbol",
+      {
+        "unlabelled": 7
+      }
+    ],
+    [
+      "structural-claim",
+      {
+        "block": 5,
+        "soft": 2
+      }
+    ],
+    [
+      "ctx-claim",
+      {
+        "nudge": 4
+      }
+    ],
+    [
+      "model-tier-fable",
+      {
+        "nudge": 4
+      }
+    ],
+    [
+      "hhmm-drift",
+      {
+        "nudge": 3
+      }
+    ],
+    [
+      "absence-claim",
+      {
+        "block": 1,
+        "soft": 1
+      }
+    ],
+    [
+      "guard-lazy-question",
+      {
+        "nudge": 2
+      }
+    ],
+    [
+      "guard-subagent-output",
+      {
+        "block": 2
+      }
+    ],
+    [
+      "persona-log-nudge",
+      {
+        "nudge": 2
+      }
+    ],
+    [
+      "plan-gate-ups",
+      {
+        "nudge": 2
+      }
+    ],
+    [
+      "guard-policy",
+      {
+        "unlabelled": 1
+      }
+    ],
+    [
+      "near-dup-env-var",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "policy-ask",
+      {
+        "unlabelled": 1
+      }
+    ]
+  ],
+  "backlog_open": 92
+}

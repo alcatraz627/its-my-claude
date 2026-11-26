@@ -6,7 +6,7 @@ triggers:
   - phrase:"_chat.txt"
   - tool:build_chat.py
 related:
-  - dev-servers
+  - features/dev-servers.md
 tier: 3
 category: features
 updated: 2026-10-21
@@ -21,7 +21,7 @@ a date pill per day, and photos, videos, voice notes and stickers playing inline
 on the left (a drawer on phones) shows every day with a bar for how busy it was, follows
 your scroll, and jumps on tap. The page remembers the exact message and pixel you were on.
 
-Built 2026-10-21 for the "yonzan" export. Planned to grow; see the proposal filed the same day.
+Built 2026-10-21 for the "macosgx" export. Planned to grow; see the proposal filed the same day.
 
 ## Use it
 
@@ -31,7 +31,8 @@ python3 -I ~/.claude/scripts/whatsapp-render/build_chat.py "<export folder>" [my
 
 It writes `chat.html` into the export folder, since media loads by relative path. Open it
 directly, or serve the folder (below). Extract the zip first; `._*` files from an exFAT
-drive are ignored.
+drive are ignored. Your side is guessed from the folder name, so pass `my-name` whenever the
+folder does not carry the contact's name as it appears in the export.
 
 ## What the parser knows (iOS export format)
 
@@ -42,7 +43,7 @@ drive are ignored.
   placeholder. A caption can sit before either one on the same line.
 - Calls (`Voice call, 33 sec`, `Missed video call`), deleted messages and the
   `<This message was edited>` suffix each get their own look.
-- **Exports can repeat history.** The yonzan export held three overlapping copies (93,059
+- **Exports can repeat history.** The macosgx export held three overlapping copies (93,059
   lines, 63,422 unique). The parser drops any stretch where time jumps backwards until it
   passes the newest message already kept.
 - Replies are not in the export, so quoted replies cannot be rebuilt.
@@ -51,9 +52,9 @@ drive are ignored.
 
 ## Serving it to a phone
 
-Live instance: pm2 `yonzan-chat` runs caddy with
-`~/.config/caddy/yonzan-chat.Caddyfile` (copy in this folder), port 5119 (tier 2 claim),
-root `~/Documents/WhatsApp Chat - yonzan`. Phone URL `http://100.65.206.85:5119/`.
+Live instance: pm2 `macosgx-chat` runs caddy with
+`~/.config/caddy/macosgx-chat.Caddyfile` (copy in this folder), port 5119 (tier 2 claim),
+root `~/Documents/WhatsApp Chat - macosgx`. Phone URL `http://100.65.206.85:5119/`.
 
 Lessons that cost a round each:
 
@@ -64,7 +65,7 @@ Lessons that cost a round each:
   is what worked; Tailscale already encrypts the hop. `tailscale serve --http` only answers
   the hostname, so the IP route is caddy binding `100.65.206.85` itself.
 - Never put the reader on an origin another app used. Data Forge had installed a service
-  worker at the root of `https://…ts.net`, which hijacked `/yonzan` on soft reloads. A
+  worker at the root of `https://…ts.net`, which hijacked `/macosgx` on soft reloads. A
   self-unregistering `/sw.js` (`_sw-kill.js` here) fixed the laptop; a `Clear-Site-Data`
   header made the phone load nothing and was removed. A fresh origin was the real fix.
 - Send `Cache-Control: no-cache` on the HTML and turn on gzip (3.4 MB to 939 KB).
@@ -73,4 +74,4 @@ Lessons that cost a round each:
 
 `~/.claude/scripts/whatsapp-render/`: `build_chat.py` (parser and builder),
 `chat_template.html` (the page; data is injected at `/*__DATA__*/`),
-`yonzan-chat.Caddyfile` and `_sw-kill.js` (serving examples).
+`macosgx-chat.Caddyfile` and `_sw-kill.js` (serving examples).

@@ -26,3 +26,9 @@
 {"cluster":"c-b8727f09","title":"Visual UI reviews run without using the local vision model","outcome":"already-filed","detail":"prop-20261021-140437-58","ts":"2026-10-27T10:38:35.512583Z"}
 {"cluster":"c-72f6b097","title":"Commands that print live tokens ran without redirecting their output","outcome":"already-filed","detail":"prop-20261021-140437-95","ts":"2026-10-27T10:38:35.512583Z"}
 {"cluster":"c-754aa69a","title":"Pull requests opened without the required title flag","outcome":"filed","detail":"prop-20261027-103835-89","ts":"2026-10-27T10:38:35.512583Z"}
+{"cluster":"c-b86b2809","title":"Sent you a list of action requests with no reason attached to any of them","outcome":"filed","detail":"prop-20261102-165943-90","ts":"2026-11-02T16:59:43.585618Z"}
+{"cluster":"c-1f725c61","title":"Asked you for something already written down in your own notes","outcome":"already-filed","detail":"prop-20261006-103353-96","ts":"2026-11-02T16:59:43.585618Z"}
+{"cluster":"c-8033ea3b","title":"Proposed an action that contradicted a rule you had already set","outcome":"filed","detail":"prop-20261112-213506-80","ts":"2026-11-12T21:05:43.982170Z"}
+{"cluster":"c-d3b3bae6","title":"Declared something working without testing the way you launch it","outcome":"filed","detail":"prop-20261112-213506-e0","ts":"2026-11-12T21:05:43.982170Z"}
+{"cluster":"c-833e079b","title":"Missed messages from a peer while focused on another task","outcome":"filed","detail":"prop-20261112-213506-41","ts":"2026-11-12T21:05:43.982170Z"}
+{"cluster":"c-da3a5c26","title":"Asked you to decide something without telling you what you were deciding","outcome":"filed","detail":"prop-20261112-213506-a1","ts":"2026-11-12T21:05:43.982170Z"}

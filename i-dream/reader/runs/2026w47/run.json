@@ -1,0 +1,311 @@
+{
+  "week": "2026w47",
+  "at": "2026-11-19T08:47:48.684704Z",
+  "forwarded": [],
+  "named": {
+    "items": [],
+    "rejected": [],
+    "dropped_ids": 0,
+    "summary": ""
+  },
+  "items": [],
+  "page_slug": null,
+  "page_url": null,
+  "tokens": 28179,
+  "held_by_gate": null,
+  "skipped": null,
+  "landed": [],
+  "since": "2026-10-22T08:47:48.684704Z",
+  "atone_total": 25,
+  "hook_actions": [
+    [
+      "terse-reply",
+      {
+        "block": 9,
+        "soft": 208
+      }
+    ],
+    [
+      "prose-smell",
+      {
+        "block": 4,
+        "nudge": 206
+      }
+    ],
+    [
+      "doc-voice-gate",
+      {
+        "block": 14,
+        "nudge": 77,
+        "unlabelled": 28
+      }
+    ],
+    [
+      "subagent-box",
+      {
+        "soft": 111
+      }
+    ],
+    [
+      "push-gate",
+      {
+        "unlabelled": 102
+      }
+    ],
+    [
+      "filename-dot",
+      {
+        "soft": 55
+      }
+    ],
+    [
+      "memory-reach",
+      {
+        "nudge": 55
+      }
+    ],
+    [
+      "prefer-tmp-py-over-inline",
+      {
+        "nudge": 52
+      }
+    ],
+    [
+      "relpath",
+      {
+        "soft": 33
+      }
+    ],
+    [
+      "guard-command-chaining",
+      {
+        "block": 26
+      }
+    ],
+    [
+      "declared-ready",
+      {
+        "block": 2,
+        "soft": 23
+      }
+    ],
+    [
+      "guard-cluster-e-smells",
+      {
+        "nudge": 25
+      }
+    ],
+    [
+      "guard-env-access",
+      {
+        "nudge": 24
+      }
+    ],
+    [
+      "guard-gh-prose",
+      {
+        "block": 24
+      }
+    ],
+    [
+      "review-nudge",
+      {
+        "nudge": 23
+      }
+    ],
+    [
+      "guidance",
+      {
+        "nudge": 19
+      }
+    ],
+    [
+      "guard-pr-title-tags",
+      {
+        "block": 17
+      }
+    ],
+    [
+      "pr-review",
+      {
+        "block": 14
+      }
+    ],
+    [
+      "warn-git-add-enumeration",
+      {
+        "nudge": 13
+      }
+    ],
+    [
+      "format-gate",
+      {
+        "block": 11
+      }
+    ],
+    [
+      "goal-paste",
+      {
+        "block": 10
+      }
+    ],
+    [
+      "guard-prose-quality",
+      {
+        "block": 10
+      }
+    ],
+    [
+      "guard-comment-verbosity",
+      {
+        "nudge": 8
+      }
+    ],
+    [
+      "bare-id-cluster",
+      {
+        "block": 7
+      }
+    ],
+    [
+      "prefer-ripgrep",
+      {
+        "nudge": 7
+      }
+    ],
+    [
+      "ready-claim",
+      {
+        "nudge": 7
+      }
+    ],
+    [
+      "ui-pr-screenshot-nudge",
+      {
+        "nudge": 6
+      }
+    ],
+    [
+      "ui-callouts-gate",
+      {
+        "block": 5
+      }
+    ],
+    [
+      "ui-verified",
+      {
+        "block": 5
+      }
+    ],
+    [
+      "guard-comment-hygiene",
+      {
+        "block": 4
+      }
+    ],
+    [
+      "guard-env-dump",
+      {
+        "block": 4
+      }
+    ],
+    [
+      "creation-box",
+      {
+        "block": 3
+      }
+    ],
+    [
+      "guard-ai-signature",
+      {
+        "block": 3
+      }
+    ],
+    [
+      "persona-suggest",
+      {
+        "nudge": 3
+      }
+    ],
+    [
+      "absence-claim",
+      {
+        "block": 1,
+        "soft": 1
+      }
+    ],
+    [
+      "owner-ask",
+      {
+        "block": 2
+      }
+    ],
+    [
+      "structural-claim",
+      {
+        "block": 2
+      }
+    ],
+    [
+      "credential-ask",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "goal-arm-lint",
+      {
+        "unlabelled": 1
+      }
+    ],
+    [
+      "guard-cd-relative-path",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "guard-extension-root",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "guard-subagent-output",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "hand-rendered-tasks",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "plan-gate-ups",
+      {
+        "nudge": 1
+      }
+    ],
+    [
+      "prevent-unsolicited-index-manipulation",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "safe-delete",
+      {
+        "block": 1
+      }
+    ],
+    [
+      "secret-scan",
+      {
+        "nudge": 1
+      }
+    ]
+  ],
+  "backlog_open": 100
+}

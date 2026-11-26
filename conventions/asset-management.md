@@ -5,7 +5,7 @@ triggers:
   - topic:assets
   - topic:screenshots
   - topic:reports
-related: []
+related: [rules/shell.md]
 tier: 2
 category: conventions
 updated: 2026-04-24
@@ -28,7 +28,7 @@ Handles naming + manifest registration.
 Direct copy to the right subdirectory:
 - Screenshots → `~/.claude/assets/images/`
 - Reports → `~/.claude/assets/reports/`
-- PDFs → `~/.claude/assets/pdfs/`
+- PDFs → `~/.claude/assets/docs/` (there is no `pdfs/` folder)
 - Data exports → `~/.claude/assets/data/`
 
 ## Diagrams: dual-save

@@ -8,6 +8,8 @@ import importlib.util
 import json
 import os
 import pathlib
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -135,6 +137,65 @@ class Holds(unittest.TestCase):
         self.assertEqual(self.read()["services"]["a"]["idle_min"], 5)
         self.assertIsNone(holds.set_policy(self.path, "a", ["default"]))
         self.assertEqual(self.read()["services"], {})
+
+
+class ASlowMachine(unittest.TestCase):
+    """The socket sweep can run past its limit on a busy machine. That must read as
+    "do not know", never as "no service has a port"."""
+
+    PID = 4242
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        root = pathlib.Path(self.tmp.name)
+        self.state = root / "state.json"
+        self.state.write_text(json.dumps({"app": {
+            "ports": [5106], "known_ports": [5106], "endpoints": ["127.0.0.1:1"],
+            "lastseen": 1000, "started": 1000, "source": "touch", "status": "online"}}))
+        self.bin = root / "bin"
+        self.bin.mkdir()
+
+    def lsof(self, body):
+        shim = self.bin / "lsof"
+        shim.write_text("#!/bin/bash\n" + body + "\n")
+        shim.chmod(0o755)
+
+    def run_sample(self):
+        apps = [{"name": "app", "pid": self.PID,
+                 "pm2_env": {"status": "online", "pm_uptime": 1000 * 1000}}]
+        env = dict(os.environ, PATH="%s:%s" % (self.bin, os.environ["PATH"]))
+        done = subprocess.run(
+            [sys.executable, str(HERE / "svc-sample.py"), "--state", str(self.state), "--mode", "watch",
+             "--sweep-timeout", "0.5"],
+            input=json.dumps(apps), capture_output=True, text=True, env=env)
+        return done.returncode, json.loads(done.stdout)[0], json.loads(self.state.read_text())["app"]
+
+    def test_a_sweep_that_times_out_reaps_nothing_and_forgets_nothing(self):
+        self.lsof("sleep 5")
+        rc, row, kept = self.run_sample()
+        self.assertEqual(rc, 4)
+        self.assertEqual(row["verdict"], "unknown(no sweep)")
+        self.assertEqual(kept["ports"], [5106])
+        self.assertEqual(kept["endpoints"], ["127.0.0.1:1"])
+
+    def test_a_sweep_that_finishes_still_reaps_an_idle_service(self):
+        self.lsof('echo "COMMAND PID USER FD TYPE DEVICE SIZE NODE NAME"\n'
+                  'echo "bun %d me 5u IPv4 0x1 0t0 TCP 127.0.0.1:5106 (LISTEN)"' % self.PID)
+        rc, row, kept = self.run_sample()
+        self.assertEqual(rc, 0)
+        self.assertEqual(row["verdict"], "REAP")
+        self.assertEqual(kept["ports"], [5106])
+
+
+class TheReapPass(unittest.TestCase):
+    def test_a_failed_sample_shows_red_to_launchd(self):
+        with tempfile.TemporaryDirectory() as home:
+            env = dict(os.environ, HOME=home, PM2_BIN="/bin/false")
+            done = subprocess.run(["bash", str(HERE / "svc.sh"), "reap", "--dry-run"],
+                                  capture_output=True, text=True, env=env)
+        self.assertEqual(done.returncode, 3, done.stderr)
+        self.assertIn("nothing reaped", done.stderr)
 
 
 if __name__ == "__main__":

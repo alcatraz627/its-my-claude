@@ -18,6 +18,7 @@ When compacting this conversation (auto-compact reads this section too), always 
 - active blockers and the immediate next action
 - paths of any checkpoint or Resume Contract files written
 - the owner's approvals, quoted verbatim with their target
+- replies owed to peer sessions (`claude-ipc owed`): who asked, and what they asked
 
 Owner ruling 2026-10-13: agents inherit authorization across compaction and /clear. Hard limits live in Switchboard policy and its hooks, which still gate push-to-main and policy asks.
 

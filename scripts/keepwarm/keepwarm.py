@@ -2,15 +2,16 @@
 """Keep-warm: keep an idle Claude session's prompt cache alive while the owner
 is away, and write its checkpoint while the cache is still warm.
 
-A recurring in-session job sends "[keepwarm] idle check" every 20 minutes, and
-next_step() decides each fire from plain numbers. A fire with nothing to do is
-blocked before the model runs, so it costs no tokens and leaves a line or two in
-the terminal. How it behaves and why: ~/.claude/features/keepwarm.md
+When a turn ends, a quiet background process waits, and next_step() decides from
+plain numbers. It wakes the model only when a ping or a dump is really due, so an
+idle session prints nothing in between. How it behaves and why:
+~/.claude/features/keepwarm.md
 
-Revert to the older chain of one-shot jobs: touch ~/.claude/.keepwarm-oneshot
+Go back to the recurring job, which prints a line per idle fire: touch ~/.claude/.keepwarm-cron
+Go back to the older chain of one-shot jobs: touch ~/.claude/.keepwarm-oneshot
 
 Usage (hooks pass their JSON on stdin):
-  keepwarm.py hook-start | hook-prompt | hook-stop
+  keepwarm.py hook-start | hook-prompt | hook-stop | hook-idle
   keepwarm.py away 3h|21:30|done|soon [--soft] [why]
   keepwarm.py plan
   keepwarm.py status [--json]
@@ -78,6 +79,13 @@ CADENCE_MIN = int(os.environ.get("KEEPWARM_CADENCE_MIN", "20"))
 # A fire at this cache age or older pings, so with fires 20 minutes apart a ping
 # always lands before the 1 hour cache lapses.
 WARM_DUE_MIN = float(os.environ.get("KEEPWARM_WARM_DUE_MIN", "40"))
+CRON_FILE = os.environ.get("KEEPWARM_CRON_FILE", os.path.join(HOME, ".claude", ".keepwarm-cron"))
+# The background waiter is not tied to a 20 minute grid, so it can ping much closer to
+# the hour the cache lasts: fewer pings than the job's 40, with the same margin for error.
+IDLE_DUE_MIN = float(os.environ.get("KEEPWARM_IDLE_DUE_MIN", "52"))
+IDLE_TICK_S = float(os.environ.get("KEEPWARM_IDLE_TICK_S", "300"))
+# Stop hooks run side by side. This gives hook-stop time to record the turn's end first.
+IDLE_SETTLE_S = float(os.environ.get("KEEPWARM_IDLE_SETTLE_S", "5"))
 # A recurring job expires after 7 days; replace it a little before that.
 JOB_LIFE_S = 6.5 * 86400
 # How many times a session's Stop hook re-asks for a job the model has not created.
@@ -87,6 +95,11 @@ WAKE_DIR = os.environ.get("KEEPWARM_WAKE_DIR", "/tmp")
 # pay to rebuild it for nobody.
 COLD_CACHE_MIN = float(os.environ.get("KEEPWARM_COLD_CACHE_MIN", "65"))
 MAX_PINGS = 6
+# A session this close to its auto-compact point has little room left, and warming it
+# costs the most, so it gets one ping and then its dump (owner, 2026-11-04). Measured in
+# points below the auto-compact percentage, because that setting is what says "full" here.
+AUTOCOMPACT_PCT = float(os.environ.get("CLAUDE_AUTOCOMPACT_PCT_OVERRIDE") or 92)
+NEAR_COMPACT_MARGIN_PCT = 10
 # Break-even, in cached-read tokens. A /catchup start measures 153k (median of 60
 # sessions) at the 1 hour write price of 20 reads. Friction is what avoiding one is
 # worth to the owner, the single knob for how eagerly sessions are held.
@@ -271,7 +284,7 @@ def return_chance(away_min, hour):
 
 
 def next_step(ctx_tokens, pct, reset_min, spent_pct, gated, wakes, away_min, cache_age_min, hour, hint, now,
-              chains, tasks_left, dumped):
+              chains, tasks_left, dumped, due_min=WARM_DUE_MIN):
     """What a keep-warm fire should do, given plain numbers. Returns (action, why).
 
     Actions: warm (a one-word turn), dump, mini, wait (blocked, no turn, the job fires
@@ -295,12 +308,14 @@ def next_step(ctx_tokens, pct, reset_min, spent_pct, gated, wakes, away_min, cac
         return finish("the owner said they are done")
     if pct is not None and pct >= spent_pct:
         return "wait", "the window is spent"
-    if cache_age_min < WARM_DUE_MIN:
+    if cache_age_min < due_min:
         return "wait", "not due"
     if holding:
         return "warm", "holding until the owner's time"
     if tasks_left is False and wakes == 0:
         return finish("everything left is the owner's")
+    if wakes >= 1 and ctx_tokens >= (AUTOCOMPACT_PCT - NEAR_COMPACT_MARGIN_PCT) / 100.0 * CTX_WINDOW:
+        return finish("the context is near its auto-compact point")
     if wakes >= MAX_PINGS:
         return finish("held as long as it is worth")
     chance = return_chance(away_min, hour)
@@ -320,6 +335,12 @@ def local_hour():
 
 def oneshot_mode():
     return os.path.exists(ONESHOT)
+
+
+def idle_mode(st):
+    """True when the background waiter runs this session. A session that already holds
+    a recurring job keeps it until it ends, or two things would ping the same cache."""
+    return not oneshot_mode() and not os.path.exists(CRON_FILE) and not st.get("recurring_at")
 
 
 def cron_spec(sid):
@@ -585,8 +606,13 @@ def hook_prompt(inp):
     sid = inp.get("session_id") or "unknown"
     prompt = (inp.get("prompt") or "").lstrip()
     st = load(sid)
-    # Any new prompt ends the previous turn, so whatever a ping marked is over.
-    wake_marker(sid, False)
+    # Any new prompt ends the previous turn, so whatever a ping marked is over. The waiter's
+    # own wake arrives as a prompt too, and that one IS the ping's turn.
+    if "Stop hook feedback" not in prompt[:200]:
+        wake_marker(sid, False)
+    # A turn is starting, so the waiter from the last one has nothing left to wait for.
+    # A prompt does not stop that process by itself; it must notice it was replaced.
+    idle_token(sid, None)
     if not prompt.startswith(PREFIX) and not_owner(prompt):
         log(sid, "not-owner", head=prompt[:40])
         # A wake skipped during a spent window schedules nothing, so this resume is
@@ -614,7 +640,7 @@ def hook_prompt(inp):
         st.pop("in_wake", None)
         st.pop("hint", None)
         relink = (not dumping and os.path.exists(SWITCH) and os.environ.get("CLAUDE_CODE_ENTRYPOINT") == "cli"
-                  and chain_broken(st))
+                  and not idle_mode(st) and chain_broken(st))
         text = None
         if dumping:
             log(sid, "stop", why="owner-dump")
@@ -771,9 +797,15 @@ def recurring_wake(sid, st, inp, reading):
         save(sid, st)
         log(sid, "stop", why=why, away_min=round(nums["away_min"]))
         return skip_wake("keep-warm finished: %s" % why)
+    text = begin_wake(sid, st, nums, action, why, ctx_tokens, WARM_DUE_MIN, DELETE_JOB)
+    return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
+
+
+def begin_wake(sid, st, nums, action, why, ctx_tokens, due_min, closing):
+    """Record a ping or dump and return what the model must do for it."""
     n = nums["wakes"] + 1
     chance = return_chance(nums["away_min"], nums["hour"])
-    st.update(wakes=n, last_activity=now_s(), in_wake=True, armed_at=now_s() + WARM_DUE_MIN * 60)
+    st.update(wakes=n, last_activity=now_s(), in_wake=True, armed_at=now_s() + due_min * 60)
     wake_marker(sid, True)
     pct = nums["pct"] if nums["pct"] is not None else "?"
     if action == "warm":
@@ -788,11 +820,85 @@ def recurring_wake(sid, st, inp, reading):
         else:
             st["stopped"] = True
             st.pop("recurring_at", None)
-            text = UPKEEP[action].format(n=n, pct=pct) + DELETE_JOB
+            text = UPKEEP[action].format(n=n, pct=pct) + closing
     save(sid, st)
     log(sid, "wake", n=n, action=action, why=why, chance=round(chance, 3), ctx_k=round(ctx_tokens / 1000),
         pct=pct, hour=round(nums["hour"], 1), away_min=round(nums["away_min"]))
-    return emit({"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": text}})
+    return text
+
+
+def idle_token(sid, token):
+    """Say which waiter is current for a session, or that none is. Kept apart from the
+    state file because hook-stop rewrites that at the same moment a waiter starts."""
+    path = os.path.join(DIR, "%s.waiter" % sid)
+    try:
+        if token is None:
+            os.unlink(path)
+        else:
+            os.makedirs(DIR, exist_ok=True)
+            with open(path, "w") as f:
+                f.write(token)
+    except OSError:
+        pass
+
+
+def idle_token_is(sid, token):
+    try:
+        with open(os.path.join(DIR, "%s.waiter" % sid)) as f:
+            return f.read() == token
+    except OSError:
+        return False
+
+
+def hook_idle(inp):
+    """Wait quietly after a turn ends, then wake the model only if a ping or dump is due.
+
+    Runs as an asyncRewake Stop hook: exit 2 wakes the model with stderr as its
+    instructions, and exit 0 is silent. Every other way of waiting prints a line in the
+    terminal each time it checks, whatever the output says; see features/keepwarm.md.
+    """
+    sid = inp.get("session_id") or "unknown"
+    if os.environ.get("CLAUDE_CODE_ENTRYPOINT") != "cli" or not os.path.exists(SWITCH):
+        return 0
+    token = "%d-%f" % (os.getpid(), now_s())
+    idle_token(sid, token)
+    time.sleep(IDLE_SETTLE_S)
+    while True:
+        # A new turn replaced this waiter, or the session's process has gone.
+        if not idle_token_is(sid, token) or os.getppid() == 1:
+            return 0
+        st = load(sid)
+        if not idle_mode(st) or st.get("stopped") or not st.get("answered", True) or not os.path.exists(SWITCH):
+            return 0
+        cur = account()
+        if st.get("account") and cur and cur != st["account"]:
+            st["stopped"] = True
+            save(sid, st)
+            log(sid, "stop", why="account-switch")
+            return 0
+        reading = window_reading()
+        nums = session_numbers(st, inp, reading)
+        action = "wait"
+        spent = reading and reading["pct"] >= REFUSED_PCT
+        if not spent and not hibernating(sid):
+            transcript = inp.get("transcript_path") or ""
+            ctx_tokens = context_used_pct(transcript) * CTX_WINDOW / 100.0
+            left = work_left(sid) if nums["wakes"] == 0 and nums["cache_age_min"] >= IDLE_DUE_MIN else None
+            if left is None and st.get("had_tasks"):
+                left = False
+            gated = usage_gated() if nums["away_min"] >= OWNER_NEARBY_MIN else False
+            action, why = next_step(ctx_tokens, gated=gated, chains=pending_chains(), tasks_left=left,
+                                    due_min=IDLE_DUE_MIN, **nums)
+        if action == "stop":
+            st["stopped"] = True
+            save(sid, st)
+            log(sid, "stop", why=why, away_min=round(nums["away_min"]))
+            return 0
+        if action != "wait":
+            print(begin_wake(sid, st, nums, action, why, ctx_tokens, IDLE_DUE_MIN, ""), file=sys.stderr)
+            return 2
+        until_due = (IDLE_DUE_MIN - nums["cache_age_min"]) * 60
+        time.sleep(max(1.0, min(IDLE_TICK_S, until_due if until_due > 0 else IDLE_TICK_S)))
 
 
 def parse_until(spec):
@@ -929,13 +1035,47 @@ def job_created_since(transcript, since_s):
     return False
 
 
+def dump_ran_since(transcript, since_s):
+    """Did this turn really run /core-dump, whatever the owner's message looked like?
+
+    The owner often asks for one at the end of a longer message ("Finally, /core-dump"),
+    which the prompt check cannot tell apart from a message that merely mentions it. The
+    skill call is the proof. An unreadable transcript counts as no dump, so keep-warm
+    carries on rather than going quiet with nothing saved.
+    """
+    try:
+        size = os.path.getsize(transcript)
+        with open(transcript, "rb") as f:
+            f.seek(max(0, size - 8000000))
+            lines = f.read().split(b"\n")
+    except OSError:
+        return False
+    for line in lines:
+        if b"core-dump" not in line or b'"Skill"' not in line:
+            continue
+        try:
+            o = json.loads(line)
+            when = dt.datetime.fromisoformat(o["timestamp"].replace("Z", "+00:00")).timestamp()
+            content = o["message"]["content"]
+        except (ValueError, KeyError, TypeError, AttributeError):
+            continue
+        if o.get("type") != "assistant" or when < since_s or not isinstance(content, list):
+            continue
+        for block in content:
+            tool_input = block.get("input") if isinstance(block, dict) else None
+            if (isinstance(tool_input, dict) and block.get("type") == "tool_use" and block.get("name") == "Skill"
+                    and tool_input.get("skill") == "core-dump"):
+                return True
+    return False
+
+
 def hook_stop(inp):
     sid = inp.get("session_id") or "unknown"
     st = load(sid)
     if st.pop("resumed_turn", False):
         save(sid, st)
         if (os.path.exists(SWITCH) and os.environ.get("CLAUDE_CODE_ENTRYPOINT") == "cli" and not st.get("stopped")
-                and (oneshot_mode() or chain_broken(st)) and not inp.get("stop_hook_active")
+                and not idle_mode(st) and (oneshot_mode() or chain_broken(st)) and not inp.get("stop_hook_active")
                 and not rearmed_in_turn(inp.get("transcript_path") or "")):
             text = arm_text(sid, st)
             save(sid, st)
@@ -948,8 +1088,15 @@ def hook_stop(inp):
         verdict, read, create = judge_ping(last_usage(inp.get("transcript_path") or ""))
         log(sid, "ping-health", verdict=verdict, cache_read=read, cache_creation=create)
         return 0
+    # A dump means the owner is about to leave and /clear, so a later ping only pays for
+    # a cache nobody returns to. Their next prompt starts keep-warm again.
+    if not st.get("stopped") and dump_ran_since(inp.get("transcript_path") or "", st.get("work_at", now_s())):
+        st["stopped"] = True
+        log(sid, "stop", why="dump-in-turn")
     st.update(last_activity=now_s(), work_at=now_s(), answered=True, account=account())
     job_missing = False
+    if idle_mode(st):
+        st["armed_at"] = now_s() + IDLE_DUE_MIN * 60   # the statusline shows this as the next ping
     if st.get("recurring_at"):
         # Claude Code tells a Stop hook which jobs the session holds, which also catches
         # one deleted later. The transcript search is for a harness that does not say.
@@ -1011,6 +1158,16 @@ def hook_start(inp):
     st.update(last_activity=now_s(), work_at=now_s(), wakes=0, stopped=False, answered=False, dumped=False)
     st.pop("hint", None)
     st.pop("arm_asks", None)
+    # The job of the process that held this state died with it, so a resumed session
+    # moves to the waiter too. /clear returned above, because its process lives on.
+    if not oneshot_mode() and not os.path.exists(CRON_FILE):
+        st.pop("recurring_at", None)
+    if idle_mode(st):
+        save(sid, st)
+        return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": (
+            "Keep-warm is on. A message starting \"Keep-warm wake\" is a keep-warm wake: do only what it says. When a "
+            "turn ends waiting on the owner for something that will take a while, such as reading documents, you may "
+            "say so with: python3 ~/.claude/scripts/keepwarm/keepwarm.py away 2h --soft \"why\".")}})
     # The re-arm goes after the answer: done first, it delayed the owner's
     # reply long enough that they interrupted it (session 90d2e6ca).
     text = ("Keep-warm is on. Answer the owner's next message first; then, as the last step of "
@@ -1052,7 +1209,8 @@ def main(argv):
         except ValueError:
             inp = {}
         try:
-            return {"hook-prompt": hook_prompt, "hook-stop": hook_stop, "hook-start": hook_start}[cmd](inp)
+            return {"hook-prompt": hook_prompt, "hook-stop": hook_stop, "hook-start": hook_start,
+                    "hook-idle": hook_idle}[cmd](inp)
         except Exception as e:   # a keep-warm bug must never block the owner's prompt
             try:
                 log(inp.get("session_id", "?"), "error", detail=repr(e))

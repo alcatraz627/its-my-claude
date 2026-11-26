@@ -7,7 +7,7 @@ triggers:
   - topic:session-id
   - topic:context-management
   - phrase:"session start"
-related: [features/wal.md, features/proposals.md]
+related: [features/wal.md, features/proposals.md, features/keepwarm.md, features/usage-speedbumps.md, rules/invariant-graduation.md]
 tier: 1
 category: features
 updated: 2026-10-13

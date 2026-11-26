@@ -16,6 +16,19 @@
 
 ---
 
+## gdoc: pageless layout audit [gdoc-vis-4e]: 2026-11-26
+
+**Purpose:** Find why published Docs look awkward and fix it in the spec and script, not per Doc.
+
+**Insights:**
+- Pageless text width is each viewer's View > Text width (Narrow by default, measured 516 pt); the API does not expose it, and Docs centres tables and images at their point width whatever the width type. Sizing to the 468 pt page left every table inset.
+- The PDF export is a paged Letter render, so it hid every pageless defect; read back in Chrome at Narrow.
+- The owner's 2026-11-02 hand edit (tables 517 pt, H2 14/4, no bold, tight gaps) lived only in one config; later Docs reverted. Promote owner hand edits to the spec.
+- 10 pt Plex Sans averages about 4.6 pt per character on screen; the old 5.8 estimate oversized short columns.
+---
+
+---
+
 ## adversarial-review: JEGS Retail PIM PRD (Google Doc) [advrev-gdoc-3f]: 2026-11-23 21:49
 
 **Purpose:** Prosecute a customer-facing PRD held in Google Docs against its source workbook, its 56 linked requirement docs and the jegs-pim plan record.

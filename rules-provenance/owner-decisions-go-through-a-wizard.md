@@ -86,3 +86,7 @@ or "please review" next to a path you wrote. Stop; wizard it. Third signal, in
 the tasks vocabulary: a /tasks render whose owner-gated count exceeds the height
 cap is definitionally this case. Wizard the gates, never compress them
 (mist-20260820-092606-29, 42 gates shipped as word salad).
+
+## 2026-11-26: what a single ask must carry (agent-behavior audit, ruling D12, finding F8)
+
+A one-sentence ask states what the answer decides, the default the agent will take, and what each side costs. Never a bare row letter, a code, or another session private id. Evidence: 6 of 30 sessions have a "more context please" reply right after an agent ask (`5b9e1788 L1736` then L1743; `29417532 L3248`, where the ids were a peer session private task ids). Decision pages were answered in one line in 4 of 5 uses. Report: `~/.claude/assets/reports/20261126-agent-behavior-audit/REPORT.md`.

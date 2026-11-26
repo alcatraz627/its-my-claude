@@ -9,6 +9,10 @@ triggers:
   - phrase:"comments in bfb"
 related:
   - ~/Code/better-file-browser/docs/comments-for-agents.md
+tier: 2
+category: features
+updated: 2026-10-27
+stale_after_days: 180
 ---
 
 # Comments on markdown, from bfb

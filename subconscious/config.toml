@@ -1,7 +1,6 @@
 [daemon]
 socket_path = "~/.claude/subconscious/daemon.sock"
 log_level = "info"
-max_concurrent_modules = 2
 
 [idle]
 threshold_hours = 4
@@ -30,9 +29,6 @@ wake_promotion_threshold = 0.5
 [modules.metacog]
 enabled = true
 sample_rate = 0.25
-triggered_sample_rate = 1.0
-trigger_on_correction = true
-trigger_on_multi_failure = true
 max_samples_per_session = 50
 
 [modules.intuition]
@@ -58,7 +54,6 @@ match_threshold = 0.7
 session_start = true
 post_tool_use = true
 stop = true
-pre_compact = true
 user_prompt_submit = true
 
 [ingestion]

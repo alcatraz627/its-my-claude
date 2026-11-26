@@ -5,7 +5,7 @@ triggers:
   - topic:agentic-coding
   - phrase:"one-shot"
   - phrase:"just one-shot it"
-related: [communication.md, todo-discipline.md, exercise-based-verification.md]
+related: [rules/communication.md, rules/todo-discipline.md, rules/exercise-based-verification.md]
 paths:
   # autoload opt-out (gcc-map v4 rec 7, owner D4a, 2026-09-05): the CLAUDE.md Tier-0
   # brief carries the rule and the owner's quote; the body adds provenance and links,

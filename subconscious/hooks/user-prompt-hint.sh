@@ -143,16 +143,40 @@ def _first_time(it):
         pass
     return True
 
+
+PRIMING_HOURS = 4
+def _recent_path(it):
+    key = hashlib.sha1(str(it.get("id", "")).encode("utf-8", "replace")).hexdigest()[:16]
+    return _p.expanduser("~/.claude/.inject-once/idream-recent/" + key)
+
+def _recently_shown(it):
+    if PRIMING_HOURS <= 0:
+        return False
+    try:
+        return time.time() - os.path.getmtime(_recent_path(it)) < PRIMING_HOURS * 3600
+    except OSError:
+        return False
+
+def _mark_shown(it):
+    path = _recent_path(it)
+    try:
+        os.makedirs(_p.dirname(path), exist_ok=True)
+        with open(path, "a"):
+            os.utime(path, None)
+    except OSError:
+        pass
+
 shown, fams = [], set()
 for it in live:
     fam = _family(it)
     if fam is not None and fam in fams:
         continue
-    if not _first_time(it):
+    if _recently_shown(it) or not _first_time(it):
         continue
     if fam is not None:
         fams.add(fam)
     shown.append(it)
+    _mark_shown(it)
     if len(shown) == 2:
         break
 _finish(["[i-dream:%s] %s" % (str(it.get("id", ""))[:8], it.get("body", ""))

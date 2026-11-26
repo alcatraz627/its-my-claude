@@ -8,7 +8,7 @@ triggers:
 related: [features/usage-speedbumps.md, features/context-retention.md]
 tier: 2
 category: features
-updated: 2026-11-02
+updated: 2026-11-04
 stale_after_days: 90
 ---
 
@@ -19,14 +19,35 @@ leaves a `/core-dump` before it stops, so they return to either a warm session o
 checkpoint. The switch is `~/.claude/.keepwarm-on`; the code is
 `~/.claude/scripts/keepwarm/keepwarm.py`.
 
-## How a fire is decided
+## How a session waits
 
-Each session has one recurring in-session job, firing every 20 minutes on its own
-minute. `next_step()` decides each fire from plain numbers. A fire with nothing to do
-is blocked before the model runs: no tokens, and about 2 lines in the terminal.
+When a turn ends, a background process (`hook-idle`, an `asyncRewake` Stop hook) waits and
+checks at least every 5 minutes. It wakes the model only when a ping or dump is really due,
+and a ping lands at 52 minutes. An idle session prints nothing between pings.
+
+This replaced a recurring job, because a job has to fire to find out it has nothing to do,
+and every way of stopping a fire prints in the terminal. Checked on Claude Code 2.1.318:
+`decision: block` prints the reason and the prompt whatever `suppressOutput` says, an empty
+reason prints "Blocked by hook", `continue: false` prints "Operation stopped by hook", and
+exit 2 prints "No stderr output". Only exit 0 from an `asyncRewake` hook is silent. A wake
+shows one "Stop hook feedback" line and the one-word reply.
+
+A new prompt does not stop a waiting process, so each one checks a token in
+`keepwarm/<session>.waiter` and leaves when a newer turn has replaced it. Interrupting a turn
+with Esc starts no waiter, so that session has none until its next turn ends.
+
+Sessions started before this change keep their job until they end, because their settings
+were read at start and two things must not ping one cache. They still print a line per idle
+fire. `touch ~/.claude/.keepwarm-cron` puts every new session back on the job.
+
+## How a check is decided
+
+The waiter calls `next_step()` with plain numbers. The chart shows the job's wording and its
+40 minute threshold; the waiter's threshold is 52 minutes, and for it "blocked" means it
+keeps waiting, silently.
 
 ```
-job fires: "[keepwarm] idle check"
+check: is anything due?
         │
         ├─ switch off, finished, nothing answered yet ──► blocked
         ├─ window at 100% ──► blocked; the job recovers by itself after the reset
@@ -43,17 +64,25 @@ job fires: "[keepwarm] idle check"
         ├─ cache under 40 min old ──────────────► blocked, not due
         ├─ inside an /away hold ────────────────► warm
         ├─ first ping, task list all done ──────► full /core-dump, finished
+        ├─ 1 ping done, context near auto-compact ► full /core-dump, finished
         ├─ 6 pings already ─────────────────────► full /core-dump, finished
         └─ break-even rule says yes ► warm; no ► full /core-dump, finished
 ```
 
 A finished session's dump turn deletes its job. The owner's next prompt arms a new one,
 and also replaces a job about to reach its 7-day expiry. A session finished without a
-turn, such as on a cold cache, keeps its job firing and blocked until then.
+turn, such as on a cold cache or by `/clear`, keeps its job firing and blocked until then.
+A blocked fire is one printed line and no API call. Only the model can delete a job, and
+deleting it takes a turn, so the block is the cheap way to hold it. A job outlives `/clear`
+because it belongs to the process, which is how a window with no message since a `/clear`
+can keep printing "finished for this absence".
+
+Any turn that runs `/core-dump` finishes the session, whether the owner typed it as the
+whole prompt or at the end of a longer message. Their next prompt starts keep-warm again.
 
 ## Making sure the job exists
 
-A hook cannot create a job; it can only ask the model to, and the model sometimes does
+This section applies only to sessions on the job. A hook cannot create a job; it can only ask the model to, and the model sometimes does
 not. The ~/Movies session of 2026-11-02 spent its first turn on 300 tool calls and never
 did, so it pinged nothing and left no dump. Now every Stop reads `session_crons`, the job
 list Claude Code hands to Stop hooks, and falls back to a real `CronCreate` call in the
@@ -73,6 +102,9 @@ and why.
 ## Is another ping worth it?
 
     chance of return in the next hour x (catchup cost + friction) > context size
+
+A session within 10 points of `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` skips this sum: one ping, then
+its dump (owner, 2026-11-04). With the setting at 70, that means 600k tokens and up.
 
 All in cached-read tokens. A `/catchup` start measures 153k (median of 60 sessions) at
 the 1 hour write price, about 3M. Friction, `KEEPWARM_FRICTION`, is what avoiding one is
@@ -149,5 +181,5 @@ the recurring job at their next fire when the file is absent.
   time, so it can occasionally ask about a cache that was still warm.
 - A session that goes cold with no dump falls back to `/catchup --from` on its transcript.
 
-Tests: `python3 ~/.claude/scripts/keepwarm/keepwarm-recurring.test.py`, `keepwarm.test.py`
-(one-shot mode), and `keepwarm-live.test.py` (a real Haiku session, about 6 minutes).
+Tests: `python3 ~/.claude/scripts/keepwarm/keepwarm-idle.test.py` (the waiter),
+`keepwarm-recurring.test.py` (the job), `keepwarm.test.py` (one-shot mode), and `keepwarm-live.test.py` (a real Haiku session, about 6 minutes).

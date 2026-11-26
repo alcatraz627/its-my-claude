@@ -113,3 +113,12 @@ autoloads when you touch shell files. Split per prime-demotion-0901 D2a,
 ## Anti-pattern: a relative `.claude/…` write while CWD is `~/.claude`
 
 When CWD is `~/.claude` itself, relative paths like `.claude/output/X` resolve to `~/.claude/.claude/X`: a broken double-nest. A hook (`scripts/block-nested-claude.sh`) blocks the **write**, judging it against CWD rather than by matching command text, so reading, grepping, or testing that path is not blocked. The directory itself is legitimate: it is this project's own project-scoped `.claude/`, holding `settings.local.json` and `worktrees/`. The accident is the relative resolution, never the path. Full redirect table: [`conventions/asset-management.md`](../conventions/asset-management.md).
+
+## Wording moved out of the rule to meet the 2,200-byte cap (2026-11-04)
+
+The rule keeps every directive in shorter words. These are the longer forms it replaced.
+
+- Chaining: "...so one unlisted segment prompts the owner about the whole chain and halts the session."
+- Tokens: "Never print a token; `secret-leak-scan.py` reports any that reaches a transcript."
+- Environment dump: "Hook: guard-env-dump.sh."
+- Delete: "`safe-delete.sh` blocks `rm`, `\rm`, `/bin/rm`, `command`/`env`/`sudo rm`, `xargs rm`, `find -exec rm`, `find -delete`, `unlink` and `bash -c "rm ..."`; it cannot see `rmdir`, a variable or alias (`$RM`), or a runtime call (`python3 -c "os.remove(...)"`)."

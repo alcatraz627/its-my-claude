@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Put local images on Clanky's file host and print links that work in a pull request, private repos included.
+
+usage: clanky-host [--url] FILE [FILE ...]
+
+Prints one line of markdown per file, ready to paste into a PR body; --url prints the bare link instead.
+A link lasts ten years and the file is never swept, so a merged PR keeps its pictures. Anyone holding a link can open
+it, so send only what is fine to share that way, such as staging screens with test data.
+
+Needs gcloud signed in with access to Secret Manager in versable-forge-v6. Set CLANKY_HOST_URL to reach another service.
+"""
+import argparse
+import hashlib
+import hmac
+import json
+import mimetypes
+import os
+import pathlib
+import re
+import subprocess
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+PROJECT = "versable-forge-v6"
+SERVICE = os.environ.get("CLANKY_HOST_URL", "https://pr-board-575485603284.us-west1.run.app").rstrip("/")
+
+
+def read_secret(name):
+    done = subprocess.run(["gcloud", "secrets", "versions", "access", "latest", "--secret", name, "--project", PROJECT],
+                          capture_output=True, text=True)
+    return done.stdout.strip() if done.returncode == 0 else ""
+
+
+def signing_key():
+    """The service's link key, worked out the same way the service does (pr-board/filehost.py secret())."""
+    base = read_secret("clanky-FILEHOST_SECRET") or read_secret("clanky-GH_WEBHOOK_SECRET")
+    if not base:
+        sys.exit("clanky-host: cannot read the signing secret. Is gcloud signed in? Try: gcloud auth login")
+    return hmac.new(base.encode(), b"clanky-filehost", hashlib.sha256).digest()
+
+
+def upload(path, key):
+    data = path.read_bytes()
+    # Spaces and odd characters are not valid names on the host, and a name is only a label on the link.
+    name = re.sub(r"[^A-Za-z0-9._-]+", "-", path.name).lstrip("-.") or "file"
+    exp = int(time.time() + 300)
+    digest = hashlib.sha256(data).hexdigest()
+    sig = hmac.new(key, f"u|{name}|{digest}|{exp}".encode(), hashlib.sha256).hexdigest()[:32]
+    url = f"{SERVICE}/upload/{urllib.parse.quote(name)}?e={exp}&s={sig}"
+    kind = mimetypes.guess_type(name)[0] or "application/octet-stream"
+    req = urllib.request.Request(url, data=data, method="POST", headers={"Content-Type": kind})
+    try:
+        with urllib.request.urlopen(req, timeout=120) as resp:
+            return json.load(resp)
+    except urllib.error.HTTPError as exc:
+        sys.exit(f"clanky-host: {path}: the host answered {exc.code}: {exc.read().decode(errors='replace')[:200]}")
+    except urllib.error.URLError as exc:
+        sys.exit(f"clanky-host: {path}: could not reach {SERVICE}: {exc.reason}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("files", nargs="+", type=pathlib.Path, metavar="FILE")
+    parser.add_argument("--url", action="store_true", help="print the bare link instead of markdown")
+    args = parser.parse_args()
+    for path in args.files:
+        if not path.is_file():
+            sys.exit(f"clanky-host: no such file: {path}")
+    key = signing_key()
+    for path in args.files:
+        got = upload(path, key)
+        print(got["url"] if args.url else got["markdown"])
+
+
+if __name__ == "__main__":
+    main()

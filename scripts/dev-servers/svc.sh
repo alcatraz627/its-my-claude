@@ -65,12 +65,19 @@ emit() { printf '%s\n' "$1" >> "$EVENTS"; }
 
 # mkdir is the atomic primitive available on macOS, which has no flock. The
 # cron watch and an interactive `up` genuinely do collide on the state file.
+#
+# A sample can legitimately hold this for minutes, because the socket sweep is
+# slow on a busy machine. Only a lock older than the longest possible sample is a
+# dead holder's, so that is the only one safe to take over.
+LOCK_STALE_S=420
 lock() {
-  local tries=0
   until mkdir "$LOCK" 2>/dev/null; do
-    tries=$((tries + 1))
-    [ "$tries" -gt 50 ] && { rm -rf "$LOCK"; continue; }
-    sleep 0.1
+    local born; born=$(stat -f %m "$LOCK" 2>/dev/null || echo 0)
+    if [ "$born" -gt 0 ] && [ $(( $(date +%s) - born )) -gt "$LOCK_STALE_S" ]; then
+      rm -rf "$LOCK"
+      continue
+    fi
+    sleep 0.2
   done
   trap 'rm -rf "$LOCK"' EXIT
 }
@@ -84,6 +91,7 @@ sample() {
     --state "$STATE" --mode "${1:-report}" --format "${2:-json}" \
     --idle-min "$IDLE_MIN" --grace-min "$GRACE_MIN" \
     --policy "$POLICY" --holds "$HOLDS" --touch-dir "$TOUCH_DIR" \
+    --sweep-timeout "${SVC_SWEEP_TIMEOUT:-60}" \
     --never $NEVER_REAP
 }
 
@@ -162,9 +170,19 @@ cmd_reap() {
   # daemons) share this pass. A failure there must not stop services being reaped.
   python3 "$(dirname "${BASH_SOURCE[0]}")/reap-leaks.py" run ${1:+"$1"} || echo "svc: leak reaper failed" >&2
 
+  # The background pass can afford to wait out a slow sweep; a person running
+  # `svc status` cannot, so only this path gets the long limit. A dry run is a
+  # question, so it leaves the recorded state alone.
+  local mode=watch rows rc
+  [ "$dry" = 1 ] && mode=report
   lock
-  local rows; rows=$(sample watch json)
+  rows=$(SVC_SWEEP_TIMEOUT="${SVC_SWEEP_TIMEOUT:-240}" sample "$mode" json)
+  rc=$?
   unlock
+  if [ "$rc" -ne 0 ]; then
+    echo "svc reap: sampler failed (rc=$rc), nothing reaped" >&2
+    return "$rc"
+  fi
 
   local targets
   targets=$(printf '%s' "$rows" | python3 -c '

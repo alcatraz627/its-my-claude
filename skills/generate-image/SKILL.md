@@ -24,7 +24,7 @@ missing, this skill fails loud rather than inventing a cloud call.
 Read `~/.claude/skills/GUIDELINES.md` and apply it for the run.
 
 ```bash
-command -v imagine || { echo "imagine not on PATH: the local image-gen backend (~/Code/local-models) is unavailable on this machine. No cloud fallback exists by design. Stopping."; exit 1; }
+command -v lm || { echo "lm not on PATH: the local image-gen backend (~/Code/local-models) is unavailable on this machine. No cloud fallback exists by design. Stopping."; exit 1; }
 ```
 If missing, stop with that message. Do NOT attempt a cloud/API image call. None is
 configured, and inventing one violates both model-tier routing and the no-speculative-
@@ -76,7 +76,7 @@ flag removes all doubt), and check the exit code:
 
 ```bash
 OUT="$HOME/.claude/assets/images/gen-$(date +%s).png"   # or <project>/assets/ in a project
-imagine -m <model> [-s STEPS] [--style NAME] [--seed N] -o "$OUT" --no-open "<prompt>"
+lm imagine -m <model> [-s STEPS] [--style NAME] [--seed N] -o "$OUT" --no-open "<prompt>"
 rc=$?
 ```
 Resolve `$OUT` to a project's `assets/` when in a project; use `~/.claude/assets/images/`
@@ -106,10 +106,10 @@ rule as `/svg`: a generated file that exists is not a verified good image.
 On feedback, use `imagine`'s native verbs against the history entry **N** from Phase 3
 instead of regenerating from scratch (which loses the seed and the lineage):
 
-- "warmer light" / "less clutter" / any directed tweak → `imagine refine N "<delta>"` (seed-locked, small change)
-- "show me another take" → `imagine vary N` (fresh seed, same prompt/model)
-- "that one was right, redo it" → `imagine redo N` (exact re-run)
-- "start from this image" → `imagine --from <path> --strength 0.5 "<prompt>"` (img2img; whole-image only. NO region/mask editing exists, so say so if asked to change just one part)
+- "warmer light" / "less clutter" / any directed tweak → `lm imagine refine N "<delta>"` (seed-locked, small change)
+- "show me another take" → `lm imagine vary N` (fresh seed, same prompt/model)
+- "that one was right, redo it" → `lm imagine redo N` (exact re-run)
+- "start from this image" → `lm imagine --from <path> --strength 0.5 "<prompt>"` (img2img; whole-image only. NO region/mask editing exists, so say so if asked to change just one part)
 
 Each iteration re-runs Phase 3 + 4 (confirm + look). Surface these verbs proactively;
 don't make the user ask how to change it.
@@ -120,7 +120,7 @@ Before declaring done on something high-stakes, optionally run a local vision cr
 against the stated goal:
 
 ```bash
-imagine critique "$OUT" "<what it was supposed to be>"
+lm imagine critique "$OUT" "<what it was supposed to be>"
 ```
 Returns a gemma4-vision report (what it is / does it match / what's wrong / fixes).
 It depends on the local Ollama server (240s cap); if the result is literally
@@ -147,7 +147,7 @@ Critique:        <ran | skipped | unavailable>
   pruned as not good enough. Use a cached model; state the ~3–8 min wait up front so
   it doesn't read as broken. Never download a model to "test" or "be thorough"
   that's a confirmed, user-authorized action only.
-- **`imagine` already tracks history + seeds + a gallery** (`imagine gallery` →
+- **`imagine` already tracks history + seeds + a gallery** (`lm imagine gallery` →
   `outputs/index.html`, dark/light toggle built in). Don't reinvent history tracking
   in the skill, read the JSONL, use the verbs.
 - **Companion:** `/svg` for vector/geometric/logo/icon/diagram work. Photographic /

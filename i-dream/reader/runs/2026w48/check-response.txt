@@ -1,0 +1,19 @@
+```json
+{
+  "items": [
+    {
+      "cluster": "c-2d8458a5",
+      "why_repeats": "The check's scope covers only .md files under docs/ and files that carry a non-agent reader: frontmatter tag; a root-level README, AGENTS file, or planning doc without that tag is outside the check entirely. Even for files it does reach, the fault detectors target ledger-voice markers and wall-of-text, not an informal or hand-holding prose register — so the specific failure that recurred is invisible to it on two independent grounds.",
+      "fix": "Extend the check's scope to cover README and AGENTS files at the project root (without requiring reader: frontmatter), and add a detection path for informal-explainer register — verbose hedging, coddling phrases, over-explained steps — as a blocking fault alongside the existing ledger-voice and wall-of-text paths.",
+      "guard": {
+        "hook_id": "doc-voice-gate",
+        "plain": "A check on the register and tone of documentation Claude writes",
+        "verdict": "no",
+        "gap": "Root-level README and AGENTS files are outside the check's scope (it requires docs/ placement or a reader: frontmatter tag), and the check's three fault detectors — dense-block, spliced-line, mechanism-run — do not include informal or hand-holding register, so the pattern that recurred produces no signal from this check at all."
+      },
+      "quote": "SKIM_TELLS = (\"dense-block\", \"spliced-line\", \"mechanism-run\")",
+      "drop": []
+    }
+  ]
+}
+```

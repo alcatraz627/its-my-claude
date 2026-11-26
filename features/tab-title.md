@@ -5,10 +5,10 @@ triggers:
   - tool:set-focus
   - topic:terminal-title
   - topic:ghostty
-  - phrase:tab title
-  - phrase:set focus
-  - phrase:claude mood
-  - phrase:claude status
+  - phrase:"tab title"
+  - phrase:"set focus"
+  - phrase:"claude mood"
+  - phrase:"claude status"
 related:
   - scripts/update-tab-title.sh
   - scripts/tab-title/lib.sh

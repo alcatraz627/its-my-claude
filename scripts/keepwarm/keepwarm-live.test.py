@@ -18,7 +18,8 @@ KWDIR = os.path.join(T, "kw")
 SWITCH = os.path.join(T, "on")
 open(SWITCH, "w").close()
 BASE = dict(os.environ, KEEPWARM_DIR=KWDIR, KEEPWARM_SWITCH=SWITCH,
-            KEEPWARM_ONESHOT_FILE=os.path.join(T, "no-oneshot"))
+            KEEPWARM_ONESHOT_FILE=os.path.join(T, "no-oneshot"), KEEPWARM_CRON_FILE=os.path.join(T, "cron"))
+open(BASE["KEEPWARM_CRON_FILE"], "w").close()
 # Inside tmux, a client from the owner's own server must not be reused.
 BASE.pop("TMUX", None)
 SOCK = "kw-live-%d" % os.getpid()

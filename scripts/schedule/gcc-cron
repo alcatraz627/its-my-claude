@@ -38,7 +38,7 @@ STATE = os.path.join(SCHED, ".gcc-cron-state.json")
 SHADOW_LOG = os.path.join(SCHED, "gcc-cron-shadow.jsonl")
 HISTORY = os.path.join(SCHED, "history.jsonl")
 DOW = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
-TIMED_KINDS = ("daily", "weekly", "monthly", "one-shot")
+TIMED_KINDS = ("hourly", "daily", "weekly", "monthly", "one-shot")
 
 
 def parse_fire_at(kind, fire_at):
@@ -53,6 +53,9 @@ def parse_fire_at(kind, fire_at):
         at = dt.datetime.strptime(fire_at, "%Y-%m-%dT%H:%M")
         return lambda t: t == at
     parts = fire_at.split("@")
+    if kind == "hourly":
+        minute = int(parts[1])
+        return lambda t: t.minute == minute
     hh, mm = (int(x) for x in parts[-1].split(":"))
     if kind == "daily":
         return lambda t: (t.hour, t.minute) == (hh, mm)

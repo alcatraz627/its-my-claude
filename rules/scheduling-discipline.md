@@ -5,9 +5,9 @@ triggers:
   - topic:cron
   - topic:launchd
   - topic:scheduled-job
-  - phrase:schedule this
-  - phrase:set up a cron
-  - phrase:fire at
+  - phrase:"schedule this"
+  - phrase:"set up a cron"
+  - phrase:"fire at"
   - phrase:"StartCalendarInterval"
   - phrase:"crontab"
   - tool:CronCreate
@@ -204,4 +204,4 @@ You just wrote a `StartCalendarInterval` plist, a crontab line, or called `CronC
 
 - `scripts/schedule/INSTRUCTIONS.md`: the gcc-schedule operational contract (the tool-specific how-to)
 - `rules/never-modify-anthropic-credentials.md`: credential hygiene
-- `NAMESPACE.md` § `std::claude::schedule`: the cluster's namespace
+- `NAMESPACE.md` § schedule: the word for the scheduling part of the gcc

@@ -44,6 +44,10 @@ def owner_words(e):
     origin = e.get("origin")
     if isinstance(origin, dict) and origin.get("kind") not in (None, "human"):
         return None
+    # Peer, headless, timer and background-job messages carry a turnOrigin that
+    # is not "human". Older transcripts have no mark at all and are still read.
+    if e.get("turnOrigin") not in (None, "human"):
+        return None
     c = e.get("message", {}).get("content")
     if isinstance(c, list):
         if any(isinstance(b, dict) and b.get("type") == "tool_result" for b in c):
@@ -291,11 +295,27 @@ def auth_entries(value):
     return [tuple(x) for x in entries]
 
 
+# Words that name what is being allowed. A short approval needs one, so that a
+# bare "yes" or "go ahead" can never be pinned to a target of the agent's choosing.
+_GRANT_VERBS = frozenset(
+    "commit push merge deploy release ship delete remove trash prune send publish rotate revoke restart "
+    "close install apply rebase tag run".split())
+
+
 def judge_quote(words, haystack):
-    """(ok, reason): are these quoted words substantive and said by the owner in ONE message, in order."""
+    """(ok, reason): are these quoted words substantive and said by the owner in ONE message, in order.
+
+    The owner often approves in two or three words ("commit and push"). Such a
+    quote counts only when it is the owner's whole message and names the action;
+    the same words lifted out of a longer message do not.
+    """
     pieces = [p for p in (norm(x) for x in re.split(r"\.\.\.|…", words)) if p]
     counts = [len(re.findall(r"\w+", p)) for p in pieces]
     if sum(counts) < 4:
+        if len(pieces) == 1 and set(re.findall(r"[a-z]+", pieces[0])) & _GRANT_VERBS:
+            bare = pieces[0].strip(" .!")
+            if any(msg.strip(" .!") == bare for msg in haystack):
+                return True, ""
         return False, "too short to verify"
     if len(pieces) > 3 or (len(pieces) > 1 and min(counts) < 3):
         return False, "stitched from fragments"

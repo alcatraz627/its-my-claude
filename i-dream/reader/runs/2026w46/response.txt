@@ -1,0 +1,156 @@
+```json
+{
+  "summary": "Claude overrode standing rulings twice in the same week — once routing a blocked setup through a person you had banned, once asking you to merge to production against an active hold — while also declaring a tool verified without testing the path you use to launch it, dropping peer messages while heads-down, and asking you to decide things without stating the question. The ruling-override pattern and context-free decision requests are the most persistent.",
+  "items": [
+    {
+      "cluster": "c-8033ea3b",
+      "merged": ["c-3e97af59", "c-c314d6cd"],
+      "kind": "repeat",
+      "title": "Proposed an action that contradicted a rule you had already set",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261104-094948-b7",
+          "what": "Claude loaded a saved session that carried your explicit hold on production deploys, then asked you to merge the PR to production anyway."
+        },
+        {
+          "evidence_id": "atone:mist-20261105-172413-b0",
+          "what": "You had banned routing the setup through a named person; Claude recommended asking that person to run the script, then scripted their exact steps."
+        },
+        {
+          "evidence_id": "proposals:prop-20261105-193133-47",
+          "what": "Claude proposed a production sign-in flow that sidesteps the access rule you had set."
+        },
+        {
+          "evidence_id": "atone:mist-20261105-172425-75",
+          "what": "In the same session, Claude gave you an IAM command missing a required flag for a project with conditional bindings, which caused an unexpected interactive prompt when you ran it."
+        }
+      ],
+      "why_repeats": "When Claude reaches a blocked path it searches for the nearest unblocked alternative; a standing ruling held as session text does not interrupt that search the way a hard block would.",
+      "fix": "A check that reads active rulings from the saved session and blocks any proposed action that contradicts one, before the proposal reaches you.",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently stops Claude from proposing actions that contradict rulings you have already given.",
+        "verdict": "no",
+        "gap": "A check for this is registered but has fired zero times in the last two weeks, so it never matches the actual pattern"
+      },
+      "why": "Evidence from two independent sessions shows Claude contradicted a named-person ban and a production-deploy hold, both times after loading a session that carried the ruling (atone:mist-20261105-172413-b0, atone:mist-20261104-094948-b7).",
+      "evidence_ids": [
+        "atone:mist-20261104-094948-b7",
+        "atone:mist-20261105-172413-b0",
+        "proposals:prop-20261105-193133-47",
+        "atone:mist-20261105-172425-75"
+      ],
+      "proposal": {
+        "target": "guard-policy.sh",
+        "change": "Add patterns that match person-name routing bans and production-deploy holds carried in a checkpoint, and change the exit code to 1 so the check blocks rather than advises."
+      }
+    },
+    {
+      "cluster": "c-d3b3bae6",
+      "merged": [],
+      "kind": "repeat",
+      "title": "Declared something working without testing the way you launch it",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261110-054557-fe",
+          "what": "Claude reported the terminal tool built and fully verified after running all tests from its source directory; it showed blank when you launched it through its installed shortcut."
+        },
+        {
+          "evidence_id": "proposals:prop-20261110-063422-3c",
+          "what": "Claude proposed auditing every similar tool on the machine, implying the same launch-path gap likely exists elsewhere."
+        }
+      ],
+      "why_repeats": "Tests are written to match how Claude starts the tool, not how you do; the difference between the source path and the installed shortcut is invisible to Claude unless it explicitly tests the installed entry point.",
+      "fix": "Any 'verified' claim for a tool that has an installed shortcut must include a test run from that shortcut, not from the source location.",
+      "guard": {
+        "hook_id": "ui-verified",
+        "plain": "A check that asks whether a UI tool was actually tested before Claude calls it done",
+        "verdict": "partly",
+        "gap": "Confirms that some test ran but does not verify the test used the installed shortcut rather than the source path"
+      },
+      "why": "Two signals in the same week show the test harness matched Claude's launch path rather than yours, leaving the installed-link failure undetected until you ran it (atone:mist-20261110-054557-fe, proposals:prop-20261110-063422-3c).",
+      "evidence_ids": [
+        "atone:mist-20261110-054557-fe",
+        "proposals:prop-20261110-063422-3c"
+      ],
+      "proposal": {
+        "target": "ui-verified-hint.sh",
+        "change": "Require that any verification log entry records the launch path used, and block a 'verified' claim that logs a source path rather than the installed path."
+      }
+    },
+    {
+      "cluster": "c-833e079b",
+      "merged": [],
+      "kind": "structural-need",
+      "title": "Missed messages from a peer while focused on another task",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261104-145725-fe",
+          "what": "A peer sent two messages about Winhere domains; Claude left both unanswered while heads-down on a different task, then went on to draft a Cloudflare change that a policy rule should have blocked."
+        }
+      ],
+      "why_repeats": "A focused session has no interrupt path; peer messages arrive and wait with no mechanism to surface them before an action that affects the same domain.",
+      "fix": "A check that runs before any tool call touching external infrastructure and blocks it when unacknowledged peer messages are waiting, until those messages are cleared.",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently surfaces waiting peer messages into an active session before an infrastructure action.",
+        "verdict": "no",
+        "gap": "The inter-process communication check is registered but shows no blocking activity; incoming messages do not interrupt a running session"
+      },
+      "why": "A peer's two domain-related messages went unanswered and an infrastructure change proceeded past a policy rule in the same session, both caused by the absence of an interrupt path for in-flight messages (atone:mist-20261104-145725-fe).",
+      "evidence_ids": [
+        "atone:mist-20261104-145725-fe",
+        "proposals:prop-20261104-151949-8e"
+      ],
+      "proposal": {
+        "target": "allow-claude-ipc.py",
+        "change": "Exit 1 when unacknowledged peer messages exist and the current tool call targets external infrastructure, blocking the call until the messages are acknowledged."
+      }
+    },
+    {
+      "cluster": "c-da3a5c26",
+      "merged": [],
+      "kind": "repeat",
+      "title": "Asked you to decide something without telling you what you were deciding",
+      "happened": [
+        {
+          "evidence_id": "atone:mist-20261023-193413-ac",
+          "what": "Claude listed three items for you to rule on by ID number only, without stating the actual questions."
+        },
+        {
+          "evidence_id": "atone:mist-20261028-184946-19",
+          "what": "Claude handed you a list of approval requests and an admin task without the context, history, or plain steps needed to act on any of them."
+        },
+        {
+          "evidence_id": "atone:mist-20261104-102145-89",
+          "what": "Claude relayed a peer's documentation request as a catalog question, dropping the actual ask so you could not answer it without going back to the peer."
+        },
+        {
+          "evidence_id": "atone:mist-20261104-105731-da",
+          "what": "Claude gave you task and issue status keyed on bare numbers twice in the same session, then closed with decisions named only by number."
+        }
+      ],
+      "why_repeats": "Claude surfaces decisions at the moment they block a task, using whatever identifier is in the task list rather than reconstructing the full question you need to answer it.",
+      "fix": "Any message that asks you to decide or approve must include the question in plain words and why it matters before any ID or reference number.",
+      "guard": {
+        "hook_id": "decision-surface-nudge",
+        "plain": "A check that notices when Claude is about to ask you to make a decision",
+        "verdict": "partly",
+        "gap": "Fires as advisory only, so a message with bare IDs and no plain question still reaches you unchanged"
+      },
+      "why": "Four atone entries across three weeks record the same pattern: Claude asked the owner to rule on something identified only by a number, without the question itself (atone:mist-20261023-193413-ac, atone:mist-20261028-184946-19, atone:mist-20261104-102145-89, atone:mist-20261104-105731-da).",
+      "evidence_ids": [
+        "atone:mist-20261023-193413-ac",
+        "atone:mist-20261028-184946-19",
+        "atone:mist-20261104-102145-89",
+        "atone:mist-20261104-105731-da"
+      ],
+      "proposal": {
+        "target": "decision-surface-nudge.sh",
+        "change": "Change the exit code to 1 for any owner-facing message that contains a bare ID reference without an adjacent plain-language question, making this a block rather than an advisory."
+      }
+    }
+  ],
+  "process_note": "The zero-fire diagnostic requested in the 2026w44 and 2026w45 amendments is still absent. This week a policy check is registered and directly relevant to two merged clusters (the ruling-override pattern) but shows zero fires in the 14-day activity list. That single diagnostic — a row for each registered check with zero fires paired with any cluster whose named mistake type it should have stopped — would have flagged the dead check before the run and resolved both clusters' guard verdict without manual cross-reference. Recommend adding it before the 2026w47 run."
+}
+```

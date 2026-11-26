@@ -29,7 +29,9 @@ ENV = dict(os.environ, KEEPWARM_DIR=os.path.join(T, "kw"), KEEPWARM_SWITCH=SWITC
            USAGE5H_CLAUDE_JSON=os.path.join(T, "claude.json"), KEEPWARM_TASK_STORE=os.path.join(T, "tasks"),
            KEEPWARM_ONESHOT_FILE=os.path.join(T, "oneshot"), KEEPWARM_MODEL=MODEL, KEEPWARM_HOUR="15",
            KEEPWARM_COLD_GATE_MUTE=os.path.join(T, "mute"), KEEPWARM_CHECKPOINTS=INDEX,
-           USAGE_GATE_FILE=os.path.join(T, "gate.json"), USAGE_GATE_PCT="90")
+           USAGE_GATE_FILE=os.path.join(T, "gate.json"), USAGE_GATE_PCT="90",
+           KEEPWARM_CRON_FILE=os.path.join(T, "cron"))
+open(ENV["KEEPWARM_CRON_FILE"], "w").close()
 os.makedirs(ENV["KEEPWARM_TASK_STORE"])
 json.dump({"oauthAccount": {"organizationUuid": "org-a"}}, open(ENV["USAGE5H_CLAUDE_JSON"], "w"))
 json.dump({"5h": {"pct": 10}, "week": {"pct": 10}}, open(ENV["USAGE_GATE_FILE"], "w"))
@@ -295,6 +297,12 @@ def step(ctx_tokens=300000, pct=10, reset_min=120, gated=False, wakes=0, away=60
     return K.next_step(ctx_tokens, pct, reset_min, 98, gated, wakes, away, cache, hour, hint, 1000.0, chains, left, dumped)[0]
 
 
+near = int((K.AUTOCOMPACT_PCT - K.NEAR_COMPACT_MARGIN_PCT) / 100 * K.CTX_WINDOW)
+expect("a session near auto-compact still gets its one ping", step(ctx_tokens=near, wakes=0) == "warm")
+expect("then it dumps, however likely the owner's return", step(ctx_tokens=near, wakes=1, away=40) == "dump")
+expect("a session just under that line keeps warming", step(ctx_tokens=near - 1000, wakes=1, away=40) == "warm")
+expect("the owner's own hold outranks it", step(ctx_tokens=near, wakes=1, away=40,
+                                               hint={"until": 2000.0, "kind": "hard"}) == "warm")
 expect("a fresh cache waits", step(cache=30) == "wait")
 expect("a due fire pings while return is likely", step(cache=45, away=60) == "warm")
 expect("unlikely return dumps instead", step(ctx_tokens=800000, cache=45, away=600) == "dump")
@@ -413,6 +421,33 @@ begin("a9")
 out = hook("hook-prompt", session_id="a9", prompt="/core-dump")
 expect("an owner /core-dump removes the job", "CronDelete" in ctx(out) and "CronCreate" not in ctx(out))
 expect("/clear arms nothing", hook("hook-start", session_id="a10", source="clear") == {})
+
+
+def skill_transcript(name, skill, age_min=0):
+    """A transcript whose one assistant row calls a skill, in Claude Code's real row shape."""
+    p = os.path.join(T, "skill-%s.jsonl" % name)
+    when = dt.datetime.now(dt.timezone.utc) - dt.timedelta(minutes=age_min)
+    open(p, "w").write(json.dumps({"type": "assistant", "timestamp": when.isoformat().replace("+00:00", "Z"), "message": {
+        "content": [{"type": "tool_use", "name": "Skill", "input": {"skill": skill}}]}}) + "\n")
+    return p
+
+
+# The owner's real wording from 2026-11-05: the command ends a longer message.
+begin("a11")
+hook("hook-prompt", session_id="a11", prompt="Make the cli better.\nFinally, /core-dump")
+expect("a dump asked for mid-message does not stop keep-warm at the prompt", state("a11")["stopped"] is False)
+hook("hook-stop", session_id="a11", transcript_path=skill_transcript("a11", "core-dump"))
+expect("the turn that ran the dump stops keep-warm", state("a11")["stopped"] is True)
+hook("hook-prompt", session_id="a11", prompt="back again")
+expect("the owner's next prompt starts it again", state("a11")["stopped"] is False)
+begin("a12")
+hook("hook-prompt", session_id="a12", prompt="work")
+hook("hook-stop", session_id="a12", transcript_path=skill_transcript("a12", "catchup"))
+expect("another skill does not stop keep-warm", state("a12")["stopped"] is False)
+begin("a13")
+hook("hook-prompt", session_id="a13", prompt="work")
+hook("hook-stop", session_id="a13", transcript_path=skill_transcript("a13", "core-dump", age_min=30))
+expect("a dump from an earlier turn does not stop keep-warm", state("a13")["stopped"] is False)
 
 # Revert path.
 open(ENV["KEEPWARM_ONESHOT_FILE"], "w").close()

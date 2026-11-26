@@ -9,7 +9,7 @@ triggers:
   - phrase:"agent policy"
   - phrase:"allowed to push"
   - phrase:"allowed to comment"
-related: [macos-menubar-widget, git, model-tier-routing]
+related: [features/macos-menubar-widget.md, rules/git.md, rules/model-tier-routing.md]
 tier: 2
 category: features
 updated: 2026-09-25

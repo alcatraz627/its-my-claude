@@ -27,6 +27,7 @@ None of these earns a halt:
 - A judgment the owner assigned to you. Make it and state it.
 - A blocked item with other items open. Do the rest; escalate the blocker once, in the record.
 - Being the supervisor. A supervisory seat that starts implementing has drifted; dispatch.
+- A reversible step in your own lane: a commit on a feature branch, deleting your own scratch resources, releasing your own bot once its suites pass, taking your own recommended reversible option while the owner is away. Do it and report after.
 
 This rule wins over the escape-hatch list in `rules/communication.md`.
 

@@ -1,4 +1,4 @@
-# WhatsApp chat reader, served on the tailnet at /yonzan via `tailscale serve`.
+# WhatsApp chat reader, served on the tailnet at /macosgx via `tailscale serve`.
 {
 	admin off
 	auto_https off
@@ -7,7 +7,7 @@
 http://:5119 {
 	# localhost for `tailscale serve`, plus the Mac's tailnet IP so phones can use http://100.65.206.85:5119 without DNS
 	bind 127.0.0.1 100.65.206.85
-	root * "/Users/alcatraz627/Documents/WhatsApp Chat - yonzan"
+	root * "/Users/alcatraz627/Documents/WhatsApp Chat - macosgx"
 
 	# The old Data Forge service worker re-checks /sw.js (proxied here) and gets a self-removing replacement.
 	@kill path /_sw-kill.js

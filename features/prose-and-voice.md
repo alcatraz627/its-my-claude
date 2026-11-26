@@ -22,7 +22,7 @@ stale_after_days: 90
 
 # Prose and voice: what guards the writing
 
-The gcc has about 110 separate pieces that shape how the agent writes: rules it reads, standards it follows, reviewers it can hand drafts to, and hooks that send a reply or a file back when it reads badly. They grew one incident at a time, so the same tell is often defined in several places with different thresholds. This page lists them by the surface they guard, then names the overlaps, the contradictions and the stale references, and ends with the ways they could be pulled together.
+The gcc has about 110 separate pieces that shape how the agent writes: rules it reads, standards it follows, reviewers it can hand drafts to, and hooks that send a reply or a file back when it reads badly. They grew one incident at a time, so the same tell is often defined in several places with different thresholds. This page lists them by the surface they guard, then names the overlaps, records the contradictions that were settled, and ends with the ways they were pulled together.
 
 Row-level detail, with file and line for every claim, is in the two survey reports this page was built from:
 
@@ -145,36 +145,9 @@ The same tell is defined in many places, each with its own wording and sometimes
 - **Comment noise:** three hooks (Pre, Post, Stop) judge the same edit with two different detectors.
 - **Sentence length:** 25 words (doc-writing, deck lint), 20 or 25 (ste-writing), 30 (Word lint), tiered 25/35/50 (language-quality).
 
-## Where they disagree
+## Past disagreements (settled 2026-10-27)
 
-| # | Disagreement | Evidence | Likely resolution |
-| --- | --- | --- | --- |
-| 1 | Does chat prose-smell block? | audience-aware-writing says dry-run; language-quality says hard block; agent-policy says policy default enforce; format-gate's own header says advisory, but its code blocks on 2+ tells under `enforce`, which is the live value | Code is the truth; fix the three docs and the header |
-| 2 | Em-dash budget | audience-aware-writing and pr-description: zero; doc-writing: "one per page is fine" | Zero, per the thesaurus verdict; fix doc-writing |
-| 3 | Greybeard on em-dashes | Same persona calls density "not the point" and also an AI tell | Drop the first line |
-| 4 | Decoration emoji | audience-aware-writing bans it; callout-boxes requires an emoji vocabulary for emitters | Say emitter emoji in boxes are exempt |
-| 5 | Fresh reviewer for decks and Word | audience-aware-writing: always; deck and word-doc skills: the lint is the whole gate (owner, 2026-08-18) | Add the carve-out to the rule |
-| 6 | Default register | audience-aware-writing: proper sentences (owner, 2026-10-22); write-docs: terse-technical | Rule wins; update write-docs |
-| 7 | Sentence caps | Five different limits (see above) | One table of caps by surface |
-| 8 | doc-writing's scope | It excludes READMEs and changelogs, yet write-docs, feature-doc-set and technical-doc-writer apply it to those | State scope once |
-| 9 | "Human-first, warm" style | write-docs and technical-doc-writer say doc-writing.md defines it; doc-writing.md says no such thing | Fix the two citers |
-| 10 | Filename-dot scope | CLAUDE.md: any filename; format-gate (ruling D7): only paths containing a slash | Narrow CLAUDE.md's wording |
-| 11 | Em-dash in comments | guard-comment-hygiene deliberately skips it; cleanup-comments nudge flags it at turn end | Pick one |
-| 12 | Same tell, different weight | A verdict opener blocks in a file but is advisory in chat | Decide per surface on purpose, in one table |
-
-## Stale or dangling references
-
-- `rules/audience-aware-writing.md`, `rules/dense-briefing-direct-answer.md`, `conventions/language-quality.md` and `rules-provenance/absolute-paths-at-the-reader-boundary.md` still name the six retired Stop scripts as live.
-- Those six scripts (`filename-dot-stop.sh`, `emdash-stop.sh`, `relpath-stop.sh`, `prose-smell-stop.sh`, `terse-reply-stop.sh`, `dense-briefing-shapes-stop.sh`) are on disk and unregistered. The dense-briefing `.py` detector is still live through format-gate.
-- `NAMESPACE.md` points to `skills/thesaurus/`; the skill is parked in `skills-parked/thesaurus/`, while readers-advocate and language-quality treat it as live.
-- `skills/ste-writing/SKILL.md` cites `rules/testing.md:67`, which doesn't exist; the text is in `rules/testing-patterns.md`.
-- `skills/pr-description/SKILL.md` cites stale line numbers in audience-aware-writing.
-- `conventions/doc-writing.md` has two sections numbered 7, and other docs cite "§7" for the voice rule.
-- `GLOSSARY.md` points "intent" at a communication.md section that moved, and points "essays / flowery" at `rules/comments.md`, which only loads for source files.
-- `LOOKUP.md` has no rows for audience-aware-writing, dense-briefing, absolute-paths, language-quality or rca-template.
-- `guard-banned-vocab.sh` is bound but inert: no project has a `.claude/banned-vocab.txt`.
-- `style/scope-map.json` and the watcher's `tier_for` function both define review tiers, so they can drift.
-- No test asserts that the prose gates stay registered in `settings.json`.
+The survey that built this page found 12 places where two docs or gates gave different answers (whether chat prose-smell blocks, the em-dash budget, the sentence caps, the scope of `doc-writing.md`, and similar) and a list of stale references (retired Stop scripts named as live, missing LOOKUP rows, a rule cited at the wrong line). All of them were fixed or ruled on the same day; the status paragraph below says how. The row-level evidence is in `~/.claude/assets/reports/20261027-prose-capability-scour/docs-side.md` and `enforcement-side.md`, and the rulings are in `consolidation-plan.md` beside them. A disagreement found today belongs in a fix, not on this page.
 
 ## Ways to consolidate
 
@@ -187,9 +160,9 @@ Status 2026-10-27: option 1 shipped for disagreements 1 to 6, 9 and 10 and every
 - `guard-banned-vocab.sh` stays bound as an opt-in list per project.
 - The thesaurus skill stays parked. Its ledger stays live through `scripts/style/thesaurus.sh`.
 
-These are options for the owner to rule on, roughly from cheapest to largest.
+The options as they were put to the owner, roughly from cheapest to largest. The status above says which shipped.
 
-1. **Fix the stale and contradicting text.** The 12 disagreements and the stale references above, with no behaviour change. About 15 small doc edits.
+1. **Fix the stale and contradicting text.** The 12 disagreements and the stale references from the survey, with no behaviour change. About 15 small doc edits.
 2. **One canon for tells and thresholds.** Keep each tell's definition and threshold in one place (the thesaurus for vocabulary and patterns, plus one "caps by surface" table on this page). Every rule, convention, persona and skill links to it instead of restating it. This removes most of the overlap list.
 3. **One detector library with surface profiles.** Move the regexes now split across format-gate's bash, prose-lint, prose_readability, and the deck and Word lints into one engine. Each surface (chat, doc, commit, GitHub, deck, Word, comment, UI string) gets a profile saying which tells block, warn or are ignored. The hooks become thin callers, and disagreement 12 becomes a deliberate table entry.
 4. **Fold the comment trio.** One comment profile run at write time, with the Stop nudge reading its results instead of re-detecting.

@@ -1,0 +1,46 @@
+```json
+{
+  "items": [
+    {
+      "cluster": "c-8033ea3b",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently stops Claude from proposing actions that contradict rulings you have already given.",
+        "verdict": "no",
+        "gap": "No check source was provided for review; the named check has fired zero times, so whether its logic can match this pattern at all cannot be verified from source."
+      }
+    },
+    {
+      "cluster": "c-d3b3bae6",
+      "fix": "Any claim that a tool is working must include a test run from the same entry point you use to launch it, not from the directory where the code lives; the check that covers this needs to be separate from the visual-screenshot gate.",
+      "guard": {
+        "hook_id": "ui-verified",
+        "plain": "The check that runs before a 'verified' claim looks for whether a screenshot was taken after a UI file was edited; it cannot see which path a test ran from and does not fire at all unless the edited file is html, css, scss, js, jsx, tsx, vue, or svelte.",
+        "verdict": "no",
+        "gap": "The check is scoped to visual verification of UI edits via screenshots and cannot see the launch-path problem; a terminal tool built and tested from its source directory passes through it untouched.",
+        "quote": "a UI file (html, css, scss, js, jsx, tsx, vue, svelte) was edited; no image reached the model after the last such edit (a Read of an image, or a screenshot tool that returns one)"
+      }
+    },
+    {
+      "cluster": "c-833e079b",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently surfaces waiting peer messages into an active session before an infrastructure action.",
+        "verdict": "no",
+        "gap": "No check source was provided for review; the inter-process communication check shows no blocking activity and cannot be evaluated from source."
+      }
+    },
+    {
+      "cluster": "c-da3a5c26",
+      "fix": "The check that runs before a question is sent to you needs to read the text of each question and block when a question contains only an identifier with no plain-language statement of what you are being asked to decide; counting the number of questions is a different test and does not catch this.",
+      "guard": {
+        "hook_id": "decision-surface-nudge",
+        "plain": "The check fires only when Claude asks you more than one question at once or when a question involves visual comparisons; a single question that gives you only an ID number and no context passes through it without any warning.",
+        "verdict": "no",
+        "gap": "The check counts questions and checks for visual previews but never reads the text of a question, so a single bare-ID question with no plain language does not trigger it at all.",
+        "quote": "COUNT=$(printf '%s' \"$INPUT\" | jq -r '(.tool_input.questions // []) | length')"
+      }
+    }
+  ]
+}
+```

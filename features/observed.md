@@ -4,6 +4,7 @@ triggers:
   - tool:observed
   - topic:one-off-bug
   - phrase:"seen once"
+related: [conventions/rca-template.md]
 tier: 2
 category: features
 updated: 2026-11-02

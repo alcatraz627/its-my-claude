@@ -1,0 +1,266 @@
+[
+ {
+  "c": 1,
+  "real": "yes",
+  "class": "wasted-cost",
+  "prior_line": 256
+ },
+ {
+  "c": 2,
+  "real": "unclear",
+  "class": "skipped-something",
+  "prior_line": 762
+ },
+ {
+  "c": 3,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": null
+ },
+ {
+  "c": 4,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 4414
+ },
+ {
+  "c": 5,
+  "real": "unclear",
+  "class": "skipped-something",
+  "prior_line": 5009
+ },
+ {
+  "c": 6,
+  "real": "yes",
+  "class": "defect-in-build",
+  "prior_line": 2540
+ },
+ {
+  "c": 7,
+  "real": "yes",
+  "class": "halted-or-waited",
+  "prior_line": 4196
+ },
+ {
+  "c": 8,
+  "real": "unclear",
+  "class": "unverified-done",
+  "prior_line": 14786
+ },
+ {
+  "c": 9,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 2646
+ },
+ {
+  "c": 10,
+  "real": "unclear",
+  "class": "skipped-something",
+  "prior_line": 3504
+ },
+ {
+  "c": 11,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 2548
+ },
+ {
+  "c": 12,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 2145
+ },
+ {
+  "c": 13,
+  "real": "yes",
+  "class": "unverified-done",
+  "prior_line": 2323
+ },
+ {
+  "c": 14,
+  "real": "yes",
+  "class": "defect-in-build",
+  "prior_line": 2664
+ },
+ {
+  "c": 15,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 2844
+ },
+ {
+  "c": 16,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 3386
+ },
+ {
+  "c": 17,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 880
+ },
+ {
+  "c": 18,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 4703
+ },
+ {
+  "c": 19,
+  "real": "yes",
+  "class": "skipped-something",
+  "prior_line": 2225
+ },
+ {
+  "c": 20,
+  "real": "yes",
+  "class": "other: global PATH litter",
+  "prior_line": 1890
+ },
+ {
+  "c": 21,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 2600
+ },
+ {
+  "c": 22,
+  "real": "yes",
+  "class": "halted-or-waited",
+  "prior_line": 4010
+ },
+ {
+  "c": 23,
+  "real": "yes",
+  "class": "halted-or-waited",
+  "prior_line": 188
+ },
+ {
+  "c": 24,
+  "real": "yes",
+  "class": "defect-in-build",
+  "prior_line": 1115
+ },
+ {
+  "c": 25,
+  "real": "unclear",
+  "class": "other: cumbersome mock flow",
+  "prior_line": 1296
+ },
+ {
+  "c": 26,
+  "real": "yes",
+  "class": "skipped-something",
+  "prior_line": 585
+ },
+ {
+  "c": 27,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 858
+ },
+ {
+  "c": 28,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 1737
+ },
+ {
+  "c": 29,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 1651
+ },
+ {
+  "c": 30,
+  "real": "yes",
+  "class": "wrong-premise",
+  "prior_line": 3032
+ },
+ {
+  "c": 31,
+  "real": "yes",
+  "class": "wrong-premise",
+  "prior_line": 3162
+ },
+ {
+  "c": 32,
+  "real": "yes",
+  "class": "defect-in-build",
+  "prior_line": 3206
+ },
+ {
+  "c": 33,
+  "real": "yes",
+  "class": "wrong-premise",
+  "prior_line": 3206
+ },
+ {
+  "c": 34,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 3961
+ },
+ {
+  "c": 35,
+  "real": "yes",
+  "class": "defect-in-build",
+  "prior_line": 1030
+ },
+ {
+  "c": 36,
+  "real": "unclear",
+  "class": "halted-or-waited",
+  "prior_line": 4860
+ },
+ {
+  "c": 37,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 2442
+ },
+ {
+  "c": 38,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 3457
+ },
+ {
+  "c": 39,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 3662
+ },
+ {
+  "c": 40,
+  "real": "unclear",
+  "class": "length-or-register",
+  "prior_line": 1817
+ },
+ {
+  "c": 41,
+  "real": "yes",
+  "class": "length-or-register",
+  "prior_line": 192
+ },
+ {
+  "c": 42,
+  "real": "yes",
+  "class": "wrong-premise",
+  "prior_line": 3130
+ },
+ {
+  "c": 43,
+  "real": "yes",
+  "class": "wrong-premise",
+  "prior_line": 1140
+ },
+ {
+  "c": 44,
+  "real": "no",
+  "class": "not-a-correction",
+  "prior_line": 3550
+ }
+]

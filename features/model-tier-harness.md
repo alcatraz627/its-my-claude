@@ -7,9 +7,9 @@ triggers:
   - topic:dispatch-telemetry
   - topic:gemini
 related:
-  - ../rules/model-tier-routing.md
-  - hook-design
-  - local-models
+  - rules/model-tier-routing.md
+  - features/hook-design.md
+  - features/local-models.md
 tier: 2
 category: features
 updated: 2026-07-10
@@ -48,7 +48,7 @@ Fires log via `warn-log.sh` (`--hook model-tier --action block|nudge`) for FP-ra
 per `features/hook-design.md`. A mis-tier heuristic (research-verbs on opus-high, etc.) is
 deliberately NOT nudging yet. Telemetry accumulates first, and the reviews below revisit it.
 
-## The plan-time nudge: `scripts/hooks/retired/nudge-model-plan.sh` (RETIRED 2026-10-14, never registered)
+## The plan-time nudge: `nudge-model-plan.sh` (retired 2026-10-14, never registered; the script was removed)
 
 This was the Phase C half. When a plan's text signaled sub-agents, workflows, large ingestion or
 modality tools but carried no `Model plan:` block, it gave one `additionalContext` nudge

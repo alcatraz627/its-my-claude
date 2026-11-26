@@ -10,6 +10,7 @@ python3 ~/.claude/scripts/hooks/pr-review-gate.py stop
 ~/.claude/scripts/hooks/declared-ready-stop.sh
 ~/.claude/scripts/hooks/ui-callouts-gate.sh
 python3 ~/.claude/scripts/hooks/ui-verified-stop.py
+python3 ~/.claude/scripts/hooks/tui-smoke-stop.py
 python3 ~/.claude/scripts/hooks/doc-voice-gate.py stop
 ~/.claude/scripts/hooks/queue-stop.sh
 ~/.claude/scripts/hooks/goal-proposal-stop.sh

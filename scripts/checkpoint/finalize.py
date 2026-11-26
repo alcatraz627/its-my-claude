@@ -109,8 +109,20 @@ def field_items(text, label):
     return split_items(f[0])
 
 
+def grant_key(entry):
+    """What makes two approval lines the same approval: the owner's words and where they apply.
+
+    The commit a target pointed at is left out, because it moves as work lands
+    and the approval is still the same one.
+    """
+    m = ck.AUTH_SHAPE_RE.match(ck.flat(entry))
+    if not m:
+        return ck.norm(entry)
+    return ck.norm(m.group("words")) + " | " + ck.norm(re.sub(r"\s*@\S+", "", m.group("target")))
+
+
 def carried_grants(path, prev):
-    """Entry texts that an earlier dump in this project directory holds verified (no UNVERIFIED: prefix)."""
+    """Approvals that an earlier dump in this project directory holds verified (no UNVERIFIED: prefix)."""
     me = os.path.realpath(path)
     mtime = os.path.getmtime(path)
     files = [p for p in glob.glob(os.path.join(os.path.dirname(os.path.abspath(path)), "_*.claude.md"))
@@ -129,7 +141,7 @@ def carried_grants(path, prev):
         for s, e in ck.auth_entries(f[0]):
             t = ck.flat(f[0][s:e])
             if not t.upper().startswith("UNVERIFIED:"):
-                found.add(ck.norm(t))
+                found.add(grant_key(t))
     return found
 
 
@@ -156,7 +168,7 @@ def check_authorizations(text, path, prev, scan, report):
             continue
         if carried is None:
             carried = carried_grants(path, prev)
-        if ck.norm(entry) in carried:
+        if grant_key(entry) in carried:
             continue
         ok, reason = ck.judge_quote(m.group("words"), haystack)
         if ok:

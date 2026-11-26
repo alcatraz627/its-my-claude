@@ -21,7 +21,7 @@ stale_after_days: 120
 ---
 # Owner decisions go through a wizard, never a chat list or a doc
 
-Before sending a reply with more than one question for the owner, or any "please review X" where X is your own output:
+Before a reply with more than one question for the owner, or any "please review X" where X is your own output:
 
 1. Write the questions in the owner's unit: only what only they can decide (authorization, taste, scope fork).
 2. **Default what you hold a confident pick for**, apply it, and list it under "Defaults applied, silence means agreement". Ask only the genuinely open calls, each with a drafted answer and a one-line explainer.
@@ -29,6 +29,6 @@ Before sending a reply with more than one question for the owner, or any "please
 4. Size the surface for the owner's sentence: the note is the ruling, the pick is shorthand.
 5. Record each answer in the artifact it binds, not only in chat.
 
-A single yes/no still goes in one sentence. A /tasks render whose owner-gated count exceeds the height cap is this case: wizard the gates, never compress them.
+One yes/no still goes in one sentence, with its default and cost. A /tasks render whose owner-gated count exceeds the height cap is this case: wizard the gates, never compress them.
 
 Provenance, lived cases and the full reasoning: `~/.claude/rules-provenance/owner-decisions-go-through-a-wizard.md`

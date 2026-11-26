@@ -1,0 +1,134 @@
+These problems were named from evidence alone, without reading the checks they credit. Below them is the source header of each credited check.
+
+## The problems as named
+```json
+[
+  {
+    "cluster": "c-2d8458a5",
+    "kind": "repeat",
+    "title": "Wrote developer docs in a hand-holding, over-explained style",
+    "why": "An atone entry and a same-day proposal both name the same prose register problem in the same session, showing the check fires but did not stop the output (atone:mist-20261120-151346-07, proposals:prop-20261120-151415-34).",
+    "evidence_ids": [
+      "atone:mist-20261120-151346-07",
+      "proposals:prop-20261120-151415-34"
+    ],
+    "proposal": {
+      "target": "doc-voice-gate.py",
+      "change": "Raise the exit code to blocking for any doc file matched by README, AGENTS, or docs/ whose tone scores as informal-explainer, rather than emitting an advisory nudge."
+    },
+    "happened": [
+      {
+        "evidence_id": "atone:mist-20261120-151346-07",
+        "what": "Claude wrote README, AGENTS, and planning docs for a developer project in a wordy, informal, hand-holding register instead of direct developer prose."
+      },
+      {
+        "evidence_id": "proposals:prop-20261120-151415-34",
+        "what": "A proposal was raised the same day to ban the coddling-explainer register from developer and agent documentation entirely."
+      }
+    ],
+    "why_repeats": "The voice check is active and blocks some cases, but the atone and proposal arriving on the same day show it passed the offending output through — most likely because informal-but-not-flagrant prose exits advisory rather than blocked, letting the register survive into the final file.",
+    "fix": "Tighten the voice check so an over-explained register in any developer-facing doc (README, AGENTS, planning files) triggers a block rather than a nudge.",
+    "guard": {
+      "hook_id": "doc-voice-gate",
+      "plain": "A check on the register and tone of documentation Claude writes",
+      "verdict": "partly",
+      "gap": "README and planning files written in an informal explainer tone pass through as nudges rather than hard stops, so the pattern recurs without being caught before the output lands"
+    }
+  }
+]
+```
+
+## The credited checks
+### doc-voice-gate (/Users/alcatraz627/.claude/scripts/hooks/doc-voice-gate.py)
+```
+#!/usr/bin/env python3
+"""Holds a document written for people to the shape a person can read.
+
+Two failures it catches. A doc meant for a person (a plan, a spec, a
+directions file) comes out as the agent's own ledger: internal ids, commit
+shas, file:line references, dated rulings, "the spec says X, but". Or it comes
+out as a wall of text: table cells and paragraphs hundreds of characters long.
+
+A note during an edit was not enough: clanky-opus got it three times on
+DIRECTIONS.md (2026-10-22), decided the file was for agents, kept writing, and
+told the owner it had written a better doc. So the check now runs again when
+the turn ends, on the file as it stands. While a doc written this turn still
+fails, the turn may not end (twice), and never on a reply that calls that doc
+better or fixed. If the agent ends the turn anyway, the owner is told.
+
+A third failure is a doc that is hard to skim: dense paragraphs, lines spliced
+with semicolons, runs of sentences that only name code and paths. Those checks
+are shared with the GitHub prose gate through the prose engine
+(scripts/style/prose-lint.py, surface "doc"), with a few more
+allowed here because a doc is longer than a comment.
+
+Runtime contract:
+  doc-voice-gate.py          PostToolUse on Write/Edit/MultiEdit: note + record
+  doc-voice-gate.py stop     Stop: re-check this turn's docs, block or tell
+  doc-voice-gate.py --check FILE
+                             judge one file now, from a shell: prints what is
+                             wrong and exits 1, or says it passes and exits 0
+Scope: .md files under a `docs/` folder, or any .md whose frontmatter names a
+non-agent `reader:` (that includes a file under `.claude/`). Skips `archive/`,
+other `.claude/` files, and changelogs, RCAs and ADRs. `reader: agent` exempts
+a file outside `docs/` only; under `docs/` only the owner's list does
+(~/.claude/doc-voice-exempt.txt, one path glob per line). Fenced code and
+everything after a final Sources / References / Appendix heading are not
+counted.
+A doc under `.claude/output/` that names no reader is judged only when the
+reply at the end of the turn points the owner at it by its full path, because
+that is the moment it becomes something a person reads. A seat's own output is
+never judged this way. `reader: agent` at the top of the file clears it.
+
+A doc is judged against how it stood before this session first touched it
+(the pre-edit snapshot, else the committed file), so a merge that only
+removed conflict markers from an old doc does not fail it, and only what got
+worse holds the turn. A new file is judged whole. A note during editing is
+sent once per change in the set of faults, not once per edit.
+
+Mute: touch ~/.claude/.no-doc-voice-gate · One-shot: DOC_VOICE_OFF=1
+Test: bash ~/.claude/scripts/hooks/doc-voice-gate.test.sh
+"""
+import fnmatch
+import hashlib
+import importlib.util
+import json
+import os
+import re
+import subprocess
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import hookpop  # noqa: E402
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SURFACE = "doc"          # the style/profiles.json row for documents
+SKIM_TELLS = ("dense-block", "spliced-line", "mechanism-run")
+_ENGINE = None
+
+
+def engine():
+    """The prose engine (scripts/style/prose-lint.py), loaded on first use."""
+    global _ENGINE
+    if _ENGINE is None:
+        spec = importlib.util.spec_from_file_location("prose_lint", os.path.join(HERE, "..", "style", "prose-lint.py"))
+        _ENGINE = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_ENGINE)
+    return _ENGINE
+
+# Planning shorthand alone (V1, T3) is common and mild; the ledger voice shows
+# as several kinds at once (ids plus shas, file:line or dated rulings).
+THRESHOLD = 8
+MIN_KINDS = 2
+# Measured on DIRECTIONS.md: the wall version had 13 table cells over 160
+# characters and 2 paragraphs over 400; its rewrite had none. A plain doc the
+```
+
+## What to do
+For each problem:
+- Correct `why_repeats`, `fix` and `guard` wherever the check's source contradicts them: what it looks at, where it runs, whether it blocks or only warns. If the credited check cannot see this problem at all, say that plainly, and aim `fix` at what is actually missing.
+- If a case in `happened` is a different problem from the others, list it in `drop` with one sentence on why.
+- Leave a field out when it is already right.
+- Put in `quote` one line copied exactly from a credited check's source that backs your correction. A correction with no such line is thrown away, so never claim a check lacks something without having read the line that shows it.
+Keep the same voice rules as before: owner-facing fields are plain sentences about what Claude did, with no hook ids, script names, slugs or numbers.
+
+Answer with one ```json block: {"items": [{"cluster": "...", "why_repeats": "...", "fix": "...", "guard": {"hook_id": "..." or null, "plain": "...", "verdict": "yes|partly|no", "gap": "..."}, "drop": [{"evidence_id": "...", "why": "..."}]}]}

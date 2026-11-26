@@ -15,6 +15,10 @@
     "STATUSLINE_PROFILE": "custom",
     "CLAUDE_CODE_SCROLL_SPEED": "3"
   },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Bash",
@@ -1213,6 +1217,16 @@
         "hooks": [
           {
             "type": "command",
+            "command": "/usr/bin/python3 ~/.claude/scripts/keepwarm/keepwarm.py hook-idle",
+            "timeout": 21600,
+            "asyncRewake": true
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
             "command": "~/.claude/scripts/hook-orchestrator/run.sh Stop",
             "async": true
           },
@@ -1638,18 +1652,20 @@
     }
   },
   "outputStyle": "Concise",
-  "attribution": { "commit": "", "pr": "" },
   "feedbackDrafts": "notify",
   "alwaysThinkingEnabled": true,
   "effortLevel": "medium",
   "modelSettings": {
     "claude-opus-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "high"
     },
     "claude-fable-5-1": {
       "effortLevel": "medium"
     },
     "claude-sonnet-5-5": {
+      "effortLevel": "high"
+    },
+    "claude-fable-5-2": {
       "effortLevel": "high"
     }
   },

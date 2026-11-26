@@ -102,10 +102,34 @@ def _first_time(it):
         pass
     return True
 
+
+PRIMING_HOURS = 4
+def _recent_path(it):
+    key = hashlib.sha1(str(it.get("id", "")).encode("utf-8", "replace")).hexdigest()[:16]
+    return _p.expanduser("~/.claude/.inject-once/idream-recent/" + key)
+
+def _recently_shown(it):
+    if PRIMING_HOURS <= 0:
+        return False
+    try:
+        return time.time() - os.path.getmtime(_recent_path(it)) < PRIMING_HOURS * 3600
+    except OSError:
+        return False
+
+def _mark_shown(it):
+    path = _recent_path(it)
+    try:
+        os.makedirs(_p.dirname(path), exist_ok=True)
+        with open(path, "a"):
+            os.utime(path, None)
+    except OSError:
+        pass
+
 shown = []
 for it in live:
-    if _first_time(it):
+    if not _recently_shown(it) and _first_time(it):
         shown.append(it)
+        _mark_shown(it)
     if len(shown) == 2:
         break
 if shown:

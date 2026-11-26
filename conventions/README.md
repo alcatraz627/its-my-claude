@@ -18,7 +18,7 @@
 
 YAML frontmatter required (`brief`, `triggers:`, `related`, `tier`, `category`, `updated`, `stale_after_days`).
 
-Body: state the convention up front, and show good vs bad examples when the failure mode isn't obvious. Keep it under 100 lines, and split longer pieces into multiple conventions.
+Body: state the convention up front, and show good vs bad examples when the failure mode isn't obvious. Keep it under about 250 lines, and split longer pieces into multiple conventions. Only the named handbooks (`doc-writing.md`, `tui-handbook.md`, `dashboard-tools.md`) run longer.
 
 ## Cross-system contracts
 

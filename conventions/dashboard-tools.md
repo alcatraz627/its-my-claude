@@ -10,7 +10,7 @@ triggers:
   - phrase:"local dev tool"
 related:
   - conventions/html-output.md
-  - mistake-patterns/2026-04-28-sherpa-data-loss-rca.md
+  - atone/rca/mist-20260428-120000-m00.md
   - conventions/ui-charter.md
 tier: 2
 category: conventions
@@ -419,5 +419,5 @@ For all small single-user dashboard tools (capture, edit, review, track, audit a
 
 ## Reference
 
-- Full RCA of what happens when these rules are violated: [`mistake-patterns/2026-04-28-sherpa-data-loss-rca.md`](../mistake-patterns/2026-04-28-sherpa-data-loss-rca.md)
+- Full RCA of what happens when these rules are violated: [`atone/rca/mist-20260428-120000-m00.md`](../atone/rca/mist-20260428-120000-m00.md)
 - HTML/theme/toggle rules for the dashboard page itself: [`conventions/html-output.md`](html-output.md)

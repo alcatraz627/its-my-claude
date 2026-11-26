@@ -2,10 +2,10 @@
 brief: Dispatch prompts for material sub-agent work (research, analysis, audit, design) MUST pin an absolute output path AND how it gets persisted. Either the sub-agent writes before returning (write-capable agent types only; never a file literally named report.md, because the harness blocks it), or the sub-agent returns full text and the PARENT writes it. The parent MUST verify the file exists before using the findings, because the return abstract is a pointer and not the artifact. Mechanically enforced by the subagent-output guard hook. Read this rule when designing multi-agent output flows or when the guard fires.
 triggers:
   - tool:Agent
-  - phrase:dispatch sub-agent
-  - phrase:research agent
-  - phrase:opus sub-agent
-  - phrase:parallel agents
+  - phrase:"dispatch sub-agent"
+  - phrase:"research agent"
+  - phrase:"opus sub-agent"
+  - phrase:"parallel agents"
 related:
   - features/context-retention.md
   - features/wal.md

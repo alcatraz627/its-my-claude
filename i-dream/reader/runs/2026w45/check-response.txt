@@ -1,0 +1,37 @@
+```json
+{
+  "items": [
+    {
+      "cluster": "c-b86b2809",
+      "guard": {
+        "hook_id": null,
+        "plain": "Nothing currently checks that asks sent to you include context before they go out",
+        "verdict": "no",
+        "gap": "No credited check source exists to review; the proposed gate does not yet exist"
+      }
+    },
+    {
+      "cluster": "c-1f725c61",
+      "why_repeats": "The check's output contract specifies exit 0 on every path, so it has never been able to block a turn regardless of whether it fires; additionally the check only inspects whether a code-reading tool ran in the current turn and cannot see whether the answer is in project notes, which is the source for two of the three instances.",
+      "fix": "Change the exit code from 0 to 1 when the check fires so it blocks the turn before the question reaches you; the two notes-based instances (accounts listed as a blocker, login details already in project notes) are outside this check's scope entirely and need a separate gate that consults notes or memory before allowing the question through.",
+      "guard": {
+        "hook_id": "guard-lazy-question",
+        "plain": "A check that is supposed to stop Claude from asking you for something it could have looked up itself, but it is wired to exit silently on every path and only checks whether Claude read code before asking — it cannot see whether the answer already exists in project notes",
+        "verdict": "partly",
+        "gap": "The check exits with code 0 on every path including when it fires, so it can never block a turn; its matching logic covers code-reading tools only, leaving the two notes-based instances entirely outside its scope"
+      },
+      "quote": "# Output contract: {hookSpecificOutput:{hookEventName:\"PreToolUse\", additionalContext:<msg>}} on stdout, exit 0 always.",
+      "drop": [
+        {
+          "evidence_id": "atone:mist-20261102-142233-82",
+          "why": "The answer was in project notes, not code files; the credited check only fires when no code-reading tool ran before the question, so this instance is outside its scope and belongs to a separate missing gate."
+        },
+        {
+          "evidence_id": "atone:mist-20261023-193439-69",
+          "why": "The answer was in project notes, not code files; same reason as above — the credited check cannot detect whether notes already hold the answer."
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,7 +1,5 @@
 # The gcc vocabulary
 
-<!-- sessions: polish-cdump-4e@2026-10-28 -->
-
 Fourteen words for the parts of `~/.claude` (the gcc). They are the words you already use when you talk about the system, so you can name any part in a prompt and an agent knows what you mean. `gcc::<word>` is the same word with a prefix and is optional. The words are labels only: no code imports them, and a word does not map to one folder.
 
 To remember them, follow one session from start to finish. It **knows** things, does **work**, is **guarded** while it works, **shows** you what is happening, and **keeps** what is left when it ends.
@@ -56,7 +54,7 @@ To find a file, use `FOLDERS.md` for folders and `LOOKUP.md` for single files. T
 
 **ledger.** The records of judgment: `atone/` (mistakes), `affirm/` (good calls), `proposals.jsonl` (the improvement backlog), `pinned/`, and the alerts in `ledger/`. You say "atone", "proposal", "backlog".
 
-**dream.** The i-dream engine that reads past sessions and writes digests and briefs: `i-dream/`, `subconscious/`, and the `*-domain/` event streams. Its source is `~/Code/Claude/i-dream`. You say "i-dream", "digest", "audit".
+**dream.** The i-dream engine that reads the owner's local signals and names what keeps recurring: `i-dream/`, `subconscious/`, and the `*-domain/` event streams. Since 2026-09-18 its live jobs are the reader (a daily recon and a weekly run that lands clusters on a decision page) and a monthly audit card; the nightly digest and dream pass were retired that day. Its source is `~/Code/Claude/i-dream`. You say "i-dream", "reader", "audit".
 
 ## Adding a word
 

@@ -4,8 +4,8 @@ triggers:
   - topic:personas
   - topic:persona-efficacy
   - tool:persona-log
-  - phrase:which persona
-  - phrase:persona usage
+  - phrase:"which persona"
+  - phrase:"persona usage"
 related:
   - personas/README.md
   - scripts/persona-log.sh

@@ -1,0 +1,95 @@
+Week 2026w48. `kind` is one of repeat, structural-need, drift or noise; a cluster's 'found by' label says how the join found it and is not its kind. The clusters:
+
+## c-2d8458a5 (found by repeat, score 11.8)
+'ai-smell-prose-against-stored-voice' came up 2 times from 2 independent source(s) across atone, proposals
+- proposals:prop-20261120-151415-34 | proposals | agent | 2026-11-20 | - | Ban the coddling-explainer register in developer and agent docs
+- atone:mist-20261120-151346-07 | atone | human | 2026-11-20 | local-models | Docs written in a hand-holding explainer register for a developer owner: imagine-kit/README.md, imagine-kit/AGENTS.md, docs/STATE.md additions and the studio plan were written wordy and informal: narr…
+
+## c-605137d0 (found by session cluster, score 4.3)
+Session da9f47ce in csync: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-3da7d3eca788cb9c | checkpoints | human | 2026-11-21 | csync | pending: - Owner: answer the four open calls in the plan. - Owner: attach the phone, so rows can move from Built to Seen. - Agent, after the calls: build rows 8, 9, 10, 12, 14, 16, 17, 28; fix row 23 …
+- signals:da9f47ce-1824-4923-bf9d-0e2135da8011-1795256577 | signals | human | 2026-11-21 | - | the owner corrected the agent
+
+## c-e21da166 (found by session cluster, score 3.7)
+Session b8d6eb03 in aep-scrape: the owner corrected the agent, the core-dump left items pending
+- checkpoints:ckpt-3f8b15b5b9cafc16 | checkpoints | human | 2026-11-19 | aep-scrape | pending: - USER: AEP catalog team list (~500 parts with ATK engine codes and sites), then load it as its own graded source. - USER: AEP prices for unlisted parts, weights and box sizes, GTIN, photos. …
+- signals:b8d6eb03-1b21-4523-98ee-26ded410b379-1795116315 | signals | human | 2026-11-19 | - | the owner corrected the agent
+
+
+
+## Hook scripts already registered in settings.json
+allow-claude-ipc.py, api-recovery-nudge.sh, authority-claim-note.sh, auto-base.sh, auto-continue-stop.sh, auto-format.sh, bash-wal.sh, block-curl-post-auth.sh, block-nested-claude.sh, browser-ttl-nudge.sh, browser-use-touch.sh, check-human-comments.sh, cleanup-comments-nudge.sh, compact-gate.sh, counter-gate-stop.sh, ctx-claim-stop.sh, ctx-pressure-nudge.sh, ctx-signal-nudge.sh, decision-surface-nudge.sh, diff-preview.sh, directions.py, doc-voice-gate.py, dream-insights-prompt.sh, edit-tracker.sh, emit-event.sh, enqueue-auto-coredump.sh, exit-code-hook.sh, file-changed.sh, format-reminder-ups.sh, gate-cli-actions.sh, gcc-signal-capture.sh, gcloud-auth-hook.py, gemini-mode-inject.sh, goal-gate-note-stop.sh, guard-ai-signature.sh, guard-anthropic-credentials.sh, guard-artifact-unasked.sh, guard-banned-vocab.sh, guard-cd-relative-path.sh, guard-cluster-e-smells.sh, guard-command-chaining.sh, guard-comment-hygiene.sh, guard-comment-verbosity.sh, guard-commit-signature.sh, guard-cron-prompt.sh, guard-db-target.py, guard-dev-server-port.sh, guard-env-access.sh, guard-env-capture-test.sh, guard-env-dump.sh, guard-extension-root.sh, guard-gh-prose.py, guard-ghostty.sh, guard-git-push.sh, guard-github-agent-marker.sh, guard-lazy-question.sh, guard-model-tier.sh, guard-near-dup-env-var.sh, guard-policy-store.sh, guard-policy.sh, guard-pr-title-tags.sh, guard-prose-quality.sh, guard-repo-visibility.sh, guard-rg-replace-bundle.sh, guard-secret-file-read.sh, guard-settings-write.py, guard-subagent-output.sh, guard-system-dir-writes.sh, guard-user-commit.sh, guard-zsh-path-var.sh, hand-rendered-tasks-stop.sh, heartbeat.sh, heed-writeback.sh, hhmm-drift-post.py, hint-injector.sh, keepwarm.py, log-image-reads.sh, memory-reach.py, migrate-hint.sh, notification-context.sh, parked-skills-nudge.sh, permission-ask.py, permission-notify.sh, persona-log-nudge.sh, persona-suggest.sh, plan-gate-pre.sh, plan-gate-ups.sh, policy-approve-ask.sh, policy-ask-prompt.sh, post-compact-recovery.sh, post-tool-use.sh, post-tool.sh, pr-review-gate.py, pre-compact-checkpoint.sh, pre-tool-use.sh, pre-tool.sh, prefer-ripgrep.sh, prefer-tmp-py-over-inline.sh, prevent-unsolicited-index-manipulation.sh, protect-atone-raw.sh, push-approve-ask.sh, push-approve-prompt.sh, quoted-text-is-not-a-command.py, raw-guard.sh, render-mcp-gate.py, review-nudge-stop.sh, run.sh, safe-delete.sh, seat-hook.py, secret-leak-scan.py, session-end-checkpoint.sh, session-end.sh, session-start.sh, sessionstart-inject.sh, shell-mem.sh, skill-invocation-log.sh, snapshot-pre-edit.sh, speculative-atone-hint.sh, stop-arbiter.py, stop-sync.sh, stop.sh, style-watch-stop.sh, subagent-box.sh, subagent-tracker.sh, task-table-inject.sh, test-status-hook.sh, tmp-jail-cleanup.sh, tmp-jail-guard.sh, tool-counter.sh, track-edits-session.sh, turn-counter.sh, turn-start.sh, ui-brief-nudge.sh, ui-pr-screenshot-nudge.sh, ui-verified-hint.sh, ups.sh, usage5h.py, user-prompt-hint.sh, user-prompt-submit.sh, wake-breaker.sh, warn-git-add-enumeration.sh
+
+Never propose registering one of these. If one exists and its mistake still repeats, name what it fails to catch, or that it only warns instead of blocking.
+
+## What each hook did in the last 14 days
+block = stopped the turn or tool call; block-dry = would have blocked but runs in dry-run; soft and nudge = advisory only; muted = suppressed by a mute file. Base any claim about whether a hook blocks on these counts, not on its name.
+- terse-reply: 8 block, 232 soft
+- prose-smell: 2 block, 209 nudge
+- doc-voice-gate: 19 block, 124 nudge, 51 unlabelled
+- subagent-box: 125 soft
+- push-gate: 93 unlabelled
+- filename-dot: 80 soft
+- prefer-tmp-py-over-inline: 60 nudge
+- memory-reach: 59 nudge
+- relpath: 49 soft
+- declared-ready: 2 block, 29 soft
+- guard-env-access: 21 nudge
+- guard-pr-title-tags: 18 block
+- guard-cluster-e-smells: 17 nudge
+- review-nudge: 17 nudge
+- warn-git-add-enumeration: 16 nudge
+- guidance: 15 nudge
+- guard-gh-prose: 14 block
+- pr-review: 14 block
+- goal-paste: 13 block
+- guard-prose-quality: 13 block
+- ui-verified: 9 block, 1 nudge
+- format-gate: 9 block
+- guard-command-chaining: 9 block
+- guard-comment-verbosity: 8 nudge
+- prefer-ripgrep: 6 nudge
+- ui-callouts-gate: 6 soft
+- secret-scan: 5 nudge
+- absence-claim: 4 block
+- creation-box: 4 block
+- protect-atone-raw: 4 block
+- structural-claim: 3 block, 1 soft
+- bare-id-cluster: 3 block
+- guard-comment-hygiene: 3 block
+- guard-rg-replace-bundle: 3 block
+- persona-suggest: 3 nudge
+- block-nested-claude: 2 block
+- goal-arm-lint: 2 unlabelled
+- guard-ai-signature: 2 block
+- ready-claim: 2 nudge
+- dev-server-port: 1 block
+
+
+## Who reads this
+The owner reads this page as the person Claude worked for, not as an engineer of the
+gcc. Write every owner-facing field (title, happened[].what, why_repeats, fix,
+guard.plain, guard.gap, summary) as plain sentences about what Claude did to them.
+Never put an evidence id, cluster id, hook id, script or file name, slug, or the
+words "gcc", "backlog", "atone", "gate" or "cluster" in those fields. Counts are added
+by the page; do not write numbers in guard.gap.
+
+`happened` lists the times it happened, one per cited evidence row, each a sentence
+about what Claude did. The page adds the date and project from the evidence row.
+`guard.hook_id` is a hook id from the 14-day list above, or null when nothing tries
+to stop it; `guard.verdict` is yes, partly or no.
+
+## Merge
+If two clusters are the same problem seen two ways, name it once and list the other
+cluster ids in "merged". A cluster is named or merged, never both.
+
+## Answer with JSON only
+{"summary": "…",
+ "items": [{"cluster": "c-…", "merged": ["c-…"], "kind": "repeat",
+   "title": "Said it works without checking where you would see it",
+   "happened": [{"evidence_id": "atone:…", "what": "told you the deploy script was simplest and certain; it had never been run, and it failed when you ran it."}],
+   "why_repeats": "…", "fix": "…",
+   "guard": {"hook_id": "declared-ready", "plain": "A check on \"done\" and \"works\" claims", "verdict": "partly", "gap": "\"proven on the Pi\" and \"green on the laptop\" get through"},
+   "why": "…", "evidence_ids": ["atone:…"],
+   "proposal": {"target": "…", "change": "…"}}],
+ "process_note": null}

@@ -20,7 +20,7 @@
 
 YAML frontmatter is required (`brief`, `triggers:`, `related`, `tier`, `category`, `updated`, `stale_after_days`). Triggers are prefixed `tool:` / `topic:` / `phrase:` / `skill:` / `mcp:`.
 
-Body: open with what the thing IS (code-agnostic), then how to invoke and configure it, then caveats. Cross-link related features with `[[feature-name]]`-style links when natural.
+Body: open with what the thing IS (code-agnostic), then how to invoke and configure it, then caveats. Cross-link related docs with the `related:` field and an inline backtick path (`features/name.md`) when natural.
 
 ## See also
 

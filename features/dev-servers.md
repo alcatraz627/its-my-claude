@@ -7,7 +7,7 @@ triggers:
   - topic:ports
   - phrase:"start the dev server"
 related:
-  - hook-design
+  - features/hook-design.md
 tier: 2
 category: features
 updated: 2026-07-10
@@ -132,6 +132,12 @@ nothing says whether it is working. `SVC_IDLE_MIN`, `SVC_GRACE_MIN` and
 
 launchd runs `gcc-svc` every 5 minutes, so a service stops within 5 minutes of its
 limit. Reap is not deletion here either. Every reap records `svc up <name>`.
+
+Finding ports means one `lsof` sweep, which took 15 to 194 seconds on this machine with
+about 1,400 processes. The reap pass allows it 240 seconds, and `svc status` and `svc up`
+allow 60 (`SVC_SWEEP_TIMEOUT`). A sweep that runs out proves nothing, so the last known
+ports are kept, nothing is reaped, the row reads `unknown(no sweep)`, and the pass exits 4
+so `launchctl list` shows it failed.
 
 Tests: `python3 ~/.claude/scripts/tests/test-svc-policy.py`, and in bfb
 `node e2e/svc-seen-walk.mjs`.

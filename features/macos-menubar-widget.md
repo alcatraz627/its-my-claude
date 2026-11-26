@@ -1,5 +1,5 @@
 ---
-brief: How to build a macOS menu-bar app here. Copy the design kit and packaging from switchboard-mac, add headless checks, then the AppKit patterns (settings window, live-propagation, composited badge, hover popover).
+brief: How to build a macOS menu-bar app here. Copy the design kit and packaging from switchboard-mac, add headless checks, then the AppKit patterns (settings window, live-propagation, composited badge, hover popover), the cost of a hidden panel, cheap motion, reading other processes, and a WidgetKit widget built without Xcode.
 triggers:
   - topic:macos-menubar
   - topic:appkit
@@ -9,12 +9,15 @@ triggers:
   - phrase:"menu bar widget"
   - phrase:"menu bar app"
   - phrase:"settings window"
+  - phrase:"widgetkit"
+  - phrase:"desktop widget"
+  - topic:macos-process-sampling
 related:
   - conventions/visual-design.md
   - features/desktop-automation.md
 tier: 3
 category: features
-updated: 2026-09-29
+updated: 2026-11-12
 stale_after_days: 180
 ---
 
@@ -176,6 +179,104 @@ An `NSMenuItem` with a custom `view` gets no action and no highlight: the view
 owns the mouse. Use `MenuRowView` from the design kit (handles `mouseUp`,
 draws its own hover) and `ClosureMenuItem` for plain closure items.
 
+## 9. A closed panel still costs CPU unless you stop feeding it
+
+A panel that is ordered out but kept (`isReleasedWhenClosed = false`) keeps its
+SwiftUI views alive. If they observe the live store, every publish lays out and
+redraws a window nobody can see.
+
+- Measured in sys-monitor: about 13% of a core in bursts with the panel closed.
+- The fix is a second store that the panel observes. Feed it from the live store
+  with a Combine sink while the panel is open, and drop the sink on close.
+- After the fix the same app idled at 0.4%.
+- How to see it: `sample <pid> 8 -file out.txt`, then look for
+  `layoutIfNeeded` and CoreGraphics under the main thread.
+
+Check idle CPU after any change that adds animation. `top -l 5 -s 4 -pid <pid>`
+and the growth of its TIME column is enough.
+
+## 10. Motion: what is cheap and what is not
+
+Animations are how a panel stops feeling clunky, but they are not free.
+
+| Motion | Cost | Use it for |
+|---|---|---|
+| `.animation(_, value: ids)` on a `LazyVStack` | low | rows sliding to a new rank |
+| `.transition(.opacity)` on a section | low | a section opening |
+| `.contentTransition(.numericText())` | a blurred redraw per figure | a handful of header figures, never a list |
+
+Two more rules from the same work.
+
+- Reserve the height of a line that appears later, so nothing shifts when the
+  first data lands.
+- Hold the last list, dimmed, while a fresh one is measured. Blanking to a
+  "measuring" message on every open reads as a flicker.
+
+Motion cannot be verified from a still render. Say so, and ask the owner to look.
+
+## 11. Reading other processes without an entitlement
+
+An ad-hoc signed app can read only the user's own processes. Three facts cost
+real time to learn.
+
+- **CPU time is in mach ticks.** `pti_total_user` and `pti_total_system` from
+  `proc_pidinfo` are not nanoseconds. On Apple Silicon a tick is 125/3 ns, so
+  skipping `mach_timebase_info` shows every process at 1/42 of its real CPU.
+  Guard it with a test that burns a known amount of CPU and reads itself back.
+- **`/bin/ps` is setuid root.** It reports CPU time and resident memory for
+  every process, system ones included, in about 30 ms. Parse
+  `ps -Axco pid=,ppid=,time=,rss=,comm=` and delta the time yourself.
+- **`top` is the only source of footprint for system processes**, and it costs
+  0.6 to 0.7 s of CPU per listing, even for one pid. Read it in the background,
+  rarely, and cache it.
+
+What does not work for `kernel_task`: `ps` omits it, the kernel refuses pid 0,
+`top` prints its CPU time to the second, and subtracting all processes from the
+machine total does not leave kernel_task (measured: 210% of a core left over
+against under 10% real).
+
+Folder sizes: `du -skx` per top-level folder, on demand, cached. macOS shows a
+permission prompt before an app may look inside Desktop, Documents or
+Downloads, so only scan on an explicit click.
+
+## 12. A WidgetKit widget without Xcode
+
+The command line tools include the WidgetKit SDK, so an extension can be built
+by hand. Working recipe: `~/Code/Claude/sys-monitor/Widget/build-widget.sh`
+
+- Compile with `swiftc -parse-as-library -application-extension`, and link with
+  `-Xlinker -e -Xlinker _NSExtensionMain`.
+- The bundle is `App.app/Contents/PlugIns/Name.appex`. Its Info.plist needs
+  `CFBundlePackageType` `XPC!` and `NSExtensionPointIdentifier`
+  `com.apple.widgetkit-extension`.
+- The extension must be sandboxed. Sign it with its entitlements first, then
+  sign the app that contains it.
+- Put it in the installed copy only. Two bundles with the same widget both
+  register.
+- Compile the app's own sampler sources into the extension, so the widget and
+  the app share one formula.
+- Check registration with `pluginkit -m -v -i <extension bundle id>`.
+
+Limits to design around.
+
+- macOS refreshes a widget every few minutes at best. Show only figures that
+  stay true that long.
+- A sandboxed widget cannot list processes. Anything like "top process" has to
+  come from the app.
+
+Open as of 2026-11-12: with an ad-hoc signature the widget host (`chronod`)
+registers the extension and then logs "purging instead because we shouldn't
+cache it". Whether the widget still appears in the gallery was not confirmed.
+Read `/usr/bin/log show --last 3m --predicate 'process == "chronod"'` after an
+install before believing a widget shipped.
+
+## 13. Which copy is running
+
+Check before measuring or restarting: `pgrep -lf <App>.app/Contents/MacOS`
+The running copy may be the repo bundle while the docs say the installed one is
+live. Rebuilding a bundle in place under a running instance invalidates its
+signature, so restart it afterwards.
+
 ## Source of truth
 
 - `~/Code/Claude/switchboard-mac/` (§0, §6-8): `Sources/DesignKit.swift`,
@@ -184,5 +285,8 @@ draws its own hover) and `ClosureMenuItem` for plain closure items.
 - `~/.claude/widgets/claude-instances/native/SettingsWindowController.swift` (§1),
   `Bar.swift` (`updateButton` §3, `checkHover`/`showUsagePopover` §4, the
   `.menuBehaviorDidChange` observer §2), `Dashboard.swift` (the SwiftUI sections).
-- `~/Code/Claude/sys-monitor/Sources/sys-monitor/` holds the Combine-sink variant of §2.
+- `~/Code/Claude/sys-monitor/Sources/sys-monitor/` holds the Combine-sink variant of §2,
+  and §9-13: `Shell/PanelController.swift` (the panel-only store),
+  `Sampling/RestrictedProcessReader.swift` (`ps` and `top`), `Widget/`.
+  The evidence behind each is in `~/Code/Claude/sys-monitor/docs/17-audit-2026-11.md`
 - Full research notes: `~/.claude/widgets/claude-instances/.claude/output/20260704-widget/`.

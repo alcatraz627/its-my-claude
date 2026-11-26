@@ -97,7 +97,7 @@ made costs a minute, and a ruling reconstructed a month later is usually wrong.
 
 ## The worked example
 
-`~/.claude/scripts/kanban/UI-CHARTER.md` is the live one, written for the agent
+`~/.claude/scripts/kanban/docs/UI-CHARTER.md` is the live one, written for the agent
 kanban board across several rounds of owner feedback. It is worth reading for
 its shape rather than its content, since its content is specific to that board:
 fifteen sections, nine anti-patterns each traced to a real correction, and the

@@ -1,12 +1,12 @@
 ---
-brief: HTML generation rules: dark/light mode toggle (MANDATORY), CSS custom properties, future rules placeholder
+brief: HTML generation rules: dark and light through the kit's theme switch, CSS custom properties, colour system and complexity tiers
 triggers:
   - topic:html-output
   - topic:reports
   - topic:visualizations
   - phrase:"generate HTML"
   - phrase:"HTML report"
-related: []
+related: [conventions/pages.md, conventions/ui-brief.md]
 tier: 2
 category: conventions
 updated: 2026-04-24
@@ -18,26 +18,11 @@ Standards for HTML files Claude generates.
 
 > Start at [`pages.md`](pages.md). It says which surface to use, and it carries the shared kit and the page check. A page built with `scripts/pages/pagekit.py` already has the theme switch and the colours below, so neither is written by hand. This file stays for its colour system, its complexity tiers and its snippets.
 
-## MANDATORY: Dark/light mode toggle
+## Dark and light
 
-Every HTML file written to disk **must** include a dark/light mode toggle button in the top-right corner. Dark mode is the default. This applies to ALL HTML outputs (reports, matrices, previews, visualizations) with no exceptions.
+Every HTML page offers both. The kit's `kit.js` gives the theme switch, and the theme follows the OS until the reader chooses (`pages.md`), so never write the switch by hand.
 
-### Implementation pattern
-
-```html
-<button
-  onclick="document.body.classList.toggle('light')"
-  style="position:fixed;top:12px;right:16px;z-index:999;
-         background:var(--surface);color:var(--text);
-         border:1px solid var(--border);border-radius:6px;
-         padding:6px 10px;cursor:pointer;font-size:14px;"
-  aria-label="Toggle light/dark mode"
->
-  ☀ / ☾
-</button>
-```
-
-Use CSS custom properties (`--bg`, `--surface`, `--text`, `--dim`, `--border`) with a `body.light { ... }` override block. Never hardcode colors directly on elements. Always go through the CSS vars so the toggle works.
+Use CSS custom properties (`--bg`, `--surface`, `--text`, `--dim`, `--border`), with a `body.light { ... }` override block for a page with its own styles. Never hardcode colors directly on elements. Always go through the CSS vars so the switch works.
 
 ### Default dark palette
 
@@ -61,7 +46,7 @@ body.light {
 Those five greys are the floor. They carry a report, but there is nothing here to
 build a status pill or a filled button out of. When the page needs real colour, use
 [`html-assets/colors.css`](html-assets/colors.css) rather than extending this block.
-It defines these same five names, so the toggle above keeps working untouched, and
+It defines these same five names, so the theme switch keeps working untouched, and
 adds ramps, brand and accent colours, and status pairs on top. Rebrand it by editing the hues in
 its Layer 0. Don't reach past the slots into a ramp from your markup, or the next
 theme change stops being one edit.

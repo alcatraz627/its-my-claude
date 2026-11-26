@@ -4,10 +4,10 @@ triggers:
   - tool:gcc-mods
   - topic:mods
   - topic:plugin
-  - phrase:/hub
-  - phrase:the hub
-  - phrase:catchup band
-  - phrase:hook_owner_wrap
+  - phrase:"/hub"
+  - phrase:"the hub"
+  - phrase:"catchup band"
+  - phrase:"hook_owner_wrap"
 related:
   - mods/gcc-mods/README.md
   - conventions/mods-handbook.md

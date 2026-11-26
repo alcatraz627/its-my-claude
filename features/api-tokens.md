@@ -14,7 +14,7 @@ triggers:
   - phrase:"I need a token"
   - topic:mint-token
 related:
-  - local-models
+  - features/local-models.md
 tier: 2
 category: features
 updated: 2026-11-03

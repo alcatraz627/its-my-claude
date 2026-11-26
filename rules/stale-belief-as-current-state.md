@@ -10,7 +10,6 @@ triggers:
 related:
   - rules/owner-gate-means-actionable-today.md
   - rules/structural-claim-without-reading-code.md
-  - rules/repeatedly-emphasizing-ops-setup-that-user-already-addressed.md
 tier: 2
 paths:
   - ~/.claude/scripts/task-table/**

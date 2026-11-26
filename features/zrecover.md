@@ -11,8 +11,8 @@ triggers:
   - phrase:"who killed"
   - phrase:"get my sessions back"
 related:
-  - dev-servers
-  - local-models
+  - features/dev-servers.md
+  - features/local-models.md
 tier: 2
 category: features
 updated: 2026-10-10
@@ -54,15 +54,81 @@ machine-wide sibling of two narrower guards that still run: `dev-guard.mjs`
 | Kernel pressure `critical` | immediate | kill the largest killable process over 1 GB |
 | Kernel pressure `warn`, or swap over 12 GB | held 20 s | kill the largest killable process over 3 GB |
 | One process over 3 cores | held 90 s | demote to background QoS (`taskpolicy -b`) |
-| A demoted process still over 3 cores, load1/ncpu at least 1.0 | 10 min after demotion | kill it |
-| Machine frozen: load1/ncpu over 1.5 | held 30 s | kill the top CPU burner outright |
+| A demoted process still over 3 cores, load1/ncpu at least 1.0 | 10 min after demotion | kill it, after a 45 s notice |
+| Machine frozen: load1/ncpu over 1.5 | held 30 s | slow what must not die, then kill the top burner if that would help, after a 45 s notice |
 
 The freeze rule exists because of the 149 s WindowServer watchdog that panics
-the kernel: a pinned CPU has to be relieved inside that window.
+the kernel: a pinned CPU has to be relieved inside that window. From the moment the freeze
+condition is met, a clear runaway dies in about 80 s. Load is a 1 minute average, so that
+condition is met some way after the runaway starts, and the kill can land 130 to 200 s after
+its onset. Whether the watchdog's clock starts at onset is not known.
 
 Per-app rules tighten the globals; first match wins, matched on the command's
 identity and its full path. Under pressure, `pressure_first` apps are shed
 before the generic largest process.
+
+### Who can be killed
+
+What losing a process would cost decides whether it can be chosen at all; among those that
+can, the top burner goes first. Every process has a class, and `zrecover explain <pid|name>` shows it.
+
+| Class | What can happen | Examples |
+|---|---|---|
+| protected | Nothing | Claude sessions, Ghostty, WindowServer, system paths |
+| slow-only | Priority lowered in a freeze, never killed | The Android emulator on `engineering` |
+| restartable | Priority lowered, then killed | Dev servers, testing browsers, models, Chrome tabs |
+
+CPU alone never kills the main process of an app in `/Applications` or `~/Applications`, or
+anything belonging to the app in front of you, tabs included. If macOS will not say which
+app is in front, the last answer keeps a countdown going for a minute but cannot finish a
+kill, because you may have just switched to that app. After that, nothing is killed for CPU
+and the ladder's progress towards a kill is held, and a countdown waits while the freeze
+lasts. Memory rules ignore all of this and act at once,
+because running out of memory is the emergency.
+
+A freeze kill also has to be worth it. The target must use at least `freeze_min_cores` and
+25% of your own processes' CPU. Kernel and other users' CPU is not visible here, so a freeze
+they cause can still cost you a process of yours that fits those limits. A target already in
+its countdown has a lower bar, 60% of those, so a share wobbling around the limit does not
+restart it, but a freeze countdown is called off if its burn falls under half of where it began.
+
+CPU kills are limited by count: at most one every 2 minutes and two in any 10 minutes
+(`freeze-kill-limit` in the log). This is deliberately not a measure of whether a kill helped,
+because on a saturated Mac neither CPU nor the lagging load average can say so reliably;
+`prop-20261105-151103-b1` holds the idea of judging by load. It is a time window rather than
+"per freeze" because load dipping under the line for one scan would otherwise reset the count.
+The price of all this is that a third runaway waits up to 10 minutes, a second can die past
+the 149 s watchdog, a freeze spread across many small processes kills nothing, and a runaway
+frontmost app is left running.
+
+A process burning at least twice as much as the one counting down takes over the countdown,
+so a small process does not use up the slot. One whose kill fails is left alone for 10 minutes,
+so it does not block the next target.
+
+The notice starts again after a silence over 150 s, which means the Mac slept, and a pause
+drops it, so a countdown does not finish unseen. After a shorter sleep the measured burn usually
+reads too low to carry on, so the countdown is called off; nothing dies on waking.
+
+Slowing a process in a freeze is undone when load stays under 1.25 for a minute, when the
+app comes to the front, when zrecover is paused, or when the daemon stops. A daemon killed
+outright gives it back when it next starts, from `zrecover/slowed.json`. While load sits
+between 1.25 and the 1.5 freeze line, a slowed process stays slowed, and nothing limits how
+long. The older demote-then-kill ladder still demotes for the life of the process.
+
+Each kill, demotion, restore and countdown row in the log names the five busiest of your own
+processes under `burners`, protected ones included, so `zrecover log --json` shows what was
+really using the CPU.
+
+### Is the machine really stuck?
+
+Load counts everything waiting to run, so it can be high while the Mac feels fine. The
+daemon also logs how late it wakes from its 2 s sleep: `tick-lateness` rows every 5 minutes,
+and one at once for a stall of 5 s or more. These change no decision yet. Read them with
+`zrecover log 500 --kind tick-lateness`; once they show a useful threshold, they can drive
+the freeze rule.
+
+The 2 s wake stays. A tick reads three kernel values in about 0.01 ms; nearly all the
+daemon's cost is the 10 s scan, about 65 ms, which comes to about 0.3% of one core.
 
 | Rule | Matches | Memory kill | CPU demote / kill |
 |---|---|---|---|
@@ -90,6 +156,14 @@ It does not switch off the pressure or freeze rules: a granted process is shed
 last under pressure, not never. That is the line between "this run may be
 big" and "this run may take the machine down". Grants expire on their own
 (default 2 h) and the daemon picks up changes within one scan.
+
+To keep one expensive job alive for a while, give it a class instead. Unlike
+`zrecover protect add`, this ends on its own:
+
+```
+zrecover allow --match my-audit --class slow-only --for 6h
+zrecover allow --pid 72489 --class protected --for 2h
+```
 
 ## Screen capture: `zrecover run claude`
 
@@ -155,8 +229,56 @@ heartbeat (`~/.claude/zrecover/daemon.json`) every tick, which is what `status`
 and `doctor` read, so "alive" means ticking, not merely loaded in launchd.
 Tab completion: `~/.zfunc/_zrecover` (linked by `zcmd install`).
 
-Tests: `zrecover test` runs 17 engine, 35 CLI and 5 wrapper cases; the
+Tests: `zrecover test` runs the engine, CLI and wrapper cases; the
 wrapper cases drive a real `claude`.
+
+## As a memory guard on another Mac
+
+The reaper needs only Python's standard library and the Command Line Tools. It does not
+read pm2 or any Claude setup, and `svc`'s reaper is a separate tool you can leave behind.
+
+```
+tar -czf zrecover-guard.tgz --exclude .venv --exclude __pycache__ --exclude config.json \
+    -C ~/.claude/scripts zrecover            # here
+tar -xzf zrecover-guard.tgz                  # on that Mac
+zrecover/install-guard.sh creative           # choose a profile; installs and starts the daemon
+```
+
+If macOS shows a Background Items notice, leave it allowed.
+
+## Profiles
+
+A profile is a named set of caps, per-app rules and protected apps in
+`scripts/zrecover/profiles/<name>.json`. `zrecover profile list`, `profile show [name]`,
+`profile use <name>` and `profile clear` manage it, and `daemon restart` applies it. Settings
+apply in rising order: built-in, the profile, then this Mac's `config.json`.
+
+| Profile | For | Never killed | Goes first under pressure |
+|---|---|---|---|
+| `engineering` | This Mac: Chrome, testing browsers, pm2 servers, local models | Agent sessions, Claude Desktop, pm2, terminals | Testing browsers, Chrome tabs, models, servers |
+| `creative` | The M5 Air: design work in active use | Claude Desktop, Affinity, TouchDesigner, Music, WhatsApp | Chrome tabs |
+
+A profile can give caps as a share of RAM (`kill_proc_pct`, `warn_proc_pct`, `swap_warn_pct`,
+`grant_max_pct`), so it fits any size of Mac. `warn_protected` sends a notice when a protected
+app grows past the warn cap; nothing else happens to it. `guard_only` tells `doctor` to skip the
+Claude Code extras.
+
+With every app protected and the machine truly out of memory, the guard has nothing it may
+kill, and macOS's own memory handling takes over. That is the deliberate price of never
+closing open work. Chrome's main process is not protected, only less likely: pressure rules
+try tabs first, and it is rarely over the 1.5 GB floor.
+
+Tests: `/usr/bin/python3 ~/.claude/scripts/zrecover/test_profiles.py`.
+
+## Staying on across restarts
+
+Three separate things must agree, and the first is easy to miss. The System Settings Login
+Items switch overrides launchd, so a daemon can be installed and still never come back after a
+reboot; that kept this guard off from 2026-10-11 to 2026-11-05. `zrecover doctor` now checks it.
+
+1. System Settings, General, Login Items & Extensions: `gcc-zrecover` on.
+2. Loaded in launchd: `zrecover daemon start`.
+3. Registered with `gcc-schedule`, which is what Switchboard lists and toggles.
 
 ## Known limits
 
