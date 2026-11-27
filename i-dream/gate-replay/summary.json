@@ -1,5 +1,5 @@
 {
- "ts": "2026-11-27T19:32:03Z",
+ "ts": "2026-11-27T19:35:56Z",
  "cases": 43,
  "agreed_real": 27,
  "classes": [
@@ -11,9 +11,9 @@
   },
   {
    "class": "unverified-done",
-   "gate": "declared-ready-stop.sh",
+   "gate": "declared-ready-stop.sh, tui-smoke-stop.py, ui-verified-stop.py",
    "cases": 1,
-   "caught": 0
+   "caught": 1
   }
  ],
  "no_gate": {

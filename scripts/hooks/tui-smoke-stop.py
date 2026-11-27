@@ -44,7 +44,10 @@ except ImportError:
     sys.exit(0)
 
 CLAIM = re.compile(r"\b(done|built|works|working|fixed|ready|shipped|finished|complete|is in|are in|now opens|passes)\b", re.I)
-OWNED_UP = re.compile(r"smoke (check|test|run)?\s*(was |is )?(not|never) (run|done)|not smoke|without the smoke|UNCONFIRMED", re.I)
+# An UNCONFIRMED line excuses the claim only when it is about opening the screen: a reply
+# that owned up to load order and reload speed still left the owner a blank pane (bbc94e51).
+OWNED_UP = re.compile(r"smoke (check|test|run)?\s*(was |is )?(not|never) (run|done)|not smoke|without the smoke"
+                      r"|UNCONFIRMED[^\n]{0,120}\b(smoke|installed|entry (path|point)|by (its|the) (installed )?name|from a prompt)", re.I)
 EDITS = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
 
 

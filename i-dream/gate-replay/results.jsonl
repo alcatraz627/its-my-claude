@@ -494,10 +494,10 @@
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C10", "sid8": "a79fef8a", "turn_line": 3467, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C11", "sid8": "a79fef8a", "turn_line": 2297, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C12", "sid8": "15508b54", "turn_line": 2077, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C13", "sid8": "bbc94e51", "turn_line": 1712, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C13", "sid8": "bbc94e51", "turn_line": 1712, "outcome": "BLOCK", "said": "{\"decision\": \"block\", \"reason\": \"This turn changed a terminal screen (zterminal, zterminal-look.py) and the reply calls it done, but the screen was not opened the way its owner opens it. Run: bash ~/."}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C14", "sid8": "bbc94e51", "turn_line": 2596, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C15", "sid8": "bbc94e51", "turn_line": 2670, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C16", "sid8": "bbc94e51", "turn_line": 2850, "outcome": "SOFT", "said": "{\"systemMessage\": \"tui-smoke: home_variants.py, zterminal, zterminal-look.py changed again with no smoke run after it.\"}"}
+{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C16", "sid8": "bbc94e51", "turn_line": 2850, "outcome": "BLOCK", "said": "{\"decision\": \"block\", \"reason\": \"This turn changed a terminal screen (home_variants.py, zterminal, zterminal-look.py) and the reply calls it done, but the screen was not opened the way its owner opens"}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C17", "sid8": "6b8890e5", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C18", "sid8": "38fb0621", "turn_line": 4484, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C19", "sid8": "38fb0621", "turn_line": 547, "outcome": "SILENT", "said": ""}

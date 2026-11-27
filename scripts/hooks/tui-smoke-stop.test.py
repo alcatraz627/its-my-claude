@@ -80,6 +80,19 @@ class Gate(unittest.TestCase):
         self.assertIsNone(self.run_hook([user("x"), tool("Edit", file_path=self.screen), result(),
                                          said("The header is fixed. The smoke check was not run, since tmux is missing here.")]))
 
+    def test_an_unrelated_unconfirmed_line_does_not_excuse_it(self):
+        # Replay case C13 (bbc94e51, 10 Nov): the reply owned up to load order and reload
+        # speed, never to the screen being unopened, and the owner got a blank pane.
+        rows = [user("x"), tool("Edit", file_path=self.screen), result(),
+                said("The picker is built and works. UNCONFIRMED: how fast Ghostty reloads on a long theme list.")]
+        self.assertEqual(self.run_hook(rows, session="c13case1")["decision"], "block")
+
+    def test_an_unconfirmed_line_about_the_smoke_check_or_the_installed_name_passes(self):
+        for i, text in enumerate(["The picker is built. UNCONFIRMED: the smoke check, since tmux is missing here.",
+                                  "The picker is built. UNCONFIRMED: zterminal run by its installed name."]):
+            rows = [user("x"), tool("Edit", file_path=self.screen), result(), said(text)]
+            self.assertIsNone(self.run_hook(rows, session="owned%04d" % i), text)
+
     def test_it_holds_once_then_only_notes(self):
         rows = [user("build it"), tool("Edit", file_path=self.screen), result(), said("Done and working.")]
         self.assertEqual(self.run_hook(rows)["decision"], "block")
