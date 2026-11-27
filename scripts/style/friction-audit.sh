@@ -8,6 +8,9 @@
 # Read-only over transcripts; ~$1-2 per run, gemini flash only.
 # Usage: friction-audit.sh [--days 7] [--dry]  (dry: extract + count, no model)
 set -uo pipefail
+# The gcc scheduler hands jobs launchd's bare PATH, which has no ~/.local/bin, so
+# `lm` was never found there and every classification silently came back empty.
+PATH="$PATH:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin"; export PATH
 DAYS=7; DRY=0
 while [ $# -gt 0 ]; do case "$1" in
   --days) DAYS="$2"; shift 2;; --dry) DRY=1; shift;; *) shift;; esac; done
@@ -39,7 +42,10 @@ for n in range(0, len(rows), SH):
                 "feats": {k: r[k] for k in ("alen","olen","reask","markers")},
                 "agent_tail": r["agent_tail"][-900:], "owner_text": r["owner_text"][:600]}) + "\n")
 PY
-if [ "$DRY" = 1 ]; then echo "friction-audit --dry: $np pairs extracted to $RUN"; exit 0; fi
+LM=$(command -v lm || true)
+if [ "$DRY" = 1 ]; then echo "friction-audit --dry: $np pairs extracted to $RUN; lm=${LM:-NOT FOUND}"; exit 0; fi
+# Refuse loudly: a missing classifier used to be logged as "pairs: 0" with exit 0.
+[ -n "$LM" ] || { echo "friction-audit: lm not found on PATH ($PATH); $np pairs extracted but none classified" >&2; exit 1; }
 PROMPT="$HOME/.claude/style/sweep/20260820-regfric-fc30/scripts/l1-prompt.txt"
 for sh in "$RUN"/candidates/shard-*.jsonl; do
   n=$(basename "$sh" .jsonl)
@@ -55,9 +61,9 @@ except Exception: print('')")
     [ -n "$parsed" ] && { printf '%s' "$parsed" > "$RUN/classified/$n.done.json"; break; }
   done
 done
-python3 - "$RUN" <<'PY'
+python3 - "$RUN" "$np" <<'PY'
 import json, sys, glob, collections, os, time
-run = sys.argv[1]
+run, extracted = sys.argv[1], int(sys.argv[2])
 rows = [r for f in glob.glob(f"{run}/classified/*.done.json") for r in json.load(open(f))]
 c = collections.Counter(r["label"] for r in rows)
 total = sum(c.values()); fr = total - c.get("fine", 0)
@@ -69,10 +75,15 @@ if os.path.exists(cg):
         try:
             r = json.loads(l); rowsn += 1; breaches += r.get("breach") is True
         except Exception: pass
+# "pairs" counts classified rows. "extracted" is what the extractor found, so a
+# classifier outage (extracted > 0, pairs 0) can no longer pass for a quiet week.
+status = "ok" if total >= extracted else ("partial" if total else "classify_failed")
 summary = {"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "pairs": total,
     "friction": fr, "rate": round(fr/max(1,total), 3), "labels": dict(c),
-    "gate_rows": rowsn, "gate_breaches": breaches, "run": run}
+    "gate_rows": rowsn, "gate_breaches": breaches, "run": run,
+    "extracted": extracted, "status": status}
 with open(os.path.expanduser("~/.claude/style/friction-ledger.jsonl"), "a") as f:
     f.write(json.dumps(summary) + "\n")
 print(json.dumps(summary, indent=1))
+sys.exit(3 if status == "classify_failed" else 0)
 PY
