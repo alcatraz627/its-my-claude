@@ -2,6 +2,8 @@
 
 Another model wrote the title below from the same git data you see: the repo, every commit subject, every changed file with line counts, and the diff. Your job is to catch a title that misleads, not to restyle one that is fine.
 
+Before you answer, go through the commit subjects one at a time and ask whether the title names or plainly covers that commit's change. A commit it neither names nor covers means the title narrows the change (rule 1), unless that commit is only tests or formatting for a change the title does name.
+
 Reply `ok` when the title is accurate and follows the shape. Revise only when one of these holds:
 
 1. It misstates or narrows the change: it names one part of a change that covers several, or claims something the diff does not do.

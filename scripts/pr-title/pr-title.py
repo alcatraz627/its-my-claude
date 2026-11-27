@@ -11,6 +11,7 @@ Usage:
   pr-title.py [-C REPO] [--base REF] [--head REF] [--layers 1|2] [--json]
   pr-title.py --pr N --repo OWNER/NAME [--layers 1|2] [--json]
   pr-title.py --input FILE.json [--layers 1|2] [--json]   (a saved git-data record)
+  pr-title.py ... --title "TITLE" [--json]   (check a given title: the checker alone)
 
 Exit 0 with the title on stdout; exit 3 when no title could be made, so a caller
 keeps its own. Writer and checker models: PR_TITLE_WRITER (default gpt-6-luna,
@@ -140,6 +141,7 @@ def main(argv):
     ap.add_argument("--repo", dest="slug")
     ap.add_argument("--input")
     ap.add_argument("--layers", type=int, choices=(1, 2), default=2)
+    ap.add_argument("--title", help="check this title instead of writing one (the checker alone)")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args(argv)
     try:
@@ -160,10 +162,13 @@ def main(argv):
         return 3
     facts = render(data)
     result = {"writer": WRITER, "checker": CHECKER if a.layers == 2 else None}
-    try:
-        title, code = write_title(brief("writer-brief.md") + "\n\n## Input\n\n" + facts)
-    except subprocess.TimeoutExpired:
-        title, code = "", 124
+    if a.title:
+        title, code, a.layers = a.title.strip(), 0, 2
+    else:
+        try:
+            title, code = write_title(brief("writer-brief.md") + "\n\n## Input\n\n" + facts)
+        except subprocess.TimeoutExpired:
+            title, code = "", 124
     result["written"] = title
     if not title:
         print("pr-title: the writer gave no title (exit %s)" % code, file=sys.stderr)
@@ -181,12 +186,19 @@ def main(argv):
             verdict = ""
         result["check"] = verdict or "(no answer)"
         m = re.match(r"revise:\s*(.+?)\s*(\|\s*(.*))?$", verdict, re.I)
-        # A revision that breaks the shape or the length is worse than the title it replaces.
-        if m and fits(clean(m.group(1))):
-            final = clean(m.group(1))
+        if m:
             result["why"] = (m.group(3) or "").strip()
+            if fits(clean(m.group(1))):
+                final = clean(m.group(1))
+            else:
+                # The checker found the title misleading but its fix does not fit the shape.
+                # Neither is safe to impose, so the caller keeps its own title.
+                result["disputed"] = True
     result["title"] = final
-    result["shape_ok"] = fits(final)
+    result["shape_ok"] = fits(final) and not result.get("disputed")
+    if result.get("disputed") and not a.json:
+        print("pr-title: the checker flagged the title (%s) and its fix did not fit" % result["why"], file=sys.stderr)
+        return 3
     print(json.dumps(result) if a.json else final)
     return 0
 
