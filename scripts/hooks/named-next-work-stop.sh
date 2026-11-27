@@ -94,6 +94,12 @@ if [ -z "$shape" ] && printf '%s' "$tail3" | rg -qi "\bI(.ll| will| am going to|
   hook_background_live "$input" && exit 0
   shape="offer"
 fi
+# The same hand-back worded as the owner's preference: "If you'd rather it read well
+# inline, I can redraw it" (cc59de35 L188, then idle wakes and "why did you wait").
+if [ -z "$shape" ] && printf '%s' "$tail3" | rg -qi "\bif you.d (rather|like|prefer)\b[^\n]{0,160}\bI (can|could)\s+[a-z]+|\bI (can|could)\s+[a-z]+[^\n]{0,160}\bif you.d (like|rather|prefer)\b"; then
+  hook_background_live "$input" && exit 0
+  shape="offer"
+fi
 # The reply tells the owner nothing waits on them while it lists work still open
 # (88339e91 L3905: "Nothing waits on you" over a "Still open" list, then six idle wakes).
 if [ -z "$shape" ] && printf '%s' "$text" | rg -qi 'nothing (else |here )?(waits|is waiting) on (you|the owner)|nothing (here )?needs you|not blocked on you' \
@@ -122,7 +128,7 @@ mute=' Blocks once per message; mute: touch ~/.claude/.no-named-next-work-gate'
 precheck=' That is a claim about work, and the account has ended the turn on exactly this shape 15 times (named-the-next-work-then-stopped, 7 this week). Precheck, per item: name the input it still lacks. If no item lacks one, do the items in this turn, now, and send the reply after. If one does, move it under a "waiting on" label with the missing input named, and do the rest.'
 case "$shape" in
   section)      lead='This reply has a "Doing now" / "Next" section and the turn is ending.'; r="$precheck$declare_hint" ;;
-  offer)        lead='This reply ends by saying what you will do next and then hands the go back ("unless you ..."), and the turn is ending.'; r="$precheck$declare_hint" ;;
+  offer)        lead='This reply ends by saying what you will do next and then hands the go back ("unless you ...", "if you would rather, I can ..."), and the turn is ending.'; r="$precheck$declare_hint" ;;
   nothingwaits) lead='This reply says nothing waits on the owner while it lists work still open, and the turn is ending.'; r="$precheck$declare_hint" ;;
   waiting)      lead='This reply ends waiting on something, with no line saying what happens if no reply comes.'
                 r=' Name any work of yours that does not depend on what you are waiting on, and do it now.'"$declare_hint" ;;

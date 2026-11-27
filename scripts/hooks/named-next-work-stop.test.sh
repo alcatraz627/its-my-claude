@@ -128,6 +128,27 @@ tx "$T/w.jsonl" $'All three landed and nothing waits on you. Nothing is left ope
 out=$(run "$T/w.jsonl" w1)
 [ -z "$out" ] && ok "'nothing waits on you' with no open work passes" || bad "a finished report blocked: $out"
 
+# Replay case C7 (16029950 L4196, owner: "Why did you stop?") stays a pass on purpose: its
+# job was live and tracked, the same shape as 20 honest waits in the 28 Nov wide replay
+# that a task notification then woke. Catching it is an owner call, not a pattern.
+tx "$T/c7.jsonl" $'That break run proves nothing, and I am discarding it.\n\nI rerun the five breaks as soon as the app suite, now rerunning in the background, comes back clean.'
+out=$(runb "$T/c7.jsonl" c7)
+[ -z "$out" ] && ok "C7: an action promised for when a live job comes back passes (owner call pending)" || bad "C7 blocked: $out"
+
+# Replay case C23 (cc59de35 L188, owner: "Next steps please, wow why did you wait").
+tx "$T/c23.jsonl" $'I made the PNG and checked the render.\n\nThe image is wide and short, so Slack\'s preview will be small until someone clicks it. If you\'d rather it read well inline, I can redraw it top-to-bottom.'
+out=$(run "$T/c23.jsonl" c23)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "C23: an 'if you'd rather, I can' closing offer blocks" || bad "C23 passed: $out"
+tx "$T/c23b.jsonl" $'The PNG is done.\n\nI can redraw it top-to-bottom if you\'d like.'
+out=$(run "$T/c23b.jsonl" c23b)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "an 'I can … if you'd like' closing offer blocks" || bad "trailing-condition offer passed: $out"
+tx "$T/c23c.jsonl" $'The PNG is done.\n\nIf you\'d rather keep the old name, that works too; nothing else changes.'
+out=$(run "$T/c23c.jsonl" c23c)
+[ -z "$out" ] && ok "an 'if you'd rather' with no work offered passes" || bad "a no-offer preference blocked: $out"
+tx "$T/c23d.jsonl" $'The PNG is done.\n\nIf you\'d rather it read well inline, I can redraw it top-to-bottom.\n\nIf no reply: hold, the layout is a taste call for you.'
+out=$(run "$T/c23d.jsonl" c23d)
+[ -z "$out" ] && ok "the same offer with a reasoned hold passes" || bad "offer with hold blocked: $out"
+
 # MUTATION: without the nothing-waits pattern, the 88339e91 shape passes again.
 M3="$T/mut3.sh"; sed 's/nothing (else |here )?(waits|is waiting)/zzz-never/' "$HOOK" > "$M3"
 rm -f /tmp/claude-nextwork-sess-*
