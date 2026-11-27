@@ -482,7 +482,7 @@
     "created": "2026-09-06T02:09:07.057532Z",
     "promoted": "2026-09-13T07:26:31.157328Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.8
+    "strength": 0.9
   },
   {
     "id": "595b0fe0fc23f577",
@@ -559,7 +559,7 @@
     "created": "2026-09-08T22:23:12.115567Z",
     "promoted": "2026-09-16T03:10:17.341254Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.7000000000000001
+    "strength": 0.8
   },
   {
     "id": "647f15ced348c55f",
@@ -718,7 +718,7 @@
     "created": "2026-10-15T23:00:52.815039Z",
     "promoted": "2026-11-17T05:44:46.284251Z",
     "promoted_by": "evidence-auto",
-    "strength": 0.9
+    "strength": 1.0
   },
   {
     "id": "bb91078a96285f82",
@@ -733,7 +733,7 @@
     },
     "body": "Stop: live_eval.py/grade.py spend the owner's local claude login. Use launch.py on Clanky's account (prod probe) or run no model.",
     "created": "2026-10-15T23:00:52.815039Z",
-    "strength": 1.0
+    "strength": 0.9
   },
   {
     "id": "b3affb0ca94ccf83",
@@ -802,7 +802,7 @@
     },
     "body": "This message cites a bare #N. Name each referenced issue/PR in words and link it before posting; don't ask the owner to rule on formalities you can decide.",
     "created": "2026-10-23T23:02:06.052165Z",
-    "strength": 0.9
+    "strength": 1.0
   },
   {
     "id": "d7e02db576536249",
@@ -830,7 +830,7 @@
     },
     "body": "Before handing over a command you can't run, grep the repo for the same subcommand and copy its flags; else read its --help and say plainly it is unrun.",
     "created": "2026-11-05T23:02:32.660513Z",
-    "strength": 0.5
+    "strength": 0.6000000000000001
   },
   {
     "id": "3b7fb66227a82e9b",
@@ -843,7 +843,7 @@
     },
     "body": "Don't name a person to involve. State the right needed and the exact command; leave who to involve to the owner. Search all Versable memory folders before writing any name.",
     "created": "2026-11-05T23:02:32.660513Z",
-    "strength": 0.028571428571428567
+    "strength": 0.0142857142857143
   },
   {
     "id": "0a6c8ff43b0fc26d",
@@ -869,6 +869,20 @@
     },
     "body": "Before dispatching a build sub-agent: >2 features or ~800+ lines? Split into separate briefs/PRs, each requiring empty/odd-input tests and a second-reader diff review before PR.",
     "created": "2026-11-25T23:01:26.658222Z",
+    "strength": 0.3
+  },
+  {
+    "id": "3f1e0ac8cdef68d6",
+    "slug": "github-text-in-internal-vocabulary",
+    "source": "atone-precheck",
+    "form": "nudge",
+    "state": "shadow",
+    "trigger": {
+      "tool": "Bash",
+      "input_pattern": "\\bgh\\s+pr\\s+create\\b"
+    },
+    "body": "Match last merged PR's title length/sections (gh pr list --state merged). Short noun-phrase title; no session notes, checks, or git mechanics in body. Replacing an owner's PR? Tell them first.",
+    "created": "2026-11-26T23:01:08.596957Z",
     "strength": 0.3
   }
 ]

@@ -896,12 +896,11 @@
     "category": "tool-use",
     "valence": "negative",
     "confidence": 0.87,
-    "occurrences": 12,
-    "member_count": 12,
+    "occurrences": 11,
+    "member_count": 11,
     "rep_pattern_id": "64b242ba-6942-4c9b-8792-98a25649d6ea",
     "member_ids": [
       "2744965f-c80c-4367-9c85-720e002054c7",
-      "46572abb-5d25-4d09-897b-f9b7f98b6720",
       "5e958a0e-d96d-40ac-a327-a27040fdff81",
       "4a799539-2a53-4682-a07e-84855061fdd6",
       "d2c9b72b-7cc5-41d2-b5ca-4b1436a48bdb",
@@ -915,7 +914,6 @@
     ],
     "member_texts": [
       "An IPC message from a peer agent that requests a reply must be answered before the turn ends; leaving it unacknowledged causes a Stop-hook reminder on the next turn.",
-      "When an IPC inbox message arrives mid-session requesting the agent to act on an owner-approved operation (e.g. a push gate), the agent must respond to that message before the turn ends; leaving it unanswered triggers a stop-hook reminder on the next turn.",
       "When an IPC push-gate approval arrives via Monitor or stop-hook reminder, verify the sentinel file exists on disk before executing the push: the panel approval message is not sufficient proof.",
       "IPC push-gate approval messages must be answered in the same turn they arrive; leaving them unanswered triggers a stop-hook reminder on the next turn.",
       "When a switchboard-panel IPC push-gate message arrives, the agent must reply via the IPC channel (claude-ipc reply) in the same turn rather than deferring it.",
@@ -937,22 +935,6 @@
       "-Users-alcatraz627--claude-scripts-kanban",
       "-Users-alcatraz627--claude",
       "-Users-alcatraz627",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-sor",
-      "switchboard-mac",
-      "csync",
-      "versable-builder",
-      "staging-enhancement-product",
       "-Users-alcatraz627-Code-Personal-controlelr",
       "-Users-alcatraz627-Code-Claude-switchboard-mac",
       "-Users-alcatraz627-Code-local-models",
@@ -968,9 +950,11 @@
       "Affinity",
       "i-dream",
       "local-models",
+      "-Users-alcatraz627-Code-Versable-versable-builder",
       "-Users-alcatraz627-Code-Versable-gcp",
       "versable-foundry",
       "gcp",
+      "versable-builder",
       "-Users-alcatraz627-Code-Versable-vg",
       "vg",
       "-Users-alcatraz627-Movies",
@@ -1167,8 +1151,8 @@
     "category": "approach",
     "valence": "negative",
     "confidence": 0.95,
-    "occurrences": 18,
-    "member_count": 17,
+    "occurrences": 19,
+    "member_count": 18,
     "rep_pattern_id": "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
     "member_ids": [
       "6fd4c584-f5c7-4201-b12c-5c42ceb2e5ef",
@@ -1187,7 +1171,8 @@
       "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
       "2c202315-f4df-4c74-80f1-c16b59f8d72e",
       "c9a08643-756d-4493-8ae3-c3fa1f58fce6",
-      "e9227937-00ea-403f-b252-6abff20dfb3a"
+      "e9227937-00ea-403f-b252-6abff20dfb3a",
+      "ad70199b-86e0-4963-a99a-5ff46a888bec"
     ],
     "member_texts": [
       "Printing a /goal paste line and ending the turn without making any further tool call is a rule violation; a proposed goal is not a stop condition: continue working toward it unless the next step is genuinely blocked on the owner.",
@@ -1206,7 +1191,8 @@
       "After proposing a goal statement, the agent must immediately make a tool call toward that goal rather than ending the turn; a proposal is not a stopping point.",
       "After stating a goal or proposal, the agent must immediately make a tool call toward that goal rather than ending the turn; a stated proposal does not substitute for action.",
       "After stating a goal or proposal (e.g. a /goal paste line), the agent must immediately make a tool call toward that goal in the same turn rather than stopping — a proposal is not a resting point.",
-      "After stating a goal or proposal, the agent must immediately make the first tool call toward that goal in the same turn; leaving a proposal as a stopping point without acting on it violates the stated working rule."
+      "After stating a goal or proposal, the agent must immediately make the first tool call toward that goal in the same turn; leaving a proposal as a stopping point without acting on it violates the stated working rule.",
+      "When the agent proposes a goal statement, it must immediately follow with a tool call toward that goal rather than ending the turn; a proposal is not a stopping point."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-sor",
@@ -1243,10 +1229,12 @@
       "-Users-alcatraz627-Code-Claude-sys-monitor",
       "aep-scrape",
       "sys-monitor",
-      "jegs-pim"
+      "jegs-pim",
+      "-Users-alcatraz627-Code-Versable",
+      "Versable"
     ],
     "first_seen": "2026-09-29T08:11:54.339604+00:00",
-    "last_seen": "2026-11-17T05:43:55.042693+00:00"
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
   },
   {
     "id": "c243848748080afe",
@@ -1386,43 +1374,6 @@
     "last_seen": "2026-10-26T20:26:53.542977+00:00"
   },
   {
-    "id": "87ee550c7ea1d0cb",
-    "text": "Replacing a modal image viewer with inline smooth-expand toggle (multiple images expandable simultaneously, Escape collapses all) is strongly preferred over modal-and-back navigation on decision pages.",
-    "category": "domain",
-    "valence": "positive",
-    "confidence": 0.72,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "c3ba892e-d3c7-4944-a3ed-65afeaddb732",
-    "member_ids": [
-      "c3ba892e-d3c7-4944-a3ed-65afeaddb732"
-    ],
-    "member_texts": [
-      "Replacing a modal image viewer with inline smooth-expand toggle (multiple images expandable simultaneously, Escape collapses all) is strongly preferred over modal-and-back navigation on decision pages."
-    ],
-    "source_projects": [
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-review-dln7gl31-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-5-describe--dultdiz-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-review-2rox5m7e-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-32-describe-m9dykplx-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-23-describe-dc6db8ji-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-seat-versable-git-pr-claude-testbed-1-review-rsvszsah-ws",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-vkv-yxq0",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-d3h6zvin",
-      "-private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T-sb-e2e-8vui0e2n",
-      "-Users-alcatraz627-Code-Versable-versable-builder",
-      "-Users-alcatraz627-Code-Versable-staging-enhancement-product",
-      "-Users-alcatraz627-Code-Versable-sor",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "switchboard-mac",
-      "csync",
-      "versable-builder",
-      "staging-enhancement-product"
-    ],
-    "first_seen": "2026-10-03T01:35:23.171572+00:00",
-    "last_seen": "2026-10-03T01:35:23.171572+00:00"
-  },
-  {
     "id": "c6d74693a1323a0b",
     "text": "When the user says a goal line is 'stupid' or dismisses it immediately after /catchup, the goal was too vague or procedural: state the concrete deliverable, not the work type.",
     "category": "user-preference",
@@ -1475,32 +1426,6 @@
     "last_seen": "2026-10-03T03:41:45.043858+00:00"
   },
   {
-    "id": "71bfd4a81b4942da",
-    "text": "When the user asks to explore UI variants or layouts, offer an HTML page with multiple rendered options rather than a text list of descriptions.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "6070d57c-df01-4f39-b7fc-dd1849a3bc3f",
-    "member_ids": [
-      "6070d57c-df01-4f39-b7fc-dd1849a3bc3f"
-    ],
-    "member_texts": [
-      "When the user asks to explore UI variants or layouts, offer an HTML page with multiple rendered options rather than a text list of descriptions."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00"
-  },
-  {
     "id": "95d2d7dc2f053e4c",
     "text": "For UI controls where a full picker is possible, the user prefers a small set of pre-chosen, design-system-compliant values (e.g. 8 colors) over an open picker.",
     "category": "user-preference",
@@ -1514,32 +1439,6 @@
     ],
     "member_texts": [
       "For UI controls where a full picker is possible, the user prefers a small set of pre-chosen, design-system-compliant values (e.g. 8 colors) over an open picker."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00"
-  },
-  {
-    "id": "b8a70e0fe3ea2c92",
-    "text": "When converting a multi-section document to a Google Doc, use H1 headings for each section rather than lower-level headings or bold titles.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.68,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "0c35b7d0-c929-4b76-807e-f927499b9210",
-    "member_ids": [
-      "0c35b7d0-c929-4b76-807e-f927499b9210"
-    ],
-    "member_texts": [
-      "When converting a multi-section document to a Google Doc, use H1 headings for each section rather than lower-level headings or bold titles."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -1579,32 +1478,6 @@
     "last_seen": "2026-10-03T03:41:45.043858+00:00"
   },
   {
-    "id": "556fba897850025e",
-    "text": "The user prefers session continuity (persisted state across turns) over low-latency async polling; when proposing watch strategies, frame the tradeoff explicitly and default to the continuity option.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "038a170b-ae0f-44f1-b1bb-21063655460f",
-    "member_ids": [
-      "038a170b-ae0f-44f1-b1bb-21063655460f"
-    ],
-    "member_texts": [
-      "The user prefers session continuity (persisted state across turns) over low-latency async polling; when proposing watch strategies, frame the tradeoff explicitly and default to the continuity option."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00"
-  },
-  {
     "id": "cc739bd1d4aa371e",
     "text": "When a sub-agent completes and its output is a file, read the output file before acting on the completion summary: the summary is a pointer, not the artifact.",
     "category": "approach",
@@ -1618,32 +1491,6 @@
     ],
     "member_texts": [
       "When a sub-agent completes and its output is a file, read the output file before acting on the completion summary: the summary is a pointer, not the artifact."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00"
-  },
-  {
-    "id": "b025f2ec544f28fc",
-    "text": "When the user provides a prioritized work list mid-session ('do 3 next, park 2, skip 4'), execute in that exact order and do not reorder based on apparent dependencies without flagging it.",
-    "category": "user-preference",
-    "valence": "positive",
-    "confidence": 0.68,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "8c9666e5-ba2e-4c32-a014-3d045a73528f",
-    "member_ids": [
-      "8c9666e5-ba2e-4c32-a014-3d045a73528f"
-    ],
-    "member_texts": [
-      "When the user provides a prioritized work list mid-session ('do 3 next, park 2, skip 4'), execute in that exact order and do not reorder based on apparent dependencies without flagging it."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -1720,31 +1567,6 @@
     ],
     "member_texts": [
       "When the user grants blanket permission for a batch of actions and asks to 'frontload' permission requests, batch all anticipated permission needs into a single upfront request rather than surfacing them one at a time during execution."
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "switchboard-mac"
-    ],
-    "first_seen": "2026-10-03T17:36:30.417767+00:00",
-    "last_seen": "2026-10-03T17:36:30.417767+00:00"
-  },
-  {
-    "id": "c526e0d2e4900a6f",
-    "text": "An autonomous work order (a persisted WORKORDER.md with a State column) is an effective coordination artifact for owner-away operation; the agent reads it on each wake, updates State as items finish, and respects explicit never-flip constraints without re-asking.",
-    "category": "approach",
-    "valence": "positive",
-    "confidence": 0.7,
-    "occurrences": 1,
-    "member_count": 1,
-    "rep_pattern_id": "ae958b88-2817-4610-bfb3-acdcbf3aba53",
-    "member_ids": [
-      "ae958b88-2817-4610-bfb3-acdcbf3aba53"
-    ],
-    "member_texts": [
-      "An autonomous work order (a persisted WORKORDER.md with a State column) is an effective coordination artifact for owner-away operation; the agent reads it on each wake, updates State as items finish, and respects explicit never-flip constraints without re-asking."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-slack-automation",
@@ -4655,14 +4477,14 @@
     "last_seen": "2026-10-16T23:00:52.189539+00:00"
   },
   {
-    "id": "9e36a2294929af2f",
-    "text": "Task tracking state must be reconciled with actual work done before stopping; failing to update completed or newly started tasks after a burst of edits causes drift that the user will flag.",
+    "id": "54ab07e0949d6005",
+    "text": "Task tracking state must be reconciled with actual work done before stopping; when many edits occur without task list updates, the list drifts and becomes misleading.",
     "category": "approach",
     "valence": "negative",
     "confidence": 0.85,
-    "occurrences": 8,
-    "member_count": 8,
-    "rep_pattern_id": "50d2da70-59a7-4cc5-b03c-cd487de8789e",
+    "occurrences": 9,
+    "member_count": 9,
+    "rep_pattern_id": "362210d8-f822-4e24-b08c-8bc9d84aed64",
     "member_ids": [
       "334fff6e-b5e7-49d6-8bde-90ec94180afa",
       "d68a411b-c1c5-4371-a9f2-55d7e0ccc4a4",
@@ -4671,7 +4493,8 @@
       "ac0a1d3a-f8dd-461c-8b2e-1483756a73a4",
       "6e872cbd-6a6f-480b-9e0f-b823301af509",
       "99d3619c-2987-47f1-8b83-b5eefc67c9b6",
-      "50d2da70-59a7-4cc5-b03c-cd487de8789e"
+      "50d2da70-59a7-4cc5-b03c-cd487de8789e",
+      "362210d8-f822-4e24-b08c-8bc9d84aed64"
     ],
     "member_texts": [
       "The agent's task list drifts out of sync with actual work done during a session; open tasks stay 'pending' or zero tasks are marked in-progress even after many file edits.",
@@ -4681,7 +4504,8 @@
       "Task lists must be kept in sync with actual work in progress; if edits accumulate without task-list updates, the list drifts and becomes misleading, triggering corrective hooks.",
       "Task lists should be kept current as work progresses; when many edits happen without task updates, the recorded state drifts from reality and must be reconciled before stopping.",
       "Task lists must be reconciled with actual work done before stopping a session; in-progress tasks that finished must be marked complete, and newly taken-on work must be added.",
-      "Task tracking state must be reconciled with actual work done before stopping; failing to update completed or newly started tasks after a burst of edits causes drift that the user will flag."
+      "Task tracking state must be reconciled with actual work done before stopping; failing to update completed or newly started tasks after a burst of edits causes drift that the user will flag.",
+      "Task tracking state must be reconciled with actual work done before stopping; when many edits occur without task list updates, the list drifts and becomes misleading."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-Versable-sor",
@@ -4710,10 +4534,11 @@
       "winhere-pim",
       "Claude",
       "Versable",
-      "csync"
+      "csync",
+      "-Users-alcatraz627-Code-Versable-aep-scrape"
     ],
     "first_seen": "2026-10-16T23:00:52.189539+00:00",
-    "last_seen": "2026-11-09T14:15:25.963480+00:00"
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
   },
   {
     "id": "db1acf007d3ae713",
@@ -6150,14 +5975,14 @@
     "last_seen": "2026-10-27T06:38:11.577928+00:00"
   },
   {
-    "id": "cc2a5beb4ae2b11f",
-    "text": "When listing task IDs, issue numbers, or commit hashes, the agent must include a plain-language gloss (subject or description) alongside each identifier — bare IDs with no context cause the user to push back.",
+    "id": "6c6dacda7f3b4ecb",
+    "text": "When referencing issue numbers, commit hashes, or task IDs in a message to the user, each identifier must be accompanied by a plain-language description of what it represents; bare IDs alone are insufficient.",
     "category": "user-preference",
     "valence": "negative",
     "confidence": 0.9,
-    "occurrences": 8,
-    "member_count": 8,
-    "rep_pattern_id": "ca73ff0d-afd2-40f4-8630-1c951427f392",
+    "occurrences": 9,
+    "member_count": 9,
+    "rep_pattern_id": "a2ea8484-d0c8-4bf9-9176-00ebe084f1f1",
     "member_ids": [
       "8ef894ee-a03c-4fdc-9551-3ed53f3cf871",
       "0e36269d-00d6-4fa2-bffe-015ac51ed931",
@@ -6166,7 +5991,8 @@
       "9f521ad8-ac0f-45a7-b9f6-4b7975985f77",
       "b6742479-a9fc-4836-a051-0ffbab6666d4",
       "ca73ff0d-afd2-40f4-8630-1c951427f392",
-      "6ce66c31-4682-4409-994f-04c33af6a4da"
+      "6ce66c31-4682-4409-994f-04c33af6a4da",
+      "a2ea8484-d0c8-4bf9-9176-00ebe084f1f1"
     ],
     "member_texts": [
       "Every task ID, issue number, or commit hash mentioned in a message must be accompanied by a plain-words gloss of what it refers to; bare IDs alone are rejected.",
@@ -6176,7 +6002,8 @@
       "When presenting actionable items to the user, each item must include a reason (why it is needed, what led to it, or what happens if skipped); bare commands without rationale get rejected.",
       "When presenting action items to the user, each item must include the reason it is needed, what led to it, or what happens if it is not done — bare commands without context cause the user to push back.",
       "When listing task IDs, issue numbers, or commit hashes, the agent must include a plain-language gloss (subject or description) alongside each identifier — bare IDs with no context cause the user to push back.",
-      "When listing issue or commit IDs in a reply, each ID must be followed by its human-readable subject; bare IDs with no context force the reader to look each one up."
+      "When listing issue or commit IDs in a reply, each ID must be followed by its human-readable subject; bare IDs with no context force the reader to look each one up.",
+      "When referencing issue numbers, commit hashes, or task IDs in a message to the user, each identifier must be accompanied by a plain-language description of what it represents; bare IDs alone are insufficient."
     ],
     "source_projects": [
       "-Users-alcatraz627-Code-better-file-browser",
@@ -6207,10 +6034,11 @@
       "-Users-alcatraz627-Code-local-models",
       "-Users-alcatraz627-Code-Versable-aep-scrape",
       "aep-scrape",
-      "local-models"
+      "local-models",
+      "Versable"
     ],
     "first_seen": "2026-10-28T06:50:45.847647+00:00",
-    "last_seen": "2026-11-21T23:00:54.604769+00:00"
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
   },
   {
     "id": "510591f3b9b72b64",
@@ -9586,5 +9414,83 @@
     ],
     "first_seen": "2026-11-25T23:00:25.557699+00:00",
     "last_seen": "2026-11-25T23:00:25.557699+00:00"
+  },
+  {
+    "id": "fa7ff4a93753c41c",
+    "text": "When a code path has partial gate coverage (e.g., some card types are checked but not others), the user expects full modular coverage rather than a targeted one-off fix for the specific broken case.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "61999b8c-8562-4c85-9034-a53a7544ede7",
+    "member_ids": [
+      "61999b8c-8562-4c85-9034-a53a7544ede7"
+    ],
+    "member_texts": [
+      "When a code path has partial gate coverage (e.g., some card types are checked but not others), the user expects full modular coverage rather than a targeted one-off fix for the specific broken case."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
+  },
+  {
+    "id": "d9c83c9289af84b3",
+    "text": "Combining shaping and validation into a single output module is preferred over a pure gate-only approach, since both concerns operate on the same data surface.",
+    "category": "architecture",
+    "valence": "positive",
+    "confidence": 0.7,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "cb847c18-d4ac-420f-b0a5-132577dd5a8d",
+    "member_ids": [
+      "cb847c18-d4ac-420f-b0a5-132577dd5a8d"
+    ],
+    "member_texts": [
+      "Combining shaping and validation into a single output module is preferred over a pure gate-only approach, since both concerns operate on the same data surface."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
+  },
+  {
+    "id": "b2a3489b2c6c541a",
+    "text": "When a background test suite fails repeatedly across multiple consecutive runs, the agent should diagnose the root cause before re-queuing the same command again.",
+    "category": "approach",
+    "valence": "negative",
+    "confidence": 0.75,
+    "occurrences": 1,
+    "member_count": 1,
+    "rep_pattern_id": "6cb5d2cd-8b25-40ca-ab3e-bfb72630f634",
+    "member_ids": [
+      "6cb5d2cd-8b25-40ca-ab3e-bfb72630f634"
+    ],
+    "member_texts": [
+      "When a background test suite fails repeatedly across multiple consecutive runs, the agent should diagnose the root cause before re-queuing the same command again."
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00"
   }
 ]

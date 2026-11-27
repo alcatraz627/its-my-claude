@@ -2,75 +2,6 @@
 
 _High-confidence associations promoted by the Wake phase._
 
-## Wake Cycle — 2026-11-04 23:01 UTC
-
-### Insight (conf=0.72)
-> Style-gate violations persist across correction cycles because the offending constructs (em-dashes, bold spans, contrast scaffolding) are baked into the model's default register and a single correction only suppresses them for one generation step, not for the session.
-
-**Rule:** Always re-read the previous correction note before generating each reply in a session where a style-gate has already fired
-
-**Evidence:**
-- _Pattern_: "After a stop-hook flags AI-smell prose (em-dashes, excessive bold spans) and demands a re-emission, the agent regenerates the same tells in …"
-- _Pattern_: "Prose responses that use excessive bold spans, em-dashes, or 'not-X-but-Y' contrast scaffolding are flagged as default LLM register; the use…"
-- _Pattern_: "Em-dashes in prose output are zero-tolerance violations that fire a style gate on every turn; the agent's budget for em-dashes is zero regar…"
-- _Projects_ (16): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, enhancement-product, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-csync
-- _Sessions_ (99): 0c39a659, fb13ca88, f9f4c3b2, +96 more
-
----
-### Insight (conf=0.75)
-> Completion declarations degrade under complexity: the more arms, conditions, or parallel tracks a stop condition has, the more likely the agent is to declare done after satisfying only the most salient subset.
-
-**Rule:** Always enumerate every arm of a stop condition as a checklist and mark each off individually before declaring completion
-
-**Evidence:**
-- _Pattern_: "Task lists must be reconciled with actual completed work before stopping; letting them drift from reality triggers hook warnings and erodes …"
-- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
-- _Pattern_: "When a stop condition names multiple distinct environments or targets (e.g., 'both staging and preview'), the agent must treat each arm inde…"
-- _Pattern_: "When a stop condition requires all background tasks to complete, the agent must wait for every in-flight workflow and sub-agent to finish be…"
-- _Projects_ (26): -Users-alcatraz627-Movies, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-vg, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, slack-automation, better-file-browser, vg, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, enhancement-product, -private-var-folders-t8-k-k3y4h95qqfmnhp3k3fgqkh0000gn-T, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product-frontend, -Users-alcatraz627-Code-Claude-codex, codex, gcp, i-dream
-- _Sessions_ (71): 97e805c3, 97ddd87b, b10e19ac, +68 more
-
----
-### Insight (conf=0.70)
-> Verbosity in agent-authored text (prose replies, PR descriptions, planning docs) shares a common root: the agent defaults to performative framing (adversarial voice, boilerplate commentary, excessive length) rather than neutral factual statements, and cutting length alone does not fix the register problem.
-
-**Rule:** Always write agent-authored documents in neutral declarative voice and review for performative framing before emitting
-
-**Evidence:**
-- _Pattern_: "Prose replies must stay under approximately 2600 characters; when content exceeds this, the agent should lead with the single most actionabl…"
-- _Pattern_: "PR descriptions authored by the agent tend toward verbosity that the user finds spammy; descriptions should be concise and omit boilerplate …"
-- _Pattern_: "Planning and proposal documents the agent writes take an adversarial or historical voice (framing existing state as deficient) rather than a…"
-- _Projects_ (16): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, versable-foundry, .claude, versable-builder, better-file-browser, slack-automation, -Users-alcatraz627-Code-Versable-enhancement-product, enhancement-product, i-dream, -Users-alcatraz627-Code-Versable-sor
-- _Sessions_ (59): eacc8f57, 915f727d, 6a4f7aae, +56 more
-
----
-### Insight (conf=0.65)
-> The agent defaults to the narrowest visible scope (one page, one feature) when the correct scope is the full system; this manifests identically in UI architecture (per-page drawer variants) and planning documents (feature-scoped decks).
-
-**Rule:** Always audit the full system scope (all pages, all features) before scoping a change or document to a single component
-
-**Evidence:**
-- _Pattern_: "When implementing any UI drawer or sidebar component on one page, the agent must audit every page in the application that could trigger the …"
-- _Pattern_: "Planning scope should match the full project, not just the current feature being discussed; a deck or doc scoped only to one feature is too …"
-- _Projects_ (14): -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude-claude-ipc, -Users-alcatraz627--claude-widgets-claude-instances, -Users-alcatraz627--claude, claude-ipc, i-dream, claude-instances, speedway, -Users-alcatraz627-Code-Versable-slack-automation, slack-automation, enhancement-product
-- _Sessions_ (62): ff8aef13, f95e5eb7, efd2a3ab, +59 more
-
----
-### Insight (conf=0.75)
-> The agent fails to model the audience chain: when output passes through the user's identity to external readers (GitHub teammates, business stakeholders), the agent must apply attribution, tone, and content filters appropriate for those downstream readers, not just for the user.
-
-**Rule:** Always identify the downstream audience of any externally-posted content and apply attribution and tone constraints for that audience before posting
-
-**Evidence:**
-- _Pattern_: "When the agent posts to GitHub (or any shared platform) using the user's account credentials, the message must explicitly identify itself as…"
-- _Pattern_: "GitHub comments posted under the owner's account must include an agent attribution marker in a fixed format specified by the owner, includin…"
-- _Pattern_: "A document drafted for the user may be shared directly with external business stakeholders; private conversational banter or dismissive comm…"
-- _Projects_ (17): -Users-alcatraz627-Code-Versable-walmart-mvp, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627--claude, versable-builder, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude-scripts-kanban-test, -Users-alcatraz627--claude-scripts-kanban-design, -Users-alcatraz627--claude-scripts-kanban, -Users-alcatraz627-Code-Versable-staging-enhancement-product-frontend, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Claude-claude-ipc, frontend, enhancement-product, local-models, .claude
-- _Sessions_ (77): a178d6c3, c8bc2450, baf2ac20, +74 more
-
----
-
-
 ## Wake Cycle — 2026-11-05 23:02 UTC
 
 ### Insight (conf=0.72)
@@ -1176,5 +1107,35 @@ _High-confidence associations promoted by the Wake phase._
 - _Pattern_: "Prose responses that use excessive bold spans, em-dashes, or 'not-X-but-Y' contrast scaffolding are flagged as default LLM register; the use…"
 - _Projects_ (20): -Users-alcatraz627-Documents-studio-search-jul-26-fable, -Users-alcatraz627-Code-Versable-versable-builder, -Users-alcatraz627-Code-Versable-staging-enhancement-product, -Users-alcatraz627-Code-Versable-automation, -Users-alcatraz627-Code-Claude-ig-download, -Users-alcatraz627--claude, claudebook, slack-automation, walmart-mvp, versable-builder, -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-gcp, -Users-alcatraz627-Code-Versable-enhancement-product, versable-foundry, better-file-browser, .claude, local-models, enhancement-product
 - _Sessions_ (96): 0c39a659, fb13ca88, f9f4c3b2, +93 more
+
+---
+
+
+## Wake Cycle — 2026-11-26 23:01 UTC
+
+### Insight (conf=0.72)
+> Task-tracking drift, premature completion claims, and optimistic plans before adversarial review share a root cause: the agent's internal model of progress outruns actual validated state, and it reports from the model rather than from evidence.
+
+**Rule:** Always reconcile claimed state against tool-verified state before any completion or readiness assertion, including mid-task status updates
+
+**Evidence:**
+- _Pattern_: "Task tracking state must be reconciled with actual work done before stopping; when many edits occur without task list updates, the list drif…"
+- _Pattern_: "Claiming a UI surface done while open owner callouts for that surface remain unresolved is a false completion; the stop hook treats this as …"
+- _Pattern_: "An optimistic refactor plan presented before adversarial review is premature; the agent should use critical review feedback to build a bette…"
+- _Projects_ (18): -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Versable-aep-scrape, -Users-alcatraz627-Code-Versable, -Users-alcatraz627--claude, Versable, .claude, -Users-alcatraz627-Downloads, -Users-alcatraz627-Code-Versable-landing-app, -Users-alcatraz627-Code-Versable-four-enhancement-product, -Users-alcatraz627-Code-Versable-enhancement-product, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627-Code-Claude, audio-doctor, landing-app, enhancement-product, i-dream, slack-automation, aep-scrape
+- _Sessions_ (27): e7117a9c, 819bd7ad, 11d3fe2c, +24 more
+
+---
+### Insight (conf=0.70)
+> Three patterns share the same failure: information exists in the system but is not surfaced in a form the reader can use — tool output not shown in reply text, bare IDs without descriptions, and docs written as internal ledgers rather than layered for humans.
+
+**Rule:** Always translate internal-facing references (tool results, IDs, file:line coordinates) into reader-facing prose before including them in any user-visible output or document
+
+**Evidence:**
+- _Pattern_: "When a proposal or atone box is recorded via a tool call, the agent must also surface it in the visible reply text with its ID and relevant …"
+- _Pattern_: "When referencing issue numbers, commit hashes, or task IDs in a message to the user, each identifier must be accompanied by a plain-language…"
+- _Pattern_: "Documentation written as an internal ledger (bare IDs, file:line refs, rulings) fails the doc check; docs must be written in layers: current…"
+- _Projects_ (14): -Users-alcatraz627-Code-better-file-browser, -Users-alcatraz627-Code-Versable-versable-foundry, -Users-alcatraz627-Code-Versable-slack-automation, -Users-alcatraz627-Code-Claude-i-dream, -Users-alcatraz627--claude, .claude, versable-foundry, slack-automation, better-file-browser, -Users-alcatraz627-Code-Versable-aep-scrape, -Users-alcatraz627-Code-Versable, Versable, -Users-alcatraz627-Code-local-models, local-models
+- _Sessions_ (31): e5f0dfd6, 0e7c704b, 031b5abb, +28 more
 
 ---

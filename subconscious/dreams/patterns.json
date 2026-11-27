@@ -43,7 +43,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 0.06134597540236266,
+    "strength": 0.0552113778621264,
     "ease": 1.5000000000000002,
     "reactivations": 10
   },
@@ -91,7 +91,7 @@
     "occurrence_history": [
       "2026-07-14T23:52:53.480811+00:00"
     ],
-    "strength": 7.956265072073953e-12,
+    "strength": 7.497249779454301e-12,
     "ease": 2.6,
     "reactivations": 1
   },
@@ -176,7 +176,7 @@
     "occurrence_history": [
       "2026-07-17T06:17:02.395030+00:00"
     ],
-    "strength": 3.1437351632974086e-23,
+    "strength": 2.806906395801258e-23,
     "ease": 1.4,
     "reactivations": 1
   },
@@ -252,7 +252,7 @@
     "occurrence_history": [
       "2026-07-19T23:16:50.118471+00:00"
     ],
-    "strength": 2.3174295834857477e-16,
+    "strength": 2.1783838084766028e-16,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -326,7 +326,7 @@
     "occurrence_history": [
       "2026-07-20T11:33:27.621372+00:00"
     ],
-    "strength": 0.011728111743883472,
+    "strength": 0.010374868081127687,
     "ease": 1.3,
     "reactivations": 7
   },
@@ -399,7 +399,7 @@
     "occurrence_history": [
       "2026-07-21T17:48:48.066578+00:00"
     ],
-    "strength": 2.1671454315422815e-11,
+    "strength": 2.046748463123266e-11,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -424,7 +424,7 @@
     "occurrence_history": [
       "2026-07-22T11:26:36.005664+00:00"
     ],
-    "strength": 0.07473707245749547,
+    "strength": 0.06939871013910294,
     "ease": 2.1000000000000005,
     "reactivations": 8
   },
@@ -449,7 +449,7 @@
     "occurrence_history": [
       "2026-07-22T11:26:36.005664+00:00"
     ],
-    "strength": 2.1700054191691325e-11,
+    "strength": 2.049449562548625e-11,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -523,7 +523,7 @@
     "occurrence_history": [
       "2026-07-22T18:48:21.553951+00:00"
     ],
-    "strength": 2.17025417482078e-11,
+    "strength": 2.0496844984418478e-11,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -579,7 +579,7 @@
     "occurrence_history": [
       "2026-07-24T04:27:10.033623+00:00"
     ],
-    "strength": 0.019014755037278522,
+    "strength": 0.017336982533989236,
     "ease": 1.7000000000000002,
     "reactivations": 4
   },
@@ -604,7 +604,7 @@
     "occurrence_history": [
       "2026-07-26T20:18:56.056799+00:00"
     ],
-    "strength": 0.003598505973793105,
+    "strength": 0.0031832937460477464,
     "ease": 1.3,
     "reactivations": 7
   },
@@ -656,7 +656,7 @@
     "occurrence_history": [
       "2026-07-28T12:58:29.179552+00:00"
     ],
-    "strength": 0.027964864395473334,
+    "strength": 0.024968628924529765,
     "ease": 1.400000000000001,
     "reactivations": 7
   },
@@ -735,7 +735,7 @@
     "occurrence_history": [
       "2026-07-29T00:27:22.281627+00:00"
     ],
-    "strength": 0.009378715968152684,
+    "strength": 0.008373853542993467,
     "ease": 1.4,
     "reactivations": 2
   },
@@ -770,7 +770,7 @@
       "2026-08-04T17:19:53.933941+00:00",
       "2026-08-06T03:09:18.470604+00:00"
     ],
-    "strength": 0.03107767938176429,
+    "strength": 0.027747928019432405,
     "ease": 1.400000000000001,
     "reactivations": 8
   },
@@ -801,7 +801,7 @@
     "occurrence_history": [
       "2026-08-06T03:09:18.470604+00:00"
     ],
-    "strength": 0.010342163126550815,
+    "strength": 0.0091488366119488,
     "ease": 1.300000000000001,
     "reactivations": 6
   },
@@ -855,7 +855,7 @@
     "occurrence_history": [
       "2026-08-07T03:20:34.526917+00:00"
     ],
-    "strength": 0.10128057177682545,
+    "strength": 0.09115251459914289,
     "ease": 1.5,
     "reactivations": 4
   },
@@ -930,7 +930,7 @@
     "occurrence_history": [
       "2026-08-12T05:39:10.860157+00:00"
     ],
-    "strength": 3.5717789081788794e-23,
+    "strength": 3.159650572619778e-23,
     "ease": 1.3,
     "reactivations": 0
   },
@@ -1010,7 +1010,7 @@
     "occurrence_history": [
       "2026-08-12T17:47:24.828668+00:00"
     ],
-    "strength": 0.4087770999100512,
+    "strength": 0.3747123415842136,
     "ease": 1.8000000000000005,
     "reactivations": 16
   },
@@ -1090,7 +1090,7 @@
     "occurrence_history": [
       "2026-08-12T17:47:24.828668+00:00"
     ],
-    "strength": 0.2916000000000001,
+    "strength": 0.26244000000000006,
     "ease": 1.5000000000000002,
     "reactivations": 4
   },
@@ -1170,7 +1170,7 @@
     "occurrence_history": [
       "2026-08-12T17:47:24.828668+00:00"
     ],
-    "strength": 0.2916000000000001,
+    "strength": 0.26244000000000006,
     "ease": 1.5000000000000002,
     "reactivations": 4
   },
@@ -1257,7 +1257,7 @@
     "occurrence_history": [
       "2026-08-13T00:18:14.841112+00:00"
     ],
-    "strength": 0.2916000000000001,
+    "strength": 0.26244000000000006,
     "ease": 1.5000000000000002,
     "reactivations": 4
   },
@@ -1344,7 +1344,7 @@
     "occurrence_history": [
       "2026-08-13T00:18:14.841112+00:00"
     ],
-    "strength": 0.16848422499396076,
+    "strength": 0.15912399027207405,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -1407,7 +1407,7 @@
     "occurrence_history": [
       "2026-08-13T02:29:05.067404+00:00"
     ],
-    "strength": 0.015423764518878827,
+    "strength": 0.013644099382085117,
     "ease": 1.3,
     "reactivations": 9
   },
@@ -1470,7 +1470,7 @@
     "occurrence_history": [
       "2026-08-13T02:29:05.067404+00:00"
     ],
-    "strength": 0.1684842249958802,
+    "strength": 0.15912399027388685,
     "ease": 2.7,
     "reactivations": 2
   },
@@ -1519,7 +1519,7 @@
     "occurrence_history": [
       "2026-08-16T03:43:31.916664+00:00"
     ],
-    "strength": 0.01639443097654305,
+    "strength": 0.014637884800484864,
     "ease": 1.4,
     "reactivations": 5
   },
@@ -1553,7 +1553,7 @@
     "occurrence_history": [
       "2026-08-19T01:01:27.764545+00:00"
     ],
-    "strength": 0.029274038679639906,
+    "strength": 0.026137534535392772,
     "ease": 1.4,
     "reactivations": 8
   },
@@ -1628,7 +1628,7 @@
     "occurrence_history": [
       "2026-08-31T03:29:04.396013+00:00"
     ],
-    "strength": 0.029274038679639906,
+    "strength": 0.026137534535392772,
     "ease": 1.4,
     "reactivations": 8
   },
@@ -1676,7 +1676,7 @@
     "occurrence_history": [
       "2026-08-31T05:35:05.597263+00:00"
     ],
-    "strength": 0.009095436833261444,
+    "strength": 0.008045963352500508,
     "ease": 1.3,
     "reactivations": 8
   },
@@ -1825,7 +1825,7 @@
     "occurrence_history": [
       "2026-09-11T06:11:48.471463+00:00"
     ],
-    "strength": 0.012470086846879435,
+    "strength": 0.011031230672239501,
     "ease": 1.3,
     "reactivations": 7
   },
@@ -1887,7 +1887,7 @@
     "occurrence_history": [
       "2026-09-11T08:17:55.345526+00:00"
     ],
-    "strength": 0.07841926175113334,
+    "strength": 0.07371410604606533,
     "ease": 2.5,
     "reactivations": 4
   },
@@ -1946,7 +1946,7 @@
     "occurrence_history": [
       "2026-09-11T11:25:28.810136+00:00"
     ],
-    "strength": 0.029167969286361076,
+    "strength": 0.026042829719965244,
     "ease": 1.4,
     "reactivations": 11
   },
@@ -2042,7 +2042,7 @@
     "occurrence_history": [
       "2026-09-12T19:41:55.813232+00:00"
     ],
-    "strength": 0.04842771877321451,
+    "strength": 0.04415468476381323,
     "ease": 1.7,
     "reactivations": 8
   },
@@ -2094,7 +2094,7 @@
     "occurrence_history": [
       "2026-09-16T05:15:59.735522+00:00"
     ],
-    "strength": 0.05137303974621699,
+    "strength": 0.046235735771595295,
     "ease": 1.5000000000000002,
     "reactivations": 11
   },
@@ -2146,7 +2146,7 @@
     "occurrence_history": [
       "2026-09-16T05:15:59.735522+00:00"
     ],
-    "strength": 0.08409081869511362,
+    "strength": 0.07620730444244672,
     "ease": 1.6000000000000003,
     "reactivations": 10
   },
@@ -2226,7 +2226,7 @@
     "occurrence_history": [
       "2026-09-18T23:40:05.968984+00:00"
     ],
-    "strength": 0.003598505973793105,
+    "strength": 0.0031832937460477464,
     "ease": 1.3,
     "reactivations": 7
   },
@@ -2327,7 +2327,7 @@
     "occurrence_history": [
       "2026-09-27T11:54:02.896978+00:00"
     ],
-    "strength": 0.017424606202795487,
+    "strength": 0.015557684109638826,
     "ease": 1.4,
     "reactivations": 7
   },
@@ -2352,7 +2352,7 @@
     "occurrence_history": [
       "2026-09-28T01:53:57.022002+00:00"
     ],
-    "strength": 0.005437750253676411,
+    "strength": 0.004810317532098363,
     "ease": 1.3,
     "reactivations": 6
   },
@@ -2396,7 +2396,7 @@
     "occurrence_history": [
       "2026-09-29T08:11:54.339604+00:00"
     ],
-    "strength": 0.024915885910916678,
+    "strength": 0.02271742538936521,
     "ease": 1.7000000000000004,
     "reactivations": 4
   },
@@ -2489,7 +2489,7 @@
     "occurrence_history": [
       "2026-10-01T05:27:18.108635+00:00"
     ],
-    "strength": 0.018285260495814432,
+    "strength": 0.01684168729877645,
     "ease": 1.9,
     "reactivations": 2
   },
@@ -2587,7 +2587,7 @@
     "occurrence_history": [
       "2026-10-01T23:10:16.106082+00:00"
     ],
-    "strength": 0.043578526993494356,
+    "strength": 0.039220674294144914,
     "ease": 1.5,
     "reactivations": 8
   },
@@ -2685,7 +2685,7 @@
     "occurrence_history": [
       "2026-10-01T23:10:16.106082+00:00"
     ],
-    "strength": 0.013708906030432098,
+    "strength": 0.012127109180766855,
     "ease": 1.3,
     "reactivations": 8
   },
@@ -2762,7 +2762,7 @@
     "occurrence_history": [
       "2026-10-02T01:21:30.851864+00:00"
     ],
-    "strength": 0.023195023735586167,
+    "strength": 0.021803322311450997,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2853,7 +2853,7 @@
     "occurrence_history": [
       "2026-10-03T01:35:23.171572+00:00"
     ],
-    "strength": 0.03060693035633488,
+    "strength": 0.028770514534954786,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -2944,7 +2944,7 @@
     "occurrence_history": [
       "2026-10-03T01:35:23.171572+00:00"
     ],
-    "strength": 0.02927619425388552,
+    "strength": 0.027519622598652385,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3035,7 +3035,7 @@
     "occurrence_history": [
       "2026-10-03T01:35:23.171572+00:00"
     ],
-    "strength": 0.028943510228273194,
+    "strength": 0.0272068996145768,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3085,7 +3085,7 @@
     "occurrence_history": [
       "2026-10-03T03:41:45.043858+00:00"
     ],
-    "strength": 0.03008312997558354,
+    "strength": 0.028278142177048528,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3135,57 +3135,7 @@
     "occurrence_history": [
       "2026-10-03T03:41:45.043858+00:00"
     ],
-    "strength": 0.028313534094666873,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "197f8e7c-f55f-4804-bb70-895b6c198a56",
-    "pattern": "For UI controls where a full picker is possible, the user prefers a small set of pre-chosen, design-system-compliant values (e.g. 8 colors) over an open picker.",
-    "valence": "positive",
-    "confidence": 0.72,
-    "category": "user-preference",
-    "source_sessions": [
-      "4439026a-9c58-4ba9-aa6b-828b2333e489",
-      "4392bc1b-4a84-4e8e-bfe4-031def121ff0",
-      "400c6714-5c21-42a2-a5ed-8c1579de62f7",
-      "3a9e3c07-5a37-48e8-9843-8ce7c0484a7c",
-      "334f22dd-dfe8-472c-81d4-b485b49f30a8",
-      "27a40795-3c28-4555-8c43-b3067841f67d",
-      "27a13554-3a5c-4394-a40d-38cbe35d833e",
-      "1ee513aa-887f-4b31-a748-0150a8427957",
-      "1d45027d-6862-4e0d-89bf-8912c5c8c4a2",
-      "17df725b-dded-4c24-80c2-9e8e0b1bc198",
-      "13dd0877-1d86-4b1e-9e91-6051621ba608",
-      "11551524-1523-4210-ab81-21496782c3d2",
-      "0f5a66b6-37ba-4739-aa64-edc7ddabf359",
-      "f2fc779a-d51e-41c5-87c6-315d21fa0f28",
-      "0c494f44-c756-4610-b4fa-bf7c60c9250c",
-      "ce9de2fb-a9bb-4ce5-82fb-4576660c6d8e",
-      "a6803912-d9f5-4227-b219-a1cecf6fd45e",
-      "94027d6a-1eee-4b4e-a1b6-d7fc6315cc7c",
-      "70726a60-7cea-44dc-91df-5437b9a46d58",
-      "71b6878d-8443-4617-b752-fdef9359509f",
-      "99085361-810f-492a-8bee-17bf00c22ef8",
-      "849f4ee6-cfe6-4ace-b344-4af77642f9c7",
-      "2f53e2ca-6e16-4c3b-961d-ecd20c806243",
-      "0005f809-4c88-4312-9b44-75e4634368ee"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00",
-    "occurrence_history": [
-      "2026-10-03T03:41:45.043858+00:00"
-    ],
-    "strength": 0.025482180685200192,
+    "strength": 0.02661472204898686,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3235,7 +3185,7 @@
     "occurrence_history": [
       "2026-10-03T03:41:45.043858+00:00"
     ],
-    "strength": 0.026543938213750215,
+    "strength": 0.0249513019209252,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3285,57 +3235,7 @@
     "occurrence_history": [
       "2026-10-03T03:41:45.043858+00:00"
     ],
-    "strength": 0.027605695742300197,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "c7fc6945-12dd-4a33-b631-0f8379d734a3",
-    "pattern": "When a sub-agent completes and its output is a file, read the output file before acting on the completion summary: the summary is a pointer, not the artifact.",
-    "valence": "positive",
-    "confidence": 0.72,
-    "category": "approach",
-    "source_sessions": [
-      "4439026a-9c58-4ba9-aa6b-828b2333e489",
-      "4392bc1b-4a84-4e8e-bfe4-031def121ff0",
-      "400c6714-5c21-42a2-a5ed-8c1579de62f7",
-      "3a9e3c07-5a37-48e8-9843-8ce7c0484a7c",
-      "334f22dd-dfe8-472c-81d4-b485b49f30a8",
-      "27a40795-3c28-4555-8c43-b3067841f67d",
-      "27a13554-3a5c-4394-a40d-38cbe35d833e",
-      "1ee513aa-887f-4b31-a748-0150a8427957",
-      "1d45027d-6862-4e0d-89bf-8912c5c8c4a2",
-      "17df725b-dded-4c24-80c2-9e8e0b1bc198",
-      "13dd0877-1d86-4b1e-9e91-6051621ba608",
-      "11551524-1523-4210-ab81-21496782c3d2",
-      "0f5a66b6-37ba-4739-aa64-edc7ddabf359",
-      "f2fc779a-d51e-41c5-87c6-315d21fa0f28",
-      "0c494f44-c756-4610-b4fa-bf7c60c9250c",
-      "ce9de2fb-a9bb-4ce5-82fb-4576660c6d8e",
-      "a6803912-d9f5-4227-b219-a1cecf6fd45e",
-      "94027d6a-1eee-4b4e-a1b6-d7fc6315cc7c",
-      "70726a60-7cea-44dc-91df-5437b9a46d58",
-      "71b6878d-8443-4617-b752-fdef9359509f",
-      "99085361-810f-492a-8bee-17bf00c22ef8",
-      "849f4ee6-cfe6-4ace-b344-4af77642f9c7",
-      "2f53e2ca-6e16-4c3b-961d-ecd20c806243",
-      "0005f809-4c88-4312-9b44-75e4634368ee"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product",
-      "-Users-alcatraz627-Code-Personal-controlelr",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627-Code-Claude-csync"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-03T03:41:45.043858+00:00",
-    "last_seen": "2026-10-03T03:41:45.043858+00:00",
-    "occurrence_history": [
-      "2026-10-03T03:41:45.043858+00:00"
-    ],
-    "strength": 0.025482180685200192,
+    "strength": 0.025949353997762183,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3382,7 +3282,7 @@
     "occurrence_history": [
       "2026-10-03T17:36:30.417767+00:00"
     ],
-    "strength": 0.032560564208866896,
+    "strength": 0.03060693035633488,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3429,54 +3329,7 @@
     "occurrence_history": [
       "2026-10-03T17:36:30.417767+00:00"
     ],
-    "strength": 0.0336223217374169,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "dfbb6c59-5ef8-4897-9628-751f9fb3dab2",
-    "pattern": "When multiple CI monitor watches are armed sequentially and older ones expire, the agent should note the expiry is expected and confirm the newest watch still covers the target rather than treating each expiry as an error.",
-    "valence": "positive",
-    "confidence": 0.72,
-    "category": "tool-use",
-    "source_sessions": [
-      "deeb1817-6a4c-47a7-bc32-cae520107a2c",
-      "d5499ecd-85ff-4526-9b56-94204708bcec",
-      "d24bdec7-712a-4b31-9019-0bbeb478b966",
-      "c387ae22-4fae-4c66-8056-17fb68cda3d6",
-      "bc3f0bcc-df4b-47b0-a571-cee082b8b2f8",
-      "b74c0be6-cfc8-4814-84ea-4e747423d3d0",
-      "a8362ffb-d6f3-4c3f-84a1-512f53994c33",
-      "997b8017-56a7-4fd2-b3b5-e86a9837ddc8",
-      "94ddba8e-0290-480e-80c4-d28a62b5149c",
-      "8db72c37-d173-40cd-a197-de2650207ad7",
-      "828b57b8-7165-474e-9374-dd8054e3090a",
-      "81d0a9ab-5ec6-4d08-9681-d13b01734037",
-      "80c2702d-b56b-4cfa-a4f9-669f540c6c15",
-      "631b883a-fc15-438c-ab38-a8dd76d810ed",
-      "45b34aae-aa41-40de-8734-f7937b138239",
-      "45b00be7-ed82-449e-a773-fbbc617f3b00",
-      "396e2701-7bc9-41cb-a511-2fc011065e77",
-      "e098a6c5-972c-4757-b764-41cd90460fef",
-      "a6803912-d9f5-4227-b219-a1cecf6fd45e",
-      "295db5c7-5232-4df1-aa85-b329ef7ff72e",
-      "71b6878d-8443-4617-b752-fdef9359509f",
-      "38d3e596-c0f8-4b39-9e9d-492743be4096"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Claude-switchboard-mac",
-      "-Users-alcatraz627-Code-Claude-i-dream",
-      "-Users-alcatraz627--claude",
-      "switchboard-mac"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-03T17:36:30.417767+00:00",
-    "last_seen": "2026-10-03T17:36:30.417767+00:00",
-    "occurrence_history": [
-      "2026-10-03T17:36:30.417767+00:00"
-    ],
-    "strength": 0.025482180685200192,
+    "strength": 0.031604982433171884,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3523,7 +3376,7 @@
     "occurrence_history": [
       "2026-10-03T17:36:30.417767+00:00"
     ],
-    "strength": 0.03008312997558354,
+    "strength": 0.028278142177048528,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3570,7 +3423,7 @@
     "occurrence_history": [
       "2026-10-03T17:36:30.417767+00:00"
     ],
-    "strength": 0.027605695742300197,
+    "strength": 0.025949353997762183,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3597,7 +3450,7 @@
     "occurrence_history": [
       "2026-10-04T19:07:43.072360+00:00"
     ],
-    "strength": 0.03463889809453926,
+    "strength": 0.0325605642088669,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3624,7 +3477,7 @@
     "occurrence_history": [
       "2026-10-04T19:07:43.072360+00:00"
     ],
-    "strength": 0.0061417591612620585,
+    "strength": 0.0054330946426548975,
     "ease": 1.3,
     "reactivations": 6
   },
@@ -3651,7 +3504,7 @@
     "occurrence_history": [
       "2026-10-04T19:07:43.072360+00:00"
     ],
-    "strength": 0.028238232142287465,
+    "strength": 0.026543938213750215,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3678,7 +3531,7 @@
     "occurrence_history": [
       "2026-10-04T19:07:43.072360+00:00"
     ],
-    "strength": 0.02635568333280161,
+    "strength": 0.024774342332833512,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3705,34 +3558,7 @@
     "occurrence_history": [
       "2026-10-04T19:07:43.072360+00:00"
     ],
-    "strength": 0.02710870285659595,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "f973b963-ede2-4403-806a-7785db845fc8",
-    "pattern": "When multiple permissions will be needed across a multi-step task, the agent should identify and request all of them upfront rather than asking one at a time as each step is reached.",
-    "valence": "positive",
-    "confidence": 0.68,
-    "category": "user-preference",
-    "source_sessions": [
-      "58f5414c-06e0-4349-9367-a8a279a59f43",
-      "b74c0be6-cfc8-4814-84ea-4e747423d3d0",
-      "38d3e596-c0f8-4b39-9e9d-492743be4096"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Documents-Codex-2026-10-04-mac",
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627--claude",
-      "slack-automation"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-04T19:07:43.072360+00:00",
-    "last_seen": "2026-10-04T19:07:43.072360+00:00",
-    "occurrence_history": [
-      "2026-10-04T19:07:43.072360+00:00"
-    ],
-    "strength": 0.025602663809007286,
+    "strength": 0.025482180685200192,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3769,7 +3595,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.03388587857074491,
+    "strength": 0.031852725856500216,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3806,7 +3632,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.030120780951773257,
+    "strength": 0.02831353409466686,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3843,7 +3669,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.030120780951773257,
+    "strength": 0.02831353409466686,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3880,7 +3706,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.032003329761259094,
+    "strength": 0.030083129975583548,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3917,7 +3743,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.02635568333280161,
+    "strength": 0.024774342332833512,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3954,7 +3780,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.028238232142287465,
+    "strength": 0.026543938213750215,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -3991,7 +3817,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.028238232142287465,
+    "strength": 0.026543938213750215,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4028,7 +3854,7 @@
     "occurrence_history": [
       "2026-10-05T12:53:41.841891+00:00"
     ],
-    "strength": 0.02635568333280161,
+    "strength": 0.024774342332833512,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4062,7 +3888,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.03524772239037295,
+    "strength": 0.03313285904695057,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4096,7 +3922,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.03484718009048236,
+    "strength": 0.03275634928505342,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4130,7 +3956,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.034046095490701166,
+    "strength": 0.032003329761259094,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4164,7 +3990,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.08575792581114532,
+    "strength": 0.07819105000427955,
     "ease": 1.7000000000000002,
     "reactivations": 10
   },
@@ -4198,7 +4024,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.03004067249179518,
+    "strength": 0.028238232142287465,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4232,7 +4058,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.03204338399124815,
+    "strength": 0.030120780951773257,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4266,7 +4092,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.02883904559212335,
+    "strength": 0.02710870285659595,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4300,7 +4126,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.03284446859102936,
+    "strength": 0.030873800475567596,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4334,7 +4160,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.06597047632853918,
+    "strength": 0.06014955194660925,
     "ease": 1.6999999999999995,
     "reactivations": 8
   },
@@ -4368,7 +4194,7 @@
     "occurrence_history": [
       "2026-10-05T18:14:08.603929+00:00"
     ],
-    "strength": 0.028037960992342133,
+    "strength": 0.026355683332801604,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4393,7 +4219,7 @@
     "occurrence_history": [
       "2026-10-05T23:50:01.598073+00:00"
     ],
-    "strength": 0.03284446859102936,
+    "strength": 0.030873800475567596,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4418,32 +4244,7 @@
     "occurrence_history": [
       "2026-10-05T23:50:01.598073+00:00"
     ],
-    "strength": 0.02883904559212335,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "e1a3b7be-cdee-461f-9e6b-e7d7cd0e60d1",
-    "pattern": "Small lookup tables or user mappings can live as in-code constants rather than separate mapping files or config layers, when the dataset is small and the tradeoff in maintainability is acceptable.",
-    "valence": "positive",
-    "confidence": 0.65,
-    "category": "architecture",
-    "source_sessions": [
-      "ad55395c-dc91-486c-8069-5ba80015e376",
-      "6e91a666-6161-4b0d-8c24-89fd0ffa44bc",
-      "fa3bf8b2-b4db-4bb4-a9a8-d88ef7bb0441"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-05T23:50:01.598073+00:00",
-    "last_seen": "2026-10-05T23:50:01.598073+00:00",
-    "occurrence_history": [
-      "2026-10-05T23:50:01.598073+00:00"
-    ],
-    "strength": 0.026035249492889122,
+    "strength": 0.02710870285659595,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4468,7 +4269,7 @@
     "occurrence_history": [
       "2026-10-05T23:50:01.598073+00:00"
     ],
-    "strength": 0.027236876392560946,
+    "strength": 0.025602663809007286,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4493,7 +4294,7 @@
     "occurrence_history": [
       "2026-10-05T23:50:01.598073+00:00"
     ],
-    "strength": 0.031242299391466957,
+    "strength": 0.02936776142797894,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4518,32 +4319,7 @@
     "occurrence_history": [
       "2026-10-05T23:50:01.598073+00:00"
     ],
-    "strength": 0.028037960992342133,
-    "ease": 2.5,
-    "reactivations": 0
-  },
-  {
-    "id": "e43acc9a-d83d-4573-a304-34b14775e25e",
-    "pattern": "State-transition triggers in Slack message buttons should be replaced by direct API endpoint calls when the message itself is not the authority for state: the endpoint is.",
-    "valence": "positive",
-    "confidence": 0.65,
-    "category": "architecture",
-    "source_sessions": [
-      "ad55395c-dc91-486c-8069-5ba80015e376",
-      "6e91a666-6161-4b0d-8c24-89fd0ffa44bc",
-      "fa3bf8b2-b4db-4bb4-a9a8-d88ef7bb0441"
-    ],
-    "source_projects": [
-      "-Users-alcatraz627-Code-Versable-slack-automation",
-      "-Users-alcatraz627-Code-Versable-enhancement-product"
-    ],
-    "occurrences": 1,
-    "first_seen": "2026-10-05T23:50:01.598073+00:00",
-    "last_seen": "2026-10-05T23:50:01.598073+00:00",
-    "occurrence_history": [
-      "2026-10-05T23:50:01.598073+00:00"
-    ],
-    "strength": 0.026035249492889122,
+    "strength": 0.026355683332801604,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4591,7 +4367,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.11467661788826526,
+    "strength": 0.10779602081496933,
     "ease": 2.5,
     "reactivations": 6
   },
@@ -4639,7 +4415,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03920201232971848,
+    "strength": 0.036849891589935374,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4687,7 +4463,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.10132825956607121,
+    "strength": 0.09524856399210692,
     "ease": 2.5,
     "reactivations": 4
   },
@@ -4735,7 +4511,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03834979467037677,
+    "strength": 0.03604880699015416,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4783,7 +4559,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03749757701103506,
+    "strength": 0.03524772239037295,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4831,7 +4607,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03621925052202251,
+    "strength": 0.03404609549070116,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4879,7 +4655,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03408870637366823,
+    "strength": 0.032043383991248134,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4927,7 +4703,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03621925052202251,
+    "strength": 0.03404609549070116,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -4975,7 +4751,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.03195816222531402,
+    "strength": 0.03004067249179518,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5023,7 +4799,7 @@
     "occurrence_history": [
       "2026-10-06T23:01:44.044338+00:00"
     ],
-    "strength": 0.029827618076959724,
+    "strength": 0.02803796099234214,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5052,7 +4828,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.07325843394272578,
+    "strength": 0.06886292790616223,
     "ease": 2.5,
     "reactivations": 2
   },
@@ -5081,7 +4857,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.003598505973793105,
+    "strength": 0.0031832937460477464,
     "ease": 1.3,
     "reactivations": 8
   },
@@ -5110,7 +4886,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.03989103937344156,
+    "strength": 0.037497577011035066,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5139,7 +4915,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.040797653904656124,
+    "strength": 0.03834979467037676,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5168,7 +4944,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.0385311175766197,
+    "strength": 0.03621925052202252,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5197,7 +4973,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.040797653904656124,
+    "strength": 0.03834979467037676,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5226,7 +5002,7 @@
     "occurrence_history": [
       "2026-10-07T23:00:40.186147+00:00"
     ],
-    "strength": 0.03263812312372494,
+    "strength": 0.03067983573630144,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5260,7 +5036,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.04243727592919314,
+    "strength": 0.03989103937344155,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5294,7 +5070,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.04340175947303845,
+    "strength": 0.04079765390465614,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5328,7 +5104,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.01667589946525653,
+    "strength": 0.01475175721926539,
     "ease": 1.3,
     "reactivations": 9
   },
@@ -5362,7 +5138,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.03375692403458547,
+    "strength": 0.03173150859251034,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5396,7 +5172,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.034721407578430785,
+    "strength": 0.03263812312372494,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5430,7 +5206,7 @@
     "occurrence_history": [
       "2026-10-08T23:00:33.439370+00:00"
     ],
-    "strength": 0.03857934175381197,
+    "strength": 0.03626458124858325,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5471,7 +5247,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.04195503415727051,
+    "strength": 0.03943773210783428,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5512,7 +5288,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.03159939412225756,
+    "strength": 0.028213744752015678,
     "ease": 1.4,
     "reactivations": 8
   },
@@ -5553,7 +5329,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.03761485820996668,
+    "strength": 0.035357966717368676,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5594,7 +5370,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.034721407578430785,
+    "strength": 0.03263812312372494,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5635,7 +5411,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.03279244049074018,
+    "strength": 0.030824894061295766,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5676,7 +5452,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.03375692403458547,
+    "strength": 0.03173150859251034,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5717,7 +5493,7 @@
     "occurrence_history": [
       "2026-10-09T23:00:46.958220+00:00"
     ],
-    "strength": 0.03134571517497222,
+    "strength": 0.029464972264473886,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5750,7 +5526,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.10132825956607121,
+    "strength": 0.09524856399210692,
     "ease": 2.5,
     "reactivations": 4
   },
@@ -5783,7 +5559,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.048027700236750966,
+    "strength": 0.045146038222545905,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5816,7 +5592,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.04911923887849532,
+    "strength": 0.0461720845457856,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5849,7 +5625,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.047481930915878816,
+    "strength": 0.04463301506092608,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5882,7 +5658,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.05021077752023966,
+    "strength": 0.04719813086902528,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5915,7 +5691,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.0436615456697736,
+    "strength": 0.04104185292958718,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5948,7 +5724,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.046390392274134475,
+    "strength": 0.0436069687376864,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -5981,7 +5757,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.04529885363239016,
+    "strength": 0.04258092241444675,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6014,7 +5790,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.04257000702802929,
+    "strength": 0.04001580660634753,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6047,7 +5823,7 @@
     "occurrence_history": [
       "2026-10-10T23:00:48.154887+00:00"
     ],
-    "strength": 0.0409326990654128,
+    "strength": 0.03847673712148803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6072,7 +5848,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.05109329812420315,
+    "strength": 0.04802770023675096,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6097,7 +5873,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.04760966416118933,
+    "strength": 0.04475308431151797,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6122,7 +5898,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.05051269246370085,
+    "strength": 0.0474819309158788,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6147,7 +5923,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.04354542453767321,
+    "strength": 0.04093269906541282,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6172,7 +5948,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.04644845284018469,
+    "strength": 0.0436615456697736,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6197,7 +5973,7 @@
     "occurrence_history": [
       "2026-10-11T23:00:58.175467+00:00"
     ],
-    "strength": 0.03773936793265008,
+    "strength": 0.03547500585669107,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6227,7 +6003,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05682523485767278,
+    "strength": 0.05341572076621241,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6257,7 +6033,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.11467661788826526,
+    "strength": 0.10779602081496933,
     "ease": 2.5,
     "reactivations": 6
   },
@@ -6287,7 +6063,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.055589903665114675,
+    "strength": 0.05225450944520779,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6317,7 +6093,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05435457247255655,
+    "strength": 0.05109329812420316,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6347,7 +6123,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05250157568371941,
+    "strength": 0.04935148114269624,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6377,7 +6153,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.04941324770232415,
+    "strength": 0.0464484528401847,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6407,7 +6183,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.055589903665114675,
+    "strength": 0.05225450944520779,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6437,7 +6213,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05435457247255655,
+    "strength": 0.05109329812420316,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6467,7 +6243,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05064857889488227,
+    "strength": 0.047609664161189336,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6497,7 +6273,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05250157568371941,
+    "strength": 0.04935148114269624,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6527,7 +6303,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.039456475758870305,
+    "strength": 0.035228996213277054,
     "ease": 1.4,
     "reactivations": 10
   },
@@ -6557,7 +6333,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05064857889488227,
+    "strength": 0.047609664161189336,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6587,7 +6363,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.05867823164650997,
+    "strength": 0.055157537747719365,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6617,7 +6393,7 @@
     "occurrence_history": [
       "2026-10-12T23:01:13.926405+00:00"
     ],
-    "strength": 0.053736906876277524,
+    "strength": 0.05051269246370086,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6653,7 +6429,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.05867823164650997,
+    "strength": 0.055157537747719365,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6689,7 +6465,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.04941324770232415,
+    "strength": 0.0464484528401847,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6725,7 +6501,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.03902740167422103,
+    "strength": 0.03558380740884858,
     "ease": 1.7,
     "reactivations": 6
   },
@@ -6761,7 +6537,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.055589903665114675,
+    "strength": 0.05225450944520779,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6797,7 +6573,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.05250157568371941,
+    "strength": 0.04935148114269624,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6833,7 +6609,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.05064857889488227,
+    "strength": 0.047609664161189336,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6869,7 +6645,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.05250157568371941,
+    "strength": 0.04935148114269624,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6905,7 +6681,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.04817791650976606,
+    "strength": 0.045287241519180094,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6941,7 +6717,7 @@
     "occurrence_history": [
       "2026-10-13T11:12:29.314804+00:00"
     ],
-    "strength": 0.04941324770232415,
+    "strength": 0.0464484528401847,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -6986,7 +6762,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.01188325084141242,
+    "strength": 0.010512106513557141,
     "ease": 1.3,
     "reactivations": 9
   },
@@ -7031,7 +6807,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.05256728478970653,
+    "strength": 0.04941324770232414,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7076,7 +6852,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.0369845869466848,
+    "strength": 0.03302195263096857,
     "ease": 1.4,
     "reactivations": 9
   },
@@ -7121,7 +6897,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.05782401326867718,
+    "strength": 0.054354572472556546,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7166,7 +6942,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.06597047632853918,
+    "strength": 0.06014955194660925,
     "ease": 1.6999999999999995,
     "reactivations": 8
   },
@@ -7211,7 +6987,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.05913819538841983,
+    "strength": 0.05558990366511463,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7256,7 +7032,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.05388146690944922,
+    "strength": 0.050648578894882265,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7301,7 +7077,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.05782401326867718,
+    "strength": 0.054354572472556546,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7346,7 +7122,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.04928182949034994,
+    "strength": 0.04632491972092894,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7391,7 +7167,7 @@
     "occurrence_history": [
       "2026-10-13T23:01:01.984227+00:00"
     ],
-    "strength": 0.051253102669963885,
+    "strength": 0.04817791650976605,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7443,7 +7219,7 @@
     "occurrence_history": [
       "2026-10-14T23:00:47.029897+00:00"
     ],
-    "strength": 0.06151490773263531,
+    "strength": 0.057824013268677185,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7495,7 +7271,7 @@
     "occurrence_history": [
       "2026-10-14T23:00:47.029897+00:00"
     ],
-    "strength": 0.060815874690219006,
+    "strength": 0.05716692220880586,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7547,7 +7323,7 @@
     "occurrence_history": [
       "2026-10-14T23:00:47.029897+00:00"
     ],
-    "strength": 0.05033037905397438,
+    "strength": 0.04731055631073592,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7599,7 +7375,7 @@
     "occurrence_history": [
       "2026-10-14T23:00:47.029897+00:00"
     ],
-    "strength": 0.05941780860538641,
+    "strength": 0.05585274008906322,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7651,7 +7427,7 @@
     "occurrence_history": [
       "2026-10-14T23:00:47.029897+00:00"
     ],
-    "strength": 0.05732070947813746,
+    "strength": 0.053881466909449206,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7706,7 +7482,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.05205565209483164,
+    "strength": 0.048932312969141745,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7761,7 +7537,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.06321043468658129,
+    "strength": 0.05941780860538641,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7816,7 +7592,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.06692869555049781,
+    "strength": 0.06291297381746794,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7871,7 +7647,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.06544139120493117,
+    "strength": 0.0615149077326353,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7926,7 +7702,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.0706469564144144,
+    "strength": 0.06640813902954953,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -7981,7 +7757,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.06841599989606446,
+    "strength": 0.0643110399023006,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8036,7 +7812,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.0557739129587482,
+    "strength": 0.05242747818122331,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8091,7 +7867,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.0483373912309151,
+    "strength": 0.04543714775706019,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8146,7 +7922,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.05205565209483164,
+    "strength": 0.048932312969141745,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8201,7 +7977,7 @@
     "occurrence_history": [
       "2026-10-15T23:00:42.654833+00:00"
     ],
-    "strength": 0.05354295644039828,
+    "strength": 0.05033037905397438,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8249,7 +8025,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.07278297861283453,
+    "strength": 0.06841599989606445,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8297,7 +8073,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.0696185012818417,
+    "strength": 0.0654413912049312,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8345,7 +8121,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.05137303974621699,
+    "strength": 0.046235735771595295,
     "ease": 1.5000000000000002,
     "reactivations": 11
   },
@@ -8393,7 +8169,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.06882738194909352,
+    "strength": 0.0646977390321479,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8441,7 +8217,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.07120073994733808,
+    "strength": 0.0669286955504978,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8489,7 +8265,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.06724514328359714,
+    "strength": 0.0632104346865813,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8537,7 +8313,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.0696185012818417,
+    "strength": 0.0654413912049312,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8585,7 +8361,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.0617073079543597,
+    "strength": 0.05800486947709811,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8633,7 +8409,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.0648717852853525,
+    "strength": 0.060979478168231356,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8681,7 +8457,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.07357409794558269,
+    "strength": 0.06915965206884772,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8729,7 +8505,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.05696059195787052,
+    "strength": 0.05354295644039828,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8777,7 +8553,7 @@
     "occurrence_history": [
       "2026-10-16T23:00:52.189539+00:00"
     ],
-    "strength": 0.0617073079543597,
+    "strength": 0.05800486947709811,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8819,7 +8595,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.07406223540621458,
+    "strength": 0.0696185012818417,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8861,7 +8637,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.11095100656337029,
+    "strength": 0.10454998695394507,
     "ease": 2.6,
     "reactivations": 5
   },
@@ -8903,7 +8679,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.10555651870059483,
+    "strength": 0.09763977979805023,
     "ease": 2.0,
     "reactivations": 7
   },
@@ -8945,7 +8721,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.07322061909478034,
+    "strength": 0.06882738194909352,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -8987,7 +8763,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.06901253753760905,
+    "strength": 0.0648717852853525,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9029,7 +8805,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.06732930491474055,
+    "strength": 0.06328954661985611,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9071,7 +8847,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.0631212233575693,
+    "strength": 0.059333949956115135,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9113,7 +8889,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.07153738647191184,
+    "strength": 0.06724514328359713,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9155,7 +8931,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.06985415384904334,
+    "strength": 0.06566290461810073,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9197,7 +8973,7 @@
     "occurrence_history": [
       "2026-10-17T23:00:39.001437+00:00"
     ],
-    "strength": 0.07153738647191184,
+    "strength": 0.06724514328359713,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9243,7 +9019,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.09048613579250163,
+    "strength": 0.08505696764495153,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9289,7 +9065,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.139036688627695,
+    "strength": 0.12806010794656117,
     "ease": 1.9,
     "reactivations": 10
   },
@@ -9335,7 +9111,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.0857237075928962,
+    "strength": 0.08058028513732242,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9381,7 +9157,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.0857237075928962,
+    "strength": 0.08058028513732242,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9427,7 +9203,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.08381873631305407,
+    "strength": 0.07878961213427083,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9473,7 +9249,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.08381873631305407,
+    "strength": 0.07878961213427083,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9519,7 +9295,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.07619885119368557,
+    "strength": 0.07162692012206442,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9565,7 +9341,7 @@
     "occurrence_history": [
       "2026-10-19T08:04:29.197660+00:00"
     ],
-    "strength": 0.0647690235146327,
+    "strength": 0.06088288210375474,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9612,7 +9388,7 @@
     "occurrence_history": [
       "2026-10-19T08:50:33.186194+00:00"
     ],
-    "strength": 0.0857237075928962,
+    "strength": 0.08058028513732242,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9659,7 +9435,7 @@
     "occurrence_history": [
       "2026-10-19T08:50:33.186194+00:00"
     ],
-    "strength": 0.08381873631305407,
+    "strength": 0.07878961213427083,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9706,7 +9482,7 @@
     "occurrence_history": [
       "2026-10-19T08:50:33.186194+00:00"
     ],
-    "strength": 0.0361804183809207,
+    "strength": 0.03332406956137433,
     "ease": 1.8999999999999997,
     "reactivations": 4
   },
@@ -9760,7 +9536,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.030340850334475842,
+    "strength": 0.027306765301028255,
     "ease": 1.4999999999999996,
     "reactivations": 4
   },
@@ -9814,7 +9590,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.08762867887273838,
+    "strength": 0.08237095814037408,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9868,7 +9644,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.0857237075928962,
+    "strength": 0.08058028513732242,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9922,7 +9698,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.08096127939329091,
+    "strength": 0.07610360262969346,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -9976,7 +9752,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.08381873631305407,
+    "strength": 0.07878961213427083,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10030,7 +9806,7 @@
     "occurrence_history": [
       "2026-10-20T07:49:02.619011+00:00"
     ],
-    "strength": 0.07143642299408022,
+    "strength": 0.0671502376144354,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10086,7 +9862,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.09048613579250163,
+    "strength": 0.08505696764495153,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10142,7 +9918,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.016365135401088977,
+    "strength": 0.014830903957236886,
     "ease": 1.6,
     "reactivations": 1
   },
@@ -10198,7 +9974,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.0857237075928962,
+    "strength": 0.08058028513732242,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10254,7 +10030,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.08381873631305407,
+    "strength": 0.07878961213427083,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10310,7 +10086,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.1366457503223432,
+    "strength": 0.1287623416499003,
     "ease": 2.6,
     "reactivations": 1
   },
@@ -10366,7 +10142,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.07143642299408022,
+    "strength": 0.0671502376144354,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10422,7 +10198,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.07810382247352768,
+    "strength": 0.07341759312511602,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10478,7 +10254,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.07619885119368557,
+    "strength": 0.07162692012206442,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10534,7 +10310,7 @@
     "occurrence_history": [
       "2026-10-20T23:01:15.521429+00:00"
     ],
-    "strength": 0.06667399479447485,
+    "strength": 0.06267355510680635,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10592,7 +10368,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.0970164187334724,
+    "strength": 0.09119543360946405,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10650,7 +10426,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.09917233914977183,
+    "strength": 0.09322199880078554,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10708,7 +10484,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.09486049831717303,
+    "strength": 0.08916886841814266,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10766,7 +10542,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.09378253810902334,
+    "strength": 0.08815558582248194,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10824,7 +10600,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.08084701561122706,
+    "strength": 0.07599619467455343,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10882,7 +10658,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.07761313498677798,
+    "strength": 0.0729563468875713,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10940,7 +10716,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.08408089623567612,
+    "strength": 0.07903604246153555,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -10998,7 +10774,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.08623681665197552,
+    "strength": 0.08106260765285699,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11056,7 +10832,7 @@
     "occurrence_history": [
       "2026-10-22T04:59:19.176089+00:00"
     ],
-    "strength": 0.07869109519492762,
+    "strength": 0.07396962948323196,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11107,7 +10883,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.1055024884572041,
+    "strength": 0.09917233914977185,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11158,7 +10934,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.10894278699385208,
+    "strength": 0.10240621977422096,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11209,7 +10985,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.10320895609943874,
+    "strength": 0.09701641873347241,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11260,7 +11036,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.10091542374167345,
+    "strength": 0.09486049831717303,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11311,7 +11087,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.10091542374167345,
+    "strength": 0.09486049831717303,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11362,7 +11138,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.09747512520502553,
+    "strength": 0.09162661769272398,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11413,7 +11189,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.09976865756279084,
+    "strength": 0.09378253810902339,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11464,7 +11240,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.09747512520502553,
+    "strength": 0.09162661769272398,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11515,7 +11291,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.09174129431061226,
+    "strength": 0.08623681665197552,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11566,7 +11342,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.086007463416199,
+    "strength": 0.08084701561122705,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11617,7 +11393,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.09403482666837755,
+    "strength": 0.0883927370682749,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11668,7 +11444,7 @@
     "occurrence_history": [
       "2026-10-22T23:00:51.295215+00:00"
     ],
-    "strength": 0.08944776195284693,
+    "strength": 0.0840808962356761,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11725,7 +11501,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.02325900063966874,
+    "strength": 0.021206735877345027,
     "ease": 1.6999999999999995,
     "reactivations": 0
   },
@@ -11782,7 +11558,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.13727560475193507,
+    "strength": 0.12643805700836128,
     "ease": 1.9,
     "reactivations": 4
   },
@@ -11839,7 +11615,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.1055024884572041,
+    "strength": 0.09917233914977185,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11896,7 +11672,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.10320895609943874,
+    "strength": 0.09701641873347241,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -11953,7 +11729,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.10091542374167345,
+    "strength": 0.09486049831717303,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12010,7 +11786,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.06260991391627406,
+    "strength": 0.056348922524646655,
     "ease": 1.5000000000000002,
     "reactivations": 7
   },
@@ -12067,7 +11843,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.12853328779772127,
+    "strength": 0.1204999573103637,
     "ease": 2.4,
     "reactivations": 1
   },
@@ -12124,7 +11900,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.00670546871855314,
+    "strength": 0.005931760789489315,
     "ease": 1.3,
     "reactivations": 1
   },
@@ -12181,7 +11957,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.10091542374167345,
+    "strength": 0.09486049831717303,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12238,7 +12014,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.10320895609943874,
+    "strength": 0.09701641873347241,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12295,7 +12071,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.09403482666837755,
+    "strength": 0.0883927370682749,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12352,7 +12128,7 @@
     "occurrence_history": [
       "2026-10-23T23:01:06.896912+00:00"
     ],
-    "strength": 0.09174129431061226,
+    "strength": 0.08623681665197552,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12394,7 +12170,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.1142093976252529,
+    "strength": 0.10735683376773772,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12436,7 +12212,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.11680506575309954,
+    "strength": 0.10979676180791356,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12478,7 +12254,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.11031589543348293,
+    "strength": 0.10369694170747393,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12520,7 +12296,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.1038267251138663,
+    "strength": 0.09759712160703432,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12562,7 +12338,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.11031589543348293,
+    "strength": 0.10369694170747393,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12604,7 +12380,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.10642239324171293,
+    "strength": 0.10003704964721014,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12646,7 +12422,7 @@
     "occurrence_history": [
       "2026-10-24T23:00:50.397633+00:00"
     ],
-    "strength": 0.11291156356132961,
+    "strength": 0.10613686974764981,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12696,7 +12472,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.056479041576307946,
+    "strength": 0.05177245477828228,
     "ease": 1.8,
     "reactivations": 1
   },
@@ -12746,7 +12522,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.13953625630683145,
+    "strength": 0.13116408092842155,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12796,7 +12572,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.22045329814654768,
+    "strength": 0.20667496701238847,
     "ease": 2.4,
     "reactivations": 3
   },
@@ -12846,7 +12622,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.13219224281699815,
+    "strength": 0.12426070824797826,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12896,7 +12672,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.13219224281699815,
+    "strength": 0.12426070824797826,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12946,7 +12722,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.12925463742106486,
+    "strength": 0.12149935917580096,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -12996,7 +12772,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.10316534425001599,
+    "strength": 0.09613134350569673,
     "ease": 2.1999999999999997,
     "reactivations": 1
   },
@@ -13046,7 +12822,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.12044182123326498,
+    "strength": 0.11321531195926908,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13096,7 +12872,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.1175042158373317,
+    "strength": 0.11045396288709179,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13146,7 +12922,7 @@
     "occurrence_history": [
       "2026-10-26T20:26:53.542977+00:00"
     ],
-    "strength": 0.10575379425359857,
+    "strength": 0.09940856659838264,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13185,7 +12961,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.140630045549998,
+    "strength": 0.13219224281699812,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13224,7 +13000,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.0778568434560747,
+    "strength": 0.07007115911046723,
     "ease": 1.5000000000000002,
     "reactivations": 5
   },
@@ -13263,7 +13039,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.13281726524166487,
+    "strength": 0.12484822932716497,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13302,7 +13078,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.14375515767333136,
+    "strength": 0.13512984821293147,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13341,7 +13117,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.13750493342666475,
+    "strength": 0.12925463742106486,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13380,7 +13156,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.12500448493333163,
+    "strength": 0.11750421583733173,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13419,7 +13195,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.11719170462499842,
+    "strength": 0.11016020234749851,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13458,7 +13234,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.10937892431666517,
+    "strength": 0.10281618885766523,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13497,7 +13273,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.12812959705666488,
+    "strength": 0.12044182123326498,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13536,7 +13312,7 @@
     "occurrence_history": [
       "2026-10-27T06:38:11.577928+00:00"
     ],
-    "strength": 0.12187937280999835,
+    "strength": 0.11456661044139844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13590,7 +13366,7 @@
       "2026-10-28T06:50:45.847647+00:00",
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15293101880141635,
+    "strength": 0.14375515767333136,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13634,7 +13410,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.1496064314361681,
+    "strength": 0.14063004554999803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13678,7 +13454,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.1496064314361681,
+    "strength": 0.14063004554999803,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13722,7 +13498,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.14628184407091996,
+    "strength": 0.13750493342666475,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13766,7 +13542,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.14129496302304773,
+    "strength": 0.13281726524166484,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13810,7 +13586,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.1296589072446791,
+    "strength": 0.12187937280999835,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13854,7 +13630,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.12467202619680685,
+    "strength": 0.11719170462499842,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13898,7 +13674,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.11636055778368638,
+    "strength": 0.1093789243166652,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -13942,7 +13718,7 @@
     "occurrence_history": [
       "2026-10-28T06:50:45.847647+00:00"
     ],
-    "strength": 0.2079290657854653,
+    "strength": 0.19545332183833738,
     "ease": 2.5,
     "reactivations": 2
   },
@@ -13987,7 +13763,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.15791789984928864,
+    "strength": 0.14844282585833132,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14032,7 +13808,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.15293101880141635,
+    "strength": 0.14375515767333136,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14077,7 +13853,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.15293101880141635,
+    "strength": 0.14375515767333136,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14122,7 +13898,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.25493703883784025,
+    "strength": 0.24022913275104177,
     "ease": 2.6,
     "reactivations": 3
   },
@@ -14167,7 +13943,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.14628184407091996,
+    "strength": 0.13750493342666475,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14212,7 +13988,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.14129496302304773,
+    "strength": 0.13281726524166484,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14257,7 +14033,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.14129496302304773,
+    "strength": 0.13281726524166484,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14302,7 +14078,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.13298349460992728,
+    "strength": 0.12500448493333163,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14347,7 +14123,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.12467202619680685,
+    "strength": 0.11719170462499842,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14392,7 +14168,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.1296589072446791,
+    "strength": 0.12187937280999835,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14437,7 +14213,7 @@
     "occurrence_history": [
       "2026-10-28T23:01:23.605357+00:00"
     ],
-    "strength": 0.1363080819751754,
+    "strength": 0.12812959705666488,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14470,7 +14246,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.16269257319299615,
+    "strength": 0.15293101880141638,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14503,7 +14279,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15915577812358314,
+    "strength": 0.14960643143616814,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14536,7 +14312,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15561898305417018,
+    "strength": 0.14628184407091996,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14569,7 +14345,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15915577812358314,
+    "strength": 0.14960643143616814,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14602,7 +14378,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15385058551946376,
+    "strength": 0.14461955038829594,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14635,7 +14411,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.15031379045005078,
+    "strength": 0.14129496302304773,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14668,7 +14444,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.14147180277651836,
+    "strength": 0.13298349460992726,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14701,7 +14477,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.1202510323600406,
+    "strength": 0.11303597041843816,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14734,7 +14510,7 @@
     "occurrence_history": [
       "2026-10-29T23:01:18.450425+00:00"
     ],
-    "strength": 0.12732462249886656,
+    "strength": 0.11968514514893455,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14774,7 +14550,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.17307720552446398,
+    "strength": 0.16269257319299613,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14814,7 +14590,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.17307720552446398,
+    "strength": 0.16269257319299613,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14854,7 +14630,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.16931465757827993,
+    "strength": 0.1591557781235831,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14894,7 +14670,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.15990828771282,
+    "strength": 0.1503137904500508,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14934,7 +14710,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.15426446579354394,
+    "strength": 0.1450085978459313,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -14974,7 +14750,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.15990828771282,
+    "strength": 0.1503137904500508,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15014,7 +14790,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.15050191784735997,
+    "strength": 0.14147180277651836,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15054,7 +14830,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.14109554798190002,
+    "strength": 0.13262981510298602,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15094,7 +14870,7 @@
     "occurrence_history": [
       "2026-10-30T23:01:17.419640+00:00"
     ],
-    "strength": 0.12228280825097998,
+    "strength": 0.11494583975592118,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15132,7 +14908,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.18412468672815316,
+    "strength": 0.17307720552446396,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15170,7 +14946,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.1801219761471063,
+    "strength": 0.1693146575782799,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15208,7 +14984,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.17611926556605953,
+    "strength": 0.16555210963209596,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15246,7 +15022,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.17011519969448935,
+    "strength": 0.15990828771281998,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15284,7 +15060,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.14409758091768513,
+    "strength": 0.135451726062624,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15322,7 +15098,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.16010842324187233,
+    "strength": 0.15050191784735997,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15360,7 +15136,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.14009487033663828,
+    "strength": 0.13168917811644,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15398,7 +15174,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.15010164678925536,
+    "strength": 0.14109554798190002,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15436,7 +15212,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.1641111338229191,
+    "strength": 0.15426446579354394,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15474,7 +15250,7 @@
     "occurrence_history": [
       "2026-10-31T23:01:27.819667+00:00"
     ],
-    "strength": 0.13609215975559147,
+    "strength": 0.12792663017025596,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15510,7 +15286,7 @@
     "occurrence_history": [
       "2026-11-01T23:01:35.209632+00:00"
     ],
-    "strength": 0.19587732630654595,
+    "strength": 0.18412468672815321,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15546,7 +15322,7 @@
     "occurrence_history": [
       "2026-11-01T23:01:35.209632+00:00"
     ],
-    "strength": 0.18736092081495692,
+    "strength": 0.1761192655660595,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15582,7 +15358,7 @@
     "occurrence_history": [
       "2026-11-01T23:01:35.209632+00:00"
     ],
-    "strength": 0.18097361669626524,
+    "strength": 0.17011519969448932,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15618,7 +15394,7 @@
     "occurrence_history": [
       "2026-11-01T23:01:35.209632+00:00"
     ],
-    "strength": 0.15968260296729295,
+    "strength": 0.15010164678925536,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15654,7 +15430,7 @@
     "occurrence_history": [
       "2026-11-01T23:01:35.209632+00:00"
     ],
-    "strength": 0.1532952988486012,
+    "strength": 0.14409758091768513,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15697,7 +15473,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.16987510953967339,
+    "strength": 0.159682602967293,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15740,7 +15516,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.19252512414496306,
+    "strength": 0.18097361669626524,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15783,7 +15559,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.19252512414496306,
+    "strength": 0.18097361669626524,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15826,7 +15602,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1812001168423182,
+    "strength": 0.1703281098317791,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15869,7 +15645,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1812001168423182,
+    "strength": 0.1703281098317791,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15912,7 +15688,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.19252512414496306,
+    "strength": 0.18097361669626524,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15955,7 +15731,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.16987510953967339,
+    "strength": 0.159682602967293,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -15998,7 +15774,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1812001168423182,
+    "strength": 0.1703281098317791,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16041,7 +15817,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1812001168423182,
+    "strength": 0.1703281098317791,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16084,7 +15860,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1585501022370284,
+    "strength": 0.1490370961028067,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16127,7 +15903,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1812001168423182,
+    "strength": 0.1703281098317791,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16170,7 +15946,7 @@
     "occurrence_history": [
       "2026-11-03T05:40:23.955844+00:00"
     ],
-    "strength": 0.1585501022370284,
+    "strength": 0.1490370961028067,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16223,7 +15999,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.22168099400921906,
+    "strength": 0.20838013436866587,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16276,7 +16052,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.2168618419655403,
+    "strength": 0.20385013144760786,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16329,7 +16105,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.2168618419655403,
+    "strength": 0.20385013144760786,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16382,7 +16158,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.19276608174714704,
+    "strength": 0.1812001168423182,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16435,7 +16211,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.20481396185634368,
+    "strength": 0.19252512414496306,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16488,7 +16264,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.21204268992186165,
+    "strength": 0.19932012852654993,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16541,7 +16317,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.17348947357243236,
+    "strength": 0.1630801051580864,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16594,7 +16370,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.20481396185634368,
+    "strength": 0.19252512414496306,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16647,7 +16423,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.2168618419655403,
+    "strength": 0.20385013144760786,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16700,7 +16476,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.16385116948507494,
+    "strength": 0.15402009931597044,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16753,7 +16529,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.18071820163795038,
+    "strength": 0.16987510953967339,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16806,7 +16582,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.19276608174714704,
+    "strength": 0.1812001168423182,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16859,7 +16635,7 @@
     "occurrence_history": [
       "2026-11-03T23:00:36.530611+00:00"
     ],
-    "strength": 0.19758523379082565,
+    "strength": 0.18573011976337608,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16912,7 +16688,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.2168618419655403,
+    "strength": 0.20385013144760786,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -16965,7 +16741,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.21204268992186165,
+    "strength": 0.19932012852654993,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17018,7 +16794,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.19276608174714704,
+    "strength": 0.1812001168423182,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17071,7 +16847,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.19758523379082565,
+    "strength": 0.18573011976337608,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17124,7 +16900,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.17348947357243236,
+    "strength": 0.1630801051580864,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17177,7 +16953,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.20481396185634368,
+    "strength": 0.19252512414496306,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17230,7 +17006,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.18794692970346835,
+    "strength": 0.17667011392126025,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17283,7 +17059,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.16867032152875364,
+    "strength": 0.1585501022370284,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17336,7 +17112,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.19276608174714704,
+    "strength": 0.1812001168423182,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17389,7 +17165,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.20481396185634368,
+    "strength": 0.19252512414496306,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17442,7 +17218,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.18071820163795038,
+    "strength": 0.16987510953967339,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17495,7 +17271,7 @@
     "occurrence_history": [
       "2026-11-04T23:01:02.188066+00:00"
     ],
-    "strength": 0.15662244141955695,
+    "strength": 0.14722509493438354,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17543,7 +17319,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.22557732970410818,
+    "strength": 0.21204268992186165,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17591,7 +17367,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.23070408719738336,
+    "strength": 0.21686184196554034,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17639,7 +17415,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.22301395095747067,
+    "strength": 0.20963311390002243,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17687,7 +17463,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.21019705722428259,
+    "strength": 0.19758523379082565,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17735,7 +17511,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.2178871934641954,
+    "strength": 0.20481396185634368,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17783,7 +17559,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.19225340599781957,
+    "strength": 0.18071820163795038,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17831,7 +17607,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.17943651226463148,
+    "strength": 0.16867032152875358,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17879,7 +17655,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.20507029973100752,
+    "strength": 0.19276608174714704,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17927,7 +17703,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.18456326975790677,
+    "strength": 0.17348947357243236,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -17975,7 +17751,7 @@
     "occurrence_history": [
       "2026-11-05T23:01:32.476155+00:00"
     ],
-    "strength": 0.19225340599781957,
+    "strength": 0.18071820163795038,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18015,7 +17791,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.2552934921956861,
+    "strength": 0.2399758826639449,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18055,7 +17831,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.2610956170183153,
+    "strength": 0.24542987999721635,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18095,7 +17871,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.25239242978437154,
+    "strength": 0.23724888399730923,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18135,7 +17911,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.2465903049617423,
+    "strength": 0.23179488666403775,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18175,7 +17951,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.23788711772779833,
+    "strength": 0.22361389066413043,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18215,7 +17991,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.21757968084859616,
+    "strength": 0.2045248999976804,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18255,7 +18031,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.2088764936146523,
+    "strength": 0.19634390399777316,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18295,7 +18071,7 @@
     "occurrence_history": [
       "2026-11-06T23:01:26.801869+00:00"
     ],
-    "strength": 0.22628286808253995,
+    "strength": 0.21270589599758757,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18336,7 +18112,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18377,7 +18153,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18418,7 +18194,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18459,7 +18235,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.2864094633749246,
+    "strength": 0.2692248955724291,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18500,7 +18276,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18541,7 +18317,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18582,7 +18358,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.24449588336883818,
+    "strength": 0.22982613036670785,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18623,7 +18399,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.25148148003651927,
+    "strength": 0.2363925912343281,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18664,7 +18440,7 @@
     "occurrence_history": [
       "2026-11-09T14:15:25.963480+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18692,7 +18468,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18720,7 +18496,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18748,7 +18524,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.3038734550441275,
+    "strength": 0.2856410477414798,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18776,7 +18552,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18804,7 +18580,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18832,7 +18608,7 @@
     "occurrence_history": [
       "2026-11-10T02:24:34.103962+00:00"
     ],
-    "strength": 0.24449588336883818,
+    "strength": 0.22982613036670785,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18867,7 +18643,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18902,7 +18678,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18937,7 +18713,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.3038734550441275,
+    "strength": 0.2856410477414798,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -18972,7 +18748,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19007,7 +18783,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19042,7 +18818,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.25148148003651927,
+    "strength": 0.2363925912343281,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19077,7 +18853,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.2864094633749246,
+    "strength": 0.2692248955724291,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19112,7 +18888,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19147,7 +18923,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19182,7 +18958,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.27243827003956256,
+    "strength": 0.2560919738371888,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19217,7 +18993,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19252,7 +19028,7 @@
     "occurrence_history": [
       "2026-11-11T02:00:18.900008+00:00"
     ],
-    "strength": 0.3038734550441275,
+    "strength": 0.2856410477414798,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19281,7 +19057,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19310,7 +19086,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19339,7 +19115,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.24449588336883818,
+    "strength": 0.22982613036670785,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19368,7 +19144,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19397,7 +19173,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19426,7 +19202,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19455,7 +19231,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19484,7 +19260,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19513,7 +19289,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19542,7 +19318,7 @@
     "occurrence_history": [
       "2026-11-11T23:20:13.430044+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19581,7 +19357,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19620,7 +19396,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.3038734550441275,
+    "strength": 0.2856410477414798,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19659,7 +19435,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19698,7 +19474,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19737,7 +19513,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19776,7 +19552,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.25148148003651927,
+    "strength": 0.2363925912343281,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19815,7 +19591,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19854,7 +19630,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.24449588336883818,
+    "strength": 0.22982613036670785,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19893,7 +19669,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19932,7 +19708,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2864094633749246,
+    "strength": 0.2692248955724291,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -19971,7 +19747,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20010,7 +19786,7 @@
     "occurrence_history": [
       "2026-11-17T05:43:55.042693+00:00"
     ],
-    "strength": 0.25148148003651927,
+    "strength": 0.2363925912343281,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20041,7 +19817,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20072,7 +19848,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20103,7 +19879,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20134,7 +19910,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.2794238667072437,
+    "strength": 0.26265843470480904,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20165,7 +19941,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20196,7 +19972,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20227,7 +20003,7 @@
     "occurrence_history": [
       "2026-11-19T23:01:14.345352+00:00"
     ],
-    "strength": 0.22703189169963542,
+    "strength": 0.2134099781976573,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20259,7 +20035,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20291,7 +20067,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20323,7 +20099,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.3318158417148519,
+    "strength": 0.31190689121196075,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20355,7 +20131,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20387,7 +20163,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20419,7 +20195,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20451,7 +20227,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20483,7 +20259,7 @@
     "occurrence_history": [
       "2026-11-20T23:01:08.932600+00:00"
     ],
-    "strength": 0.22703189169963542,
+    "strength": 0.2134099781976573,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20517,7 +20293,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20551,7 +20327,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.31435185004564903,
+    "strength": 0.29549073904291007,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20585,7 +20361,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.30736625337796797,
+    "strength": 0.2889242781752899,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20619,7 +20395,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.32133744671333014,
+    "strength": 0.3020571999105303,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20653,7 +20429,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.3038734550441275,
+    "strength": 0.2856410477414798,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20687,7 +20463,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.2619598750380409,
+    "strength": 0.24624228253575844,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20721,7 +20497,7 @@
     "occurrence_history": [
       "2026-11-21T23:00:54.604769+00:00"
     ],
-    "strength": 0.2968878583764464,
+    "strength": 0.27907458687385955,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20763,7 +20539,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.47398130040351144,
+    "strength": 0.44554242237930075,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20805,7 +20581,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.48475360268540946,
+    "strength": 0.4556683865242849,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20847,7 +20623,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.47398130040351144,
+    "strength": 0.44554242237930075,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20889,7 +20665,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.4955259049673074,
+    "strength": 0.46579435066926894,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20931,7 +20707,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.45782284698066444,
+    "strength": 0.4303534761618246,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -20973,7 +20749,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.4308920912759196,
+    "strength": 0.4050385657993644,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21015,7 +20791,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.48475360268540946,
+    "strength": 0.4556683865242849,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21057,7 +20833,7 @@
     "occurrence_history": [
       "2026-11-23T16:04:57.157031+00:00"
     ],
-    "strength": 0.4039613355711746,
+    "strength": 0.37972365543690406,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21101,7 +20877,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.4955259049673074,
+    "strength": 0.46579435066926894,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21145,7 +20921,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.48475360268540946,
+    "strength": 0.4556683865242849,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21189,7 +20965,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.47398130040351144,
+    "strength": 0.44554242237930075,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21233,7 +21009,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.45782284698066444,
+    "strength": 0.4303534761618246,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21277,7 +21053,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.4039613355711746,
+    "strength": 0.37972365543690406,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21321,7 +21097,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.4308920912759196,
+    "strength": 0.4050385657993644,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21365,7 +21141,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.3878028821483276,
+    "strength": 0.36453470921942793,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21409,7 +21185,7 @@
     "occurrence_history": [
       "2026-11-24T05:16:16.771884+00:00"
     ],
-    "strength": 0.37703057986642957,
+    "strength": 0.3544087450744438,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21443,7 +21219,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.7475255999999999,
+    "strength": 0.7026740639999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21477,7 +21253,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.7475255999999999,
+    "strength": 0.7026740639999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21511,7 +21287,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.6229379999999999,
+    "strength": 0.5855617199999998,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21545,7 +21321,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.6644671999999999,
+    "strength": 0.6245991679999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21579,7 +21355,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.5814087999999998,
+    "strength": 0.5465242719999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21613,7 +21389,7 @@
     "occurrence_history": [
       "2026-11-24T23:00:42.184943+00:00"
     ],
-    "strength": 0.5398795999999999,
+    "strength": 0.5074868239999999,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21645,7 +21421,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.846,
+    "strength": 0.79524,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21677,7 +21453,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.846,
+    "strength": 0.79524,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21709,7 +21485,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.705,
+    "strength": 0.6627,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21741,7 +21517,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.7989999999999999,
+    "strength": 0.7510599999999998,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21773,7 +21549,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.752,
+    "strength": 0.70688,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21805,7 +21581,7 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
-    "strength": 0.705,
+    "strength": 0.6627,
     "ease": 2.5,
     "reactivations": 0
   },
@@ -21837,7 +21613,217 @@
     "occurrence_history": [
       "2026-11-25T23:00:25.557699+00:00"
     ],
+    "strength": 0.6185199999999998,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "ad70199b-86e0-4963-a99a-5ff46a888bec",
+    "pattern": "When the agent proposes a goal statement, it must immediately follow with a tool call toward that goal rather than ending the turn; a proposal is not a stopping point.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "approach",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
+    "strength": 0.846,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "a2ea8484-d0c8-4bf9-9176-00ebe084f1f1",
+    "pattern": "When referencing issue numbers, commit hashes, or task IDs in a message to the user, each identifier must be accompanied by a plain-language description of what it represents; bare IDs alone are insufficient.",
+    "valence": "negative",
+    "confidence": 0.9,
+    "category": "user-preference",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
+    "strength": 0.846,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "362210d8-f822-4e24-b08c-8bc9d84aed64",
+    "pattern": "Task tracking state must be reconciled with actual work done before stopping; when many edits occur without task list updates, the list drifts and becomes misleading.",
+    "valence": "negative",
+    "confidence": 0.85,
+    "category": "approach",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
+    "strength": 0.7989999999999999,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "61999b8c-8562-4c85-9034-a53a7544ede7",
+    "pattern": "When a code path has partial gate coverage (e.g., some card types are checked but not others), the user expects full modular coverage rather than a targeted one-off fix for the specific broken case.",
+    "valence": "positive",
+    "confidence": 0.75,
+    "category": "architecture",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
+    "strength": 0.705,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "cb847c18-d4ac-420f-b0a5-132577dd5a8d",
+    "pattern": "Combining shaping and validation into a single output module is preferred over a pure gate-only approach, since both concerns operate on the same data surface.",
+    "valence": "positive",
+    "confidence": 0.7,
+    "category": "architecture",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
     "strength": 0.6579999999999999,
+    "ease": 2.5,
+    "reactivations": 0
+  },
+  {
+    "id": "6cb5d2cd-8b25-40ca-ab3e-bfb72630f634",
+    "pattern": "When a background test suite fails repeatedly across multiple consecutive runs, the agent should diagnose the root cause before re-queuing the same command again.",
+    "valence": "negative",
+    "confidence": 0.75,
+    "category": "approach",
+    "source_sessions": [
+      "e7117a9c-2e00-43a9-a6a1-709da130a149",
+      "819bd7ad-b5b5-4abc-a09a-4f8c1a5d9f3c",
+      "11d3fe2c-89bd-4d13-9375-87d11f043dc5",
+      "fa2136e4-c69d-4f81-b925-6e4bf886681c",
+      "de6572c8-9702-45a4-8e44-900e81dcd4df",
+      "4466dffe-9a8d-4383-849c-5e78c0fd0df4",
+      "002ba4a1-80a0-44c3-9b35-09697dbfd7e5",
+      "9ceb30dd-a63d-45f0-a239-e498136d9c28",
+      "27554db0-fdf3-48b8-b9fd-897f8bac65e3"
+    ],
+    "source_projects": [
+      "-Users-alcatraz627-Code-Versable-slack-automation",
+      "-Users-alcatraz627-Code-Versable-aep-scrape",
+      "-Users-alcatraz627-Code-Versable",
+      "-Users-alcatraz627--claude",
+      "Versable",
+      ".claude"
+    ],
+    "occurrences": 1,
+    "first_seen": "2026-11-26T23:00:16.074879+00:00",
+    "last_seen": "2026-11-26T23:00:16.074879+00:00",
+    "occurrence_history": [
+      "2026-11-26T23:00:16.074879+00:00"
+    ],
+    "strength": 0.705,
     "ease": 2.5,
     "reactivations": 0
   }

@@ -1,25 +1,26 @@
 {
-  "last_updated": "2026-11-19T08:49:09.374672Z",
-  "average_depth": 199.0,
-  "average_breadth": 2.5,
-  "fixation_rate": 0.35,
-  "assumption_rate": 0.42,
-  "overconfidence_rate": 0.22,
+  "last_updated": "2026-11-26T23:02:13.822513Z",
+  "average_depth": 3.0,
+  "average_breadth": 2.0,
+  "fixation_rate": 0.4,
+  "assumption_rate": 0.65,
+  "overconfidence_rate": 0.45,
   "common_assumptions": [
-    "Git branch and working tree are in expected state before operations",
-    "External services and test infrastructure are available without verification",
-    "File paths and directory structures match prior knowledge from earlier in the chain",
-    "Previously read file contents remain current across long multi-step chains"
+    "File and service state matches expectations without prior verification",
+    "Previous tool call succeeded before proceeding to dependent steps",
+    "Git working tree is clean before branch operations",
+    "External services (GCP, GitHub, Render) are reachable and authenticated",
+    "Initial problem framing is correct and does not need revisiting mid-chain"
   ],
   "strength_patterns": [
-    "Multi-source cross-referencing (PR view, diff, comments, commits) before committing to decisions",
-    "Iterative test-and-verify loops catch regressions before pushing to remotes",
-    "Explicit state inspection (git status, pr view, lsof) before destructive or hard-to-reverse steps"
+    "Concrete verification loops: each significant mutation is followed by a status or log read to confirm the effect",
+    "Parallel multi-file exploration: related files are read in a single turn rather than sequentially gated on each result",
+    "Iterative test-driven refinement: failing test output is used to target the next edit rather than re-reading the whole module"
   ],
   "weakness_patterns": [
-    "Repeated reads of the same file without intervening changes indicate stalled or looping reasoning",
-    "Long chains accumulate context drift causing late-chain tool calls to re-verify early findings redundantly",
-    "Alternatives are rarely explored; first viable path is pursued linearly with low branching breadth"
+    "Fixation on the same file across many steps without extracting new information (scraper.utils.ts read 11+ times in fd5c15db; format-gate-stop.sh read/edited repeatedly in fcc859da)",
+    "Single thinking block at chain start with no mid-chain re-evaluation, even when tool results contradict the initial framing",
+    "High assumption carry-through: errors from early tool calls are not propagated as uncertainty into later steps, leading to silent compounding of stale state"
   ],
   "trend": {
     "calibration_improving": false,

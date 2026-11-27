@@ -1552,6 +1552,28 @@
     ]
   },
   {
+    "id": "01a46547-5b05-4cc2-ab60-272e6caa06d9",
+    "patterns_linked": [
+      "9e780b25-5d42-4d27-95ee-87da91cd69b7",
+      "802b5e0d-0c2b-4380-a091-a8842f0eced1",
+      "9fa76cc2-3e1f-42bd-a0b5-1bf807000fa0",
+      "656256b2-8f86-4528-a0cd-3abbb578786d"
+    ],
+    "hypothesis": "The agent systematically conflates 'checked the representation' with 'verified the reality' across UI, code execution, URL liveness, and remote environments — a single epistemic failure (treating proxies as ground truth) manifesting in four domains.",
+    "confidence": 0.82,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "bc7ba8651cb1bf3f",
+      "4fec59fcb649fe56",
+      "58ec32d44c50d1c9",
+      "50314070c378ade0"
+    ]
+  },
+  {
     "id": "77b6d5a0-cf4a-4d8b-91b5-d1e2c806dbb3",
     "patterns_linked": [
       "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b",
@@ -3462,6 +3484,26 @@
     ]
   },
   {
+    "id": "9935c621-9341-46dd-875c-20487cdec533",
+    "patterns_linked": [
+      "6414f0ef-cac0-41fb-82f4-843fd5a85a8d",
+      "64b242ba-6942-4c9b-8792-98a25649d6ea",
+      "deb2807b-986f-4cc7-a8fa-18525e3a6273"
+    ],
+    "hypothesis": "The agent treats stating an intention as equivalent to completing it — proposing a goal without acting, receiving a message without answering, declaring a stop condition met while work is still running — all variants of 'announcing X substitutes for doing X'.",
+    "confidence": 0.75,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "beedd341c12d17b6",
+      "b5341d52939cc77e",
+      "26c2a0944ac5e873"
+    ]
+  },
+  {
     "id": "ea33ebce-ddca-4dd5-8055-4b396330b444",
     "patterns_linked": [
       "64b242ba-6942-4c9b-8792-98a25649d6ea",
@@ -4568,6 +4610,46 @@
     ]
   },
   {
+    "id": "5d876011-6825-411f-adcd-a75278890f15",
+    "patterns_linked": [
+      "362210d8-f822-4e24-b08c-8bc9d84aed64",
+      "bcfea430-fd64-4d9e-b5ee-dcdbc352a05b",
+      "7d9a5cb9-30b8-4456-993f-1c8ee04b53ea"
+    ],
+    "hypothesis": "Task-tracking drift, premature completion claims, and optimistic plans before adversarial review share a root cause: the agent's internal model of progress outruns actual validated state, and it reports from the model rather than from evidence.",
+    "confidence": 0.72,
+    "actionable": true,
+    "suggested_rule": "Always reconcile claimed state against tool-verified state before any completion or readiness assertion, including mid-task status updates",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "54ab07e0949d6005",
+      "f685d025a7a48e60",
+      "8da765fb85eabf0f"
+    ]
+  },
+  {
+    "id": "1a5106c8-0546-4c96-9ab1-81c9bf95d207",
+    "patterns_linked": [
+      "12a84358-2c88-49fe-a8d2-bf219a68786d",
+      "441bc040-713f-4c51-980f-6b73bf4c7672",
+      "63edd773-aa7b-4681-9728-01f1a06a1186"
+    ],
+    "hypothesis": "Post-action verification steps (PR review gates, TUI smoke tests, browser-based feature testing) are consistently skipped not because the agent is unaware of them but because completion pressure causes it to treat the edit as the deliverable rather than the validated outcome.",
+    "confidence": 0.72,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "5398cdda6153a543",
+      "6eee462396be00ad",
+      "9b4aa82e996a8e4c"
+    ]
+  },
+  {
     "id": "c797cc05-71ad-4a6e-849a-c77f988f81e1",
     "patterns_linked": [
       "f22e7974-dbe3-4051-ad5d-666239d02f2c",
@@ -5190,6 +5272,26 @@
     ]
   },
   {
+    "id": "b006b819-cedc-41f2-8eab-69ac2d64d7d6",
+    "patterns_linked": [
+      "7fdb76a5-1dd7-4500-8f52-f323e3d991e5",
+      "a2ea8484-d0c8-4bf9-9176-00ebe084f1f1",
+      "907bb0a3-dbea-4c9e-be1b-8b5a671198ac"
+    ],
+    "hypothesis": "Three patterns share the same failure: information exists in the system but is not surfaced in a form the reader can use — tool output not shown in reply text, bare IDs without descriptions, and docs written as internal ledgers rather than layered for humans.",
+    "confidence": 0.7,
+    "actionable": true,
+    "suggested_rule": "Always translate internal-facing references (tool results, IDs, file:line coordinates) into reader-facing prose before including them in any user-visible output or document",
+    "promoted": true,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "2d3051cb4df81dcb",
+      "6c6dacda7f3b4ecb",
+      "6c4e6536543e6709"
+    ]
+  },
+  {
     "id": "1795a333-5013-4f44-99af-c120cb53789f",
     "patterns_linked": [
       "748e5f47-8372-48bc-827e-bda5d04d74da",
@@ -5750,6 +5852,26 @@
     ]
   },
   {
+    "id": "dbeb40e8-9247-42dd-957b-9adf1f53a9ca",
+    "patterns_linked": [
+      "c43d77a8-64be-48da-9691-f4e179249cbe",
+      "58d1f23e-5d8f-400f-bf9d-dc5b40befb0d",
+      "256894f1-fb54-4569-8025-dd5d51ced89c"
+    ],
+    "hypothesis": "The agent generates confident claims from cached/inferred knowledge when grounding tools are available but unused — whether about deploy state, file existence, or document authority — revealing a preference for fluency over verification that must be structurally constrained.",
+    "confidence": 0.68,
+    "actionable": false,
+    "suggested_rule": null,
+    "promoted": false,
+    "dismissed": false,
+    "auto_intention_id": null,
+    "patterns_linked_stable": [
+      "8c1e529b2a1d92e4",
+      "497c1347315e04d9",
+      "1599038879619491"
+    ]
+  },
+  {
     "id": "bfa92c3e-2227-4c0c-b3cc-948c2d407379",
     "patterns_linked": [
       "65879bfc-ccdc-44d4-b384-799b1679fa4d",
@@ -5987,124 +6109,6 @@
       "cab740dfd60d7c54",
       "4150862173f7781b",
       "1599038879619491"
-    ]
-  },
-  {
-    "id": "8a5285a3-dda4-49b3-921b-492436633104",
-    "patterns_linked": [
-      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
-      "7b48ca3d-941e-48a6-9429-742fcfcdfa04",
-      "856b8d58-30cb-4025-b7b4-5e7a70de9b15"
-    ],
-    "hypothesis": "The agent treats UI as a container for correct data rather than a communication medium with its own coherence requirements; visual hierarchy failures, contradictory signals, and per-page component variants all stem from optimizing for data correctness while ignoring perceptual coherence.",
-    "confidence": 0.65,
-    "actionable": false,
-    "suggested_rule": null,
-    "promoted": false,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "ca82efc1a26d2202",
-      "b953c0740743065e",
-      "d3c4790d5c18a071"
-    ]
-  },
-  {
-    "id": "d693b7dc-fb2a-4c35-9d44-ca0623988892",
-    "patterns_linked": [
-      "c504de59-e425-4b9a-b808-d1697aaae11d",
-      "3dbdfc3c-1511-4d09-b563-21fd6b76a771"
-    ],
-    "hypothesis": "The agent has a merging instinct that collapses distinct parallel outputs into a single synthesis, violating workflows that depend on independent comparison; this is the same impulse whether the parallel outputs are two agent plans or two user-provided documents.",
-    "confidence": 0.65,
-    "actionable": false,
-    "suggested_rule": null,
-    "promoted": false,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "cab740dfd60d7c54",
-      "4150862173f7781b"
-    ]
-  },
-  {
-    "id": "64515234-77d0-4df4-a2b2-c2e0c4f2de59",
-    "patterns_linked": [
-      "dca6219e-7312-4fd0-829c-f1dc49f52c99",
-      "22a8ae07-962e-41a6-aa13-1af799a4cc09",
-      "3ec5e98f-ebe7-4a46-8086-eec204e9c6cb"
-    ],
-    "hypothesis": "The agent's verbosity failures share a structural cause: it defaults to 'completeness as quality' rather than 'signal density as quality', producing bloated PRs, long replies, and multi-line blockers that all violate the user's information-density preference.",
-    "confidence": 0.65,
-    "actionable": false,
-    "suggested_rule": null,
-    "promoted": false,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "4d894ab8c1cded78",
-      "65ce513978d96fdc",
-      "1fd645bf1ccfe744"
-    ]
-  },
-  {
-    "id": "73ed24cb-bdde-4db8-a6f1-a0d24e5e27f7",
-    "patterns_linked": [
-      "53fe4f23-978b-4ec0-8b47-4376c099f138",
-      "d431ead9-2125-482c-ae45-34676488fe61",
-      "b49a05d7-0680-4af4-b8b2-49cac0952dd8"
-    ],
-    "hypothesis": "The agent over-initiates in exactly the wrong direction: it re-raises topics the user has deferred (unwanted initiative) while simultaneously appending unsolicited warnings to factual answers, yet under-initiates on routine decisions where the user wants autonomy.",
-    "confidence": 0.65,
-    "actionable": true,
-    "suggested_rule": "Always distinguish between user-deferred topics (never re-raise) and routine judgment calls (proceed autonomously) by tracking explicit deferral signals separately from silence",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "671c212e8883c950",
-      "86c1bbbe73cd6f54",
-      "65f5ecd2ab0c571b"
-    ]
-  },
-  {
-    "id": "9de78d79-edaf-4114-abd9-41f631c5a134",
-    "patterns_linked": [
-      "e32f09b4-e9e4-4de4-b3d9-12486e8e75b2",
-      "7b48ca3d-941e-48a6-9429-742fcfcdfa04",
-      "26287c1d-7182-4229-83c8-fd003cfe2429"
-    ],
-    "hypothesis": "The agent treats output formatting as cosmetic rather than functional: broken terminal links, incoherent visual hierarchy, and contradictory UI signals all stem from not modeling how the output will be consumed in its actual rendering environment.",
-    "confidence": 0.65,
-    "actionable": false,
-    "suggested_rule": null,
-    "promoted": false,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "ca82efc1a26d2202",
-      "b953c0740743065e",
-      "aa2961a6cd578ece"
-    ]
-  },
-  {
-    "id": "e4618e3d-66b8-4ad4-9308-c441b211bcd7",
-    "patterns_linked": [
-      "8c98642d-2293-43ff-a90d-5fcc41267624",
-      "939866a0-afe6-43f0-a5a0-205c40be4c99",
-      "22a8ae07-962e-41a6-aa13-1af799a4cc09"
-    ],
-    "hypothesis": "The agent defaults to an evaluative or adversarial voice in authored documents (dissing existing state, inserting banter, adding boilerplate commentary) rather than neutral factual prose, suggesting the training distribution for 'helpful writing' skews toward opinionated content that is inappropriate when the output will be read by third parties.",
-    "confidence": 0.65,
-    "actionable": true,
-    "suggested_rule": "Always assume any document the agent authors may be shared externally, and write in neutral declarative voice unless the user explicitly requests editorial tone",
-    "promoted": true,
-    "dismissed": false,
-    "auto_intention_id": null,
-    "patterns_linked_stable": [
-      "ae98f3ef5e93dfd0",
-      "367cb6df9918a92c",
-      "65ce513978d96fdc"
     ]
   }
 ]
