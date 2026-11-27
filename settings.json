@@ -656,7 +656,8 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/scripts/hooks/guard-pr-title-tags.sh"
+            "command": "~/.claude/scripts/hooks/guard-pr-title-tags.sh",
+            "timeout": 300
           }
         ]
       },
