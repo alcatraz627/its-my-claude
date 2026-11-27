@@ -87,7 +87,7 @@ right edge is what makes their width safe), and a note here.
 | Box | Drawn by |
 |---|---|
 | 🙏 atone, 🏅 affirm, 📝 proposal, 📌 pin | `python3 ~/.claude/scripts/box/record-box.py <id>`, from the stored record; a `judg-` id draws the juror-cleared atone |
-| 🛫/🛬 subagent and fleet | `scripts/hooks/subagent-box.sh`; three or more dispatches within 20 s share one fleet box, priced by `scripts/box/seat-cost.py` |
+| 🛫/🛬 subagent and fleet | `scripts/hooks/subagent-box.sh`, rendered by `scripts/box/seat-line.py`. Not a box: a header line led by 🛫 or 🛬 with every field in spaced columns, then lines that carry their own emoji (🎯 goal, 📄 out, and 🔹 ✅ ❌ ⏳ per fleet seat). Nothing is clipped; a long goal wraps under itself (owner, 2026-11-28). Three or more dispatches within 20 s share one fleet notice, priced by `scripts/box/seat-cost.py` |
 | 💾 core-dump, 🧭 catchup | the core-dump and catchup skill recipes, through `box.sh` |
 | 🎯 goal | `goal.sh box` |
 

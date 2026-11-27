@@ -20,7 +20,7 @@ set -uo pipefail
 
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null || true
 
-BOXSH="$HOME/.claude/scripts/box/box.sh"
+LINE="$HOME/.claude/scripts/box/seat-line.py"
 COST="$HOME/.claude/scripts/box/seat-cost.py"
 # Dispatches closer together than this belong to one batch: parallel Agent
 # calls in one message arrive within a second or two of each other.
@@ -50,13 +50,13 @@ fleet_out() {
     [ "$b" = "$bid" ] || continue
     n=$((n + 1))
     [ -n "$est" ] && { total=$(awk -v a="$total" -v b="$est" 'BEGIN{printf "%.2f", a+b}'); known=$((known + 1)); }
-    args+=(--row "info:$i" "$(printf '%-6s  %-6s  %s' "$model" "${est:+~\$$est}" "$desc")")
+    args+=(--row "$model|${est:+~\$$est}|$desc")
   done < "$STASH_DIR/burst"
   # No estimate at all says nothing; a partial one says it is a floor.
   local attr=""
   [ "$known" -gt 0 ] && attr="est ~\$$total"
   [ "$known" -gt 0 ] && [ "$known" -lt "$n" ] && attr="$attr+"
-  bash "$BOXSH" fleet-out "$n seats" ${attr:+--attr "$attr"} "${args[@]}" 2>/dev/null
+  python3 "$LINE" fleet-out --title "$n seats" --attr "$attr" "${args[@]}" 2>/dev/null
 }
 
 # fleet_in <bid>: the landing box for a batch; seats still out show as waiting.
@@ -73,12 +73,12 @@ fleet_in() {
       [ -n "$cost" ] && { sum=$(awk -v a="$sum" -v b="$cost" 'BEGIN{printf "%.2f", a+b}'); known=1; }
       [ -n "$lout" ] && outs+=("$lout")
       if [ "$st" = "missing" ]; then
-        args+=(--row "blocked:$i" "$(printf '%-4s  %-6s  %s (no output written)' "$dur" "${cost:+\$$cost}" "$desc")")
+        args+=(--row "missing|$dur|${cost:+\$$cost}|$desc")
       else
-        args+=(--row "done:$i" "$(printf '%-4s  %-6s  %s' "$dur" "${cost:+\$$cost}" "$desc")")
+        args+=(--row "done|$dur|${cost:+\$$cost}|$desc")
       fi
     else
-      args+=(--row "wait:$i" "$(printf '%-4s  %-6s  %s' "" "" "$desc")")
+      args+=(--row "wait|||$desc")
     fi
   done < "$STASH_DIR/burst"
   local el=$(( $(date +%s) - first )) name attr
@@ -92,10 +92,10 @@ fleet_in() {
   if [ ${#outs[@]} -gt 0 ]; then
     dir=$(dirname "${outs[0]}")
     for o in "${outs[@]}"; do [ "$(dirname "$o")" = "$dir" ] || common=0; done
-    if [ "$common" = 1 ] && [ ${#outs[@]} -gt 1 ]; then copies+=(--copy "$dir/")
-    else for o in "${outs[@]}"; do copies+=(--copy "$o"); done; fi
+    if [ "$common" = 1 ] && [ ${#outs[@]} -gt 1 ]; then copies+=(--out "$dir/")
+    else for o in "${outs[@]}"; do copies+=(--out "$o"); done; fi
   fi
-  bash "$BOXSH" fleet-in "$name" --attr "$attr" "${args[@]}" ${copies[@]+"${copies[@]}"} 2>/dev/null
+  python3 "$LINE" fleet-in --title "$name" --attr "$attr" "${args[@]}" ${copies[@]+"${copies[@]}"} 2>/dev/null
 }
 
 case "$event" in
@@ -107,23 +107,16 @@ case "$event" in
     # `// empty` would swallow a boolean false, so bg is read with an explicit null check.
     bg=$(printf '%s' "$input" | jq -r '.tool_input.run_in_background | if . == null then "default" else tostring end' 2>/dev/null)
     desc=$(ti description)
-    # The goal line is a summary a person reads at a glance: the seat header
-    # line (if any) is metadata, not goal, and the cut lands on a word boundary.
-    read -r seat out goal < <(ti prompt | python3 -c '
-import re, sys
-p = sys.stdin.read()
-m = re.match(r"\s*\[seat (s-[0-9a-z-]+)\][^\n]*", p)
-seat = m.group(1) if m else "-"
-o = re.search(r"\boutput=(\S+)", m.group(0)) if m else None
-body = " ".join((p[m.end():] if m else p).split())
-if len(body) > 170:
-    body = body[:170].rsplit(" ", 1)[0].rstrip(",;:") + " …"
-print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
+    # The goal is the brief's own goal section (or first paragraph), shown whole;
+    # the seat header line is metadata and never part of it.
+    IFS=$'\t' read -r seat out goal < <(ti prompt | python3 "$LINE" goal 2>/dev/null)
     [ "$seat" = "-" ] && seat=""; [ "$out" = "-" ] && out=""
     est=$(python3 "$COST" estimate "${model:-$typ}" 2>/dev/null)
 
     # Batch bookkeeping: a dispatch within BURST_GAP of the last one joins its batch.
-    now=$(date +%s) bid="$now" idx=1
+    # A new batch's id is unique even when two lone dispatches share a second,
+    # or the landing would count them as one fleet.
+    now=$(date +%s) bid="$now$RANDOM" idx=1
     if [ -s "$STASH_DIR/burst" ]; then
       IFS='|' read -r lts lbid lidx _ < <(tail -n 1 "$STASH_DIR/burst")
       if [ $(( now - lts )) -le "$BURST_GAP" ]; then bid="$lbid"; idx=$((lidx + 1)); fi
@@ -134,11 +127,10 @@ print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
     if [ "$idx" -ge "$FLEET_MIN" ]; then
       box=$(fleet_out "$bid")
     else
-      seatrow="${typ:-general-purpose}${name:+ as $name}"
-      [ "$bg" = "true" ] && seatrow="$seatrow · background"
-      [ -n "$seat" ] && seatrow="$seatrow · $seat"
-      box=$(bash "$BOXSH" dispatch "${typ:-general-purpose}" --attr "${model:-inherit}${est:+ · ~\$$est}" \
-        --row info:goal "${desc:+$desc: }$goal" --row info:seat "$seatrow" 2>/dev/null)
+      bgflag=(); [ "$bg" = "true" ] && bgflag=(--bg)
+      box=$(python3 "$LINE" dispatch --type "${typ:-general-purpose}" --name "$name" --model "${model:-inherit}" \
+        --est "$est" --seat "$seat" --desc "$desc" --goal "$goal" ${bgflag[@]+"${bgflag[@]}"} 2>/dev/null)
+      [ -n "$box" ] || box="🛫 ${typ:-general-purpose}  ${model:-inherit}  $desc"
     fi
     emit_owner "$box" ""
     ;;
@@ -197,14 +189,9 @@ print(seat, o.group(1) if o else "-", body)' 2>/dev/null)
       fleet_in "$bid" > "$STASH_DIR/pending-fleet-$bid" 2>/dev/null
       box=$(cat "$STASH_DIR/pending-fleet-$bid")
     else
-      case "$st" in
-        written) row=(--row done:goal "${ldesc:-$typ} · output written") ;;
-        missing) row=(--row blocked:goal "${ldesc:-$typ} · output NOT written") ;;
-        *)       row=(--row info:goal "${ldesc:-${typ:-?} · id ${aid:-?}}") ;;
-      esac
-      box=$(bash "$BOXSH" landing "${typ:-unknown}" --attr "ran $dur${cost:+ · \$$cost}" "${row[@]}" \
-        ${lout:+--copy "$lout"} 2>/dev/null)
-      [ -n "$box" ] || box=$(printf 'goal: %s\n' "$ldesc" | hook_box_kind landing "${typ:-unknown}" "ran $dur")
+      box=$(python3 "$LINE" landing --type "${typ:-unknown}" --desc "${ldesc:-id ${aid:-?}}" --dur "$dur" \
+        --cost "$cost" --status "$st" ${lout:+--out "$lout"} 2>/dev/null)
+      [ -n "$box" ] || box="🛬 ${typ:-unknown}  ${ldesc:-id ${aid:-?}}  ran $dur"
       printf '%s\n' "$box" >> "$STASH_DIR/pending-boxes" 2>/dev/null || true
     fi
     # Nothing a SubagentStop hook prints reaches the screen or the model, so the parked
