@@ -41,22 +41,14 @@
 {"gate": "ready-claim-note.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -65,6 +57,26 @@
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "ready-claim-note.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -75,18 +87,6 @@
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "ready-claim-note.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "ready-claim-note.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -138,22 +138,14 @@
 {"gate": "guard-structural-claim.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -162,6 +154,26 @@
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "guard-structural-claim.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -172,18 +184,6 @@
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "guard-structural-claim.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "guard-structural-claim.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -235,22 +235,14 @@
 {"gate": "guard-absence-claim.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"\u26d4 absence-claim (grounding gate): your message asserts 'versable-git/aep-scrape' does not exist / never fired, but this turn ran no ignore-transparent search of it (rg/fd"}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -259,6 +251,26 @@
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "guard-absence-claim.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -269,18 +281,6 @@
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "guard-absence-claim.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "guard-absence-claim.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -332,22 +332,14 @@
 {"gate": "declared-ready-stop.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -356,6 +348,26 @@
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 declared-ready (soft (a run was observed, on a UI surface): if this surface has states) dark AND light theme, open/closed, breakpoints: exercise the changed surface in EACH state b"}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 declared-ready (soft (a run was observed, on a UI surface): if this surface has states) dark AND light theme, open/closed, breakpoints: exercise the changed surface in EACH state b"}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 repo-state verdict (soft: nothing read the tree this turn): your message states what is committed, pushed, or clean, and no git status/log/diff ran this turn. State drifts under th"}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "declared-ready-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -366,18 +378,6 @@
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 declared-ready (soft (a run was observed, on a UI surface): if this surface has states) dark AND light theme, open/closed, breakpoints: exercise the changed surface in EACH state b"}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 declared-ready (soft (a run was observed, on a UI surface): if this surface has states) dark AND light theme, open/closed, breakpoints: exercise the changed surface in EACH state b"}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SOFT", "said": "{\"systemMessage\":\"\u2713 repo-state verdict (soft: nothing read the tree this turn): your message states what is committed, pushed, or clean, and no git status/log/diff ran this turn. State drifts under th"}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "declared-ready-stop.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "declared-ready-stop.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -403,7 +403,7 @@
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C16", "sid8": "bbc94e51", "turn_line": 2850, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C17", "sid8": "6b8890e5", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C18", "sid8": "38fb0621", "turn_line": 4484, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "case", "id": "C19", "sid8": "38fb0621", "turn_line": 547, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "case", "id": "C19", "sid8": "38fb0621", "turn_line": 547, "outcome": "SOFT", "said": "{\"systemMessage\": \"\\u26a0 ui-verified: UI claim without a frame description first (0 UI atones in 14d; blocks at 3).\"}"}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C20", "sid8": "49aca47d", "turn_line": 16, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C21", "sid8": "49aca47d", "turn_line": 2566, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C22", "sid8": "88339e91", "turn_line": 3994, "outcome": "SILENT", "said": ""}
@@ -429,22 +429,14 @@
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -453,6 +445,26 @@
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "ui-verified-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -463,18 +475,6 @@
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "ui-verified-stop.py", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "ui-verified-stop.py", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -497,7 +497,7 @@
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C13", "sid8": "bbc94e51", "turn_line": 1712, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C14", "sid8": "bbc94e51", "turn_line": 2596, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C15", "sid8": "bbc94e51", "turn_line": 2670, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C16", "sid8": "bbc94e51", "turn_line": 2850, "outcome": "SOFT", "said": "{\"systemMessage\": \"tui-smoke: home_variants.py, zterminal, zterminal-look.py changed again with no smoke run after it.\"}"}
+{"gate": "tui-smoke-stop.py", "kind": "case", "id": "C16", "sid8": "bbc94e51", "turn_line": 2850, "outcome": "BLOCK", "said": "{\"decision\": \"block\", \"reason\": \"This turn changed a terminal screen (home_variants.py, zterminal, zterminal-look.py) and the reply calls it done, but the screen was not opened the way its owner opens"}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C17", "sid8": "6b8890e5", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C18", "sid8": "38fb0621", "turn_line": 4484, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C19", "sid8": "38fb0621", "turn_line": 547, "outcome": "SILENT", "said": ""}
@@ -526,22 +526,14 @@
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -550,6 +542,26 @@
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "tui-smoke-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -560,18 +572,6 @@
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "tui-smoke-stop.py", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "tui-smoke-stop.py", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -623,22 +623,14 @@
 {"gate": "doc-voice-gate.py", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -647,6 +639,26 @@
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "doc-voice-gate.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -657,18 +669,6 @@
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "doc-voice-gate.py", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "doc-voice-gate.py", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -695,7 +695,7 @@
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C17", "sid8": "6b8890e5", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C18", "sid8": "38fb0621", "turn_line": 4484, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C19", "sid8": "38fb0621", "turn_line": 547, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C20", "sid8": "49aca47d", "turn_line": 16, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
+{"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C20", "sid8": "49aca47d", "turn_line": 16, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C21", "sid8": "49aca47d", "turn_line": 2566, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C22", "sid8": "88339e91", "turn_line": 3994, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C23", "sid8": "cc59de35", "turn_line": 178, "outcome": "SILENT", "said": ""}
@@ -720,22 +720,14 @@
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -744,6 +736,26 @@
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -754,19 +766,7 @@
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
-{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statem"}
+{"gate": "goal-proposal-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
 {"gate": "goal-proposal-stop.sh", "kind": "control", "id": "e4035d22:1405", "sid8": "e4035d22", "turn_line": 1405, "outcome": "SILENT", "said": ""}
@@ -817,22 +817,14 @@
 {"gate": "owner-ask-content-stop.py", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -841,6 +833,26 @@
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -851,18 +863,6 @@
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "owner-ask-content-stop.py", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "owner-ask-content-stop.py", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -914,22 +914,14 @@
 {"gate": "creation-box-stop.py", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -938,6 +930,26 @@
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "creation-box-stop.py", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -948,18 +960,6 @@
 {"gate": "creation-box-stop.py", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "creation-box-stop.py", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "creation-box-stop.py", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -1011,22 +1011,14 @@
 {"gate": "named-next-work-stop.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -1035,6 +1027,26 @@
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -1045,22 +1057,10 @@
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
-{"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:1405", "sid8": "e4035d22", "turn_line": 1405, "outcome": "SILENT", "said": ""}
+{"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:1405", "sid8": "e4035d22", "turn_line": 1405, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"This reply says nothing waits on the owner while it lists work still open, and the turn is ending. That is a claim about work, and the account has ended the turn on exact"}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:2501", "sid8": "e4035d22", "turn_line": 2501, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:2516", "sid8": "e4035d22", "turn_line": 2516, "outcome": "SILENT", "said": ""}
 {"gate": "named-next-work-stop.sh", "kind": "control", "id": "e4035d22:2535", "sid8": "e4035d22", "turn_line": 2535, "outcome": "SILENT", "said": ""}
@@ -1108,22 +1108,14 @@
 {"gate": "bare-id-cluster-stop.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -1132,6 +1124,26 @@
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -1142,18 +1154,6 @@
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SILENT", "said": ""}
-{"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SILENT", "said": ""}
 {"gate": "bare-id-cluster-stop.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SILENT", "said": ""}
@@ -1205,22 +1205,14 @@
 {"gate": "format-gate-stop.sh", "kind": "case", "id": "C42", "sid8": "acf8e633", "turn_line": 3058, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 2631 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
 {"gate": "format-gate-stop.sh", "kind": "case", "id": "C43", "sid8": "80138d42", "turn_line": 711, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/aep-scrape/docs/plan/20261\\n[terse-reply WARN] 2194 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the "}
 {"gate": "format-gate-stop.sh", "kind": "case", "id": "C44", "sid8": "6f5b2fdd", "turn_line": 3445, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 2648 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"format-gate: re-emit once with all of these fixed. terse-reply: 3386 chars, prose cap 2600 chars; cut 886+, lead with the one thing to do or know, detail goes in a file\"}"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 1609 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x10\\n[terse-reply WARN] 2001 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x9\\n[terse-reply WARN] 2041 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1583 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 2809 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1853 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SOFT", "said": "{\"systemMessage\":\"[terse-reply WARN] 1684 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short bullets; put detail in the file.\"}"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 1881 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 2751 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x8\\n[terse-reply WARN] 2470 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x8\"}"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/aep-scrape/versions/v05-20\\nprose-smell (advisory): bold spans x8\\n[terse-reply WARN] 2977 chars of prose (warn 1500, prose cap 26"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:6179", "sid8": "06990a98", "turn_line": 6179, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1873 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:6350", "sid8": "06990a98", "turn_line": 6350, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:6380", "sid8": "06990a98", "turn_line": 6380, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:8052", "sid8": "06990a98", "turn_line": 8052, "outcome": "SILENT", "said": ""}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:21", "sid8": "1f16da8a", "turn_line": 21, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\"}"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:2567", "sid8": "1f16da8a", "turn_line": 2567, "outcome": "SILENT", "said": ""}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:2901", "sid8": "1f16da8a", "turn_line": 2901, "outcome": "SILENT", "said": ""}
@@ -1229,6 +1221,26 @@
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:6271", "sid8": "1f16da8a", "turn_line": 6271, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/slack-automation/docs/oper\\nprose-smell (advisory): bold spans x6\"}"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:7163", "sid8": "1f16da8a", "turn_line": 7163, "outcome": "SILENT", "said": ""}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "1f16da8a:7766", "sid8": "1f16da8a", "turn_line": 7766, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `generic_extractor_service/tests/test_raw.py`\"}"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:15", "sid8": "54a30410", "turn_line": 15, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 2648 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:255", "sid8": "54a30410", "turn_line": 255, "outcome": "BLOCK", "said": "{\"decision\":\"block\",\"reason\":\"format-gate: re-emit once with all of these fixed. terse-reply: 3386 chars, prose cap 2600 chars; cut 886+, lead with the one thing to do or know, detail goes in a file\"}"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:371", "sid8": "54a30410", "turn_line": 371, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:398", "sid8": "54a30410", "turn_line": 398, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 1609 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:474", "sid8": "54a30410", "turn_line": 474, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:1294", "sid8": "54a30410", "turn_line": 1294, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x10\\n[terse-reply WARN] 2001 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:1720", "sid8": "54a30410", "turn_line": 1720, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "54a30410:2735", "sid8": "54a30410", "turn_line": 2735, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x9\\n[terse-reply WARN] 2041 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x11\\n[terse-reply WARN] 3050 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SOFT", "said": "{\"systemMessage\":\"full paths: ./build.sh -> ~/Code/Claude/sys-monitor/build.sh\\nprose-smell (advisory): bold spans x7\\n[terse-reply WARN] 2086 chars of prose (warn 1500, prose cap 2600 chars). Lead wi"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7; verdict opener (\\\"Everything is committed and pushed, and \\\"), the done-verdict is the owner's\\n[terse-reply WARN] 2078 chars of prose (warn 15"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:18", "sid8": "da9f47ce", "turn_line": 18, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1583 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1049", "sid8": "da9f47ce", "turn_line": 1049, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 2809 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1548", "sid8": "da9f47ce", "turn_line": 1548, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1658", "sid8": "da9f47ce", "turn_line": 1658, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1853 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1700", "sid8": "da9f47ce", "turn_line": 1700, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1724", "sid8": "da9f47ce", "turn_line": 1724, "outcome": "SOFT", "said": "{\"systemMessage\":\"[terse-reply WARN] 1684 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short bullets; put detail in the file.\"}"}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1904", "sid8": "da9f47ce", "turn_line": 1904, "outcome": "SILENT", "said": ""}
+{"gate": "format-gate-stop.sh", "kind": "control", "id": "da9f47ce:1926", "sid8": "da9f47ce", "turn_line": 1926, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 1881 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "dc40d202:18", "sid8": "dc40d202", "turn_line": 18, "outcome": "SOFT", "said": "{\"systemMessage\":\"[terse-reply WARN] 2285 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short bullets; put detail in the file.\"}"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "dc40d202:444", "sid8": "dc40d202", "turn_line": 444, "outcome": "SILENT", "said": ""}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "dc40d202:1683", "sid8": "dc40d202", "turn_line": 1683, "outcome": "SILENT", "said": ""}
@@ -1239,18 +1251,6 @@
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "de51025f:408", "sid8": "de51025f", "turn_line": 408, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x13\\n[terse-reply WARN] 1983 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "de51025f:1809", "sid8": "de51025f", "turn_line": 1809, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7; verdict opener (\\\"Everything is finished and pushed to  (n\\\"), the done-verdict is the owner's\\n[terse-reply WARN] 1594 chars of prose (warn 15"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "de51025f:1895", "sid8": "de51025f", "turn_line": 1895, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:17", "sid8": "cbb31170", "turn_line": 17, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x11\\n[terse-reply WARN] 3050 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:1062", "sid8": "cbb31170", "turn_line": 1062, "outcome": "SOFT", "said": "{\"systemMessage\":\"full paths: ./build.sh -> ~/Code/Claude/sys-monitor/build.sh\\nprose-smell (advisory): bold spans x7\\n[terse-reply WARN] 2086 chars of prose (warn 1500, prose cap 2600 chars). Lead wi"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:1768", "sid8": "cbb31170", "turn_line": 1768, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7; verdict opener (\\\"Everything is committed and pushed, and \\\"), the done-verdict is the owner's\\n[terse-reply WARN] 2078 chars of prose (warn 15"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "cbb31170:2554", "sid8": "cbb31170", "turn_line": 2554, "outcome": "SILENT", "said": ""}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:23", "sid8": "06990a98", "turn_line": 23, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x6\\n[terse-reply WARN] 2751 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:90", "sid8": "06990a98", "turn_line": 90, "outcome": "SOFT", "said": "{\"systemMessage\":\"full paths: docs/team/20261120-aep-pim-readiness-status.md -> ~/Code/Versable/aep-scrape/docs/team/20261120-aep-pim-readiness-status.md ; docs/team/20261120-aep-pim-readiness-status."}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:1921", "sid8": "06990a98", "turn_line": 1921, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x8\\n[terse-reply WARN] 2470 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:3383", "sid8": "06990a98", "turn_line": 3383, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/aep-scrape/scripts/woo_rea ; `/Users/alcatraz627/Code/Versable/aep-scrape/snapshots/20261\\nprose-smell (advisory): bold spans x8\"}"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:3912", "sid8": "06990a98", "turn_line": 3912, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x8\"}"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:4249", "sid8": "06990a98", "turn_line": 4249, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/aep-scrape/versions/v03-20\\nprose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1685 chars of prose (warn 1500, prose cap 26"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:4278", "sid8": "06990a98", "turn_line": 4278, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/Users/alcatraz627/Code/Versable/aep-scrape/versions/v05-20\\nprose-smell (advisory): bold spans x8\\n[terse-reply WARN] 2977 chars of prose (warn 1500, prose cap 26"}
-{"gate": "format-gate-stop.sh", "kind": "control", "id": "06990a98:5263", "sid8": "06990a98", "turn_line": 5263, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x7\\n[terse-reply WARN] 1640 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short b"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "e4035d22:45", "sid8": "e4035d22", "turn_line": 45, "outcome": "SOFT", "said": "{\"systemMessage\":\"prose-smell (advisory): bold spans x14\\n[terse-reply WARN] 2571 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short "}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "e4035d22:859", "sid8": "e4035d22", "turn_line": 859, "outcome": "SOFT", "said": "{\"systemMessage\":\"paths, clickable: `/private/tmp/claude-501/-Users-alcatraz627-Code-Versable-ae\"}"}
 {"gate": "format-gate-stop.sh", "kind": "control", "id": "e4035d22:904", "sid8": "e4035d22", "turn_line": 904, "outcome": "SOFT", "said": "{\"systemMessage\":\"[terse-reply WARN] 1796 chars of prose (warn 1500, prose cap 2600 chars). Lead with the one thing the owner must do or know, then a few short bullets; put detail in the file.\"}"}
