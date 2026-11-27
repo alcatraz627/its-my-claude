@@ -12,6 +12,8 @@ Reply `ok` when the title is accurate and follows the shape. Revise only when on
 
 Passive voice and a "+" joining two facets are acceptable, not reasons to revise. Prefer the shorter of two equally true titles.
 
+A revision must be at least as specific as the title it replaces. Keep every name the title gives (a tool, a path, a service, a field) unless that name is wrong, and take your words from the diff: "use Open Swagger, not the /docs proxy, for API docs", never "correct the API docs and proxy check guidance". Summary words such as guidance, handling, behavior, separately, improvements, and updates name nothing; a revision that needs them is worse than `ok`.
+
 A title you would merely have worded differently is `ok`.
 
 ## Output

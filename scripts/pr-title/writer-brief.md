@@ -22,6 +22,7 @@ The reader is an engineer scanning a list of pull requests. The title tells them
 4b. **Specific nouns over generic ones.** "reach Postgres from Vercel through a token-checked relay" beats "route database calls through an authenticated relay": "authenticated" makes the reader open the PR to learn how.
 4c. **Describe the system, never address the reader.** "direct engineers to Open Swagger" confuses; "use Open Swagger, not the /docs proxy, for API docs" does not.
 4d. **Spend the character budget well.** Short words ("infra pages", not "infrastructure docs"). Join two facets with "and" or "+", never ", plus": "ask before secret creation + update docs". A useful terse title beats a perfect long one.
+4e. **No summary words where a name belongs.** guidance, handling, behavior, separately, improvements, and updates name nothing. Say what replaced what: "use Open Swagger, not the /docs proxy, for API docs", not "use Open Swagger and verify the API proxy separately".
 5. **Be specific enough that two different changes could not share the title.** "update database connection options" fails this.
 6. **Do not explain what a tool or feature is.** That belongs in the description.
 7. **Keep literal names literal.** A check on `[tags]` is about `[tags]`, with the brackets.

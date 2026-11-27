@@ -170,8 +170,13 @@ def main(argv):
         return 3
     final = title
     if a.layers == 2:
+        # A model cannot count characters, so the checker is handed the measured lengths.
+        after = len(title.split(": ", 1)[-1])
+        measured = "%d characters in all (limit: under 72), %d after the colon (limit: 60)%s" % (
+            len(title), after, "" if fits(title) else ". It is out of shape and must be revised to fit")
         try:
-            verdict, _ = check_title(brief("checker-brief.md") + "\n\n## Title\n\n" + title + "\n\n## Git data\n\n" + facts)
+            verdict, _ = check_title(brief("checker-brief.md") + "\n\n## Title\n\n" + title +
+                                     "\n\nMeasured: " + measured + "\n\n## Git data\n\n" + facts)
         except subprocess.TimeoutExpired:
             verdict = ""
         result["check"] = verdict or "(no answer)"
