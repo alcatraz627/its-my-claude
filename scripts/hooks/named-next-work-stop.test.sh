@@ -78,6 +78,66 @@ runb() { jq -cn --arg tp "$1" --arg s "sess-$2" '{transcript_path:$tp, session_i
 out=$(runb "$T/h.jsonl" h2)
 [ -z "$out" ] && ok "a closing offer while a job is still running passes" || bad "blocked a reply that is waiting on a running job"
 
+# The declared default: "If no reply: <action>" or "If no reply: hold, <why>" (D1, 2026-11-26).
+export KEEPWARM_PY="$HERE/../keepwarm/keepwarm.py"
+rm -f /tmp/claude-nextwork-sess-*
+tx "$T/n.jsonl" $'Every suite passes. Nothing waits on you.\n\n**Still open:**\n- no real render has run through the page yet\n- nothing is committed\n'
+out=$(run "$T/n.jsonl" n1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "'nothing waits on you' over open work blocks" || bad "nothing-waits passed: $out"
+printf '%s' "$out" | rg -q 'If no reply' && ok "its reason names the declared-default line" || bad "reason lacks the If no reply line: $out"
+
+tx "$T/o.jsonl" $'Every suite passes. Nothing waits on you.\n\n**Still open:**\n- the budget split\n\nIf no reply: hold, the budget split is yours to set.'
+out=$(run "$T/o.jsonl" o1)
+[ -z "$out" ] && ok "a declared hold with its reason passes" || bad "declared hold blocked: $out"
+
+tx "$T/p.jsonl" $'Two items are open.\n\nIf no reply: hold'
+out=$(run "$T/p.jsonl" p1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a bare hold with no reason blocks" || bad "bare hold passed"
+
+tx "$T/q.jsonl" $'Suites are green on main.\n\nIf no reply: cut the release and post the notes.'
+out=$(run "$T/q.jsonl" q1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a declared action with nothing asked blocks: do it now" || bad "declared action with no ask passed"
+printf '%s' "$out" | rg -q 'asks the owner nothing' && ok "its reason says nothing was asked" || bad "declared-action reason wrong: $out"
+
+tx "$T/r.jsonl" $'Which schema do you want, A or B?\n\nIf no reply: build on schema A.'
+out=$(run "$T/r.jsonl" r1)
+[ -z "$out" ] && ok "a question with a declared default passes" || bad "question plus default blocked: $out"
+
+out=$(runb "$T/q.jsonl" q2)
+[ -z "$out" ] && ok "a declared action while a job runs passes" || bad "declared action blocked while a job runs"
+
+tx "$T/t.jsonl" $'Main is pushed with all four suites passing, but it is not released.\n\nI\'m waiting on the ui-flow and docs-targets seats.'
+out=$(runb "$T/t.jsonl" t1)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "a reply waiting on seats with no declared default blocks, even while they run" || bad "waiting reply passed: $out"
+printf '%s' "$out" | rg -q 'does not depend on' && ok "its reason asks for the work that does not depend on the wait" || bad "waiting reason wrong: $out"
+
+# Replay regression (a0daccbc L3188): an honest wait on a build the next step needs passes.
+tx "$T/t2.jsonl" $'Motion and rail are unverified and remain open. I\'m waiting on the motion build.'
+out=$(runb "$T/t2.jsonl" t2)
+[ -z "$out" ] && ok "a plain wait on a build the next step needs passes" || bad "an honest wait blocked: $out"
+
+tx "$T/u.jsonl" $'Main is pushed, not released.\n\nI\'m waiting on the ui-flow seat.\n\nIf no reply: cut the release now; the seat does not touch it.'
+out=$(runb "$T/u.jsonl" u1)
+[ -z "$out" ] && ok "a waiting reply with a declared default passes while the job runs" || bad "declared waiting reply blocked: $out"
+
+tx "$T/v.jsonl" $'Two things are open.\n\nI\'ll start item 1 next unless you\'d rather redirect.\n\nIf no reply: hold, item 1 spends about $30 and you set that budget.'
+out=$(run "$T/v.jsonl" v1)
+[ -z "$out" ] && ok "a closing offer with a reasoned hold passes" || bad "offer with reasoned hold blocked: $out"
+
+tx "$T/w.jsonl" $'All three landed and nothing waits on you. Nothing is left open.'
+out=$(run "$T/w.jsonl" w1)
+[ -z "$out" ] && ok "'nothing waits on you' with no open work passes" || bad "a finished report blocked: $out"
+
+# MUTATION: without the nothing-waits pattern, the 88339e91 shape passes again.
+M3="$T/mut3.sh"; sed 's/nothing (else |here )?(waits|is waiting)/zzz-never/' "$HOOK" > "$M3"
+rm -f /tmp/claude-nextwork-sess-*
+out=$(jq -cn --arg tp "$T/n.jsonl" --arg s "sess-m3" '{transcript_path:$tp, session_id:$s}' | HOME="$T" bash "$M3" 2>/dev/null)
+[ -z "$out" ] && ok "MUTATION: dropping the nothing-waits pattern lets the halt through (the assertion above is load-bearing)" || bad "nothing-waits mutant still blocked: $out"
+# MUTATION: with the parser unreachable, a reasoned hold no longer parks the reply.
+rm -f /tmp/claude-nextwork-sess-*
+out=$(KEEPWARM_PY=/nonexistent run "$T/o.jsonl" m4)
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "MUTATION: without the shared parser the declared hold is not seen (the parser is load-bearing)" || bad "hold still passed with no parser"
+
 # MUTATION: with the order rule removed, any waiting-on label parks everything again.
 M2="$T/mut2.sh"; sed 's/\[ "\$wait_line" -gt "\$head_line" \]/true/' "$HOOK" > "$M2"; cp "$HERE/hook-common.sh" "$T/hook-common.sh" 2>/dev/null
 rm -f /tmp/claude-nextwork-sess-*

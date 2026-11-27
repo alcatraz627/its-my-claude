@@ -43,4 +43,28 @@ mk "$ROOT/bad-tail.jsonl" $'/goal The thing is built.\n'
 out=$(runlam "$ROOT/bad-tail.jsonl" 'Plain reply, nothing proposed.')
 [ -z "$out" ] && ok "current reply clean, proposing tail: silent" || bad "lag: current clean, bad tail blocked: $out"
 
+# The owner asked for a plan or a pick, so the reply is the answer and the next move is theirs
+# (c314380d L277 then L359: the gate pushed edits before the owner's "go on all").
+export KEEPWARM_PY="$HOME/.claude/scripts/keepwarm/keepwarm.py"
+mkp(){ # mkp <file> <owner prompt> <assistant text>
+  { printf '{"type":"user","message":{"role":"user","content":%s}}\n' "$(printf '%s' "$2" | jq -Rs .)"
+    printf '{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":%s}]}}\n' "$(printf '%s' "$3" | jq -Rs .)"; } > "$1"
+}
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+mkp "$ROOT/e.jsonl" 'Can you also make a plan to fix the issues, and then tell me which ones are worth doing' $'Do six of the ten.\n\n| # | Fix | Verdict |\n|---|---|---|\n| 1 | chmod -x | Do |\n\n/goal The hooks fire once and the stamps are current.\n'
+out=$(run "$ROOT/e.jsonl"); [ -z "$out" ] && ok "a plan the owner asked to choose from passes (c314380d L359)" || bad "pushed past the owner's pick: $out"
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+mkp "$ROOT/f.jsonl" 'fix the flaky hook' $'Here is the fix plan.\n\n/goal The hook fires once.\n\nIf no reply: hold, the restart is yours to time.'
+out=$(run "$ROOT/f.jsonl"); [ -z "$out" ] && ok "a declared hold passes" || bad "declared hold blocked: $out"
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+mkp "$ROOT/g.jsonl" 'fix the flaky hook' $'Plan is set.\n\n/goal The hook fires once.\n'
+out=$(run "$ROOT/g.jsonl"); printf '%s' "$out" | rg -q '"decision":"block"' && ok "a bare proposal after a build order still blocks" || bad "build-order proposal passed"
+printf '%s' "$out" | rg -q 'read-only' && ok "the block says a pending choice allows only read-only calls" || bad "block lacks the read-only clause: $out"
+
+# MUTATION: without the owner-prompt check, the c314380d shape is pushed again.
+MUT="$ROOT/mut.sh"; sed 's/owner_asked_pick=1/owner_asked_pick=0/' "$H" > "$MUT"
+rm -f "/tmp/claude-goalprop-${sid:0:8}"
+out=$(printf '{"transcript_path":"%s","session_id":"%s","stop_hook_active":false}' "$ROOT/e.jsonl" "$sid" | bash "$MUT")
+printf '%s' "$out" | rg -q '"decision":"block"' && ok "MUTATION: dropping the owner-prompt check blocks the plan again (the check is load-bearing)" || bad "mutant still passed: $out"
+
 echo "---- pass=$pass fail=$fail"; [ "$fail" -eq 0 ]

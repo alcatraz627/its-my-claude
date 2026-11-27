@@ -15,6 +15,7 @@ Usage (hooks pass their JSON on stdin):
   keepwarm.py away 3h|21:30|done|soon [--soft] [why]
   keepwarm.py plan
   keepwarm.py status [--json]
+  keepwarm.py declared < reply.txt   (prints "act|hold<TAB>words" from an "If no reply:" line)
 On/off for every session: ~/.claude/.keepwarm-on (present = on).
 """
 import datetime as dt
@@ -137,6 +138,55 @@ UPKEEP = {
 }
 DELETE_JOB = (" Before the dump, without mentioning it: run CronList and CronDelete any job whose prompt starts "
               "with [keepwarm].")
+# A ping that follows what the agent said it would do if the owner stayed away.
+DECLARED_WAKE = ("Keep-warm wake {n}: the owner is still away and this turn keeps the cache warm. Your last reply "
+                 "ended with \"If no reply: {action}\". "
+                 "Do that now if it is still yours to do and nothing since has changed it, and end with a fresh "
+                 "\"If no reply:\" line. If it no longer applies, reply with exactly one word: warm.")
+UNDECLARED_WAKE = ("Keep-warm wake {n}: the owner is away and this turn keeps the cache warm. If your last reply "
+                   "named work of yours that waits on "
+                   "nothing from the owner and is within the authority you already hold, do it now and end with an "
+                   "\"If no reply:\" line. Otherwise reply with exactly one word: warm.")
+DECLARE_BRIEF = (" When a turn ends with a question to the owner, or with you waiting on something, make its last "
+                 "line say what you will do if no reply comes: \"If no reply: <action>\", or \"If no reply: hold, "
+                 "<what only the owner can give>\". The next wake follows that line. If nothing waits on the owner, "
+                 "do the work instead of declaring it.")
+# The closing line an agent writes when a turn ends while the owner may be away. A quoted
+# line (">") is someone else's words, so it never matches.
+DECLARED_LINE = re.compile(r"^[ \t]*(?:[*_`]+[ \t]*)?if no reply[ \t]*[*_`]*[ \t]*:[ \t]*[*_`]*[ \t]*(.+?)[ \t]*$",
+                           re.I | re.M)
+DECLARED_HOLD = re.compile(r"^[*_`]*\s*(hold|wait|nothing|no action|stay)\b", re.I)
+
+
+def declared_default(text):
+    """What the agent said it will do if the owner does not answer, or None.
+
+    Reads the last "If no reply: ..." line of a reply. A line that starts with hold,
+    wait or nothing is the agent choosing to wait for the owner's yes; anything else
+    is an action the next keep-warm wake hands back.
+    """
+    found = DECLARED_LINE.findall(text or "")
+    if not found:
+        return None
+    action = found[-1].strip().strip("*_`").strip()
+    if not action:
+        return None
+    return {"kind": "hold" if DECLARED_HOLD.match(action) else "act", "text": action[:400], "at": now_s()}
+
+
+def warm_text(n, st):
+    """The words of a warm ping, following the agent's declared default when it gave one.
+
+    A declared action is handed back once; after that the ping is the plain one-word
+    kind, so a wake never repeats work the agent already did or chose to drop.
+    """
+    d = st.get("declared")
+    if d is None:
+        return UNDECLARED_WAKE.format(n=n)
+    if d.get("kind") == "act" and not d.get("served"):
+        d["served"] = True
+        return DECLARED_WAKE.format(n=n, action=d.get("text", ""))
+    return UPKEEP["warm"].format(n=n)
 
 
 def now_s():
@@ -742,8 +792,11 @@ def hook_prompt(inp):
         # than pay for warm-only wakes that end in the same dump anyway.
         action, st["stopped"] = "dump", True
     st.update(wakes=n, last_activity=now_s())
-    text = UPKEEP[action].format(n=n, note=note_path(inp.get("cwd"), sid),
-                                 now=dt.datetime.now().strftime("%H:%M"))
+    if action == "warm":
+        text = warm_text(n, st)
+    else:
+        text = UPKEEP[action].format(n=n, note=note_path(inp.get("cwd"), sid),
+                                     now=dt.datetime.now().strftime("%H:%M"))
     if not st["stopped"]:
         text += " " + rearm_text(now_s(), st)
     save(sid, st)
@@ -809,7 +862,7 @@ def begin_wake(sid, st, nums, action, why, ctx_tokens, due_min, closing):
     wake_marker(sid, True)
     pct = nums["pct"] if nums["pct"] is not None else "?"
     if action == "warm":
-        text = UPKEEP["warm"].format(n=n)
+        text = warm_text(n, st)
     else:
         hint = st.get("hint") or {}
         carry_on = (action == "dump" and hint.get("kind") == "hard" and (hint.get("until") or 0) > now_s()
@@ -1082,7 +1135,12 @@ def hook_stop(inp):
             log(sid, "relink", via="resume-stop")
             return emit({"decision": "block", "reason": "Keep-warm has no wake pending. %s Then end the turn, "
                          "starting nothing else and without mentioning it." % text})
+    declared = declared_default(inp.get("last_assistant_message") or "")
     if st.pop("in_wake", False):
+        # A wake turn that wrote a new closing line replaces the old one; a one-word
+        # "warm" leaves the earlier declaration (and whether it was handed over) alone.
+        if declared:
+            st["declared"] = declared
         save(sid, st)
         # Record only: the verdict never delays or changes the owner's next message.
         verdict, read, create = judge_ping(last_usage(inp.get("transcript_path") or ""))
@@ -1094,6 +1152,11 @@ def hook_stop(inp):
         st["stopped"] = True
         log(sid, "stop", why="dump-in-turn")
     st.update(last_activity=now_s(), work_at=now_s(), answered=True, account=account())
+    # The owner's turn ended: its reply's closing line, or none, is what the next wake follows.
+    if declared:
+        st["declared"] = declared
+    else:
+        st.pop("declared", None)
     job_missing = False
     if idle_mode(st):
         st["armed_at"] = now_s() + IDLE_DUE_MIN * 60   # the statusline shows this as the next ping
@@ -1167,7 +1230,7 @@ def hook_start(inp):
         return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": (
             "Keep-warm is on. A message starting \"Keep-warm wake\" is a keep-warm wake: do only what it says. When a "
             "turn ends waiting on the owner for something that will take a while, such as reading documents, you may "
-            "say so with: python3 ~/.claude/scripts/keepwarm/keepwarm.py away 2h --soft \"why\".")}})
+            "say so with: python3 ~/.claude/scripts/keepwarm/keepwarm.py away 2h --soft \"why\"." + DECLARE_BRIEF)}})
     # The re-arm goes after the answer: done first, it delayed the owner's
     # reply long enough that they interrupted it (session 90d2e6ca).
     text = ("Keep-warm is on. Answer the owner's next message first; then, as the last step of "
@@ -1175,7 +1238,7 @@ def hook_start(inp):
             "%s Prompts starting with [keepwarm] "
             "are keep-warm wakes: do only what they say. When a turn ends waiting on the owner for something that "
             "will take a while, such as reading documents, you may say so with: python3 "
-            "~/.claude/scripts/keepwarm/keepwarm.py away 2h --soft \"why\"." % arm_text(sid, st))
+            "~/.claude/scripts/keepwarm/keepwarm.py away 2h --soft \"why\"." % arm_text(sid, st)) + DECLARE_BRIEF
     save(sid, st)
     return emit({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": text}})
 
@@ -1223,6 +1286,13 @@ def main(argv):
         return cmd_away(argv[1:])
     if cmd == "plan":
         return cmd_plan()
+    if cmd == "declared":
+        # The Stop gates read a reply's closing line through this, so they and the
+        # wake agree on what the agent declared.
+        d = declared_default(sys.stdin.read())
+        if d:
+            print("%s\t%s" % (d["kind"], d["text"]))
+        return 0
     print(__doc__)
     return 2
 

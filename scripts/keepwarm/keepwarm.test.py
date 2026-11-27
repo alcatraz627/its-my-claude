@@ -117,20 +117,20 @@ expect("a wake 40 min after activity is not due and never blocked", "decision" n
 expect("it only re-arms and says the one word", "not due" in ctx(early) and "recurring false" in ctx(early)
        and "one word: warm" in ctx(early))
 w1 = wake("s1", 300000, 56)
-expect("small: wake 1 at 56 min only keeps warm", "only keeps the cache warm" in ctx(w1))
+expect("small: wake 1 at 56 min only keeps warm", "keeps the cache warm" in ctx(w1))
 expect("a due wake also arms the next one", "Re-arm keep-warm" in ctx(w1))
-expect("small: wake 2 keeps warm", "only keeps the cache warm" in ctx(wake("s1", 300000, 56)))
+expect("small: wake 2 keeps warm", "keeps the cache warm" in ctx(wake("s1", 300000, 56)))
 last = wake("s1", 300000, 56)
 expect("small: wake 3 is the last and writes the full core-dump",
        "the last" in ctx(last) and "full /core-dump" in ctx(last) and "not mini" in ctx(last))
 expect("the last wake does not arm another", "Re-arm keep-warm" not in ctx(last))
 expect("after the last wake, wakes are skipped", wake("s1", 300000, 56).get("decision") == "block")
 hook("hook-prompt", session_id="s1", prompt="I'm back")
-expect("the owner returning resets keep-warm", "only keeps the cache warm" in ctx(wake("s1", 300000, 56)))
+expect("the owner returning resets keep-warm", "keeps the cache warm" in ctx(wake("s1", 300000, 56)))
 
 # Large session (150k = 75%): warm once, then the full dump, then stop.
 hook("hook-prompt", session_id="s2", prompt="x")
-expect("large: wake 1 keeps warm", "only keeps the cache warm" in ctx(wake("s2", 750000, 56)))
+expect("large: wake 1 keeps warm", "keeps the cache warm" in ctx(wake("s2", 750000, 56)))
 expect("large: wake 2 is the full dump", "full /core-dump" in ctx(wake("s2", 750000, 56)))
 expect("large: then stops", wake("s2", 750000, 56).get("decision") == "block")
 
@@ -150,7 +150,7 @@ st5 = json.load(open(p5))
 st5["last_activity"] -= 56 * 60
 json.dump(st5, open(p5, "w"))
 nxt = hook("hook-prompt", session_id="s5", prompt="[keepwarm] idle check", transcript_path=transcript(300000))
-expect("so the next wake 56 min later is due, not a re-arm", "only keeps the cache warm" in ctx(nxt))
+expect("so the next wake 56 min later is due, not a re-arm", "keeps the cache warm" in ctx(nxt))
 
 # Health check: after a wake's turn, did the ping actually find the cache warm?
 EVENTS = os.path.join(T, "kw", "events.jsonl")
@@ -225,9 +225,9 @@ expect("an owner /core-dump adds no re-arm", ctx(hook("hook-prompt", session_id=
 expect("a wake after an owner dump is skipped with no turn", wake("s8", 760000, 56).get("decision") == "block")
 expect("even a not-due wake after a dump is skipped", wake("s8", 760000, 20).get("decision") == "block")
 hook("hook-prompt", session_id="s8", prompt="back again")
-expect("the owner's next prompt resumes keep-warm", "only keeps the cache warm" in ctx(wake("s8", 760000, 56)))
+expect("the owner's next prompt resumes keep-warm", "keeps the cache warm" in ctx(wake("s8", 760000, 56)))
 hook("hook-prompt", session_id="s9", prompt="fix the core-dump skill, then /catchup later")
-expect("prose about core-dump does not stop keep-warm", "only keeps the cache warm" in ctx(wake("s9", 300000, 56)))
+expect("prose about core-dump does not stop keep-warm", "keeps the cache warm" in ctx(wake("s9", 300000, 56)))
 
 # A /clear arms nothing; a wake armed before it is skipped; the next prompt re-links.
 expect("a cleared session start asks for no cron", hook("hook-start", session_id="s10", source="clear") == {})
@@ -338,7 +338,7 @@ limits(100)
 expect("a wake into a spent window is skipped", wake("s13", 300000, 56).get("decision") == "block")
 expect("even a not-due one", wake("s13", 300000, 10).get("decision") == "block")
 limits(10)
-expect("an open window wakes as before", "only keeps the cache warm" in ctx(wake("s13", 300000, 56)))
+expect("an open window wakes as before", "keeps the cache warm" in ctx(wake("s13", 300000, 56)))
 
 # A hibernating session keeps itself warm; keep-warm must not ping it a second time.
 hook("hook-prompt", session_id="s14", prompt="x")

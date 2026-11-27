@@ -8,7 +8,7 @@ triggers:
 related: [features/usage-speedbumps.md, features/context-retention.md]
 tier: 2
 category: features
-updated: 2026-11-04
+updated: 2026-11-27
 stale_after_days: 90
 ---
 
@@ -39,6 +39,26 @@ with Esc starts no waiter, so that session has none until its next turn ends.
 Sessions started before this change keep their job until they end, because their settings
 were read at start and two things must not ping one cache. They still print a line per idle
 fire. `touch ~/.claude/.keepwarm-cron` puts every new session back on the job.
+
+## What a ping asks the agent to do
+
+A ping used to say "reply with exactly one word: warm. Start nothing else", which kept
+agents idle for hours with their own next work named and undone (behaviour audit, finding
+F1). Now the ping follows what the agent said it would do if no reply came. The last line
+of a reply that waits on the owner, or on a job, can read:
+
+- `If no reply: <action>`. The next ping hands the action back once: do it if it still
+  applies, and end with a fresh line. Later pings are the plain one-word kind.
+- `If no reply: hold, <what only the owner can give>`. The agent chose to wait for a yes;
+  pings stay one word.
+- No line. The ping allows, but does not force, work the reply named that waits on nothing
+  from the owner.
+
+`keepwarm.py hook-stop` reads the line with `declared_default()` and keeps it in the session
+state as `declared`; a later owner turn without one clears it. The halting gate
+(`scripts/hooks/named-next-work-stop.sh`) and the goal gate (`goal-proposal-stop.sh`) read the
+same line through `keepwarm.py declared`, so all three agree on what was declared. Tests:
+`keepwarm-declared.test.py`.
 
 ## How a check is decided
 

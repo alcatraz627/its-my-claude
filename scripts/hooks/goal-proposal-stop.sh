@@ -39,6 +39,21 @@ printf '%s' "$text" | rg -qi 'Which pending item|/catchup|checkpoint|core-dump|R
 hook_background_live "$input" && exit 0
 # A reply waiting on the owner's answer is meant to stop here, so pushing it on would be wrong.
 printf '%s' "$text" | tail -c 900 | rg -qi '\?\s|answer like|waiting on you|blocked on|your call|your go|say go|you to' && exit 0
+# A declared default ("If no reply: ...") already says what happens next; the
+# named-next-work gate judges whether that line was honest.
+KW="${KEEPWARM_PY:-$HOME/.claude/scripts/keepwarm/keepwarm.py}"
+[ -n "$(printf '%s' "$text" | python3 "$KW" declared 2>/dev/null)" ] && exit 0
+# The owner asked for a plan or a pick, so the reply is the answer and the next move
+# is theirs, however it is worded (c314380d: "tell me which ones are worth doing",
+# then this gate pushed edits before the owner's "go on all").
+owner=$(tail -n 2000 "$tp" | jq -rs '[.[] | select(.type=="user") | (.message.content
+  | if type=="string" then . else ([.[]? | select(.type=="text") | .text] | join(" ")) end)
+  | select(length > 0)
+  | select(test("^\\s*(Stop hook feedback|<task-notification>|<system-reminder>|<local-command|<command-|\\[keepwarm\\])") | not)]
+  | last // ""' 2>/dev/null)
+owner_asked_pick=0
+printf '%s' "$owner" | rg -qi 'which (ones?|of|items?)|worth doing|should (we|i)\b|make a plan|a plan (for|to)|recommend|your (pick|take|recommendation)|what do you (think|suggest|recommend)|tell me (which|what|whether)|options for|pros and cons' && owner_asked_pick=1
+[ "$owner_asked_pick" = 1 ] && exit 0
 h=$(printf '%s' "$text" | shasum | cut -c1-12)
 STATE="/tmp/claude-goalprop-${sid:0:8}"
 [ "$(cat "$STATE" 2>/dev/null)" = "$h" ] && exit 0
@@ -49,7 +64,7 @@ printf '%s' "$h" > "$STATE"
 prop=$(printf '%s' "$text" | rg -o '^\s*/goal .*' | head -1 | sed 's/^[[:space:]]*\/goal //')
 lint=""
 [ -n "$prop" ] && lint=$(bash "$HOME/.claude/scripts/goal/goal.sh" lint "$prop" 2>&1 >/dev/null | rg -v '^linted\.$' || true)
-reason='You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statement-on-starting-work.md, Propose, do not arm). Make the next tool call toward the goal you just proposed. If the work genuinely waits on the owner, say so in one line as a blocked-on, not as a paste line. This block fires once per message; mute: touch ~/.claude/.no-goal-proposal-gate'
+reason='You printed a /goal paste line and ended the turn with no tool call after it. A proposal is not a stop: the rule says work under it while the line sits (rules/goal-statement-on-starting-work.md, Propose, do not arm). Make the next tool call toward the goal you just proposed. If the work genuinely waits on the owner, say so in one line as a blocked-on, not as a paste line. If the reply asks the owner to choose, make only read-only calls (read, measure, check) until they answer, never an edit or a spend, and end with "If no reply: hold, <the choice that is theirs>". This block fires once per message; mute: touch ~/.claude/.no-goal-proposal-gate'
 [ -n "$lint" ] && reason="$reason
 The proposed goal also has lint findings; fix the wording before it is armed:
 $lint"
