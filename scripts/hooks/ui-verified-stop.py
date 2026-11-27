@@ -29,11 +29,12 @@ shows, displays, visible, rendered).
 
 Third check (review turns): a turn with no UI edit can still give a visual verdict, such
 as a review that says a page "holds up at 360px" after reading CSS and computed styles.
-When the reply gives such a verdict about a UI and the turn never looked (no Read of an
+It is judged only when the turn touched a UI: it read a UI file, or drove a browser
+page. When the reply gives such a verdict and the turn never looked (no Read of an
 image file, no image returned by a tool, no screenshot tool call, no `lm see` or
-`claude-see` Bash call), it blocks once per distinct reply. A turn that looked passes,
-and so does a reply that names what it did not look at. The edit turns above keep their
-own rules.
+`claude-see` Bash call), it blocks once per distinct reply. A turn that touched no UI
+stays silent however the reply is worded: "verified" about a scraper, a markdown file
+or a migration was a false alarm in 14 of 24 classified fires (behaviour audit, F3).
 
 Heed: a later UI claim that carries the image, or a frame description, after a fire
 records heeded:true; the same shortfall again records heeded:false.
@@ -95,13 +96,17 @@ if start is None:
 # directory, because most .js here is scripts and hooks.
 UI = re.compile(r"\.(html?|css|scss|jsx|tsx|vue|svelte)$"
                 r"|/(src|components|pages|public|static|app|web|ui|frontend|views|kanban)/[^/]*\.js$", re.I)
-# A shell command that rewrites a markup or style file: sed -i, a redirect, tee.
-BASH_WRITE = re.compile(r"(sed\s+-i\S*\s[^;&|]*|>{1,2}\s*|\btee\s+(-a\s+)?)\S*\.(html?|css|scss|jsx|tsx|vue|svelte)\b", re.I)
+# A shell command that rewrites a markup or style file: sed -i, a redirect, tee. The
+# extension must end the file name, so `gzip -c page.html > fixture.html.gz` is no UI edit.
+BASH_WRITE = re.compile(r"(sed\s+-i\S*\s[^;&|]*|>{1,2}\s*|\btee\s+(-a\s+)?)\S*\.(html?|css|scss|jsx|tsx|vue|svelte)(?=[\s\"'`;&|)]|$)", re.I)
 IMAGE_FILE = re.compile(r"\.(png|jpe?g|gif|webp|bmp|tiff?|heic)$", re.I)
 # A look at the render without an image coming back: the local vision model.
 VISION_CMD = re.compile(r"(^|[\s;&|(])(lm\s+(gemini\s+)?see|claude-see)\b")
+# A tool that drives a browser page: the turn touched a live UI even without editing one.
+BROWSER_TOOL = re.compile(r"(playwright|chrome|devtools|browser|puppeteer)", re.I)
 last_edit, last_seen, reply = -1, -1, ""
 looked = False   # anything this turn that put a render in front of the model or the vision model
+touched_ui = False   # the turn read a UI file or drove a page, so a visual verdict is about a real UI
 for i, r in enumerate(recs[start:], start):
     for b in content_of(r):
         if not isinstance(b, dict):
@@ -114,6 +119,8 @@ for i, r in enumerate(recs[start:], start):
                     or (name.endswith("__computer") and args.get("action") in ("screenshot", "zoom")) \
                     or (name == "Bash" and VISION_CMD.search(args.get("command") or "")):
                 looked = True
+            if (name == "Read" and UI.search(args.get("file_path") or "")) or BROWSER_TOOL.search(name):
+                touched_ui = True
         elif kind == ("user", "tool_result"):
             c = b.get("content")
             if isinstance(c, list) and any(isinstance(x, dict) and x.get("type") == "image" for x in c):
@@ -136,7 +143,7 @@ reply = inp.get("last_assistant_message") or reply
 if not reply:
     sys.exit(0)
 review_turn = last_edit < 0     # no UI file edited: only a visual verdict can trip the hook
-if review_turn and looked:
+if review_turn and (looked or not touched_ui):
     sys.exit(0)
 
 prose = re.sub(r"`[^`\n]*`", "", re.sub(r"```.*?```", "", reply, flags=re.S))

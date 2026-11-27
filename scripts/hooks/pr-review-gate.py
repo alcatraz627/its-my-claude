@@ -31,9 +31,17 @@ told to run `wait`.
 No review five minutes after the push, with no wait running, is reported to the
 owner and never acted on: a retrigger needs the owner's approval. Clanky being
 out of usage or paused on the PR is read from the PR's comments and reported
-the same way. Skipped: closed, merged and draft PRs, and titles carrying [nobot]
-or [no-bot]. Each block fires at most twice per PR, head and phase, then becomes
-a note to the owner.
+the same way. Out of usage is only ever a note, once per head, never a block.
+
+Review rounds are capped at four per PR (owner ruling, 2026-11-26): the fifth
+review's findings are not demanded back. The agent is told once to put the
+remaining findings to the owner and not to start another fix-and-review round.
+A round is one reviewed head, counted from the reviews on the PR and from the
+answers already recorded, so a rewritten bot comment does not reset the count.
+
+Skipped: closed, merged and draft PRs, and titles carrying [nobot] or [no-bot].
+Each block fires at most twice per PR, head and phase, then becomes a note to
+the owner.
 
 Mute: touch ~/.claude/.no-pr-review-gate · One-shot: PR_REVIEW_GATE_OFF=1
 Test: bash ~/.claude/scripts/hooks/pr-review-gate.test.sh
@@ -59,6 +67,8 @@ AUTO_WAIT_GRACE_S = 60
 AUTO_WAIT_RESTARTS = 1
 IPC_TIMEOUT_S = 10
 MAX_BLOCKS = 2
+# The owner's cap on fix-and-review rounds per PR; past it, leftover findings go to the owner.
+MAX_ROUNDS = int(os.environ.get("PR_REVIEW_GATE_MAX_ROUNDS", 4))
 CONCERN_MAX = 140
 GH_TIMEOUT_S = 10
 # stop-arbiter.py gives each gate 55 s; stay well inside it so
@@ -296,7 +306,12 @@ def dispositions(ref, sha):
     head can renumber or replace findings, and an old answer must not cover a
     new finding.
     """
-    got = {}
+    return {row["n"]: (row["disposition"], row["reason"], row.get("finding"))
+            for row in ledger_rows(ref) if row.get("sha") == sha}
+
+
+def ledger_rows(ref):
+    """Every answer recorded for this PR, in the order given."""
     try:
         with open(ledger_path()) as f:
             for line in f:
@@ -304,11 +319,22 @@ def dispositions(ref, sha):
                     row = json.loads(line)
                 except ValueError:
                     continue
-                if row.get("pr") == key(ref) and row.get("sha") == sha:
-                    got[row["n"]] = (row["disposition"], row["reason"], row.get("finding"))
+                if row.get("pr") == key(ref):
+                    yield row
     except OSError:
-        pass
-    return got
+        return
+
+
+def review_rounds(ref, pr):
+    """How many of Clanky's reviews this PR has had, the current head's included.
+
+    The bot may rewrite its comment, so reviews still on the PR are not enough;
+    every review an agent has already answered counts too, in any session.
+    """
+    shas = {s[:7] for s in pr.get("reviews", {})}
+    shas.update(str(row.get("sha") or "")[:7] for row in ledger_rows(ref))
+    shas.discard("")
+    return len(shas)
 
 
 def cmd_track(inp):
@@ -429,6 +455,17 @@ def check_pr(k, info, st, sid, headless, notes):
         if not missing:
             return None, None, None
         lines = "\n".join(f"  {n}. {t}" for n, t in missing)
+        rounds = review_rounds(ref, pr)
+        if rounds > MAX_ROUNDS:
+            # Once per PR and session: the owner capped the rounds so the findings left over go to them, not back to a fix loop.
+            if st["noted"].get(f"{k}:round-cap"):
+                return None, None, None
+            st["noted"][f"{k}:round-cap"] = 1
+            return (f"{k}: this is review round {rounds} of Clanky on the PR, past the {MAX_ROUNDS}-round limit the owner set, and "
+                    f"head {head7} has {len(missing)} finding(s) with no disposition:\n{lines}\n"
+                    f"Do not start another fix-and-review round. Put these findings to the owner once: one line each with your "
+                    f"recommendation ({SELF} summary {k} lists them), then let them decide which, if any, to fix. "
+                    f"This is the last time the gate raises them."), "round-cap", head7
         return (f"{k}: Clanky's review of {head7} has {len(missing)} finding(s) with no disposition:\n{lines}\n"
                 f"Read each one, act, then record it: {SELF} dispose {k} \"N=<{'|'.join(DISPOSITIONS)}>:<one-line reason>\" ...\n"
                 f"Then give the owner {SELF} summary {k} (one line per finding)."), "dispose", head7
@@ -441,7 +478,8 @@ def check_pr(k, info, st, sid, headless, notes):
     usage_out = out_of_usage(pr)
     if headless:
         # Nothing can wake a run that has exited, so it has to sit through the wait itself.
-        if age < SETTLE_S and not usage_out and not watched_for(ref, head, sid):
+        # Not past the round cap, though: the owner does not want another round waited for.
+        if age < SETTLE_S and not usage_out and not watched_for(ref, head, sid) and review_rounds(ref, pr) < MAX_ROUNDS:
             return (f"{k}: Clanky has not reviewed head {head7} yet. Run {SELF} wait {k} "
                     f"(polls up to {WAIT_MAX_S // 60} min), then disposition what it raises."), "wait", head7
         wait_state = "ended"
@@ -501,6 +539,9 @@ def wake_body(ref, pr, code):
     n = len(pr["findings"])
     if not n:
         return f"{k}: Clanky reviewed {pr['review_sha'][:7]} with no findings. Nothing to disposition. No reply needed."
+    if review_rounds(ref, pr) > MAX_ROUNDS:
+        return (f"{k}: Clanky reviewed {pr['review_sha'][:7]} with {n} finding(s), past the {MAX_ROUNDS}-round limit. "
+                f"Do not start another round: put them to the owner once ({SELF} summary {k}). No reply needed.")
     return (f"{k}: Clanky reviewed {pr['review_sha'][:7]} with {n} finding(s). Read them with {SELF} summary {k}, "
             f"act, then record each with {SELF} dispose {k}. No reply needed.")
 

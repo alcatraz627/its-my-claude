@@ -11,7 +11,10 @@ DIRECTIONS.md (2026-10-22), decided the file was for agents, kept writing, and
 told the owner it had written a better doc. So the check now runs again when
 the turn ends, on the file as it stands. While a doc written this turn still
 fails, the turn may not end (twice), and never on a reply that calls that doc
-better or fixed. If the agent ends the turn anyway, the owner is told.
+better or fixed. If the agent ends the turn anyway, the owner is told. A decline
+that also gives a reason ("it's a live checklist, the ids belong next to the steps")
+is remembered for the session: the doc is not flagged again, at edit time or at the
+end of a turn, unless it later gets worse than it was when the agent declined.
 
 A third failure is a doc that is hard to skim: dense paragraphs, lines spliced
 with semicolons, runs of sentences that only name code and paths. Those checks
@@ -149,11 +152,20 @@ CLAIM = re.compile(r"\b(better|cleaner|clearer|plainer|tighter|shorter|rewrote|r
                    r"simplified|readable|reads (?:well|cleanly|better))\b", re.IGNORECASE)
 ADMIT = re.compile(r"\bstill (?:fails?|flagged|reads like|has|have)|\bdoc(?:-| )voice\b|\bwall of text\b"
                    r"|\bfails? the doc check\b", re.IGNORECASE)
+# A reply that says it is leaving the doc as it is, without the words "still fails".
+LEAVE = re.compile(r"\b(?:leav(?:e|ing)|keep(?:ing)?|stay(?:s|ing)?|left)\b(?:[^.!?\n]|[.](?=\S))*\b(?:as is|as-is|as it is|on purpose|deliberately)\b",
+                   re.IGNORECASE)
+# What makes a decline reasoned: the gate's message asks for "why", so the decline sentence
+# or the one right after it must give a reason (a because-word, or what kind of file it is).
+REASON = re.compile(r"\b(?:because|since|so that|so (?:it|they|whoever|the|a)\b|as (?:it|they)(?:'s|'re| is| are)\b|"
+                    r"it(?:'s| is) an? |they(?:'re| are) |not (?:a )?(?:prose|doc for a person)|not meant|meant for|"
+                    r"for (?:the )?agents?|agent notes?|internal|fixtures?|checklist|needs? to|need to)",
+                    re.IGNORECASE)
 SENTENCE = re.compile(r"(?<=[.!?])\s+|\n+")
 
 
-def sentences_naming(reply, path):
-    """The reply's sentences that name this doc. The file name with its extension
+def names_doc(sentence, path):
+    """Whether one sentence names this doc. The file name with its extension
     always counts. The bare stem counts as a whole word only when it cannot be an
     ordinary word (DIRECTIONS, user-org-access, ADR-004), so "testing" in "fixed the
     testing job" does not name testing.md."""
@@ -161,17 +173,39 @@ def sentences_naming(reply, path):
     stem = os.path.splitext(name)[0]
     distinct = bool(re.search(r"[A-Z0-9_-]", stem))
     stem_rx = re.compile(r"(?<![\w.-])%s(?![\w-])" % re.escape(stem)) if distinct else None
-    return [s for s in SENTENCE.split(reply) if name.lower() in s.lower() or (stem_rx and stem_rx.search(s))]
+    return name.lower() in sentence.lower() or bool(stem_rx and stem_rx.search(sentence))
+
+
+def sentences_naming(reply, path):
+    """The reply's sentences that name this doc."""
+    return [s for s in SENTENCE.split(reply) if names_doc(s, path)]
+
+
+def declines(sentence):
+    """The sentence says the doc stays as it is, or still fails the check."""
+    return bool(ADMIT.search(sentence) or LEAVE.search(sentence))
 
 
 def claims_better(reply, path):
     """A sentence that names the doc and says it got better, without admitting it still fails."""
-    return any(CLAIM.search(s) and not ADMIT.search(s) for s in sentences_naming(reply, path))
+    return any(CLAIM.search(s) and not declines(s) for s in sentences_naming(reply, path))
 
 
 def admits(reply, path):
-    """A sentence that names the doc and says plainly that it still fails."""
-    return any(ADMIT.search(s) for s in sentences_naming(reply, path))
+    """A sentence that names the doc and says plainly that it still fails or stays as it is."""
+    return any(declines(s) for s in sentences_naming(reply, path))
+
+
+def reasoned_decline(reply, path):
+    """A decline that also says why: the sentence that names the doc and declines, or the
+    one right after it, gives a reason. The gate's own message asks for "that it still fails
+    the doc check, and why", so a bare "still fails" is a decline but not a reasoned one."""
+    sents = [s for s in SENTENCE.split(reply) if s.strip()]
+    for i, s in enumerate(sents):
+        if names_doc(s, path) and declines(s):
+            if REASON.search(s + " " + (sents[i + 1] if i + 1 < len(sents) else "")):
+                return True
+    return False
 
 
 def reader_of(text):
@@ -497,6 +531,11 @@ def warn_log(action):
                     "--action", action, "--heeded", "unknown"], capture_output=True)
 
 
+def read_text(path):
+    with open(path, encoding="utf-8", errors="replace") as f:
+        return f.read()
+
+
 def state_path(sid):
     return os.path.join(STATE_DIR, "claude-docgate-%s.json" % (sid or "unknown")[:8])
 
@@ -512,6 +551,49 @@ def load(sid):
 def save(sid, st):
     with open(state_path(sid), "w") as f:
         json.dump(st, f)
+
+
+def declined_path(sid):
+    return os.path.join(STATE_DIR, "claude-docgate-declined-%s.json" % (sid or "unknown")[:8])
+
+
+def load_declined(sid):
+    """The docs the agent gave a reasoned decline for this session, each with how bad it
+    was at that moment. Kept apart from the turn state, which is wiped at the end of every
+    turn that ends clean; a decline has to outlive that."""
+    try:
+        with open(declined_path(sid)) as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_declined(sid, declined):
+    with open(declined_path(sid), "w") as f:
+        json.dump(declined, f)
+
+
+def decline_holds(sid, path, text):
+    """True while a reasoned decline for this doc stands: it is not worse, on any measure,
+    than it was when the agent declined. Worse (or a different shape of failing) ends the
+    decline, so the doc is judged again, and the agent may decline again with a new reason."""
+    declined = load_declined(sid)
+    base = declined.get(path)
+    if base is None:
+        return False
+    if worse(base, measure(text)):
+        del declined[path]
+        save_declined(sid, declined)
+        return False
+    return True
+
+
+def forget_declined(sid, path):
+    """A doc that reads fine again starts over, as with noted faults."""
+    declined = load_declined(sid)
+    if path in declined:
+        del declined[path]
+        save_declined(sid, declined)
 
 
 def note_candidate(data, path):
@@ -562,6 +644,12 @@ def post(data):
     if not found:
         note_candidate(data, path)
         forget_noted(data.get("session_id"), path)
+        # Empty findings also mean "out of scope" (a handed-over .claude/output doc), where the
+        # decline must survive; only a doc that reads fine when judged anyway starts over.
+        if not findings(path, force=True, hint=False):
+            forget_declined(data.get("session_id"), path)
+        return 0
+    if not data.get("agent_id") and decline_holds(data.get("session_id"), path, read_text(path)):
         return 0
     kinds = fault_kinds(" ".join(found))
     if data.get("agent_id"):
@@ -616,11 +704,21 @@ def stop(data):
     claims = any(claims_better(reply, p) for p in failing)
     # Only the agent's own doing holds the turn: a doc it made fail or made worse, or a claim it is better.
     if not claims:
-        failing = {p: f for p, f in failing.items() if worse(st.get("base", {}).get(p), measure(open(p, errors="replace").read()))}
+        failing = {p: f for p, f in failing.items() if worse(st.get("base", {}).get(p), measure(read_text(p)))}
     # A doc the reply names and says plainly still fails is the agent's decision to
     # leave it. The turn may end, and the owner hears it from the hook.
+    # A doc the agent already gave a reasoned decline for this session is not raised again
+    # unless it got worse than it was then, or the reply calls it better.
+    held = {p for p in failing if not claims_better(reply, p) and decline_holds(sid, p, read_text(p))}
+    failing = {p: f for p, f in failing.items() if p not in held}
     admitted = {p: f for p, f in failing.items() if admits(reply, p) and not claims_better(reply, p)}
     failing = {p: f for p, f in failing.items() if p not in admitted}
+    reasoned = [p for p in admitted if reasoned_decline(reply, p)]
+    if reasoned:
+        declined = load_declined(sid)
+        for p in reasoned:
+            declined[p] = measure(read_text(p))
+        save_declined(sid, declined)
     detail = " ".join("%s: %s." % (os.path.basename(p), "; ".join(f)) for p, f in failing.items())
     if not failing:
         os.remove(state_path(sid)) if os.path.exists(state_path(sid)) else None
@@ -638,9 +736,13 @@ def stop(data):
         warn_log("block")
         lead = ("Your reply tells the owner the doc is better, and it still fails the doc check. "
                 if claims else "A doc you wrote this turn still fails the doc check. ")
-        print(json.dumps({"decision": "block", "reason": lead + detail + " Rewrite it until it passes. If you "
+        print(json.dumps({"decision": "block", "reason": lead + detail + " Rewrite it until it passes, then give "
+                          "the final voice pass to a fresh reader that did not write it (a sub-agent or "
+                          "personas/doc-writer.md), because an author cannot see their own register "
+                          "(rules/audience-aware-writing.md). If you "
                           "decide it should stay as it is, say so in your reply in one sentence (that it still "
-                          "fails the doc check, and why); never call it better or fixed."}))
+                          "fails the doc check, and why); never call it better or fixed. A stated reason keeps "
+                          "the file from being raised again this session unless it gets worse."}))
         return 0
     # Out of blocks: let the turn end, and make sure the owner hears it from the hook, not the agent.
     os.remove(state_path(sid))

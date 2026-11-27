@@ -54,7 +54,9 @@ expect "its rewrite is quiet" silent "$(run "$T/docs/plan/plain-directions.md" s
 
 # The end of the turn: the doc as it stands decides, not the note.
 expect "the turn may not end while the doc fails" '"decision": "block"' "$(stop s9 'Updated the directions file.')"
-expect "nor a second time" '"decision": "block"' "$(stop s9 'Still working on it.')"
+got=$(stop s9 'Still working on it.')
+expect "nor a second time" '"decision": "block"' "$got"
+expect "the block names the fresh-reader step (owner ruling D11)" 'fresh reader that did not write it' "$got"
 got=$(stop s9 'Leaving it.')
 expect "the third stop goes through and tells the owner" '"systemMessage"' "$got"
 expect "naming the doc" "DIRECTIONS.md still fails" "$got"
@@ -278,6 +280,51 @@ got=$(python3 "$H" --check 2>&1); code=$?
 before=$(ls "$DOC_VOICE_STATE" | wc -l | tr -d ' ')
 python3 "$H" --check "$T/loose/wall.md" >/dev/null 2>&1
 [ "$(ls "$DOC_VOICE_STATE" | wc -l | tr -d ' ')" = "$before" ] && echo "ok   --check leaves no session state behind" || { echo "FAIL --check wrote state"; fail=1; }
+
+# A reasoned decline sticks for the session (2026-11-26 audit, F3). The replies below are the
+# shapes seen in sessions db8d512f ("it's a live incident checklist") and 076c2049 ("a test fixture").
+APPEND_CELL() { printf '\n| a | %s |\n' "$(printf 'x%.0s' $(seq 1 200))" >> "$1"; }
+cp "$WALL/directions-wall.md" "$T/docs/plan/dec-one.md"
+run "$T/docs/plan/dec-one.md" dc1 >/dev/null
+got=$(stop dc1 'dec-one.md still fails the doc check, because it is a live checklist and the ids sit next to each step.')
+expect "a reasoned decline ends the turn and the owner is told" "on purpose" "$got"
+expect "and the same doc, edited again, is not noted again" silent "$(run "$T/docs/plan/dec-one.md" dc1)"
+printf '\nOne more short line.\n' >> "$T/docs/plan/dec-one.md"
+expect "a small edit to it stays quiet" silent "$(run "$T/docs/plan/dec-one.md" dc1)"
+expect "and the next turn is not held for it" silent "$(stop dc1 'Added a line to dec-one.md.')"
+cp "$WALL/directions-wall.md" "$T/docs/plan/dec-other.md"
+expect "a doc that was never declined is still flagged" "does not read as a doc" "$(run "$T/docs/plan/dec-other.md" dc1)"
+expect "the same doc in another session is still flagged" "does not read as a doc" "$(run "$T/docs/plan/dec-one.md" dc1x)"
+APPEND_CELL "$T/docs/plan/dec-one.md"
+expect "a declined doc that gets worse is flagged again" "does not read as a doc" "$(run "$T/docs/plan/dec-one.md" dc1)"
+expect "and holds the turn again" '"decision": "block"' "$(stop dc1 'Added a row to dec-one.md.')"
+
+# A decline with no reason ends the turn as before but is not remembered.
+cp "$WALL/directions-wall.md" "$T/docs/plan/dec-bare.md"
+run "$T/docs/plan/dec-bare.md" dc2 >/dev/null
+expect "a bare decline still ends the turn" '"systemMessage"' "$(stop dc2 'dec-bare.md still fails the doc check.')"
+expect "but the doc is flagged again on the next edit" "does not read as a doc" "$(run "$T/docs/plan/dec-bare.md" dc2)"
+
+# "Leaving it as is" counts as a decline without the words "still fails".
+cp "$WALL/directions-wall.md" "$T/docs/plan/dec-leave.md"
+run "$T/docs/plan/dec-leave.md" dc3 >/dev/null
+expect "leaving a doc as it is, with a reason, ends the turn" '"systemMessage"' \
+  "$(stop dc3 "I'm leaving dec-leave.md as it is because it's a test fixture, not prose.")"
+expect "and is remembered" silent "$(run "$T/docs/plan/dec-leave.md" dc3)"
+
+# The end-of-turn check honours a remembered decline too (a doc handed over from .claude/output).
+O2="$T/proj/.claude/output/20261126-decline"; mkdir -p "$O2"
+cp "$REC/review-before-rewrite.md" "$O2/status.md"
+run "$O2/status.md" dc4 >/dev/null
+expect "a handed-over doc with a reasoned decline ends the turn" '"systemMessage"' \
+  "$(stop dc4 "Status is in $O2/status.md, which still fails the doc check, because it is an internal status note.")"
+run "$O2/status.md" dc4 >/dev/null
+expect "handed over again, it is not held a second time" silent "$(stop dc4 "Status again in $O2/status.md")"
+cp "$REC/review-before-rewrite.md" "$O2/status2.md"
+run "$O2/status2.md" dc5 >/dev/null
+stop dc5 "Status is in $O2/status2.md, which still fails the doc check." >/dev/null
+run "$O2/status2.md" dc5 >/dev/null
+expect "an unreasoned decline on a handed-over doc is held again" '"decision": "block"' "$(stop dc5 "Status again in $O2/status2.md")"
 
 trash "$T" 2>/dev/null
 exit $fail

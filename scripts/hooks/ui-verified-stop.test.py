@@ -173,46 +173,46 @@ else:
     failed += 1
     print(f"FAIL heed false when the shortfall repeats (true={heed_count('true')} false={heed_count('false')})")
 
-# ---- review turns: a visual verdict with no UI edit and no look ----
+# ---- turns that edited no UI file: judged only when they touched a UI ----
 def tool(name, **inp):
     return {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": name, "input": inp}]}}
 
 
 rv = user("review the landing page across widths 360 to 1600")
 LA = "/Users/alcatraz627/Code/Versable/landing-app"
-# Reconstructed from the 2026-10-20 landing-app width review (atone mist-20261020-120344-a4):
-# the verdict came from CSS and computed styles, with no render looked at.
+# A review that reads CSS and then gives a visual verdict touched a UI, so it is still
+# judged (atone mist-20261020-120344-a4: "holds up at 360px" from CSS alone).
 css_only = [rv, tool("Bash", command=f"rg -n '@media|@container|grid-template' {LA}/src/styles/base.css"),
             tool("Read", file_path=f"{LA}/src/styles/base.css"),
             tool("Read", file_path=f"{LA}/src/components/module-extraction.tsx")]
 verdict = "The layout holds up at 360, 390 and 400px: the extraction module looks right and nothing overflows."
-run("review: verdict from CSS alone", "block", css_only + [say(verdict)], "uiv00040")
-run("review: same reply again", "pass", css_only + [say(verdict)], "uiv00040")
-run("review: after reading a screenshot file", "pass",
-    css_only + [tool("Read", file_path=f"{LA}/.claude/output/shots/extraction-360.png"), say(verdict)], "uiv00041")
-run("review: after an image came back", "pass", css_only + [image(), say(verdict)], "uiv00042")
-run("review: after a browser screenshot tool", "pass",
-    css_only + [tool("mcp__plugin_playwright_playwright__browser_take_screenshot"), say(verdict)], "uiv00043")
-run("review: after a devtools screenshot", "pass",
-    css_only + [tool("mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot"), say(verdict)], "uiv00044")
-run("review: after lm see", "pass",
-    css_only + [tool("Bash", command="lm see /x/extraction-360.png --crop 400x300+0+0 'are the values cut off?'"), say(verdict)], "uiv00045")
-run("review: an accessibility snapshot is not a look", "block",
-    css_only + [tool("mcp__plugin_playwright_playwright__browser_snapshot"), say(verdict)], "uiv00046")
-run("review: lm see only in a past turn", "block",
-    [tool("Bash", command="lm see /x/a.png 'q'"), user("now the tablet widths")] + css_only[1:] + [say(verdict)], "uiv00047")
-run("review: UI mentioned, no verdict", "pass",
-    css_only + [say("The extraction module has a compact grid below 768px at base.css:1291 and the sweep covers 400 to 1600px.")], "uiv00048")
-run("review: verdict about something that is not a UI", "pass",
-    [rv, tool("Bash", command="pytest -q"), say("Verified: the migration ran and the tests pass.")], "uiv00049")
-# Real message from the same session (turn that only read CSS and said where it expected trouble).
-run("review: 'fixed in pixels' describes CSS, it is no verdict", "pass",
-    css_only + [say("While it runs I read the responsive CSS for the animated visuals. These are where I expect "
-                    "phone-width trouble, because their layouts are fixed in pixels: the hero graphic below 1024px.")], "uiv00053")
-run("review: honest about not looking", "pass",
-    css_only + [say("The CSS suggests it holds up at 360px, but I have not looked at a render, so this is not verified.")], "uiv00050")
-run("review: stop hook already active", "pass", css_only + [say(verdict)], "uiv00051", active=True)
-run("review: input reply is judged", "block", css_only + [say("Read base.css.")], "uiv00052", lam=verdict)
+run("review that read UI files: visual verdict from CSS alone blocks", "block", css_only + [say(verdict)], "uiv00040")
+run("review that read UI files: the input reply is judged", "block", css_only + [say("Read base.css.")], "uiv00052", lam=verdict)
+run("review that drove a page: visual verdict with no look blocks", "block",
+    [rv, tool("mcp__plugin_playwright_playwright__browser_navigate", url="http://localhost:5173"), say(verdict)], "uiv00061")
+run("review that read UI files and took a screenshot passes", "pass",
+    css_only + [tool("mcp__plugin_playwright_playwright__browser_take_screenshot"), say(verdict)], "uiv00062")
+run("review that only grepped a stylesheet is silent", "pass", css_only[:2] + [say(verdict)], "uiv00063")
+# Real misfires, each from a turn that edited a scraper or a data file.
+scrape = [user("fix the sku parsing"), tool("Edit", file_path="/x/scrape/parse_sku.py")]
+run("scraper turn: 'is fixed' about code is silent", "pass", scrape + [say("The SKU parser is fixed and the layout of the output file is correct on all 40 rows.")], "uiv00054")
+run("scraper turn: 'verified' about a markdown file is silent", "pass",
+    [user("update the notes"), tool("Edit", file_path="/x/notes/README.md"), say("Verified: the css and ui sections of the notes read well.")], "uiv00055")
+run("no edit at all: plain 'verified' is silent", "pass", [rv, say("Verified the migration ran and the tests pass.")], "uiv00049")
+# The same verdict words in a turn that DID edit a UI file are still judged.
+run("ui edit then the same verdict: still blocks", "block", css_only[:1] + [edit(f"{LA}/src/styles/base.css"), say(verdict)], "uiv00056")
+run("ui edit via sed then the same verdict: still blocks", "block",
+    css_only[:1] + [tool("Bash", command=f"sed -i '' 's/1px/2px/' {LA}/src/styles/base.css"), say("It is verified at 360px.")], "uiv00057")
+run("ui edit, honest about not looking: passes", "pass",
+    css_only[:1] + [edit(f"{LA}/src/styles/base.css"), say("The CSS suggests it holds up at 360px, but I have not looked at a render, so this is not verified.")], "uiv00050")
+
+# A redirect into a compressed fixture is no UI edit (real: f34d2405, gzip of a scraped page to .html.gz).
+gz = tool("Bash", command="gzip -9 -c /tmp/pages/a.html > /x/tests/fixtures/dealer_pages/a-list.html.gz")
+run("gzip redirect to .html.gz is not a UI edit", "pass", [user("add the fixture"), gz, say("Done and verified: the parser tests pass.")], "uiv00058")
+run("redirect into a real .html file is a UI edit", "block",
+    [user("write the page"), tool("Bash", command="cat /tmp/a > /x/site/index.html"), say("Done and verified.")], "uiv00059")
+run("tee into a .css file is a UI edit", "block",
+    [user("write the style"), tool("Bash", command="printf 'a{}' | tee /x/site/app.css"), say("Done and verified.")], "uiv00060")
 
 clear_state()
 print(f"{passed} passed, {failed} failed")

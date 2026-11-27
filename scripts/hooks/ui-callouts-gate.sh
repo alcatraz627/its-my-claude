@@ -10,10 +10,13 @@
 #
 # Fires ONLY when all three hold this turn:
 #   1. a UI file was edited inside a repo that has .claude/callouts.jsonl
-#   2. the final assistant message claims done-ness
-#   3. an open row's surface name appears in the edited paths or the claim
-# Then callouts.sh gate <surface> decides; unmet rows block ONCE (loop-safe;
-# the second Stop passes with a note). Everything else is silent.
+#   2. the final assistant message claims done-ness (a claim word that is not
+#      negated, so "nothing here is verified yet" is not a claim)
+#   3. an open row's surface name appears in the UI files edited this turn or in
+#      a claim clause (a surface named only in the rest of the reply is not claimed)
+# Then callouts.sh gate <surface> decides; unmet rows block ONCE per surface
+# (loop-safe; a later claim on the same surfaces, or fewer, passes with a note).
+# Everything else is silent.
 # Mute: touch ~/.claude/.no-ui-callouts-gate (machine-wide until removed).
 # Advice for a person reading the reply: see hook_should_run.
 . "$HOME/.claude/scripts/hooks/hook-common.sh" 2>/dev/null && { hook_should_run owner-turn || exit 0; }
@@ -64,23 +67,67 @@ turn_json="$window"; [ -n "$boundary" ] && turn_json=$(printf '%s\n' "$window" |
 # message at Stop time, see hook_last_assistant_text in hook-common.sh).
 claim_text=$(hook_last_assistant_text "$input" "$tp")
 [ -n "$claim_text" ] || exit 0
-printf '%s' "$claim_text" | rg -qi '\b(done|fixed|complete|completed|ready|shipped|verified|works now|looks good)\b' || exit 0
 
-# surfaces with open rows whose name appears in the edits or the claim
+# A done-claim is a claim word that is not negated just before it. "Nothing here is
+# verified yet" and "I didn't claim those surfaces fixed" say the opposite of done, so
+# they must not trip the gate (the agent's own explanation used to re-fire it).
+# Prints the clauses that may name a surface: each claim clause plus the clause right
+# after it when that one does not disclaim. Prints nothing when the reply makes no
+# done-claim.
+read -r -d '' CLAIM_PY <<'PY'
+import re, sys
+text = sys.stdin.read()
+CLAIM = re.compile(r"\b(done|fixed|complete|completed|ready|shipped|verified|works now|looks good)\b", re.I)
+NEG = re.compile(r"\b(not|never|nothing|none|neither|nor|without)\b|n['\N{RIGHT SINGLE QUOTATION MARK}]t\b", re.I)
+UNV = re.compile(r"\b(unverified|untested|unconfirmed|not yet)\b|still (?:open|unverified)|stays? open", re.I)
+clauses = re.split(r"(?<=[.!?])\s+|\n+|;|\N{EM DASH}|\s+(?:but|however|though|although)\b[,\s]*", text)
+kept, real, follow = [], False, False
+for c in (c.strip() for c in clauses):
+    if not c:
+        continue
+    claims = False
+    for m in CLAIM.finditer(c):
+        before = c[:m.start()].rsplit(",", 1)[-1].split()[-8:]
+        if not NEG.search(" ".join(before)):
+            claims = True
+            break
+    real = real or claims
+    # The clause after a claim may carry its subject ("Done. The about page is updated."),
+    # unless it disclaims. A surface named elsewhere in a long reply is not claimed.
+    if claims or (follow and not (NEG.search(c) or UNV.search(c))):
+        kept.append(c)
+    follow = claims
+if real:
+    print("\n".join(kept))
+PY
+claim_clauses=$(printf '%s' "$claim_text" | python3 -c "$CLAIM_PY" 2>/dev/null)
+[ -n "$claim_clauses" ] || exit 0
+
+# UI files edited in THIS turn. The session-wide list above only finds the repo; read as
+# "edited now" it made every later reply in a session look like a UI done-claim.
+turn_ui_paths=$(printf '%s\n' "$turn_json" | jq -r 'select(.type=="assistant") | .message.content[]?
+    | select(.type=="tool_use" and (.name=="Edit" or .name=="MultiEdit" or .name=="Write"))
+    | .input.file_path // empty' 2>/dev/null \
+  | rg -i '\.(tsx|jsx|css|scss|sass|less|vue|svelte|html)$|/(app|components|pages)/.*\.(ts|js)$' | sort -u)
+
+# surfaces with open rows whose name appears in this turn's UI edits or the claim
 surfaces=$(jq -r 'select(.status=="open") | .surface' "$store" 2>/dev/null | sort -u)
 [ -n "$surfaces" ] || exit 0
 matched=""
 while IFS= read -r s; do
   [ -n "$s" ] || continue
-  if printf '%s\n%s' "$ui_paths" "$claim_text" | rg -qi -F -- "$s"; then matched="$matched $s"; fi
+  if printf '%s\n%s' "$turn_ui_paths" "$claim_clauses" | rg -qi -F -- "$s"; then matched="$matched $s"; fi
 done <<< "$surfaces"
 matched=$(printf '%s' "$matched" | tr ' ' '\n' | rg -v '^$' | sort -u)
 [ -n "$matched" ] || exit 0
 
 STATE="/tmp/claude-ui-callouts-gate-${sid8}"
 sig=$(printf '%s' "$matched" | tr '\n' ',')
-if [ -f "$STATE" ] && [ "$(cat "$STATE" 2>/dev/null)" = "$sig" ]; then
-  note "ui-callouts-gate: open call-outs still unmet on: $sig: letting the Stop pass (block fires once). The rows remain open until the owner retires them."
+# STATE lists every surface already blocked on this session. A later claim that names only
+# those surfaces (the same set, or fewer) passes: the owner was told once, and the agent
+# narrowing its claim to some of them is the fix this gate asks for, not a new offence.
+if [ -f "$STATE" ] && [ -z "$(printf '%s\n' "$matched" | rg -v -x -F -f "$STATE" 2>/dev/null)" ]; then
+  note "ui-callouts-gate: open call-outs still unmet on: $sig: letting the Stop pass (block fires once per surface). The rows remain open until the owner retires them."
 fi
 
 CALLOUTS="$HOME/.claude/scripts/callouts/callouts.sh"
@@ -100,7 +147,7 @@ if [ -z "$unmet" ]; then
   [ -x "$WARN" ] && bash "$WARN" --hook ui-callouts-gate --action soft --heeded true >/dev/null 2>&1 || true
   exit 0
 fi
-printf '%s' "$sig" > "$STATE" 2>/dev/null || true
+printf '%s\n' "$matched" >> "$STATE" 2>/dev/null || true
 [ -x "$WARN" ] && bash "$WARN" --hook ui-callouts-gate --action block --heeded unknown >/dev/null 2>&1 || true
 jq -cn --arg r "ui-callouts-gate: this done-claim touches surfaces with OPEN owner call-outs that were not re-run:
 $unmet

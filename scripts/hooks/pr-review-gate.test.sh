@@ -82,6 +82,20 @@ if extra == "usage":
     comments.append({"body": "<!-- pr-claude:review -->\n<!-- pr-claude:review:dead -->\n## nobody looked\n\n"
         "\U0001F99E Claude usage exhausted\n\nClaude's usage resets 3:50pm (UTC), and I am asleep until then. "
         "A run after that picks it up.\n\n<!-- pr-claude:review:outcome=review.not_run.out_of_usage -->"})
+if extra == "usage-real":
+    # The shape Clanky posted on 30 Oct 2026 (session 1936fe09): one sticky comment, notes block first, the review part dead.
+    comments.append({"body": "<!-- pr-claude:review -->\n<!-- pr-claude:review:dead -->\n<!-- pr-claude:notes:start -->\n"
+        "<!-- pr-claude:notes:lead -->\n## Clanky Would Say\n\nnotes\n<!-- pr-claude:notes:end -->\n---\n\n"
+        "## Clanky's Review: not run\n\n\U0001F99E\U0001F971 Claude usage exhausted\n\n"
+        "No review this push: Claude's usage resets 3:50pm (UTC), and I am asleep until then. A run after that picks it up.\n\n"
+        "> The run is here: https://console.cloud.google.com/logs/query\n"
+        "<!-- pr-claude:review:outcome=review.not_run.out_of_usage -->"})
+if extra.startswith("rounds"):
+    # N earlier reviews of earlier heads, left on the PR beside the current one.
+    for i in range(int(extra[6:])):
+        comments.insert(1, {"body": "<!-- pr-claude:review -->\n## Clanky's Review\n"
+            f"### ⚠️ 1. [`old{i}.py:1`](https://x) · `gone`\n\nAn earlier concern {i}.\n"
+            f"<!-- pr-claude:review:sha={i + 1:07d} -->"})
 if extra == "stood-down":
     comments.append({"body": f"\U0001F99E> `/claude-bot review`\n\nReview stood down on `{head[:7]}`: Claude usage exhausted; the next run overwrites this"})
 if extra == "paused":
@@ -449,6 +463,93 @@ out=$(python3 "$GATE" dispose demo#7 --sha abc1234 "1=fixed:moved in the same pu
 same "dispose --sha on the only review exits 0 after saving" "$code" "0"
 check "and prints that review's summary" "$out" "Clanky on abc1234"
 check "and the answer was recorded" "$(python3 "$GATE" summary demo#7 --sha abc1234)" "fixed: moved in the same push"
+
+# From here on a fresh state directory, so the answers recorded above do not count as review rounds.
+export PR_REVIEW_GATE_STATE="$T/state2"
+export PR_REVIEW_GATE_AUTO_WAIT_S=1
+age_push_by() {  # $1 session, $2 seconds
+  python3 - "$PR_REVIEW_GATE_STATE/sessions/$1.json" "$2" <<'EOF'
+import json, sys
+p = sys.argv[1]; st = json.load(open(p))
+for v in st["prs"].values(): v["pushed_at"] -= int(sys.argv[2])
+json.dump(st, open(p, "w"))
+EOF
+}
+ledger_add() {  # $1 how many earlier heads already answered on demo#7
+  python3 - "$PR_REVIEW_GATE_STATE/ledger.jsonl" "$1" <<'EOF'
+import json, os, sys
+os.makedirs(os.path.dirname(sys.argv[1]), exist_ok=True)
+with open(sys.argv[1], "a") as f:
+    for i in range(int(sys.argv[2])):
+        f.write(json.dumps({"ts": 0, "pr": "versable-git/demo#7", "sha": f"{i + 1:07d}", "n": 1,
+                            "finding": "x", "disposition": "fixed", "reason": "done earlier"}) + "\n")
+EOF
+}
+HEADLESS="HOOK_POPULATION_TEST=1 CLAUDE_CODE_ENTRYPOINT=sdk-cli"
+
+# Out of usage, in the shape the bot really posted, 114 minutes after the push (1936fe09 L4291).
+track s50 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "6698630aaa" "" usage-real
+age_push_by s50 6840
+out=$(stop s50)
+check "out of usage, real shape: one note naming the reset time" "$out" "resets 3:50pm (UTC)"
+check_not "and no block" "$out" '"decision"'
+check_not "and no retrigger demand" "$out" "clanky-review.py"
+same "a repeat Stop says nothing more" "$(stop s50)" ""
+track s51 "git push" "https://github.com/versable-git/demo/pull/7"
+age_push_by s51 6840
+out=$(env $HEADLESS python3 "$GATE" stop <<< '{"session_id":"s51"}')
+check_not "a headless run 114 min on is not blocked either" "$out" '"decision"'
+track s52 "git push" "https://github.com/versable-git/demo/pull/7"
+out=$(env $HEADLESS python3 "$GATE" stop <<< '{"session_id":"s52"}')
+check_not "a headless run fresh from the push is not told to wait on a spent account" "$out" '"decision"'
+# The real case still holds: usage available, no review yet, headless run waits.
+fixture "t" "6698630aaa" ""
+track s53 "git push" "https://github.com/versable-git/demo/pull/7"
+check "no review and usage available: a headless run is still told to wait" "$(env $HEADLESS python3 "$GATE" stop <<< '{"session_id":"s53"}')" "pr-review-gate.py wait versable-git/demo#7"
+
+# The round cap: four rounds get the usual demand, the fifth review goes to the owner once.
+track s60 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" "abc1234" rounds3
+out=$(stop s60)
+check "round 4 of 4 still asks for dispositions" "$out" "2 finding(s) with no disposition"
+check_not "and is not the cap message" "$out" "round limit"
+track s61 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" "abc1234" rounds4
+out=$(stop s61)
+check "round 5 is past the cap and the gate says so" "$out" "round 5 of Clanky"
+check "and blocks the agent once" "$out" '"decision": "block"'
+check "and tells it to put the findings to the owner" "$out" "Put these findings to the owner once"
+check "and not to start another round" "$out" "Do not start another fix-and-review round"
+check "and lists what is open" "$out" "1. \`a.py:3\`"
+check_not "and does not ask for dispositions" "$out" "pr-review-gate.py dispose"
+same "the second Stop is silent" "$(stop s61)" ""
+fixture "t" "9999999aaa" "9999999" rounds4
+same "so is a later head's review on the same PR" "$(stop s61)" ""
+# Answers already recorded count as rounds even when the bot has rewritten its comment away.
+ledger_add 4
+track s62 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" "abc1234"
+out=$(stop s62)
+check "four recorded answers plus a fifth review: past the cap" "$out" "round limit"
+trash "$PR_REVIEW_GATE_STATE" >/dev/null 2>&1
+export PR_REVIEW_GATE_STATE="$T/state3"
+ledger_add 3
+track s63 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "abc1234def" "abc1234"
+check "three recorded answers plus a fourth review: still asks for dispositions" "$(stop s63)" "2 finding(s) with no disposition"
+# A headless run is not made to sit through a fifth round's wait.
+ledger_add 4
+track s64 "git push" "https://github.com/versable-git/demo/pull/7"
+fixture "t" "fff9999aaa" ""
+out=$(env $HEADLESS python3 "$GATE" stop <<< '{"session_id":"s64"}')
+check "four rounds done and no review at the new head: no wait demanded, nothing said" "$out" ""
+# The wake message agrees with the gate.
+fixture "t" "abc1234def" "abc1234" rounds4
+python3 "$GATE" wait demo#7 1 --wake sess-cap >/dev/null 2>&1
+line=$(rg -- "--to sess-cap " "$IPC_LOG")
+check "a wake past the cap says not to start another round" "$line" "Do not start another round"
+check_not "and does not tell the agent to disposition" "$line" "pr-review-gate.py dispose"
 
 pkill -f "$T/state" 2>/dev/null
 trash "$T" >/dev/null 2>&1

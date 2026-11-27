@@ -2,8 +2,8 @@
 """Links Agent dispatches to seat records (PreToolUse) and lands them on return
 (PostToolUse). A dispatch with no [seat ...] header only gets a warning, never a
 block (owner ruling b, 2026-10-10; re-affirmed 2026-10-26: "make header warn for
-now, will escalate later to block if warn isn't enough (ensure telemetry)").
-Every dispatch is logged to seats/dispatch.jsonl so `seat weekly` can show
+now, will escalate later to block if warn isn't enough (ensure telemetry)"). The warning
+shows once per session. Every dispatch is logged to seats/dispatch.jsonl so `seat weekly` can show
 whether the warning is working. Never fails the tool call."""
 import datetime as dt
 import json
@@ -14,6 +14,7 @@ import sys
 
 SEAT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "seat")
 SEATS = os.environ.get("SEATS_DIR", os.path.expanduser("~/.claude/seats"))
+HINT_DIR = os.environ.get("SEAT_HINT_DIR", "/tmp")
 
 # What each of the five dispatch clauses looks like in a prompt. A floor, not an
 # audit: it reads wording, so a clause phrased some new way reads as missing.
@@ -40,6 +41,23 @@ def log_dispatch(ti, prompt, sid, warned):
         pass
 
 
+def first_hint_this_session(session_id):
+    """True the first time a session asks, False on every later ask.
+
+    The hint is a reminder, and a reminder repeated on every dispatch stops being read
+    (227 fires against 20% seated dispatches). One marker file per session, named with
+    the first 8 characters of the session id like the other hooks' markers. If the marker
+    cannot be written, the hint shows again rather than being lost."""
+    marker = os.path.join(HINT_DIR, "claude-seathint-%s" % (str(session_id or "nosid")[:8]))
+    try:
+        os.close(os.open(marker, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644))
+        return True
+    except FileExistsError:
+        return False
+    except OSError:
+        return True
+
+
 def main():
     try:
         inp = json.load(sys.stdin)
@@ -57,11 +75,13 @@ def main():
         subprocess.run([sys.executable, SEAT, "sweep", "--quiet"], capture_output=True, timeout=10)
     if not m:
         if event == "PreToolUse":
-            log_dispatch(ti, prompt, None, True)
-            print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext":
-                  "This sub-agent dispatch has no seat header. Seat it in one call: "
-                  "`seat header --role R --model M --output /abs/path --goal \"...\"` prints the header line "
-                  "to put first in the prompt. For a full brief use `seat template` + `seat compose`."}}))
+            hint = first_hint_this_session(inp.get("session_id"))
+            log_dispatch(ti, prompt, None, hint)
+            if hint:
+                print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "additionalContext":
+                      "This sub-agent dispatch has no seat header. Seat it in one call: "
+                      "`seat header --role R --model M --output /abs/path --goal \"...\"` prints the header line "
+                      "to put first in the prompt. For a full brief use `seat template` + `seat compose`."}}))
         return 0
     sid = m.group(1)
     rec_p = os.path.join(SEATS, sid + ".json")

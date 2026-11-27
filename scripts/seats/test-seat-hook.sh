@@ -4,7 +4,7 @@
 #   bash ~/.claude/scripts/seats/test-seat-hook.sh
 set -uo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-SEATS_DIR="$(mktemp -d)"; SEATS_DOMAIN="$(mktemp -d)"; export SEATS_DIR SEATS_DOMAIN
+SEATS_DIR="$(mktemp -d)"; SEATS_DOMAIN="$(mktemp -d)"; SEAT_HINT_DIR="$SEATS_DIR"; export SEATS_DIR SEATS_DOMAIN SEAT_HINT_DIR
 OUT="$SEATS_DIR/out.md"
 pass=0; fail=0
 eq() { if [ "$2" = "$3" ]; then pass=$((pass+1)); printf 'ok   %s\n' "$1"; else fail=$((fail+1)); printf 'FAIL %s\n     want %s, got %s\n' "$1" "$3" "$2"; fi; }
@@ -58,6 +58,7 @@ has "an unseated dispatch is warned, however long" "$(printf '%s' "$bare" | hook
 eq "every dispatch is logged" "$(wc -l < "$SEATS_DIR/dispatch.jsonl" | tr -d ' ')" "4"
 has "the log records clauses" "$(head -n 1 "$SEATS_DIR/dispatch.jsonl")" '"nesting": true'
 has "weekly shows the seated share" "$(python3 "$HERE/seat" weekly)" "Agent dispatches, last 7 days: 4, seated 3 (75%)"
+eq "the next unseated dispatch in that session gets no hint" "$(printf '%s' "$bare" | hook)" ""
 
 trash "$SEATS_DIR" "$SEATS_DOMAIN" >/dev/null 2>&1
 printf '\n%d passed, %d failed\n' "$pass" "$fail"
