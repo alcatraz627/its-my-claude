@@ -3,7 +3,8 @@
 
 Each event is a header line led by its emoji (🛫 out, 🛬 back) with every field
 laid out in spaced columns, then continuation lines that carry their own emoji
-(🎯 goal, 📄 out). Nothing is clipped: a long goal wraps under its own column.
+(🎯 goal, 📄 out), then a ten-character rule. Nothing is clipped: a long goal
+wraps under its own column.
 A fleet (three or more seats sent together) is a header plus one aligned line
 per seat. The hook that calls this is scripts/hooks/subagent-box.sh.
 
@@ -94,7 +95,16 @@ def goal_of(prompt):
     return seat, out, " ".join(body.split())
 
 
+RULE = "─" * 10
+
+
 def main():
+    """Print the notice, then a short rule that closes it off from the next one."""
+    _main()
+    print(RULE)
+
+
+def _main():
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd")
     for f in ("type", "name", "model", "est", "seat", "desc", "goal", "dur", "cost",
@@ -109,7 +119,7 @@ def main():
 
     if a.cmd == "goal":
         print("\t".join(goal_of(sys.stdin.read())))
-        return
+        sys.exit(0)  # a data line for the hook, so no closing rule
 
     if a.cmd == "dispatch":
         print(fields("🛫 " + (a.type or "general-purpose"), a.name, a.model or "inherit",

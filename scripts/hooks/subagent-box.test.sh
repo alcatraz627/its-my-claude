@@ -17,9 +17,11 @@ ln -s "$REAL/.claude/scripts" "$T/.claude/scripts"
 # Lone-seat cases first: no two dispatches may join a batch.
 export SUBAGENT_BURST_GAP=-1
 ev(){ bash "$BX" | jq -r '[.systemMessage // empty, .hookSpecificOutput.additionalContext // empty] | join("\n")'; }
-rows(){ printf '%s\n' "$1" | rg -c '\S'; }
+rows(){ printf '%s\n' "$1" | rg -v '^─{10}$' | rg -c '\S'; }
+# Every notice closes with a ten-character rule.
+ruled(){ [ "$(printf '%s\n' "$1" | rg -v '^Subagent landing' | rg -v '^ *$' | tail -n 1)" = "──────────" ]; }
 # Every line of a notice opens with an emoji, the header's or its label's.
-emoji_led(){ printf '%s\n' "$1" | rg -v '^ *$' | rg -v '^(🛫|🛬|   (🎯|📄|🔹|✅|❌|⏳) )|^ {12}\S|^Subagent landing' | rg -c . || echo 0; }
+emoji_led(){ printf '%s\n' "$1" | rg -v '^ *$|^─{10}$' | rg -v '^(🛫|🛬|   (🎯|📄|🔹|✅|❌|⏳) )|^ {12}\S|^Subagent landing' | rg -c . || echo 0; }
 # A SubagentStop hook's output reaches nobody, so a landing box waits for the next prompt.
 land(){ printf "$1" "$SID" | bash "$BX" >/dev/null; cat "/tmp/claude-agentbox-$S8/pending-boxes"; }
 
@@ -29,6 +31,7 @@ n=$(rows "$d")
 printf '%s\n' "$d" | rg -q "^   🎯 goal  audit hooks: Audit every hook\.$" && ok "the goal line carries its own emoji" || ko "goal lost: $d"
 printf '%s\n' "$d" | rg -q "^🛫 general-purpose  sonnet$" && ok "the header leads with the emoji and spaced fields" || ko "header: $d"
 printf '%s' "$d" | rg -q "[│┌└]" && ko "the dispatch still draws rails: $d" || ok "no rails"
+ruled "$d" && ok "a dispatch closes with a ten-dash rule" || ko "no closing rule: $d"
 raw=$(printf '{"hook_event_name":"PreToolUse","session_id":"%s","tool_name":"Agent","tool_input":{"subagent_type":"general-purpose","model":"sonnet","description":"channel check","prompt":"x"}}' "$SID" | bash "$BX")
 printf '%s' "$raw" | jq -e '.systemMessage | test("^🛫")' >/dev/null && ok "the line goes straight to the owner's screen" || ko "line not in systemMessage: $raw"
 printf '%s' "$raw" | jq -e 'has("hookSpecificOutput") | not' >/dev/null && ok "and the model does not read it" || ko "box reached the model: $raw"
@@ -92,6 +95,7 @@ printf '%s' "$l" | rg -q "✅ output written" && ok "landing says the file was w
 printf '%s\n' "$l" | rg -qxF "   📄 out   $OUTF" && ok "the path gets its own emoji line, whole" || ko "out line: $l"
 n=$(rows "$l"); [ "$n" = 2 ] && ok "the landing is two lines" || ko "landing grew to $n lines"
 [ "$(emoji_led "$l")" = "0" ] && ok "every landing line is emoji-led" || ko "unled line: $l"
+ruled "$l" && ok "a landing closes with a ten-dash rule" || ko "no closing rule: $l"
 printf '%s' "$l" | rg -q "ran [0-9]+s" && ok "a short run shows seconds, not 0m" || ko "duration: $l"
 printf '{"hook_event_name":"UserPromptSubmit","session_id":"%s","prompt":"go"}' "$SID" | bash "$BX" >/dev/null
 
@@ -135,6 +139,8 @@ printf '%s\n' "$u" | rg -qxF "   📄 out   $T/out/" && ok "a shared output fold
 cols=$(printf '%s\n' "$u" | rg '^   [✅❌] ' | python3 -c 'import sys; print(len({l.index("part") for l in sys.stdin}))')
 [ "$cols" = "1" ] && ok "the fleet's description column lines up" || ko "fleet columns drift: $u"
 [ "$(emoji_led "$u")" = "0" ] && ok "every fleet line is emoji-led" || ko "unled line: $u"
+ruled "$u" && ok "a fleet landing closes with a ten-dash rule" || ko "no closing rule: $u"
+ruled "$f" && ok "a fleet dispatch closes with a ten-dash rule" || ko "no closing rule: $f"
 
 export HOME="$REAL"; trash "$T" "/tmp/claude-agentbox-$S8" 2>/dev/null || true
 echo "---- pass=$pass fail=$fail"; [ $fail -eq 0 ]
